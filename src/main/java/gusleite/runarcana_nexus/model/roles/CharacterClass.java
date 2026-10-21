@@ -1,14 +1,20 @@
 package gusleite.runarcana_nexus.model.roles;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import gusleite.runarcana_nexus.enums.CharacterClassType;
+import jakarta.persistence.*;
+import lombok.Data;
+
 @Entity
-public abstract class CharacterClass {
+@Inheritance(strategy = InheritanceType.JOINED)
+@Data
+public class CharacterClass {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String className;
-    private int hitDice;
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    @Enumerated(EnumType.STRING)
+    private CharacterClassType className;
+    private int hitHpDice;
 }

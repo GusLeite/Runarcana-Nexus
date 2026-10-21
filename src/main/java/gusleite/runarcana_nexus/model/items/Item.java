@@ -1,5 +1,6 @@
 package gusleite.runarcana_nexus.model.items;
 
+import gusleite.runarcana_nexus.enums.ItemSize;
 import gusleite.runarcana_nexus.enums.Rarity;
 import jakarta.persistence.*;
 
@@ -13,5 +14,10 @@ public class Item {
     private String itemDescription;
     private Rarity rarity;
     private Integer price;
-    private Integer weigh;
+    private Double weight;
+    @Enumerated(EnumType.STRING)
+    private ItemSize size;
+    private String effect;
 }
+
+

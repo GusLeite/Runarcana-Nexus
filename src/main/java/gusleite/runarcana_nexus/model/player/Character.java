@@ -3,6 +3,7 @@ package gusleite.runarcana_nexus.model.player;
 import gusleite.runarcana_nexus.model.roles.CharacterClass;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 @Entity
@@ -10,8 +11,12 @@ public class Character {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String PlayerName;
+    @NotNull
     private String characterName;
+    @Min(0)
+    private Integer level;
     @Positive
     private Integer gold;
     @Min(1)
@@ -19,6 +24,7 @@ public class Character {
     @Positive
     private double height;
     @ManyToOne
+    @NotNull
     private CharacterClass characterClass;
     @Positive
     private Integer maxHp;
@@ -29,7 +35,7 @@ public class Character {
     @Positive
     private Integer dex;
     @Positive
-    private Integer Integerel;
+    private Integer intel;
     @Positive
     private Integer wis;
     @Positive

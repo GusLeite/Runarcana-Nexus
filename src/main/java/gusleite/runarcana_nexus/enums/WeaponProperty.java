@@ -10,5 +10,6 @@ public enum WeaponProperty {
     AMMUNITION,
     RELOAD,
     EXPLOSIVE,
-    SCATTER
+    SCATTER,
+    REACH
 }
