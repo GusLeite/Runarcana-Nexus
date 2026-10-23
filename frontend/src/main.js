@@ -5,41 +5,53 @@ const app = document.querySelector('#app')
 
 app.innerHTML = `
   <main class="page">
-    <section class="login-card" aria-labelledby="login-title">
-      <p class="brand-kicker">Runarcana • Nexus</p>
-      <h1 id="login-title">Entrar na plataforma</h1>
-      <p class="subtitle">
-        Acesse sua campanha e suas fichas. Este é apenas o frontend inicial.
-      </p>
+    <div class="login-layout">
+      <section class="lore-panel" aria-hidden="true">
+        <p class="brand-kicker">Runarcana • Nexus</p>
+        <h2 class="lore-title">Portal das Campanhas</h2>
+        <p class="lore-copy">
+          Entre no painel do seu grupo para consultar fichas, narrativas e progresso da jornada.
+        </p>
+        <div class="lore-divider"></div>
+        <p class="lore-footnote">Interface conceitual do frontend • sem autenticação real nesta etapa.</p>
+      </section>
 
-      <form id="login-form" novalidate>
-        <div class="field">
-          <label for="login">E-mail ou usuário</label>
-          <input id="login" name="login" type="text" autocomplete="username" required aria-describedby="login-error" />
-          <p id="login-error" class="error-text" aria-live="polite"></p>
-        </div>
+      <section class="login-card" aria-labelledby="login-title">
+        <p class="brand-kicker brand-kicker-card">Runarcana • Nexus</p>
+        <h1 id="login-title">Acesso do Jogador</h1>
+        <p class="subtitle">
+          Informe suas credenciais para entrar no núcleo da campanha.
+        </p>
 
-        <div class="field">
-          <label for="password">Senha</label>
-          <div class="password-field">
-            <input id="password" name="password" type="password" autocomplete="current-password" required aria-describedby="password-error" />
-            <button id="toggle-password" type="button" class="ghost-button" aria-pressed="false" aria-label="Mostrar senha">
-              Mostrar
-            </button>
+        <form id="login-form" novalidate>
+          <div class="field">
+            <label for="login">E-mail ou usuário</label>
+            <input id="login" name="login" type="text" autocomplete="username" required aria-describedby="login-error" />
+            <p id="login-error" class="error-text" aria-live="polite"></p>
           </div>
-          <p id="password-error" class="error-text" aria-live="polite"></p>
-        </div>
 
-        <div class="actions">
-          <button id="submit-button" class="primary-button" type="submit">
-            <span class="button-label">Entrar</span>
-          </button>
-          <a id="recovery-link" href="#" class="recovery-link">Esqueci minha senha</a>
-        </div>
-      </form>
+          <div class="field">
+            <label for="password">Senha</label>
+            <div class="password-field">
+              <input id="password" name="password" type="password" autocomplete="current-password" required aria-describedby="password-error" />
+              <button id="toggle-password" type="button" class="ghost-button" aria-pressed="false" aria-label="Mostrar senha">
+                Mostrar
+              </button>
+            </div>
+            <p id="password-error" class="error-text" aria-live="polite"></p>
+          </div>
 
-      <p id="status-message" class="status-message" role="status" aria-live="polite"></p>
-    </section>
+          <div class="actions">
+            <button id="submit-button" class="primary-button" type="submit">
+              <span class="button-label">Entrar</span>
+            </button>
+            <a id="recovery-link" href="#" class="recovery-link">Esqueci minha senha</a>
+          </div>
+        </form>
+
+        <p id="status-message" class="status-message" role="status" aria-live="polite"></p>
+      </section>
+    </div>
   </main>
 `
 

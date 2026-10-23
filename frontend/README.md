@@ -35,12 +35,13 @@ npm run test
 ## Escopo desta entrega
 
 - Tela de login responsiva (desktop/mobile)
+- Direção visual original de fantasia premium (tema escuro com acentos dourados e painel estilo RPG)
 - Campos de e-mail/usuário e senha
 - Validação client-side com mensagens acessíveis de erro
 - Estado de carregamento visual no botão
 - Alternância mostrar/ocultar senha
 - Link visual de recuperação de senha (sem backend)
-- Mensagem explícita de que a autenticação real depende do backend
+- Mensagens explícitas de que a autenticação real e a recuperação de senha dependem do backend
 
 ## Pendências do backend
 
