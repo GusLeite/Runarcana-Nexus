@@ -1,6 +1,6 @@
 # Frontend - Runarcana Nexus
 
-Frontend inicial do projeto com tela de login (somente frontend) em português-BR.
+Frontend em React + Vite do projeto com tela de login (somente frontend) em português-BR.
 
 ## Requisitos
 
@@ -36,6 +36,7 @@ npm run test
 
 - Tela de login responsiva (desktop/mobile)
 - Direção visual original de fantasia premium (tema escuro com acentos dourados e painel estilo RPG)
+- Implementação em React no frontend
 - Campos de e-mail/usuário e senha
 - Validação client-side com mensagens acessíveis de erro
 - Estado de carregamento visual no botão
