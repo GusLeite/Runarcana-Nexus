@@ -12,6 +12,7 @@ public class Item {
     private Long id;
     private String name;
     private String itemDescription;
+    @Enumerated(EnumType.STRING)
     private Rarity rarity;
     private Integer price;
     private Double weight;

@@ -11,6 +11,7 @@ public class Armor extends Item {
     @Enumerated(EnumType.STRING)
     private ArmorWeight weight;
     private int armorClass;
+    @Enumerated(EnumType.STRING)
     private Attribute modifierAttribute;
     private Integer damageReduction;
     private boolean nerfStealth;
