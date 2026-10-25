@@ -1,26 +1,18 @@
 import { describe, expect, it } from 'vitest'
-import { validateLoginForm } from './validation'
+import { validateLogin } from './validation'
 
-describe('validateLoginForm', () => {
-  it('retorna erro quando os campos obrigatórios não são informados', () => {
-    const result = validateLoginForm({ login: '', password: '' })
-
-    expect(result.isValid).toBe(false)
-    expect(result.errors.login).toContain('Informe seu e-mail ou usuário')
-    expect(result.errors.password).toContain('Informe sua senha')
+describe('validateLogin', () => {
+  it('exige usuário e senha', () => {
+    expect(validateLogin({ user: '', password: '' })).toContain('Informe usuário e senha')
+    expect(validateLogin({ user: 'rudo', password: '' })).not.toBeNull()
+    expect(validateLogin({ user: '', password: 'segredo' })).not.toBeNull()
   })
 
-  it('retorna erro para e-mail inválido', () => {
-    const result = validateLoginForm({ login: 'user@', password: '123456' })
-
-    expect(result.isValid).toBe(false)
-    expect(result.errors.login).toContain('e-mail válido')
+  it('ignora usuário só com espaços', () => {
+    expect(validateLogin({ user: '   ', password: 'segredo' })).not.toBeNull()
   })
 
-  it('aceita usuário e senha válidos', () => {
-    const result = validateLoginForm({ login: 'jogador.runarcana', password: 'segredo123' })
-
-    expect(result.isValid).toBe(true)
-    expect(result.errors).toEqual({})
+  it('aceita usuário e senha preenchidos', () => {
+    expect(validateLogin({ user: 'rudo', password: 'segredo' })).toBeNull()
   })
 })
