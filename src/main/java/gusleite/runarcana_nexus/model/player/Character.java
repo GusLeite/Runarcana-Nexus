@@ -67,7 +67,7 @@ public class Character {
         return Math.floorDiv(attribute - 10, 2);
         }
 
-    private int getModifier(Attribute attribute) {
+    public int getModifier(Attribute attribute) {
         int value = switch (attribute) {
             case STRENGTH -> str;
             case DEXTERITY -> dex;
@@ -110,15 +110,23 @@ public class Character {
         return getPassiveSkill(SkillType.INSIGHT);
     }
 
-    private int getPassiveSkill(SkillType skill) {
-        int modifier = 0;
-
+    public boolean isProficient(SkillType skill) {
         CharacterSkill characterSkill = getSkill(skill);
+        return characterSkill != null && characterSkill.isProficient();
+    }
 
-        if (characterSkill != null && characterSkill.isProficient()) {
+    // Bônus de um teste de perícia: modificador do atributo base + proficiência, se tiver.
+    public int getSkillModifier(SkillType skill) {
+        int modifier = getModifier(skill.getBaseAttribute());
+
+        if (isProficient(skill)) {
             modifier += getProficiencyBonus();
         }
 
-        return 10 + modifier;
+        return modifier;
+    }
+
+    private int getPassiveSkill(SkillType skill) {
+        return 10 + getSkillModifier(skill);
     }
 }

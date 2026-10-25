@@ -39,6 +39,7 @@ Configuração em `src/main/resources/application.properties`:
 | GET | `/character-classes` | – | Lista as classes |
 | POST | `/character` | `CreateCharacterRequest` (ver abaixo) | Cria um personagem; devolve `CharacterResponse` (201). 400 com `message` se faltar campo, a classe/antecedente não existir ou o JSON tiver valor fora do enum |
 | GET | `/character` | – | Lista os personagens (`CharacterResponse[]`) |
+| GET | `/character/me` | – (Bearer) | Ficha do personagem da conta logada: `{ character: CharacterResponse, inventory: InventoryItemResponse[] }`. 401 sem sessão; 404 com `message` se a ficha não existir |
 | POST | `/auth/login` | `LoginRequest { username, password }` | Entra; devolve `{ token, expiresAt, account: { username, mustChangePassword } }`. 401 se errar |
 | GET | `/auth/me` | – (Bearer) | Conta do token. 401 se o token for inválido ou expirado |
 | POST | `/auth/logout` | – (Bearer) | Apaga o token. 204 |
@@ -53,7 +54,13 @@ O endpoint não recebe a entidade `Character`: recebe o DTO `record/CreateCharac
 - `background` é o **nome** do antecedente (sem diferenciar maiúsculas). É opcional; se vier e não existir, 400.
 - `skills` é a lista de `SkillType` em que o personagem é **proficiente**; cada uma vira um `CharacterSkill` com `proficient = true` (repetidas contam uma vez).
 - Validações com mensagem em PT: nomes obrigatórios, `level` 1–20, atributos e PV máx. > 0, `currentHp` ≤ `maxHp`.
-- A resposta (`record/CharacterResponse`) é achatada: classe como enum, antecedente como nome, `skills` como `SkillType[]`, mais `proficiencyBonus`, `passivePerception` e `passiveInsight` calculados. Isso evita o ciclo `Character` ↔ `CharacterSkill` na serialização.
+- A resposta (`record/CharacterResponse`) é achatada: classe como enum, antecedente como nome, mais `proficiencyBonus`, `passivePerception` e `passiveInsight` calculados. `skills` traz **todas** as 19 perícias como `SkillResponse { skill, attribute, proficient, modifier }`, com o bônus já somado (atributo + proficiência). Isso evita o ciclo `Character` ↔ `CharacterSkill` na serialização.
+
+### Ficha do jogador logado (`GET /character/me`)
+
+- A conta e o personagem se ligam **pelo nome**: a conta `rudo` abre o personagem cujo `characterName` é "Rudo" (sem diferenciar maiúsculas; se houver dois, vale o de menor `id`). Não há chave estrangeira entre `Account` e `Character`.
+- O inventário vem de `PlayerItems` (`PlayerItemsRepository.findByCharacterOrderByIdAsc`) e cada entrada vira um `InventoryItemResponse`: `name, description, effect, rarity, kind (WEAPON | ARMOR | CONSUMABLE | OBJECT), quantity, weight, price` e, conforme o tipo, `damage` ("1d6"), `damageType`, `properties` (arma) ou `armorClass`, `armorWeight` (armadura).
+- `Armor` tem um campo `weight` (`ArmorWeight`) com o mesmo nome do peso em kg do `Item`; por isso o getter dele é `getArmorWeight()` (o Lombok está desligado nesse campo).
 - `Character` usa `@Getter @Setter` (não `@Data`): o `equals`/`hashCode`/`toString` do `@Data` entraria em recursão com o `@Data` do `CharacterSkill`.
 
 Erros de regra e de `@Valid` voltam como `{ "message": "..." }` (`exception/ApiExceptionHandler.java`), já em português para o front mostrar direto.
@@ -70,7 +77,7 @@ Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spri
 
 ## Testes
 
-`./mvnw test` usa H2 em memória (`src/test/resources/application.properties`), então não precisa do PostgreSQL. `controller/AuthControllerTests` cobre seed, login, senha errada, token inválido, troca de senha, sessões derrubadas e logout. `controller/CharacterControllerTests` cria o Rudo com o payload real (números como string) e cobre classe/antecedente inexistente, campo obrigatório vazio e enum inválido. As tabelas antigas `character`/`character_skill` geram avisos de DDL no H2 (usam `tinyint`), sem afetar os testes.
+`./mvnw test` usa H2 em memória (`src/test/resources/application.properties`), então não precisa do PostgreSQL. `controller/AuthControllerTests` cobre seed, login, senha errada, token inválido, troca de senha, sessões derrubadas e logout. `controller/CharacterControllerTests` cria o Rudo com o payload real (números como string) e cobre classe/antecedente inexistente, campo obrigatório vazio e enum inválido, além de `/character/me` (ficha com inventário, 401 sem login e 404 sem ficha). As tabelas antigas `character`/`character_skill` geram avisos de DDL no H2 (usam `tinyint`), sem afetar os testes.
 
 ## Modelo de dados
 
@@ -83,7 +90,7 @@ Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spri
 
 ### Personagem (`model/player`)
 - **Character**: jogador, nome, `level` (1–20), ouro, idade, altura, `characterClass` (ManyToOne), PV máx./atual, atributos `str, dex, con, intel, wis, cha`, `skills` (OneToMany → CharacterSkill), `region`, `background`, `alignment`, `inspiration`.
-  - Regras: modificador = `floor((atributo - 10) / 2)`; bônus de proficiência por nível (1–4: +2, 5–8: +3, 9–12: +4, 13–16: +5, 17–20: +6); percepção e intuição passivas = 10 + proficiência, se o personagem for proficiente. Hoje o cálculo passivo **não soma o modificador do atributo**.
+  - Regras: modificador = `floor((atributo - 10) / 2)`; bônus de proficiência por nível (1–4: +2, 5–8: +3, 9–12: +4, 13–16: +5, 17–20: +6); bônus de perícia (`getSkillModifier`) = modificador do atributo base + proficiência, se proficiente; percepção e intuição passivas = 10 + bônus da perícia.
 - **CharacterSkill**: `character, skillType, proficient`
 - **Background** (antecedente): `name` (único), `skills` (tabela `background_skills`), `occupation`, `items` (ManyToMany, tabela `background_items`)
 - **Occupation**: `name` (único)
@@ -112,17 +119,19 @@ Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spri
 
 - Injeção: novos services usam **injeção por construtor** (como `BackgroundService`); evite `@Autowired` em campo.
 - DTOs de entrada em `record/` como Java `record`.
-- Lombok `@Data` nas entidades que precisam de getters e setters.
+- Lombok `@Data` nas entidades que precisam de getters e setters; em entidades com relação bidirecional (`Character` ↔ `CharacterSkill`) e na hierarquia de `Item`, use `@Getter @Setter`.
 
 ## Pendências / problemas conhecidos
 
 - **Credencial no Git**: a senha do banco está versionada em `application.properties`. Mover para variável de ambiente (`${DB_PASSWORD}`) e trocar a senha.
-- `Item`, `Weapon`, `Armor`, `Origin` e `PlayerItems` não têm getters (nem `@Data`), então o Jackson não serializa os campos e não dá para preencher via setter.
-- `/character` não exige login nem liga o personagem a uma `Account`; ainda não há rotas para buscar, editar ou apagar uma ficha.
+- `Origin` não tem getters (nem `@Data`).
+- Não há rotas de itens nem de inventário: hoje os itens só entram no banco direto (tabelas `item`/`weapon`/`armor`/... e `player_items`). A ficha mostra o inventário, mas ninguém consegue preenchê-lo pela API.
+- `POST /character` e `GET /character` não exigem login; só `/character/me` exige. A ligação conta ↔ personagem é pelo nome (ver acima), não por chave estrangeira.
+- Ainda não há rotas para editar a ficha (PV atual, ouro, inspiração) nem para apagá-la.
 - O enum `region`/`alignment` em `Character` não tem `@Enumerated(STRING)` e é salvo como ordinal (frágil se a ordem mudar).
 - `BackgroundService.getBackGroundByName` dá NullPointerException quando o nome não existe; o nome do método não diz que ele altera dados.
 - `ItemService` tem métodos com nomes copiados (`getAllCharacters`, `createCharacter`) e ainda não tem controller.
 - As rotas de dados (`/background`, `/character-classes`) não exigem login. Quando houver rotas de ficha/inventário, proteger com `AuthService.authenticate` (ou migrar para Spring Security).
 - Não há papel de mestre (admin) nem tela para resetar senha esquecida; hoje o reset é apagar a conta no banco (ver Autenticação).
 - Não há CORS configurado: em dev o Vite faz proxy de `/runarcana`. Num deploy com front e API em domínios diferentes, será preciso configurar CORS.
-- Testes só cobrem a autenticação, a criação de personagem e o `contextLoads`.
+- Testes só cobrem a autenticação, as rotas de personagem e o `contextLoads`.

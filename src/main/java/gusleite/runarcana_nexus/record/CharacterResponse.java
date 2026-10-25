@@ -5,8 +5,8 @@ import gusleite.runarcana_nexus.enums.CharacterClassType;
 import gusleite.runarcana_nexus.enums.Region;
 import gusleite.runarcana_nexus.enums.SkillType;
 import gusleite.runarcana_nexus.model.player.Character;
-import gusleite.runarcana_nexus.model.player.CharacterSkill;
 
+import java.util.Arrays;
 import java.util.List;
 
 // Ficha achatada para o front: evita o ciclo Character <-> CharacterSkill e as relações lazy.
@@ -27,7 +27,7 @@ public record CharacterResponse(
         int wis,
         int cha,
         int con,
-        List<SkillType> skills,
+        List<SkillResponse> skills,
         Region region,
         String background,
         Alignment alignment,
@@ -54,9 +54,10 @@ public record CharacterResponse(
                 character.getWis(),
                 character.getCha(),
                 character.getCon(),
-                character.getSkills().stream()
-                        .filter(CharacterSkill::isProficient)
-                        .map(CharacterSkill::getSkillType)
+                // Todas as perícias do sistema, não só as proficientes, para a ficha mostrar cada bônus.
+                Arrays.stream(SkillType.values())
+                        .map(type -> new SkillResponse(type, type.getBaseAttribute(),
+                                character.isProficient(type), character.getSkillModifier(type)))
                         .toList(),
                 character.getRegion(),
                 character.getBackground() == null ? null : character.getBackground().getName(),

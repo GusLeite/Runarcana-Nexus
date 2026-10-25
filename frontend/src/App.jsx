@@ -6,12 +6,12 @@ import CharacterPanel from './components/CharacterPanel.jsx'
 import Separator from './components/Separator.jsx'
 import LoginForm from './components/LoginForm.jsx'
 import PasswordForm from './components/PasswordForm.jsx'
-import AccountPanel from './components/AccountPanel.jsx'
+import CharacterSheet from './components/sheet/CharacterSheet.jsx'
 
 const indexOf = username => CHARACTERS.findIndex(c => c.id === username)
 
 // Tela inicial: o jogador escolhe o personagem e, em seguida, faz login com ele.
-// Logado, o painel do personagem mostra a conta (e pede a troca da senha inicial).
+// Logado, abre a ficha do personagem (antes, pede a troca da senha inicial).
 export default function App() {
   const [hovered, setHovered] = useState(null)
   // Sessão salva entra direto no personagem; o useEffect abaixo confirma com o back-end.
@@ -99,13 +99,16 @@ export default function App() {
       />
     )
   } else if (chosen) {
-    panel = (
-      <AccountPanel
-        key={chosen.id + '-acc'}
+    // Logado: a ficha ocupa a tela inteira no lugar da seleção.
+    return (
+      <CharacterSheet
+        key={chosen.id + '-sheet'}
         character={chosen}
+        session={session}
         notice={notice}
         onChangePassword={() => { setNotice(null); setView('password') }}
         onLogout={signOut}
+        onExpired={sessionExpired}
       />
     )
   }
