@@ -1,12 +1,12 @@
 package gusleite.runarcana_nexus.controller;
 
-import gusleite.runarcana_nexus.model.player.Character;
+import gusleite.runarcana_nexus.record.CharacterResponse;
+import gusleite.runarcana_nexus.record.CreateCharacterRequest;
 import gusleite.runarcana_nexus.services.CharacterService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,18 +14,21 @@ import java.util.List;
 @RequestMapping("/character")
 public class CharacterController {
 
-    @Autowired
-    private CharacterService charService;
+    private final CharacterService charService;
 
-    private ResponseEntity<List<Character>> getAllCharacters(){
+    public CharacterController(CharacterService charService) {
+        this.charService = charService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CharacterResponse>> getAllCharacters() {
         return ResponseEntity.ok(charService.getAllCharacters());
     }
 
-    private ResponseEntity<Character> createCharacter(Character character){
-        Character charCreated = charService.createCharacter(character);
-
+    @PostMapping
+    public ResponseEntity<CharacterResponse> createCharacter(@Valid @RequestBody CreateCharacterRequest request) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(charCreated);
+                .body(charService.createCharacter(request));
     }
 }

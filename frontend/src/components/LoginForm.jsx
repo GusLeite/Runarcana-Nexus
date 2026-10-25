@@ -1,17 +1,33 @@
 import { useState } from 'react'
 import { validateLogin } from '../validation.js'
+import { login, logout } from '../api/auth.js'
 
 // Painel de login que aparece depois que o jogador escolhe o personagem.
-export default function LoginForm({ character, onBack }) {
-  const [user, setUser] = useState('')
+// Por enquanto o usuário é o próprio id do personagem (ex.: "rudo").
+export default function LoginForm({ character, onLogin, onBack }) {
+  const [user, setUser] = useState(character.id)
   const [password, setPassword] = useState('')
   const [msg, setMsg] = useState(null)
+  const [busy, setBusy] = useState(false)
 
-  const submit = e => {
+  const submit = async e => {
     e.preventDefault()
     const error = validateLogin({ user, password })
     if (error) return setMsg({ type: 'err', text: error })
-    setMsg({ type: 'ok', text: 'Entrando como ' + character.name + '…' }) // TODO: conectar à API de autenticação do back-end
+
+    setBusy(true)
+    setMsg(null)
+    try {
+      const res = await login(user, password)
+      if (res.account.username !== character.id) {
+        logout(res.token).catch(() => {})
+        throw new Error('Essa conta não é a de ' + character.name + '.')
+      }
+      onLogin({ token: res.token, ...res.account })
+    } catch (err) {
+      setMsg({ type: 'err', text: err.message })
+      setBusy(false)
+    }
   }
 
   return (
@@ -19,11 +35,11 @@ export default function LoginForm({ character, onBack }) {
       <h2>{character.name}</h2>
       <p>{character.role} · acesse sua campanha</p>
       <label htmlFor="u">Usuário</label>
-      <input id="u" autoFocus autoComplete="username" value={user} onChange={e => setUser(e.target.value)} />
+      <input id="u" autoComplete="username" value={user} onChange={e => setUser(e.target.value)} />
       <label htmlFor="pw">Senha</label>
-      <input id="pw" type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} />
+      <input id="pw" type="password" autoFocus autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} />
       {msg && <div className={msg.type} role="status">{msg.text}</div>}
-      <button className="btn" type="submit">ENTRAR</button>
+      <button className="btn" type="submit" disabled={busy}>{busy ? 'ENTRANDO…' : 'ENTRAR'}</button>
       <button className="back" type="button" onClick={onBack}>Trocar de personagem</button>
     </form>
   )

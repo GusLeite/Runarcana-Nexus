@@ -48,6 +48,7 @@ input:focus{outline:2px solid var(--teal);outline-offset:0;border-color:var(--te
 .btn{width:100%;margin-top:22px;padding:13px;background:var(--gold-hi);color:#1a1405;border:0;font-family:'Cinzel',Georgia,serif;font-weight:700;letter-spacing:.14em;font-size:15px;cursor:pointer;transition:background .2s,box-shadow .2s}
 .btn:hover{background:#ffd97a;box-shadow:0 0 22px rgba(240,199,94,.5)}
 .btn:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+.btn:disabled{opacity:.6;cursor:wait;box-shadow:none}
 .back{margin-top:14px;background:none;border:0;color:var(--muted);font:inherit;font-size:14px;cursor:pointer;padding:4px 0;text-decoration:underline}
 .back:hover{color:var(--text)}
 .err{margin-top:14px;color:#ff8a7a;font-size:14px}

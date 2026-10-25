@@ -1,6 +1,6 @@
 # Back-end
 
-> Código no branch `feature/inventory` (ainda não está em `main`). Pacote raiz: `gusleite.runarcana_nexus`.
+> Código na raiz do repositório (`src/`, `pom.xml`), já em `main`. Pacote raiz: `gusleite.runarcana_nexus`.
 
 ## Arquitetura
 
@@ -14,9 +14,14 @@ model/        entidades JPA
   items/      Item (base) → Weapon, Armor, Consumable, Object
   player/     Character, CharacterSkill, Background, Occupation, Origin, PlayerItems
   roles/      CharacterClass
-record/       DTOs de entrada (Java records)
+  auth/       Account, AuthToken (login)
+record/       DTOs de entrada e saída (Java records)
 enums/        enums de domínio (regras do sistema Runarcana)
+config/       beans de configuração (AuthConfig: BCrypt + seed das contas)
+exception/    ApiException + ApiExceptionHandler (erros viram { "message": ... })
 ```
+
+Build: o `pom.xml` declara o Lombok em `annotationProcessorPaths` (obrigatório no JDK 23+) e fixa `lombok.version=1.18.48`, porque a 1.18.46 que vem com o Boot 4.1.1 quebra no `javac` do JDK 27.
 
 Configuração em `src/main/resources/application.properties`:
 - `server.servlet.context-path=/runarcana`, então todas as rotas começam com `/runarcana`
@@ -32,8 +37,40 @@ Configuração em `src/main/resources/application.properties`:
 | PATCH | `/background/{name}` | `BackGroundSkillsRequest { skills: SkillType[] }` | Substitui as perícias do antecedente com aquele nome |
 | POST | `/character-classes` | `CharacterClassRequest { hitHpDice, className }` | Cria uma classe |
 | GET | `/character-classes` | – | Lista as classes |
+| POST | `/character` | `CreateCharacterRequest` (ver abaixo) | Cria um personagem; devolve `CharacterResponse` (201). 400 com `message` se faltar campo, a classe/antecedente não existir ou o JSON tiver valor fora do enum |
+| GET | `/character` | – | Lista os personagens (`CharacterResponse[]`) |
+| POST | `/auth/login` | `LoginRequest { username, password }` | Entra; devolve `{ token, expiresAt, account: { username, mustChangePassword } }`. 401 se errar |
+| GET | `/auth/me` | – (Bearer) | Conta do token. 401 se o token for inválido ou expirado |
+| POST | `/auth/logout` | – (Bearer) | Apaga o token. 204 |
+| PUT | `/auth/password` | `ChangePasswordRequest { currentPassword, newPassword }` (Bearer) | Troca a senha; devolve a conta. 400 com `message` se a regra falhar |
 
-`CharacterController` (`/character`) existe, mas os métodos são `private` e não têm `@GetMapping`/`@PostMapping`, então **nenhuma rota de personagem está exposta** ainda. Não há endpoints de itens nem de autenticação.
+Não há endpoints de itens.
+
+### Criação de personagem
+
+O endpoint não recebe a entidade `Character`: recebe o DTO `record/CreateCharacterRequest`, e o `CharacterService` monta a entidade.
+- `characterClass` é um `CharacterClassType` (ex.: `"ARCANIST"`); o service busca a `CharacterClass` já cadastrada (`findByClassName`). Se não existir, 400. Cadastre antes em `POST /character-classes`.
+- `background` é o **nome** do antecedente (sem diferenciar maiúsculas). É opcional; se vier e não existir, 400.
+- `skills` é a lista de `SkillType` em que o personagem é **proficiente**; cada uma vira um `CharacterSkill` com `proficient = true` (repetidas contam uma vez).
+- Validações com mensagem em PT: nomes obrigatórios, `level` 1–20, atributos e PV máx. > 0, `currentHp` ≤ `maxHp`.
+- A resposta (`record/CharacterResponse`) é achatada: classe como enum, antecedente como nome, `skills` como `SkillType[]`, mais `proficiencyBonus`, `passivePerception` e `passiveInsight` calculados. Isso evita o ciclo `Character` ↔ `CharacterSkill` na serialização.
+- `Character` usa `@Getter @Setter` (não `@Data`): o `equals`/`hashCode`/`toString` do `@Data` entraria em recursão com o `@Data` do `CharacterSkill`.
+
+Erros de regra e de `@Valid` voltam como `{ "message": "..." }` (`exception/ApiExceptionHandler.java`), já em português para o front mostrar direto.
+
+## Autenticação
+
+Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spring-security-crypto` para o BCrypt.
+
+- **Contas** (`model/auth/Account`): `username` (único, sempre minúsculo), `passwordHash` (BCrypt), `mustChangePassword`, `passwordChangedAt`. Uma conta por personagem; o `username` é o `id` do personagem no front (`rudo`, `gaudron`, `proto`, `titan`, `loge`).
+- **Seed** (`config/AuthConfig.seedAccounts`): ao subir, cria as contas que ainda não existem, com a **senha inicial igual ao nome do usuário** e `mustChangePassword = true`. A lista vem de `runarcana.auth.seed-accounts` (padrão: os 5 personagens). Conta já existente não é tocada; para "resetar" a senha de alguém, apague a linha dele em `account` (e os tokens em `auth_token`) e reinicie.
+- **Login** (`services/AuthService`): o usuário não diferencia maiúsculas nem espaços nas pontas. Gera um token opaco aleatório (32 bytes, base64url) válido por 30 dias; no banco (`auth_token`) fica só o SHA-256 dele. O cliente manda `Authorization: Bearer <token>`. Tokens vencidos são limpos a cada login.
+- **Troca de senha**: exige a senha atual; a nova precisa ter 6–72 caracteres, ser diferente da atual e não ser o nome do personagem. Ao trocar, `mustChangePassword` vira `false` e as **outras** sessões da conta são encerradas (a atual continua).
+- As rotas antigas (`/background`, `/character-classes`) continuam **abertas**; nada exige login além de `/auth/me`, `/auth/logout` e `/auth/password`.
+
+## Testes
+
+`./mvnw test` usa H2 em memória (`src/test/resources/application.properties`), então não precisa do PostgreSQL. `controller/AuthControllerTests` cobre seed, login, senha errada, token inválido, troca de senha, sessões derrubadas e logout. `controller/CharacterControllerTests` cria o Rudo com o payload real (números como string) e cobre classe/antecedente inexistente, campo obrigatório vazio e enum inválido. As tabelas antigas `character`/`character_skill` geram avisos de DDL no H2 (usam `tinyint`), sem afetar os testes.
 
 ## Modelo de dados
 
@@ -45,7 +82,7 @@ Configuração em `src/main/resources/application.properties`:
 - **Consumable**, **Object**: sem campos próprios por enquanto
 
 ### Personagem (`model/player`)
-- **Character**: jogador, nome, `level` (0–20), ouro, idade, altura, `characterClass` (ManyToOne), PV máx./atual, atributos `str, dex, con, intel, wis, cha`, `skills` (OneToMany → CharacterSkill), `region`, `background`, `alignment`, `inspiration`.
+- **Character**: jogador, nome, `level` (1–20), ouro, idade, altura, `characterClass` (ManyToOne), PV máx./atual, atributos `str, dex, con, intel, wis, cha`, `skills` (OneToMany → CharacterSkill), `region`, `background`, `alignment`, `inspiration`.
   - Regras: modificador = `floor((atributo - 10) / 2)`; bônus de proficiência por nível (1–4: +2, 5–8: +3, 9–12: +4, 13–16: +5, 17–20: +6); percepção e intuição passivas = 10 + proficiência, se o personagem for proficiente. Hoje o cálculo passivo **não soma o modificador do atributo**.
 - **CharacterSkill**: `character, skillType, proficient`
 - **Background** (antecedente): `name` (único), `skills` (tabela `background_skills`), `occupation`, `items` (ManyToMany, tabela `background_items`)
@@ -80,12 +117,12 @@ Configuração em `src/main/resources/application.properties`:
 ## Pendências / problemas conhecidos
 
 - **Credencial no Git**: a senha do banco está versionada em `application.properties`. Mover para variável de ambiente (`${DB_PASSWORD}`) e trocar a senha.
-- `CharacterController`: métodos privados e sem mapeamento, então os endpoints de personagem não existem.
-- `Character`, `Item`, `Weapon`, `Armor`, `Origin` e `PlayerItems` não têm getters (nem `@Data`), então o Jackson não serializa os campos e não dá para preencher via setter.
-- `Character.level` aceita 0 (`@Min(0)`), mas `getProficiencyBonus()` lança exceção para nível < 1.
+- `Item`, `Weapon`, `Armor`, `Origin` e `PlayerItems` não têm getters (nem `@Data`), então o Jackson não serializa os campos e não dá para preencher via setter.
+- `/character` não exige login nem liga o personagem a uma `Account`; ainda não há rotas para buscar, editar ou apagar uma ficha.
 - O enum `region`/`alignment` em `Character` não tem `@Enumerated(STRING)` e é salvo como ordinal (frágil se a ordem mudar).
 - `BackgroundService.getBackGroundByName` dá NullPointerException quando o nome não existe; o nome do método não diz que ele altera dados.
 - `ItemService` tem métodos com nomes copiados (`getAllCharacters`, `createCharacter`) e ainda não tem controller.
-- Não há autenticação. O front-end precisa de um endpoint de login (ver `frontend.md`).
-- Não há CORS configurado para `http://localhost:5173`.
-- Teste: apenas `contextLoads`.
+- As rotas de dados (`/background`, `/character-classes`) não exigem login. Quando houver rotas de ficha/inventário, proteger com `AuthService.authenticate` (ou migrar para Spring Security).
+- Não há papel de mestre (admin) nem tela para resetar senha esquecida; hoje o reset é apagar a conta no banco (ver Autenticação).
+- Não há CORS configurado: em dev o Vite faz proxy de `/runarcana`. Num deploy com front e API em domínios diferentes, será preciso configurar CORS.
+- Testes só cobrem a autenticação, a criação de personagem e o `contextLoads`.

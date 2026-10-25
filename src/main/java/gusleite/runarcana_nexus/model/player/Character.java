@@ -7,20 +7,25 @@ import gusleite.runarcana_nexus.enums.SkillType;
 import gusleite.runarcana_nexus.model.roles.CharacterClass;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+// @Getter/@Setter em vez de @Data: o equals/hashCode/toString do @Data entraria em ciclo com CharacterSkill.
 @Entity
+@Getter
+@Setter
 public class Character {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
-    private String PlayerName;
+    private String playerName;
     @NotBlank
     private String characterName;
-    @Min(0)
+    @Min(1)
     @Max(20)
     private int level;
     @PositiveOrZero

@@ -26,4 +26,4 @@ Não coloque senhas, tokens nem credenciais nos docs.
 ## Atalhos
 
 - Front-end: `cd frontend && npm run dev | npm test | npm run build`. Para o preview no app, use `.claude/launch.json` (configuração `frontend`).
-- Back-end: está no branch `feature/inventory`; `./mvnw spring-boot:run` (precisa de PostgreSQL local).
+- Back-end: `./mvnw spring-boot:run` (precisa de PostgreSQL local e JDK 27) | `./mvnw test` (usa H2).

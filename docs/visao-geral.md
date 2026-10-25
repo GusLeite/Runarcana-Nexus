@@ -24,27 +24,28 @@ Runarcana-Nexus/
 
 ## Branches
 
-Os branches ainda **não foram unificados**. Hoje cada parte vive em um branch diferente:
+Back-end e front-end já estão juntos em `main` (PRs #4 e #5). Os branches de feature antigos ficam só como histórico:
 
 | Branch | Conteúdo |
 |---|---|
-| `main` | Só `README.md` e `.gitignore` (commit inicial) |
-| `feature/inventory` | **Back-end** Spring completo (entidades, controllers, seed do banco) |
-| `copilot/frontend-inicial-login` | Primeiro login em JS puro, feito pelo Copilot (substituído) |
-| `copilot/update-login-screen-implementation` (remoto) | Restyle do login feito pelo Copilot. **Descartado** pelo dono do projeto |
-| `feature/frontend-react-login` | **Front-end React** atual: tela de seleção de personagem + login |
+| `main` | **Tudo**: back-end Spring na raiz e front-end React em `frontend/` |
+| `feature/inventory` | Back-end antes do merge (histórico) |
+| `feature/frontend-react-login` | Front-end antes do merge (histórico) |
+| `copilot/frontend-inicial-login`, `copilot/update-login-screen-implementation` | Tentativas do Copilot. **Descartadas** pelo dono do projeto; não usar como base |
 
-Próximo passo natural: fazer o merge de `feature/inventory` e `feature/frontend-react-login` em `main`.
+Trabalho novo: crie um branch a partir de `main`.
 
 ## Como rodar
 
-**Back-end** (no branch `feature/inventory`; precisa de um PostgreSQL local com o banco `runarcana`):
+**Back-end** (precisa de um PostgreSQL local com o banco `runarcana` e do JDK 27; se o `java` não estiver no PATH, defina `JAVA_HOME`):
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-A API sobe em `http://localhost:8080/runarcana` (context-path `/runarcana`). O Swagger fica em `/runarcana/swagger-ui.html`.
+A API sobe em `http://localhost:8080/runarcana` (context-path `/runarcana`). O Swagger fica em `/runarcana/swagger-ui.html`. Na primeira subida são criadas as contas dos 5 personagens (ver `backend.md`, seção Autenticação). Testes: `./mvnw test` (usa H2, não precisa do PostgreSQL).
+
+Para o login funcionar no front, suba o back-end antes: o Vite repassa `/runarcana` para `localhost:8080`.
 
 **Front-end:**
 
