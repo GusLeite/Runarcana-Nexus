@@ -12,9 +12,11 @@ services/     regras de negócio (@Service)
 repository/   Spring Data JPA (JpaRepository)
 model/        entidades JPA
   items/      Item (base) → Weapon, Armor, Consumable, Object
-  player/     Character, CharacterSkill, Background, Occupation, Origin, PlayerItems
+  player/     Character, CharacterSkill, CharacterAbility, Background, Occupation, Origin, PlayerItems
   roles/      CharacterClass
   auth/       Account, AuthToken (login)
+  notes/      PlayerNote (anotações do jogador)
+  documents/  GameDocument, DocumentRead (documentos do mestre)
 record/       DTOs de entrada e saída (Java records)
 enums/        enums de domínio (regras do sistema Runarcana)
 config/       beans de configuração (AuthConfig: BCrypt + seed das contas)
@@ -39,8 +41,23 @@ Configuração em `src/main/resources/application.properties`:
 | GET | `/character-classes` | – | Lista as classes |
 | POST | `/character` | `CreateCharacterRequest` (ver abaixo) | Cria um personagem; devolve `CharacterResponse` (201). 400 com `message` se faltar campo, a classe/antecedente não existir ou o JSON tiver valor fora do enum |
 | GET | `/character` | – | Lista os personagens (`CharacterResponse[]`) |
-| GET | `/character/me` | – (Bearer) | Ficha do personagem da conta logada: `{ character: CharacterResponse, inventory: InventoryItemResponse[] }`. 401 sem sessão; 404 com `message` se a ficha não existir |
-| POST | `/auth/login` | `LoginRequest { username, password }` | Entra; devolve `{ token, expiresAt, account: { username, mustChangePassword } }`. 401 se errar |
+| GET | `/character/me` | – (Bearer) | Ficha do personagem da conta logada: `{ character: CharacterResponse, inventory: InventoryItemResponse[], abilities: AbilityResponse[] }`. 401 sem sessão; 404 com `message` se a ficha não existir |
+| POST | `/character/{id}/abilities` | `AbilityRequest` (Bearer **mestre**) | Cadastra magia/habilidade no personagem. 201; 403 para jogador |
+| GET | `/character/{id}/abilities` | – (Bearer **mestre**) | Habilidades do personagem (painel do mestre) |
+| DELETE | `/character/{id}/abilities/{abilityId}` | – (Bearer **mestre**) | Remove. 204 |
+| PATCH | `/character/me/abilities/{abilityId}` | `{ usesLeft }` (Bearer) | Jogador gasta/recupera usos. 400 se passar do máximo ou a habilidade não tiver usos |
+| POST | `/character/me/rest` | `{ type: SHORT \| LONG }` (Bearer) | Descanso: curto recupera o que é `SHORT_REST`; longo recupera tudo que recarrega. Devolve as habilidades |
+| GET | `/notes` | – (Bearer) | Anotações do jogador (fixadas primeiro, depois as mais recentes) |
+| POST | `/notes` | `NoteRequest { title, body, pinned }` (Bearer) | Cria. Título vazio vira "Sem título". 201 |
+| PUT | `/notes/{id}` | `NoteRequest` (Bearer) | Atualiza. 404 se a nota não for da conta |
+| DELETE | `/notes/{id}` | – (Bearer) | Apaga. 204 |
+| GET | `/documents/me` | – (Bearer) | Documentos para o jogador (para todos ou só para ele), com `read` |
+| POST | `/documents/{id}/read` | – (Bearer) | Marca como lido. 204; 404 se o documento não for para ele |
+| GET | `/documents` | – (Bearer **mestre**) | Todos os documentos, com `recipients` |
+| GET | `/documents/recipients` | – (Bearer **mestre**) | Usernames que podem receber documentos (todas as contas de jogador, em ordem) |
+| POST | `/documents` | `DocumentRequest` (Bearer **mestre**) | Envia um documento. 201 |
+| DELETE | `/documents/{id}` | – (Bearer **mestre**) | Apaga (e as marcas de lido). 204 |
+| POST | `/auth/login` | `LoginRequest { username, password }` | Entra; devolve `{ token, expiresAt, account: { username, mustChangePassword, master } }`. 401 se errar |
 | GET | `/auth/me` | – (Bearer) | Conta do token. 401 se o token for inválido ou expirado |
 | POST | `/auth/logout` | – (Bearer) | Apaga o token. 204 |
 | PUT | `/auth/password` | `ChangePasswordRequest { currentPassword, newPassword }` (Bearer) | Troca a senha; devolve a conta. 400 com `message` se a regra falhar |
@@ -54,7 +71,7 @@ O endpoint não recebe a entidade `Character`: recebe o DTO `record/CreateCharac
 - `background` é o **nome** do antecedente (sem diferenciar maiúsculas). É opcional; se vier e não existir, 400.
 - `skills` é a lista de `SkillType` em que o personagem é **proficiente**; cada uma vira um `CharacterSkill` com `proficient = true` (repetidas contam uma vez).
 - Validações com mensagem em PT: nomes obrigatórios, `level` 1–20, atributos e PV máx. > 0, `currentHp` ≤ `maxHp`.
-- A resposta (`record/CharacterResponse`) é achatada: classe como enum, antecedente como nome, mais `proficiencyBonus`, `passivePerception` e `passiveInsight` calculados. `skills` traz **todas** as 19 perícias como `SkillResponse { skill, attribute, proficient, modifier }`, com o bônus já somado (atributo + proficiência). Isso evita o ciclo `Character` ↔ `CharacterSkill` na serialização.
+- A resposta (`record/CharacterResponse`) é achatada: classe como enum, antecedente como nome, mais `proficiencyBonus`, `passivePerception`, `passiveInsight` calculados e `hitDie` (dado de vida da classe). `skills` traz **todas** as 19 perícias como `SkillResponse { skill, attribute, proficient, modifier }`, com o bônus já somado (atributo + proficiência). Isso evita o ciclo `Character` ↔ `CharacterSkill` na serialização.
 
 ### Ficha do jogador logado (`GET /character/me`)
 
@@ -63,21 +80,38 @@ O endpoint não recebe a entidade `Character`: recebe o DTO `record/CreateCharac
 - `Armor` tem um campo `weight` (`ArmorWeight`) com o mesmo nome do peso em kg do `Item`; por isso o getter dele é `getArmorWeight()` (o Lombok está desligado nesse campo).
 - `Character` usa `@Getter @Setter` (não `@Data`): o `equals`/`hashCode`/`toString` do `@Data` entraria em recursão com o `@Data` do `CharacterSkill`.
 
+### Magias e habilidades (`CharacterAbility`)
+
+- Campos: `name`, `type` (`SPELL | ABILITY | PASSIVE`), `spellLevel` (0 = truque, 1–9; só em magia), `school`, `castingTime`, `range` (coluna `ability_range`), `duration`, `components`, `damage` (expressão "2d6+4"; o front rola direto dela), `description`, `maxUses`/`usesLeft` (nulos = uso livre) e `recharge` (`SHORT_REST | LONG_REST | NONE`; padrão `LONG_REST` quando há usos).
+- O mestre cadastra; o jogador só gasta/recupera usos e descansa. Os usos começam cheios.
+- Exemplo (mestre, `POST /runarcana/character/1/abilities`): `{ "name": "Seta Estelar", "type": "SPELL", "spellLevel": 1, "range": "36 m", "damage": "3d4+3", "maxUses": 4, "recharge": "LONG_REST", "description": "Três dardos de luz." }`
+
+### Documentos do mestre (`GameDocument`)
+
+- Campos: `title`, `kind` (`LETTER | CLUE | MAP | LORE | SECRET | REWARD`, muda ícone e cor no front), `body` (texto; o front entende `## título`, `**negrito**` e `*itálico*`), `imageUrl` (opcional, `http(s)://`), `recipients` (usernames; vazio = **todos**), `createdAt`, `author`.
+- Leitura por jogador fica em `DocumentRead` (único por documento + conta). O jogador não vê para quem mais o documento foi (`recipients` vem nulo para ele).
+- Exemplo (mestre, `POST /runarcana/documents`): `{ "title": "Carta selada", "kind": "SECRET", "body": "## Só para você\n\nO templo abre à noite.", "recipients": ["rudo"] }`
+
+### Anotações (`PlayerNote`)
+
+Por conta (não por personagem): `title`, `body` (até 20.000 caracteres), `pinned`, `createdAt`, `updatedAt`. Nota de outra conta responde 404. `pinned` é `Boolean` no DTO porque o Jackson 3 (Boot 4) recusa campo primitivo ausente no JSON.
+
 Erros de regra e de `@Valid` voltam como `{ "message": "..." }` (`exception/ApiExceptionHandler.java`), já em português para o front mostrar direto.
 
 ## Autenticação
 
 Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spring-security-crypto` para o BCrypt.
 
-- **Contas** (`model/auth/Account`): `username` (único, sempre minúsculo), `passwordHash` (BCrypt), `mustChangePassword`, `passwordChangedAt`. Uma conta por personagem; o `username` é o `id` do personagem no front (`rudo`, `gaudron`, `proto`, `titan`, `loge`).
-- **Seed** (`config/AuthConfig.seedAccounts`): ao subir, cria as contas que ainda não existem, com a **senha inicial igual ao nome do usuário** e `mustChangePassword = true`. A lista vem de `runarcana.auth.seed-accounts` (padrão: os 5 personagens). Conta já existente não é tocada; para "resetar" a senha de alguém, apague a linha dele em `account` (e os tokens em `auth_token`) e reinicie.
+- **Contas** (`model/auth/Account`): `username` (único, sempre minúsculo), `passwordHash` (BCrypt), `mustChangePassword`, `passwordChangedAt`, `role` (`PLAYER | MASTER`; nulo nas contas antigas = jogador). Uma conta por personagem; o `username` é o `id` do personagem no front (`rudo`, `gaudron`, `proto`, `titan`, `loge`).
+- **Mestre**: a conta `mestre` (`role = MASTER`) é a única que cadastra magias/habilidades e envia documentos (`AuthService.requireMaster`, 403 "Só o mestre pode fazer isso." para jogadores). No front, o mestre entra pelo botão **MESTRE** da tela inicial e usa o painel do mestre (ver `frontend.md`); a API também pode ser usada direto pelo Swagger (`/runarcana/swagger-ui.html`) com o token em `Authorization: Bearer <token>`.
+- **Seed** (`config/AuthConfig.seedAccounts`): ao subir, cria as contas que ainda não existem, com a **senha inicial igual ao nome do usuário** e `mustChangePassword = true`. Jogadores vêm de `runarcana.auth.seed-accounts` (padrão: os 5 personagens); mestres, de `runarcana.auth.master-accounts` (padrão: `mestre`). Troque a senha do mestre logo no primeiro acesso (`PUT /auth/password`). Conta já existente não é tocada; para "resetar" a senha de alguém, apague a linha dele em `account` (e os tokens em `auth_token`) e reinicie.
 - **Login** (`services/AuthService`): o usuário não diferencia maiúsculas nem espaços nas pontas. Gera um token opaco aleatório (32 bytes, base64url) válido por 30 dias; no banco (`auth_token`) fica só o SHA-256 dele. O cliente manda `Authorization: Bearer <token>`. Tokens vencidos são limpos a cada login.
 - **Troca de senha**: exige a senha atual; a nova precisa ter 6–72 caracteres, ser diferente da atual e não ser o nome do personagem. Ao trocar, `mustChangePassword` vira `false` e as **outras** sessões da conta são encerradas (a atual continua).
 - As rotas antigas (`/background`, `/character-classes`) continuam **abertas**; nada exige login além de `/auth/me`, `/auth/logout` e `/auth/password`.
 
 ## Testes
 
-`./mvnw test` usa H2 em memória (`src/test/resources/application.properties`), então não precisa do PostgreSQL. `controller/AuthControllerTests` cobre seed, login, senha errada, token inválido, troca de senha, sessões derrubadas e logout. `controller/CharacterControllerTests` cria o Rudo com o payload real (números como string) e cobre classe/antecedente inexistente, campo obrigatório vazio e enum inválido, além de `/character/me` (ficha com inventário, 401 sem login e 404 sem ficha). As tabelas antigas `character`/`character_skill` geram avisos de DDL no H2 (usam `tinyint`), sem afetar os testes.
+`./mvnw test` usa H2 em memória (`src/test/resources/application.properties`), então não precisa do PostgreSQL. `controller/AuthControllerTests` cobre seed, login, senha errada, token inválido, troca de senha, sessões derrubadas e logout. `controller/CharacterControllerTests` cria o Rudo com o payload real (números como string) e cobre classe/antecedente inexistente, campo obrigatório vazio e enum inválido, além de `/character/me` (ficha com inventário, 401 sem login e 404 sem ficha). `controller/PlayerFeaturesTests` cobre habilidades (cadastro, listagem e exclusão pelo mestre, 403 para jogador, usos e descanso), a lista de destinatários, anotações (CRUD e isolamento entre contas) e documentos (destinatários, lido, exclusão, 403 e destinatário inexistente). As tabelas antigas `character`/`character_skill` geram avisos de DDL no H2 (usam `tinyint`), sem afetar os testes.
 
 ## Modelo de dados
 
@@ -114,6 +148,9 @@ Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spri
 | `WeaponProperty` | FINESSE, THROWN, TWO_HANDED, LIGHT, HEAVY, VERSATILE, AMMUNITION, RELOAD, EXPLOSIVE, SCATTER, REACH |
 | `WeaponCategory` / `WeaponType` | SIMPLE, MARTIAL, IMPROVISED, FIREARM / FIREARM, CHAIN, REGIONAL, SPECIAL |
 | `DamageType`, `ArmorWeight`, `ItemSize`, `ItemWeight` | B/P/S; LIGHT/MEDIUM/HEAVY; SMALL/MEDIUM/LARGE; LIGHT/MEDIUM/HEAVY |
+| `AccountRole` | PLAYER, MASTER |
+| `AbilityType`, `Recharge`, `RestType` | SPELL/ABILITY/PASSIVE; SHORT_REST/LONG_REST/NONE; SHORT/LONG |
+| `DocumentKind` | LETTER, CLUE, MAP, LORE, SECRET, REWARD |
 
 ## Convenções
 
@@ -132,6 +169,9 @@ Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spri
 - `BackgroundService.getBackGroundByName` dá NullPointerException quando o nome não existe; o nome do método não diz que ele altera dados.
 - `ItemService` tem métodos com nomes copiados (`getAllCharacters`, `createCharacter`) e ainda não tem controller.
 - As rotas de dados (`/background`, `/character-classes`) não exigem login. Quando houver rotas de ficha/inventário, proteger com `AuthService.authenticate` (ou migrar para Spring Security).
-- Não há papel de mestre (admin) nem tela para resetar senha esquecida; hoje o reset é apagar a conta no banco (ver Autenticação).
+- Não há como resetar senha esquecida; hoje o reset é apagar a conta no banco (ver Autenticação).
+- Back-end iniciado antes de uma mudança não tem as rotas novas: o front recebe 404 (ex.: "Nova" anotação). Reinicie o `spring-boot:run` depois de puxar o código.
+- Não há rota para o mestre editar uma habilidade (só criar e apagar) nem para editar um documento já enviado.
+- Documentos aceitam só link de imagem (`imageUrl`); não há upload de arquivos.
 - Não há CORS configurado: em dev o Vite faz proxy de `/runarcana`. Num deploy com front e API em domínios diferentes, será preciso configurar CORS.
-- Testes só cobrem a autenticação, as rotas de personagem e o `contextLoads`.
+- Testes não cobrem `/background`, `/character-classes` nem itens.

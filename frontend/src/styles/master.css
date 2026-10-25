@@ -1,0 +1,82 @@
+/* Entrada e painel do mestre. Usa os tokens de global.css e as peças de sheet.css (card, seg, topbar...). */
+
+/* ---------- botão na tela inicial ---------- */
+.master-btn{display:flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--gold);background:rgba(5,11,20,.6);color:var(--gold-hi);
+font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:13px;letter-spacing:.18em;cursor:pointer;transition:box-shadow .2s,background .2s}
+.master-btn:hover{background:rgba(200,162,74,.12);box-shadow:0 0 18px rgba(240,199,94,.4)}
+.master-btn:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+.crown{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round}
+
+/* ---------- portal do mestre ---------- */
+.gate{position:fixed;inset:0;z-index:15;display:grid;place-items:center;background:radial-gradient(circle at center,rgba(10,22,38,.75),rgba(1,10,19,.96) 65%);animation:gate-in .6s ease both}
+@keyframes gate-in{from{opacity:0}}
+.gate-rings{position:absolute;width:min(560px,92vw);aspect-ratio:1;pointer-events:none}
+.gate-rings span{position:absolute;inset:0;border-radius:50%}
+.gate-rings .ring-a{border:1px solid rgba(200,162,74,.45);box-shadow:0 0 40px rgba(200,162,74,.15),inset 0 0 40px rgba(200,162,74,.1)}
+.gate-rings .ring-b{inset:7%;border:2px dashed rgba(47,211,192,.35);animation:spin 40s linear infinite}
+.gate-rings .ring-c{inset:16%;border:1px solid rgba(240,199,94,.35);border-top-color:var(--gold-hi);border-bottom-color:var(--gold-hi);animation:spin 18s linear infinite reverse}
+.gate-form{position:relative}
+.gate .login{position:relative;top:auto;right:auto;transform:none;animation:gate-form .7s .1s cubic-bezier(.22,1,.36,1) both}
+@keyframes gate-form{from{opacity:0;transform:translateY(16px) scale(.97)}}
+.gate .login h2::before{content:"";display:inline-block;width:10px;height:10px;margin-right:10px;transform:rotate(45deg);border:1.5px solid var(--gold-hi);vertical-align:.15em}
+
+/* ---------- painel ---------- */
+.master-bg{background:radial-gradient(ellipse at 30% 20%,rgba(200,162,74,.25),transparent 55%),radial-gradient(ellipse at 80% 80%,rgba(47,211,192,.18),transparent 55%),#050b14;filter:none;transform:none}
+.master-badge{display:flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--gold);color:var(--gold-hi);font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:12px;letter-spacing:.2em;background:rgba(200,162,74,.1)}
+.master-body{display:flex;flex-direction:column;gap:20px;max-width:1680px;margin:0 auto;padding:24px 28px 48px;container-type:inline-size}
+.master-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;align-items:start}
+.master-grid.three{grid-template-columns:minmax(0,1.2fr) minmax(280px,.9fr) minmax(0,1fr)}
+.master-grid>*{min-width:0}
+
+.mform{display:flex;flex-direction:column}
+.mform label,.mlabel{display:block;margin:14px 0 6px;font-size:14px;color:var(--teal);letter-spacing:.06em}
+.mform label small{margin-left:6px;color:var(--muted);font-style:italic;letter-spacing:0}
+.mform label:first-child{margin-top:0}
+.mform select{width:100%;padding:11px 10px;background:#050b14;border:1px solid rgba(200,162,74,.4);color:var(--text);font:inherit;font-size:15px}
+.mform select:focus{outline:2px solid var(--teal);border-color:var(--teal)}
+.mrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:0 14px}
+.mbody{min-height:220px}
+.mdesc{min-height:130px}
+.wide-seg{display:grid;grid-template-columns:repeat(3,1fr)}
+.wide-seg button{padding:9px 6px;font-size:14px}
+
+.kind-pick,.to-pick{display:flex;flex-wrap:wrap;gap:8px}
+.kind-chip{--k:var(--gold);display:flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid rgba(200,162,74,.25);background:rgba(0,0,0,.3);color:var(--muted);font:inherit;font-size:14px;cursor:pointer;transition:border-color .2s,color .2s,background .2s}
+.kind-chip svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.kind-chip:hover{color:var(--text)}
+.kind-chip.on{border-color:var(--k);color:var(--k);background:color-mix(in srgb,var(--k) 14%,transparent);box-shadow:0 0 12px color-mix(in srgb,var(--k) 30%,transparent)}
+.to-chip{padding:7px 14px;border:1px solid rgba(200,162,74,.25);background:rgba(0,0,0,.3);color:var(--muted);font-family:'Cinzel',Georgia,serif;font-size:13px;font-weight:700;letter-spacing:.08em;cursor:pointer}
+.to-chip.on{border-color:var(--teal);color:var(--teal);background:rgba(47,211,192,.1)}
+.kind-chip:focus-visible,.to-chip:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+
+.sent-row{--k:var(--gold);display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid rgba(200,162,74,.14);border-left:3px solid var(--k);background:rgba(0,0,0,.28)}
+.sent-row.t-ability{--k:var(--gold)}.sent-row.t-passive{--k:var(--teal)}.sent-row.t-spell{--k:#8f7cff}
+.sent-row .abl-icon{width:38px;height:38px}
+.sent-row .abl-glyph{font-size:16px}
+.sent-to{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;font-size:12px;color:var(--teal)}
+.to-tag{padding:0 6px;border:1px solid rgba(47,211,192,.4)}
+
+.char-pick{display:flex;flex-wrap:wrap;gap:12px}
+.char-chip{display:flex;align-items:center;gap:12px;padding:6px 16px 6px 6px;border:1px solid rgba(200,162,74,.25);background:rgba(0,0,0,.3);color:var(--text);font:inherit;text-align:left;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.char-chip:hover{border-color:var(--gold-soft)}
+.char-chip.on{border-color:var(--gold-hi);box-shadow:0 0 16px hsla(var(--h),90%,55%,.4),inset 0 0 0 1px var(--gold)}
+.char-chip:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.char-face{width:48px;height:48px;flex:none;border:1px solid var(--gold);background:radial-gradient(circle,hsla(var(--h),60%,40%,.6),#02060c) center/cover}
+.char-chip.on .char-face{border-color:var(--gold-hi)}
+.char-info{display:flex;flex-direction:column}
+.char-name{font-family:'Cinzel',Georgia,serif;font-weight:700;letter-spacing:.08em;color:var(--gold-hi)}
+.char-sub{font-size:13px;color:var(--muted)}
+.preview-card{position:sticky;top:90px}
+
+@container (max-width:1180px){
+ .master-grid.three{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .master-grid.three>:last-child{grid-column:1/-1}
+}
+@container (max-width:760px){
+ .master-grid,.master-grid.three{grid-template-columns:1fr}
+ .preview-card{position:static}
+}
+@media (max-width:860px){
+ .master-body{padding:16px 16px 40px}
+ .master-badge{display:none}
+}

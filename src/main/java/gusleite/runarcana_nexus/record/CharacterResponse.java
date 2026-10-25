@@ -34,7 +34,9 @@ public record CharacterResponse(
         int inspiration,
         int proficiencyBonus,
         int passivePerception,
-        int passiveInsight
+        int passiveInsight,
+        // Dado de vida da classe (6 = d6).
+        int hitDie
 ) {
     public static CharacterResponse of(Character character) {
         return new CharacterResponse(
@@ -65,7 +67,8 @@ public record CharacterResponse(
                 character.getInspiration(),
                 character.getProficiencyBonus(),
                 character.getPassivePerception(),
-                character.getPassiveInsight()
+                character.getPassiveInsight(),
+                character.getCharacterClass().getHitHpDice()
         );
     }
 }

@@ -29,9 +29,11 @@ class AuthControllerTests {
     private AccountRepository accounts;
 
     @Test
-    void criaAsContasDosCincoPersonagens() {
+    void criaAsContasDosCincoPersonagensEADoMestre() {
         assertThat(accounts.findAll()).extracting("username")
-                .containsExactlyInAnyOrder("rudo", "gaudron", "proto", "titan", "loge");
+                .containsExactlyInAnyOrder("rudo", "gaudron", "proto", "titan", "loge", "mestre");
+        assertThat(accounts.findByUsername("mestre")).hasValueSatisfying(a -> assertThat(a.isMaster()).isTrue());
+        assertThat(accounts.findByUsername("rudo")).hasValueSatisfying(a -> assertThat(a.isMaster()).isFalse());
     }
 
     @Test

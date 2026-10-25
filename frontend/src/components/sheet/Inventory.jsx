@@ -1,54 +1,95 @@
 import { useState } from 'react'
-import { ITEM_KINDS, carryCapacity, formatKg, itemStats, rarityOf, totalWeight } from '../../data/rules.js'
+import { ITEM_KINDS, carryCapacity, formatKg, itemStats, rarityOf, totalValue, totalWeight } from '../../data/rules.js'
 import { CoinIcon } from './icons.jsx'
 
-const MIN_SLOTS = 12
+const MIN_SLOTS = 24
+const FILTERS = [
+  { id: 'ALL', label: 'Todos' },
+  { id: 'WEAPON', label: 'Armas' },
+  { id: 'ARMOR', label: 'Armaduras' },
+  { id: 'CONSUMABLE', label: 'Consumíveis' },
+  { id: 'OBJECT', label: 'Objetos' },
+]
 
-// Inventário em casas quadradas como a loja/inventário do LoL; a borda mostra a raridade.
+// Aba de inventário: casas quadradas como a loja do LoL (a borda mostra a raridade),
+// filtro por tipo e a dica do item escolhido ao lado.
 export default function Inventory({ items, strength }) {
+  const [filter, setFilter] = useState('ALL')
   const [selectedId, setSelectedId] = useState(items[0]?.id ?? null)
-  const selected = items.find(i => i.id === selectedId)
+  const visible = filter === 'ALL' ? items : items.filter(i => i.kind === filter)
+  // Se o filtro esconder o item escolhido, mostra o primeiro que continua visível.
+  const selected = visible.find(i => i.id === selectedId) ?? visible[0]
   const weight = totalWeight(items)
   const capacity = carryCapacity(strength)
   const load = Math.min(weight / capacity, 1)
-  const empty = Math.max(MIN_SLOTS - items.length, 0)
+  const empty = Math.max(MIN_SLOTS - visible.length, 0)
+  const counts = Object.fromEntries(FILTERS.map(f => [f.id, f.id === 'ALL' ? items.length : items.filter(i => i.kind === f.id).length]))
 
   return (
-    <>
-      <h3 className="card-title">Inventário <small>{items.length} {items.length === 1 ? 'item' : 'itens'}</small></h3>
-      <div className="slots">
-        {items.map(item => {
-          const rarity = rarityOf(item.rarity)
-          return (
-            <button
-              key={item.id}
-              type="button"
-              className={'slot' + (item.id === selectedId ? ' on' : '')}
-              style={{ '--r': rarity.color }}
-              onClick={() => setSelectedId(item.id)}
-              onMouseEnter={() => setSelectedId(item.id)}
-              aria-label={`${item.name}, ${rarity.name}${item.quantity > 1 ? ', ' + item.quantity + ' unidades' : ''}`}
-            >
-              <ItemIcon kind={item.kind} />
-              {item.quantity > 1 && <span className="qty">{item.quantity}</span>}
-            </button>
-          )
-        })}
-        {Array.from({ length: empty }, (_, i) => <span key={'e' + i} className="slot empty" aria-hidden="true" />)}
-      </div>
-
-      {selected ? <ItemDetail item={selected} /> : (
-        <p className="muted-note">Mochila vazia. Quando o mestre entregar itens, eles aparecem aqui.</p>
-      )}
-
-      <div className="carry">
-        <div className="carry-head">
-          <span>Carga</span>
-          <b>{formatKg(weight)} <small>/ {formatKg(capacity)}</small></b>
+    <div className="inventory">
+      <div className="inv-main">
+        <div className="card-title inv-title">
+          <h3>Inventário <small>{items.length} {items.length === 1 ? 'item' : 'itens'}</small></h3>
+          <div className="seg" role="group" aria-label="Filtrar por tipo">
+            {FILTERS.map(f => (
+              <button
+                key={f.id}
+                type="button"
+                className={filter === f.id ? 'on' : ''}
+                aria-pressed={filter === f.id}
+                disabled={f.id !== 'ALL' && counts[f.id] === 0}
+                onClick={() => setFilter(f.id)}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
         </div>
-        <div className={'carry-bar' + (load > 0.8 ? ' heavy' : '')}><div style={{ width: load * 100 + '%' }} /></div>
+
+        <div className="slots">
+          {visible.map(item => {
+            const rarity = rarityOf(item.rarity)
+            return (
+              <button
+                key={item.id}
+                type="button"
+                className={'slot' + (item.id === selected?.id ? ' on' : '')}
+                style={{ '--r': rarity.color }}
+                onClick={() => setSelectedId(item.id)}
+                onMouseEnter={() => setSelectedId(item.id)}
+                aria-label={`${item.name}, ${rarity.name}${item.quantity > 1 ? ', ' + item.quantity + ' unidades' : ''}`}
+              >
+                <ItemIcon kind={item.kind} />
+                {item.quantity > 1 && <span className="qty">{item.quantity}</span>}
+              </button>
+            )
+          })}
+          {Array.from({ length: empty }, (_, i) => <span key={'e' + i} className="slot empty" aria-hidden="true" />)}
+        </div>
+
+        <div className="inv-summary">
+          <div className="carry">
+            <div className="carry-head">
+              <span>Carga</span>
+              <b>{formatKg(weight)} <small>/ {formatKg(capacity)}</small></b>
+            </div>
+            <div className={'carry-bar' + (load > 0.8 ? ' heavy' : '')}><div style={{ width: load * 100 + '%' }} /></div>
+          </div>
+          <div className="inv-value" title="Soma do preço dos itens">
+            <span>Valor estimado</span>
+            <b><CoinIcon />{totalValue(items).toLocaleString('pt-BR')}</b>
+          </div>
+        </div>
       </div>
-    </>
+
+      <div className="inv-side">
+        {selected ? <ItemDetail item={selected} /> : (
+          <div className="item-detail empty-detail">
+            <p className="muted-note">Mochila vazia. Quando o mestre entregar itens, eles aparecem aqui.</p>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 

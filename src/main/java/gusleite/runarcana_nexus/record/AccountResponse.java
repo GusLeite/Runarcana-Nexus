@@ -4,9 +4,10 @@ import gusleite.runarcana_nexus.model.auth.Account;
 
 public record AccountResponse(
     String username,
-    boolean mustChangePassword
+    boolean mustChangePassword,
+    boolean master
 ) {
     public static AccountResponse of(Account account) {
-        return new AccountResponse(account.getUsername(), account.isMustChangePassword());
+        return new AccountResponse(account.getUsername(), account.isMustChangePassword(), account.isMaster());
     }
 }

@@ -1,5 +1,6 @@
 package gusleite.runarcana_nexus.model.auth;
 
+import gusleite.runarcana_nexus.enums.AccountRole;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,4 +26,12 @@ public class Account {
     private boolean mustChangePassword;
 
     private Instant passwordChangedAt;
+
+    // Nulo nas contas criadas antes do papel existir: conta como jogador.
+    @Enumerated(EnumType.STRING)
+    private AccountRole role;
+
+    public boolean isMaster() {
+        return role == AccountRole.MASTER;
+    }
 }

@@ -1,5 +1,6 @@
 package gusleite.runarcana_nexus.config;
 
+import gusleite.runarcana_nexus.enums.AccountRole;
 import gusleite.runarcana_nexus.model.auth.Account;
 import gusleite.runarcana_nexus.repository.AccountRepository;
 import gusleite.runarcana_nexus.services.AuthService;
@@ -24,14 +25,22 @@ public class AuthConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Cria as contas dos personagens da mesa que ainda não existem.
+    // Cria as contas dos personagens da mesa (e a do mestre) que ainda não existem.
     // A senha inicial é o próprio nome do usuário, e a conta fica marcada para trocar a senha.
     @Bean
     public ApplicationRunner seedAccounts(
             AccountRepository accounts,
             PasswordEncoder encoder,
-            @Value("${runarcana.auth.seed-accounts:rudo,gaudron,proto,titan,loge}") List<String> usernames) {
-        return args -> usernames.stream()
+            @Value("${runarcana.auth.seed-accounts:rudo,gaudron,proto,titan,loge}") List<String> usernames,
+            @Value("${runarcana.auth.master-accounts:mestre}") List<String> masters) {
+        return args -> {
+            seed(accounts, encoder, usernames, AccountRole.PLAYER);
+            seed(accounts, encoder, masters, AccountRole.MASTER);
+        };
+    }
+
+    private static void seed(AccountRepository accounts, PasswordEncoder encoder, List<String> usernames, AccountRole role) {
+        usernames.stream()
                 .map(AuthService::normalizeUsername)
                 .filter(username -> !username.isEmpty() && !accounts.existsByUsername(username))
                 .forEach(username -> {
@@ -39,8 +48,9 @@ public class AuthConfig {
                     account.setUsername(username);
                     account.setPasswordHash(encoder.encode(username));
                     account.setMustChangePassword(true);
+                    account.setRole(role);
                     accounts.save(account);
-                    log.info("Conta criada para o personagem '{}' com a senha inicial padrão.", username);
+                    log.info("Conta '{}' ({}) criada com a senha inicial padrão.", username, role);
                 });
     }
 }

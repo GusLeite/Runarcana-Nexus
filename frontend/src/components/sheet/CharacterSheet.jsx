@@ -1,37 +1,73 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { fetchSheet } from '../../api/character.js'
-import { formatModifier, modifier, rollD20 } from '../../data/rules.js'
+import { fetchSheet, rest as restApi, setAbilityUses } from '../../api/character.js'
+import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
+import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
+import { rollCheck, rollDice } from '../../data/rules.js'
 import SheetHero from './SheetHero.jsx'
-import AttributeGrid from './AttributeGrid.jsx'
-import SkillList from './SkillList.jsx'
+import OverviewTab from './OverviewTab.jsx'
+import AbilitiesTab from './AbilitiesTab.jsx'
 import Inventory from './Inventory.jsx'
-import DiceRoll, { RollLog } from './DiceRoll.jsx'
+import DocumentsTab from './DocumentsTab.jsx'
+import NotesTab from './NotesTab.jsx'
+import DiceRoll from './DiceRoll.jsx'
 import { CoinIcon, ExitIcon, KeyIcon } from './icons.jsx'
 import '../../styles/sheet.css'
 
 const MAX_LOG = 8
+const TABS = [
+  { id: 'sheet', label: 'FICHA' },
+  { id: 'abilities', label: 'MAGIAS' },
+  { id: 'inventory', label: 'INVENTÁRIO' },
+  { id: 'documents', label: 'DOCUMENTOS' },
+  { id: 'notes', label: 'ANOTAÇÕES' },
+]
+const MODE_SHORT = { adv: 'V', dis: 'D' }
 
-// Tela pós-login: a ficha do personagem no estilo do cliente do LoL.
-// Arte e cores vêm de data/characters.js; os números, de GET /character/me.
+// Fixadas primeiro, depois as editadas mais recentemente (mesma ordem do back-end).
+const sortNotes = list => [...list].sort((a, b) => (b.pinned - a.pinned) || (b.updatedAt ?? '').localeCompare(a.updatedAt ?? ''))
+
+// Tela pós-login: a ficha do personagem no estilo do cliente do LoL, em abas.
+// Arte e cores vêm de data/characters.js; os dados, de /character/me, /documents/me e /notes.
 export default function CharacterSheet({ character, session, notice, onChangePassword, onLogout, onExpired }) {
   const [state, setState] = useState({ status: 'loading' })
+  const [abilities, setAbilities] = useState([])
+  const [documents, setDocuments] = useState([])
+  const [notes, setNotes] = useState([])
+  const [tab, setTab] = useState('sheet')
+  const [docId, setDocId] = useState(null)
+  const [noteId, setNoteId] = useState(null)
   const [rolls, setRolls] = useState([])
   const [current, setCurrent] = useState(null)
+  const [mode, setMode] = useState('normal')
+  const [busy, setBusy] = useState(false)
   const [toast, setToast] = useState(notice)
-  // Em ref para a busca não repetir a cada render do App (o callback muda de identidade).
+  // Em ref para as buscas não repetirem a cada render do App (o callback muda de identidade).
   const expired = useRef(onExpired)
   expired.current = onExpired
+  const token = session.token
+
+  // Erro de uma ação: 401 desloga; o resto vira aviso.
+  const fail = useCallback(err => {
+    if (err.status === 401) expired.current()
+    else setToast(err.message)
+  }, [])
 
   const load = useCallback(() => {
     setState({ status: 'loading' })
-    fetchSheet(session.token)
-      .then(sheet => setState({ status: 'ready', sheet }))
+    fetchSheet(token)
+      .then(sheet => {
+        setState({ status: 'ready', sheet })
+        setAbilities(sheet.abilities ?? [])
+      })
       .catch(err => {
         if (err.status === 401) expired.current()
         else if (err.status === 404) setState({ status: 'empty', message: err.message })
         else setState({ status: 'error', message: err.message })
       })
-  }, [session.token])
+    // Documentos e anotações não travam a ficha: se falharem, as abas ficam vazias.
+    fetchDocuments(token).then(setDocuments).catch(() => {})
+    fetchNotes(token).then(list => setNotes(sortNotes(list))).catch(() => {})
+  }, [token])
 
   useEffect(load, [load])
 
@@ -41,26 +77,108 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     return () => clearTimeout(t)
   }, [toast])
 
-  const roll = useCallback((label, mod = 0) => {
-    const d20 = rollD20()
-    const entry = { id: Date.now() + Math.random(), label, mod, d20, total: d20 + mod }
+  // ---------- rolagens ----------
+
+  const pushRoll = entry => {
     setCurrent(entry)
     setRolls(list => [entry, ...list].slice(0, MAX_LOG))
+  }
+
+  const roll = useCallback((label, mod = 0) => {
+    const { d20, other } = rollCheck(mode)
+    pushRoll({ id: Date.now() + Math.random(), kind: 'check', label, mod, d20, other, mode, total: d20 + mod })
+  }, [mode])
+
+  const rollExpr = useCallback((label, expr) => {
+    const r = rollDice(expr)
+    if (r) pushRoll({ id: Date.now() + Math.random(), kind: 'dice', label, expr, ...r })
   }, [])
 
-  const sheet = state.status === 'ready' ? state.sheet.character : null
-  const initiative = sheet ? modifier(sheet.dex) : 0
-
-  // Atalho: R rola um d20 puro, Esc fecha a rolagem.
+  // Atalho: R rola um d20 puro, Esc fecha a rolagem (fora de campos de texto).
   useEffect(() => {
     const onKey = e => {
       if (e.target.closest?.('input, textarea')) return
       if (e.key === 'Escape') setCurrent(null)
-      if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey) roll('d20')
+      if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey && !e.altKey) roll('d20')
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [roll])
+
+  const closeRoll = useCallback(() => setCurrent(null), [])
+
+  // ---------- habilidades ----------
+
+  const setUses = useCallback((ability, usesLeft) => {
+    const before = abilities
+    setAbilities(list => list.map(a => (a.id === ability.id ? { ...a, usesLeft } : a)))
+    setAbilityUses(token, ability.id, usesLeft).catch(err => { setAbilities(before); fail(err) })
+  }, [abilities, token, fail])
+
+  const rest = useCallback(type => {
+    setBusy(true)
+    restApi(token, type)
+      .then(list => {
+        setAbilities(list)
+        setToast(type === 'LONG' ? 'Descanso longo: todos os usos voltaram.' : 'Descanso curto: usos recuperados.')
+      })
+      .catch(fail)
+      .finally(() => setBusy(false))
+  }, [token, fail])
+
+  // ---------- documentos ----------
+
+  // Um aviso por documento, mesmo que o efeito da aba dispare de novo antes do estado atualizar.
+  const sentReads = useRef(new Set())
+  const markRead = useCallback(doc => {
+    setDocuments(list => list.map(d => (d.id === doc.id ? { ...d, read: true } : d)))
+    if (sentReads.current.has(doc.id)) return
+    sentReads.current.add(doc.id)
+    markDocumentRead(token, doc.id).catch(() => sentReads.current.delete(doc.id))
+  }, [token])
+
+  // ---------- anotações ----------
+
+  const newNote = useCallback(() => {
+    setBusy(true)
+    createNote(token, { title: 'Nova anotação', body: '', pinned: false })
+      .then(note => {
+        setNotes(list => sortNotes([note, ...list]))
+        setNoteId(note.id)
+      })
+      .catch(fail)
+      .finally(() => setBusy(false))
+  }, [token, fail])
+
+  const saveNote = useCallback((id, values) =>
+    updateNote(token, id, values)
+      .then(note => setNotes(list => sortNotes(list.map(n => (n.id === id ? note : n)))))
+      .catch(err => { fail(err); throw err }), [token, fail])
+
+  const removeNote = useCallback(note => {
+    deleteNote(token, note.id)
+      .then(() => {
+        setNotes(list => list.filter(n => n.id !== note.id))
+        setNoteId(null)
+      })
+      .catch(fail)
+  }, [token, fail])
+
+  // Vai para uma aba já com um item escolhido (usado pelos atalhos da aba Ficha).
+  const go = useCallback((target, id) => {
+    setTab(target)
+    if (target === 'documents' && id != null) setDocId(id)
+    if (target === 'notes' && id != null) setNoteId(id)
+  }, [])
+
+  const sheet = state.status === 'ready' ? state.sheet.character : null
+  const unread = documents.filter(d => !d.read).length
+  const badges = {
+    abilities: abilities.length,
+    inventory: state.status === 'ready' ? state.sheet.inventory.length : 0,
+    documents: unread,
+    notes: notes.length,
+  }
 
   const motes = useMemo(() => Array.from({ length: 18 }, (_, i) => ({
     '--x': ((i * 37) % 100) + '%',
@@ -79,13 +197,25 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       <header className="topbar">
         <div className="topbar-left">
           <div className="logo">RUNARCANA</div>
-          <nav className="tabs" aria-label="Seções">
-            <span className="tab on" aria-current="page">FICHA</span>
-          </nav>
+          <button className="play" type="button" onClick={() => roll('d20')} title="Atalho: R">
+            <span>ROLAR D20{MODE_SHORT[mode] && <i className={'play-mode ' + mode}>{MODE_SHORT[mode]}</i>}</span>
+          </button>
         </div>
-        <button className="play" type="button" onClick={() => roll('d20')} title="Atalho: R">
-          <span>ROLAR D20</span>
-        </button>
+        <nav className="tabs" role="tablist" aria-label="Seções">
+          {TABS.map(t => (
+            <button
+              key={t.id}
+              type="button"
+              role="tab"
+              className={'tab' + (tab === t.id ? ' on' : '')}
+              aria-selected={tab === t.id}
+              onClick={() => setTab(t.id)}
+            >
+              {t.label}
+              {badges[t.id] > 0 && <span className={'tab-count' + (t.id === 'documents' ? ' alert' : '')}>{badges[t.id]}</span>}
+            </button>
+          ))}
+        </nav>
         <div className="topbar-right">
           {sheet && (
             <div className="purse" title="Ouro">
@@ -106,7 +236,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
         </div>
       </header>
 
-      <main className="sheet-body">
+      <main className={'sheet-body tab-' + tab}>
         <SheetHero character={character} sheet={sheet} />
 
         {state.status === 'loading' && (
@@ -120,50 +250,49 @@ export default function CharacterSheet({ character, session, notice, onChangePas
           </div>
         )}
 
-        {sheet && (
-          <>
-            <div className="sheet-col">
-              <section className="card" style={{ '--i': 1 }}>
-                <h3 className="card-title">Atributos <small>clique para rolar</small></h3>
-                <AttributeGrid sheet={sheet} onRoll={roll} />
-              </section>
-              <section className="card stats" style={{ '--i': 2 }}>
-                <Stat label="Proficiência" value={formatModifier(sheet.proficiencyBonus)} />
-                <Stat label="Iniciativa" value={formatModifier(initiative)} onClick={() => roll('Iniciativa', initiative)} />
-                <Stat label="Percepção passiva" value={sheet.passivePerception} />
-                <Stat label="Intuição passiva" value={sheet.passiveInsight} />
-                <Stat label="Inspiração" value={sheet.inspiration > 0 ? '◆'.repeat(Math.min(sheet.inspiration, 5)) : '—'} lit={sheet.inspiration > 0} />
-              </section>
-              <section className="card" style={{ '--i': 3 }}>
-                <SkillList skills={sheet.skills} onRoll={roll} />
-              </section>
-            </div>
+        {sheet && tab === 'sheet' && (
+          <OverviewTab
+            sheet={sheet}
+            abilities={abilities}
+            documents={documents}
+            notes={notes}
+            rolls={rolls}
+            mode={mode}
+            onMode={setMode}
+            onRoll={roll}
+            onRollDice={rollExpr}
+            onGo={go}
+          />
+        )}
 
-            <div className="sheet-col">
-              <section className="card" style={{ '--i': 2 }}>
-                <Inventory items={state.sheet.inventory} strength={sheet.str} />
-              </section>
-              <section className="card" style={{ '--i': 4 }}>
-                <h3 className="card-title">Rolagens <small>R para rolar</small></h3>
-                <RollLog rolls={rolls} />
-              </section>
-            </div>
-          </>
+        {sheet && tab !== 'sheet' && (
+          <div className="sheet-col wide" key={tab}>
+            <section className="card" style={{ '--i': 1 }}>
+              {tab === 'abilities' && (
+                <AbilitiesTab abilities={abilities} onSetUses={setUses} onRest={rest} onRollDice={rollExpr} busy={busy} />
+              )}
+              {tab === 'inventory' && <Inventory items={state.sheet.inventory} strength={sheet.str} />}
+              {tab === 'documents' && (
+                <DocumentsTab documents={documents} selectedId={docId} onSelect={setDocId} onOpen={markRead} />
+              )}
+              {tab === 'notes' && (
+                <NotesTab
+                  notes={notes}
+                  selectedId={noteId}
+                  onSelect={setNoteId}
+                  onCreate={newNote}
+                  onSave={saveNote}
+                  onDelete={removeNote}
+                  busy={busy}
+                />
+              )}
+            </section>
+          </div>
         )}
       </main>
 
-      <DiceRoll roll={current} onClose={() => setCurrent(null)} />
+      <DiceRoll roll={current} onClose={closeRoll} />
       {toast && <div className="toast" role="status">{toast}</div>}
     </div>
-  )
-}
-
-function Stat({ label, value, onClick, lit }) {
-  const Tag = onClick ? 'button' : 'div'
-  return (
-    <Tag className={'stat' + (onClick ? ' clickable' : '') + (lit ? ' lit' : '')} type={onClick ? 'button' : undefined} onClick={onClick}>
-      <span className="stat-value">{value}</span>
-      <span className="stat-label">{label}</span>
-    </Tag>
   )
 }

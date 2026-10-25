@@ -2,6 +2,27 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-25 — Painel do mestre (`feature/character-sheet`)
+- Front-end: botão **MESTRE** na tela inicial abre um portal de login (anéis hextech); o mestre logado vê o painel com as abas **Documentos** (escrever com prévia igual à do jogador, tipo, destinatários, enviados com apagar) e **Habilidades** (escolher personagem, cadastrar com prévia ao vivo, apagar).
+- Back-end: `GET /character/{id}/abilities` e `GET /documents/recipients` (só mestre), com testes.
+- Diagnóstico: o 404 ao criar anotação vinha de um back-end iniciado antes das rotas novas; registrado nas pendências.
+
+## 2026-10-25 — Magias, documentos do mestre e anotações (`feature/character-sheet`)
+- Back-end: papel de **mestre** (`Account.role`, conta `mestre` no seed, `AuthService.requireMaster` → 403).
+- Magias e habilidades (`CharacterAbility`): o mestre cadastra/apaga; o jogador gasta usos e descansa (curto/longo). Vêm em `/character/me`.
+- Documentos do mestre (`GameDocument` + `DocumentRead`): para todos ou para jogadores escolhidos, com marca de lido.
+- Anotações do jogador (`PlayerNote`): CRUD isolado por conta.
+- `CharacterResponse.hitDie` (dado de vida da classe). Testes em `PlayerFeaturesTests`.
+- Front-end: abas **MAGIAS** (teclas Q/W/E/R/P, usos em losangos, descanso, rolagem de dano), **DOCUMENTOS** (pergaminho com selo, NOVO, carimbo de segredo) e **ANOTAÇÕES** (salvamento automático, fixar).
+- Aba Ficha mais cheia: dados de vida, vantagem/desvantagem, barra rápida de habilidades, documentos recentes e anotação fixada. Barra do topo reorganizada para 5 abas; no celular o "Rolar d20" vira botão flutuante.
+
+## 2026-10-25 — Inventário em aba própria (`feature/character-sheet`)
+- A ficha ganhou as abas **FICHA** e **INVENTÁRIO** na barra do topo (também no celular).
+- A aba de inventário tem grade maior, filtro por tipo, detalhe do item ao lado e valor estimado (`totalValue` em `rules.js`, com teste).
+
+## 2026-10-25 — Correção: siglas dos atributos cortadas (`feature/character-sheet`)
+- Em larguras médias os 6 hexágonos ficavam pequenos e o `clip-path` cortava a sigla (FOR, DES...). Agora atributos e estatísticas se ajustam à largura da coluna (container queries) e o texto escala com o hexágono.
+
 ## 2026-10-25 — Ficha do personagem pós-login (`feature/character-sheet`)
 - Front-end: a tela pós-login provisória (`AccountPanel`) virou a **ficha do personagem** no estilo do cliente do LoL: splash com anel de nível e barra de PV, atributos em hexágonos, estatísticas, as 19 perícias com bônus, inventário em casas por raridade com dica de item, barra de carga e rolagem de d20 animada (crítico/falha crítica, atalho R).
 - `data/rules.js` com os rótulos em PT e as regras derivadas dos atributos (+ testes).

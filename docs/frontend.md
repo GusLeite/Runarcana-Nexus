@@ -17,23 +17,37 @@ A sessão (`{ token, username, mustChangePassword }`) fica no `localStorage` (`r
 
 Responsivo: abaixo de 760px os painéis empilham na vertical e a lore some. Com `prefers-reduced-motion` as animações e partículas são desligadas.
 
+## Mestre: entrada e painel
+
+- **Entrada**: botão **MESTRE** (coroa) no canto do cabeçalho da seleção, visível enquanto ninguém está logado. Abre o `MasterGate` (`components/master/MasterGate.jsx`): fundo escurecido com três anéis hextech girando e o `LoginForm` de sempre, usando um "personagem" `MASTER` (`id: 'mestre'`) definido no `App.jsx`. A troca da senha inicial do mestre aparece no mesmo portal (`PasswordForm`).
+- **Sessão**: a resposta do login traz `master: true`; o `App` aceita sessão salva de mestre (não precisa estar em `CHARACTERS`) e, logado, mostra o `MasterPanel` no lugar da seleção. "Sair" volta para a seleção.
+- **Painel** (`MasterPanel.jsx`): mesma moldura da ficha (barra do topo, cards, abas), com selo "MESTRE" e fundo dourado/turquesa sem arte. Abas:
+  - **Documentos** (`MasterDocuments.jsx`): título, tipo (chips coloridos por tipo), destinatários ("Todos os jogadores" ou um ou mais, vindos de `GET /documents/recipients`; nomes de `CHARACTERS`), texto com a mesma formatação da leitura, link de imagem. "Escrever / Prévia": a prévia usa o `DocumentView` da ficha, então é exatamente o que o jogador vê. O botão diz para quem vai ("ENVIAR PARA RUDO"). À direita, os enviados com destinatários e "Apagar" com confirmação.
+  - **Habilidades** (`MasterAbilities.jsx`): escolhe o personagem (cartões com a arte de `CHARACTERS` quando o nome bate), formulário (nome, tipo, círculo e escola/componentes só para magia, tempo, alcance, duração, dano validado com `parseDice`, usos — vazio = livre — e recarga, descrição), **prévia ao vivo** com o `AbilityDetail` da ficha e a lista do personagem com "Apagar". Depois de adicionar, o formulário limpa mas mantém o tipo e o círculo.
+- API em `api/master.js`; estilos em `styles/master.css` (usa também `sheet.css`).
+
 ## Tela pós-login: ficha do personagem
 
-`components/sheet/CharacterSheet.jsx` busca `GET /character/me` (`api/character.js`) e monta a ficha no estilo do cliente do League of Legends:
+`components/sheet/CharacterSheet.jsx` busca `GET /character/me`, `GET /documents/me` e `GET /notes` (`api/character.js`, `api/documents.js`, `api/notes.js`) e monta a ficha no estilo do cliente do League of Legends. Documentos e anotações não travam a ficha: se falharem, as abas ficam vazias.
 
-- **Barra do topo**: logo, aba "FICHA", botão **ROLAR D20** no formato do "JOGAR" do cliente (trapézio com borda turquesa/dourada), ouro com moeda, nome do personagem e botões de alterar senha e sair.
+- **Abas**: **FICHA**, **MAGIAS**, **INVENTÁRIO**, **DOCUMENTOS** e **ANOTAÇÕES**, com contador ao lado (em documentos, o contador é de **não lidos**, em vermelho pulsando). A aba fica em estado do `CharacterSheet` (não há roteamento). O herói aparece em todas no desktop; no celular só na Ficha.
+- **Barra do topo**: logo e botão **ROLAR D20** (formato do "JOGAR" do cliente, mostra V/D quando há vantagem/desvantagem) à esquerda, abas no meio (rolam na horizontal se faltar espaço), ouro, nome e botões de alterar senha e sair à direita. No celular as abas vão para a segunda linha e o "Rolar d20" vira um botão hexagonal flutuante no canto (a barra perde o `backdrop-filter` ali, porque ele prenderia o `position: fixed`).
 - **Fundo**: a arte do personagem desfocada e escurecida, brilho na cor `hue` dele, trama hextech dourada em losangos e partículas turquesa subindo.
 - **Herói** (`SheetHero.jsx`): splash do personagem (vídeo, se houver) com cantos dourados, anel de nível (preenche até o 20, como a borda de ícone do invocador), classe, nome, região, barra de PV com uma marca a cada 10 PV (vermelha abaixo de 35%) e dados de identidade.
 - **Atributos** (`AttributeGrid.jsx`): seis hexágonos com o modificador em destaque e o valor embaixo.
-- **Estatísticas**: proficiência, iniciativa (mod. de DES, clicável), percepção e intuição passivas, inspiração.
+- **Estatísticas**: proficiência, iniciativa (mod. de DES, clicável), percepção e intuição passivas, **dados de vida** (`nível`d`hitDie`; clicar rola 1 dado + CON) e inspiração.
+- **Coluna direita da Ficha** (`OverviewTab.jsx`): Rolagens (com o seletor **Desvantagem / Normal / Vantagem**, que vale para todo teste de d20), **Habilidades** (barra rápida com até 5 ativas; clicar rola o dano ou abre a aba), **Documentos** (os 3 mais recentes, com selo NOVO) e **Anotação fixada** (ou a última editada).
+- **Magias** (`AbilitiesTab.jsx`): habilidades, passivas e magias por círculo (truques primeiro). Ícone quadrado com a inicial e borda na cor do tipo (dourado = habilidade, turquesa = passiva, roxo = magia); como no LoL, as 4 primeiras habilidades ativas ganham as teclas **Q/W/E/R** e as passivas **P** (a barra rápida da Ficha usa a mesma regra, `keysFor`). Usos em losangos: clicar num aceso gasta 1, num apagado recupera 1 (`PATCH`, com atualização otimista e volta atrás se falhar). Botões de **Descanso curto/longo**. Dano com botão para rolar a expressão ("2d8+4"). Dica ao lado com tempo, alcance, duração, componentes, escola, descrição e usos.
+- **Documentos** (`DocumentsTab.jsx`): lista com selo na cor do tipo (carta, pista, mapa, lore, segredo, recompensa) e "NOVO"; filtro "Todos / Não lidos". Leitura num "pergaminho" com selo de cera, imagem (se houver) e texto com `## título`, `**negrito**` e `*itálico*` (`RichText`, sem HTML). Segredos ganham o carimbo CONFIDENCIAL. O documento mostrado é marcado como lido (uma chamada por documento, mesmo no StrictMode).
+- **Anotações** (`NotesTab.jsx`): lista (fixadas primeiro) e editor com **salvamento automático** 700 ms depois de parar de digitar (e ao sair do campo ou trocar de nota), "Fixar" (vai para o topo e para o card da Ficha) e "Apagar" com confirmação.
 - **Perícias** (`SkillList.jsx`): as 19 agrupadas pelo atributo; losango turquesa = proficiente; o maior bônus brilha; filtro "Todas / Proficientes".
-- **Inventário** (`Inventory.jsx`): casas quadradas como a loja do LoL, com a borda na cor da raridade (Comum cinza → Proibido vermelho), quantidade no canto, ícone SVG por tipo; o item escolhido aparece num painel no formato da dica de item (atributos, descrição, efeito, peso, preço). Barra de carga = peso total / (FOR × 7,5 kg), laranja acima de 80%.
-- **Rolagens** (`DiceRoll.jsx`): clicar num atributo, perícia ou iniciativa rola d20 + bônus. O dado gira e para no resultado; 20 natural acende em dourado ("CRÍTICO!"), 1 natural treme em vermelho ("FALHA CRÍTICA"). Atalhos: **R** rola um d20 puro, **Esc** fecha. As últimas 8 rolagens ficam no card "Rolagens" (só no navegador).
+- **Inventário** (`Inventory.jsx`, aba própria): casas quadradas como a loja do LoL, com a borda na cor da raridade (Comum cinza → Proibido vermelho), quantidade no canto, ícone SVG por tipo; filtro por tipo (Armas, Armaduras, Consumíveis, Objetos; os vazios ficam desativados). O item escolhido aparece ao lado, num painel no formato da dica de item (atributos, descrição, efeito, peso, preço); se o filtro esconder o escolhido, vale o primeiro visível. Embaixo: barra de carga = peso total / (FOR × 7,5 kg), laranja acima de 80%, e o valor estimado (soma de preço × quantidade). Com a coluna abaixo de 720px, o detalhe desce para baixo da grade e as casas vazias param em 12.
+- **Rolagens** (`DiceRoll.jsx`): clicar num atributo, perícia ou iniciativa rola d20 + bônus; com vantagem/desvantagem rola 2d20 e mostra o descartado riscado. Dano e dados de vida rolam a expressão e mostram cada dado. O dado gira e para no resultado; 20 natural acende em dourado ("CRÍTICO!"), 1 natural treme em vermelho ("FALHA CRÍTICA"). Atalhos: **R** rola um d20 puro, **Esc** fecha. As últimas 8 rolagens ficam no card "Rolagens" (só no navegador).
 - **Estados**: carregando (hexágono girando), ficha inexistente (404, mensagem da API), erro com "Tentar de novo"; 401 desloga.
 
-Os números que contam (bônus de perícia, proficiência, passivas) vêm prontos do back-end. `data/rules.js` (+ `.test.js`) só traduz os enums para PT (perícias, classes, regiões, alinhamentos, raridades, propriedades), formata (`+3`, `−1`, `67,5 kg`) e calcula o que sai direto dos atributos (modificador, carga, d20).
+Os números que contam (bônus de perícia, proficiência, passivas) vêm prontos do back-end. `data/rules.js` (+ `.test.js`) só traduz os enums para PT (perícias, classes, regiões, alinhamentos, raridades, propriedades), formata (`+3`, `−1`, `67,5 kg`, datas) e calcula o que sai direto dos atributos ou dos dados (modificador, carga, d20 com vantagem/desvantagem em `rollCheck`, expressões "2d6+4" em `parseDice`/`rollDice`, agrupamento de habilidades).
 
-Layout: 3 colunas acima de 1240px; 2 colunas (herói + conteúdo, inventário e rolagens embaixo) até 860px; 1 coluna no celular. O CSS fica em `styles/sheet.css`, importado pelo `CharacterSheet`.
+Layout: 3 colunas acima de 1240px; 2 colunas (herói + conteúdo, rolagens embaixo) até 860px; 1 coluna no celular. Atributos e estatísticas usam **container queries** na coluna (`.sheet-col` é `container-type: inline-size`): com a coluna abaixo de 640px os hexágonos passam de 6 para 3 por linha (e as estatísticas de 6 para 3 abaixo de 680px), e o texto dos hexágonos escala em `cqi`, para a sigla não ser cortada pelas pontas. O CSS fica em `styles/sheet.css`, importado pelo `CharacterSheet`.
 
 ## Estrutura
 
@@ -45,7 +59,9 @@ frontend/
     ├── main.jsx               monta <App/> e importa o CSS global
     ├── App.jsx                estado (hovered, selected, sessão), cabeçalho, painéis e qual formulário mostrar
     ├── api/auth.js (+ .test.js)  chamadas /auth (login, me, logout, senha), sessão no localStorage e o `request` compartilhado
-    ├── api/character.js       GET /character/me (ficha do logado)
+    ├── api/character.js       ficha do logado, usos de habilidade e descanso
+    ├── api/documents.js       documentos do mestre (listar, marcar lido)
+    ├── api/notes.js           anotações (listar, criar, salvar, apagar)
     ├── data/characters.js     lista de personagens + imports das artes
     ├── data/rules.js (+ .test.js)  rótulos em PT, formatação e regras derivadas dos atributos
     ├── components/
@@ -54,11 +70,15 @@ frontend/
     │   ├── LoginForm.jsx      formulário de login do personagem escolhido
     │   ├── PasswordForm.jsx   troca de senha (senha atual, nova, confirmação)
     │   ├── effects/Embers.jsx brasas e calor (Gaudron)
-    │   └── sheet/             ficha pós-login: CharacterSheet, SheetHero, AttributeGrid, SkillList, Inventory, DiceRoll, icons
+    │   └── sheet/             ficha pós-login: CharacterSheet (abas e estado), SheetHero, OverviewTab, AttributeGrid,
+    │                          SkillList, AbilitiesTab, Inventory, DocumentsTab, NotesTab, DiceRoll, icons
+    │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities
     ├── hooks/usePanelSprings.js  animação por mola (requestAnimationFrame)
     ├── utils/placeholderArt.js   gera um retrato SVG para quem ainda não tem arte
     ├── styles/global.css      visual da seleção e do login (tokens em :root)
     ├── styles/sheet.css       visual da ficha
+    ├── styles/master.css      botão, portal e painel do mestre
+    ├── api/master.js          rotas do mestre (personagens, habilidades, documentos, destinatários)
     ├── validation.js (+ .test.js)
     └── assets/characters/     rudo.jpg/.mp4, gaudron.jpg/.mp4
 ```
@@ -112,8 +132,10 @@ A tela foi prototipada num `index.html` único (React via CDN, imagens e vídeo 
 
 - Artes reais para Proto, Titan e Loge.
 - Vídeos pesados (cerca de 8,5 MB e 7,2 MB) estão versionados no Git; vale comprimir ou passar para Git LFS/CDN.
-- Ainda não há roteamento (react-router); a aba "FICHA" é a única. Próximas candidatas: lore, campanha, magias.
-- A ficha é só leitura: PV atual, ouro, inspiração e inventário ainda não podem ser alterados pela tela (o back-end não tem essas rotas).
+- Ainda não há roteamento (react-router): as abas da ficha são estado local e não mudam a URL (recarregar volta para "FICHA").
+- PV atual, ouro, inspiração e inventário ainda não podem ser alterados pela tela (o back-end não tem essas rotas); dos dados do jogo, só os usos de habilidade e as anotações são editáveis.
+- O painel do mestre ainda não edita habilidades/documentos já criados (só cria e apaga), não mostra quem leu cada documento e não gerencia fichas (criar personagem, PV, ouro, itens).
+- Documentos e anotações só atualizam ao abrir a ficha (não há aviso em tempo real quando o mestre envia algo).
 - Os itens usam ícones SVG genéricos por tipo; falta arte por item.
 - O histórico de rolagens não é compartilhado com o mestre nem salvo.
 - O token fica no `localStorage` (simples, mas acessível a scripts da página); se o projeto crescer, considerar cookie `HttpOnly`.

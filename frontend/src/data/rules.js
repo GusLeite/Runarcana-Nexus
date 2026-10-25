@@ -128,6 +128,9 @@ export const formatKg = value =>
 export const totalWeight = inventory =>
   inventory.reduce((sum, item) => sum + (item.weight ?? 0) * item.quantity, 0)
 
+export const totalValue = inventory =>
+  inventory.reduce((sum, item) => sum + (item.price ?? 0) * item.quantity, 0)
+
 // Linhas de atributos do item para o painel de detalhes.
 export function itemStats(item) {
   const stats = []
@@ -150,9 +153,92 @@ export function groupSkills(skills) {
     .filter(group => group.skills.length > 0)
 }
 
+// ---------- magias e habilidades ----------
+
+export const ABILITY_TYPES = {
+  ABILITY: { name: 'Habilidade', plural: 'Habilidades' },
+  PASSIVE: { name: 'Passiva', plural: 'Passivas' },
+  SPELL: { name: 'Magia', plural: 'Magias' },
+}
+
+export const RECHARGES = {
+  SHORT_REST: 'Descanso curto',
+  LONG_REST: 'Descanso longo',
+  NONE: 'Não recupera',
+}
+
+export const spellLevelName = level => (level === 0 ? 'Truque' : level + 'º círculo')
+
+// Ordem da aba: habilidades, passivas e magias por círculo (truques primeiro).
+export function groupAbilities(abilities) {
+  const groups = []
+  const push = (key, title, list) => list.length && groups.push({ key, title, list })
+  push('ABILITY', 'Habilidades', abilities.filter(a => a.type === 'ABILITY'))
+  push('PASSIVE', 'Passivas', abilities.filter(a => a.type === 'PASSIVE'))
+  const spells = abilities.filter(a => a.type === 'SPELL')
+  const levels = [...new Set(spells.map(s => s.spellLevel ?? 0))].sort((a, b) => a - b)
+  levels.forEach(l => push('SPELL-' + l, l === 0 ? 'Truques' : 'Magias de ' + l + 'º círculo', spells.filter(s => (s.spellLevel ?? 0) === l)))
+  return groups
+}
+
+// ---------- documentos ----------
+
+export const DOCUMENT_KINDS = {
+  LETTER: { name: 'Carta', color: '#c8a24a' },
+  CLUE: { name: 'Pista', color: '#2fd3c0' },
+  MAP: { name: 'Mapa', color: '#6fbf5a' },
+  LORE: { name: 'Lore', color: '#8f7cff' },
+  SECRET: { name: 'Segredo', color: '#e0204a' },
+  REWARD: { name: 'Recompensa', color: '#f0b232' },
+}
+
+export const documentKindOf = kind => DOCUMENT_KINDS[kind] ?? DOCUMENT_KINDS.LETTER
+
+export function formatDate(iso) {
+  if (!iso) return ''
+  return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })
+}
+
+export function formatDateTime(iso) {
+  if (!iso) return ''
+  return new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+}
+
+// ---------- dados ----------
+
 // d20 com crypto quando disponível (rolagem justa), Math.random como reserva.
 export function rollD20(random = defaultRandom) {
-  return Math.floor(random() * 20) + 1
+  return rollDie(20, random)
+}
+
+export function rollDie(sides, random = defaultRandom) {
+  return Math.floor(random() * sides) + 1
+}
+
+// Teste de d20 com vantagem ('adv'), desvantagem ('dis') ou normal: devolve o dado que vale e o descartado.
+export function rollCheck(mode = 'normal', random = defaultRandom) {
+  const a = rollD20(random)
+  if (mode === 'normal') return { d20: a, other: null }
+  const b = rollD20(random)
+  const keep = mode === 'adv' ? Math.max(a, b) : Math.min(a, b)
+  return { d20: keep, other: keep === a ? b : a }
+}
+
+// "2d6+4" → { count: 2, sides: 6, bonus: 4 }; null se não for uma expressão de dados.
+export function parseDice(expr) {
+  const m = /^\s*(\d+)\s*d\s*(\d+)\s*(?:([+-])\s*(\d+))?\s*$/i.exec(expr ?? '')
+  if (!m) return null
+  const count = Number(m[1])
+  const sides = Number(m[2])
+  if (count < 1 || count > 100 || sides < 2) return null
+  return { count, sides, bonus: m[3] ? (m[3] === '-' ? -1 : 1) * Number(m[4]) : 0 }
+}
+
+export function rollDice(expr, random = defaultRandom) {
+  const dice = parseDice(expr)
+  if (!dice) return null
+  const rolls = Array.from({ length: dice.count }, () => rollDie(dice.sides, random))
+  return { ...dice, rolls, total: rolls.reduce((s, r) => s + r, 0) + dice.bonus }
 }
 
 function defaultRandom() {

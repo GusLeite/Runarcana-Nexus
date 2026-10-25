@@ -4,7 +4,7 @@ import { login, logout } from '../api/auth.js'
 
 // Painel de login que aparece depois que o jogador escolhe o personagem.
 // Por enquanto o usuário é o próprio id do personagem (ex.: "rudo").
-export default function LoginForm({ character, onLogin, onBack }) {
+export default function LoginForm({ character, onLogin, onBack, backLabel = 'Trocar de personagem' }) {
   const [user, setUser] = useState(character.id)
   const [password, setPassword] = useState('')
   const [msg, setMsg] = useState(null)
@@ -40,7 +40,7 @@ export default function LoginForm({ character, onLogin, onBack }) {
       <input id="pw" type="password" autoFocus autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} />
       {msg && <div className={msg.type} role="status">{msg.text}</div>}
       <button className="btn" type="submit" disabled={busy}>{busy ? 'ENTRANDO…' : 'ENTRAR'}</button>
-      <button className="back" type="button" onClick={onBack}>Trocar de personagem</button>
+      <button className="back" type="button" onClick={onBack}>{backLabel}</button>
     </form>
   )
 }

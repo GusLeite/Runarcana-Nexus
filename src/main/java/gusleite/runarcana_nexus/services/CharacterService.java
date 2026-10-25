@@ -7,11 +7,13 @@ import gusleite.runarcana_nexus.model.player.Background;
 import gusleite.runarcana_nexus.model.player.Character;
 import gusleite.runarcana_nexus.model.player.CharacterSkill;
 import gusleite.runarcana_nexus.model.roles.CharacterClass;
+import gusleite.runarcana_nexus.record.AbilityResponse;
 import gusleite.runarcana_nexus.record.CharacterResponse;
 import gusleite.runarcana_nexus.record.CharacterSheetResponse;
 import gusleite.runarcana_nexus.record.CreateCharacterRequest;
 import gusleite.runarcana_nexus.record.InventoryItemResponse;
 import gusleite.runarcana_nexus.repository.BackGroundRepository;
+import gusleite.runarcana_nexus.repository.CharacterAbilityRepository;
 import gusleite.runarcana_nexus.repository.CharacterClassRepository;
 import gusleite.runarcana_nexus.repository.CharacterRepository;
 import gusleite.runarcana_nexus.repository.PlayerItemsRepository;
@@ -28,15 +30,18 @@ public class CharacterService {
     private final CharacterClassRepository classRepository;
     private final BackGroundRepository backgroundRepository;
     private final PlayerItemsRepository itemsRepository;
+    private final CharacterAbilityRepository abilityRepository;
 
     public CharacterService(CharacterRepository charRepository,
                             CharacterClassRepository classRepository,
                             BackGroundRepository backgroundRepository,
-                            PlayerItemsRepository itemsRepository) {
+                            PlayerItemsRepository itemsRepository,
+                            CharacterAbilityRepository abilityRepository) {
         this.charRepository = charRepository;
         this.classRepository = classRepository;
         this.backgroundRepository = backgroundRepository;
         this.itemsRepository = itemsRepository;
+        this.abilityRepository = abilityRepository;
     }
 
     @Transactional(readOnly = true)
@@ -45,16 +50,23 @@ public class CharacterService {
     }
 
     // A conta e o personagem têm o mesmo nome (conta "rudo" ↔ personagem "Rudo").
+    public Character characterOf(Account account) {
+        return charRepository.findFirstByCharacterNameIgnoreCaseOrderByIdAsc(account.getUsername())
+                .orElseThrow(() -> ApiException.notFound("Sua ficha ainda não foi criada. Fale com o mestre."));
+    }
+
     @Transactional(readOnly = true)
     public CharacterSheetResponse getSheet(Account account) {
-        Character character = charRepository.findFirstByCharacterNameIgnoreCaseOrderByIdAsc(account.getUsername())
-                .orElseThrow(() -> ApiException.notFound("Sua ficha ainda não foi criada. Fale com o mestre."));
+        Character character = characterOf(account);
 
         List<InventoryItemResponse> inventory = itemsRepository.findByCharacterOrderByIdAsc(character).stream()
                 .map(InventoryItemResponse::of)
                 .toList();
+        List<AbilityResponse> abilities = abilityRepository.findByCharacterOrderByIdAsc(character).stream()
+                .map(AbilityResponse::of)
+                .toList();
 
-        return new CharacterSheetResponse(CharacterResponse.of(character), inventory);
+        return new CharacterSheetResponse(CharacterResponse.of(character), inventory, abilities);
     }
 
     @Transactional

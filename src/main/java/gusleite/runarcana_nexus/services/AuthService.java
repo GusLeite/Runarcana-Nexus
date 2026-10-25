@@ -74,6 +74,15 @@ public class AuthService {
         return session.getAccount();
     }
 
+    // Como authenticate, mas só deixa passar a conta do mestre (403 para jogadores).
+    public Account requireMaster(String authorization) {
+        Account account = authenticate(authorization);
+        if (!account.isMaster()) {
+            throw ApiException.forbidden("Só o mestre pode fazer isso.");
+        }
+        return account;
+    }
+
     public void logout(String authorization) {
         tokens.deleteByTokenHash(hash(bearer(authorization)));
     }
