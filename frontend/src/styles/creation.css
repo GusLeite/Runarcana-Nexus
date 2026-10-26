@@ -204,3 +204,9 @@ animation:slide-in .35s ease backwards;animation-delay:calc(var(--n,0)*40ms)}
 .lineage-step{margin-top:22px;padding-top:16px;border-top:1px solid rgba(200,162,74,.2);animation:rise-in .35s ease backwards}
 .choice-group+.choice-group{margin-top:10px}
 .choice-group-title{margin-bottom:6px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* Recursos de classe (Sutras, Iras, Técnicas...) nas Escolhas: cartões como os das Heranças */
+.res-search{display:block;width:100%;margin-bottom:10px}
+.res-list{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.res-cost{border-color:var(--gold-hi);color:var(--gold-hi);letter-spacing:.12em}
+.choice .muted-note{margin:0 0 10px}

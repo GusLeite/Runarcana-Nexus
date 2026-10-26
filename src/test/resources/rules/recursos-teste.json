@@ -1,0 +1,144 @@
+{
+  "resources": [
+    {
+      "id": "t-sutra-vento",
+      "kind": "SUTRA",
+      "name": "Vento Teste",
+      "groups": [
+        "Teste"
+      ],
+      "components": "S, R",
+      "description": "CA de dois atributos.",
+      "grants": [
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Reduto Teste",
+          "armor": {
+            "base": 10,
+            "dex": false,
+            "attribute": "CONSTITUTION",
+            "secondAttribute": "DEXTERITY"
+          }
+        }
+      ]
+    },
+    {
+      "id": "t-sutra-sabio",
+      "kind": "SUTRA",
+      "name": "Sábio Teste",
+      "groups": [
+        "Teste"
+      ],
+      "prerequisite": "Sabedoria 18",
+      "description": "Bloqueado pela Sabedoria.",
+      "requires": {
+        "attributes": {
+          "WISDOM": 18
+        }
+      }
+    },
+    {
+      "id": "t-vel-forca",
+      "kind": "VEL",
+      "name": "Força Teste",
+      "groups": [
+        "Vel"
+      ],
+      "cost": 1,
+      "prerequisite": "Força 11",
+      "description": "+4 de Força, que não paga o próprio pré-requisito.",
+      "requires": {
+        "attributes": {
+          "STRENGTH": 11
+        }
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "STRENGTH",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "t-vel-leve",
+      "kind": "VEL",
+      "name": "Leve Teste",
+      "groups": [
+        "Vel"
+      ],
+      "cost": 1,
+      "description": "Ocupa um ponto."
+    },
+    {
+      "id": "t-vel-pesado",
+      "kind": "VEL",
+      "name": "Pesado Teste",
+      "groups": [
+        "Vel"
+      ],
+      "cost": 2,
+      "description": "Ocupa dois pontos."
+    },
+    {
+      "id": "t-tecnica-mestra",
+      "kind": "TECNICA",
+      "name": "Mestra Teste",
+      "groups": [
+        "Teste"
+      ],
+      "execution": "Ação bônus",
+      "description": "Traz outra escolha de Sutra.",
+      "grants": [
+        {
+          "type": "RESOURCE_CHOICE",
+          "value": "SUTRA",
+          "count": 1,
+          "options": [
+            "Teste"
+          ],
+          "label": "Sutra da técnica"
+        }
+      ]
+    },
+    {
+      "id": "t-vel-ki",
+      "kind": "VEL",
+      "name": "Ki Teste",
+      "groups": [
+        "Vel"
+      ],
+      "cost": 1,
+      "ki": 2,
+      "prerequisite": "2 pontos de Ki",
+      "description": "Inativa 2 pontos de Ki."
+    },
+    {
+      "id": "t-vel-ki-demais",
+      "kind": "VEL",
+      "name": "Ki Demais Teste",
+      "groups": [
+        "Vel"
+      ],
+      "cost": 1,
+      "ki": 3,
+      "prerequisite": "3 pontos de Ki",
+      "description": "Mais Ki do que o personagem tem."
+    },
+    {
+      "id": "t-tecnica-exotica",
+      "kind": "TECNICA",
+      "name": "Exótica Teste",
+      "groups": [
+        "Teste"
+      ],
+      "prerequisite": "proficiência com armas exóticas",
+      "description": "Exige uma arma que ele não usa.",
+      "requires": {
+        "weapons": [
+          "Armas exóticas"
+        ]
+      }
+    }
+  ]
+}

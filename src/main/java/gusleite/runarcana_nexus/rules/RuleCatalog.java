@@ -15,8 +15,14 @@ public record RuleCatalog(
         List<RuleOption> regions,
         List<RuleHeritage> heritages,
         // Traços da Runinata (rules/tracos.json), usados pelas origens com usesTraits.
-        RuleTraits traits
+        RuleTraits traits,
+        // Recursos de classe do Capítulo 5 (rules/recursos.json): Iras, Sutras, Vel, Técnicas, Invocações...
+        List<RuleResource> resources
 ) {
+    public List<RuleResource> resourcesOrEmpty() {
+        return resources == null ? List.of() : resources;
+    }
+
     public List<Craft> craftsOrEmpty() {
         return crafts == null ? List.of() : crafts;
     }
@@ -26,11 +32,15 @@ public record RuleCatalog(
     }
 
     public RuleCatalog withHeritages(List<RuleHeritage> list) {
-        return new RuleCatalog(attributeMethods, baseSpeed, rounding, crafts, origins, classes, backgrounds, regions, list, traits);
+        return new RuleCatalog(attributeMethods, baseSpeed, rounding, crafts, origins, classes, backgrounds, regions, list, traits, resources);
     }
 
     public RuleCatalog withTraits(RuleTraits t) {
-        return new RuleCatalog(attributeMethods, baseSpeed, rounding, crafts, origins, classes, backgrounds, regions, heritages, t);
+        return new RuleCatalog(attributeMethods, baseSpeed, rounding, crafts, origins, classes, backgrounds, regions, heritages, t, resources);
+    }
+
+    public RuleCatalog withResources(List<RuleResource> list) {
+        return new RuleCatalog(attributeMethods, baseSpeed, rounding, crafts, origins, classes, backgrounds, regions, heritages, traits, list);
     }
 
     // kind: MAJOR (ofício maior, com níveis) ou MINOR (ofício menor, com disciplinas).

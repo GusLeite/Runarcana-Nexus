@@ -358,6 +358,44 @@
           ]
         }
       ]
+    },
+    {
+      "id": "BRUTE",
+      "name": "Bruto Teste",
+      "description": "Recursos de classe.",
+      "hitDie": 12,
+      "grants": [
+        {
+          "type": "RESOURCE_CHOICE",
+          "value": "SUTRA",
+          "count": 1,
+          "options": [
+            "Teste"
+          ]
+        },
+        {
+          "type": "RESOURCE_CHOICE",
+          "value": "VEL",
+          "amount": 1
+        },
+        {
+          "type": "RESOURCE_CHOICE",
+          "value": "TECNICA",
+          "count": 1
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Ki",
+          "description": "Reserva de Ki.",
+          "usesByLevel": {
+            "1": 2,
+            "3": 3
+          },
+          "recharge": "LONG_REST"
+        }
+      ],
+      "levels": []
     }
   ],
   "backgrounds": [

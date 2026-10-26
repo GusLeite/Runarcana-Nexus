@@ -5783,7 +5783,48 @@
           "type": "FEATURE",
           "abilityType": "PASSIVE",
           "name": "Sutras",
-          "description": "Técnicas do Ki (Capítulo 5: Sutras e Vel). Você escolhe um Sutra de Classe no 1º nível e mais um nos níveis 2, 4, 6, 8, 10, 12, 14, 16, 18 e 20, e um novo Sutra a cada Aprimoramento. A Doutrina dá Sutras de Subclasse; mestres, manuscritos e entidades podem ensinar Sutras Gerais e Vel-Sutras (Vel por nível: 1 no 1º, +1 a cada nível ímpar, até 10)."
+          "description": "Técnicas do Ki (Capítulo 5: Sutras e Vel). Você escolhe um Sutra de Classe no 1º nível e mais um nos níveis 2, 4, 6, 8, 10, 12, 14, 16, 18 e 20, e um novo Sutra a cada Aprimoramento. A Doutrina dá Sutras de Subclasse; mestres, manuscritos e entidades podem ensinar Sutras Gerais e Vel-Sutras (Vel por nível: 1 no 1º, +1 a cada nível ímpar, até 10).\n\nKi inativado: alguns usos (Vel, Shinpus mantidos além de 48 horas) tiram pontos do seu total de Ki até serem liberados.\nComponentes dos Sutras: (V) Mantra, palavras entoadas (silêncio ou mordaça impedem; baixo exige Furtividade); (S) Mudra, gestos com ao menos uma mão livre (quem conhece o Sutra pode identificá-lo com Percepção em desvantagem); (M) Shinpu, papel inscrito com um elemento, consumido no uso; (R) Hara, respiração (prender o fôlego ou estar submerso impede e encerra Sutras com Hara).\n\nVel: assimilar leva 8 horas (◆), 3 dias (◆◆), 15 dias (◆◆◆), 1 mês, 3 meses ou 6 meses (◆◆◆◆◆◆), com −10% por ponto de mod. de Sabedoria (até −50%). Desativar fora de um descanso longo: ação bônus e 1 dado de vida; reativar: 1 dia por nível do Vel."
+        },
+        {
+          "type": "RESOURCE_CHOICE",
+          "value": "SUTRA",
+          "count": 1,
+          "label": "Sutra de Classe",
+          "options": [
+            "Bodisatva",
+            "Wuju",
+            "Dança das Lâminas",
+            "Shojin",
+            "Hakensai",
+            "Shinobi",
+            "Escola Espiritual",
+            "Escola da Proteção",
+            "Escola Crepuscular",
+            "Escolas Sombrias",
+            "Escola Obscura",
+            "Escola Umbral",
+            "Escola Noctígena"
+          ]
+        },
+        {
+          "type": "RESOURCE_CHOICE",
+          "value": "VEL",
+          "amount": 1,
+          "label": "Vel (opcional, até 1 ◆)"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Shinpus",
+          "recharge": "LONG_REST",
+          "usesByLevel": {
+            "1": 5,
+            "5": 8,
+            "10": 11,
+            "15": 14,
+            "20": 17
+          },
+          "description": "Num descanso longo, você medita para criar Shinpus de elementos à sua escolha: 5 no 1º nível e mais 3 nos níveis 5, 10, 15 e 20. Shinpus com dois elementos ocupam o espaço de 2. Sem uso, perdem a propriedade após 48 horas (manter um ativo inativa 1 Ki por Shinpu); o papel pode ser reaproveitado.\n\nElementos tradicionais e dano: Água (perfurante), Terra (contundente), Fogo (ígneo), Vento (cortante), Raio (elétrico).\nCombinações: Água+Terra Madeira, Água+Fogo Vapor, Água+Vento Gelo, Água+Raio Eletricidade, Terra+Fogo Magma, Terra+Vento Areia, Terra+Raio Ferro, Fogo+Vento Cinzas, Fogo+Raio Energia, Vento+Raio Tempestade. Outros: Magnetismo (Terra+Vento), Gravidade (Terra+Raio), Cristal (Fogo+Terra). O Shinpu das Sombras exige o Ícor sombrio da Ordem das Sombras."
         },
         {
           "type": "FEATURE",
@@ -5822,6 +5863,38 @@
                 "Combate com Duas Armas",
                 "Duelismo"
               ]
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "SUTRA",
+              "count": 1,
+              "label": "Sutra de Classe (2º nível)",
+              "options": [
+                "Bodisatva",
+                "Wuju",
+                "Dança das Lâminas",
+                "Shojin",
+                "Hakensai",
+                "Shinobi",
+                "Escola Espiritual",
+                "Escola da Proteção",
+                "Escola Crepuscular",
+                "Escolas Sombrias",
+                "Escola Obscura",
+                "Escola Umbral",
+                "Escola Noctígena"
+              ]
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "grants": [
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "VEL",
+              "amount": 1,
+              "label": "Vel (3º nível, opcional, +1 ◆)"
             }
           ]
         },
@@ -5843,6 +5916,27 @@
               "usesFormula": "ATTRIBUTE_MODIFIER",
               "attribute": "WISDOM",
               "recharge": "LONG_REST"
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "SUTRA",
+              "count": 2,
+              "label": "Sutras (4º nível: de Classe e do Aprimoramento)",
+              "options": [
+                "Bodisatva",
+                "Wuju",
+                "Dança das Lâminas",
+                "Shojin",
+                "Hakensai",
+                "Shinobi",
+                "Escola Espiritual",
+                "Escola da Proteção",
+                "Escola Crepuscular",
+                "Escolas Sombrias",
+                "Escola Obscura",
+                "Escola Umbral",
+                "Escola Noctígena"
+              ]
             }
           ]
         },
@@ -5854,6 +5948,38 @@
               "abilityType": "PASSIVE",
               "name": "Ataque Extra",
               "description": "Você ataca duas vezes, em vez de uma, ao usar a ação Atacar no seu turno."
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "VEL",
+              "amount": 1,
+              "label": "Vel (5º nível, opcional, +1 ◆)"
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "grants": [
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "SUTRA",
+              "count": 1,
+              "label": "Sutra de Classe (6º nível)",
+              "options": [
+                "Bodisatva",
+                "Wuju",
+                "Dança das Lâminas",
+                "Shojin",
+                "Hakensai",
+                "Shinobi",
+                "Escola Espiritual",
+                "Escola da Proteção",
+                "Escola Crepuscular",
+                "Escolas Sombrias",
+                "Escola Obscura",
+                "Escola Umbral",
+                "Escola Noctígena"
+              ]
             }
           ]
         },
@@ -5872,6 +5998,12 @@
               "name": "Mente Tranquila",
               "description": "Com uma ação, encerre em si um efeito que te Enfeitice ou Amedronte, ou um Episódio de Abalo Episódico mundano.",
               "castingTime": "Ação"
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "VEL",
+              "amount": 1,
+              "label": "Vel (7º nível, opcional, +1 ◆)"
             }
           ]
         },
@@ -5883,6 +6015,38 @@
               "abilityType": "PASSIVE",
               "name": "Aprimoramento",
               "description": "No 8º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "SUTRA",
+              "count": 2,
+              "label": "Sutras (8º nível: de Classe e do Aprimoramento)",
+              "options": [
+                "Bodisatva",
+                "Wuju",
+                "Dança das Lâminas",
+                "Shojin",
+                "Hakensai",
+                "Shinobi",
+                "Escola Espiritual",
+                "Escola da Proteção",
+                "Escola Crepuscular",
+                "Escolas Sombrias",
+                "Escola Obscura",
+                "Escola Umbral",
+                "Escola Noctígena"
+              ]
+            }
+          ]
+        },
+        {
+          "level": 9,
+          "grants": [
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "VEL",
+              "amount": 1,
+              "label": "Vel (9º nível, opcional, +1 ◆)"
             }
           ]
         },
@@ -5894,6 +6058,38 @@
               "abilityType": "PASSIVE",
               "name": "Pureza Corporal",
               "description": "Imune a doenças mundanas, Envenenado e Intoxicado; vantagem contra doenças mágicas; ignora componentes materiais não consumidos de Sutras."
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "SUTRA",
+              "count": 1,
+              "label": "Sutra de Classe (10º nível)",
+              "options": [
+                "Bodisatva",
+                "Wuju",
+                "Dança das Lâminas",
+                "Shojin",
+                "Hakensai",
+                "Shinobi",
+                "Escola Espiritual",
+                "Escola da Proteção",
+                "Escola Crepuscular",
+                "Escolas Sombrias",
+                "Escola Obscura",
+                "Escola Umbral",
+                "Escola Noctígena"
+              ]
+            }
+          ]
+        },
+        {
+          "level": 11,
+          "grants": [
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "VEL",
+              "amount": 1,
+              "label": "Vel (11º nível, opcional, +1 ◆)"
             }
           ]
         },
@@ -5905,6 +6101,27 @@
               "abilityType": "PASSIVE",
               "name": "Aprimoramento",
               "description": "No 12º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "SUTRA",
+              "count": 2,
+              "label": "Sutras (12º nível: de Classe e do Aprimoramento)",
+              "options": [
+                "Bodisatva",
+                "Wuju",
+                "Dança das Lâminas",
+                "Shojin",
+                "Hakensai",
+                "Shinobi",
+                "Escola Espiritual",
+                "Escola da Proteção",
+                "Escola Crepuscular",
+                "Escolas Sombrias",
+                "Escola Obscura",
+                "Escola Umbral",
+                "Escola Noctígena"
+              ]
             }
           ]
         },
@@ -5916,6 +6133,49 @@
               "abilityType": "PASSIVE",
               "name": "Plenitude",
               "description": "Você não fica surpreso em combate; na primeira rodada, vantagem nos ataques contra quem ainda não agiu."
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "VEL",
+              "amount": 1,
+              "label": "Vel (13º nível, opcional, +1 ◆)"
+            }
+          ]
+        },
+        {
+          "level": 14,
+          "grants": [
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "SUTRA",
+              "count": 1,
+              "label": "Sutra de Classe (14º nível)",
+              "options": [
+                "Bodisatva",
+                "Wuju",
+                "Dança das Lâminas",
+                "Shojin",
+                "Hakensai",
+                "Shinobi",
+                "Escola Espiritual",
+                "Escola da Proteção",
+                "Escola Crepuscular",
+                "Escolas Sombrias",
+                "Escola Obscura",
+                "Escola Umbral",
+                "Escola Noctígena"
+              ]
+            }
+          ]
+        },
+        {
+          "level": 15,
+          "grants": [
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "VEL",
+              "amount": 1,
+              "label": "Vel (15º nível, opcional, +1 ◆)"
             }
           ]
         },
@@ -5927,6 +6187,64 @@
               "abilityType": "PASSIVE",
               "name": "Aprimoramento",
               "description": "No 16º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "SUTRA",
+              "count": 2,
+              "label": "Sutras (16º nível: de Classe e do Aprimoramento)",
+              "options": [
+                "Bodisatva",
+                "Wuju",
+                "Dança das Lâminas",
+                "Shojin",
+                "Hakensai",
+                "Shinobi",
+                "Escola Espiritual",
+                "Escola da Proteção",
+                "Escola Crepuscular",
+                "Escolas Sombrias",
+                "Escola Obscura",
+                "Escola Umbral",
+                "Escola Noctígena"
+              ]
+            }
+          ]
+        },
+        {
+          "level": 17,
+          "grants": [
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "VEL",
+              "amount": 1,
+              "label": "Vel (17º nível, opcional, +1 ◆)"
+            }
+          ]
+        },
+        {
+          "level": 18,
+          "grants": [
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "SUTRA",
+              "count": 1,
+              "label": "Sutra de Classe (18º nível)",
+              "options": [
+                "Bodisatva",
+                "Wuju",
+                "Dança das Lâminas",
+                "Shojin",
+                "Hakensai",
+                "Shinobi",
+                "Escola Espiritual",
+                "Escola da Proteção",
+                "Escola Crepuscular",
+                "Escolas Sombrias",
+                "Escola Obscura",
+                "Escola Umbral",
+                "Escola Noctígena"
+              ]
             }
           ]
         },
@@ -5938,6 +6256,59 @@
               "abilityType": "PASSIVE",
               "name": "Aprimoramento",
               "description": "No 19º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "SUTRA",
+              "count": 1,
+              "label": "Sutra do Aprimoramento (19º nível)",
+              "options": [
+                "Bodisatva",
+                "Wuju",
+                "Dança das Lâminas",
+                "Shojin",
+                "Hakensai",
+                "Shinobi",
+                "Escola Espiritual",
+                "Escola da Proteção",
+                "Escola Crepuscular",
+                "Escolas Sombrias",
+                "Escola Obscura",
+                "Escola Umbral",
+                "Escola Noctígena"
+              ]
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "VEL",
+              "amount": 1,
+              "label": "Vel (19º nível, opcional, +1 ◆)"
+            }
+          ]
+        },
+        {
+          "level": 20,
+          "grants": [
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "SUTRA",
+              "count": 1,
+              "label": "Sutra de Classe (20º nível)",
+              "options": [
+                "Bodisatva",
+                "Wuju",
+                "Dança das Lâminas",
+                "Shojin",
+                "Hakensai",
+                "Shinobi",
+                "Escola Espiritual",
+                "Escola da Proteção",
+                "Escola Crepuscular",
+                "Escolas Sombrias",
+                "Escola Obscura",
+                "Escola Umbral",
+                "Escola Noctígena"
+              ]
             }
           ]
         }
@@ -6153,6 +6524,15 @@
                   "abilityType": "PASSIVE",
                   "name": "Garra do Dragão",
                   "description": "A Glaive (Naginata) vira arma Bodisatva para você; desarmados e armas Bodisatva têm margem de crítico ampliada em 1. Você recebe um Sutra Shojin."
+                },
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "SUTRA",
+                  "count": 1,
+                  "label": "Sutra Shojin (3º nível)",
+                  "options": [
+                    "Shojin"
+                  ]
                 }
               ]
             },
@@ -6164,6 +6544,15 @@
                   "abilityType": "PASSIVE",
                   "name": "Malícia do Dragão",
                   "description": "Desarmados e armas Bodisatva têm multiplicador de crítico +1 (de novo no 18º). Você recebe um Sutra Shojin."
+                },
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "SUTRA",
+                  "count": 1,
+                  "label": "Sutra Shojin (6º nível)",
+                  "options": [
+                    "Shojin"
+                  ]
                 }
               ]
             },
@@ -6186,6 +6575,15 @@
                   "abilityType": "PASSIVE",
                   "name": "Força do Dragão",
                   "description": "Desarmados sobem 1 categoria; com a Lança Shojin, soma seu dado Marcial ao dano. Você recebe um Sutra Shojin."
+                },
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "SUTRA",
+                  "count": 1,
+                  "label": "Sutra Shojin (15º nível)",
+                  "options": [
+                    "Shojin"
+                  ]
                 }
               ]
             },
@@ -6201,6 +6599,15 @@
                   "options": [
                     "Garra do Dragão",
                     "Cauda do Dragão"
+                  ]
+                },
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "SUTRA",
+                  "count": 1,
+                  "label": "Sutra Shojin (17º nível)",
+                  "options": [
+                    "Shojin"
                   ]
                 }
               ]
@@ -6361,6 +6768,21 @@
                     "Escola Umbral",
                     "Escola Noctígena"
                   ]
+                },
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "SUTRA",
+                  "count": 1,
+                  "label": "Sutra da Escola (3º nível)",
+                  "options": [
+                    "Escola Espiritual",
+                    "Escola da Proteção",
+                    "Escola Crepuscular",
+                    "Escolas Sombrias",
+                    "Escola Obscura",
+                    "Escola Umbral",
+                    "Escola Noctígena"
+                  ]
                 }
               ]
             },
@@ -6372,6 +6794,22 @@
                   "abilityType": "PASSIVE",
                   "name": "Gume Aprimorado",
                   "description": "A arma foco do Neiyar tem margem de crítico −1. Você recebe um Sutra Shinobi ou da sua Escola."
+                },
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "SUTRA",
+                  "count": 1,
+                  "label": "Sutra Shinobi ou da Escola (6º nível)",
+                  "options": [
+                    "Shinobi",
+                    "Escola Espiritual",
+                    "Escola da Proteção",
+                    "Escola Crepuscular",
+                    "Escolas Sombrias",
+                    "Escola Obscura",
+                    "Escola Umbral",
+                    "Escola Noctígena"
+                  ]
                 }
               ]
             },
@@ -6383,6 +6821,22 @@
                   "abilityType": "PASSIVE",
                   "name": "Movimentação Irregular",
                   "description": "O primeiro acerto contra você na rodada perde seu bônus de proficiência de dano. Você recebe uma nova Escola e um Sutra."
+                },
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "SUTRA",
+                  "count": 1,
+                  "label": "Sutra Shinobi ou da Escola (11º nível)",
+                  "options": [
+                    "Shinobi",
+                    "Escola Espiritual",
+                    "Escola da Proteção",
+                    "Escola Crepuscular",
+                    "Escolas Sombrias",
+                    "Escola Obscura",
+                    "Escola Umbral",
+                    "Escola Noctígena"
+                  ]
                 }
               ]
             },
@@ -6408,6 +6862,22 @@
                   "abilityType": "PASSIVE",
                   "name": "Observador",
                   "description": "Alvo pela segunda vez num combate de um efeito que já te acertou, some metade da Sabedoria à CA ou à salvaguarda até o fim do combate. Uma vez por rodada, ataque de oportunidade em quem errar um corpo a corpo contra você. Você recebe um Sutra."
+                },
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "SUTRA",
+                  "count": 1,
+                  "label": "Sutra Shinobi ou da Escola (17º nível)",
+                  "options": [
+                    "Shinobi",
+                    "Escola Espiritual",
+                    "Escola da Proteção",
+                    "Escola Crepuscular",
+                    "Escolas Sombrias",
+                    "Escola Obscura",
+                    "Escola Umbral",
+                    "Escola Noctígena"
+                  ]
                 }
               ]
             },
@@ -6419,6 +6889,22 @@
                   "abilityType": "PASSIVE",
                   "name": "Onimusha",
                   "description": "+2 em Força, Destreza e Sabedoria (máximo 24). Seus Sutras custam 1 a menos (mínimo 1). Você recebe um Sutra Geral, Bodisatva, Shinobi ou de Escola."
+                },
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "SUTRA",
+                  "count": 1,
+                  "label": "Sutra Shinobi ou da Escola (20º nível)",
+                  "options": [
+                    "Shinobi",
+                    "Escola Espiritual",
+                    "Escola da Proteção",
+                    "Escola Crepuscular",
+                    "Escolas Sombrias",
+                    "Escola Obscura",
+                    "Escola Umbral",
+                    "Escola Noctígena"
+                  ]
                 }
               ]
             }
@@ -6549,6 +7035,12 @@
               "usesFormula": "ATTRIBUTE_MODIFIER",
               "attribute": "CONSTITUTION",
               "recharge": "LONG_REST"
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "IRA",
+              "count": 1,
+              "label": "Ira (3º nível)"
             }
           ]
         },
@@ -6599,6 +7091,12 @@
               "abilityType": "PASSIVE",
               "name": "Aprimoramento",
               "description": "No 8º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "IRA",
+              "count": 1,
+              "label": "Ira (8º nível)"
             }
           ]
         },
@@ -6621,6 +7119,12 @@
               "abilityType": "PASSIVE",
               "name": "Aprimoramento",
               "description": "No 12º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "IRA",
+              "count": 1,
+              "label": "Ira (12º nível)"
             }
           ]
         },
@@ -6632,6 +7136,12 @@
               "abilityType": "PASSIVE",
               "name": "Fúria Persistente",
               "description": "Sua Fúria só termina antes se você ficar Inconsciente ou quiser."
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "IRA",
+              "count": 1,
+              "label": "Ira (15º nível)"
             }
           ]
         },
@@ -6643,6 +7153,17 @@
               "abilityType": "PASSIVE",
               "name": "Aprimoramento",
               "description": "No 16º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            }
+          ]
+        },
+        {
+          "level": 17,
+          "grants": [
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "IRA",
+              "count": 1,
+              "label": "Ira (17º nível)"
             }
           ]
         },
@@ -7834,6 +8355,12 @@
           "recharge": "LONG_REST"
         },
         {
+          "type": "RESOURCE_CHOICE",
+          "value": "TECNICA",
+          "count": 1,
+          "label": "Técnica de Combate"
+        },
+        {
           "type": "FEATURE",
           "abilityType": "PASSIVE",
           "name": "Maestria de Armas",
@@ -7868,10 +8395,10 @@
               "description": "No 4º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
             },
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Técnica de Combate",
-              "description": "Você aprende uma nova Técnica de Combate."
+              "type": "RESOURCE_CHOICE",
+              "value": "TECNICA",
+              "count": 1,
+              "label": "Técnica de Combate (4º nível)"
             }
           ]
         },
@@ -7890,10 +8417,10 @@
           "level": 6,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Técnica de Combate",
-              "description": "Você aprende uma nova Técnica de Combate."
+              "type": "RESOURCE_CHOICE",
+              "value": "TECNICA",
+              "count": 1,
+              "label": "Técnica de Combate (6º nível)"
             }
           ]
         },
@@ -7924,10 +8451,10 @@
               "recharge": "LONG_REST"
             },
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Técnica de Combate",
-              "description": "Você aprende uma nova Técnica de Combate."
+              "type": "RESOURCE_CHOICE",
+              "value": "TECNICA",
+              "count": 1,
+              "label": "Técnica de Combate (9º nível)"
             }
           ]
         },
@@ -7941,10 +8468,10 @@
               "description": "No 12º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
             },
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Técnica de Combate",
-              "description": "Você aprende uma nova Técnica de Combate."
+              "type": "RESOURCE_CHOICE",
+              "value": "TECNICA",
+              "count": 1,
+              "label": "Técnica de Combate (12º nível)"
             }
           ]
         },
@@ -7969,10 +8496,10 @@
               "description": "No 16º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
             },
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Técnica de Combate",
-              "description": "Você aprende uma nova Técnica de Combate."
+              "type": "RESOURCE_CHOICE",
+              "value": "TECNICA",
+              "count": 1,
+              "label": "Técnica de Combate (16º nível)"
             }
           ]
         },
@@ -9384,7 +9911,13 @@
           "type": "FEATURE",
           "abilityType": "PASSIVE",
           "name": "Totem",
-          "description": "Você se conecta a um Grande Espírito, representado por um Totem que carrega e que concede um benefício enquanto estiver com você. Você vê e se comunica com espíritos, enxergando até 60 pés no Reino Espiritual."
+          "description": "Você se conecta a um Grande Espírito, representado por um Totem que carrega e que concede um benefício enquanto estiver com você. Você vê e se comunica com espíritos, enxergando até 60 pés no Reino Espiritual.\n\nCanalizar um Grande Espírito: você encontra uma manifestação dele num espaço espiritual. A relação com ele e o motivo definem a CD do teste de Carisma (do Mestre). No sucesso, ele concede o Sucesso de Canalização (ou parte dele, ou mais, com pontos de Exaustão ao fim pelo poder extra). Falhando no Carisma, force com ação bônus gastando o Ki e fazendo o teste de canalização; ou force só com a ação, sem o teste de Carisma. Falhando na canalização, sofra a Falha do espírito, que pode tirar o controle do personagem, às vezes para sempre.\nCanalização = bônus de proficiência + mod. do atributo indicado."
+        },
+        {
+          "type": "RESOURCE_CHOICE",
+          "value": "GRANDE_ESPIRITO",
+          "count": 1,
+          "label": "Totem: Grande Espírito"
         }
       ],
       "levels": [
@@ -9411,7 +9944,13 @@
               "type": "FEATURE",
               "abilityType": "PASSIVE",
               "name": "Invocações Espirituais",
-              "description": "Você recebe uma Invocação Espiritual (Capítulo 5: Invocações) e outra nos níveis 5, 9, 14 e 20. Com um professor, pode aprender Sutras gerais no lugar."
+              "description": "Invocações Espirituais (Capítulo 5) manipulam a energia dos reinos material e espiritual; funcionam como os Sutras, mas não são compatíveis (o Xamã não aprende Sutras de Bodisatva, salvo Sutras Gerais com um professor). Uma no 2º nível e outra nos níveis 5, 9, 14 e 20."
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "INVOCACAO",
+              "count": 1,
+              "label": "Invocação Espiritual (2º nível)"
             }
           ]
         },
@@ -9437,10 +9976,10 @@
           "level": 5,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Invocação Espiritual",
-              "description": "Você recebe uma nova Invocação Espiritual."
+              "type": "RESOURCE_CHOICE",
+              "value": "INVOCACAO",
+              "count": 1,
+              "label": "Invocação Espiritual (5º nível)"
             }
           ]
         },
@@ -9472,10 +10011,10 @@
           "level": 9,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Invocação Espiritual",
-              "description": "Você recebe uma nova Invocação Espiritual."
+              "type": "RESOURCE_CHOICE",
+              "value": "INVOCACAO",
+              "count": 1,
+              "label": "Invocação Espiritual (9º nível)"
             }
           ]
         },
@@ -9509,10 +10048,10 @@
           "level": 14,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Invocação Espiritual",
-              "description": "Você recebe uma nova Invocação Espiritual."
+              "type": "RESOURCE_CHOICE",
+              "value": "INVOCACAO",
+              "count": 1,
+              "label": "Invocação Espiritual (14º nível)"
             }
           ]
         },
@@ -9542,10 +10081,10 @@
           "level": 20,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Invocação Espiritual",
-              "description": "Você recebe uma nova Invocação Espiritual."
+              "type": "RESOURCE_CHOICE",
+              "value": "INVOCACAO",
+              "count": 1,
+              "label": "Invocação Espiritual (20º nível)"
             }
           ]
         }
@@ -9811,7 +10350,7 @@
               "type": "FEATURE",
               "abilityType": "ABILITY",
               "name": "Forma Selvagem",
-              "description": "Ação bônus: assuma uma forma de fera por até metade do nível de Xamã em horas (mínimo 1), ganhando 10 + nível de Xamã em PV temporários por 2 rodadas. Aspectos: 1 terrestre no 1º; +1 terrestre e 1 aquático no 5º; +1 aquático e 1 alado no 9º; +1 alado no 13º; +1 de cada no 17º. Forma Híbrida (13º, 1/descanso longo): aspectos dobrados, ataque extra, mãos funcionais e conjuração. Forma Superior (17º, 1/descanso pleno): aspectos dobrados, dois ataques extras, ataques mágicos, conjuração e RD igual ao bônus de proficiência. Transformado, mantém personalidade, Inteligência, Sabedoria, Carisma, proficiências, PV e características; não conjura nem usa sentidos que a forma não tenha.",
+              "description": "Ação bônus: assuma uma forma de fera por até metade do nível de Xamã em horas (mínimo 1), ganhando 10 + nível de Xamã em PV temporários por 2 rodadas. Aspectos: 1 terrestre no 1º; +1 terrestre e 1 aquático no 5º; +1 aquático e 1 alado no 9º; +1 alado no 13º; +1 de cada no 17º. Forma Híbrida (13º, 1/descanso longo): aspectos dobrados, ataque extra, mãos funcionais e conjuração. Forma Superior (17º, 1/descanso pleno): aspectos dobrados, dois ataques extras, ataques mágicos, conjuração e RD igual ao bônus de proficiência. Transformado, mantém personalidade, Inteligência, Sabedoria, Carisma, proficiências, PV e características; não conjura nem usa sentidos que a forma não tenha.\n\nFormas Ferais (o Aspecto escolhido muda características e atributos; os atributos da forma usam o maior entre o seu atributo e a sua Sabedoria, + o bônus do Aspecto; você faz o maior número de ataques entre a sua forma normal e o Aspecto):\nTerrestre: animal Médio ou Grande, CA 10 + Sabedoria, 40 pés, atributos Força e Destreza, visão no escuro 60 pés; Ataque Feral 1d8 + Força (contundente, cortante ou perfurante), acerto com Força ou Sabedoria.\nAquática: Médio ou Grande, CA 10 + Sabedoria, 20 pés e natação 40, Destreza, visão no escuro 90 pés, anfíbio; Ataque Feral 1d6 + Força.\nAlada: Pequeno ou Médio, CA 8 + Sabedoria, 20 pés e voo 40, Destreza, visão no escuro 120 pés, sem ataques de oportunidade ao voar para longe; Ataque Feral 1d4 + Força.",
               "castingTime": "Ação bônus",
               "usesByLevel": {
                 "1": 2,
@@ -9822,6 +10361,12 @@
                 "20": null
               },
               "recharge": "LONG_REST"
+            },
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "ASPECTO_TERRESTRE",
+              "count": 1,
+              "label": "Forma Selvagem: Aspecto Terrestre"
             }
           ],
           "levels": [
@@ -9833,6 +10378,23 @@
                   "abilityType": "PASSIVE",
                   "name": "Táticas Ferais",
                   "description": "Ataques cortantes causam 1 de Sangramento (1d4 num crítico; 1d6 no 7º, 1d8 no 11º, 1d10 no 15º)."
+                }
+              ]
+            },
+            {
+              "level": 5,
+              "grants": [
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "ASPECTO_TERRESTRE",
+                  "count": 1,
+                  "label": "Aspecto Terrestre (5º nível)"
+                },
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "ASPECTO_AQUATICO",
+                  "count": 1,
+                  "label": "Aspecto Aquático (5º nível)"
                 }
               ]
             },
@@ -9864,6 +10426,18 @@
                   "abilityType": "PASSIVE",
                   "name": "Mil Formas",
                   "description": "Você conhece alterar-se (fora do máximo) e a conjura sem Ki. Vantagem em salvaguardas contra mudar sua forma sem consentimento."
+                },
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "ASPECTO_AQUATICO",
+                  "count": 1,
+                  "label": "Aspecto Aquático (9º nível)"
+                },
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "ASPECTO_ALADO",
+                  "count": 1,
+                  "label": "Aspecto Alado (9º nível)"
                 }
               ]
             },
@@ -9881,6 +10455,17 @@
               ]
             },
             {
+              "level": 13,
+              "grants": [
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "ASPECTO_ALADO",
+                  "count": 1,
+                  "label": "Aspecto Alado (13º nível)"
+                }
+              ]
+            },
+            {
               "level": 15,
               "grants": [
                 {
@@ -9888,6 +10473,29 @@
                   "abilityType": "PASSIVE",
                   "name": "Maleabilidade Espiritual",
                   "description": "Ao forçar a canalização de um Grande Espírito, gaste um uso de Forma Selvagem para reduzir o custo em metade do bônus de proficiência; falhando, o efeito dura 1 dia a menos."
+                }
+              ]
+            },
+            {
+              "level": 17,
+              "grants": [
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "ASPECTO_TERRESTRE",
+                  "count": 1,
+                  "label": "Aspecto Terrestre (17º nível)"
+                },
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "ASPECTO_AQUATICO",
+                  "count": 1,
+                  "label": "Aspecto Aquático (17º nível)"
+                },
+                {
+                  "type": "RESOURCE_CHOICE",
+                  "value": "ASPECTO_ALADO",
+                  "count": 1,
+                  "label": "Aspecto Alado (17º nível)"
                 }
               ]
             },

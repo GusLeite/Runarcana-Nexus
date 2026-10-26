@@ -276,6 +276,7 @@ export function grantLabel(g, crafts = []) {
     case 'AC_BONUS': return 'CA: ' + g.name + ' ' + (g.usesFormula === 'PROFICIENCY' ? '+bônus de proficiência' : signed(g.amount ?? 0))
       + (g.armor?.unarmoredOnly ? ' sem armadura' : '')
     case 'HERITAGE_POINTS': return g.label ?? signed(g.amount) + (Math.abs(g.amount) === 1 ? ' ponto de ' : ' pontos de ') + HERITAGE_SCOPES[g.value ?? 'ANY']
+    case 'RESOURCE_CHOICE': return g.label ?? (g.value === 'VEL' ? 'Vel (opcional, até ' + g.amount + ' ◆)' : (RESOURCE_KINDS[g.value] ?? g.value) + ' à escolha')
     default: return g.type
   }
 }
@@ -304,6 +305,24 @@ export function choiceOptionName(type, id, crafts = []) {
     }
     default: return id
   }
+}
+
+// Tipos de recurso de classe do Capítulo 5 (rules/recursos.json).
+export const RESOURCE_KINDS = {
+  IRA: 'Ira', SUTRA: 'Sutra', VEL: 'Vel', TECNICA: 'Técnica de Combate', INVOCACAO: 'Invocação', GRANDE_ESPIRITO: 'Grande Espírito',
+  ASPECTO_TERRESTRE: 'Aspecto Terrestre', ASPECTO_AQUATICO: 'Aspecto Aquático', ASPECTO_ALADO: 'Aspecto Alado',
+}
+
+// Pontos de Vel (◆) que um recurso ocupa; sem custo, 1.
+export function resourceCost(resource) {
+  return resource?.cost ?? 1
+}
+
+// Marca ou desmarca uma opção: com max 1, trocar substitui; cheio, não acrescenta.
+export function togglePick(current, id, max) {
+  if (current.includes(id)) return current.filter(x => x !== id)
+  if (max === 1) return [id]
+  return current.length < max ? [...current, id] : current
 }
 
 // Custo total da compra de pontos com os valores atuais (null onde ainda não há valor).

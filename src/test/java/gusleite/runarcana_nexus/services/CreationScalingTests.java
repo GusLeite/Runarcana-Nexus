@@ -16,7 +16,7 @@ class CreationScalingTests {
 
     private static Grant inspired(UsesFormula formula) {
         return new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, "Inspirado", null, null, null, null,
-                null, formula, Map.of("2", "1d4", "4", "1d6", "6", "1d8"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, formula, Map.of("2", "1d4", "4", "1d6", "6", "1d8"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     @Test
@@ -39,22 +39,36 @@ class CreationScalingTests {
         assertThat(CreationService.usesFor(halfLevel, 2, 1, false, a -> 0)).isEqualTo(1);
         // Plumadagas: 3 + bônus de proficiência.
         Grant plus = new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, "Plumadagas", null, null, null, null,
-                null, UsesFormula.PROFICIENCY, null, null, null, null, null, null, null, null, null, null, null, 3, null, null, null, null);
+                null, UsesFormula.PROFICIENCY, null, null, null, null, null, null, null, null, null, null, null, 3, null, null, null, null, null);
         assertThat(CreationService.usesFor(plus, 2, false)).isEqualTo(5);
         // Bênção do Espírito: nível de Acólito + mod. de Sabedoria, mínimo 1.
         Grant blessing = new Grant(GrantType.FEATURE, Attribute.WISDOM, null, null, null, null, null, null, "Bênção do Espírito", null, null, null, null,
-                null, UsesFormula.LEVEL_PLUS_ATTRIBUTE, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, UsesFormula.LEVEL_PLUS_ATTRIBUTE, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
         assertThat(CreationService.usesFor(blessing, 2, 1, false, a -> 3)).isEqualTo(4);
         assertThat(CreationService.usesFor(blessing, 3, 5, false, a -> 3)).isEqualTo(8);
         assertThat(CreationService.usesFor(blessing, 2, 1, false, a -> -2)).isEqualTo(1);
         // Receptáculo Etéreo: proficiência + mod. de Sabedoria.
         Grant vessel = new Grant(GrantType.FEATURE, Attribute.WISDOM, null, null, null, null, null, null, "Receptáculo Etéreo", null, null, null, null,
-                null, UsesFormula.PROFICIENCY_PLUS_ATTRIBUTE, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, UsesFormula.PROFICIENCY_PLUS_ATTRIBUTE, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
         assertThat(CreationService.usesFor(vessel, 4, 11, false, a -> 3)).isEqualTo(7);
         // Estratégia: mod. de Inteligência + mod. de Carisma (o segundo atributo vai em value).
         Grant strategy = new Grant(GrantType.FEATURE, Attribute.INTELLIGENCE, null, null, null, null, "CHARISMA", null, "Estratégia", null, null, null, null,
-                null, UsesFormula.TWO_ATTRIBUTES, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, UsesFormula.TWO_ATTRIBUTES, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
         assertThat(CreationService.usesFor(strategy, 2, 1, false, a -> a == Attribute.INTELLIGENCE ? 2 : 3)).isEqualTo(5);
+    }
+
+    @Test
+    void valorPeloNivelVenceOFixo() {
+        // Casca Grossa: +1 de CA, +2 no 6º nível, +5 no 20º.
+        Grant shell = new Grant(GrantType.AC_BONUS, null, 1, null, null, null, null, null, "Casca Grossa", null, null, null, null,
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+                Map.of("1", 1, "6", 2, "20", 5));
+        assertThat(CreationService.valueAt(shell, shell.amount(), 1)).isEqualTo(1);
+        assertThat(CreationService.valueAt(shell, shell.amount(), 11)).isEqualTo(2);
+        assertThat(CreationService.valueAt(shell, shell.amount(), 20)).isEqualTo(5);
+        Grant plain = new Grant(GrantType.AC_BONUS, null, 1, null, null, null, null, null, "Fixo", null, null, null, null,
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        assertThat(CreationService.valueAt(plain, plain.amount(), 20)).isEqualTo(1);
     }
 
     @Test
@@ -63,7 +77,7 @@ class CreationScalingTests {
         Map<String, Integer> rage = new java.util.HashMap<>(Map.of("1", 2, "17", 6));
         rage.put("20", null);
         Grant g = new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, "Fúria", null, null, null, null,
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, rage, null);
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, rage, null, null);
         assertThat(CreationService.usesFor(g, 6, 19, false, a -> 0)).isEqualTo(6);
         assertThat(CreationService.usesFor(g, 6, 20, false, a -> 0)).isNull();
     }
@@ -81,7 +95,7 @@ class CreationScalingTests {
     void constituicaoPoderosaBateComOsExemplosDoLivro() {
         // Metade do bônus de proficiência por nível, para baixo: nível 1 = +1; até o nível 10 = +12.
         Grant g = new Grant(GrantType.HP_BONUS, null, null, null, null, null, null, null, null, null, null, null, null,
-                null, UsesFormula.HALF_PROFICIENCY, null, null, null, null, null, null, true, null, null, null, null, null, null, null, null, null);
+                null, UsesFormula.HALF_PROFICIENCY, null, null, null, null, null, null, true, null, null, null, null, null, null, null, null, null, null);
         assertThat(CreationService.hpBonusFor(g, 2, false)).isEqualTo(1);
         int total = 0;
         for (int level = 1; level <= 10; level++) total += CreationService.hpBonusFor(g, 2 + (level - 1) / 4, false);
@@ -92,14 +106,14 @@ class CreationScalingTests {
     void danoSomaProficienciaEAtributo() {
         // Chifres do Minotauro: 1d6 + bônus de proficiência + mod. de Força.
         Grant horns = new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, "Chifres", null, null, null, "1d6",
-                null, null, null, null, null, null, null, null, null, null, null, List.of("PROFICIENCY", "STRENGTH"), null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, List.of("PROFICIENCY", "STRENGTH"), null, null, null, null, null, null, null);
         assertThat(CreationService.damageFor(horns, 2, false, a -> a == Attribute.STRENGTH ? 3 : 0)).isEqualTo("1d6+5");
         assertThat(CreationService.damageFor(horns, 2, false, a -> -3)).isEqualTo("1d6-1");
         assertThat(CreationService.damageFor(horns, 2, false, a -> -2)).isEqualTo("1d6");
 
         // Garras "de Força ou Destreza": vale o maior dos dois.
         Grant claws = new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, "Garras", null, null, null, "1d6",
-                null, null, null, null, null, null, null, null, null, null, null, List.of("PROFICIENCY", "STRENGTH_OR_DEXTERITY"), null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, List.of("PROFICIENCY", "STRENGTH_OR_DEXTERITY"), null, null, null, null, null, null, null);
         assertThat(CreationService.damageFor(claws, 2, false, a -> a == Attribute.STRENGTH ? 4 : 1)).isEqualTo("1d6+6");
         assertThat(CreationService.damageFor(claws, 2, false, a -> a == Attribute.DEXTERITY ? 3 : 0)).isEqualTo("1d6+5");
     }

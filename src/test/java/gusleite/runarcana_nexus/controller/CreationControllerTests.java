@@ -457,6 +457,46 @@ class CreationControllerTests {
                 .andExpect(status().isForbidden());
     }
 
+    @Test
+    void recursosDeClasseComPreRequisitosVelEEscolhaInterna() throws Exception {
+        String token = login("gaudron");
+        String brute = FULL.replace("\"classId\":\"ARCANIST\"", "\"classId\":\"BRUTE\"")
+                .replace(",\"class:ARCANIST:1\":[\"ARCANA\",\"INSIGHT\"]", "");
+
+        // Sem escolher: o Sutra bloqueado pela Sabedoria não aparece; Vel é opcional.
+        preview(token, brute)
+                .andExpect(jsonPath("$.choices[?(@.key == 'class:BRUTE:0')].options[0]").value("t-sutra-vento"))
+                .andExpect(jsonPath("$.choices[?(@.key == 'class:BRUTE:0')].note").value("1 opção ainda bloqueada por pré-requisito."))
+                .andExpect(jsonPath("$.errors", hasItem("Faltam escolhas: Sutra: escolha um.")))
+                .andExpect(jsonPath("$.errors", not(hasItem("Faltam escolhas: Vel (opcional, até 1 ◆)."))));
+
+        String picks = brute.replace("\"choices\":{", "\"choices\":{\"class:BRUTE:0\":[\"t-sutra-vento\"],"
+                + "\"class:BRUTE:1\":[\"t-vel-leve\",\"t-vel-pesado\"],\"class:BRUTE:2\":[\"t-tecnica-mestra\"],");
+        preview(token, picks)
+                // o recurso vira habilidade e as concessões dele valem (CA com dois atributos: 10 + CON + DES)
+                .andExpect(jsonPath("$.features[?(@.name == 'Vento Teste')].source").value("Sutra: Vento Teste"))
+                .andExpect(jsonPath("$.armorClass.options[?(@.label == 'Reduto Teste')].value").value(14))
+                .andExpect(jsonPath("$.errors", hasItem("Vel: os escolhidos ocupam 3 pontos, mas há 1.")))
+                // a Técnica traz outra escolha de Sutra, sem o Vento (já escolhido) e sem o bloqueado
+                .andExpect(jsonPath("$.choices[?(@.key == 'resource:t-tecnica-mestra:1')].options[0]").doesNotExist())
+                .andExpect(jsonPath("$.choices[?(@.key == 'resource:t-tecnica-mestra:1')].note")
+                        .value("Nenhuma opção disponível ainda: confira os pré-requisitos com o mestre."));
+
+        // O +4 de Força do próprio Vel não paga a Força 11 dele (sem ele, a Força fica abaixo de 11).
+        preview(token, picks.replace("[\"t-vel-leve\",\"t-vel-pesado\"]", "[\"t-vel-forca\"]"))
+                .andExpect(jsonPath("$.errors", hasItem("Força Teste: pré-requisito: Força 11.")));
+
+        // Vel que inativa Ki: sai do total (2 − 2 = 0); com mais Ki do que ele tem, fica bloqueado.
+        preview(token, picks.replace("[\"t-vel-leve\",\"t-vel-pesado\"]", "[\"t-vel-ki\"]"))
+                .andExpect(jsonPath("$.features[?(@.name == 'Ki')].uses").value(0))
+                .andExpect(jsonPath("$.choices[?(@.key == 'class:BRUTE:1')].options", hasItem(hasItem("t-vel-ki"))))
+                .andExpect(jsonPath("$.choices[?(@.key == 'class:BRUTE:1')].options", not(hasItem(hasItem("t-vel-ki-demais")))));
+        // Técnica que pede proficiência com uma arma que ele não tem fica bloqueada.
+        preview(token, brute)
+                .andExpect(jsonPath("$.choices[?(@.key == 'class:BRUTE:2')].options", not(hasItem(hasItem("t-tecnica-exotica")))))
+                .andExpect(jsonPath("$.choices[?(@.key == 'class:BRUTE:2')].note").value("1 opção ainda bloqueada por pré-requisito."));
+    }
+
     private ResultActions preview(String token, String body) throws Exception {
         return mvc.perform(post("/creation/preview").header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON).content(body));

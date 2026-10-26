@@ -189,7 +189,7 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
               onChange={values => set('baseAttributes', values)} />
           )}
           {current === 'choices' && (
-            <ChoiceStep choices={preview?.choices ?? []} picks={draft.choices} crafts={catalog.crafts ?? []}
+            <ChoiceStep choices={preview?.choices ?? []} picks={draft.choices} crafts={catalog.crafts ?? []} resources={catalog.resources ?? []}
               onChange={(key, list) => setDraft(d => ({ ...d, choices: { ...d.choices, [key]: list } }))} />
           )}
           {current === 'heritages' && (

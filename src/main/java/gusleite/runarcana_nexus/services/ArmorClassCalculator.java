@@ -44,6 +44,7 @@ public final class ArmorClassCalculator {
             int value = (r.getBase() == null ? 10 : r.getBase())
                     + (r.isDex() ? (r.getDexMax() == null ? dex : Math.min(dex, r.getDexMax())) : 0)
                     + (r.getAttribute() == null ? 0 : modifier.applyAsInt(r.getAttribute()))
+                    + (r.getSecondAttribute() == null ? 0 : modifier.applyAsInt(r.getSecondAttribute()))
                     + (r.isProficiency() ? proficiency : 0);
             base.add(new DefenseOption("RULE:" + i, r.getName(), "RULE", value, r.getReduction() == null ? 0 : r.getReduction()));
         }

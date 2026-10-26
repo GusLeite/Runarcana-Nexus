@@ -51,7 +51,10 @@ public record Grant(
         // Usos e dado pelo NÍVEL do personagem (vale o maior nível <= o atual): Mana do Arcanista {"1": 4, "2": 6, ...},
         // Ataque Furtivo {"1": "1d6", "3": "2d6", ...}. usesByLevel vence usesFormula/maxUses; diceByLevel vence damage.
         Map<String, Integer> usesByLevel,
-        Map<String, String> diceByLevel
+        Map<String, String> diceByLevel,
+        // Valor pelo NÍVEL do personagem (vale o maior nível <= o atual): o amount do AC_BONUS e do ATTRIBUTE ou os pés
+        // do SPEED. Ex.: Casca Grossa {"1": 1, "6": 2, "12": 3, ...}; Natação {"1": 30, "6": 35, ...}.
+        Map<String, Integer> valueByLevel
 ) {
     // A Herança escolhida vira uma habilidade do tipo HERITAGE com o texto completo.
     public static Grant heritage(String name, String description) {
@@ -60,21 +63,21 @@ public record Grant(
 
     public static Grant feature(AbilityType type, String name, String description) {
         return new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, name, description, type,
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     // A mesma concessão com outro nome (habilidade com opção: "Resistente" → "Resistente (Ígneo)").
     public Grant withName(String newName) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, newName, description, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
-                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel);
+                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel);
     }
 
     // A mesma concessão com outra quantidade de pés (SPEED que cresce a cada escolha do traço: 15, 15, 10…).
     public Grant withFeet(Double newFeet) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, name, description, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
-                components, perLevel, newFeet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel);
+                components, perLevel, newFeet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel);
     }
 
     // A mesma concessão com os usos da opção escolhida (optionUses).
@@ -82,7 +85,14 @@ public record Grant(
         return new Grant(type, u.attribute() != null ? u.attribute() : attribute, amount, count, options,
                 skill, value, label, name, description, abilityType, spellLevel, damage, u.maxUses(), u.usesFormula(),
                 diceByProficiency, u.recharge() == null ? recharge : u.recharge(), castingTime, range, duration, components,
-                perLevel, feet, fromRegion, damageBonus, armor, u.usesPlus(), expertise, optionUses, usesByLevel, diceByLevel);
+                perLevel, feet, fromRegion, damageBonus, armor, u.usesPlus(), expertise, optionUses, usesByLevel, diceByLevel, valueByLevel);
+    }
+
+    // A mesma concessão com outra tabela de usos e outro texto (Ki com pontos inativados pelos Vel).
+    public Grant withUsesByLevel(Map<String, Integer> table, String newDescription) {
+        return new Grant(type, attribute, amount, count, options, skill, value, label, name, newDescription, abilityType,
+                spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
+                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, table, diceByLevel, valueByLevel);
     }
 
     // FEATURE com options: a habilidade pede uma escolha (ex.: o tipo de dano do Resistente).

@@ -26,5 +26,7 @@ public enum GrantType {
                         // value WITH_CRAFTS = também ofícios que ele tem, opções "SKILL:..." e "CRAFT:...")
     SAVING_THROW_CHOICE, // proficiência em count resistências à escolha (options = atributos)
     ARMOR_PROFICIENCY,  // proficiência com armaduras: value LIGHT, MEDIUM, HEAVY ou SHIELD
-    WEAPON_PROFICIENCY  // proficiência com armas: value = o nome ("Armas simples", "Rapieiras")
+    WEAPON_PROFICIENCY, // proficiência com armas: value = o nome ("Armas simples", "Rapieiras")
+    RESOURCE_CHOICE     // recurso de classe do Capítulo 5 (rules/recursos.json): value = tipo (SUTRA, IRA, TECNICA...), count,
+                        // options = grupos aceitos (vazio = todos); VEL é opcional e usa amount como os pontos (◆) disponíveis
 }

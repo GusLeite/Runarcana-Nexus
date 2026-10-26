@@ -2,6 +2,20 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-26 — Pendências dos recursos de classe (`feature/character-sheet`)
+- Escalas por nível: `Grant.valueByLevel` (amount do `AC_BONUS`/`ATTRIBUTE` e pés do `SPEED`), usado na Casca Grossa (+1 → +5) e nos deslocamentos dos Aspectos Ferais; a Arma Natural ganhou o ataque com dado 1d4 → 1d12.
+- Ki inativado: os Vel com "N pontos de Ki" (`ki`) só aparecem com Ki suficiente e descontam os pontos da habilidade Ki.
+- Pré-requisito de arma e armadura: `requires.weapons` e `requires.armor` (Arremesso de Escudo, Parede Protetora, Brincalhão e Trapaceiro, Choque Sísmico, Contusão Pulmonar, Movimento Circular).
+- Fica pendente o truque conhecido da Rajada Etérea, que depende do catálogo de magias.
+- Testes: `valorPeloNivelVenceOFixo` e o teste de recursos ampliado (Ki e arma). Conferido no sandbox (Presente da Serpente: Ki 2 → 1).
+
+## 2026-10-26 — Recursos de classe do Capítulo 5 (`feature/character-sheet`)
+- `rules/recursos.json` com **315** recursos: 34 Iras, 120 Sutras (gerais, de Bodisatva, das Doutrinas e das Escolas Shinobi), 19 Vel, 45 Técnicas de Combate, 38 Invocações Espirituais, 15 Grandes Espíritos e 44 Aspectos Ferais, com pré-requisitos conferidos pelo assistente.
+- Concessão nova `RESOURCE_CHOICE`: o recurso escolhido vira uma fonte com a habilidade e as concessões dele (CA do Sutra do Vento e da Rocha, +2 da Potência do Búfalo, deslocamentos dos Aspectos Ferais, Ki, Sutra e Vel do Combatente Monástico...). Vel é opcional e conta pontos ◆. CA com dois atributos (`secondAttribute`).
+- Ligado às classes: Técnicas (Combatente), Sutras, Vel e Shinpus (Bodisatva, Shojin, Shinobi), Iras (Bruto), Grande Espírito do Totem e Invocações (Xamã), Aspectos da Forma Selvagem (Metamorfo, com as três Formas Ferais na descrição).
+- Front: `ResourceChoice.jsx`, cartões com pré-requisito e texto na etapa Escolhas.
+- Testes: `recursosDeClasseComPreRequisitosVelEEscolhaInterna` e helpers do front. Conferido no sandbox (Bodisatva Shojin: 3 Sutras no 1º nível, Rocha dá CA 16 com FOR 14 e SAB 16).
+
 ## 2026-10-26 — Pendências mecânicas das classes (`feature/character-sheet`)
 - O Estilo de Luta "Defesa sem Armadura" do Combatente vira uma opção de CA (10 + DES + CON) quando escolhido: `ArmorFormula.feature`/`featureOption`.
 - Usos sem limite: valor `null` em `usesByLevel` (Fúria do Bruto, Forma Selvagem e Aura Etérea no 20º nível).

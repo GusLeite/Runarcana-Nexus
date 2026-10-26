@@ -27,7 +27,7 @@ class RuleCatalogValidationTests {
 
     private static Grant grant(GrantType type, String value) {
         return new Grant(type, null, null, null, null, null, value, null, null, null, null, null, null, null, null, null,
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     @Test
@@ -36,7 +36,7 @@ class RuleCatalogValidationTests {
                 List.of("nao-existe"), List.of("tambem-nao"), null, 0, null, "texto",
                 List.of(new HeritageCondition(null, List.of("tribo-y"), "sem-heranca", null, null, null)));
         RuleCatalog catalog = new RuleCatalog(new AttributeMethods(null, List.of(15, 14, 13, 12, 10, 8), null), 30.0, "DOWN",
-                List.of(new RuleCatalog.Craft("x", "X", "GRANDE")), List.of(), List.of(), List.of(), List.of(), List.of(noRegion), null);
+                List.of(new RuleCatalog.Craft("x", "X", "GRANDE")), List.of(), List.of(), List.of(), List.of(), List.of(noRegion), null, null);
 
         List<String> problems = RuleCatalogService.validate(catalog);
 
@@ -60,7 +60,7 @@ class RuleCatalogValidationTests {
                 List.of(new RuleLevel(1, List.of())));
         RuleClass klass = new RuleClass("MAGO", "Mago", null, null, null, null, List.of(), List.of(), null, null);
         RuleCatalog catalog = new RuleCatalog(new AttributeMethods(null, List.of(15, 14, 13, 12, 10, 8), null), 30.0, "MEIO",
-                List.of(), List.of(origin), List.of(klass), List.of(), List.of(), List.of(), null);
+                List.of(), List.of(origin), List.of(klass), List.of(), List.of(), List.of(), null, null);
 
         List<String> problems = RuleCatalogService.validate(catalog);
 
@@ -85,7 +85,7 @@ class RuleCatalogValidationTests {
                 Map.of("MINOR", 1), List.of(noTier), List.of(noPoints));
         RuleOption runinata = new RuleOption("runinata", "Runinata", null, null, null, null, null, null, List.of(), null, true, null);
         RuleCatalog catalog = new RuleCatalog(new AttributeMethods(null, List.of(15, 14, 13, 12, 10, 8), null), 30.0, "DOWN",
-                List.of(), List.of(runinata), List.of(), List.of(), List.of(), List.of(), traits);
+                List.of(), List.of(runinata), List.of(), List.of(), List.of(), List.of(), traits, null);
 
         List<String> problems = RuleCatalogService.validate(catalog);
 
@@ -99,9 +99,9 @@ class RuleCatalogValidationTests {
 
     @Test
     void oCatalogoRealSobeSemErros() {
-        // Garante que o criacao.json, o herancas.json e o tracos.json versionados continuam válidos a cada mudança.
+        // Garante que o criacao.json, o herancas.json, o tracos.json e o recursos.json versionados continuam válidos a cada mudança.
         assertThatCode(() -> new RuleCatalogService(new DefaultResourceLoader(), "classpath:rules/criacao.json",
-                "classpath:rules/herancas.json", "classpath:rules/tracos.json"))
+                "classpath:rules/herancas.json", "classpath:rules/tracos.json", "classpath:rules/recursos.json"))
                 .doesNotThrowAnyException();
     }
 }

@@ -1,8 +1,10 @@
 import { choiceOptionName } from '../../data/rules.js'
+import ResourceChoice from './ResourceChoice.jsx'
 
 // Escolhas que as opções pedem (ex.: "+1 em 1 atributo", "2 perícias de Arcanista").
 // A lista vem da prévia do back, já sem as perícias que o personagem ganhou de outro lugar.
-export default function ChoiceStep({ choices, picks, onChange, crafts }) {
+// Recursos de classe (Sutras, Iras, Técnicas...) usam cartões com o texto de cada opção.
+export default function ChoiceStep({ choices, picks, onChange, crafts, resources = [] }) {
   if (!choices.length) {
     return (
       <>
@@ -16,6 +18,10 @@ export default function ChoiceStep({ choices, picks, onChange, crafts }) {
       <h4 className="step-title">Escolhas</h4>
       {choices.map((c, n) => {
         const current = picks[c.key] ?? []
+        if (c.type === 'RESOURCE_CHOICE') {
+          return <ResourceChoice key={c.key} choice={c} current={current} resources={resources} n={n}
+            onChange={list => onChange(c.key, list)} />
+        }
         // Sem opções cadastradas: só o aviso (não bloqueia a criação).
         if (!c.options.length) {
           return (

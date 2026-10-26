@@ -27,6 +27,9 @@ public class ArmorRule {
     @Enumerated(EnumType.STRING)
     @Column(name = "extra_attribute")
     private Attribute attribute;
+    // Segundo atributo somado (Sutra da Rocha: Força + Sabedoria).
+    @Enumerated(EnumType.STRING)
+    private Attribute secondAttribute;
     private boolean proficiency;
     private Integer amount;
     private Integer reduction;

@@ -3,6 +3,7 @@ import {
   addHeritage, carryCapacity, choiceOptionName, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
   addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
+  resourceCost, togglePick,
 } from './rules.js'
 
 describe('modificadores', () => {
@@ -183,5 +184,28 @@ describe('d20', () => {
       expect(r).toBeGreaterThanOrEqual(1)
       expect(r).toBeLessThanOrEqual(20)
     }
+  })
+})
+
+describe('escolha de recursos de classe', () => {
+  it('troca quando só cabe um e não passa do máximo', () => {
+    expect(togglePick(['a'], 'b', 1)).toEqual(['b'])
+    expect(togglePick(['a', 'b'], 'c', 2)).toEqual(['a', 'b'])
+    expect(togglePick(['a', 'b'], 'a', 2)).toEqual(['b'])
+    expect(togglePick([], 'a', Infinity)).toEqual(['a'])
+  })
+
+  it('Vel sem custo conta 1 ponto', () => {
+    expect(resourceCost({ cost: 3 })).toBe(3)
+    expect(resourceCost({})).toBe(1)
+    expect(resourceCost(undefined)).toBe(1)
+  })
+})
+
+describe('ganho de recurso de classe', () => {
+  it('descreve a escolha de recurso', () => {
+    expect(grantLabel({ type: 'RESOURCE_CHOICE', value: 'IRA', count: 1 })).toBe('Ira à escolha')
+    expect(grantLabel({ type: 'RESOURCE_CHOICE', value: 'VEL', amount: 1 })).toBe('Vel (opcional, até 1 ◆)')
+    expect(grantLabel({ type: 'RESOURCE_CHOICE', value: 'SUTRA', label: 'Sutra Shojin' })).toBe('Sutra Shojin')
   })
 })

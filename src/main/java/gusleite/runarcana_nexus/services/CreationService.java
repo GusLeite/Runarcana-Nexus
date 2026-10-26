@@ -50,6 +50,7 @@ import gusleite.runarcana_nexus.rules.RuleClass;
 import gusleite.runarcana_nexus.rules.RuleHeritage;
 import gusleite.runarcana_nexus.rules.RuleLineage;
 import gusleite.runarcana_nexus.rules.RuleOption;
+import gusleite.runarcana_nexus.rules.RuleResource;
 import gusleite.runarcana_nexus.rules.RuleTrait;
 import gusleite.runarcana_nexus.rules.RuleTraits;
 import org.springframework.http.HttpStatus;
@@ -80,6 +81,8 @@ public class CreationService {
     private static final JsonMapper JSON = JsonMapper.builder().build();
     // Bônus de proficiência no 1º nível (a ficha nasce no nível 1).
     private static final int LEVEL_ONE_PROFICIENCY = 2;
+    // Nível do personagem na criação (tabelas usesByLevel, diceByLevel e valueByLevel).
+    static final int CREATION_LEVEL = 1;
     private static final double DEFAULT_SPEED_FEET = 30;
     private static final Pattern DICE_WITH_BONUS = Pattern.compile("^(\\d+d\\d+)([+-]\\d+)?$");
 
@@ -227,13 +230,14 @@ public class CreationService {
         if (b.subclass != null) sources.add(new Source("subclass:" + b.subclass.id(), subclassLabel(b.klass) + ": " + b.subclass.name(), b.subclass.grantsOrEmpty()));
         if (b.background != null) sources.add(new Source("background:" + b.background.id(), "Passado: " + b.background.name(), b.background.grantsOrEmpty()));
 
+        resourceSources(sources, picks, b);
         baseAttributes(r, catalog.attributeMethods(), b);
 
         // 1ª passada: o que é fixo. 2ª: as escolhas (que não podem repetir algo já ganho).
         for (Source s : sources) {
             for (Grant g : s.grants()) {
                 switch (g.type()) {
-                    case ATTRIBUTE -> b.bonus.merge(g.attribute(), g.amount(), Integer::sum);
+                    case ATTRIBUTE -> b.bonus.merge(g.attribute(), valueAt(g, g.amount(), CREATION_LEVEL), Integer::sum);
                     case SKILL -> {
                         // "Caso já tenha, especialidade": decide no fim, depois de todas as perícias.
                         if (Boolean.TRUE.equals(g.expertise())) b.deferred.add(new Deferred(null, g, s.label()));
@@ -250,7 +254,9 @@ public class CreationService {
                     case SPEED -> {
                         // value: tipo de deslocamento (sem value = caminhada; ALL = todos os que o personagem tiver).
                         // usesFormula PROFICIENCY: feet × bônus de proficiência (Brisa de Impulso: 5 pés × bônus).
-                        double feet = g.usesFormula() == UsesFormula.PROFICIENCY ? g.feet() * LEVEL_ONE_PROFICIENCY : g.feet();
+                        // valueByLevel: pés pelo nível (Aspecto Feral: Natação 30 → 35 no 6º...); o aumento "se já tiver" cresce junto.
+                        double base = valueAt(g, g.feet() == null ? null : g.feet().intValue(), CREATION_LEVEL);
+                        double feet = g.usesFormula() == UsesFormula.PROFICIENCY ? base * LEVEL_ONE_PROFICIENCY : base;
                         String mode = g.value() == null ? "WALK" : g.value();
                         switch (mode) {
                             case "WALK" -> b.speedBonus += feet;
@@ -258,7 +264,7 @@ public class CreationService {
                             default -> {
                                 // amount: aumento quando ele já tem esse deslocamento (Aptidão Marinha: natação 30, ou +15).
                                 MovementType type = MovementType.valueOf(mode);
-                                double gain = g.amount() != null && b.otherSpeeds.containsKey(type) ? g.amount() : feet;
+                                double gain = g.amount() != null && b.otherSpeeds.containsKey(type) ? g.amount() + (base - g.feet()) : feet;
                                 b.otherSpeeds.merge(type, gain, Double::sum);
                             }
                         }
@@ -417,6 +423,7 @@ public class CreationService {
             List<String> chosen = b.featureOptions.get(g.armor().feature());
             if (chosen != null && chosen.contains(g.armor().featureOption())) b.armorRules.add(armorRule(g, null));
         }
+        resourceChoices(b);
 
         if (blank(r.characterName())) b.errors.add("Dê um nome ao personagem.");
         if (r.age() == null || r.age() < 1) b.errors.add("Informe a idade (1 ou mais).");
@@ -483,13 +490,14 @@ public class CreationService {
 
     // Opção de defesa (ARMOR_CLASS). chosen: atributo escolhido quando a concessão tem options.
     static ArmorRule armorRule(Grant g, Attribute chosen) {
-        ArmorFormula f = g.armor() == null ? new ArmorFormula(null, null, null, null, null, null, null, null, null, null, null) : g.armor();
+        ArmorFormula f = g.armor() == null ? new ArmorFormula(null, null, null, null, null, null, null, null, null, null, null, null) : g.armor();
         ArmorRule r = new ArmorRule();
         r.setName(ArmorClassCalculator.withAttribute(g.name() != null ? g.name() : g.label(), chosen));
         r.setBase(f.base());
         r.setDex(f.dexOrTrue());
         r.setDexMax(f.dexMax());
         r.setAttribute(chosen != null ? chosen : f.attribute());
+        r.setSecondAttribute(f.secondAttribute());
         r.setProficiency(Boolean.TRUE.equals(f.proficiency()));
         r.setReduction(f.reduction());
         r.setBlocksArmor(Boolean.TRUE.equals(f.blocksArmor()));
@@ -503,7 +511,7 @@ public class CreationService {
         ArmorRule r = new ArmorRule();
         r.setName(g.name() != null ? g.name() : g.label() != null ? g.label() : "Bônus de CA");
         r.setBonus(true);
-        r.setAmount(g.amount());
+        r.setAmount(valueAt(g, g.amount(), CREATION_LEVEL));
         r.setProficiency(g.usesFormula() == UsesFormula.PROFICIENCY || (f != null && Boolean.TRUE.equals(f.proficiency())));
         r.setUnarmoredOnly(f != null && Boolean.TRUE.equals(f.unarmoredOnly()));
         r.setBlocksArmor(f != null && Boolean.TRUE.equals(f.blocksArmor()));
@@ -653,6 +661,174 @@ public class CreationService {
     }
 
     private record Picked(RuleTrait trait, List<String> details) {}
+
+    // ---------- Recursos de classe (Capítulo 5) ----------
+
+    private static final Map<String, String> RESOURCE_KINDS = Map.of(
+            "IRA", "Ira", "SUTRA", "Sutra", "VEL", "Vel", "TECNICA", "Técnica de Combate", "INVOCACAO", "Invocação",
+            "GRANDE_ESPIRITO", "Grande Espírito", "ASPECTO_TERRESTRE", "Aspecto Terrestre",
+            "ASPECTO_AQUATICO", "Aspecto Aquático", "ASPECTO_ALADO", "Aspecto Alado");
+
+    static String resourceKindLabel(String kind) {
+        return RESOURCE_KINDS.getOrDefault(kind, kind);
+    }
+
+    // Os recursos escolhidos (RESOURCE_CHOICE) viram fontes como as outras, antes das passadas: as concessões
+    // deles (CA do Sutra do Vento, +2 de Força da Potência do Búfalo, escolhas internas...) seguem o fluxo normal.
+    // A lista cresce enquanto percorre: um recurso pode trazer outra escolha (Combatente Monástico → Sutra).
+    private void resourceSources(List<Source> sources, Map<String, List<String>> picks, Build b) {
+        for (int s = 0; s < sources.size(); s++) {
+            Source src = sources.get(s);
+            List<Grant> grants = src.grants();
+            for (int i = 0; i < grants.size(); i++) {
+                Grant g = grants.get(i);
+                if (g.type() != GrantType.RESOURCE_CHOICE) continue;
+                String key = src.key() + ":" + i;
+                List<String> picked = List.copyOf(new LinkedHashSet<>(picks.getOrDefault(key, List.of())));
+                b.resourceChoices.add(new ResourceChoice(key, g, src.label(), picked));
+                for (String id : picked) {
+                    Optional<RuleResource> found = rules.resource(id);
+                    if (found.isEmpty() || !found.get().kind().equals(g.value())) continue;
+                    RuleResource res = found.get();
+                    if (!b.resourceIds.add(res.id())) continue;
+                    sources.add(new Source("resource:" + res.id(), resourceKindLabel(res.kind()) + ": " + res.name(), resourceGrants(res)));
+                }
+            }
+        }
+    }
+
+    // A habilidade com o texto do recurso (pré-requisito, execução e componentes no topo) + as concessões dele.
+    static List<Grant> resourceGrants(RuleResource res) {
+        StringBuilder text = new StringBuilder();
+        if (res.prerequisite() != null) text.append("Pré-requisito: ").append(res.prerequisite()).append('\n');
+        if (res.execution() != null) text.append("Execução: ").append(res.execution()).append('\n');
+        if (res.components() != null) text.append("Componentes: ").append(res.components()).append('\n');
+        if (res.cost() != null) text.append("Vel: ").append("◆".repeat(res.cost())).append('\n');
+        if (!text.isEmpty()) text.append('\n');
+        text.append(res.description() == null ? "" : res.description());
+        AbilityType type = res.execution() != null ? AbilityType.ABILITY : AbilityType.PASSIVE;
+        List<Grant> grants = new ArrayList<>();
+        grants.add(Grant.feature(type, res.name(), text.toString()));
+        grants.addAll(res.grantsOrEmpty());
+        return grants;
+    }
+
+    // Depois de tudo (atributos, heranças, opções): o que cada escolha aceita, o que foi escolhido e os erros.
+    private void resourceChoices(Build b) {
+        for (ResourceChoice c : b.resourceChoices) {
+            Grant g = c.grant();
+            boolean vel = "VEL".equals(g.value());
+            List<RuleResource> pool = rules.resources(g.value()).stream()
+                    .filter(r -> !g.hasOptions() || r.groupsOrEmpty().stream().anyMatch(g.options()::contains))
+                    .toList();
+            List<String> options = new ArrayList<>();
+            List<String> selected = new ArrayList<>();
+            int locked = 0;
+            for (RuleResource r : pool) {
+                boolean mine = c.picked().contains(r.id());
+                // Escolhido em outra escolha: não aparece de novo.
+                if (!mine && b.resourceIds.contains(r.id())) continue;
+                String reason = resourceBlock(r, b, mine);
+                if (reason == null) options.add(r.id());
+                else locked++;
+                if (mine) {
+                    if (reason == null) selected.add(r.id());
+                    else b.errors.add(r.name() + ": " + reason + ".");
+                }
+            }
+            for (String id : c.picked()) {
+                if (pool.stream().noneMatch(r -> r.id().equals(id))) b.errors.add("Opção inválida em \"" + resourceLabel(g) + "\".");
+            }
+            int count = vel ? (g.amount() == null ? 0 : g.amount()) : (g.count() == null ? 1 : g.count());
+            if (vel) {
+                int used = selected.stream().mapToInt(id -> rules.resource(id).map(RuleResource::costOrOne).orElse(1)).sum();
+                if (used > count) b.errors.add("Vel: os escolhidos ocupam " + used + " pontos, mas há " + count + ".");
+            } else if (selected.size() > count) {
+                b.errors.add("Escolha só " + count + " em \"" + resourceLabel(g) + "\".");
+            } else if (selected.size() < count && options.size() > selected.size()) {
+                b.errors.add("Faltam escolhas: " + resourceLabel(g) + ".");
+            }
+            String note = locked == 0 ? null
+                    : locked == 1 ? "1 opção ainda bloqueada por pré-requisito." : locked + " opções ainda bloqueadas por pré-requisito.";
+            if (options.isEmpty() && !vel) note = "Nenhuma opção disponível ainda: confira os pré-requisitos com o mestre.";
+            b.choices.add(new ChoiceLine(c.key(), g.type(), resourceLabel(g), count, options, List.copyOf(selected), c.source(), note));
+        }
+        inactivateKi(b);
+    }
+
+    // Habilidade com a reserva de Ki da classe (Bodisatva, Combatente Monástico).
+    static final String KI = "Ki";
+
+    private static Optional<Sourced<Grant>> kiFeature(Build b) {
+        return b.features.stream().filter(f -> KI.equals(f.value().name())).findFirst();
+    }
+
+    // Pontos de Ki do personagem na criação (0 sem a habilidade Ki).
+    private static int kiTotal(Build b) {
+        return kiFeature(b).map(f -> usesFor(f.value(), LEVEL_ONE_PROFICIENCY, CREATION_LEVEL, b.roundUp, b::modifier))
+                .map(n -> n == null ? 0 : n).orElse(0);
+    }
+
+    // Os Vel com "N pontos de Ki" inativam esses pontos: saem do total de Ki (em todos os níveis da tabela).
+    private void inactivateKi(Build b) {
+        int inactive = b.resourceIds.stream().map(rules::resource).flatMap(Optional::stream)
+                .mapToInt(r -> r.ki() == null ? 0 : r.ki()).sum();
+        if (inactive == 0) return;
+        Optional<Sourced<Grant>> ki = kiFeature(b);
+        int total = kiTotal(b);
+        if (ki.isEmpty() || total < inactive) {
+            b.errors.add("Os Vel escolhidos inativam " + inactive + " ponto(s) de Ki, mas o personagem tem " + total + ".");
+            return;
+        }
+        Grant g = ki.get().value();
+        if (g.usesByLevel() == null || g.usesByLevel().isEmpty()) return;
+        Map<String, Integer> table = new LinkedHashMap<>();
+        g.usesByLevel().forEach((lv, n) -> table.put(lv, n == null ? null : Math.max(0, n - inactive)));
+        Grant reduced = g.withUsesByLevel(table, g.description() + "\n\nKi inativado pelos Vel: " + inactive + " ponto(s).");
+        b.features.set(b.features.indexOf(ki.get()), new Sourced<>(reduced, ki.get().source()));
+    }
+
+    static String resourceLabel(Grant g) {
+        if (g.label() != null) return g.label();
+        if ("VEL".equals(g.value())) return "Vel (opcional, até " + g.amount() + " ◆)";
+        int count = g.count() == null ? 1 : g.count();
+        return resourceKindLabel(g.value()) + (count == 1 ? ": escolha um" : ": escolha " + count);
+    }
+
+    // Por que o recurso não pode ser escolhido agora (null = pode). Na criação o personagem é de 1º nível.
+    private static String resourceBlock(RuleResource r, Build b, boolean mine) {
+        String pre = "pré-requisito: " + (r.prerequisite() == null ? "não atendido" : r.prerequisite());
+        // Vel que inativa Ki: o personagem precisa ter esse Ki.
+        if (r.ki() != null && r.ki() > kiTotal(b)) return pre;
+        RuleResource.Requirements q = r.requires();
+        if (q == null) return null;
+        if (q.level() != null && q.level() > 1) return "a partir do " + q.level() + "º nível";
+        // Sem contar o que o próprio recurso dá (Potência do Búfalo: +2 de Força não paga a Força 15 dele).
+        ToIntFunction<Attribute> value = a -> b.total(a) - (mine ? r.grantsOrEmpty().stream()
+                .filter(x -> x.type() == GrantType.ATTRIBUTE && x.attribute() == a).mapToInt(x -> x.amount() == null ? 0 : x.amount()).sum() : 0);
+        if (q.attributes() != null && q.attributes().entrySet().stream().anyMatch(e -> value.applyAsInt(e.getKey()) < e.getValue())) return pre;
+        if (q.anyAttributes() != null && !q.anyAttributes().isEmpty()
+                && q.anyAttributes().entrySet().stream().noneMatch(e -> value.applyAsInt(e.getKey()) >= e.getValue())) return pre;
+        if (q.classes() != null && !q.classes().isEmpty()
+                && (b.klass == null || q.classes().stream().noneMatch(x -> x.equalsIgnoreCase(b.klass.id())))) return pre;
+        if (q.subclasses() != null && !q.subclasses().isEmpty()
+                && (b.subclass == null || q.subclasses().stream().noneMatch(x -> x.equalsIgnoreCase(b.subclass.id())))) return pre;
+        if (q.regions() != null && !q.regions().isEmpty()
+                && (b.region == null || q.regions().stream().noneMatch(x -> x.equalsIgnoreCase(b.region.id())))) return pre;
+        if (q.skills() != null && q.skills().stream().anyMatch(x -> !b.skills.containsKey(SkillType.valueOf(x)))) return pre;
+        if (q.heritages() != null && !q.heritages().isEmpty()
+                && b.heritages.stream().noneMatch(h -> q.heritages().stream().anyMatch(x -> x.equalsIgnoreCase(h.id())))) return pre;
+        if (q.resources() != null && q.resources().stream().anyMatch(x -> !b.resourceIds.contains(x))) return pre;
+        if (q.weapons() != null && !q.weapons().isEmpty()
+                && b.weaponProficiencies.stream().noneMatch(w -> q.weapons().stream().anyMatch(w::equalsIgnoreCase))) return pre;
+        if (q.armor() != null && !b.armorProficiencies.containsAll(q.armor())) return pre;
+        if (q.feature() != null) {
+            List<String> chosen = b.featureOptions.get(q.feature());
+            if (chosen == null || (q.featureOptions() != null && !q.featureOptions().isEmpty()
+                    && chosen.stream().noneMatch(q.featureOptions()::contains))) return pre;
+        }
+        return null;
+    }
 
     // ---------- Heranças ----------
 
@@ -974,6 +1150,13 @@ public class CreationService {
         return m.group(1) + (bonus == 0 ? "" : bonus > 0 ? "+" + bonus : String.valueOf(bonus));
     }
 
+    // amount/pés da concessão no nível: a tabela valueByLevel, se houver, senão o valor fixo.
+    static Integer valueAt(Grant g, Integer fixed, int level) {
+        if (g.valueByLevel() == null || g.valueByLevel().isEmpty()) return fixed;
+        Integer v = byLevel(g.valueByLevel(), level);
+        return v == null ? fixed : v;
+    }
+
     // Valor da tabela no maior nível <= o atual (null se a tabela só começa depois).
     static <T> T byLevel(Map<String, T> table, int level) {
         return table.entrySet().stream()
@@ -1041,6 +1224,8 @@ public class CreationService {
 
     private record Source(String key, String label, List<Grant> grants) {}
 
+    private record ResourceChoice(String key, Grant grant, String source, List<String> picked) {}
+
     private record Sourced<T>(T value, String source) {}
 
     // Resultado do cálculo (rascunho da ficha).
@@ -1058,6 +1243,9 @@ public class CreationService {
         // Perícias com especialidade (sempre entre as de skills) e as concessões decididas no fim (ver expertise()).
         final Set<SkillType> expertise = new LinkedHashSet<>();
         final List<Deferred> deferred = new ArrayList<>();
+        // Recursos de classe: as escolhas (para conferir no fim) e os ids já escolhidos.
+        final List<ResourceChoice> resourceChoices = new ArrayList<>();
+        final Set<String> resourceIds = new LinkedHashSet<>();
         // CAs que dependem de uma opção escolhida numa habilidade (ArmorFormula.feature).
         final List<Grant> optionArmor = new ArrayList<>();
         final Map<Attribute, String> saves = new LinkedHashMap<>();

@@ -3,6 +3,7 @@ package gusleite.runarcana_nexus.services;
 import gusleite.runarcana_nexus.enums.Attribute;
 import gusleite.runarcana_nexus.enums.CharacterClassType;
 import gusleite.runarcana_nexus.enums.CreatureSize;
+import gusleite.runarcana_nexus.enums.GrantType;
 import gusleite.runarcana_nexus.enums.HeritageCategory;
 import gusleite.runarcana_nexus.enums.Region;
 import gusleite.runarcana_nexus.enums.SkillType;
@@ -16,6 +17,7 @@ import gusleite.runarcana_nexus.rules.RuleHeritage;
 import gusleite.runarcana_nexus.rules.RuleLineage;
 import gusleite.runarcana_nexus.rules.RuleLevel;
 import gusleite.runarcana_nexus.rules.RuleOption;
+import gusleite.runarcana_nexus.rules.RuleResource;
 import gusleite.runarcana_nexus.rules.RuleTrait;
 import gusleite.runarcana_nexus.rules.RuleTraits;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,26 +55,34 @@ public class RuleCatalogService {
     // Tipo de deslocamento da concessão SPEED (sem value = WALK; ALL = todos os deslocamentos que o personagem tiver).
     static final Set<String> SPEED_TYPES = Set.of("WALK", "SWIM", "CLIMB", "FLY", "BURROW", "ALL");
     private static final Set<String> CRAFT_KINDS = Set.of("MAJOR", "MINOR");
+    // Tipos de recurso de classe (rules/recursos.json e value da concessão RESOURCE_CHOICE).
+    static final Set<String> RESOURCE_KINDS = Set.of("IRA", "SUTRA", "VEL", "TECNICA", "INVOCACAO", "GRANDE_ESPIRITO",
+            "ASPECTO_TERRESTRE", "ASPECTO_AQUATICO", "ASPECTO_ALADO");
 
     private final RuleCatalog catalog;
 
     public RuleCatalogService(ResourceLoader resources,
                               @Value("${runarcana.rules.catalog:classpath:rules/criacao.json}") String location,
                               @Value("${runarcana.rules.heritages:classpath:rules/herancas.json}") String heritagesLocation,
-                              @Value("${runarcana.rules.traits:classpath:rules/tracos.json}") String traitsLocation) {
+                              @Value("${runarcana.rules.traits:classpath:rules/tracos.json}") String traitsLocation,
+                              @Value("${runarcana.rules.resources:classpath:rules/recursos.json}") String resourcesLocation) {
         RuleCatalog base = load(resources.getResource(location), location, RuleCatalog.class);
         HeritageFile heritages = load(resources.getResource(heritagesLocation), heritagesLocation, HeritageFile.class);
         RuleTraits traits = load(resources.getResource(traitsLocation), traitsLocation, RuleTraits.class);
-        this.catalog = base.withHeritages(heritages.heritages()).withTraits(traits);
+        ResourceFile classResources = load(resources.getResource(resourcesLocation), resourcesLocation, ResourceFile.class);
+        this.catalog = base.withHeritages(heritages.heritages()).withTraits(traits).withResources(classResources.resources());
         List<String> problems = validate(catalog);
         if (!problems.isEmpty()) {
             throw new IllegalStateException("Regras de criação inválidas em " + location + " / " + heritagesLocation
-                    + " / " + traitsLocation + ":\n - " + String.join("\n - ", problems));
+                    + " / " + traitsLocation + " / " + resourcesLocation + ":\n - " + String.join("\n - ", problems));
         }
     }
 
     // Formato do rules/herancas.json: { "heritages": [ ... ] }.
     record HeritageFile(List<RuleHeritage> heritages) {}
+
+    // Formato do rules/recursos.json: { "resources": [ ... ] }.
+    record ResourceFile(List<RuleResource> resources) {}
 
     public RuleCatalog catalog() {
         return catalog;
@@ -98,6 +108,16 @@ public class RuleCatalogService {
     public Optional<RuleHeritage> heritage(String id) {
         if (id == null) return Optional.empty();
         return catalog.heritagesOrEmpty().stream().filter(h -> h.id().equalsIgnoreCase(id)).findFirst();
+    }
+
+    public Optional<RuleResource> resource(String id) {
+        if (id == null) return Optional.empty();
+        return catalog.resourcesOrEmpty().stream().filter(r -> r.id().equalsIgnoreCase(id)).findFirst();
+    }
+
+    // Recursos de um tipo (SUTRA, IRA...), na ordem do arquivo.
+    public List<RuleResource> resources(String kind) {
+        return catalog.resourcesOrEmpty().stream().filter(r -> r.kind().equals(kind)).toList();
     }
 
     public Optional<RuleTrait> trait(String id) {
@@ -188,7 +208,70 @@ public class RuleCatalogService {
             p.add("traços: há origem com usesTraits, mas o tracos.json não tem budgets");
         }
         if (c.traits() != null) validateTraits(c.traits(), p, crafts);
+        validateResources(c, p, crafts, classIds);
         return p;
+    }
+
+    // Recursos de classe e as escolhas que apontam para eles (tipo e grupos existentes).
+    private static void validateResources(RuleCatalog c, List<String> p, Set<String> crafts, Set<String> classIds) {
+        Set<String> ids = new HashSet<>();
+        c.resourcesOrEmpty().forEach(r -> ids.add(String.valueOf(r.id()).toLowerCase()));
+        Set<String> heritageIds = new HashSet<>();
+        c.heritagesOrEmpty().forEach(h -> heritageIds.add(String.valueOf(h.id()).toLowerCase()));
+        Set<String> subclassIds = new HashSet<>();
+        for (RuleClass k : c.classes() == null ? List.<RuleClass>of() : c.classes()) {
+            k.subclassesOrEmpty().forEach(s -> subclassIds.add(String.valueOf(s.id()).toLowerCase()));
+        }
+        Set<String> seen = new HashSet<>();
+        for (RuleResource r : c.resourcesOrEmpty()) {
+            String where = "recurso " + r.id();
+            if (blank(r.id()) || blank(r.name())) p.add("recursos: cada um precisa de id e name");
+            else if (!seen.add(r.id().toLowerCase())) p.add(where + ": id repetido");
+            if (r.kind() == null || !RESOURCE_KINDS.contains(r.kind())) p.add(where + ": kind deve ser um destes: " + RESOURCE_KINDS);
+            if (blank(r.description())) p.add(where + ": falta description");
+            if (r.cost() != null && r.cost() < 1) p.add(where + ": cost deve ser 1 ou mais");
+            if (r.ki() != null && r.ki() < 1) p.add(where + ": ki deve ser 1 ou mais");
+            RuleResource.Requirements q = r.requires();
+            if (q != null) {
+                if (q.level() != null && (q.level() < 1 || q.level() > 20)) p.add(where + ": requires.level deve ir de 1 a 20");
+                if (q.classes() != null) q.classes().stream().filter(x -> !classIds.contains(x))
+                        .forEach(x -> p.add(where + ": classe desconhecida \"" + x + "\""));
+                if (q.subclasses() != null) q.subclasses().stream().filter(x -> !subclassIds.contains(x.toLowerCase()))
+                        .forEach(x -> p.add(where + ": subclasse desconhecida \"" + x + "\""));
+                if (q.regions() != null) q.regions().stream().filter(x -> !names(Region.values()).contains(x))
+                        .forEach(x -> p.add(where + ": região desconhecida \"" + x + "\""));
+                if (q.skills() != null) q.skills().stream().filter(x -> !SKILLS.contains(x))
+                        .forEach(x -> p.add(where + ": perícia desconhecida \"" + x + "\""));
+                if (q.heritages() != null) q.heritages().stream().filter(x -> !heritageIds.contains(x.toLowerCase()))
+                        .forEach(x -> p.add(where + ": herança inexistente \"" + x + "\""));
+                if (q.armor() != null) q.armor().stream().filter(x -> !ARMOR_TYPES.contains(x))
+                        .forEach(x -> p.add(where + ": armadura desconhecida \"" + x + "\""));
+                if (q.resources() != null) q.resources().stream().filter(x -> !ids.contains(x.toLowerCase()))
+                        .forEach(x -> p.add(where + ": recurso inexistente \"" + x + "\""));
+            }
+            validateGrants(where, r.grantsOrEmpty(), p, crafts);
+        }
+        // Escolhas de recurso nas classes, subclasses, ganhos por nível e nos próprios recursos.
+        List<Map.Entry<String, Grant>> choices = new ArrayList<>();
+        for (RuleClass k : c.classes() == null ? List.<RuleClass>of() : c.classes()) {
+            k.grantsOrEmpty().forEach(g -> choices.add(Map.entry("classe " + k.id(), g)));
+            k.levelsOrEmpty().forEach(l -> (l.grants() == null ? List.<Grant>of() : l.grants())
+                    .forEach(g -> choices.add(Map.entry("classe " + k.id() + " nível " + l.level(), g))));
+            for (RuleLineage sub : k.subclassesOrEmpty()) {
+                sub.grantsOrEmpty().forEach(g -> choices.add(Map.entry("classe " + k.id() + ", subclasse " + sub.id(), g)));
+                sub.levelsOrEmpty().forEach(l -> (l.grants() == null ? List.<Grant>of() : l.grants())
+                        .forEach(g -> choices.add(Map.entry("classe " + k.id() + ", subclasse " + sub.id() + " nível " + l.level(), g))));
+            }
+        }
+        c.resourcesOrEmpty().forEach(r -> r.grantsOrEmpty().forEach(g -> choices.add(Map.entry("recurso " + r.id(), g))));
+        for (Map.Entry<String, Grant> e : choices) {
+            Grant g = e.getValue();
+            if (g.type() != GrantType.RESOURCE_CHOICE || g.value() == null) continue;
+            Set<String> groups = new HashSet<>();
+            c.resourcesOrEmpty().stream().filter(r -> g.value().equals(r.kind())).forEach(r -> groups.addAll(r.groupsOrEmpty()));
+            if (g.options() != null) g.options().stream().filter(o -> !groups.contains(o))
+                    .forEach(o -> p.add(e.getKey() + " (RESOURCE_CHOICE): nenhum recurso " + g.value() + " no grupo \"" + o + "\""));
+        }
     }
 
     // Ganhos por nível (classe, origem ou linhagem): do 2º ao 20º, cada nível uma vez.
@@ -334,6 +417,15 @@ public class RuleCatalogService {
                 p.add(at + ": falta type");
                 continue;
             }
+            if (g.valueByLevel() != null) {
+                if (!Set.of(GrantType.ATTRIBUTE, GrantType.AC_BONUS, GrantType.SPEED).contains(g.type())) {
+                    p.add(at + ": valueByLevel só vale em ATTRIBUTE, AC_BONUS e SPEED");
+                }
+                g.valueByLevel().forEach((lv, n) -> {
+                    if (!lv.matches("\\d+") || Integer.parseInt(lv) < 1 || Integer.parseInt(lv) > 20) p.add(at + ": valueByLevel usa o nível (1 a 20) como chave");
+                    if (n == null) p.add(at + ": valueByLevel precisa de valores");
+                });
+            }
             switch (g.type()) {
                 case ATTRIBUTE -> {
                     if (g.attribute() == null || g.amount() == null) p.add(at + " (ATTRIBUTE): precisa de attribute e amount");
@@ -425,6 +517,14 @@ public class RuleCatalogService {
                 }
                 case LANGUAGE_CHOICE -> {
                     if (g.count() == null || g.count() < 1) p.add(at + " (LANGUAGE_CHOICE): precisa de count");
+                }
+                case RESOURCE_CHOICE -> {
+                    if (g.value() == null || !RESOURCE_KINDS.contains(g.value())) p.add(at + " (RESOURCE_CHOICE): value deve ser um destes: " + RESOURCE_KINDS);
+                    if ("VEL".equals(g.value())) {
+                        if (g.amount() == null || g.amount() < 1) p.add(at + " (RESOURCE_CHOICE): Vel precisa de amount (pontos ◆)");
+                    } else if (g.count() != null && g.count() < 1) {
+                        p.add(at + " (RESOURCE_CHOICE): count deve ser 1 ou mais");
+                    }
                 }
             }
         }
