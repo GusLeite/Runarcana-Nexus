@@ -1850,7 +1850,8 @@
               "abilityType": "ABILITY",
               "name": "Fúria Símia",
               "description": "Seus ataques desarmados têm seu dano aumentado em uma categoria. Adicionalmente, você pode dobrar o modificador de dano de seu ataque corpo a corpo um total de vezes igual ao dobro do seu bônus de proficiência por descanso pleno.",
-              "recharge": "LONG_REST"
+              "recharge": "LONG_REST",
+              "usesFormula": "DOUBLE_PROFICIENCY"
             }
           ]
         },
@@ -1900,7 +1901,8 @@
               "description": "Com uma ação, você pode curar uma criatura a até 30 pés gastando um dado de vida; você recebe metade do valor curado como dano (que não pode ser reduzido ou mitigado). Você pode gastar uma quantidade de dados igual à metade do seu nível de personagem por descanso pleno (no nível 9, por exemplo, 4 dados).",
               "castingTime": "Ação",
               "range": "30 pés",
-              "recharge": "LONG_REST"
+              "recharge": "LONG_REST",
+              "usesFormula": "HALF_LEVEL"
             },
             {
               "type": "FEATURE",
@@ -1974,7 +1976,9 @@
               "name": "Plumadagas",
               "description": "Com uma ação bônus, você cria 2 penas afiadas e as usa como adagas, causando seu bônus de proficiência como dano adicional aos ataques feitos com elas. Você pode fazer isso um número de vezes igual a 3 + seu bônus de proficiência por descanso pleno, e pode manter um número de Plumadagas igual ao dobro do seu bônus de proficiência.",
               "castingTime": "Ação bônus",
-              "recharge": "LONG_REST"
+              "recharge": "LONG_REST",
+              "usesFormula": "PROFICIENCY",
+              "usesPlus": 3
             }
           ]
         },

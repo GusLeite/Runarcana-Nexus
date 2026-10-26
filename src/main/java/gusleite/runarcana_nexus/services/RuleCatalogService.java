@@ -396,6 +396,9 @@ public class RuleCatalogService {
         if (g.usesFormula() == UsesFormula.ATTRIBUTE_MODIFIER && g.attribute() == null) {
             p.add(at + " (FEATURE): usesFormula ATTRIBUTE_MODIFIER precisa de attribute");
         }
+        if (g.usesPlus() != null && (g.usesFormula() == null || g.usesFormula() == UsesFormula.FIXED)) {
+            p.add(at + " (FEATURE): usesPlus só vale com usesFormula (ex.: PROFICIENCY + 3)");
+        }
         if (g.usesFormula() != null && g.usesFormula() != UsesFormula.FIXED && g.maxUses() != null) {
             p.add(at + " (FEATURE): use maxUses ou usesFormula, não os dois");
         }

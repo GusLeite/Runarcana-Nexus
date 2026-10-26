@@ -40,7 +40,9 @@ public record Grant(
         // Somados ao dado (damage/diceByProficiency): "PROFICIENCY", "HALF_PROFICIENCY" ou um atributo ("STRENGTH" = mod. de Força).
         List<String> damageBonus,
         // Fórmula de CA (ARMOR_CLASS e AC_BONUS).
-        ArmorFormula armor
+        ArmorFormula armor,
+        // Somado aos usos da fórmula: Plumadagas = 3 + bônus de proficiência (usesFormula PROFICIENCY, usesPlus 3).
+        Integer usesPlus
 ) {
     // A Herança escolhida vira uma habilidade do tipo HERITAGE com o texto completo.
     public static Grant heritage(String name, String description) {
@@ -49,21 +51,21 @@ public record Grant(
 
     public static Grant feature(AbilityType type, String name, String description) {
         return new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, name, description, type,
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     // A mesma concessão com outro nome (habilidade com opção: "Resistente" → "Resistente (Ígneo)").
     public Grant withName(String newName) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, newName, description, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
-                components, perLevel, feet, fromRegion, damageBonus, armor);
+                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus);
     }
 
     // A mesma concessão com outra quantidade de pés (SPEED que cresce a cada escolha do traço: 15, 15, 10…).
     public Grant withFeet(Double newFeet) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, name, description, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
-                components, perLevel, newFeet, fromRegion, damageBonus, armor);
+                components, perLevel, newFeet, fromRegion, damageBonus, armor, usesPlus);
     }
 
     // FEATURE com options: a habilidade pede uma escolha (ex.: o tipo de dano do Resistente).

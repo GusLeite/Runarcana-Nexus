@@ -764,14 +764,24 @@ public class CreationService {
         return usesFor(g, proficiency, roundUp, a -> 0);
     }
 
+    // Na criação o personagem é de 1º nível.
     static Integer usesFor(Grant g, int proficiency, boolean roundUp, ToIntFunction<Attribute> modifier) {
+        return usesFor(g, proficiency, 1, roundUp, modifier);
+    }
+
+    // usesPlus soma um valor fixo à fórmula (Plumadagas = 3 + bônus de proficiência).
+    static Integer usesFor(Grant g, int proficiency, int level, boolean roundUp, ToIntFunction<Attribute> modifier) {
         UsesFormula formula = g.usesFormula() == null ? UsesFormula.FIXED : g.usesFormula();
-        return switch (formula) {
-            case FIXED -> g.maxUses();
-            case PROFICIENCY -> proficiency;
-            case HALF_PROFICIENCY -> Math.max(1, roundUp ? (proficiency + 1) / 2 : proficiency / 2);
+        // Fixo pode ser nulo (sem usos): fora do switch, que é numérico.
+        if (formula == UsesFormula.FIXED) return g.maxUses();
+        int uses = switch (formula) {
+            case FIXED, PROFICIENCY -> proficiency;
+            case HALF_PROFICIENCY -> Math.max(1, half(proficiency, roundUp));
             case ATTRIBUTE_MODIFIER -> Math.max(1, modifier.applyAsInt(g.attribute()));
+            case DOUBLE_PROFICIENCY -> proficiency * 2;
+            case HALF_LEVEL -> Math.max(1, half(level, roundUp));
         };
+        return g.usesPlus() == null ? uses : uses + g.usesPlus();
     }
 
     // Dado da habilidade: o da tabela por proficiência (maior bônus <= o atual) ou o "damage" fixo.

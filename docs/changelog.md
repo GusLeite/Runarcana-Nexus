@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-26 — Novas fórmulas de usos (`feature/character-sheet`)
+- `usesFormula` ganha `DOUBLE_PROFICIENCY` e `HALF_LEVEL` (mínimo 1), e `usesPlus` soma um valor fixo à fórmula.
+- Fúria Símia (dobro do bônus: 4 no 1º nível), Plumadagas (3 + bônus: 5) e Autossacrifício (metade do nível: 1) passam a ter contador na ficha.
+- Testes em `CreationScalingTests`; conferido na prévia do sandbox.
+
 ## 2026-10-26 — Classe de Armadura e CAs alternativas (`feature/character-sheet`)
 - Concessões `ARMOR_CLASS` (opção de defesa com fórmula) e `AC_BONUS` (bônus); a ficha guarda as regras (`character_armor_rules`) e a defesa em uso (`Character.defense`). `ArmorClassCalculator` junta sem armadura, CAs alternativas e armaduras do inventário (média até +2 de DES, pesada sem DES, RD).
 - Catálogo: Pele de Árvore (10 + DES + CON, sem armadura), Proteção Ajustável do Construto (Nulo 11+DES, Leve 13+DES, Médio 16+DES máx. 2 RD 1, Pesado 19 RD 2 para Brutal/Emissário), Escorregadio (+ bônus de proficiência), Armadura Natural do Auroque (+1 sem armadura), Armadura Natural da Runinata (10 + DES + atributo à escolha).

@@ -7,5 +7,9 @@ public enum UsesFormula {
     HALF_PROFICIENCY,
     PROFICIENCY,
     // Modificador do atributo da concessão ("attribute"), mínimo 1. Ex.: Urro Triunfante = mod. de Constituição.
-    ATTRIBUTE_MODIFIER
+    ATTRIBUTE_MODIFIER,
+    // Dobro do bônus de proficiência. Ex.: Fúria Símia.
+    DOUBLE_PROFICIENCY,
+    // Metade do nível do personagem (arredondamento do catálogo), mínimo 1. Ex.: Autossacrifício.
+    HALF_LEVEL
 }

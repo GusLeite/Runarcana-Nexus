@@ -16,7 +16,7 @@ class CreationScalingTests {
 
     private static Grant inspired(UsesFormula formula) {
         return new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, "Inspirado", null, null, null, null,
-                null, formula, Map.of("2", "1d4", "4", "1d6", "6", "1d8"), null, null, null, null, null, null, null, null, null, null);
+                null, formula, Map.of("2", "1d4", "4", "1d6", "6", "1d8"), null, null, null, null, null, null, null, null, null, null, null);
     }
 
     @Test
@@ -27,6 +27,20 @@ class CreationScalingTests {
         assertThat(CreationService.usesFor(g, 3, true)).isEqualTo(2);
         assertThat(CreationService.usesFor(g, 6, false)).isEqualTo(3);
         assertThat(CreationService.usesFor(inspired(UsesFormula.PROFICIENCY), 4, false)).isEqualTo(4);
+    }
+
+    @Test
+    void formulasDeUsosForaDoBonusSimples() {
+        // Fúria Símia: dobro do bônus de proficiência.
+        assertThat(CreationService.usesFor(inspired(UsesFormula.DOUBLE_PROFICIENCY), 3, false)).isEqualTo(6);
+        // Autossacrifício: metade do nível (no 9º, 4 dados), mínimo 1 no 1º nível.
+        Grant halfLevel = inspired(UsesFormula.HALF_LEVEL);
+        assertThat(CreationService.usesFor(halfLevel, 4, 9, false, a -> 0)).isEqualTo(4);
+        assertThat(CreationService.usesFor(halfLevel, 2, 1, false, a -> 0)).isEqualTo(1);
+        // Plumadagas: 3 + bônus de proficiência.
+        Grant plus = new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, "Plumadagas", null, null, null, null,
+                null, UsesFormula.PROFICIENCY, null, null, null, null, null, null, null, null, null, null, null, 3);
+        assertThat(CreationService.usesFor(plus, 2, false)).isEqualTo(5);
     }
 
     @Test
@@ -42,7 +56,7 @@ class CreationScalingTests {
     void constituicaoPoderosaBateComOsExemplosDoLivro() {
         // Metade do bônus de proficiência por nível, para baixo: nível 1 = +1; até o nível 10 = +12.
         Grant g = new Grant(GrantType.HP_BONUS, null, null, null, null, null, null, null, null, null, null, null, null,
-                null, UsesFormula.HALF_PROFICIENCY, null, null, null, null, null, null, true, null, null, null, null);
+                null, UsesFormula.HALF_PROFICIENCY, null, null, null, null, null, null, true, null, null, null, null, null);
         assertThat(CreationService.hpBonusFor(g, 2, false)).isEqualTo(1);
         int total = 0;
         for (int level = 1; level <= 10; level++) total += CreationService.hpBonusFor(g, 2 + (level - 1) / 4, false);
@@ -53,7 +67,7 @@ class CreationScalingTests {
     void danoSomaProficienciaEAtributo() {
         // Chifres do Minotauro: 1d6 + bônus de proficiência + mod. de Força.
         Grant horns = new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, "Chifres", null, null, null, "1d6",
-                null, null, null, null, null, null, null, null, null, null, null, List.of("PROFICIENCY", "STRENGTH"), null);
+                null, null, null, null, null, null, null, null, null, null, null, List.of("PROFICIENCY", "STRENGTH"), null, null);
         assertThat(CreationService.damageFor(horns, 2, false, a -> a == Attribute.STRENGTH ? 3 : 0)).isEqualTo("1d6+5");
         assertThat(CreationService.damageFor(horns, 2, false, a -> -3)).isEqualTo("1d6-1");
         assertThat(CreationService.damageFor(horns, 2, false, a -> -2)).isEqualTo("1d6");
