@@ -1046,12 +1046,14 @@
       "name": "Variante Glacinata",
       "category": "ORIGIN",
       "origins": [
+        "antroplantae",
         "construto",
         "humano",
         "minotauro",
+        "troll",
         "yordle"
       ],
-      "prerequisite": "Construto, Humano, Minotauro ou Yordle",
+      "prerequisite": "Construto, Humano, Minotauro, Yordle, Antroplantæ Floral com Flor Gélida ou Troll do Gelo",
       "description": "Você possui em seu sangue a força dos Glacinatas, uma experimentação feita pelos Observadores Gélidos em Freljordianos no passado, mas que ainda corre entre os dos dias atuais. Você não pode escolher as heranças Ignata ou Eletrinata.\n\n• Você recebe imunidade a Frio Extremo e resistência a Calor Extremo.\n• Você recebe redução de dano Gélido igual ao seu bônus de proficiência.\n• Você faz testes para usar gelo verdadeiro com vantagem e você utiliza o dobro de seu modificador de Constituição para a duração Adicionalmente, o dano gélido ou glacial causado por você tem seu dano aumentado em 1 categoria."
     },
     {
@@ -1076,6 +1078,16 @@
         "Vesani"
       ],
       "description": "Você é fruto de um relacionamento “proibido” entre um humano e um vastaya, um relacionamento que é considerado um tabu pelas duas espécies. Caso você já seja um vastaya, você não pode escolher uma herança variante da mesma tribo que a sua. Ao escolher uma tribo de ascendência, você recebe os seguintes modificadores:\nMeio-Oovi-kat\nSua herança Vastaya aflorou em você uma característica dos Oovi-Kat:\nHerança de Sho’ma. Usando uma ação e fazendo uma jogada de Transformação CD 17, você pode mudar algum aspecto menor de sua aparência, como cor de cabelo ou olhos, podendo manter um número de características diferentes igual ao seu bônus de Proficiência. Adicionalmente, um número de vezes igual ao seu bônus de Proficiência por descanso pleno, você pode fazer essa jogada de Transformação para se transformar em um ser diferente, sentir emoções e vislumbrar parte da memória recente desse ser. Para se transformar em outra criatura é necessário 2 minutos de observação, para sentir suas emoções e um vislumbre das suas memórias recentes é necessário observar por pelo menos 10 minutos. Essas memórias recentes são sensações e imagens sobre o que houve nas última hora, antes de você tentar entender suas memórias. Quando em outra forma, você mantém todas suas características. Em um sucesso você assume a aparência dessa criatura por no máximo 10 vezes seu bônus de Proficiência em minutos. Essa transformação requer Concentração.\nMeio-Marai\nSua herança Vastaya aflorou em você uma característica dos Marai:\nHerança Profunda. Você consegue respirar tanto em terra quanto na água e, combate debaixo da água não causa penalidades ou desvantagens de movimentação em você. Enquanto debaixo da água você possui visão no escuro de 60 pés. Adicionalmente, um número de vezes igual ao seu bônus de Proficiência por descanso pleno, você pode usar sua ação para acionar um sonar, desferindo um cone de 10 pés que causa 1d4 + metade de seu bônus de proficiência + seu modificador de Constituição de dano trovejante. Todas as criaturas no alcance devem fazer uma salvaguarda de constituição CD 8 + bônus de proficiência + modificador de Constituição ou recebem esse dano. Em um sucesso, recebem apenas metade. Criaturas surdas tem vantagem nessa salvaguarda.\nMeio-Shimon\nSua herança Vastaya aflorou em você uma característica dos Shimon:\nHerança Símia. Você pode re-rolar uma falha em um teste de Força, Destreza ou Constituição um número de vezes igual ao a metade do seu bônus de proficiência por descanso pleno. Adicionalmente, seus ataques desarmados têm seu dano aumentado em uma categoria.\nMeio-Fauhwoon\nSua herança Vastaya aflorou em você uma característica dos Fauhwoon\nHerança Protetora. Você possui um par de chifres menor que os dos Fauhwoon. O dano causado pelos chifres é de 1d4 + seu modificador de Força em dano contundente. Adicionalmente, sempre que você curar ou proteger um aliado de alguma forma usando uma ação ou ação bônus, o dano de seu próximo ataque corpo a corpo aumenta em um na escala e recebe o seu bônus de proficiência como dano adicional.\nMeio-Ottrani\nSua herança Vastaya aflorou em você uma característica dos Ottrani\nHerança Estelar. Utilizando uma ação, você pode curar uma criatura que esteja a até 30 pés de você gastando um dado de vida, ao fazer isso você recebe metade do valor curado como dano para si mesmo (esse dano não pode ser reduzido ou mitigado). Você pode gastar uma quantidade de dados igual à metade de seu bônus de proficiência por descanso pleno. Adicionalmente, você pode tocar uma criatura que esteja a até 5 pés de você para curá-la em uma quantidade de pontos de vida igual a metade do seu bônus de proficiência + metade de seu modificador de Sabedoria. Você pode utilizar essa habilidade um número de vezes igual à metade do seu bônus de Proficiência por descanso pleno.\nMeio-Kiilash\nSua herança Vastaya aflorou em você uma característica dos Killash\nHerança Predatória. Você possui garras e presas que podem ser usadas como armas, sendo proficiente com ambos. Suas garras causam 1d4 + metade do seu bônus de proficiência + seu modificador de Destreza ou Força de dano cortante e sua mordida causa 1d6 + metade do seu bônus de proficiência + seu modificador de Força de dano perfurante. Adicionalmente, você enxerga na penumbra a até 30 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza.\nMeio-Lhotlan\nSua herança Vastaya aflorou em você uma característica dos Lhotlan\nHerança Aérea. Ao realizar saltos em altura, você pode saltar até um número de vezes igual a até 3 + uma vez e meia seu modificador de Força (mínimo de 1) pés de altura. Adicionalmente, você pode usar uma ação bônus para criar 1 pena afiada e usá-la como adagas causando seu bônus de Proficiência como dano adicional aos ataques feitos por você com ela. Você pode fazer isso um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno. Você pode manter um número de Plumadagas igual ao seu bônus de Proficiência.\nMeio-Vesani\nSua herança Vastaya aflorou em você uma característica dos Vesani:\nHerança Vulpina. Ao adquirir esta Herança Variante, você deve escolher um atributo entre Carisma ou Sabedoria para definir as características da mesma. Você conhece o truque Disparo Arcano e é capaz de conjurar uma versão especial do mesmo um número de vezes igual à metade do seu seu bônus de proficiência por descanso longo com uma ação bônus. Ao conjurar esse truque dessa forma especial, surgem acima de sua mão até três orbes espirituais que duram por até 5 rodadas. Você pode dispará-las, cada uma, com uma ação de ataque utilizando o atributo escolhido como atributo de Conjuração. Adicionalmente, você pode utilizar uma ação para devorar a essência vital de uma criatura que esteja Inconsciente com 0 pontos de vida a menos de 5 pés de você; aquela criatura então morre e não pode ser revivida de nenhuma outra forma que não seja a magia desejo. Ao fazer isso, você recupera pontos de vida iguais ao seu modificador do atributo escolhido. Você pode utilizar essa característica um número de vezes igual à metade do seu bônus de proficiência por descanso longo. Adicionalmente, quando você faz isso, você recebe alguns fragmentos de memória e emoções da criatura. Você pode optar por não consumir a essência, armazenando-a em você. Você pode armazenar um máximo de essências igual a metade do seu bônus de proficiência + metade do seu modificador do atributo escolhido. Tentar armazenar mais essências pode provocar confusão em suas próprias memórias e sentimentos. Essas essências duram indeterminadamente ou até você morrer. Além disso, você é afligido pela dependência Fome de Essência, somando metade do seu bônus de proficiência à quantidade de dias que que pode passar sem se alimentar de Essência."
+    },
+    {
+      "id": "variante-nebulon",
+      "name": "Variante Nebulon",
+      "category": "ORIGIN",
+      "origins": [
+        "construto"
+      ],
+      "prerequisite": "Construto",
+      "description": "Nem todos que partilham da origem Construto são criaturas construídas artificialmente. Os Nebulon são criaturas gasosas, quase dizimadas nas Guerras Rúnicas; os poucos sobreviventes fugiram para onde futuramente seria Piltover. Seu corpo real é um aglomerado de gás que, embora consiga se manter coeso, tem dificuldade em existir fora de um recipiente limitado, por isso criam corpos metálicos com os quais se integram completamente. Sua reprodução é extremamente rara; a maioria está bem consolidada em Piltover, com riquezas e influência conquistadas pela longevidade e pelo conhecimento acumulado.\n\nPara fins mecânicos, os Nebulons fazem parte da origem Construto; para ser um Nebulon é necessário possuir esta Herança.\n\nVeja mais detalhes no Capítulo 5: Personalização - Heranças Variantes - Nebulon."
     },
     {
       "id": "variante-progressao-tecnologica",
@@ -1278,6 +1290,876 @@
       ],
       "prerequisite": "Construto",
       "description": "Seu núcleo emite mais energia do que seu corpo precisa para funcionar, com essa energia residual sendo expelida em seus ataques. Você recebe os seguintes benefícios:\n\nUm número de vezes igual ao seu bônus de Proficiência por Descanso Pleno, você pode adicionar 1d4 de dano elétrico a um de seus ataques desarmados ou com arma corpo a corpo, desde que elas sejam feitas de metal. Esse bônus aumenta para 1d8 no nível 6, 1d10 no nível 12 e 2d8 no nível 18."
+    },
+    {
+      "id": "ancia",
+      "name": "Anciã",
+      "category": "ORIGIN",
+      "origins": [
+        "antroplantae"
+      ],
+      "lineages": [
+        "arboreo"
+      ],
+      "prerequisite": "Arbóreo",
+      "description": "Um ancião de uma espécie já ancestral, você vagueia pelo mundo a séculos ou já viu muitas almas vivas passarem por você, com o tempo você se tornou mais resistente, tanto mentalmente quanto fisicamente. Você ganha os seguintes benefícios:\n\nVocê pode utilizar o truque druidismo sem utilizar quaisquer componentes verbais, somáticos ou materiais. Você pode usar esse truque dessa maneira um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê pode utilizar o truque resistência em si mesmo sem utilizar quaisquer componentes verbais, somáticos ou materiais. Você pode usar esse truque dessa maneira um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê recebe o Mistério da Flora."
+    },
+    {
+      "id": "arbusto-frutifero",
+      "name": "Arbusto Frutífero",
+      "category": "ORIGIN",
+      "origins": [
+        "antroplantae"
+      ],
+      "prerequisite": "Antroplantæ",
+      "description": "Como as mais diversas plantas frutíferas você pode prover um doce sabor aos seus aliados. Você ganha os seguintes benefícios:\n\nVocê pode utilizar a magia bom fruto sem gastar pontos de mana nem precisa utilizar quaisquer componentes verbais, somáticos ou materiais. Você pode usar essa magia dessa maneira um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê recebe o Mistério Flora."
+    },
+    {
+      "id": "arsenal-floral",
+      "name": "Arsenal Floral",
+      "category": "ORIGIN",
+      "origins": [
+        "antroplantae"
+      ],
+      "prerequisite": "Antroplantæ",
+      "description": "Algumas plantas tem seus espinhos, mas você tem todos eles. Você ganha os seguintes benefícios:\n\nVocê pode produzir espinhos resistentes capazes de serem usados como arma. Você possui proficiência com esses espinhos e eles causam 1d4 de dano perfurante e possuem as propriedades: leve, acuidade e arremesso (10-20 pés). Você pode criar um número de espinhos iguais ao dobro do seu bônus de Proficiência por descanso pleno. Criaturas que não sejam você possuem desvantagem em rolagem de ataques com esses espinhos. Espinhos criados dessa forma ficam secos e quebradiços depois de 24 horas, se tornando inutilizáveis.\nVocê recebe o Mistério Flora."
+    },
+    {
+      "id": "esporos-inebriantes",
+      "name": "Esporos Inebriantes",
+      "category": "ORIGIN",
+      "origins": [
+        "antroplantae"
+      ],
+      "lineages": [
+        "arboreo"
+      ],
+      "prerequisite": "Arbóreo",
+      "description": "Você pode criar um feromônio em seu corpo capaz de atordoar os sentidos de criaturas próximas à você. Você ganha os seguintes benefícios:\n\nUma vez por descanso longo, utilizando sua ação, você espalha esses esporos pelo seu corpo, criaturas a até 5 pés de você devem realizar uma salvaguarda de Constituição CD 8 + bônus de proficiência + modificador de Constituição. Em uma falha, a criatura fica Atordoada pelo próximo minuto, podendo repetir a salvaguarda no início de cada um dos seus turnos com desvantagem, enquanto em um sucesso fica imune desse efeito pelas próximas 24 horas.\nVocê recebe o Mistério Veneno."
+    },
+    {
+      "id": "florescimento-acelerado",
+      "name": "Florescimento Acelerado",
+      "category": "ORIGIN",
+      "origins": [
+        "antroplantae"
+      ],
+      "prerequisite": "Antroplantæ",
+      "description": "A potência floral de seu corpo é extremamente ativa, permitindo feitos impressionantes com seu corpo. Você recebe os seguintes benefícios:\n\nDurante a luz solar, você recupera 1 ponto de vida a cada 10 - seu bônus de Proficiência minutos.\nDurante um descanso pleno, você é capaz de regenerar um membro perdido."
+    },
+    {
+      "id": "madeira-de-lei",
+      "name": "Madeira de Lei",
+      "category": "ORIGIN",
+      "origins": [
+        "antroplantae"
+      ],
+      "prerequisite": "Antroplantæ",
+      "description": "A densidade de seu corpo é maior que a normal, fazendo com que ele possua características diferentes. Você recebe os seguintes benefícios:\n\nVocê recebe resistência a ataques contundentes.\nTodos os seus ataques desarmados ou causados por armas naturais têm sua categoria de dano aumentado em 1.\nUsando uma ação, você pode se enraizar no calor da batalha, caso o chão permita. Ao fazer isso, sua velocidade cai para 0, mas você se torna imune a quedas e a movimentos forçados. Você pode se desenraizar usando uma ação bônus."
+    },
+    {
+      "id": "mestre-de-vinhas",
+      "name": "Mestre de Vinhas",
+      "category": "ORIGIN",
+      "origins": [
+        "antroplantae"
+      ],
+      "lineages": [
+        "floral"
+      ],
+      "prerequisite": "Floral",
+      "description": "Você dominou a habilidade de criar Vinhas Espinhosas com seu corpo, fazendo com que elas sejam mais perigosas e resistentes. Você ganha os seguintes benefícios:\n\nVocê ganha um bônus de +1 nas jogadas de ataque feitas com um Chicote de Espinhos.\nQuando utilizado por você, seu Chicote de Espinhos tem seu dado de dano aumentado em uma categoria e passa a funcionar como a arma marcial Chicote, tendo as propriedades captura, desarme, extensão 2.\nEnquanto você está empunhando um Chicote de Espinhos, outras criaturas provocam um ataque de oportunidade quando entram no alcance de seu Chicote de Espinhos.\nSeus Ramos Florais (ou chicote de espinhos) perdem a vulnerabilidade a dano ígneo. Cada vez que você cria um chicote de espinhos, você consome 6 pés de sua capacidade de criar ramo floral. Como alternativa, você passa a poder receber 1d4 de dano voluntário (não mitigável) e criar 2 metros de ramo (como ramo floral ou chicote de espinhos) instantaneamente."
+    },
+    {
+      "id": "sombra-da-folha",
+      "name": "Sombra da Folha",
+      "category": "ORIGIN",
+      "origins": [
+        "antroplantae"
+      ],
+      "lineages": [
+        "floral"
+      ],
+      "prerequisite": "Floral",
+      "description": "Você aprende a magia das florestas primitivas, que são reverenciadas e protegidas pelo seu povo. Você ganha os seguintes benefícios:\n\nVocê aprende a magia passos sem pegadas, podendo conjurá-la sem gastar mana um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério da Umbramancia."
+    },
+    {
+      "id": "coletivo-forte",
+      "name": "Coletivo Forte",
+      "category": "ORIGIN",
+      "origins": [
+        "chireano"
+      ],
+      "prerequisite": "Chireano",
+      "description": "Os Chireanos sabem extrair o máximo da força proporcionada pela união e têm facilidade em trabalhar em equipe, mas você se destaca ainda mais entre eles. Você recebe os seguintes benefícios:\n\nAo criar objetos em um dia de tempo livre, adicione seu bônus de proficiência ao valor do que pode produzir. Cada Chireano adicional envolvido no trabalho adiciona além de seu bônus de proficiência, metade de seu modificador de inteligência a esse valor.\nVocê pode usar a ação de Ajuda como uma ação bônus. Além disso, quando você usa a ação de Ajuda para auxiliar um aliado a atacar uma criatura, o alvo desse ataque pode estar a 30 pés de você, em vez de 5, caso o alvo possa ver ou ouvir você."
+    },
+    {
+      "id": "pteropus",
+      "name": "Pteropus",
+      "category": "ORIGIN",
+      "origins": [
+        "chireano"
+      ],
+      "prerequisite": "Chireano",
+      "description": "Seus traços animalescos são mais acentuados, dando a você um aspecto mais selvagem e ameaçador além de garras perigosas. Você recebe os seguintes benefícios:\n\nVocê possui garras em suas mãos e em seus pés, podendo usá-las para ataques sendo proficientes com elas, elas são armas naturais com as propriedades leve e acuidade e causam 1d4 de dano cortante.\nVocê faz ataques de oportunidade com vantagem."
+    },
+    {
+      "id": "tecnomaniaco",
+      "name": "Tecnomaníaco",
+      "category": "ORIGIN",
+      "origins": [
+        "chireano"
+      ],
+      "prerequisite": "Chireano",
+      "description": "Os Chireanos não apenas gostam e tem facilidade em lidar com tecnologia, mas possuem uma grande habilidade quando se empenham em construir inventos. Você recebe os seguintes benefícios:\n\nVocê recebe o Ofício de Tecmaturgo ou especialidade no mesmo caso já o possua.\nVocê pode construir Inventos de Tecmaturgia na metade do tempo."
+    },
+    {
+      "id": "alma-fluida",
+      "name": "Alma Fluida",
+      "category": "ORIGIN",
+      "origins": [
+        "meio-dragao"
+      ],
+      "lineages": [
+        "oceano"
+      ],
+      "prerequisite": "Meio-Dragão do Oceano",
+      "description": "Você possui uma harmonização natural com os fluídos espirituais. Você recebe os seguintes benefícios:\n\nVocê recebe 1 ponto de Ki para cada 5 níveis de personagem que você possui.\nUtilizando uma ação bônus e gastando 1 ponto de Ki, você pode aumentar sua CA em +1 ou adicionar o seu modificador de Sabedoria ao dano de seus ataques corpo a corpo. O bônus escolhido dura até o início de seu próximo turno."
+    },
+    {
+      "id": "armamento-gelido",
+      "name": "Armamento Gélido",
+      "category": "ORIGIN",
+      "origins": [
+        "meio-dragao"
+      ],
+      "lineages": [
+        "glacial"
+      ],
+      "prerequisite": "Meio-Dragão Glacial",
+      "description": "Você é capaz de solidificar o ar na forma de uma arma que, enquanto estiver em contato com você, permanece sólida como uma arma normal. Você recebe os seguintes benefícios:\n\nUtilizando uma ação bônus, você pode criar uma arma de gelo em suas mãos, a arma criada possui a aparência de uma arma a qual você possui proficiência, o que também define o tipo de dano da arma. Essa arma causa metade do seu bônus de proficiência em dano Gélido adicional. Você pode fazer isso um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nAs armas naturais de sua essência dracônica causam dano gélido igual à metade do seu bônus de proficiência, esse dano extra é igual ao seu bônus de proficiência ao assumir sua forma dracônica."
+    },
+    {
+      "id": "ataque-vingativo",
+      "name": "Ataque Vingativo",
+      "category": "ORIGIN",
+      "origins": [
+        "meio-dragao"
+      ],
+      "lineages": [
+        "infernal"
+      ],
+      "prerequisite": "Meio-Dragão Infernal",
+      "description": "A essência das chamas que queima dentro de você é canalizada em seus atos. Você recebe os seguintes benefícios:\n\nQuando você receber dano de uma criatura a até 10 vezes seu bônus de Proficiência em pés de você, você pode utilizar sua reação para realizar um ataque corpo a corpo ou à distância contra essa criatura. Você pode utilizar essa característica um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nQuando você causa a condição Chamuscado a um alvo, você adiciona seu bônus de proficiência ao dano causado."
+    },
+    {
+      "id": "constituicao-anfibia",
+      "name": "Constituição Anfíbia",
+      "category": "ORIGIN",
+      "origins": [
+        "meio-dragao"
+      ],
+      "lineages": [
+        "oceano"
+      ],
+      "prerequisite": "Meio-Dragão do Oceano",
+      "description": "A essência elemental do Oceano concede a você adaptação para as águas, além de prover você com uma força de cura. Você recebe os seguintes benefícios:\n\nVocê recebe 35 pés de deslocamento de natação e pode respirar tanto ar quanto água. Adicionalmente, você não é afetado por terrenos difíceis relacionados à água.\nVocê pode utilizar uma ação bônus para recuperar seu dado de Pulso + seu nível de personagem em pontos de vida um número de vezes igual a metade do seu bônus de Proficiência por Descanso Pleno."
+    },
+    {
+      "id": "constituicao-glacial",
+      "name": "Constituição Glacial",
+      "category": "ORIGIN",
+      "origins": [
+        "meio-dragao"
+      ],
+      "lineages": [
+        "glacial"
+      ],
+      "prerequisite": "Meio-Dragão Glacial",
+      "description": "Sua constituição elemental é similar ao dos chamados Glacinatas, você é capaz de tocar gelo verdadeiro tendo maior resistência a seus efeitos nocivos. Você recebe os seguintes benefícios:\n\nVocê recebe resistência a climas gélidos e ignora níveis de exaustão causados pela exposição prolongada a temperaturas congelantes.\nAo receber dano de um ataque feito por uma arma de Gelo Verdadeiro, você faz sua Salvaguarda com Vantagem e utiliza o dobro do seu bônus de Proficiência ao invés do bônus simples.\nAo tocar Gelo Verdadeiro empunhando um objeto feito deste material, você deve fazer uma Salvaguarda de Constituição CD 25, em um sucesso, você pode ignorar a propriedade congelante por um número de rodadas igual ao dobro do seu bônus de Proficiência. Ao término desses turnos, você deve fazer uma nova salvaguarda. Em caso de falha, você recebe 1d4 de dano não absorvível e larga automaticamente o item."
+    },
+    {
+      "id": "constituicao-montanhosa",
+      "name": "Constituição Montanhosa",
+      "category": "ORIGIN",
+      "origins": [
+        "meio-dragao"
+      ],
+      "lineages": [
+        "montanha"
+      ],
+      "prerequisite": "Meio-Dragão da Montanha",
+      "description": "Sua solidez é uma clara manifestação de sua essência elemental das Montanhas. Você recebe os seguintes benefícios:\n\nVocê adiciona metade do seu bônus de proficiência aos seus pontos de vida permanente para cada nível de personagem que você tenha. No nível 1 terá +1 de vida, já no nível 10 terá +12 e assim por diante. Adicionalmente, ao se transformar em sua Forma Dracônica você adiciona seu bônus de Proficiência ao invés de apenas metade por nível."
+    },
+    {
+      "id": "dupliventos",
+      "name": "Dupliventos",
+      "category": "ORIGIN",
+      "origins": [
+        "meio-dragao"
+      ],
+      "lineages": [
+        "nuvens"
+      ],
+      "prerequisite": "Meio-Dragão das Nuvens",
+      "description": "Os ventos parecem recuperar sua energia interior, como se a cada sopro renovado você fosse provido de mais força. Você recebe os seguintes benefícios:\n\nAo ser alvo de uma magia ou efeito que recupere uma quantidade de pontos de vida equivalentes ou maiores que o máximo de seu dado de vida, você pode usar sua reação para recuperar metade do seu bônus de Proficiência em pontos de mana. Você pode usar essa característica um número de vezes igual ao dobro de seu bônus de Proficiência por descanso pleno.\nVocê pode utilizar o truque leque de vento sem utilizar quaisquer componentes verbais, somáticos ou materiais. Você pode usar esse truque dessa maneira um número de vezes igual ao seu bônus de Proficiência por descanso pleno. O atributo de Conjuração para essa magia é Constituição.\nVocê recebe o Mistério Vento."
+    },
+    {
+      "id": "essencia-elemental",
+      "name": "Essência Elemental",
+      "category": "ORIGIN",
+      "origins": [
+        "meio-dragao"
+      ],
+      "prerequisite": "Meio-Dragão",
+      "description": "Sua herança elemental emana com maior poder ligando você a sua herança dracônica. Você recebe os seguintes benefícios:\n\nUm número de vezes igual ao seu bônus de Proficiência por Descanso Pleno, quando você causa dano do mesmo tipo causado pela sua arma de sopro, você pode fazer com que esse dano aumente em uma categoria.\nVocê manifesta o elemento baseado em seu tipo elemental de meio-dragão.\nVocê recebe um truque de um mistério baseado em seu tipo elemental de meio-dragão. Seu Atributo de Conjuração para essa magia é Constituição ou seu Atributo de Conjuração, caso você seja um conjurador (o que for maior). Você pode utilizar esse truque um número de vezes igual a seu bônus de Proficiência por Descanso Pleno.\n\nMistérios Dracônicos: Glacial → Gelo; Infernal → Inferno; Montanha → Terra; Nuvens → Vento; Oceano → Água."
+    },
+    {
+      "id": "leveza-das-nuvens",
+      "name": "Leveza das Nuvens",
+      "category": "ORIGIN",
+      "origins": [
+        "meio-dragao"
+      ],
+      "lineages": [
+        "nuvens"
+      ],
+      "prerequisite": "Meio-Dragão das Nuvens",
+      "description": "Seu corpo possui a leveza das nuvens. Você recebe os seguintes benefícios:\n\nDesde que não esteja Incapacitado você pode prender sua respiração indefinidamente.\nVocê possui vantagens em Salvaguardas contra venenos e substâncias que ajam através da respiração.\nVocê está sempre sob efeito da magia queda suave."
+    },
+    {
+      "id": "presente-incandescente",
+      "name": "Presente Incandescente",
+      "category": "ORIGIN",
+      "origins": [
+        "meio-dragao"
+      ],
+      "lineages": [
+        "infernal"
+      ],
+      "prerequisite": "Meio-Dragão Infernal",
+      "options": [
+        "Fogo",
+        "Inferno",
+        "Magma"
+      ],
+      "description": "As chamas em seu interior são manifestas através de suas mãos, você recebe os seguintes benefícios:\n\nEscolha entre um dos seguintes elementos: Fogo, Inferno ou Magma. Você recebe o Mistério do Elemento escolhido.\nQuando você causa dano ígneo ou incandescente a um alvo, você recupera 1 ponto de vida para cada dado rolado."
+    },
+    {
+      "id": "resiliencia-draconica",
+      "name": "Resiliência Dracônica",
+      "category": "ORIGIN",
+      "origins": [
+        "meio-dragao"
+      ],
+      "prerequisite": "Meio-Dragão",
+      "description": "Seu ancestral possuia uma resistência incomparável entre os Dragões, podendo ficar dias sem exaurir a própria energia. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência com Sobrevivência, caso já possua você recebe especialidade com a mesma.\nVocê pode, uma vez por descanso longo, remover um ponto de exaustão durante um descanso curto."
+    },
+    {
+      "id": "rocha-bruta",
+      "name": "Rocha Bruta",
+      "category": "ORIGIN",
+      "origins": [
+        "meio-dragao"
+      ],
+      "lineages": [
+        "montanha"
+      ],
+      "prerequisite": "Meio-Dragão da Montanha",
+      "description": "Sua aparência é ainda mais rochosa, fazendo com que você carregue ainda mais atributos de sua herança dracônica. Você recebe os seguintes benefícios:\n\nSeus ataques desarmados ou com armas naturais causam 1d4 de dano adicional, esse dano aumenta para 1d6 no nível 6, 1d8 no nível 12 e 1d10 no nível 18.\nAo atacar um alvo com um ataque desarmado ou com uma arma natural, você pode forçá-lo a fazer uma salvaguarda de Constituição CD 8 + seu bônus de proficiência + seu modificador de Constituição. Em uma falha, o alvo ficará Enfraquecido até o início de seu próximo turno. Você pode fazer isso um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+    },
+    {
+      "id": "sopro-precoce",
+      "name": "Sopro Precoce",
+      "category": "ORIGIN",
+      "origins": [
+        "meio-dragao"
+      ],
+      "prerequisite": "Meio-Dragão",
+      "description": "Possuindo uma velocidade de crescimento até superior à de muitos dragões, seu corpo acabou por se desenvolver prematuramente. Você ganha os seguintes benefícios:\n\nEnquanto você não recebe acesso à sua arma de sopro, você é capaz de utilizar uma versão menor de sua origem desde bem jovem. Ela causa 2d4 de dano e pode ser usada um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nAo receber acesso a sua arma de sopro, ela recebe um bônus de +2 em sua CD, seu número de usos se torna uma vez e meia seu bônus de Proficiência e ela causa 1d6 de dano adicional, ao alcançar o nível 10 esse bônus se torna 2d6, no 15º nível aumenta para 3d6 e novamente aumenta para 4d6 no 19º nível."
+    },
+    {
+      "id": "adaptacao-selvagem",
+      "name": "Adaptação Selvagem",
+      "category": "ORIGIN",
+      "origins": [
+        "troll"
+      ],
+      "prerequisite": "Troll",
+      "description": "A capacidade regenerativa dos Trolls é por si só lendária, em você, ela cria efeitos adicionais em sua pele marcada por tantos golpes. Você recebe os seguintes benefícios:\n\nVocê recebe RD igual a seu bônus de Proficiência/ dano ácido e ígneo.\nSua pele adquire um tom mais eficiente para se esconder em seu ambiente. Quando em sua região, você recebe proficiência com Furtividade, caso já tenha, recebe especialidade e, caso também já tenha especialidade, faz essas jogadas com vantagem."
+    },
+    {
+      "id": "castelo-de-areia",
+      "name": "Castelo de Areia",
+      "category": "ORIGIN",
+      "origins": [
+        "troll"
+      ],
+      "lineages": [
+        "troll-areia"
+      ],
+      "prerequisite": "Troll da Areia",
+      "description": "Você pode não ser tão grande quanto seus primos gélidos, mas você tem alguns truques na manga, você recebe os seguintes benefícios:\n\nVocê aprende a magia aumentar/ reduzir, podendo conjurá-la em sua versão de “Aumentar” sem gastar pontos de mana. Você pode conjurar essa magia dessa maneira um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nEnquanto estiver sob o efeito de Aumentar da magia aumentar/ reduzir, conjurado por você através dessa Herança, ao ser atingido por um ataque, você pode utilizar sua reação para desfazer a magia e fazer com que o ataque seja considerado uma falha crítica."
+    },
+    {
+      "id": "conhecimentos-veneficos",
+      "name": "Conhecimentos Venéficos",
+      "category": "ORIGIN",
+      "origins": [
+        "troll"
+      ],
+      "lineages": [
+        "troll-selva"
+      ],
+      "prerequisite": "Troll da Selva",
+      "description": "Os Trolls da Selva quando se dedicam a Venefício são exímios, você recebe os seguintes benefícios:\n\nVocê recebe o Mistério Elemental Veneno.\nVocê aprende o truque borrifo venenoso, esse truque é conjurado usando seu atributo de conjuração ou Constituição, o que for maior. Você pode conjurar este truque um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê recebe o Ofício de Apotecário."
+    },
+    {
+      "id": "forca-predatoria",
+      "name": "Força Predatória",
+      "category": "ORIGIN",
+      "origins": [
+        "troll"
+      ],
+      "prerequisite": "Troll",
+      "description": "A capacidade de adaptação do seu organismo ao meio ambiente concede a você os seguintes benefícios:\n\nVocê recebe proficiência em Sobrevivência, caso já tenha, recebe especialidade. Você pode encontrar comida em lugares quase impossíveis (embora essa comida possa não servir para não Trolls).\nSeus olhos se adaptaram de forma surpreendente ao escuro. Você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+    },
+    {
+      "id": "furia-de-warmog",
+      "name": "Fúria de Warmog",
+      "category": "ORIGIN",
+      "origins": [
+        "troll"
+      ],
+      "prerequisite": "Troll",
+      "description": "Você é uma encarnação da fúria de Warmog, um Troll lendário da era das Guerras Rúnicas. E você está dedicado a honrar isso. Você ganha os seguintes benefícios:\n\nAo usar armas de combate corpo a corpo de duas mãos você adiciona seu bônus de proficiência ao dano da arma, e a margem de crítico feita com essas armas diminui em 1, ou seja, se for 20 se torna 19 ou se for 19, se torna 18."
+    },
+    {
+      "id": "mordida-infecciosa",
+      "name": "Mordida Infecciosa",
+      "category": "ORIGIN",
+      "origins": [
+        "troll"
+      ],
+      "lineages": [
+        "troll-gelo"
+      ],
+      "prerequisite": "Troll do Gelo",
+      "description": "Existe um número generoso de bactérias em sua boca. Elas sabem que quem manda é você, então elas não te causam problema, mas podem causar problema aos outros, você recebe os seguintes benefícios:\n\nSua Mordida causa 1d4 de dano venenoso adicional, esse dano aumenta para 1d6 no nível 6, 1d8 no nível 12 e 1d10 no nível 18, além disso, o dano se torna letífero ao atingir o nível 12.\nVocê recebe resistência a dano venenoso."
+    },
+    {
+      "id": "selvageria-superior",
+      "name": "Selvageria Superior",
+      "category": "ORIGIN",
+      "origins": [
+        "troll"
+      ],
+      "prerequisite": "Troll",
+      "description": "Trolls normalmente são selvagens e burros, mas você possui uma esperteza a mais, conseguindo utilizá-la para se tornar ainda mais selvagem. Você recebe os seguintes benefícios:\n\nSe um inimigo que você tiver causado dano morrer na mesma rodada, você pode utilizar sua ação bônus para se mover 20 pés em direção de um próximo inimigo e desferir um ataque corpo a corpo contra o alvo. Caso não houver mais inimigos, você não poderá utilizar essa habilidade.\nVocê pode adicionar seu modificador de Inteligência ou Sabedoria (o que for mais alto) ao dano de seus ataques corpo a corpo. Ao realizar um acerto crítico com um ataque corpo a corpo, você pode aumentar em 1 o multiplicador de dados de dano. Você pode fazer isso um número de vezes igual a metade do seu bônus de proficiência por Descanso Pleno."
+    },
+    {
+      "id": "afinidade-onirica",
+      "name": "Afinidade Onírica",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "ottrani"
+      ],
+      "prerequisite": "Vastaya - Ottrani",
+      "description": "Ottrani possuem grande relação com os sonhos e a magia Onírica, você conseguiu ampliar sua conexão com isso. Você recebe os seguintes benefícios:\n\nQuando você é alvo de um efeito mágico que cause Sono, você se torna ciente disso e pode optar por receber o efeito ou não.\nSuas Salvaguardas contra efeitos não mágicos que causem sono são feitas com vantagem.\nQuando Inconsciente por estar dormindo, caso seja alvo de um ataque, o mesmo continua sendo feito com vantagem mas o dano causado é normal ao invés de ser considerado um acerto crítico."
+    },
+    {
+      "id": "cauda-preensil",
+      "name": "Cauda Preênsil",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "shimon",
+        "oovi-kat"
+      ],
+      "prerequisite": "Shimon, Oovi’kat ou Meio Vastaya Shimon ou Oovi’kat",
+      "description": "Sua cauda é quase uma terceira mão e braço para você. Você ganha os seguintes benefícios:\n\nComo uma ação bônus você pode realizar as seguintes ações com sua cauda:\nPegar ou segurar um objeto que pese até 1 quilo com sua cauda. Se fizer isso enquanto estiver roubando, você ganha vantagem no teste de Prestidigitação.\nAbrir e Fechar portas.\nUsar ferramentas de chaveiro.\nGanhar vantagem em jogadas de Agarrão.\nUsar a ação Ajuda a uma criatura amigável até 5 pés de você.\nSe pendurar."
+    },
+    {
+      "id": "centelha-magica-vesani",
+      "name": "Centelha Mágica Vesani",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "vesani"
+      ],
+      "prerequisite": "Vesani",
+      "description": "Você é versado nos caminhos mágicos dos Vesani, possuindo muita habilidade e conhecimento em como conjurar essas magias. Você recebe os seguintes benefícios:\n\nVocê recebe o Mistério do Encantamento e outro Mistério Espiritual à sua escolha.\nUm número de vezes igual ao seu bônus de proficiência por descanso longo, você pode subtrair seu bônus de Proficiência do custo de mana de uma magia desses dois Mistérios (o custo não pode ser menor que 1)."
+    },
+    {
+      "id": "conjurador-marai",
+      "name": "Conjurador Marai",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "marai"
+      ],
+      "prerequisite": "Marai",
+      "description": "Você aprendeu a se adaptar tanto na superfície quanto nas profundezas. Você ganha os seguintes benefícios:\n\nVocê aprende a magia criar ou destruir água, podendo conjurá-la sem pontos de mana. Você pode conjurar essa magia um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério Água."
+    },
+    {
+      "id": "conjurador-suporte",
+      "name": "Conjurador Suporte",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "marai"
+      ],
+      "prerequisite": "Marai e habilidade de conjuração",
+      "description": "Você sempre se prepara para o próximo perigo que pode encontrar. Você ganha os seguintes benefícios:\n\nQuando você escolhe essa Herança, ela permite que você conjure duas magias de uma só vez com uma única ação, com os níveis máximos de magia que podem ser usados. Ambas as magias devem ter um tempo de conjuração de 1 Ação, ter uma duração de Instantâneo e pelo menos uma magia precisa atingir uma criatura aliada não causando dano à ela. Você pode usar essa habilidade um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério da Étermancia."
+    },
+    {
+      "id": "contemplacao-estelar",
+      "name": "Contemplação Estelar",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "ottrani"
+      ],
+      "prerequisite": "Ottrani",
+      "description": "Você aprendeu como influenciar levemente o Sho’ma ao redor de uma criatura, fazendo com que seja mais difícil ter uma imagem certa da posição dela. Você recebe os seguintes benefícios:\n\nAo curar uma criatura, até o final do próximo turno dela, ataques de oportunidade realizados contra ela possuirão desvantagem e o próximo ataque que ela realizar possuirá vantagem.\nVocê recebe o Mistério da Étermancia."
+    },
+    {
+      "id": "controle-de-plumadagas",
+      "name": "Controle de Plumadagas",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "lhotlan"
+      ],
+      "prerequisite": "Vastaya Lhotlan",
+      "description": "Suas características metamórficas permitem que você possua uma maior sintonia e ainda mais controle de suas plumadagas. Você recebe os seguintes benefícios:\n\nO número de Plumadagas que você cria aumenta para 3 + o dobro do seu bônus de Proficiência por Descanso Pleno. Adicionalmente, o número de Plumadagas que você pode manter aumenta em mais uma vez seu bônus de Proficiência por Descanso Pleno, se tornando três vezes esse valor.\nRetorno das Lâminas. Você pode usar uma ação bônus para puxar de volta para você suas plumadagas que tenham sido arremessadas, fazendo com que criaturas entre você e as plumas tenham que ser bem sucedidas em uma Salvaguarda de Destreza CD 8 + seu bônus de Proficiência + seu modificador de Destreza, para não receber 1d4 + seu modificador de Destreza como dano perfurante para cada adaga que passe por ela. Criaturas surpreendidas tem desvantagem nessa Salvaguarda. Você pode fazer isso um número de vezes igual o seu bônus de Proficiência por Descanso Pleno."
+    },
+    {
+      "id": "cura-ottrani",
+      "name": "Cura Ottrani",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "ottrani"
+      ],
+      "prerequisite": "Vastaya Ottrani",
+      "description": "Você recebeu ensinamentos preciosos sobre como promover a cura, sendo especialista nisso. Você recebe os seguintes benefícios:\n\nAo utilizar habilidades, magias ou runas que curem uma criatura, você pode adicionar seu bônus de proficiência à cura. Além disso, você recebe proficiência em Medicina, caso já tenha, recebe especialidade.\nCaso você seja um Acólito do Rito das Estrelas, você recebe um uso adicional de sua Liturgia."
+    },
+    {
+      "id": "dancarino",
+      "name": "Dançarino",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "lhotlan"
+      ],
+      "prerequisite": "Lhotlan",
+      "description": "Você sabe como conquistar a atenção dos outros dançando. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência em Acrobacia e Atuação, caso você já possua proficiência na perícia escolhida, você recebe especialização com a mesma.\nEscolha entre Atuação ou Prestidigitação, a perícia escolhida recebe seu bônus de proficiência.\nSeu deslocamento aumenta em 10 pés."
+    },
+    {
+      "id": "devorador-de-conhecimento",
+      "name": "Devorador de Conhecimento",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "vesani"
+      ],
+      "prerequisite": "Vesani",
+      "options": [
+        "Carisma",
+        "Sabedoria"
+      ],
+      "description": "Quando você devora uma essência você é capaz de reter conhecimentos daquela essência. Você ganha os seguintes benefícios:\n\nQuando você utiliza Devorar Essência você pode reter um conhecimento do alvo como magia, uma língua ou um ofício à critério do Mestre por um número de dias igual ao seu modificador de Carisma ou Sabedoria (definido durante a escolha dessa Herança).\nEnquanto você possui essências armazenadas, você adiciona o número delas ao dano causado por seus ataques."
+    },
+    {
+      "id": "encanto-vulpino",
+      "name": "Encanto Vulpino",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "vesani"
+      ],
+      "prerequisite": "Vesani",
+      "options": [
+        "Carisma",
+        "Sabedoria"
+      ],
+      "description": "Os Vesani possuem facilidade em utilizar magias que mexam com emoções e memórias. Você recebe os seguintes benefícios:\n\nVocê pode utilizar a magia enfeitiçar pessoa sem gasto de mana como uma magia de 1º nível um número de vezes igual a metade do seu bônus de proficiência por descanso pleno. Seu atributo de Conjuração é Carisma ou Sabedoria (definido ao escolher essa Herança) caso você não tenha um atributo de conjuração.\nCaso você possa conjurar essa magia em níveis superiores, você o faz gastando 1 nível a menos que o nível conjurado.\nQuando você conjura magias de um mistério Espiritual, você pode optar por utilizar Carisma ou Sabedoria (definido ao escolher essa Herança) como atributo de Conjuração. Adicionalmente, quando suas magias de Mistérios Espirituais forem conjuradas dessa forma, elas recebem metade do seu bônus de proficiência em suas jogadas de ataque e dano e em sua CD."
+    },
+    {
+      "id": "estilo-do-mar",
+      "name": "Estilo do Mar",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "marai"
+      ],
+      "prerequisite": "Vastaya - Marai",
+      "description": "A forma de combate dos Marai envolve um uso extraordinário da agilidade e de sua pele escorregadia. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência no uso da rede, lança e tridente.\nA margem de crítico da lança e do tridente diminui em 1 e o multiplicador de crítico aumenta em 1.\nVocê faz salvaguardas contra as condições Agarrado ou Contido com vantagem."
+    },
+    {
+      "id": "ferocidade-do-predador",
+      "name": "Ferocidade do Predador",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "kiilash"
+      ],
+      "prerequisite": "Vastaya Kiilash",
+      "description": "Seus instintos de predador são extremamente apurados. Você recebe os seguintes benefícios:\n\nVocê pode tentar se ocultar mesmo quando estiver com cobertura leve de folhagem, chuva pesada, neve, névoa ou outros fenômenos naturais. Enquanto estiver escondido, você pode utilizar uma ação bônus para saltar em um inimigo a até 20 pés de você.\nQuando em combate, seu instinto tem picos que fortalecem seus ataques. Durante um combate a cada ataque bem sucedido, você gera um acúmulo de ferocidade. Ao alcançar o máximo de ferocidade, você pode utilizar uma ação bônus para fazer com que até o início de seu próximo turno, todos seus ataques tenham margem e multiplicador de crítico aumentado em 1. Fora de combate esse acúmulo é zerado. Seu máximo de ferocidade é igual a 10 - seu bônus de proficiência."
+    },
+    {
+      "id": "forma-de-shoma",
+      "name": "Forma de Sho’Ma",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "prerequisite": "Vastaya",
+      "maxTimes": 5,
+      "options": [
+        "Humana",
+        "Feral Íbex",
+        "Íbex",
+        "Feral Sabre",
+        "Dentes de Sabre",
+        "Feral Rapina",
+        "Feral Vulpina",
+        "Rapina",
+        "Vulpina",
+        "Feral Seláquio",
+        "Feral Sirênio",
+        "Seláquio",
+        "Sirênio",
+        "Feral Camaleão",
+        "Camaleão",
+        "Feral Bode",
+        "Bode",
+        "Feral Símio",
+        "Kong"
+      ],
+      "description": "Explorando suas capacidades espirituais, você se tornou capaz de mudar sua forma para algumas formas ligadas à sua tribo. Você recebe os seguintes benefícios:\n\nVocê pode escolher uma forma de Sho’Ma ligada a sua tribo, você pode se transformar nessa forma um número de vezes igual a seu bônus de Proficiência por Descanso Pleno.\nEssa Herança pode ser adquirida mais de uma vez, escolhendo uma nova forma da tribo a cada vez.\n\nFormas possíveis por tribo: Fauhwoon (Humana, Feral Íbex, Íbex); Kiilash (Humana, Feral Sabre, Dentes de Sabre); Lhotlan (Humana, Feral Rapina, Feral Vulpina, Rapina, Vulpina); Marai (Humana, Feral Seláquio, Feral Sirênio, Seláquio, Sirênio); Oovi’Kat (Humana, Feral Camaleão, Camaleão); Ottrani (Humana, Feral Bode, Bode); Shimon (Humana, Feral Símio, Kong); Vesani (Humana, Feral Vulpina, Vulpina).\n\nHumana. A forma humana esconde a maior parte dos traços Vastaya, fazendo com que um Vastaya possa passar por um humano normalmente.\nFeral. Na forma feral, o Vastaya se aproxima dos animais ligados a sua tribo em um híbrido antropomórfico normalmente portando armas naturais ou habilidades dessa fera mas ainda sendo capaz de utilizar magias e manter armas.\nAnimal. A forma animal é indistinguível de outros animais da mesma espécie, não sendo capaz de lançar magias nem segurar armas (exceto a forma Kong do Shimon, que utiliza armas normalmente).\n\nTransformação. Você usa sua característica de origem Transformação para assumir uma forma obtida com esta Herança: uma ação e uma jogada de Transformação; em um sucesso, você assume a forma. O nível de magia da região afeta a dificuldade. A cada vez que receber dano nessa forma, faça uma salvaguarda de Constituição CD 10 ou metade do dano recebido (o que for maior); em uma falha, gaste um uso de Transformação ou reverta para sua forma original.\n\nFormas (bônus de FOR/DES nas formas animais):\nFauhwoon – Íbex (FOR +2, DES +4): quadrúpede semelhante a um Íbex, tamanho aumenta uma categoria; deslocamento de caminhada 50 pés; Chifres causam 2d8 + bônus de proficiência + mod. de Força ao invés de 1d8.\nFauhwoon – Feral Íbex: chifres mais curvos, pelo pelo corpo, pernas fortalecidas. Chifres causam 2d8 ao invés de 1d8; deslocamento de caminhada 40 pés; salto em distância com o dobro do alcance.\nKiilash – Dentes de Sabre (FOR +4, DES +4): +30 cm de tamanho; deslocamento base 50 pés; Mordida 3d4 ao invés de 2d4 e Garras 2d6 ao invés de 1d6; ambos causam 1d4 de Sangramento.\nKiilash – Feral Sabre: garras mais protuberantes; Garras 2d6 ao invés de 1d6; Mordida e Garras causam 1d4 de Sangramento.\nLhotlan – Rapina (FOR +2, DES +4): deslocamento de voo 40 pés; ataque com Bico 2d4 + mod. de Força (perfurante) e Garras 2d6 + mod. de Destreza (cortante).\nLhotlan – Vulpina (FOR +3, DES +3): deslocamento base 60 pés; Garras 3d6 + mod. de Destreza (cortante) e Mordida 3d4 + mod. de Força (perfurante).\nLhotlan – Feral Rapina: garras nos pés (proficiente; armas leves; +1d6 cortante no chute); bico 1d4 + mod. de Força (perfurante); patágio que dá deslocamento de planagem por 15 pés.\nLhotlan – Feral Vulpina: garras nas mãos e audição superior; vantagem em Percepção pela audição e não pode ser surpreendido (salvo pela magia silêncio); Garras 2d6 + mod. de Destreza (cortante).\nMarai – Seláquio (FOR +4, DES +2): tamanho igual ao da forma natural na água; presas de tubarão, mordida 2d6 + bônus de proficiência + mod. de Força.\nMarai – Sirênio (FOR +2, DES +4): tamanho igual ao da forma natural; deslocamento na água 60 pés; Sonar como ataque causando 1d6 trovejante em cone de 20 pés.\nMarai – Feral Seláquio: presas de tubarão; com uma ação, morde a até 5 pés causando 1d8 perfurante.\nMarai – Feral Sirênio: presas de moréia; com uma ação, morde a até 5 pés causando 1d4 perfurante; Sonar como ataque causando 1d6 trovejante em cone de 20 pés.\nOovi’Kat – Camaleão (FOR +2, DES +4): ataques com a cauda a até 10 pés, 1d8 + mod. de Força (ou Destreza) contundente; com sua ação, esconde sua presença pela magia invisibilidade por metade do seu bônus de proficiência em turnos.\nOovi’Kat – Feral Camaleão: com sua ação, esconde sua presença pela magia invisibilidade por um número de turnos igual ao seu bônus de proficiência.\nOttrani – Bode (FOR +3, DES +3): quadrúpede semelhante a um carneiro, tamanho aumenta uma categoria; deslocamento de escalada 50 pés; Chifres causam 1d8 ao invés de 1d4.\nOttrani – Feral Bode: forma de guerra com mais pelos e focinho; Chifres causam 1d6 ao invés de 1d4; deslocamento de escalada 40 pés; salto em altura e distância com o dobro do alcance.\nShimon – Kong (FOR +4, DES +2): +30 cm de tamanho; ataque Mordida 1d6 + mod. de Força (perfurante).\nShimon – Feral Símio: forma de guerra com +1 de Força; a cauda carrega objetos de até 20 kg; com uma ação bônus, a cauda tenta derrubar uma criatura (salvaguarda de Destreza CD 8 + bônus de proficiência + mod. de Força; em uma falha, fica Caída).\nVesani – Vulpina (FOR +3, DES +3): deslocamento base 60 pés; Garras 3d6 + mod. de Destreza (cortante) e Mordida 3d4 + mod. de Força (perfurante).\nVesani – Feral Vulpina: garras nas mãos e audição superior; vantagem em Percepção pela audição e em rolagens contra ser surpreendido (salvo pela magia silêncio); Garras 2d6 + mod. de Destreza (cortante)."
+    },
+    {
+      "id": "forca-ottrani",
+      "name": "Força Ottrani",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "ottrani"
+      ],
+      "prerequisite": "Vastaya Ottrani",
+      "description": "Seus chifres são maiores e mais poderosos que os da maioria dos Ottrani. Você recebe os seguintes benefícios:\n\nVocê possui proficiência em ataques utilizando seus chifres, sendo considerados armas naturais, o dano causado por seus chifres é 1d6 + seu modificador de Força de dano contundente.\nUsando sua ação bônus, você faz com que até o início do próximo turno, seus ataques que causem dano contundente tenham seu dano aumentado em 1 na escala de dano, a margem e multiplicador de crítico aumentados em 1. Você pode fazer isso um número de vezes igual ao seu bônus de Proficiência por Descanso Pleno."
+    },
+    {
+      "id": "graca-da-raposa",
+      "name": "Graça da Raposa",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "vesani"
+      ],
+      "prerequisite": "Vesani",
+      "description": "Sua herança Vulpina é mais aflorada refletindo em uma necessidade de espaços abertos e uma maior agilidade em seus movimentos. Você recebe os seguintes benefícios:\n\nVocê pode utilizar Ímpeto Espiritual um número de vezes igual a metade do seu bônus de proficiência por descanso longo de duas formas:\nAo ser alvo de um ataque, você pode utilizar sua reação para receber até o final da rodada a característica evasão. Caso você já tenha a mesma, você pode impor desvantagem aos ataques ou fazer as salvaguardas com vantagem.\nFazer uma ação de disparada como parte de sua ação de movimentação.\nCada vez que você consome uma essência com Devorar Essência, você recupera seus usos de Ímpeto Espiritual."
+    },
+    {
+      "id": "graca-do-felino",
+      "name": "Graça do Felino",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "kiilash"
+      ],
+      "prerequisite": "Kiilashi",
+      "description": "Seus reflexos e incrível agilidade furtiva melhoraram. Você ganha os seguintes benefícios:\n\nVocê não recebe os primeiros 10 + (5 × seu bônus de proficiência) pés de dano de queda, a não ser que você esteja incapacitado.\nCaso esteja furtivo, você pode se mover de uma cobertura para outra sem perder sua furtividade, desde que termine seu deslocamento dentro de outra cobertura.\nO dano de suas armas naturais aumenta em uma categoria."
+    },
+    {
+      "id": "guardiao-de-essencia",
+      "name": "Guardião de Essência",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "vesani"
+      ],
+      "prerequisite": "Vesani",
+      "description": "Você se dedicou a aprimorar o armazenamento de essências em seu corpo, conseguindo separá-las bem de sua própria mente e conseguindo utilizá-las de forma mais efetiva. Você ganha os seguintes benefícios:\n\nQuando você utiliza Devorar Essência para recuperar pontos de vida, você pode optar por utilizar seu modificador de Constituição ao invés do de Carisma ou Sabedoria. O total de pontos curados é multiplicado pelo seu bônus de proficiência.\nSeu máximo de essências armazenadas aumenta em um valor igual a metade do seu modificador de Constituição.\nVocê faz a Salvaguarda de Fome de Essência com vantagem."
+    },
+    {
+      "id": "habilidade-do-impulso",
+      "name": "Habilidade do Impulso",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "shimon"
+      ],
+      "prerequisite": "Shimon",
+      "description": "Suas manias impulsivas tornaram trivial para você superar qualquer obstáculo em seu caminho. Você ganha os seguintes benefícios:\n\nEnquanto você estiver descalço, mover através de terreno difícil não custa deslocamento extra.\nEnquanto você está fazendo um teste de agarrão contra uma criatura, você pode utilizar Acrobacia ao invés de Atletismo e você possui vantagem nesse teste."
+    },
+    {
+      "id": "habilidade-simia",
+      "name": "Habilidade Símia",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "shimon"
+      ],
+      "prerequisite": "Vastaya - Shimon",
+      "description": "A agilidade dos Shimon já é considerável, mas você conseguiu desenvolver ainda mais isso. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência com a perícia Atletismo. Caso já tenha, recebe especialidade com a mesma. Quando for escalar você pode usar todo seu deslocamento de caminhada.\nQuando você recebe dano, você pode usar sua reação para reduzir o dano em 1d6 + seu bônus de Proficiência. Você pode utilizar isso um número de vezes igual ao seu bônus de proficiência por Descanso Pleno. Esse dado aumenta para 1d8 no nível 7, 1d10 no nível 13 e 1d12 no nível 19."
+    },
+    {
+      "id": "nascido-em-kumungu",
+      "name": "Nascido em Kumungu",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "kiilash"
+      ],
+      "prerequisite": "Kiilashi",
+      "description": "Você se tornou adepto aos altos galhos das florestas mais profundas. Você ganha os seguintes benefícios:\n\nVocê pode usar Acrobacia para fazer testes de escalada e salto.\nVocê dobra o número de pés que você cobre para qualquer salto.\nVocê anda ou corre por galhos, copas de árvores e cipós como se fossem terreno sólido."
+    },
+    {
+      "id": "potencia-da-cura",
+      "name": "Potência da Cura",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "ottrani"
+      ],
+      "prerequisite": "Ottrani",
+      "options": [
+        "Étermancia",
+        "Água"
+      ],
+      "description": "Você aprendeu a controlar melhor o seu Sho’ma, para que quando ele for induzido por fontes externas para acelerar seu processo de cura, você receba uma melhoria temporária em seu físico. Você recebe os seguintes benefícios:\n\nEnquanto em combate, ao receber cura de qualquer fonte, você pode fazer com que seu próximo ataque corpo a corpo tenha vantagem e caso você atinja poderá adicionar seu bônus de proficiência ao dano. Você pode utilizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por descanso pleno.\nEscolha entre um desses Mistérios para receber: Étermancia ou Água."
+    },
+    {
+      "id": "precisao-vastayesa",
+      "name": "Precisão Vastayesa",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "prerequisite": "Vastaya",
+      "description": "Você tem uma mira fora do comum. Você ganha os seguintes benefícios:\n\nQuando você tem vantagem em um teste de ataque, você rola três d20s em vez de dois, e usa o maior dos três testes."
+    },
+    {
+      "id": "procurador-da-verdade",
+      "name": "Procurador da Verdade",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "lhotlan"
+      ],
+      "prerequisite": "Lhotlan",
+      "description": "Você treinou diligentemente para reunir segredos ativamente e passivamente. Você tem o dom de lembrar e sabe exatamente as perguntas certas a fazer quando procura informações. Você ganha os seguintes benefícios:\n\nVocê tem uma excelente memória, e pode recordar com precisão a maioria das coisas que viu e ouviu, incluindo o texto de um livro que você casualmente folheou, uma lista grande de nomes que você leu, ou o número de pronomes usados em um livro ou de um discurso que você ouviu. Pequenos detalhes podem exigir um teste de Inteligência com o CD definido pelo seu Mestre.\nVocê ganha a habilidade de ler os lábios a uma distância de 100 pés.\nVocê possui proficiência com Percepção e você recebe +1 em sua Percepção Passiva. Caso já possua proficiência em Percepção, você recebe especialidade com a mesma."
+    },
+    {
+      "id": "proficiencia-onirica",
+      "name": "Proficiência Onírica",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "fauhwoon"
+      ],
+      "prerequisite": "Fauhwoon",
+      "description": "Com uma profunda relação com a magia dos sonhos, você aprendeu a… forçá-los nos outros. Você ganha os seguintes benefícios:\n\nVocê aprende a magia sono, podendo conjurá-la sem gastar pontos de mana um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério da Oniromancia."
+    },
+    {
+      "id": "propulsao-natural",
+      "name": "Propulsão Natural",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "fauhwoon"
+      ],
+      "prerequisite": "Vastaya - Fauhwoon",
+      "options": [
+        "Natureza",
+        "Sobrevivência"
+      ],
+      "description": "A sua conexão com a natureza o permite canalizar a energia natural como forma de fortalecimento. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência em Natureza ou Sobrevivência, caso já possua proficiência na perícia escolhida, você recebe especialidade com a perícia escolhida.\nVocê pode invocar o poder da natureza para causar um dano adicional a seus ataques. Usando sua ação bônus, você pode adicionar 1d6 + seu bônus de proficiência de dano energético aos seus ataques até o final do seu turno. Você pode fazer isso um número de vezes igual a metade do seu bônus de Proficiência por Descanso Pleno."
+    },
+    {
+      "id": "salva-iip-guarda",
+      "name": "Salva-IIP-guarda",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya"
+      ],
+      "lineages": [
+        "fauhwoon"
+      ],
+      "prerequisite": "Fauhwoon",
+      "description": "“Agora é só esperar a minha confiança crescer de novo”. Você ganha os seguintes benefícios:\n\nVocê aprende a magia benção, podendo conjurá-la sem gastar espaços de magia. Você pode conjurar essa magia um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno."
+    },
+    {
+      "id": "magia-inata",
+      "name": "Magia Inata",
+      "category": "ORIGIN",
+      "origins": [
+        "vastaya",
+        "yordle"
+      ],
+      "lineages": [
+        "fauhwoon",
+        "ottrani",
+        "aquatico",
+        "feerico",
+        "felpudo"
+      ],
+      "initial": true,
+      "prerequisite": "Inicial, Vastaya Fauhwoon ou Ottrani, Yordle",
+      "options": [
+        "Inteligência",
+        "Sabedoria",
+        "Carisma",
+        "Constituição"
+      ],
+      "description": "Sua essência espiritual é poderosa o bastante para que você possa conjurar magias de forma inata. Você recebe os seguintes benefícios:\n\nVocê pode conjurar um número de truques e magias um número de vezes por descanso pleno, baseados em seu nível de personagem conforme a tabela de Magia Inata, sem o gasto de mana e sem a necessidade de componentes materiais. A lista de magia é baseada em sua Origem e pode ser encontrada no Capítulo 10. Seu Atributo de Conjuração para essas magias deve ser escolhido no momento em que você escolhe essa Herança entre Inteligência, Sabedoria, Carisma ou Constituição.\n\nMagia Inata (truques / usos de 1º, 2º e 3º nível): 1º nível: 1 truque; 5º: 1 truque e 1 de 1º; 11º: 1 truque, 1 de 1º e 1 de 2º; 17º: 1 truque, 1 de 1º, 1 de 2º e 1 de 3º.\nCD para suas Magias Inatas = 8 + seu bônus de proficiência + seu modificador de Atributo de Conjuração.\nModificador de Ataque de Magia Inata = seu bônus de proficiência + seu modificador de Atributo de Conjuração.\n\nMagia Inata Yordle. A Magia Inata Yordle reflete a relação que eles têm com a sua própria essência espiritual e mágica, funcionando em termos narrativos de forma diferente da magia de classes conjuradoras. Sempre que um Yordle conjura uma Magia Inata Yordle, ela tem necessariamente um componente narrativo que pode soar até absurdo, como por exemplo, ao usar a magia de 3º nível luz do dia, o Yordle pode dizer que seu personagem está assoprando a escuridão para longe. Conforme o Yordle sobe de nível e tem acesso a novas magias, elas obrigatoriamente têm que ter alguma explicação narrativa para serem “aprendidas”."
+    },
+    {
+      "id": "bola-de-pelos",
+      "name": "Bola de Pelos",
+      "category": "ORIGIN",
+      "origins": [
+        "yordle"
+      ],
+      "lineages": [
+        "felpudo"
+      ],
+      "prerequisite": "Yordle Felpudo",
+      "description": "Você possui um pouco mais de pelagem que os outros Yordles, se ela é bonita e vistosa ou desgrenhada, depende apenas de seus cuidados, mas ela consegue tirar você de vários apuros, você recebe os seguintes benefícios:\n\nEnquanto estiver Agarrado, você pode utilizar sua reação para receber 1 ponto de dano e escapar. Você pode fazer isso um número de vezes igual ao seu bônus de Proficiência por descanso pleno.\nAo ser atingido por um ataque à distância, você pode utilizar sua reação para que o ataque seja considerado uma falha. Você pode fazer isso um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+    },
+    {
+      "id": "extrovertido",
+      "name": "Extrovertido",
+      "category": "ORIGIN",
+      "origins": [
+        "yordle"
+      ],
+      "prerequisite": "Yordle",
+      "description": "Você é um Yordle curioso e interessado nas culturas do reino material. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em História, caso você já possua, recebe especialidade com essa perícia.\nVocê aprende um idioma adicional à sua escolha da tabela de Idiomas Comuns no Capítulo 4: Detalhamento.\nVocê aprende o truque reparar. Você pode conjurar este truque um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+    },
+    {
+      "id": "teleporte-das-fadas",
+      "name": "Teleporte das Fadas",
+      "category": "ORIGIN",
+      "origins": [
+        "yordle"
+      ],
+      "prerequisite": "Yordle",
+      "description": "Seu estudo de combate desbloqueou um poder feérico que apenas poucos yordles possuem. Você ganha os seguintes benefícios:\n\nVocê aprende a falar Silvestre.\nVocê aprende a magia passo nebuloso e pode conjurá-la um número de vezes igual ao seu bônus de Proficiência por descanso pleno usando seu atributo de conjuração ou Carisma, o que for maior."
+    },
+    {
+      "id": "truque-da-mare",
+      "name": "Truque da Maré",
+      "category": "ORIGIN",
+      "origins": [
+        "yordle"
+      ],
+      "lineages": [
+        "aquatico"
+      ],
+      "prerequisite": "Yordle Aquático",
+      "description": "Você sabe se beneficiar dos ensinamentos da maré, você recebe os seguintes benefícios:\n\nVocê recebe acesso à magia jato d’água, podendo conjurá-la como uma magia de 2º nível sem gastar pontos de mana. Você pode conjurar essa magia um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério Elemental Água."
+    },
+    {
+      "id": "gas-corrosivo",
+      "name": "Gás Corrosivo",
+      "category": "ORIGIN",
+      "origins": [
+        "construto"
+      ],
+      "requires": [
+        "variante-nebulon"
+      ],
+      "prerequisite": "Construto com a Herança Variante Nebulon",
+      "description": "O composto de gases do qual você é formado é bastante corrosivo, possuindo uma maior afinidade com ácidos. Você recebe os seguintes benefícios:\n\nVocê recebe resistência a dano ácido. Ao alcançar o 11º nível, essa resistência se aplica a dano antimônico.\nUma vez por rodada, ao causar dano ácido ou antimônico, você pode recuperar metade do seu bônus de proficiência em pontos de vida."
+    },
+    {
+      "id": "gas-ionizado",
+      "name": "Gás Ionizado",
+      "category": "ORIGIN",
+      "origins": [
+        "construto"
+      ],
+      "requires": [
+        "variante-nebulon"
+      ],
+      "prerequisite": "Construto com a Herança Variante Nebulon",
+      "description": "O composto de gases do qual você é formado é fortemente ionizado, possuindo uma maior afinidade com a eletricidade. Você recebe os seguintes benefícios:\n\nVocê recebe resistência a dano elétrico. Ao alcançar o 11º nível, essa resistência se aplica a dano plásmico.\nUma vez por rodada, ao causar dano elétrico ou plásmico, você pode recuperar metade do seu bônus de proficiência em pontos de vida."
+    },
+    {
+      "id": "gas-termionico",
+      "name": "Gás Termiônico",
+      "category": "ORIGIN",
+      "origins": [
+        "construto"
+      ],
+      "requires": [
+        "variante-nebulon"
+      ],
+      "prerequisite": "Construto com a Herança Variante Nebulon",
+      "description": "O composto de gases do qual você é formado alcança grandes temperaturas, possuindo uma maior afinidade com o calor e o fogo. Você recebe os seguintes benefícios:\n\nVocê recebe resistência a dano ígneo. Ao alcançar o 11º nível, essa resistência se aplica a dano incinerante.\nUma vez por rodada, ao causar dano ígneo ou incinerante, você pode recuperar metade do seu bônus de proficiência em pontos de vida."
+    },
+    {
+      "id": "nucleo-dividido",
+      "name": "Núcleo Dividido",
+      "category": "ORIGIN",
+      "origins": [
+        "runinata"
+      ],
+      "prerequisite": "Runinata com Consistência Gelatinosa",
+      "description": "Você possui um núcleo dentro de si que é capaz de se dividir em várias partes. Você recebe os seguintes benefícios:\n\nAo ser reduzido a 0 pontos de vida, você se divide em 4 pedaços que tentam se recombinar. Cada pedaço é lançado a 15 pés de você em direções opostas, no início de cada um de seus turnos os pedaços se movem 5 pés em direção a onde você estava. Cada pedaço possui 1/4 de sua vida máxima, a mesma CA que você e todas as suas resistências e imunidades. Quando cada pedaço retornar ao espaço que você ocupava, você retorna a sua forma normal com pontos de vida iguais a soma de seus pedaços que retornaram. Essa habilidade se ativa uma vez por descanso longo."
     }
   ]
 }

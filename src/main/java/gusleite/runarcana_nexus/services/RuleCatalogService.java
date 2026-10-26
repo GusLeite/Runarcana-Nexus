@@ -15,6 +15,8 @@ import gusleite.runarcana_nexus.rules.RuleHeritage;
 import gusleite.runarcana_nexus.rules.RuleLineage;
 import gusleite.runarcana_nexus.rules.RuleLevel;
 import gusleite.runarcana_nexus.rules.RuleOption;
+import gusleite.runarcana_nexus.rules.RuleTrait;
+import gusleite.runarcana_nexus.rules.RuleTraits;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -43,21 +45,24 @@ public class RuleCatalogService {
     private static final Set<String> SKILLS = names(SkillType.values());
     private static final Set<String> SIZES = names(CreatureSize.values());
     // Tipos de ponto de Herança (value da concessão HERITAGE_POINTS; sem value = ANY).
-    static final Set<String> HERITAGE_SCOPES = Set.of("REGION", "ORIGIN", "ANY");
+    static final Set<String> HERITAGE_SCOPES = Set.of("REGION", "ORIGIN", "GENERAL", "ANY");
+    static final Set<String> TRAIT_TIERS = Set.of("MINOR", "MAJOR", "SUPERIOR");
     private static final Set<String> CRAFT_KINDS = Set.of("MAJOR", "MINOR");
 
     private final RuleCatalog catalog;
 
     public RuleCatalogService(ResourceLoader resources,
                               @Value("${runarcana.rules.catalog:classpath:rules/criacao.json}") String location,
-                              @Value("${runarcana.rules.heritages:classpath:rules/herancas.json}") String heritagesLocation) {
+                              @Value("${runarcana.rules.heritages:classpath:rules/herancas.json}") String heritagesLocation,
+                              @Value("${runarcana.rules.traits:classpath:rules/tracos.json}") String traitsLocation) {
         RuleCatalog base = load(resources.getResource(location), location, RuleCatalog.class);
         HeritageFile heritages = load(resources.getResource(heritagesLocation), heritagesLocation, HeritageFile.class);
-        this.catalog = base.withHeritages(heritages.heritages());
+        RuleTraits traits = load(resources.getResource(traitsLocation), traitsLocation, RuleTraits.class);
+        this.catalog = base.withHeritages(heritages.heritages()).withTraits(traits);
         List<String> problems = validate(catalog);
         if (!problems.isEmpty()) {
             throw new IllegalStateException("Regras de criação inválidas em " + location + " / " + heritagesLocation
-                    + ":\n - " + String.join("\n - ", problems));
+                    + " / " + traitsLocation + ":\n - " + String.join("\n - ", problems));
         }
     }
 
@@ -88,6 +93,19 @@ public class RuleCatalogService {
     public Optional<RuleHeritage> heritage(String id) {
         if (id == null) return Optional.empty();
         return catalog.heritagesOrEmpty().stream().filter(h -> h.id().equalsIgnoreCase(id)).findFirst();
+    }
+
+    public Optional<RuleTrait> trait(String id) {
+        return findTrait(catalog.traits() == null ? List.of() : catalog.traits().traitsOrEmpty(), id);
+    }
+
+    public Optional<RuleTrait> drawback(String id) {
+        return findTrait(catalog.traits() == null ? List.of() : catalog.traits().drawbacksOrEmpty(), id);
+    }
+
+    private static Optional<RuleTrait> findTrait(List<RuleTrait> list, String id) {
+        if (id == null) return Optional.empty();
+        return list.stream().filter(t -> t.id().equalsIgnoreCase(id)).findFirst();
     }
 
     public boolean roundsUp() {
@@ -145,19 +163,68 @@ public class RuleCatalogService {
             if (blank(k.name())) p.add(where + ": falta name");
             if (k.hitDie() == null || k.hitDie() < 2) p.add(where + ": hitDie deve ser o lado do dado de vida (ex.: 8)");
             validateGrants(where, k.grantsOrEmpty(), p, crafts);
-            Set<Integer> levels = new HashSet<>();
-            for (RuleLevel l : k.levelsOrEmpty()) {
-                if (l.level() == null || l.level() < 2 || l.level() > 20) p.add(where + ": nível deve ir de 2 a 20");
-                else if (!levels.add(l.level())) p.add(where + ": nível " + l.level() + " repetido");
-                validateGrants(where + " nível " + l.level(), l.grants() == null ? List.of() : l.grants(), p, crafts);
-            }
+            validateLevels(where, k.levelsOrEmpty(), p, crafts);
         }
         Set<String> allLineages = new HashSet<>();
         for (RuleOption o : c.origins() == null ? List.<RuleOption>of() : c.origins()) {
             o.lineagesOrEmpty().forEach(l -> allLineages.add(String.valueOf(l.id()).toLowerCase()));
         }
         validateHeritages(c.heritagesOrEmpty(), p, crafts, allLineages);
+        boolean anyTraitOrigin = c.origins() != null && c.origins().stream().anyMatch(RuleOption::usesTraitsOrFalse);
+        if (anyTraitOrigin && (c.traits() == null || c.traits().budgetsOrEmpty().isEmpty())) {
+            p.add("traços: há origem com usesTraits, mas o tracos.json não tem budgets");
+        }
+        if (c.traits() != null) validateTraits(c.traits(), p, crafts);
         return p;
+    }
+
+    // Ganhos por nível (classe, origem ou linhagem): do 2º ao 20º, cada nível uma vez.
+    private static void validateLevels(String where, List<RuleLevel> list, List<String> p, Set<String> crafts) {
+        Set<Integer> levels = new HashSet<>();
+        for (RuleLevel l : list) {
+            if (l.level() == null || l.level() < 2 || l.level() > 20) p.add(where + ": nível deve ir de 2 a 20");
+            else if (!levels.add(l.level())) p.add(where + ": nível " + l.level() + " repetido");
+            validateGrants(where + " nível " + l.level(), l.grants() == null ? List.of() : l.grants(), p, crafts);
+        }
+    }
+
+    private static void validateTraits(RuleTraits t, List<String> p, Set<String> crafts) {
+        Set<String> budgets = new HashSet<>();
+        for (RuleTraits.Budget b : t.budgetsOrEmpty()) {
+            if (blank(b.id()) || blank(b.name())) p.add("traços: cada modo (budgets) precisa de id e name");
+            else if (!budgets.add(b.id())) p.add("traços, modo " + b.id() + ": id repetido");
+            if (b.minor() == null || b.minor() < 0 || b.major() == null || b.major() < 0) {
+                p.add("traços, modo " + b.id() + ": minor e major devem ser 0 ou mais");
+            }
+        }
+        for (String tier : TRAIT_TIERS) {
+            if (t.costOf(tier) < 1) p.add("traços: costs precisa do custo de " + tier);
+        }
+        Set<String> ids = new HashSet<>();
+        t.traitsOrEmpty().forEach(x -> ids.add(String.valueOf(x.id()).toLowerCase()));
+        Set<String> seen = new HashSet<>();
+        for (RuleTrait x : t.traitsOrEmpty()) {
+            String where = "traço " + x.id();
+            validateTraitCommon(x, where, seen, p, crafts);
+            if (x.tier() == null || !TRAIT_TIERS.contains(x.tier())) p.add(where + ": tier deve ser MINOR, MAJOR ou SUPERIOR");
+            x.requiresOrEmpty().stream().filter(r -> !ids.contains(r.toLowerCase()))
+                    .forEach(r -> p.add(where + ": requires cita traço inexistente \"" + r + "\""));
+        }
+        for (RuleTrait x : t.drawbacksOrEmpty()) {
+            String where = "desvantagem " + x.id();
+            validateTraitCommon(x, where, seen, p, crafts);
+            if (x.points() == null || x.points() <= 0) p.add(where + ": points deve ser maior que 0");
+            if (x.tier() != null) p.add(where + ": desvantagem não tem tier");
+        }
+    }
+
+    private static void validateTraitCommon(RuleTrait x, String where, Set<String> seen, List<String> p, Set<String> crafts) {
+        if (blank(x.id())) p.add("traços: item sem id");
+        else if (!seen.add(x.id().toLowerCase())) p.add(where + ": id repetido");
+        if (blank(x.name())) p.add(where + ": falta name");
+        if (blank(x.description())) p.add(where + ": falta description");
+        if (x.maxTimes() != null && x.maxTimes() < 1) p.add(where + ": maxTimes deve ser 1 ou mais");
+        validateGrants(where, x.grantsOrEmpty(), p, crafts);
     }
 
     private static void validateHeritages(List<RuleHeritage> list, List<String> p, Set<String> crafts, Set<String> lineages) {
@@ -180,6 +247,7 @@ public class RuleCatalogService {
                     .forEach(l -> p.add(where + ": linhagem desconhecida \"" + l + "\""));
             h.classesOrEmpty().stream().filter(k -> !classes.contains(k)).forEach(k -> p.add(where + ": classe desconhecida \"" + k + "\""));
             h.excludesOrEmpty().stream().filter(x -> !ids.contains(x.toLowerCase())).forEach(x -> p.add(where + ": excludes cita herança inexistente \"" + x + "\""));
+            h.requiresOrEmpty().stream().filter(x -> !ids.contains(x.toLowerCase())).forEach(x -> p.add(where + ": requires cita herança inexistente \"" + x + "\""));
             if (h.maxTimes() != null && h.maxTimes() < 1) p.add(where + ": maxTimes deve ser 1 ou mais");
             if (h.minAttributes() != null && h.minAttributes().values().stream().anyMatch(v -> v == null || v < 1)) {
                 p.add(where + ": minAttributes precisa de valores (ex.: { \"STRENGTH\": 16 })");
@@ -224,12 +292,14 @@ public class RuleCatalogService {
             }
             if (o.languagesOrEmpty().stream().anyMatch(RuleCatalogService::blank)) p.add(where + ": idioma vazio em languages");
             validateGrants(where, o.grantsOrEmpty(), p, crafts);
+            validateLevels(where, o.levelsOrEmpty(), p, crafts);
             Set<String> lineageIds = new HashSet<>();
             for (RuleLineage l : o.lineagesOrEmpty()) {
                 String at = where + ", linhagem " + l.id();
                 if (blank(l.id()) || blank(l.name())) p.add(where + ": cada linhagem precisa de id e name");
                 else if (!lineageIds.add(l.id().toLowerCase())) p.add(at + ": id repetido");
                 validateGrants(at, l.grantsOrEmpty(), p, crafts);
+                validateLevels(at, l.levelsOrEmpty(), p, crafts);
             }
         }
     }
@@ -274,7 +344,7 @@ public class RuleCatalogService {
                 }
                 case HERITAGE_POINTS -> {
                     if (g.amount() == null) p.add(at + " (HERITAGE_POINTS): precisa de amount");
-                    if (g.value() != null && !HERITAGE_SCOPES.contains(g.value())) p.add(at + " (HERITAGE_POINTS): value deve ser REGION, ORIGIN ou ANY");
+                    if (g.value() != null && !HERITAGE_SCOPES.contains(g.value())) p.add(at + " (HERITAGE_POINTS): value deve ser REGION, ORIGIN, GENERAL ou ANY");
                 }
                 case SPEED -> {
                     if (g.feet() == null) p.add(at + " (SPEED): precisa de feet");

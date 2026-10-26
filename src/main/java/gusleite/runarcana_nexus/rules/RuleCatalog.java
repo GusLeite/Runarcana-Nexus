@@ -13,7 +13,9 @@ public record RuleCatalog(
         List<RuleClass> classes,
         List<RuleOption> backgrounds,
         List<RuleOption> regions,
-        List<RuleHeritage> heritages
+        List<RuleHeritage> heritages,
+        // Traços da Runinata (rules/tracos.json), usados pelas origens com usesTraits.
+        RuleTraits traits
 ) {
     public List<Craft> craftsOrEmpty() {
         return crafts == null ? List.of() : crafts;
@@ -24,7 +26,11 @@ public record RuleCatalog(
     }
 
     public RuleCatalog withHeritages(List<RuleHeritage> list) {
-        return new RuleCatalog(attributeMethods, baseSpeed, rounding, crafts, origins, classes, backgrounds, regions, list);
+        return new RuleCatalog(attributeMethods, baseSpeed, rounding, crafts, origins, classes, backgrounds, regions, list, traits);
+    }
+
+    public RuleCatalog withTraits(RuleTraits t) {
+        return new RuleCatalog(attributeMethods, baseSpeed, rounding, crafts, origins, classes, backgrounds, regions, heritages, t);
     }
 
     // kind: MAJOR (ofício maior, com níveis) ou MINOR (ofício menor, com disciplinas).

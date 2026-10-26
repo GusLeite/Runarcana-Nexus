@@ -51,6 +51,10 @@ color:var(--text);font:inherit;text-align:left;cursor:pointer;transition:border-
 .grant.g-feature{border-color:#b25cff}
 .grant.g-hp_bonus{border-color:#3fbf6a}
 .option-levels{font-size:12px;font-style:italic;color:var(--muted)}
+.option-level-list{display:flex;flex-direction:column;gap:3px;padding-top:6px;border-top:1px dashed rgba(200,162,74,.25)}
+.option-level-title{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.option-level{font-size:13px;color:#cfc7b2}
+.option-level b{color:var(--gold-hi);font-weight:600}
 
 /* ---------- atributos ---------- */
 .method-seg{display:inline-flex;margin-bottom:14px;flex-wrap:wrap}
@@ -182,6 +186,16 @@ animation:slide-in .35s ease backwards;animation-delay:calc(var(--n,0)*40ms)}
 .her-options .to-chip{padding:4px 10px;font-size:12px}
 .her-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px;margin-top:auto;padding-top:6px}
 .her-reason{flex:1 1 100%;font-size:12px;font-style:italic;color:#ff8a7a}
+/* ---------- Traços (Runinata) ---------- */
+.trait-budgets{margin-bottom:14px}
+.trait-pools{align-items:center}
+.trait-converted{flex:1 1 100%;margin:0;font-size:12px;font-style:italic;color:var(--teal)}
+.her-cat.c-minor{border-color:var(--teal);color:var(--teal)}
+.her-cat.c-major{border-color:var(--gold-hi);color:var(--gold-hi)}
+.her-cat.c-superior{border-color:#b9aaff;color:#b9aaff}
+.her-cat.c-drawback{border-color:#ff8a7a;color:#ff8a7a}
+.trait-details{display:flex;flex-direction:column;gap:6px;padding-top:4px}
+.trait-details .her-search{flex:none}
 .btn.her-add{width:auto;margin:0;padding:6px 14px;font-size:12px;letter-spacing:.1em}
 .btn.her-add:disabled{opacity:.35;cursor:default;box-shadow:none}
 .ft-type.t-heritage{color:#e0a95c}

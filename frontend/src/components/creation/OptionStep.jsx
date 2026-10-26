@@ -49,6 +49,16 @@ export default function OptionStep({ kind, title, hint, items, selected, onPick,
               {kind === 'class' && item.levels?.length > 0 && (
                 <span className="option-levels">Ganhos por nível cadastrados até o {Math.max(...item.levels.map(l => l.level))}º</span>
               )}
+              {kind !== 'class' && item.levels?.length > 0 && (
+                <span className="option-level-list">
+                  <span className="option-level-title">Ao subir de nível</span>
+                  {[...item.levels].sort((a, b) => a.level - b.level).map(l => (
+                    <span key={l.level} className="option-level">
+                      <b>{l.level}º nível.</b> {(l.grants ?? []).map(g => grantLabel(g, crafts)).join(' · ')}
+                    </span>
+                  ))}
+                </span>
+              )}
             </button>
           )
         })}

@@ -23,6 +23,8 @@ public record RuleHeritage(
         Map<Attribute, Integer> minAttributes,
         Boolean initial,
         List<String> excludes,
+        // Pré-requisito de Herança: precisa ter escolhido pelo menos uma destas (ex.: Gás Ionizado → Variante Nebulon).
+        List<String> requires,
         String prerequisite,
         Integer maxTimes,
         List<String> options,
@@ -50,6 +52,10 @@ public record RuleHeritage(
 
     public List<String> excludesOrEmpty() {
         return excludes == null ? List.of() : excludes;
+    }
+
+    public List<String> requiresOrEmpty() {
+        return requires == null ? List.of() : requires;
     }
 
     public List<String> optionsOrEmpty() {

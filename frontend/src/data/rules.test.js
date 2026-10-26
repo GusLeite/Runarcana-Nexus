@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
-  addHeritage, carryCapacity, choiceOptionName, heritageTimes, removeHeritage, setHeritageOption, formatFeet, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
+  addHeritage, carryCapacity, choiceOptionName, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
+  addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
 } from './rules.js'
 
@@ -120,6 +121,19 @@ describe('criação de personagem', () => {
     picks = removeHeritage(picks, 'colosso')
     expect(picks).toEqual([{ id: 'colosso', option: null }, { id: 'meio-vastaya', option: 'Marai' }])
     expect(removeHeritage(picks, 'nao-tem')).toBe(picks)
+  })
+
+  it('escolhe, repete e tira traços com a resposta de cada escolha', () => {
+    let picks = addTrait([], 'pericia')
+    picks = addTrait(picks, 'resistencia-natural')
+    picks = addTrait(picks, 'pericia')
+    picks = setTraitDetail(picks, 'pericia', 1, 'Segunda')
+    expect(traitTimes(picks, 'pericia')).toBe(2)
+    expect(picks).toEqual([{ id: 'pericia', detail: null }, { id: 'resistencia-natural', detail: null }, { id: 'pericia', detail: 'Segunda' }])
+    expect(removeTrait(picks, 'pericia')).toEqual([{ id: 'pericia', detail: null }, { id: 'resistencia-natural', detail: null }])
+    expect(removeTrait(picks, 'nao-tem')).toBe(picks)
+    expect(formatPoints(2.5)).toBe('2,5')
+    expect(grantLabel({ type: 'HERITAGE_POINTS', amount: 2, value: 'GENERAL' })).toBe('+2 pontos de Herança Geral')
   })
 
   it('dá nome às opções de cada tipo de escolha', () => {

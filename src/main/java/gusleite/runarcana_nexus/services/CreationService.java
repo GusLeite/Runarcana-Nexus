@@ -28,8 +28,12 @@ import gusleite.runarcana_nexus.record.CreationPreview.HeritageStatus;
 import gusleite.runarcana_nexus.record.CreationPreview.PointBuyStatus;
 import gusleite.runarcana_nexus.record.CreationPreview.SaveLine;
 import gusleite.runarcana_nexus.record.CreationPreview.SkillLine;
+import gusleite.runarcana_nexus.record.CreationPreview.TraitBudgetStatus;
+import gusleite.runarcana_nexus.record.CreationPreview.TraitLine;
+import gusleite.runarcana_nexus.record.CreationPreview.TraitStatus;
 import gusleite.runarcana_nexus.record.CreationRequest;
 import gusleite.runarcana_nexus.record.CreationRequest.HeritagePick;
+import gusleite.runarcana_nexus.record.CreationRequest.TraitPick;
 import gusleite.runarcana_nexus.repository.BackGroundRepository;
 import gusleite.runarcana_nexus.repository.CharacterAbilityRepository;
 import gusleite.runarcana_nexus.repository.CharacterClassRepository;
@@ -41,6 +45,8 @@ import gusleite.runarcana_nexus.rules.RuleClass;
 import gusleite.runarcana_nexus.rules.RuleHeritage;
 import gusleite.runarcana_nexus.rules.RuleLineage;
 import gusleite.runarcana_nexus.rules.RuleOption;
+import gusleite.runarcana_nexus.rules.RuleTrait;
+import gusleite.runarcana_nexus.rules.RuleTraits;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -177,18 +183,26 @@ public class CreationService {
             b.lineage = pick(r.lineageId(), id -> lineages.stream().filter(l -> l.id().equalsIgnoreCase(id)).findFirst(),
                     "Escolha a linhagem.", "Linhagem desconhecida.", b.errors);
         }
+        boolean traitOrigin = b.origin != null && b.origin.usesTraitsOrFalse();
+        if (traitOrigin) traits(r, b);
         if (catalog.regions() != null && !catalog.regions().isEmpty()) {
             b.region = pick(r.regionId(), rules::region, "Escolha uma região.", "Região desconhecida.", b.errors);
         }
         b.klass = pick(r.classId(), rules::characterClass, "Escolha uma classe.", "Classe desconhecida.", b.errors);
         if (catalog.backgrounds() != null && !catalog.backgrounds().isEmpty()) {
-            b.background = pick(r.backgroundId(), rules::background, "Escolha um passado.", "Passado desconhecido.", b.errors);
+            // Runinata só tem Passado com um traço que libera (Antecedente).
+            if (traitOrigin && !b.traitBackground) {
+                if (!blank(r.backgroundId())) b.errors.add("Sem o traço Antecedente, a Runinata não tem Passado.");
+            } else {
+                b.background = pick(r.backgroundId(), rules::background, "Escolha um passado.", "Passado desconhecido.", b.errors);
+            }
         }
 
         // Fontes na ordem do assistente; a chave de cada escolha nasce daqui.
         List<Source> sources = new ArrayList<>();
         if (b.origin != null) sources.add(new Source("origin:" + b.origin.id(), "Origem: " + b.origin.name(), b.origin.grantsOrEmpty()));
         if (b.lineage != null) sources.add(new Source("lineage:" + b.lineage.id(), "Linhagem: " + b.lineage.name(), b.lineage.grantsOrEmpty()));
+        sources.addAll(b.traitSources);
         if (b.region != null) sources.add(new Source("region:" + b.region.id(), "Região: " + b.region.name(), b.region.grantsOrEmpty()));
         if (b.klass != null) sources.add(new Source("class:" + b.klass.id(), "Classe: " + b.klass.name(), b.klass.grantsOrEmpty()));
         if (b.background != null) sources.add(new Source("background:" + b.background.id(), "Passado: " + b.background.name(), b.background.grantsOrEmpty()));
@@ -208,7 +222,10 @@ public class CreationService {
                     case HP_BONUS -> b.hpBonus += hpBonusFor(g, LEVEL_ONE_PROFICIENCY, b.roundUp);
                     case SPEED -> b.speedBonus += g.feet();
                     case GOLD -> b.gold += g.amount();
-                    case SIZE -> b.size = CreatureSize.valueOf(g.value());
+                    case SIZE -> {
+                        b.size = CreatureSize.valueOf(g.value());
+                        b.sizeFixed = true;
+                    }
                     case CRAFT -> b.crafts.add(g.value());
                     case LANGUAGE -> b.languages.add(g.value());
                     case HERITAGE_POINTS -> {
@@ -275,6 +292,8 @@ public class CreationService {
                         b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, selected, s.label(), null));
                     }
                     case SIZE_CHOICE -> {
+                        // Tamanho fixo de outra fonte (ex.: traço Chaveirinho) vence a escolha.
+                        if (b.sizeFixed) break;
                         String label = orLabel(g, "Escolha o tamanho");
                         List<String> selected = choose(picked, g.options(), 1, label, b.errors);
                         if (!selected.isEmpty()) b.size = CreatureSize.valueOf(selected.getFirst());
@@ -304,6 +323,7 @@ public class CreationService {
             }
         }
 
+        b.features.addAll(b.traitFeatures);
         heritages(r, b);
 
         if (b.origin != null) b.baseSpeed = b.origin.speed() != null ? b.origin.speed()
@@ -317,6 +337,142 @@ public class CreationService {
         if (r.height() == null || r.height() <= 0) b.errors.add("Informe a altura em metros.");
         return b;
     }
+
+    // ---------- Traços (Runinata) ----------
+
+    // A Runinata monta a origem com traços: o modo (combinado com o mestre) dá Traços Menores e Maiores;
+    // desvantagens e a conversão de até um traço de cada tipo dão pontos de Origem, que compram mais traços
+    // (os Superiores só assim). A conversão é escolhida sozinha: a que cobre os traços escolhidos com menos sobra.
+    private void traits(CreationRequest r, Build b) {
+        RuleTraits system = rules.catalog().traits();
+        if (system == null) {
+            b.errors.add("O sistema de traços não está cadastrado.");
+            return;
+        }
+        RuleTraits.Budget budget = pick(r.traitBudget(),
+                id -> system.budgetsOrEmpty().stream().filter(x -> x.id().equalsIgnoreCase(id)).findFirst(),
+                "Escolha o modo de traços combinado com o mestre.", "Modo de traços desconhecido.", b.errors);
+        Map<String, Picked> traits = collectTraits(r.traits(), rules::trait, "Traço desconhecido.", b);
+        Map<String, Picked> drawbacks = collectTraits(r.drawbacks(), rules::drawback, "Desvantagem desconhecida.", b);
+
+        int minor = 0, major = 0, superior = 0;
+        double drawbackPoints = 0;
+        for (Picked p : traits.values()) {
+            RuleTrait t = p.trait();
+            if (!t.requiresOrEmpty().isEmpty() && t.requiresOrEmpty().stream().noneMatch(traits::containsKey)) {
+                b.errors.add("O traço " + t.name() + " precisa de: " + traitNames(t.requiresOrEmpty()) + ".");
+            }
+            int n = p.details().size();
+            switch (t.tier()) {
+                case "MINOR" -> minor += n;
+                case "MAJOR" -> major += n;
+                default -> superior += n;
+            }
+            if (Boolean.TRUE.equals(t.background())) b.traitBackground = true;
+        }
+        for (Picked p : drawbacks.values()) drawbackPoints += p.trait().points() * p.details().size();
+
+        for (Map.Entry<String, Picked> e : traits.entrySet()) addTraitSources(e.getValue(), "trait", "Traço", "TRAIT", b);
+        for (Map.Entry<String, Picked> e : drawbacks.entrySet()) addTraitSources(e.getValue(), "drawback", "Desvantagem", "DRAWBACK", b);
+
+        for (RuleTrait t : system.traitsOrEmpty()) {
+            int times = traits.containsKey(t.id()) ? traits.get(t.id()).details().size() : 0;
+            String reason = null;
+            if (!t.requiresOrEmpty().isEmpty() && t.requiresOrEmpty().stream().noneMatch(traits::containsKey)) {
+                reason = "precisa de " + traitNames(t.requiresOrEmpty());
+            } else if (times >= t.maxTimesOrOne()) {
+                reason = t.maxTimesOrOne() == 1 ? "já escolhido" : "já escolhido " + times + " vezes (máximo)";
+            }
+            b.traitOptions.add(new TraitStatus(t.id(), reason == null, reason, times));
+        }
+        for (RuleTrait t : system.drawbacksOrEmpty()) {
+            int times = drawbacks.containsKey(t.id()) ? drawbacks.get(t.id()).details().size() : 0;
+            String reason = times >= t.maxTimesOrOne() ? (t.maxTimesOrOne() == 1 ? "já escolhida" : "já escolhida " + times + " vezes (máximo)") : null;
+            b.traitOptions.add(new TraitStatus(t.id(), reason == null, reason, times));
+        }
+
+        if (budget == null) return;
+        int budgetMinor = budget.minor(), budgetMajor = budget.major();
+        int[] best = null;
+        double bestWaste = Double.MAX_VALUE;
+        for (int cm = 0; cm <= Math.min(1, budgetMinor); cm++) {
+            for (int cj = 0; cj <= Math.min(1, budgetMajor); cj++) {
+                int slotsMinor = budgetMinor - cm, slotsMajor = budgetMajor - cj;
+                double points = drawbackPoints + cm * system.conversionOf("MINOR") + cj * system.conversionOf("MAJOR");
+                int cost = traitCost(system, minor - slotsMinor, major - slotsMajor, superior);
+                if (cost > points) continue;
+                double waste = Math.max(0, slotsMinor - minor) + Math.max(0, slotsMajor - major) + Math.floor(points - cost);
+                if (waste < bestWaste) {
+                    bestWaste = waste;
+                    best = new int[] {cm, cj};
+                }
+            }
+        }
+        int cm = best == null ? 0 : best[0], cj = best == null ? 0 : best[1];
+        int slotsMinor = budgetMinor - cm, slotsMajor = budgetMajor - cj;
+        double points = drawbackPoints + cm * system.conversionOf("MINOR") + cj * system.conversionOf("MAJOR");
+        int cost = traitCost(system, minor - slotsMinor, major - slotsMajor, superior);
+        b.traitBudget = new TraitBudgetStatus(budget.id(), slotsMinor, slotsMajor, Math.min(minor, slotsMinor),
+                Math.min(major, slotsMajor), cm == 1, cj == 1, drawbackPoints, points, cost);
+        if (best == null) {
+            b.errors.add("Os traços escolhidos passam do que o modo " + budget.name() + " e as desvantagens permitem.");
+        } else if (bestWaste > 0) {
+            b.errors.add("Ainda sobram traços ou pontos de Origem para escolher.");
+        }
+    }
+
+    // Pontos de Origem para os traços além dos do modo: menores e maiores excedentes e todos os superiores.
+    private static int traitCost(RuleTraits system, int extraMinor, int extraMajor, int superior) {
+        return Math.max(0, extraMinor) * system.costOf("MINOR") + Math.max(0, extraMajor) * system.costOf("MAJOR")
+                + superior * system.costOf("SUPERIOR");
+    }
+
+    // Junta as escolhas por id (na ordem), com a resposta de cada vez; confere máximo e resposta obrigatória.
+    private Map<String, Picked> collectTraits(List<TraitPick> picks, Function<String, Optional<RuleTrait>> find, String unknown, Build b) {
+        Map<String, Picked> out = new LinkedHashMap<>();
+        for (TraitPick pick : picks == null ? List.<TraitPick>of() : picks) {
+            if (pick == null) continue;
+            Optional<RuleTrait> found = find.apply(pick.id());
+            if (found.isEmpty()) {
+                b.errors.add(unknown);
+                continue;
+            }
+            RuleTrait t = found.get();
+            out.computeIfAbsent(t.id(), k -> new Picked(t, new ArrayList<>()))
+                    .details().add(blank(pick.detail()) ? null : pick.detail().trim());
+        }
+        for (Picked p : out.values()) {
+            RuleTrait t = p.trait();
+            if (p.details().size() > t.maxTimesOrOne()) {
+                b.errors.add(t.maxTimesOrOne() == 1 ? t.name() + " só pode ser escolhido uma vez."
+                        : t.name() + " pode ser escolhido no máximo " + t.maxTimesOrOne() + " vezes.");
+            }
+            if (t.detail() != null && p.details().stream().anyMatch(d -> d == null)) {
+                b.errors.add("Responda em " + t.name() + ": " + t.detail());
+            }
+        }
+        return out;
+    }
+
+    // Cada escolha vira uma fonte de concessões ("Traço: Garras"); o texto vira uma passiva (uma por traço).
+    private static void addTraitSources(Picked p, String key, String label, String kind, Build b) {
+        RuleTrait t = p.trait();
+        for (int n = 0; n < p.details().size(); n++) {
+            b.traitSources.add(new Source(key + ":" + t.id() + ":" + n, label + ": " + t.name(), t.grantsOrEmpty()));
+        }
+        List<String> details = p.details().stream().filter(d -> d != null).toList();
+        int times = p.details().size();
+        b.traitLines.add(new TraitLine(t.id(), t.name(), kind, t.tier(), details, times));
+        if (Boolean.TRUE.equals(t.silent())) return;
+        String name = t.name() + (details.isEmpty() ? "" : " (" + String.join(", ", details) + ")") + (times > 1 ? " (" + times + "×)" : "");
+        b.traitFeatures.add(new Sourced<>(Grant.feature(AbilityType.PASSIVE, name, t.description()), label));
+    }
+
+    private String traitNames(List<String> ids) {
+        return String.join(" ou ", ids.stream().map(id -> rules.trait(id).map(RuleTrait::name).orElse(id)).toList());
+    }
+
+    private record Picked(RuleTrait trait, List<String> details) {}
 
     // ---------- Heranças ----------
 
@@ -366,9 +522,9 @@ public class CreationService {
             b.heritages.add(line);
             b.features.add(new Sourced<>(Grant.heritage(displayName(line), h.description()), "Herança"));
         }
-        // As Gerais por último: usam o ponto que sobrar, de qualquer tipo.
+        // As Gerais por último: usam primeiro os pontos só de Gerais, depois o que sobrar, de qualquer tipo.
         for (int i = 0; i < generals; i++) {
-            if (!b.spend("REGION", "ORIGIN", "ANY")) overflow = true;
+            if (!b.spend("GENERAL", "REGION", "ORIGIN", "ANY")) overflow = true;
         }
         if (overflow) b.errors.add("Você escolheu mais Heranças do que tem pontos.");
 
@@ -391,7 +547,8 @@ public class CreationService {
         if (b.pools.keySet().stream().noneMatch(scope -> allows(scope, h.category()))) {
             if (b.pools.isEmpty()) return "você não tem pontos de Herança";
             return h.category() == HeritageCategory.REGION ? "seus pontos não compram Heranças de Região"
-                    : "seus pontos não compram Heranças de Origem";
+                    : h.category() == HeritageCategory.ORIGIN ? "seus pontos não compram Heranças de Origem"
+                    : "seus pontos não compram Heranças Gerais";
         }
         String pre = "pré-requisito: " + (h.prerequisite() == null ? "não atendido" : h.prerequisite());
         if (!h.originsOrEmpty().isEmpty()
@@ -413,6 +570,10 @@ public class CreationService {
         if (h.minAttributes() != null && h.minAttributes().entrySet().stream().anyMatch(e -> b.total(e.getKey()) < e.getValue())) {
             return pre;
         }
+        if (!h.requiresOrEmpty().isEmpty()
+                && h.requiresOrEmpty().stream().noneMatch(req -> chosen.stream().anyMatch(c -> c.equalsIgnoreCase(req)))) {
+            return pre;
+        }
         for (String other : h.excludesOrEmpty()) {
             if (chosen.stream().anyMatch(c -> c.equalsIgnoreCase(other))) {
                 return "não pode junto com " + rules.heritage(other).map(RuleHeritage::name).orElse(other);
@@ -425,6 +586,7 @@ public class CreationService {
         return switch (scope) {
             case "REGION" -> category == HeritageCategory.REGION || category == HeritageCategory.GENERAL;
             case "ORIGIN" -> category == HeritageCategory.ORIGIN || category == HeritageCategory.GENERAL;
+            case "GENERAL" -> category == HeritageCategory.GENERAL;
             default -> true;
         };
     }
@@ -651,7 +813,15 @@ public class CreationService {
         final Map<String, Integer> spent = new LinkedHashMap<>();
         final List<HeritageLine> heritages = new ArrayList<>();
         final List<HeritageStatus> heritageOptions = new ArrayList<>();
+        // Runinata: fontes e passivas dos traços/desvantagens, a conta e o que dá para escolher.
+        final List<Source> traitSources = new ArrayList<>();
+        final List<Sourced<Grant>> traitFeatures = new ArrayList<>();
+        final List<TraitLine> traitLines = new ArrayList<>();
+        final List<TraitStatus> traitOptions = new ArrayList<>();
+        TraitBudgetStatus traitBudget;
+        boolean traitBackground;
         CreatureSize size;
+        boolean sizeFixed;
         int hpBonus;
         int heritagePoints;
         double baseSpeed;
@@ -708,7 +878,8 @@ public class CreationService {
                     pools.entrySet().stream()
                             .map(e -> new HeritagePool(e.getKey(), e.getValue(), spent.getOrDefault(e.getKey(), 0)))
                             .toList(),
-                    List.copyOf(heritages), List.copyOf(heritageOptions), List.copyOf(errors), errors.isEmpty());
+                    List.copyOf(heritages), List.copyOf(heritageOptions), traitBudget, List.copyOf(traitLines),
+                    List.copyOf(traitOptions), List.copyOf(errors), errors.isEmpty());
         }
     }
 }

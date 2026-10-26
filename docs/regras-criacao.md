@@ -13,11 +13,12 @@ As regras do assistente de criação (o que cada origem, região, classe e passa
 
 | Parte | Situação |
 |---|---|
-| Origens | **Humano**, **Minotauro** (Linhagens Aelus, Alnuk e Auroque) e **Construto** (modelos Brutal, Emissário e Ligeiro). As outras ainda faltam |
+| Origens | **Humano**, **Minotauro** (Aelus, Alnuk, Auroque), **Construto** (Brutal, Emissário, Ligeiro), **Antroplantæ** (Arbóreo, Floral), **Chireano** (Nocti, Fulgor), **Meio-Dragão** (Glacial, Infernal, Montanha, Nuvens, Oceano), **Troll** (da Areia, do Gelo, da Selva), **Vastaya** (Oovi-Kat, Marai, Shimon, Fauhwoon, Ottrani, Kiilash, Lhotlan, Vesani) e **Yordle** (Aquáticos, Feérico, Felpudo) e **Runinata** (monta a origem com traços, ver **Traços da Runinata**). Nebulon é um tipo de Construto, não uma origem: é a Herança **Variante Nebulon** |
+| Traços | **50** traços (Menores, Maiores e Superiores) e **19** desvantagens em `rules/tracos.json`, com os três modos (Controlado, Moderado, Forte) |
 | Regiões | As 14 do enum |
 | Idiomas | **Desligados** por enquanto (o Humano não escolhe idioma; a estrutura `LANGUAGE`/`LANGUAGE_CHOICE` continua disponível) |
 | Ofícios | Os **22** (16 maiores, 6 menores), sem atributo base nem níveis ainda |
-| Heranças | **136** em `rules/herancas.json`: 59 Gerais, 54 de Região e 23 de Origem (Humano, Minotauro e Construto). As exclusivas das outras origens entram com elas |
+| Heranças | **204** em `rules/herancas.json`: 59 Gerais, 54 de Região e 91 de Origem (todas as origens, a Variante Nebulon e as 3 do Nebulon, que exigem a variante por `requires`) |
 | Classes | Arcanista e Lutador **de exemplo** |
 | Passados | Estudioso e Soldado **de exemplo** |
 | Métodos de atributos | Compra de pontos (27), arranjo padrão e manual, **valores de 5e** a confirmar |
@@ -37,7 +38,8 @@ Escolhas sem opções cadastradas aparecem no assistente como aviso e **não blo
   "rounding": "DOWN",                    // arredondamento de "metade do bônus de proficiência": DOWN ou UP
   "crafts": [ { "id": "alquimista", "name": "Alquimista", "kind": "MAJOR" } ],   // ofícios: MAJOR (maior) ou MINOR (menor)
   "origins":     [ { "id", "name", "description", "example", "speed", "startingGold", "details", "grants": [...],
-                     "lineages": [ { "id", "name", "description", "grants": [...] } ] } ],   // linhagens (tribos), opcional
+                     "levels": [ { "level": 2, "grants": [...] } ],   // ganhos do 2º nível em diante, opcional
+                     "lineages": [ { "id", "name", "description", "grants": [...], "levels": [...] } ] } ],   // linhagens (tribos), opcional
   "regions":     [ { "id", "name", "languages": ["..."], "grants": [...] } ],
   "classes":     [ { "id", "name", "description", "example", "hitDie", "startingGold", "grants": [...],
                      "levels": [ { "level": 2, "grants": [...] }, ... ] } ],
@@ -51,6 +53,7 @@ Escolhas sem opções cadastradas aparecem no assistente como aviso e **não blo
 - A **região é obrigatória** quando há regiões no catálogo (tem etapa própria no assistente, logo depois da origem). `languages` da região alimenta o `LANGUAGE_CHOICE` com `fromRegion`.
 - `hitDie` é o lado do dado de vida (6 = d6). PV no 1º nível = `hitDie` + mod. de CON + bônus de PV.
 - `grants` da classe = o que ganha no **1º nível**. `levels` = o que ganha do 2º em diante (para a subida de nível, que vem depois).
+- Origem e linhagem também podem ter `levels`, no mesmo formato (níveis de 2 a 20, cada um uma vez). Na criação (1º nível) eles **não entram** na ficha; o cartão do assistente mostra "Ao subir de nível" com o que vem em cada nível, e a subida de nível vai aplicá-los junto com os da classe. Hoje usado pelo **Meio-Dragão**: sopro da essência no 2º (usos = bônus de proficiência, dano = bônus×d6), Forma Dracônica no 8º (usos = metade do bônus) e Resistência Dracônica no 15º.
 - Ouro inicial = soma dos `startingGold` da classe, do passado e da origem, mais concessões `GOLD`.
 - Deslocamento sempre em **pés**, como no livro.
 
@@ -99,6 +102,7 @@ Arquivo à parte (são muitas e com texto longo), no formato `{ "heritages": [ .
   "minAttributes": { "STRENGTH": 16 },  // pré-requisito de atributo (total, com os bônus da criação)
   "initial": true,                  // "Inicial": só na criação
   "excludes": ["operario"],         // não pode junto com essas Heranças
+  "requires": ["variante-nebulon"], // precisa ter escolhido pelo menos uma destas Heranças
   "prerequisite": "Piltovense, não ter as Heranças Operário ou Privilegiado",  // o texto do livro, sempre mostrado
   "maxTimes": 2,                    // quantas vezes pode ser escolhida (padrão 1)
   "options": ["Marai", "Shimon"],   // sub-escolha obrigatória (tribo do Meio-Vastaya, fonte da Progressão Tecnológica...)
@@ -107,19 +111,50 @@ Arquivo à parte (são muitas e com texto longo), no formato `{ "heritages": [ .
 ```
 
 Como os pontos funcionam no assistente:
-- Cada Herança custa **1 ponto**. O tipo do ponto vem da concessão `HERITAGE_POINTS` da origem: `REGION` compra Heranças **de Região** (da região escolhida) e **Gerais**; `ORIGIN` compra **de Origem** e **Gerais**; `ANY` compra qualquer uma. O Humano tem 2 pontos `REGION` ("Receba 2 pontos de Herança de Região").
-- Os pré-requisitos de origem, linhagem, região, classe, atributo mínimo e `excludes` são conferidos sozinhos. O resto do texto (ex.: "Conjuração", "proficiência com arma de fogo") **só é mostrado**: confira com o mestre.
+- Cada Herança custa **1 ponto**. O tipo do ponto vem da concessão `HERITAGE_POINTS` da origem: `REGION` compra Heranças **de Região** (da região escolhida) e **Gerais**; `ORIGIN` compra **de Origem** e **Gerais**; `GENERAL` só compra **Gerais** (traço Herança da Runinata); `ANY` compra qualquer uma. O Humano tem 2 pontos `REGION` ("Receba 2 pontos de Herança de Região").
+- Os pré-requisitos de origem, linhagem, região, classe, atributo mínimo, `requires` e `excludes` são conferidos sozinhos. O resto do texto (ex.: "Conjuração", "proficiência com arma de fogo") **só é mostrado**: confira com o mestre.
 - Ponto sobrando com alguma Herança disponível impede a criação.
 - O efeito de cada Herança é o **texto**: ela vira uma habilidade do tipo Herança na ficha. Nenhum bônus é aplicado sozinho ainda.
 - Níveis 5, 9, 13 e 17 (Heranças de Origem e Gerais, sem as de Região nem as "Inicial") entram com a subida de nível.
 
 As Variantes do Humano levam o texto completo do capítulo "Heranças Variantes": Anfíbio, Colosso, Progressão Tecnológica e Ressurgido podem ser escolhidas 2 vezes; Meio-Vastaya, Progressão Tecnológica e Ressurgido pedem a opção. A Glacinata usa o texto da Natividade Elemental.
 
+## Traços da Runinata (`rules/tracos.json`)
+
+A origem com `"usesTraits": true` (a Runinata) não tem traços fixos: ganha a etapa **Traços** no assistente, logo depois da Origem. Arquivo à parte (`runarcana.rules.traits`; testes: `rules/tracos-teste.json`), conferido ao subir.
+
+```jsonc
+{
+  "budgets": [ { "id": "MODERATE", "name": "Moderado", "minor": 4, "major": 3, "description": "..." } ],  // modos
+  "conversion": { "MINOR": 1, "MAJOR": 2 },        // pontos ao converter 1 traço do modo (no máximo 1 de cada tipo)
+  "costs": { "MINOR": 1, "MAJOR": 3, "SUPERIOR": 6 },  // custo em pontos de Origem
+  "traits": [ {
+    "id": "garras", "name": "Garras", "tier": "MAJOR",  // MINOR, MAJOR ou SUPERIOR
+    "description": "...",
+    "maxTimes": 1,                    // quantas vezes (padrão 1)
+    "requires": ["escalador"],        // precisa de pelo menos um destes traços
+    "detail": "Qual tipo de dano?",   // pergunta de texto livre; a resposta entra no nome ("Resistência Natural (Ígneo)")
+    "background": true,               // libera o Passado (Antecedente)
+    "silent": true,                   // não vira passiva própria (quando as concessões bastam)
+    "grants": [ ... ]                 // concessões normais, aplicadas a cada escolha
+  } ],
+  "drawbacks": [ { "id": "um-olho", "name": "Apenas 1 olho", "group": "Forma", "points": 1, "description": "...", "maxTimes": 1 } ]
+}
+```
+
+- O jogador escolhe o **modo** (combinado com o mestre), os traços e as desvantagens. As desvantagens somam pontos de Origem (pode haver meio ponto).
+- Traços Menores e Maiores ocupam primeiro as vagas do modo; o que passar custa pontos. Superiores só com pontos.
+- **Conversão automática**: o back testa converter (ou não) 1 Traço Menor (+1 ponto) e 1 Maior (+2) e fica com a combinação que cobre as escolhas com menos sobra; a etapa mostra quando converteu. Faltar é erro ("passam do que o modo… permitem"); sobrar vaga ou ponto inteiro também ("Ainda sobram traços ou pontos de Origem").
+- Cada escolha é uma fonte de concessões ("Traço: Garras"), então perícias, ofícios e habilidades com opção caem na etapa **Escolhas** com chave `trait:<id>:<n>:<índice>` (desvantagens: `drawback:...`). Sem `silent`, o traço vira uma passiva com o texto, a resposta no nome e "(2×)" quando repetido.
+- **Passado**: sem traço com `background`, a Runinata não tem Passado (escolher um é erro); com Antecedente, ele volta a ser obrigatório.
+- Tamanho fixo de uma concessão (`SIZE`, ex.: Chaveirinho → Miúdo) vence a escolha de tamanho (`SIZE_CHOICE`).
+- O que só existe como texto: deslocamentos de natação/escalada/voo/escavação, telepatia, idiomas (desligados), Oriundo (as regiões não dão proficiências no sistema), Resquício.
+
 ## O que falta definir (preencher com as regras do Runarcana)
 
 Para cada item, basta mandar o texto do livro ou um resumo; eu converto para o JSON.
 
-1. **Demais origens** (e as Heranças de Origem de cada uma).
+1. **Origens**: todas cadastradas. Falta o texto dos benefícios da **Variante Nebulon** (Capítulo 5: Heranças Variantes); hoje ela tem só a descrição da origem. Confirmado pelo usuário: Chireano com pontos de Origem, Chicote de Espinhos soma Destreza, bando do Troll não obriga a região. Os traços do Meio-Dragão por nível usam `levels` (ver **Formato**). Pode usar o mesmo para outros ganhos por nível de origem (ex.: Mordida do Troll 1d8 no 6º), quando a subida de nível existir.
 2. **Métodos de atributos** que a mesa usa (compra de pontos com quantos pontos e qual tabela, arranjo padrão, rolagem) e limite máximo na criação.
 4. **Classes** (as 9): dado de vida, resistências, perícias à escolha, habilidades do 1º nível, ouro/equipamento inicial e os ganhos por nível.
 5. **Passados** (Capítulo 4): perícias, ouro e característica.

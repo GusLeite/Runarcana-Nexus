@@ -6,12 +6,14 @@ import OptionStep from './OptionStep.jsx'
 import AttributeStep from './AttributeStep.jsx'
 import ChoiceStep from './ChoiceStep.jsx'
 import HeritageStep from './HeritageStep.jsx'
+import TraitStep from './TraitStep.jsx'
 import DetailsStep from './DetailsStep.jsx'
 import BuildSummary from './BuildSummary.jsx'
 import '../../styles/creation.css'
 
 const STEPS = [
   { id: 'origin', label: 'Origem' },
+  { id: 'traits', label: 'Traços' },
   { id: 'region', label: 'Região' },
   { id: 'class', label: 'Classe' },
   { id: 'background', label: 'Passado' },
@@ -50,6 +52,7 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
         setDraft({
           originId: null, lineageId: null, classId: null, backgroundId: null, regionId: null,
           attributeMethod: method, baseAttributes: startingAttributes(method, methods), choices: {}, heritages: [],
+          traitBudget: null, traits: [], drawbacks: [],
           characterName: '', playerName: defaultPlayer ?? '', age: '', height: '', alignment: null,
         })
       })
@@ -66,13 +69,17 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
   }, [draft, token, onError])
 
   const set = (key, value) => setDraft(d => ({ ...d, [key]: value }))
-  // Passado, Região e Heranças só aparecem se o catálogo tiver opções para eles.
-  const steps = useMemo(() => STEPS.filter(s =>
-    (s.id !== 'background' || catalog?.backgrounds?.length) && (s.id !== 'region' || catalog?.regions?.length)
-    && (s.id !== 'heritages' || catalog?.heritages?.length)), [catalog])
-  const current = steps[step]?.id
   const origin = catalog?.origins.find(o => o.id === draft?.originId)
   const lineages = origin?.lineages ?? []
+  // Runinata: tem a etapa Traços e só tem Passado com um traço que libera (Antecedente).
+  const usesTraits = !!origin?.usesTraits && !!catalog?.traits
+  const traitBackground = usesTraits && draft.traits.some(p => catalog.traits.traits.find(t => t.id === p.id)?.background)
+  const noBackground = usesTraits && !traitBackground
+  // Passado, Região e Heranças só aparecem se o catálogo tiver opções para eles; Traços, só na origem que usa.
+  const steps = useMemo(() => STEPS.filter(s =>
+    (s.id !== 'background' || catalog?.backgrounds?.length) && (s.id !== 'region' || catalog?.regions?.length)
+    && (s.id !== 'heritages' || catalog?.heritages?.length) && (s.id !== 'traits' || usesTraits)), [catalog, usesTraits])
+  const current = steps[step]?.id
   const last = step === steps.length - 1
 
   const create = async () => {
@@ -99,11 +106,13 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
   const attributeErrors = preview?.errors.some(e => /atribut|pontos|arranjo/i.test(e))
   const choiceErrors = preview?.errors.some(e => e.startsWith('Faltam escolhas') || e.startsWith('Escolha só') || e.startsWith('Opção inválida'))
   const heritageErrors = preview?.errors.some(e => /Heran|ser escolhida|Escolha a opção de/.test(e))
+  const traitErrors = preview?.errors.some(e => /traço|Traço|pontos de Origem|Responda em|ser escolhido|Desvantagem desconhecida/.test(e))
   const done = {
     origin: !!draft.originId && (!lineages.length || !!draft.lineageId),
+    traits: !!preview?.traitBudget && !traitErrors,
     region: !!draft.regionId,
     class: !!draft.classId,
-    background: !!draft.backgroundId,
+    background: noBackground ? !draft.backgroundId : !!draft.backgroundId,
     attributes: !!preview && !attributeErrors && (draft.attributeMethod !== 'POINT_BUY' || (preview.pointBuy?.spent ?? 0) > 0),
     choices: !!preview && !!draft.originId && !!draft.classId && !choiceErrors,
     heritages: !!preview && !!draft.originId && !!draft.regionId && !heritageErrors,
@@ -142,6 +151,9 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
               )}
             </>
           )}
+          {current === 'traits' && (
+            <TraitStep system={catalog.traits} preview={preview} draft={draft} onChange={set} />
+          )}
           {current === 'region' && (
             <OptionStep kind="region" title="Escolha a região" hint="Onde o personagem cresceu. Libera as Heranças de Região."
               items={catalog.regions} crafts={catalog.crafts} selected={draft.regionId} onPick={id => set('regionId', id)} />
@@ -149,9 +161,17 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
           {current === 'class' && (
             <OptionStep kind="class" title="Escolha a classe" items={catalog.classes} crafts={catalog.crafts} selected={draft.classId} onPick={id => set('classId', id)} />
           )}
-          {current === 'background' && (
+          {current === 'background' && (noBackground ? (
+            <>
+              <h4 className="step-title">Passado</h4>
+              <p className="muted-note">A Runinata não tem Passado, a não ser com o traço menor Antecedente (etapa Traços).</p>
+              {draft.backgroundId && (
+                <button type="button" className="ghost-btn small" onClick={() => set('backgroundId', null)}>Tirar o passado escolhido</button>
+              )}
+            </>
+          ) : (
             <OptionStep kind="background" title="Escolha o passado" items={catalog.backgrounds} crafts={catalog.crafts} selected={draft.backgroundId} onPick={id => set('backgroundId', id)} />
-          )}
+          ))}
           {current === 'attributes' && (
             <AttributeStep methods={catalog.attributeMethods} draft={draft} preview={preview}
               onMethod={m => setDraft(d => ({ ...d, attributeMethod: m, baseAttributes: startingAttributes(m, catalog.attributeMethods) }))}

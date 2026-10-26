@@ -1,4 +1,4 @@
-import { ABILITY_TYPES, ATTRIBUTES, SIZE_NAMES, SKILL_NAMES, attributeById, formatFeet, formatModifier } from '../../data/rules.js'
+import { ABILITY_TYPES, ATTRIBUTES, SIZE_NAMES, SKILL_NAMES, attributeById, formatFeet, formatModifier, formatPoints } from '../../data/rules.js'
 import Num from '../sheet/Num.jsx'
 
 // "Ficha em construção": o resultado calculado pelo back para as escolhas atuais.
@@ -40,6 +40,10 @@ export default function BuildSummary({ preview, catalog, draft }) {
 
           <dl className="build-facts">
             <div><dt>Tamanho</dt><dd>{SIZE_NAMES[preview.size] ?? '—'}</dd></div>
+            {preview.traitBudget && (
+              <div><dt>Traços</dt><dd>{preview.traits.filter(t => t.kind === 'TRAIT').reduce((s, t) => s + t.times, 0)} escolhidos
+                · {formatPoints(preview.traitBudget.pointsSpent)} de {formatPoints(preview.traitBudget.points)} pontos de Origem</dd></div>
+            )}
             <div><dt>Pontos de Herança</dt><dd>{preview.heritagePoints
               ? preview.heritagePools.reduce((s, p) => s + p.spent, 0) + ' de ' + preview.heritagePoints + ' gastos'
               : '—'}</dd></div>

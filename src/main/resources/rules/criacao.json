@@ -533,6 +533,1639 @@
           ]
         }
       ]
+    },
+    {
+      "id": "antroplantae",
+      "name": "Antroplantæ",
+      "description": "Plantas sencientes que se locomovem, ligadas fortemente à natureza e às plantas, mas também às pedras e à terra. Lembram árvores pequenas ou humanoides cobertos de flores e espinhos, cada um semelhante a um tipo de árvore ou flor. São raros, e ver um fora de sua floresta costuma significar que algo terrível aconteceu.",
+      "speed": 30,
+      "details": [
+        {
+          "name": "Idade",
+          "text": "Arbóreos alcançam a maturidade entre 8 e 15 anos; Florais, em 1 ou 2 anos. Podem viver por milênios dependendo de seu estilo de vida."
+        },
+        {
+          "name": "Tamanho",
+          "text": "Pequeno ou Médio, à escolha do jogador. Um Floral adulto tem de 1,5 a 2,1 metros; um Arbóreo, de 2,1 a 2,9 metros."
+        },
+        {
+          "name": "Herança",
+          "text": "2 pontos de Herança de Origem e mais 1 ponto nos níveis 5, 9, 13 e 17."
+        },
+        {
+          "name": "Passado",
+          "text": "Escolha um Passado disponível no Capítulo 4: Detalhamento."
+        },
+        {
+          "name": "Região",
+          "text": "1 ponto de Herança de Região e 1 idioma dessa região. Sua região representa onde você cresceu e influencia sua visão de mundo."
+        },
+        {
+          "name": "Idiomas",
+          "text": "Antroplantæ podem falar Silvestre. Eles podem se comunicar com qualquer árvore de seu próprio tipo como se usassem a magia falar com plantas."
+        },
+        {
+          "name": "Nomes",
+          "text": "Normalmente dados por seus criadores ou por quem tem contato com eles, ligados a suas características ou à natureza. Ex.: Maokai, Ruibarba, Graveto, Barbárvore, Floripes, Margarida, Violeta, Dália."
+        },
+        {
+          "name": "Linhagem",
+          "text": "Escolha uma das estirpes: Arbóreo ou Floral."
+        }
+      ],
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 2,
+          "label": "+2 em um atributo"
+        },
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um segundo atributo"
+        },
+        {
+          "type": "SIZE_CHOICE",
+          "options": [
+            "SMALL",
+            "MEDIUM"
+          ],
+          "label": "Tamanho: Pequeno ou Médio"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 2,
+          "value": "ORIGIN",
+          "label": "2 pontos de Herança de Origem"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 1,
+          "value": "REGION",
+          "label": "1 ponto de Herança de Região"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Vegetação",
+          "description": "Devido a sua natureza, Antroplantæ possuem uma Fraqueza contra efeitos relacionados ao fogo e não têm necessidade de se alimentar, mas devem passar pelo menos 4 horas do dia no sol e tomar 5 litros de água por dia, caso contrário recebem 1 nível de exaustão.\n\nEmbora não precisem dormir, devem se enraizar todas as noites por pelo menos 8 horas. Enquanto estão enraizados eles se tornam imóveis, embora possam fazer ações leves se necessário e fiquem cientes dos seus arredores. Só podem se enraizar em areia, terra, lama e cascalho; não em rocha sólida ou em chão de pedra trabalhado. Um Antroplantæ que não consiga se enraizar por uma noite recebe 1 nível de exaustão e não é beneficiado por um descanso longo.\n\nDurante o enraizamento, os Arbóreos têm vantagem em testes de Enganação para disfarçarem-se de árvore, assim como Florais para vegetação."
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Não-humanoide",
+          "description": "Antroplantæ não podem ser alvos de magias que afetem humanoides, como enfeitiçar pessoa. No entanto, eles contam como plantas para magias que alvejam plantas, como malogro."
+        }
+      ],
+      "lineages": [
+        {
+          "id": "arboreo",
+          "name": "Arbóreo",
+          "description": "Seres mais robustos que os Florais; sua casca grossa os ajuda a se manter por muito tempo em combate. Tendem a ajudar aqueles que são bons com sua floresta, como regar as plantas, adubar o solo e proteger a vida local.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Pele de Árvore",
+              "description": "Um Arbóreo não pode usar armadura, no entanto sua casca provê defesa natural. A CA de um Arbóreo é igual a 10 + seu modificador de Destreza + modificador de Constituição."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Fibras",
+              "description": "Alguns Arbóreos podem ter propriedades especiais por conta da madeira do qual são feitos ou das folhas que produzem. Essas variações não são obrigatórias, mas pode-se selecionar apenas uma entre as seguintes:\n\nCarvalho. Mesmo quando não enraizado, tem vantagem em qualquer salvaguarda para resistir a movimento forçado. Você conta como uma criatura de uma categoria acima para definir sua capacidade de carga e seu peso aumenta em 50%.\nCedro. Uma vez por descanso longo, você pode utilizar a magia criar muda como se fosse uma magia de 1º nível, fazendo com que a muda cause 2d6 de dano ao invés de 4d6, e a área de sua explosão se torna um raio de 5 pés ao invés de 10. Quando você atingir o nível 5 poderá usá-la no 3º nível normalmente, e no nível 7 poderá conjurá-la como uma magia de 4º nível.\nCerejeira. Você pode duplicar os efeitos da magia de 1º nível névoa obscurecente soltando todas as suas flores de uma vez, que formam uma esfera de 20 pés de raio a partir de você. Depois de usar, só pode usar de novo após completar um descanso longo.\nÉbano. Seu bônus de proficiência é dobrado para jogadas contra a fraqueza proporcionada pela característica “Vegetação”.\nFerrobrasa. Você emana calor e seus ataques desarmados recebem dano ígneo adicional igual ao seu modificador de Constituição. Além disso, uma vez por ano você pode gerar uma Semente de Ferrobrasa.\nFrutífero. Ao se enraizar por 8 horas, você produz frutas suficientes para 4 rações diárias.\nOlmo. Você sabe e pode usar os truques druidismo e orientação.\nPetricita. Toda magia lançada a até 5 pés de você cura você um total de pontos de vida igual ao nível da magia.\nSalgueiro. Você pode usar a magia amizade animal; você a conjura como uma magia de 2º nível no seu nível 3, de 3º nível no nível 5 e de 4º no nível 7.\nSequoia. Adicione metade de seu bônus de proficiência ao dano de seus ataques desarmados ou causados por armas naturais. Você conta como uma criatura de uma categoria acima para definir sua capacidade de carga e seu peso aumenta em 50%.\nSeringueira. Quando exposto diretamente à luz do sol, você pode usar um Dado de Vida para se curar como uma ação, contanto que não esteja fazendo um descanso curto. Você pode também gastar 1 Dado de Vida para regenerar membros perdidos.\nTeixo. Você pode usar a magia ver o invisível um número de vezes igual a metade da sua proficiência (arredondado para baixo) por descanso longo.",
+              "label": "Fibras: escolha uma (opcional)",
+              "options": [
+                "Nenhuma",
+                "Carvalho",
+                "Cedro",
+                "Cerejeira",
+                "Ébano",
+                "Ferrobrasa",
+                "Frutífero",
+                "Olmo",
+                "Petricita",
+                "Salgueiro",
+                "Sequoia",
+                "Seringueira",
+                "Teixo"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "floral",
+          "name": "Floral",
+          "description": "Seres com aptidão mágica excepcional, porém mais vulneráveis. São mais agressivos e violentos com aqueles que destroem o seu lar, podendo envenenar ou prender uma criatura em seu território para sempre.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Ramo",
+              "description": "Um Floral é capaz de criar uma quantidade de ramo floral medindo até 10× seu bônus de proficiência em pés, por descanso longo. Esse ramo pode ser usado de diversas formas, como corda ou mesmo como um chicote de espinhos. Utilizando uma ação bônus, você pode criar 6 pés de ramo espinhoso e separá-lo de seu corpo (ou mantê-lo conectado ao seu corpo) e utilizá-lo como um chicote. O ramo criado se desintegra depois de 24 horas e é vulnerável a dano ígneo.",
+              "castingTime": "Ação bônus (chicote)",
+              "recharge": "LONG_REST"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Chicote de Espinhos",
+              "description": "Esse chicote possui 2 metros e causa 1d4 + seu bônus de proficiência + modificador de Destreza em dano cortante. É uma arma com a propriedade acuidade (você não pode adicionar Força no dano desse chicote) com a qual você tem proficiência.",
+              "damage": "1d4",
+              "damageBonus": [
+                "PROFICIENCY",
+                "DEXTERITY"
+              ],
+              "castingTime": "Ataque",
+              "range": "2 metros"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Florescência",
+              "description": "Um Floral, devido a sua natureza, possui maneiras únicas de se defender. Escolha uma entre as seguintes:\n\nCharme Sobrenatural. Você recebe a magia enfeitiçar pessoa, podendo conjurá-la uma quantidade de vezes igual a metade do seu modificador de Carisma por descanso longo (mínimo de 1) sem gastar pontos de Mana. Carisma é seu atributo de conjuração para essa magia.\nEspinhos Alucinógenos. Ao sofrer um ataque desarmado (ou com arma natural) o atacante deve ser bem sucedido em uma salvaguarda de Constituição contra sua CD Floral; em uma falha, por um número de turnos igual ao seu bônus de proficiência, perde a noção de realidade, imaginando criaturas avançando em sua direção, e recebe uma penalidade igual a metade do seu bônus de proficiência em qualquer ação contra você. Ao final de cada turno pode repetir a salvaguarda, cancelando o efeito em caso de sucesso. Quem passar na salvaguarda fica imune por 24 horas. Adicionalmente, com uma ação de ataque, você pode atirar um espinho a até 15 pés de distância (ataque à distância, com proficiência).\nEsporos Venenosos. Ao ser atacado, você pode utilizar sua reação para lançar um gás venenoso. Criaturas adjacentes devem passar em uma salvaguarda de Constituição; em uma falha recebem a condição Envenenado e 1d4 de dano venenoso por turno. No fim de cada turno da criatura ela pode repetir a salvaguarda para anular a condição.\nFlor do Imperador. Seu bônus de proficiência é dobrado para jogadas contra a fraqueza proporcionada pela característica “Vegetação”.\nFlor Gélida. No primeiro nível você pode utilizar um ponto de Herança para escolher a Herança Variante Glacinata. Adicionalmente, inimigos que te atacarem desarmados devem passar em uma salvaguarda de Constituição; em uma falha o atacante perde 15 pés de deslocamento. No final de cada turno ele pode repetir a salvaguarda. Esse efeito não é auto-cumulativo.\nLuminescência. Você conhece os truques luz e luzes dançantes.\nNictinastia. Ao receber dano que o deixaria abaixo de 1 ponto de vida, mas não o mate instantaneamente, você se fecha em suas pétalas em um estado dormente e não recebe dano algum até o início do seu próximo turno. Você fica dormente até alguém destruir suas pétalas ou até recuperar metade dos seus pontos de vida; nesse estado não pode se mover nem realizar ações ou reações. No começo de cada turno, recupera seu bônus de proficiência + modificador de Constituição em pontos de vida até estar com metade dos seus pontos de vida máximos. Você possui pétalas iguais ao dobro do seu bônus de proficiência; cada uma tem CA 10 e pontos de vida iguais ao dobro do seu modificador de Constituição. Ativa-se sozinha apenas uma vez por descanso pleno.\nRaízes Detectoras. Você pode se enraizar em terra, areia ou lama se concentrando por 10 minutos. Ao fazer isso, detecta a quantidade de criaturas a até 1 milha de você (sem saber a espécie) e se alguma região está sendo afetada por magia nesse alcance. Só funciona para criaturas ou magias em terra, lama ou areia (não detecta nada dentro ou acima de pedra ou gelo).\nSopro de Esporos. Uma vez por descanso longo, você sopra seu estoque de pólen em um cone de 15 pés. Criaturas na área fazem uma salvaguarda de Constituição ou ficam Cegas por um número de turnos igual ao seu modificador de Constituição (mínimo de 1), repetindo a salvaguarda no início de seus turnos.\nSopro Polinizador. Uma vez por descanso longo, você sopra seu estoque de pólen como energia curativa em um cone de 15 pés; aliados na área recuperam 1d4 + metade do seu modificador de Constituição (mínimo de 0) vezes o seu bônus de proficiência em pontos de vida.\n\nCD Floral = 8 + bônus de proficiência + modificador de Constituição.",
+              "label": "Florescência: escolha uma",
+              "options": [
+                "Charme Sobrenatural",
+                "Espinhos Alucinógenos",
+                "Esporos Venenosos",
+                "Flor do Imperador",
+                "Flor Gélida",
+                "Luminescência",
+                "Nictinastia",
+                "Raízes Detectoras",
+                "Sopro de Esporos",
+                "Sopro Polinizador"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chireano",
+      "name": "Chireano",
+      "description": "Humanoides de Zaun com traços semelhantes aos de morcegos: pele acinzentada, orelhas enormes e grandes olhos de um verde vivo. Curiosos, ágeis e inteligentes, têm imenso apreço por tecnologia e maquinário e um forte senso de coletividade, embora tenham o pé atrás com os Piltovenses.",
+      "speed": 30,
+      "details": [
+        {
+          "name": "Idade",
+          "text": "Atingem a idade adulta por volta dos 14 anos e podem viver até os 70 anos normalmente."
+        },
+        {
+          "name": "Tamanho",
+          "text": "Depende da colônia: Nocti têm de 1,3 a 1,6 metro e 40 a 80 kg (Pequeno ou Médio); Fulgor têm de 1,5 a 2 metros e 60 a 120 kg (Médio)."
+        },
+        {
+          "name": "Herança",
+          "text": "2 pontos de Herança de Origem e mais 1 ponto nos níveis 5, 9, 13 e 17."
+        },
+        {
+          "name": "Passado",
+          "text": "Escolha um Passado disponível no Capítulo 4: Detalhamento."
+        },
+        {
+          "name": "Região",
+          "text": "1 ponto de Herança de Região. Os Chireanos são nativos de Zaun e não costumam se afastar dela, fascinados pela tecnologia de Zaun e Piltover."
+        },
+        {
+          "name": "Idiomas",
+          "text": "Falam, leem e escrevem Chireano e Zaunita. A língua Chireana usa ultra e infrassom e é praticamente impossível de ser aprendida por outras origens. Os Nocti não conseguem falar idiomas humanoides, embora possam lê-los, escrevê-los e compreendê-los."
+        },
+        {
+          "name": "Nomes",
+          "text": "Simples. Ex.: Bo, Jo, Cri, Dan, Leo, Jun, Cho, Lei, Ay, Ca, Ké, Ky, Sek, Ta, Te, Lai."
+        },
+        {
+          "name": "Linhagem",
+          "text": "Escolha uma das colônias: Nocti ou Fulgor."
+        }
+      ],
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 2,
+          "label": "+2 em um atributo"
+        },
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um segundo atributo"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 2,
+          "value": "ORIGIN",
+          "label": "2 pontos de Herança de Origem"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 1,
+          "value": "REGION",
+          "label": "1 ponto de Herança de Região"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Quirosenso",
+          "description": "Chireanos possuem orelhas grandes capazes de ouvir infra e ultrassom facilmente, além de olhos aprimorados para enxergar no escuro, tendo até uma grande sensibilidade a luzes fortes. Você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza. Adicionalmente, você tem vantagem em jogadas relacionadas à audição."
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Energia",
+          "description": "Você recebe a característica Energia, recebendo metade de seu bônus de proficiência em pontos de Energia por descanso longo.",
+          "usesFormula": "HALF_PROFICIENCY",
+          "recharge": "LONG_REST"
+        }
+      ],
+      "lineages": [
+        {
+          "id": "nocti",
+          "name": "Nocti",
+          "description": "Chireanos de baixa estatura que preferem locais bem escuros e não se integram tão facilmente à superfície. Usam luvas, roupas de retalhos personalizadas, uma máscara estilizada para conviver na superfície e sempre carregam uma ferramenta, normalmente uma chave ajustável chireana, e uma bolsa com parafusos e engrenagens.",
+          "grants": [
+            {
+              "type": "SIZE_CHOICE",
+              "options": [
+                "SMALL",
+                "MEDIUM"
+              ],
+              "label": "Tamanho: Pequeno ou Médio"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Mudos",
+              "description": "Os Nocti não são capazes de falar outros idiomas além do Chireano, um idioma formado de pequenos sons simples e infrassom; seu aparato vocal não permite que falem línguas humanoides, embora possam lê-las, escrevê-las e compreendê-las."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Sensibilidade",
+              "description": "Os Nocti têm olhos particularmente sensíveis a luzes fortes e repentinas, além de serem mais suscetíveis a toxinas e gases que atuam no sistema respiratório. Têm desvantagem em salvaguardas ligadas à luz forte e clarões e em salvaguardas contra a condição Intoxicado de fontes respiratórias. Por outro lado, recebem mais 60 pés de visão no escuro."
+            },
+            {
+              "type": "SKILL",
+              "skill": "TECHNOLOGY"
+            },
+            {
+              "type": "SKILL_CHOICE",
+              "count": 1,
+              "options": [
+                "ACROBATICS",
+                "SLEIGHT_OF_HAND",
+                "STEALTH"
+              ],
+              "label": "Técnicos: Acrobacia, Prestidigitação ou Furtividade"
+            },
+            {
+              "type": "CRAFT_CHOICE",
+              "count": 1,
+              "label": "Técnicos: um Ofício à escolha"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Técnicos",
+              "description": "Os Noctis são extremamente hábeis com tecnologias e ofícios: você ganha proficiência em Tecnologia, escolhe uma das perícias Acrobacia, Prestidigitação ou Furtividade para ter proficiência (ou especialidade, caso já possua a proficiência) e possui proficiência com um Ofício à sua escolha."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Improvisadores",
+              "description": "Chireanos não são particularmente hábeis com armas comuns, mas extraem um grande potencial de ferramentas comuns (chaves, martelos, etc.) usadas como armas improvisadas. Você tem proficiência em ataques feitos com ferramentas comuns, e o dano causado por armas improvisadas aumenta em um na escala de dano, aplicando normalmente o modificador do atributo apropriado ao dano além de seu bônus de proficiência."
+            }
+          ]
+        },
+        {
+          "id": "fulgor",
+          "name": "Fulgor",
+          "description": "Chireanos de estatura similar à dos humanos, adaptados à superfície e a lugares claros, capazes de falar qualquer idioma humanoide que conheçam. Muito protetores com seus irmãos Nocti. Seus olhos, menores que os dos Nocti, têm imensa acuidade, o que lhes dá uma espécie de mira natural.",
+          "grants": [
+            {
+              "type": "SIZE",
+              "value": "MEDIUM"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Precisão",
+              "description": "Os Fulgores possuem extrema precisão em suas ações, graças a sua percepção espacial superior, recebendo metade do seu bônus de proficiência como bônus em ataques feitos com armas à distância ou com acuidade."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Geolocalização",
+              "description": "Os Fulgores são capazes de emitir um som inaudível para outras criaturas, detectando formas e obstáculos em um raio de 60 pés, mesmo na escuridão total. Essa habilidade dura 1 minuto.",
+              "range": "60 pés",
+              "duration": "1 minuto",
+              "usesFormula": "PROFICIENCY",
+              "recharge": "LONG_REST"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "meio-dragao",
+      "name": "Meio-Dragão",
+      "description": "Seres raríssimos de natureza desconhecida, ligados aos dragões elementais; o único exemplar conhecido em toda a história de Runeterra é Shyvana. Têm aparência quase humana, mas a pele de uma cor sobrenatural e olhos de brilho mágico. Seus traços se desenvolvem conforme sobem de nível. O livro pede para não exagerar: nada de 5 Meio-Dragões na mesma mesa.",
+      "speed": 30,
+      "details": [
+        {
+          "name": "Idade",
+          "text": "Adultos aos 9 anos; podem passar dos 1000 anos de idade."
+        },
+        {
+          "name": "Tamanho",
+          "text": "Pequeno ou Médio, à escolha do jogador. A forma humanoide costuma ter de 1,5 a 2,1 metros."
+        },
+        {
+          "name": "Herança",
+          "text": "2 pontos de Herança de Origem e mais 1 ponto nos níveis 5, 9, 13 e 17."
+        },
+        {
+          "name": "Passado",
+          "text": "Escolha um Passado disponível no Capítulo 4: Detalhamento."
+        },
+        {
+          "name": "Região",
+          "text": "1 ponto de Herança de Região e 1 idioma dessa região. Sua região representa onde você cresceu e influencia sua visão de mundo."
+        },
+        {
+          "name": "Idioma",
+          "text": "Meio-Dragões podem falar Dracônico, uma língua que surge para eles naturalmente como um chamado de seu sangue."
+        },
+        {
+          "name": "Evolução",
+          "text": "Os traços do Meio-Dragão se desenvolvem conforme sobe de nível: armas naturais no 1º, arma de sopro no 2º, Forma Dracônica no 8º e resistência à versão mágica do dano elemental no 15º. Os do 2º nível em diante entram na ficha com a subida de nível."
+        },
+        {
+          "name": "Linhagem",
+          "text": "Escolha uma das Essências Dracônicas: Glacial, Infernal, Montanha, Nuvens ou Oceano."
+        }
+      ],
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 2,
+          "label": "+2 em um atributo"
+        },
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um segundo atributo"
+        },
+        {
+          "type": "SIZE_CHOICE",
+          "options": [
+            "SMALL",
+            "MEDIUM"
+          ],
+          "label": "Tamanho: Pequeno ou Médio"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 2,
+          "value": "ORIGIN",
+          "label": "2 pontos de Herança de Origem"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 1,
+          "value": "REGION",
+          "label": "1 ponto de Herança de Região"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Natureza Elemental",
+          "description": "Um Meio-Dragão possui uma resistência a dano elemental simples e uma fraqueza a um tipo de dano elemental baseadas em sua essência dracônica. A partir do nível 15, sua resistência passa a se aplicar à versão mágica do dano elemental."
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Aspectos Dracônicos",
+          "description": "Todo Meio-Dragão possui aspectos de sua linhagem dracônica em seu corpo, que se desenvolvem conforme sua conexão com sua essência se aprofunda. Você possui três armas naturais baseadas em sua essência dracônica que pode utilizar para realizar ataques corpo a corpo."
+        }
+      ],
+      "lineages": [
+        {
+          "id": "glacial",
+          "name": "Glacial",
+          "description": "Essência ligada aos dragões gélidos, comuns em Freljord. Pelagem grossa e branca, chifres, presas e garras semelhantes a cristais de gelo e escamas escuras ou azuladas. Pele branco-azulada.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Natureza Glacial",
+              "description": "Resistência a dano Gélido e Fraqueza a dano Ígneo (simples e mágico). No nível 15 a resistência se torna a dano Glacial."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Chifres",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d4 + modificador de Força, dano perfurante.",
+              "damage": "1d4",
+              "damageBonus": [
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Garras",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d6 + modificador de Força ou Destreza, dano cortante.",
+              "damage": "1d6",
+              "damageBonus": [
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Mordida",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d4 + modificador de Força, dano perfurante.",
+              "damage": "1d4",
+              "damageBonus": [
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            }
+          ],
+          "levels": [
+            {
+              "level": 2,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Sopro Gélido",
+                  "description": "Seu sopro causa dano Gélido a criaturas em um cone de 15 pés de você.\n\nVocê usa o sopro com uma ação de ataque um número de vezes igual ao seu bônus de proficiência por descanso pleno. Criaturas na área do seu sopro devem realizar uma salvaguarda de Destreza CD 8 + seu modificador de Constituição + seu bônus de proficiência, sofrendo seu bônus de proficiência em d6 de dano do tipo da sua essência em uma falha ou metade desse dano em um sucesso.",
+                  "castingTime": "Ataque",
+                  "range": "Cone de 15 pés",
+                  "usesFormula": "PROFICIENCY",
+                  "recharge": "LONG_REST",
+                  "diceByProficiency": {
+                    "2": "2d6",
+                    "3": "3d6",
+                    "4": "4d6",
+                    "5": "5d6",
+                    "6": "6d6"
+                  }
+                }
+              ]
+            },
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Forma Dracônica Glacial",
+                  "description": "Sua Constituição é aumentada, aumentando seus pontos de vida pela duração. Suas asas também possuem garras, permitindo ataques com Garras usando uma ação bônus.\n\nVocê aprende a assumir sua Forma de Dragão, podendo se transformar um número de vezes igual a metade do seu bônus de proficiência por descanso pleno. Essa forma dura até 3 horas ou até você se destransformar usando uma ação bônus. Enquanto transformado:\n\nVocê recebe um aumento igual à metade do seu bônus de proficiência em um atributo físico (Força, Destreza ou Constituição), definido pela sua essência.\nSeu tamanho aumenta em 1 categoria (até o máximo de Enorme).\nVocê recebe 60 pés de deslocamento de voo.\nVocê recebe usos adicionais da arma de sopro iguais à metade do seu bônus de proficiência, e a escala dos dados de dano dela aumenta em 1.\nAs armas naturais da sua essência têm o dano aumentado em uma categoria.\nVocê mantém seus pontos de vida e dados de vida. Caindo a 0 pontos de vida, você se destransforma e faz salvaguardas contra a morte normalmente. Morrer em forma de Dragão significa a morte do personagem.\nVocê conjura feitiços normalmente, exceto os que consomem componente material.\nVocê mantém os benefícios de todas as características de Classe, Origem ou outras fontes, e pode usá-las se a nova forma for fisicamente capaz.\nVocê escolhe se o equipamento cai no chão, é assimilado à nova forma ou é usado por ela; o Mestre decide o que a nova forma consegue vestir ou usar. Equipamento fundido não tem efeito até você deixar a forma.",
+                  "duration": "Até 3 horas",
+                  "usesFormula": "HALF_PROFICIENCY",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 15,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Resistência Dracônica (Glacial)",
+                  "description": "Sua resistência elemental passa a se aplicar à versão mágica do dano: você recebe resistência a dano Glacial."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "infernal",
+          "name": "Infernal",
+          "description": "Essência ligada aos dragões infernais, cuspidores de fogo conhecidos por seu poder destrutivo. Chifres ameaçadores, cauda robusta, corpo muscular e escamas avermelhadas. Pele violeta.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Natureza Infernal",
+              "description": "Resistência a dano Ígneo e Fraqueza a dano Gélido (simples e mágico). No nível 15 a resistência se torna a dano Incinerante."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Chifres",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d6 + modificador de Força, dano perfurante.",
+              "damage": "1d6",
+              "damageBonus": [
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Cauda",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d4 + modificador de Força, dano contundente.",
+              "damage": "1d4",
+              "damageBonus": [
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Garras",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d4 + modificador de Destreza, dano perfurante.",
+              "damage": "1d4",
+              "damageBonus": [
+                "DEXTERITY"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            }
+          ],
+          "levels": [
+            {
+              "level": 2,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Sopro Ígneo",
+                  "description": "Seu sopro causa dano ígneo a criaturas em um cone de 15 pés de você.\n\nVocê usa o sopro com uma ação de ataque um número de vezes igual ao seu bônus de proficiência por descanso pleno. Criaturas na área do seu sopro devem realizar uma salvaguarda de Destreza CD 8 + seu modificador de Constituição + seu bônus de proficiência, sofrendo seu bônus de proficiência em d6 de dano do tipo da sua essência em uma falha ou metade desse dano em um sucesso.",
+                  "castingTime": "Ataque",
+                  "range": "Cone de 15 pés",
+                  "usesFormula": "PROFICIENCY",
+                  "recharge": "LONG_REST",
+                  "diceByProficiency": {
+                    "2": "2d6",
+                    "3": "3d6",
+                    "4": "4d6",
+                    "5": "5d6",
+                    "6": "6d6"
+                  }
+                }
+              ]
+            },
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Forma Dracônica Infernal",
+                  "description": "Sua Força é aumentada e sua arma de sopro causa 1 dado de dano adicional.\n\nVocê aprende a assumir sua Forma de Dragão, podendo se transformar um número de vezes igual a metade do seu bônus de proficiência por descanso pleno. Essa forma dura até 3 horas ou até você se destransformar usando uma ação bônus. Enquanto transformado:\n\nVocê recebe um aumento igual à metade do seu bônus de proficiência em um atributo físico (Força, Destreza ou Constituição), definido pela sua essência.\nSeu tamanho aumenta em 1 categoria (até o máximo de Enorme).\nVocê recebe 60 pés de deslocamento de voo.\nVocê recebe usos adicionais da arma de sopro iguais à metade do seu bônus de proficiência, e a escala dos dados de dano dela aumenta em 1.\nAs armas naturais da sua essência têm o dano aumentado em uma categoria.\nVocê mantém seus pontos de vida e dados de vida. Caindo a 0 pontos de vida, você se destransforma e faz salvaguardas contra a morte normalmente. Morrer em forma de Dragão significa a morte do personagem.\nVocê conjura feitiços normalmente, exceto os que consomem componente material.\nVocê mantém os benefícios de todas as características de Classe, Origem ou outras fontes, e pode usá-las se a nova forma for fisicamente capaz.\nVocê escolhe se o equipamento cai no chão, é assimilado à nova forma ou é usado por ela; o Mestre decide o que a nova forma consegue vestir ou usar. Equipamento fundido não tem efeito até você deixar a forma.",
+                  "duration": "Até 3 horas",
+                  "usesFormula": "HALF_PROFICIENCY",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 15,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Resistência Dracônica (Incinerante)",
+                  "description": "Sua resistência elemental passa a se aplicar à versão mágica do dano: você recebe resistência a dano Incinerante."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "montanha",
+          "name": "Montanha",
+          "description": "Essência dos robustos dragões da montanha, os mais resilientes entre os dragões elementais. Cauda rochosa, garras pétreas, corpo largo e escamas semelhantes a rochas e minerais. Pele cor de cobre.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Natureza Montanhosa",
+              "description": "Resistência a dano Trovejante e Fraqueza a dano Ácido (simples e mágico). No nível 15 a resistência se torna a dano Vibracional."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Cauda",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d6 + modificador de Força, dano contundente.",
+              "damage": "1d6",
+              "damageBonus": [
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Garras",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d4 + modificador de Destreza ou Força, dano cortante.",
+              "damage": "1d4",
+              "damageBonus": [
+                "DEXTERITY"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Mordida",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d4 + modificador de Força, dano perfurante.",
+              "damage": "1d4",
+              "damageBonus": [
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            }
+          ],
+          "levels": [
+            {
+              "level": 2,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Sopro Trovejante",
+                  "description": "Seu sopro causa dano Trovejante a criaturas em um cone de 15 pés de você.\n\nVocê usa o sopro com uma ação de ataque um número de vezes igual ao seu bônus de proficiência por descanso pleno. Criaturas na área do seu sopro devem realizar uma salvaguarda de Destreza CD 8 + seu modificador de Constituição + seu bônus de proficiência, sofrendo seu bônus de proficiência em d6 de dano do tipo da sua essência em uma falha ou metade desse dano em um sucesso.",
+                  "castingTime": "Ataque",
+                  "range": "Cone de 15 pés",
+                  "usesFormula": "PROFICIENCY",
+                  "recharge": "LONG_REST",
+                  "diceByProficiency": {
+                    "2": "2d6",
+                    "3": "3d6",
+                    "4": "4d6",
+                    "5": "5d6",
+                    "6": "6d6"
+                  }
+                }
+              ]
+            },
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Forma Dracônica da Montanha",
+                  "description": "Sua Constituição é aumentada, aumentando seus pontos de vida pela duração.\n\nVocê aprende a assumir sua Forma de Dragão, podendo se transformar um número de vezes igual a metade do seu bônus de proficiência por descanso pleno. Essa forma dura até 3 horas ou até você se destransformar usando uma ação bônus. Enquanto transformado:\n\nVocê recebe um aumento igual à metade do seu bônus de proficiência em um atributo físico (Força, Destreza ou Constituição), definido pela sua essência.\nSeu tamanho aumenta em 1 categoria (até o máximo de Enorme).\nVocê recebe 60 pés de deslocamento de voo.\nVocê recebe usos adicionais da arma de sopro iguais à metade do seu bônus de proficiência, e a escala dos dados de dano dela aumenta em 1.\nAs armas naturais da sua essência têm o dano aumentado em uma categoria.\nVocê mantém seus pontos de vida e dados de vida. Caindo a 0 pontos de vida, você se destransforma e faz salvaguardas contra a morte normalmente. Morrer em forma de Dragão significa a morte do personagem.\nVocê conjura feitiços normalmente, exceto os que consomem componente material.\nVocê mantém os benefícios de todas as características de Classe, Origem ou outras fontes, e pode usá-las se a nova forma for fisicamente capaz.\nVocê escolhe se o equipamento cai no chão, é assimilado à nova forma ou é usado por ela; o Mestre decide o que a nova forma consegue vestir ou usar. Equipamento fundido não tem efeito até você deixar a forma.",
+                  "duration": "Até 3 horas",
+                  "usesFormula": "HALF_PROFICIENCY",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 15,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Resistência Dracônica (Vibracional)",
+                  "description": "Sua resistência elemental passa a se aplicar à versão mágica do dano: você recebe resistência a dano Vibracional."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "nuvens",
+          "name": "Nuvens",
+          "description": "Essência dos dragões das nuvens, criaturas ágeis que cortam os céus. Carapaça óssea cobrindo crânio e chifres, penugem clara e macia, corpo esguio e escamas ciano. Pele cinza clara.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Natureza Nebulosa",
+              "description": "Resistência a dano Elétrico e Fraqueza a dano Gélido (simples e mágico). No nível 15 a resistência se torna a dano Plásmico."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Chifres",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d6 + modificador de Força, dano contundente.",
+              "damage": "1d6",
+              "damageBonus": [
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Cauda",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d4 + modificador de Força ou Destreza, dano contundente.",
+              "damage": "1d4",
+              "damageBonus": [
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Mordida",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d4 + modificador de Força, dano perfurante.",
+              "damage": "1d4",
+              "damageBonus": [
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            }
+          ],
+          "levels": [
+            {
+              "level": 2,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Sopro Elétrico",
+                  "description": "Seu sopro causa dano elétrico a criaturas em uma linha de 20 pés de comprimento e 5 pés de largura partindo de você.\n\nVocê usa o sopro com uma ação de ataque um número de vezes igual ao seu bônus de proficiência por descanso pleno. Criaturas na área do seu sopro devem realizar uma salvaguarda de Destreza CD 8 + seu modificador de Constituição + seu bônus de proficiência, sofrendo seu bônus de proficiência em d6 de dano do tipo da sua essência em uma falha ou metade desse dano em um sucesso.",
+                  "castingTime": "Ataque",
+                  "range": "Linha de 20 × 5 pés",
+                  "usesFormula": "PROFICIENCY",
+                  "recharge": "LONG_REST",
+                  "diceByProficiency": {
+                    "2": "2d6",
+                    "3": "3d6",
+                    "4": "4d6",
+                    "5": "5d6",
+                    "6": "6d6"
+                  }
+                }
+              ]
+            },
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Forma Dracônica das Nuvens",
+                  "description": "Sua Destreza é aumentada e seu deslocamento de voo aumenta em 10 pés.\n\nVocê aprende a assumir sua Forma de Dragão, podendo se transformar um número de vezes igual a metade do seu bônus de proficiência por descanso pleno. Essa forma dura até 3 horas ou até você se destransformar usando uma ação bônus. Enquanto transformado:\n\nVocê recebe um aumento igual à metade do seu bônus de proficiência em um atributo físico (Força, Destreza ou Constituição), definido pela sua essência.\nSeu tamanho aumenta em 1 categoria (até o máximo de Enorme).\nVocê recebe 60 pés de deslocamento de voo.\nVocê recebe usos adicionais da arma de sopro iguais à metade do seu bônus de proficiência, e a escala dos dados de dano dela aumenta em 1.\nAs armas naturais da sua essência têm o dano aumentado em uma categoria.\nVocê mantém seus pontos de vida e dados de vida. Caindo a 0 pontos de vida, você se destransforma e faz salvaguardas contra a morte normalmente. Morrer em forma de Dragão significa a morte do personagem.\nVocê conjura feitiços normalmente, exceto os que consomem componente material.\nVocê mantém os benefícios de todas as características de Classe, Origem ou outras fontes, e pode usá-las se a nova forma for fisicamente capaz.\nVocê escolhe se o equipamento cai no chão, é assimilado à nova forma ou é usado por ela; o Mestre decide o que a nova forma consegue vestir ou usar. Equipamento fundido não tem efeito até você deixar a forma.",
+                  "duration": "Até 3 horas",
+                  "usesFormula": "HALF_PROFICIENCY",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 15,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Resistência Dracônica (Plásmico)",
+                  "description": "Sua resistência elemental passa a se aplicar à versão mágica do dano: você recebe resistência a dano Plásmico."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "oceano",
+          "name": "Oceano",
+          "description": "Essência dos elusivos dragões do oceano, em sintonia com ambientes aquáticos. Dentes serrilhados, cauda longa e flexível, garras semelhantes a corais, barbatanas e pele emborrachada ou com escamas marinhas. Pele azul intensa.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Natureza Oceânica",
+              "description": "Resistência a dano Ácido e Fraqueza a dano Elétrico (simples e mágico). No nível 15 a resistência se torna a dano Antimônico."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Cauda",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d4 + modificador de Força ou Destreza, dano cortante.",
+              "damage": "1d4",
+              "damageBonus": [
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Garras",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d4 + modificador de Força, dano perfurante.",
+              "damage": "1d4",
+              "damageBonus": [
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Mordida",
+              "description": "Arma natural da sua essência dracônica. Dano: 1d6 + modificador de Força, dano perfurante.",
+              "damage": "1d6",
+              "damageBonus": [
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            }
+          ],
+          "levels": [
+            {
+              "level": 2,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Sopro Ácido",
+                  "description": "Seu sopro causa dano ácido a criaturas em uma linha de 20 pés de comprimento e 5 pés de largura partindo de você.\n\nVocê usa o sopro com uma ação de ataque um número de vezes igual ao seu bônus de proficiência por descanso pleno. Criaturas na área do seu sopro devem realizar uma salvaguarda de Destreza CD 8 + seu modificador de Constituição + seu bônus de proficiência, sofrendo seu bônus de proficiência em d6 de dano do tipo da sua essência em uma falha ou metade desse dano em um sucesso.",
+                  "castingTime": "Ataque",
+                  "range": "Linha de 20 × 5 pés",
+                  "usesFormula": "PROFICIENCY",
+                  "recharge": "LONG_REST",
+                  "diceByProficiency": {
+                    "2": "2d6",
+                    "3": "3d6",
+                    "4": "4d6",
+                    "5": "5d6",
+                    "6": "6d6"
+                  }
+                }
+              ]
+            },
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Forma Dracônica do Oceano",
+                  "description": "Sua Constituição é aumentada, aumentando seus pontos de vida pela duração.\n\nVocê aprende a assumir sua Forma de Dragão, podendo se transformar um número de vezes igual a metade do seu bônus de proficiência por descanso pleno. Essa forma dura até 3 horas ou até você se destransformar usando uma ação bônus. Enquanto transformado:\n\nVocê recebe um aumento igual à metade do seu bônus de proficiência em um atributo físico (Força, Destreza ou Constituição), definido pela sua essência.\nSeu tamanho aumenta em 1 categoria (até o máximo de Enorme).\nVocê recebe 60 pés de deslocamento de voo.\nVocê recebe usos adicionais da arma de sopro iguais à metade do seu bônus de proficiência, e a escala dos dados de dano dela aumenta em 1.\nAs armas naturais da sua essência têm o dano aumentado em uma categoria.\nVocê mantém seus pontos de vida e dados de vida. Caindo a 0 pontos de vida, você se destransforma e faz salvaguardas contra a morte normalmente. Morrer em forma de Dragão significa a morte do personagem.\nVocê conjura feitiços normalmente, exceto os que consomem componente material.\nVocê mantém os benefícios de todas as características de Classe, Origem ou outras fontes, e pode usá-las se a nova forma for fisicamente capaz.\nVocê escolhe se o equipamento cai no chão, é assimilado à nova forma ou é usado por ela; o Mestre decide o que a nova forma consegue vestir ou usar. Equipamento fundido não tem efeito até você deixar a forma.",
+                  "duration": "Até 3 horas",
+                  "usesFormula": "HALF_PROFICIENCY",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 15,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Resistência Dracônica (Antimônico)",
+                  "description": "Sua resistência elemental passa a se aplicar à versão mágica do dano: você recebe resistência a dano Antimônico."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "troll",
+      "name": "Troll",
+      "description": "Espécie humanoide grotesca, enorme e musculosa, de pele com saliências semelhantes a verrugas, mãos de 3 dedos e grandes presas. Vivem em culturas tribais em Freljord, Shurima e Kumungu. Os Trolls do Gelo se preparam para a guerra sob a bandeira de Trundle, o Rei Troll.",
+      "speed": 30,
+      "details": [
+        {
+          "name": "Idade",
+          "text": "Chegam à maturidade por volta dos 15 anos, mas podem viver por mais de 300 anos."
+        },
+        {
+          "name": "Tamanho",
+          "text": "Pequeno ou Médio, à escolha do jogador. Variam muito: de 2 metros a mais de 5 metros, chegando a 300 kg."
+        },
+        {
+          "name": "Herança",
+          "text": "2 pontos de Herança de Origem e mais 1 ponto nos níveis 5, 9, 13 e 17."
+        },
+        {
+          "name": "Passado",
+          "text": "Escolha um Passado disponível no Capítulo 4: Detalhamento."
+        },
+        {
+          "name": "Região",
+          "text": "1 ponto de Herança de Região e 1 idioma dessa região. Trolls do Gelo só se encontram em Freljord, os da Areia em Shurima e os da Selva em Kumungu."
+        },
+        {
+          "name": "Idiomas",
+          "text": "Você pode falar Troll, mas não pode ler ou escrever. O idioma da sua região também é só falado. Isso não impede que você aprenda essas habilidades."
+        },
+        {
+          "name": "Nomes",
+          "text": "Sem sobrenome, apenas designações ligadas à região da tribo (Norte, Sul). Ex.: Alzim, Grubgrack, Kurzol, Trundle, Uzgar, Augur, Eleja, Lujin, Zalma."
+        },
+        {
+          "name": "Linhagem",
+          "text": "Escolha um dos bandos: Troll da Areia, Troll do Gelo ou Troll da Selva."
+        }
+      ],
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 2,
+          "label": "+2 em um atributo"
+        },
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um segundo atributo"
+        },
+        {
+          "type": "SIZE_CHOICE",
+          "options": [
+            "SMALL",
+            "MEDIUM"
+          ],
+          "label": "Tamanho: Pequeno ou Médio"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 2,
+          "value": "ORIGIN",
+          "label": "2 pontos de Herança de Origem"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 1,
+          "value": "REGION",
+          "label": "1 ponto de Herança de Região"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Mordida",
+          "description": "Trolls possuem uma arma natural em suas mandíbulas, com a qual são proficientes. Com uma ação de ataque ou uma ação bônus, mordem um alvo a 5 pés causando 1d6 + bônus de proficiência + modificador de Força de dano perfurante. Ao atingir o 6º nível, a mordida passa a ser considerada mágica para ultrapassar resistência, e o dado se torna 1d8.",
+          "damage": "1d6",
+          "damageBonus": [
+            "PROFICIENCY",
+            "STRENGTH"
+          ],
+          "castingTime": "Ataque ou ação bônus",
+          "range": "5 pés"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Regeneração",
+          "description": "Em batalha, a adrenalina dá aos Trolls uma recuperação surpreendente: recuperam seu bônus de proficiência em pontos de vida a cada (10 − bônus de proficiência) rodadas. Fora de batalha, recuperam seu modificador de Constituição a cada 1 hora. Feridas causadas por dano ácido ou ígneo não se regeneram dessa forma, precisando de tratamento médico ou mágico. Você morre ou fica Inconsciente apenas se começar seu turno com 0 pontos de vida e não puder se regenerar."
+        }
+      ],
+      "lineages": [
+        {
+          "id": "troll-areia",
+          "name": "Troll da Areia",
+          "description": "Mais inteligentes e sorrateiros que os primos do Gelo, mas com tribos menos numerosas e reclusas, em Shurima e Ixtal.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Nascido do Deserto",
+              "description": "Trolls da Areia são imunes a quaisquer efeitos de calor extremo de locais e ignoram terreno difícil causado por areia."
+            },
+            {
+              "type": "SKILL",
+              "skill": "STEALTH"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Mestres Elusivos",
+              "description": "Apesar de seu tamanho, Trolls da Areia são extremamente ágeis e se escondem facilmente devido ao tom de pele arenoso. Você possui proficiência em Furtividade e vantagem nesses testes se estiver em uma região arenosa."
+            }
+          ]
+        },
+        {
+          "id": "troll-gelo",
+          "name": "Troll do Gelo",
+          "description": "Quão maior, mais burro: os maiores entre os Trolls, com os do Sul menores que os do Norte, mas geralmente mais espertos (embora nem tanto assim).",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Nascido da Tundra",
+              "description": "Trolls do Gelo são imunes a quaisquer efeitos de frio extremo de locais e ignoram terreno difícil causado por gelo. Além disso, podem escolher a Herança Variante Glacinata."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Em Caçada",
+              "description": "Com uma ação bônus, você marca um alvo de perseguição. Enquanto estiver com um inimigo marcado, recebe 15 pés de movimentação adicional ao se mover em direção a ele. Você só pode ter um inimigo marcado por vez, e cada marca dura 1 minuto.",
+              "castingTime": "Ação bônus",
+              "duration": "1 minuto",
+              "usesFormula": "PROFICIENCY",
+              "recharge": "LONG_REST"
+            }
+          ]
+        },
+        {
+          "id": "troll-selva",
+          "name": "Troll da Selva",
+          "description": "Espalhados em pequenas tribos na floresta a leste do continente Shurimane, são mais próximos dos primos da Areia do que dos nascidos na Tundra.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Nascido da Selva",
+              "description": "Os Trolls da Selva são imunes a dano venenoso e envenenamento, e ignoram terreno difícil causado por vegetação."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Visão no Escuro",
+              "description": "Devido a sua familiaridade de agir no escuro: Você enxerga na penumbra a até 120 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vastaya",
+      "name": "Vastaya",
+      "description": "Criaturas quiméricas cuja linhagem mistura sangue humano e a magia espiritual dos Vastayashai’rei, metamorfos pré-humanos de Ionia. Compartilham traços animais e humanos, vivem muito tempo e estão em sintonia com a magia natural de Runeterra. Organizam-se em tribos.",
+      "speed": 30,
+      "details": [
+        {
+          "name": "Idade",
+          "text": "Vivem muito mais que os humanos; alguns dizem ter mais de quinhentos anos e outros passam de mil. Rumores dizem até que são imortais."
+        },
+        {
+          "name": "Tamanho",
+          "text": "Pequeno ou Médio, à escolha do jogador. Altura e peso similares aos dos humanos, com exceções bem destacadas."
+        },
+        {
+          "name": "Herança",
+          "text": "2 pontos de Herança de Origem e mais 1 ponto nos níveis 5, 9, 13 e 17."
+        },
+        {
+          "name": "Passado",
+          "text": "Escolha um Passado disponível no Capítulo 4: Detalhamento."
+        },
+        {
+          "name": "Região",
+          "text": "1 ponto de Herança de Região e 1 idioma dessa região. Sua região representa onde você cresceu e influencia sua visão de mundo."
+        },
+        {
+          "name": "Idioma",
+          "text": "Cada Vastaya sabe falar o idioma de sua própria tribo."
+        },
+        {
+          "name": "Sho’Ma",
+          "text": "A parte espiritual que habita todos os seres. Permite ao Vastaya mudar aspectos visuais de sua forma; quanto mais longe da forma padrão da tribo, mais difícil manter. Apenas os Oovi-Kat mantiveram essa tradição."
+        },
+        {
+          "name": "Linhagem",
+          "text": "Escolha uma das tribos: Oovi-Kat, Marai, Shimon, Fauhwoon, Ottrani, Kiilash, Lhotlan ou Vesani."
+        }
+      ],
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 2,
+          "label": "+2 em um atributo"
+        },
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um segundo atributo"
+        },
+        {
+          "type": "SIZE_CHOICE",
+          "options": [
+            "SMALL",
+            "MEDIUM"
+          ],
+          "label": "Tamanho: Pequeno ou Médio"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 2,
+          "value": "ORIGIN",
+          "label": "2 pontos de Herança de Origem"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 1,
+          "value": "REGION",
+          "label": "1 ponto de Herança de Região"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Metamorfos",
+          "description": "Embora os Vastaya no geral sejam metamorfos, o controle dessa forma não é igual em todos. Um Vastaya pode mudar aspectos de sua forma como cor de olhos, se possui cabelos ou penas, entre outros aspectos menores, utilizando uma ação bônus e fazendo uma jogada de Transformação CD 15.\n\nTransformação = seu bônus de proficiência + seu modificador de Constituição.",
+          "castingTime": "Ação bônus"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Conexão Mágica",
+          "description": "Os Vastaya são naturalmente ligados à magia que flui em uma região, recebendo efeitos baseados no nível de magia do local:\n\nNula. Cada segundo é como uma facada na alma. Além dos efeitos de Magia Fraca, não podem mudar de forma, e a cada hora na região fazem uma salvaguarda de Constituição CD 5 (+5 a cada falha, até 20); cada falha dá 1 nível de exaustão. Usuários de mana podem canalizar 5 pontos de mana para remover um nível de exaustão, mas a salvaguarda continua a cada hora.\nFraca. Desconfortáveis: não podem obter nem utilizar Inspiração e fazem jogadas de Transformação com desvantagem.\nMédia. Os locais mais comuns; nenhum efeito positivo ou negativo.\nForte. Locais geralmente sagrados. Uma vez por rodada, podem refazer uma jogada e escolher entre os dois resultados, um número de vezes igual ao bônus de proficiência por descanso pleno.\nAlta. A magia é tão intensa que intoxica, podendo aflorar aspectos diferentes da personalidade. Além dos efeitos de Magia Forte, recuperam 1 ponto de vida por minuto e fazem jogadas de Transformação com vantagem."
+        }
+      ],
+      "lineages": [
+        {
+          "id": "oovi-kat",
+          "name": "Oovi-Kat",
+          "description": "Tribo desconhecida pelos humanos, com a reputação de ser a mais próxima do ancestral Vastayashai’rei. Única integrante conhecida: Neeko, a camaleoa curiosa. Deslocamento de 35 pés; de 1,2 a 1,6 metro. Idioma: falam o antigo Vastayashai’rei e, usando o Sho’ma, aprendem idiomas com facilidade (+2 idiomas comuns ou 1 exótico).",
+          "grants": [
+            {
+              "type": "SPEED",
+              "feet": 5
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Mestre de Sho’ma",
+              "description": "Oovi-Kat sentem a essência espiritual de um ser, o Sho’ma, e podem usar sua Metamorfose para se transformar em um ser diferente, sentir suas emoções e vislumbrar parte de suas memórias recentes. Para se transformar em outra criatura é necessário 1 minuto de observação (com a jogada de Metamorfose feita normalmente). Para sentir suas emoções e vislumbrar memórias recentes (sensações e imagens das últimas 2 horas) é necessário observar por pelo menos 5 minutos e fazer uma jogada de Perscrutação (bônus de proficiência + modificador de Carisma) com CD definida pelo Mestre. Quando em outra forma, você mantém todas as suas características."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Clone de Sho’ma",
+              "description": "Com uma ação bônus, você cria uma duplicata de si mesmo ou da criatura de que está disfarçado. O clone dura até o final do seu próximo turno e se move o máximo que conseguir em uma direção que você escolher. Um inimigo deve fazer um teste de Percepção ou Arcanismo CD 8 + bônus de proficiência + modificador de Carisma para saber quem é o verdadeiro. Se for atacado, o clone desaparece.",
+              "castingTime": "Ação bônus",
+              "usesFormula": "PROFICIENCY",
+              "recharge": "LONG_REST"
+            }
+          ]
+        },
+        {
+          "id": "marai",
+          "name": "Marai",
+          "description": "Sirênios que vivem sob o oceano a oeste do Monte Targon, com escamas pelo corpo, cauda de mamífero aquático e parte superior humanoide. Integrante mais conhecida: Nami. Em terra adaptam a cauda em pernas e o deslocamento cai para 25 pés; com cauda medem de 1,9 a 2,7 metros e com pernas de 1,4 a 2 metros.",
+          "grants": [
+            {
+              "type": "SPEED",
+              "feet": -5
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Anfíbios",
+              "description": "Os Marai respiram tanto em terra quanto na água e possuem deslocamento de natação de 50 pés. Em terra, adaptam a parte inferior do corpo em pernas (deslocamento de caminhada de 25 pés). Combate debaixo da água não causa penalidades ou desvantagens de movimentação. Debaixo da água: Você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Sonar",
+              "description": "Os Marai se comunicam em grandes profundidades por sonares, que na superfície podem ser usados como arma. Com uma ação, você desfere um cone de 15 pés. Criaturas no alcance fazem uma salvaguarda de Constituição CD 8 + bônus de proficiência + modificador de Constituição; em uma falha, sofrem 1d4 + bônus de proficiência + modificador de Constituição de dano trovejante. Criaturas surdas têm vantagem na salvaguarda.",
+              "damage": "1d4",
+              "damageBonus": [
+                "PROFICIENCY",
+                "CONSTITUTION"
+              ],
+              "castingTime": "Ação",
+              "range": "Cone de 15 pés",
+              "usesFormula": "PROFICIENCY",
+              "recharge": "LONG_REST"
+            }
+          ]
+        },
+        {
+          "id": "shimon",
+          "name": "Shimon",
+          "description": "Vastayeses de Ionia com aparência de macacos: espertos, ágeis e astutos, pregam peças em qualquer desavisado. Integrante mais conhecido: Wukong, o Macaco Rei. De 1,4 a 1,8 metro.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Sem Limites",
+              "description": "Shimon estão sempre se superando. Você pode rolar novamente uma falha em um teste de Força, Destreza ou Constituição. Você também recebe proficiência com uma perícia e um ofício à sua escolha.",
+              "usesFormula": "PROFICIENCY",
+              "recharge": "LONG_REST"
+            },
+            {
+              "type": "SKILL_CHOICE",
+              "count": 1,
+              "label": "Sem Limites: uma perícia à escolha"
+            },
+            {
+              "type": "CRAFT_CHOICE",
+              "count": 1,
+              "label": "Sem Limites: um ofício à escolha"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Fúria Símia",
+              "description": "Seus ataques desarmados têm seu dano aumentado em uma categoria. Adicionalmente, você pode dobrar o modificador de dano de seu ataque corpo a corpo um total de vezes igual ao dobro do seu bônus de proficiência por descanso pleno.",
+              "recharge": "LONG_REST"
+            }
+          ]
+        },
+        {
+          "id": "fauhwoon",
+          "name": "Fauhwoon",
+          "description": "Seres relativamente comuns em Ionia, amantes das artes, da música e da dança. A parte de baixo do corpo é de corça e a de cima humana, com grandes chifres. Deslocamento de 35 pés; de 1,4 a 1,7 metro.",
+          "grants": [
+            {
+              "type": "SPEED",
+              "feet": 5
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Protetores Naturais",
+              "description": "Fauhwoon estão intimamente ligados à proteção de algo ou alguém e se contêm em combate para priorizar a proteção. Sempre que você curar ou proteger um aliado de alguma forma usando uma ação ou ação bônus, o dano de seu próximo ataque aumenta em um na escala e recebe seu bônus de proficiência como dano adicional."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Chifres",
+              "description": "Grandes e resistentes chifres, capazes de quebrar madeira facilmente (às vezes até os ossos dos inimigos). Dano: 1d8 + modificador de Força, contundente.",
+              "damage": "1d8",
+              "damageBonus": [
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            }
+          ]
+        },
+        {
+          "id": "ottrani",
+          "name": "Ottrani",
+          "description": "Tribo de Targon que habita o topo das montanhas, inspirada em um ser celestial que compartilhou com os mortais os dons da cura. Um ou dois chifres curvos, pernas caprinas com cascos e rabo longo e peludo. De 1,2 a 1,7 metro.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Escalada",
+              "description": "Você possui um deslocamento de escalada de 20 pés."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Autossacrifício",
+              "description": "Com uma ação, você pode curar uma criatura a até 30 pés gastando um dado de vida; você recebe metade do valor curado como dano (que não pode ser reduzido ou mitigado). Você pode gastar uma quantidade de dados igual à metade do seu nível de personagem por descanso pleno (no nível 9, por exemplo, 4 dados).",
+              "castingTime": "Ação",
+              "range": "30 pés",
+              "recharge": "LONG_REST"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Resgate",
+              "description": "Com uma ação, você toca uma criatura a até 5 pés e a cura em uma quantidade igual ao seu bônus de proficiência + metade de seu modificador de Sabedoria.",
+              "castingTime": "Ação",
+              "range": "5 pés",
+              "usesFormula": "PROFICIENCY",
+              "recharge": "LONG_REST"
+            }
+          ]
+        },
+        {
+          "id": "kiilash",
+          "name": "Kiilash",
+          "description": "Vastaya de aparência felina que vivem a leste de Shurima: fortes, ágeis, com garras, presas e habilidades assustadoras de camuflagem. Integrante mais conhecido: Rengar. Deslocamento de 35 pés; de 1,6 a 2,2 metros.",
+          "grants": [
+            {
+              "type": "SPEED",
+              "feet": 5
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Garras",
+              "description": "Predador Natural: você possui garras poderosas e é proficiente com elas. Dano: 1d6 + bônus de proficiência + modificador de Destreza ou Força, cortante.",
+              "damage": "1d6",
+              "damageBonus": [
+                "PROFICIENCY",
+                "DEXTERITY"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Mordida",
+              "description": "Predador Natural: você possui presas poderosas e é proficiente com elas. Dano: 2d4 + bônus de proficiência + modificador de Força, perfurante.",
+              "damage": "2d4",
+              "damageBonus": [
+                "PROFICIENCY",
+                "STRENGTH"
+              ],
+              "castingTime": "Ataque",
+              "range": "Corpo a corpo"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Caçador Nato",
+              "description": "Seu olfato e audição são excepcionalmente bons a qualquer momento do dia: você tem vantagem em jogadas de Percepção que envolvam esses dois sentidos. Você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+            }
+          ]
+        },
+        {
+          "id": "lhotlan",
+          "name": "Lhotlan",
+          "description": "Tribo que mescla raposas e aves, entre as mais ágeis e festivas. Lançam penas afiadas como lâminas, retiradas das próprias asas, que se dissipam horas depois de longe do corpo. Integrantes mais conhecidos: Xayah e Rakan. De 1,4 a 1,8 metro.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Salto Vastaya",
+              "description": "No salto à distância, o alcance se torna 3 vezes seu valor de Força e você não precisa de movimentação prévia. No salto em altura, você pode saltar até 3 + o dobro do seu modificador de Força (mínimo de 1) pés de altura."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Plumadagas",
+              "description": "Com uma ação bônus, você cria 2 penas afiadas e as usa como adagas, causando seu bônus de proficiência como dano adicional aos ataques feitos com elas. Você pode fazer isso um número de vezes igual a 3 + seu bônus de proficiência por descanso pleno, e pode manter um número de Plumadagas igual ao dobro do seu bônus de proficiência.",
+              "castingTime": "Ação bônus",
+              "recharge": "LONG_REST"
+            }
+          ]
+        },
+        {
+          "id": "vesani",
+          "name": "Vesani",
+          "description": "Tribo nômade numerosa no passado que desapareceu sem deixar vestígios, quase apagada da história. Única integrante conhecida: Ahri. De 1,4 a 1,8 metro.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Fogo de Raposa",
+              "description": "Você conhece o truque Disparo Arcano e é capaz de conjurar uma versão especial dele com uma ação bônus. Ao conjurá-lo assim, surgem acima de sua mão até três orbes espirituais que duram até 5 rodadas; você pode dispará-las, cada uma, com uma ação de ataque. Você usa Carisma ou Sabedoria (definido na criação) como atributo de conjuração.",
+              "castingTime": "Ação bônus",
+              "usesFormula": "PROFICIENCY",
+              "recharge": "LONG_REST",
+              "label": "Fogo de Raposa e Devorar Essência: atributo",
+              "options": [
+                "Carisma",
+                "Sabedoria"
+              ]
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Devorar Essência",
+              "description": "Com uma ação, você devora a essência vital de uma criatura Inconsciente com 0 pontos de vida a menos de 5 pés; ela morre e só pode ser revivida pela magia desejo. Você recupera pontos de vida iguais ao seu modificador de Carisma ou Sabedoria (o escolhido em Fogo de Raposa) e recebe fragmentos de memória e emoções da criatura. Você pode, em vez de consumir, armazenar a essência: o máximo é metade do seu bônus de proficiência + metade do seu modificador de Carisma ou Sabedoria; armazenar mais pode confundir suas próprias memórias e sentimentos. As essências duram indefinidamente ou até você morrer. Além disso, você é afligido pela Dependência Fome de Essência, somando seu bônus de proficiência à quantidade de dias que pode passar sem se alimentar de Essência.",
+              "castingTime": "Ação",
+              "range": "5 pés",
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yordle",
+      "name": "Yordle",
+      "description": "Criaturas espirituais, mágicas e misteriosas, de forma bípede com no máximo cerca de 80 centímetros, normalmente mamíferas. Vivem em Bandópolis, mas aparecem por toda Runeterra. O Glamour, um véu mágico natural, muda como os outros os percebem. Precisam muito de convívio com outros Yordles.",
+      "speed": 30,
+      "details": [
+        {
+          "name": "Idade",
+          "text": "Vivem extremamente mais que os humanos, mas mantêm quase sempre um aspecto jovial e um humor próximo ao de crianças, o que torna praticamente impossível precisar a idade de qualquer um."
+        },
+        {
+          "name": "Tamanho",
+          "text": "Pequeno. A maioria tem menos de 1 metro de altura e pesa por volta de 30 kg."
+        },
+        {
+          "name": "Herança",
+          "text": "2 pontos de Herança de Origem e mais 1 ponto nos níveis 5, 9, 13 e 17."
+        },
+        {
+          "name": "Passado",
+          "text": "Escolha um Passado disponível no Capítulo 4: Detalhamento."
+        },
+        {
+          "name": "Região",
+          "text": "1 ponto de Herança de Região e 1 idioma dessa região. Sua região representa onde você cresceu e influencia sua visão de mundo."
+        },
+        {
+          "name": "Idiomas",
+          "text": "Você pode falar, ler e escrever a língua Yordle. Yordles aprendem outras línguas na metade do tempo normal."
+        },
+        {
+          "name": "Necessidade de Cobertura",
+          "text": "Por algum motivo, todo yordle sente necessidade de ter algo em sua cabeça, como óculos, chapéu, touca, brinco, etc."
+        },
+        {
+          "name": "Nomes",
+          "text": "Sem sobrenome; quando têm, é um apelido. Ex.: Teemo, Rumble, Veigar, Ziggs, Brundon, Tristana, Lulu, Poppy, Brandy, Kittie."
+        },
+        {
+          "name": "Linhagem",
+          "text": "Escolha um dos berços: Aquáticos, Feérico ou Felpudo."
+        }
+      ],
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 2,
+          "label": "+2 em um atributo"
+        },
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um segundo atributo"
+        },
+        {
+          "type": "SIZE",
+          "value": "SMALL"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 2,
+          "value": "ORIGIN",
+          "label": "2 pontos de Herança de Origem"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 1,
+          "value": "REGION",
+          "label": "1 ponto de Herança de Região"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Visão no Escuro",
+          "description": "Pelos olhos especiais que têm, Yordles têm uma visão superior no escuro e na penumbra. Você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Máscara da Natureza",
+          "description": "Você pode tentar se esconder mesmo quando estiver apenas levemente oculto pela folhagem, chuva forte, neve caindo ou outro fenômeno natural. Você também pode tentar se esconder atrás de uma criatura, contanto que ela seja no mínimo uma categoria de tamanho maior que a sua."
+        }
+      ],
+      "lineages": [
+        {
+          "id": "aquatico",
+          "name": "Aquáticos",
+          "description": "Yordles sintonizados com a magia dos mares, adaptados à vida marinha. Até criaturas marinhas perigosas e gigantescas parecem formar vínculos e amizades com eles.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Marítimos",
+              "description": "Você possui 35 pés de deslocamento de natação. Combate debaixo da água não causa penalidades em deslocamento ou ataques para você. Debaixo da água, sua Visão no Escuro é dobrada e você pode se comunicar normalmente com criaturas marinhas, tendo vantagem em testes de Persuasão para convencer uma criatura marinha a não atacar você ou seus aliados, desde que vocês ainda não a tenham atacado."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Escorregadio",
+              "description": "Você pode adicionar seu bônus de proficiência à sua CA e recebe resistência a dano contundente. Por outro lado, você não pode usar armadura que não seja adaptada para você."
+            }
+          ]
+        },
+        {
+          "id": "feerico",
+          "name": "Feérico",
+          "description": "Yordles sintonizados com a magia das criaturas da Clareira, que entendem coisas incompreensíveis e percebem estranhezas na realidade. Sua naturalidade com ilusões e energia quimérica lhes dá traços diferentes e certa resistência a feitiços.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Ancestralidade Feérica",
+              "description": "Você não precisa dormir. Em vez disso, medita profundamente, semiconsciente, por 4 horas por dia, podendo sonhar como exercício mental; depois disso recebe o mesmo benefício de um descanso longo. Você tem vantagem em salvaguardas contra a condição Enfeitiçado e não pode ser colocado para dormir por magias."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Essência Feérica",
+              "description": "Você toca um alvo e entende seu estado emocional atual. Se a criatura falhar em uma salvaguarda de Carisma CD 8 + bônus de proficiência + modificador de Carisma, você também saberá suas intenções. Além disso, você possui pequenas asas nas costas, recebendo 30 pés de deslocamento de voo.",
+              "range": "Toque"
+            }
+          ]
+        },
+        {
+          "id": "felpudo",
+          "name": "Felpudo",
+          "description": "A linhagem mais comum: cidadãos de Bandópolis que, em sua maioria, levam vidas pacatas. Exceto quando acabam encontrando confusões tentando ter aventuras.",
+          "grants": [
+            {
+              "type": "SPEED",
+              "feet": 10
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Capacidade Extraordinária",
+              "description": "Apesar do seu tamanho, você consegue carregar e utilizar armas pesadas feitas para criaturas Médias normalmente. Caso não esteja empunhando uma arma pesada, você possui 40 pés de deslocamento de caminhada, ao invés de 30 (a ficha mostra 40)."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Mestres do Glamour",
+              "description": "O glamour faz com que os yordles passem despercebidos ou tenham sua presença minimizada, confundindo as pessoas ou desviando a atenção delas. Você possui pontos de Glamour iguais à metade do seu bônus de proficiência por descanso pleno. Sempre que for atacado, como reação, pode gastar um ponto para rolar o dado de Glamour e reduzir o resultado da jogada de ataque ou somá-lo à sua salvaguarda.\n\nDado de Glamour: 1d4 (bônus +2), 1d6 (+3), 2d4 (+4), 2d6 (+5), 3d4 (+6).",
+              "castingTime": "Reação",
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST",
+              "diceByProficiency": {
+                "2": "1d4",
+                "3": "1d6",
+                "4": "2d4",
+                "5": "2d6",
+                "6": "3d4"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "runinata",
+      "name": "Runinata",
+      "description": "Formas de vida únicas surgidas pelos caprichos da magia e das Runas Globais: uma reverberação das Runas, um conjurador poderoso o bastante para criar vida, experimentos mágicos ou a total transformação de outro ser. Cada Runinata é o único de sua espécie, sem cultura própria, e costuma despertar com a mente em branco. Monte seus traços com o mestre.",
+      "speed": 30,
+      "usesTraits": true,
+      "details": [
+        {
+          "name": "Idade",
+          "text": "A idade padrão é baseada na dos Humanos, mas pode mudar sensivelmente com base nos traços escolhidos."
+        },
+        {
+          "name": "Tamanho",
+          "text": "Pequeno ou Médio, com altura condizente."
+        },
+        {
+          "name": "Herança",
+          "text": "0 pontos de Herança de Origem. O traço maior Herança dá 2 pontos de Heranças Gerais."
+        },
+        {
+          "name": "Idiomas",
+          "text": "Runinatas não possuem nenhuma forma de comunicação e não sabem falar, ler ou escrever nenhum idioma. Os traços Comunicação, Comunicação Ancestral e Comunicação Telepática mudam isso."
+        },
+        {
+          "name": "Região",
+          "text": "Qualquer região, mas você não recebe as proficiências dela, a não ser com o traço menor Oriundo."
+        },
+        {
+          "name": "Passado",
+          "text": "Runinatas não possuem Passado, a não ser com o traço menor Antecedente."
+        },
+        {
+          "name": "Traços",
+          "text": "No lugar das características das outras origens, você recebe Traços Menores e Maiores na quantidade combinada com o mestre (Controlado 3/2, Moderado 4/3, Forte 6/4). Desvantagens e a conversão de um traço de cada tipo dão pontos de Origem, que compram mais traços (Menor 1, Maior 3, Superior 6)."
+        },
+        {
+          "name": "Reprodução",
+          "text": "A grande maioria é estéril. Como os outros detalhes, isso é decidido com o Mestre."
+        }
+      ],
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 2,
+          "label": "+2 em um atributo"
+        },
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um segundo atributo"
+        },
+        {
+          "type": "SIZE_CHOICE",
+          "options": [
+            "SMALL",
+            "MEDIUM"
+          ],
+          "label": "Tamanho: Pequeno ou Médio"
+        }
+      ]
     }
   ],
   "classes": [

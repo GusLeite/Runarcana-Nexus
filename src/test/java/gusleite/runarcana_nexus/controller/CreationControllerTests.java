@@ -49,7 +49,8 @@ class CreationControllerTests {
         mvc.perform(get("/creation/catalog").header("Authorization", "Bearer " + login("gaudron")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.origins[0].id").value("teste-origem"))
-                .andExpect(jsonPath("$.classes[0].hitDie").value(6));
+                .andExpect(jsonPath("$.classes[0].hitDie").value(6))
+                .andExpect(jsonPath("$.origins[1].lineages[0].levels[0].level").value(2));
     }
 
     @Test
@@ -181,6 +182,8 @@ class CreationControllerTests {
         preview(token, FULL.replace(HERITAGES, "\"heritages\":[{\"id\":\"teste-tribo\",\"option\":\"Sol\"},{\"id\":\"teste-tribo\"}]"))
                 .andExpect(jsonPath("$.complete").value(true))
                 .andExpect(jsonPath("$.heritages[0].times").value(2))
+                // requires: só com a Targon Teste escolhida
+                .andExpect(jsonPath("$.heritageOptions[?(@.id == 'teste-requer')].reason").value("pré-requisito: Targon Teste"))
                 .andExpect(jsonPath("$.features[?(@.name == 'Tribo Teste (Sol) (2×)')].source").value("Herança"));
 
         preview(token, FULL.replace("," + HERITAGES, ""))
@@ -206,6 +209,8 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.features[?(@.name == 'Urro Teste')].uses").value(2))
                 // habilidade com opção e proficiência mista (aqui, um ofício)
                 .andExpect(jsonPath("$.features[?(@.name == 'Resistente (Gélido)')].source").value("Linhagem: Sol"))
+                // ganho do 2º nível da linhagem não entra na ficha de 1º nível
+                .andExpect(jsonPath("$.features[?(@.name == 'Sopro Teste')]").isEmpty())
                 .andExpect(jsonPath("$.crafts", hasItem("alquimia")));
 
         preview(token, tribal.replace("CRAFT:alquimia", "MARTIAL_WEAPON") + ",\"lineageId\":\"sol\"}")
@@ -218,6 +223,66 @@ class CreationControllerTests {
                         .contentType(MediaType.APPLICATION_JSON).content(tribal + ",\"lineageId\":\"sol\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.lineage").value("Sol"));
+    }
+
+    @Test
+    void runinataMontaAOrigemComTracos() throws Exception {
+        String token = login("gaudron");
+        // Modo Teste: 1 traço menor e 1 maior. Sem Passado (só com o traço que libera).
+        String base = "{\"characterName\":\"Rúnio\",\"age\":5,\"height\":1.2,\"regionId\":\"TARGON\",\"originId\":\"teste-runinata\","
+                + "\"classId\":\"ARCANIST\"," + ATTRS + ",\"choices\":{\"origin:teste-runinata:0\":[\"INTELLIGENCE\"],"
+                + "\"origin:teste-runinata:1\":[\"SMALL\"],\"class:ARCANIST:1\":[\"ARCANA\",\"INSIGHT\"],\"trait:t-garras:0:0\":[\"Cortante\"]}";
+
+        preview(token, base + "}")
+                .andExpect(jsonPath("$.errors", hasItem("Escolha o modo de traços combinado com o mestre.")));
+
+        String ok = base + ",\"traitBudget\":\"TESTE\",\"traits\":[{\"id\":\"t-escalador\"},{\"id\":\"t-garras\"}]";
+        preview(token, ok + "}")
+                .andExpect(jsonPath("$.complete").value(true))
+                .andExpect(jsonPath("$.traitBudget.minorUsed").value(1))
+                .andExpect(jsonPath("$.traitBudget.majorUsed").value(1))
+                .andExpect(jsonPath("$.features[?(@.name == 'Garras (Cortante)')].source").value("Traço: Garras Teste"))
+                .andExpect(jsonPath("$.features[?(@.name == 'Escalador Teste')].source").value("Traço"))
+                // traço silencioso não vira passiva própria
+                .andExpect(jsonPath("$.features[?(@.name == 'Garras Teste')]").isEmpty());
+
+        preview(token, ok + ",\"backgroundId\":\"estudioso\"}")
+                .andExpect(jsonPath("$.errors", hasItem("Sem o traço Antecedente, a Runinata não tem Passado.")));
+        preview(token, ok.replace("t-escalador", "t-antecedente") + "}")
+                .andExpect(jsonPath("$.errors", hasItem("Escolha um passado.")));
+        preview(token, ok.replace("t-escalador", "t-aranha") + "}")
+                .andExpect(jsonPath("$.errors", hasItem("O traço Aranha Teste precisa de: Escalador Teste.")))
+                .andExpect(jsonPath("$.traitOptions[?(@.id == 't-aranha')].reason").value("precisa de Escalador Teste"));
+        preview(token, base + ",\"traitBudget\":\"TESTE\",\"traits\":[{\"id\":\"t-escalador\"}]}")
+                .andExpect(jsonPath("$.errors", hasItem("Ainda sobram traços ou pontos de Origem para escolher.")));
+
+        // Superior (6 pontos): 3 de desvantagens + os dois traços do modo convertidos (1 + 2).
+        String superior = base + ",\"traitBudget\":\"TESTE\",\"traits\":[{\"id\":\"t-super\",\"detail\":\"Voar\"}],"
+                + "\"drawbacks\":[{\"id\":\"d-fraco\",\"detail\":\"Ígneo\"},{\"id\":\"d-fraco\",\"detail\":\"Gélido\"},"
+                + "{\"id\":\"d-lento\"},{\"id\":\"d-lento\"}]}";
+        preview(token, superior.replace(",\"trait:t-garras:0:0\":[\"Cortante\"]", ""))
+                .andExpect(jsonPath("$.complete").value(true))
+                .andExpect(jsonPath("$.traitBudget.minorConverted").value(true))
+                .andExpect(jsonPath("$.traitBudget.majorConverted").value(true))
+                .andExpect(jsonPath("$.traitBudget.points").value(6.0))
+                .andExpect(jsonPath("$.speed").value(20.0))
+                .andExpect(jsonPath("$.features[?(@.name == 'Super Teste (Voar)')].source").value("Traço"))
+                .andExpect(jsonPath("$.features[?(@.name == 'Fraco Teste (Ígneo, Gélido) (2×)')].source").value("Desvantagem"));
+        preview(token, superior.replace("\"detail\":\"Voar\"", "\"detail\":\" \""))
+                .andExpect(jsonPath("$.errors", hasItem("Responda em Super Teste: Qual?")));
+        preview(token, superior.replace("{\"id\":\"d-lento\"},", ""))
+                .andExpect(jsonPath("$.errors", hasItem("Os traços escolhidos passam do que o modo Teste e as desvantagens permitem.")));
+
+        // Tamanho fixo de um traço vence a escolha da origem; Herança dá pontos de Heranças Gerais.
+        preview(token, base + ",\"traitBudget\":\"TESTE\",\"traits\":[{\"id\":\"t-chaveiro\"},{\"id\":\"t-heranca\"}]}")
+                .andExpect(jsonPath("$.size").value("TINY"))
+                .andExpect(jsonPath("$.heritagePools[0].scope").value("GENERAL"))
+                .andExpect(jsonPath("$.heritagePools[0].points").value(2));
+
+        mvc.perform(post("/creation").header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON).content(ok + "}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.origin").value("Runinata Teste"));
     }
 
     @Test

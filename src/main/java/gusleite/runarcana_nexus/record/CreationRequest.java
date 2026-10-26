@@ -24,8 +24,16 @@ public record CreationRequest(
         Map<Attribute, Integer> baseAttributes,
         Map<String, List<String>> choices,
         // Heranças compradas com os pontos de Herança. Repetir o id = escolher de novo (quando maxTimes permite).
-        List<HeritagePick> heritages
+        List<HeritagePick> heritages,
+        // Runinata (origem com usesTraits): modo de traços combinado com o mestre (id de budgets),
+        // traços e desvantagens escolhidos. Repetir o id = escolher de novo.
+        String traitBudget,
+        List<TraitPick> traits,
+        List<TraitPick> drawbacks
 ) {
     // option: a sub-escolha da Herança (ex.: a tribo do Meio-Vastaya), quando ela tem options.
     public record HeritagePick(String id, String option) {}
+
+    // detail: resposta livre que o traço pede (ex.: o tipo de dano da Resistência Natural).
+    public record TraitPick(String id, String detail) {}
 }

@@ -8,9 +8,15 @@ public record RuleLineage(
         String id,
         String name,
         String description,
-        List<Grant> grants
+        List<Grant> grants,
+        // Ganhos do 2º nível em diante (subida de nível). Ex.: a Forma Dracônica de cada essência no 8º.
+        List<RuleLevel> levels
 ) {
     public List<Grant> grantsOrEmpty() {
         return grants == null ? List.of() : grants;
+    }
+
+    public List<RuleLevel> levelsOrEmpty() {
+        return levels == null ? List.of() : levels;
     }
 }

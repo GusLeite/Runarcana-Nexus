@@ -15,8 +15,20 @@ public record RuleOption(
         List<String> languages,
         List<Grant> grants,
         // Linhagens (tribos) da origem; quando há, escolher uma é obrigatório.
-        List<RuleLineage> lineages
+        List<RuleLineage> lineages,
+        // A origem monta seus traços com o sistema de traços (Runinata) e só tem Passado com o traço que libera.
+        Boolean usesTraits,
+        // Ganhos do 2º nível em diante (subida de nível), como nas classes. Ex.: o sopro do Meio-Dragão no 2º.
+        List<RuleLevel> levels
 ) {
+    public List<RuleLevel> levelsOrEmpty() {
+        return levels == null ? List.of() : levels;
+    }
+
+    public boolean usesTraitsOrFalse() {
+        return Boolean.TRUE.equals(usesTraits);
+    }
+
     public List<RuleLineage> lineagesOrEmpty() {
         return lineages == null ? List.of() : lineages;
     }

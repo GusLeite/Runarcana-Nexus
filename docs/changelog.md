@@ -2,6 +2,23 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-26 — Ganhos por nível na origem e na linhagem (`feature/character-sheet`)
+- `levels` em origem e linhagem (mesmo formato das classes, níveis 2 a 20), conferidos ao subir. Não entram na ficha de 1º nível; o cartão do assistente mostra "Ao subir de nível". Aplicação fica para a subida de nível.
+- **Meio-Dragão**: sopro de cada essência no 2º (usos = bônus de proficiência, dano bônus×d6, área da essência), Forma Dracônica da essência no 8º (usos = metade do bônus, até 3 horas) e Resistência Dracônica no 15º (dano mágico da essência). Saíram as passivas de texto do 1º nível.
+- Testes: validação de níveis em origem/linhagem e ganho de nível fora da prévia de 1º nível. Conferido no sandbox (cartão do Meio-Dragão).
+
+## 2026-10-26 — Runinata com etapa de Traços e Variante Nebulon (`feature/character-sheet`)
+- Origem **Runinata** (`usesTraits`): etapa **Traços** no assistente (`TraitStep.jsx`), com o modo combinado com o mestre (Controlado 3/2, Moderado 4/3, Forte 6/4), 50 traços (Menores, Maiores, Superiores) e 19 desvantagens em `rules/tracos.json`. O back confere vagas, pontos de Origem (desvantagens + conversão automática de até 1 traço de cada tipo), máximo, pré-requisito e resposta (`detail`); cada traço é uma fonte de concessões (perícias, ofícios e habilidades com opção vão para Escolhas). Sem Antecedente a Runinata não tem Passado. Herança Núcleo Dividido.
+- Regras novas: pontos de Herança `GENERAL` (só Gerais), tamanho fixo vence `SIZE_CHOICE`, Herança com `requires` (outra Herança escolhida).
+- **Variante Nebulon** como Herança de Origem do Construto; Gás Corrosivo, Ionizado e Termiônico passam a exigir a variante.
+- Chicote de Espinhos do Floral soma Destreza; Chireano com pontos de Origem e região livre para o Troll confirmados.
+- Testes: `runinataMontaAOrigemComTracos`, `conferenciaDosTracos`, `requires` de Herança e helpers de traços em `rules.test.js`. Conferido no sandbox: Runinata criada no navegador com traços, desvantagens e respostas.
+
+## 2026-10-26 — Origens Antroplantæ, Chireano, Meio-Dragão, Troll, Vastaya e Yordle (`feature/character-sheet`)
+- Seis origens novas no `criacao.json`, com as linhagens: **Antroplantæ** (Arbóreo com Fibras opcional, Floral com Florescência), **Chireano** (Nocti, Fulgor; tamanho pela colônia), **Meio-Dragão** (cinco essências, cada uma com resistência/fraqueza, três armas naturais, sopro e forma), **Troll** (da Areia, do Gelo, da Selva), **Vastaya** (oito tribos, deslocamento pela tribo) e **Yordle** (Aquáticos, Feérico, Felpudo com Mestres do Glamour).
+- 66 Heranças de Origem novas no `herancas.json` (inclui as 3 do Nebulon, variante do Construto, que ficam invisíveis até a variante ser cadastrada); Variante Glacinata liberada para Antroplantæ e Troll.
+- Leituras provisórias até o usuário confirmar: Chireano com pontos de Origem, Chicote de Espinhos sem Destreza, região livre para o Troll, traços do Meio-Dragão por nível em texto. Runinata fica para uma etapa própria.
+
 ## 2026-10-25 — Origem Construto (`feature/character-sheet`)
 - Origem **Construto**: +2/+1 em atributos, tamanho Pequeno ou Médio, 2 pontos de Herança de Origem e 1 de Região, **Construto Vivo** e **Proteção Ajustável** (texto, com a tabela de modos), Peculiaridades e nomes no cartão.
 - Modelos como linhagens: **Brutal** (Ultrapassar os Limites, Resistente com o tipo de dano à escolha), **Emissário** (Geolocalização, Funcional) e **Ligeiro** (Energia Cinética, Duelista).

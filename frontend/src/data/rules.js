@@ -187,7 +187,7 @@ export function groupAbilities(abilities) {
 
 // Tipo de Herança (rules/herancas.json) e de ponto de Herança (concessão HERITAGE_POINTS).
 export const HERITAGE_CATEGORIES = { GENERAL: 'Geral', ORIGIN: 'de Origem', REGION: 'de Região' }
-export const HERITAGE_SCOPES = { REGION: 'Herança de Região', ORIGIN: 'Herança de Origem', ANY: 'Herança' }
+export const HERITAGE_SCOPES = { REGION: 'Herança de Região', ORIGIN: 'Herança de Origem', GENERAL: 'Herança Geral', ANY: 'Herança' }
 
 // As Heranças escolhidas vão para o back como lista de { id, option }; repetir o id = escolher de novo.
 export const heritageTimes = (picks, id) => picks.filter(p => p.id === id).length
@@ -205,6 +205,29 @@ export function removeHeritage(picks, id) {
 
 // A opção (ex.: tribo do Meio-Vastaya) vale para todas as escolhas da mesma Herança.
 export const setHeritageOption = (picks, id, option) => picks.map(p => (p.id === id ? { ...p, option } : p))
+
+// Traços da Runinata (rules/tracos.json). Traços e desvantagens vão para o back como lista de { id, detail };
+// repetir o id = escolher de novo, e cada escolha tem a sua resposta (detail), quando o traço pede uma.
+export const TRAIT_TIERS = { MINOR: 'Menor', MAJOR: 'Maior', SUPERIOR: 'Superior' }
+
+export const traitTimes = (picks, id) => picks.filter(p => p.id === id).length
+
+export const addTrait = (picks, id) => [...picks, { id, detail: null }]
+
+// Tira a última escolha do traço.
+export function removeTrait(picks, id) {
+  const i = picks.map(p => p.id).lastIndexOf(id)
+  return i < 0 ? picks : picks.filter((_, n) => n !== i)
+}
+
+// Resposta da n-ésima escolha do traço (0 = a primeira).
+export function setTraitDetail(picks, id, n, detail) {
+  let seen = -1
+  return picks.map(p => (p.id === id && ++seen === n ? { ...p, detail } : p))
+}
+
+// Pontos de Origem com meio ponto: 2.5 → "2,5".
+export const formatPoints = n => n.toLocaleString('pt-BR', { maximumFractionDigits: 1 })
 
 // Deslocamento em pés, como no livro.
 export const formatFeet = ft => ft.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' pés'
