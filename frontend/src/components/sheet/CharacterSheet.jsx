@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { fetchSheet, rest as restApi, setAbilityUses } from '../../api/character.js'
+import { chooseDefense as chooseDefenseApi, fetchSheet, rest as restApi, setAbilityUses } from '../../api/character.js'
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
 import { rollCheck, rollDice } from '../../data/rules.js'
@@ -74,6 +74,13 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   }, [token])
 
   useEffect(load, [load])
+
+  // Defesa em uso (sem armadura, CA alternativa ou armadura do inventário): o back devolve a CA recalculada.
+  const chooseDefense = useCallback(key => {
+    chooseDefenseApi(token, key)
+      .then(armorClass => setState(s => (s.status === 'ready' ? { ...s, sheet: { ...s.sheet, armorClass } } : s)))
+      .catch(fail)
+  }, [token, fail])
 
   useEffect(() => {
     if (!toast) return
@@ -227,7 +234,8 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       </header>
 
       <main className={'sheet-body tab-' + tab}>
-        <SheetHero character={character} sheet={sheet} />
+        <SheetHero character={character} sheet={sheet} armorClass={state.status === 'ready' ? state.sheet.armorClass : null}
+          onDefense={chooseDefense} />
 
         {state.status === 'loading' && (
           <div className="sheet-state" role="status"><div className="hex-spinner" />Abrindo a ficha…</div>

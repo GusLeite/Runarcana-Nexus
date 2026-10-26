@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-26 — Classe de Armadura e CAs alternativas (`feature/character-sheet`)
+- Concessões `ARMOR_CLASS` (opção de defesa com fórmula) e `AC_BONUS` (bônus); a ficha guarda as regras (`character_armor_rules`) e a defesa em uso (`Character.defense`). `ArmorClassCalculator` junta sem armadura, CAs alternativas e armaduras do inventário (média até +2 de DES, pesada sem DES, RD).
+- Catálogo: Pele de Árvore (10 + DES + CON, sem armadura), Proteção Ajustável do Construto (Nulo 11+DES, Leve 13+DES, Médio 16+DES máx. 2 RD 1, Pesado 19 RD 2 para Brutal/Emissário), Escorregadio (+ bônus de proficiência), Armadura Natural do Auroque (+1 sem armadura), Armadura Natural da Runinata (10 + DES + atributo à escolha).
+- `GET /character/me` traz `armorClass`; `PATCH /character/me/defense` escolhe a defesa. Front: CA no herói (`ArmorClass.jsx`) com a lista de defesas, e na ficha em construção.
+- Testes: CA na prévia e na ficha, troca de defesa, armadura média do inventário. Conferido no sandbox com um Construto Brutal (Pesado 19 RD 2 → Leve 15, salvo).
+
 ## 2026-10-26 — Tipos de deslocamento (`feature/character-sheet`)
 - `SPEED` com `value` (`SWIM`, `CLIMB`, `FLY`, `BURROW`, `ALL`); a ficha guarda os outros deslocamentos em `character_speeds` (`MovementType`) e a ficha/prévia mandam `speeds`.
 - Catálogo: Marai nada 50, Ottrani escala 20, Yordle Aquático nada 35, Feérico voa 30; traços Aquático, Escalador, Alado e Escavação da Runinata crescem 15, 15, 10… (`speedSteps`); Deslocamento reduzido tira de todos.

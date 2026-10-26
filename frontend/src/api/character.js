@@ -1,6 +1,6 @@
 import { request } from './auth.js'
 
-// Ficha do personagem logado: { character, inventory, abilities }.
+// Ficha do personagem logado: { character, armorClass, inventory, abilities }.
 // 404 quando a ficha ainda não foi criada; 401 quando a sessão venceu.
 export const fetchSheet = token => request('/character/me', { token })
 
@@ -9,3 +9,6 @@ export const setAbilityUses = (token, abilityId, usesLeft) =>
 
 // type: 'SHORT' | 'LONG'. Devolve a lista de habilidades atualizada.
 export const rest = (token, type) => request('/character/me/rest', { method: 'POST', token, body: { type } })
+
+// Defesa em uso: "UNARMORED", "RULE:<n>" ou "ITEM:<id>". Devolve a CA recalculada.
+export const chooseDefense = (token, key) => request('/character/me/defense', { method: 'PATCH', token, body: { key } })

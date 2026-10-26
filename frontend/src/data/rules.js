@@ -265,6 +265,9 @@ export function grantLabel(g, crafts = []) {
     case 'CRAFT_CHOICE': return g.label ?? plural(g.count, 'ofício', 'ofícios') + ' à escolha'
     case 'LANGUAGE': return 'Idioma: ' + g.value
     case 'LANGUAGE_CHOICE': return g.label ?? plural(g.count, 'idioma', 'idiomas') + (g.fromRegion ? ' da região' : ' à escolha')
+    case 'ARMOR_CLASS': return 'CA: ' + g.name + (g.options?.length ? ' (atributo à escolha)' : '')
+    case 'AC_BONUS': return 'CA: ' + g.name + ' ' + (g.usesFormula === 'PROFICIENCY' ? '+bônus de proficiência' : signed(g.amount ?? 0))
+      + (g.armor?.unarmoredOnly ? ' sem armadura' : '')
     case 'HERITAGE_POINTS': return g.label ?? signed(g.amount) + (Math.abs(g.amount) === 1 ? ' ponto de ' : ' pontos de ') + HERITAGE_SCOPES[g.value ?? 'ANY']
     default: return g.type
   }
@@ -273,7 +276,8 @@ export function grantLabel(g, crafts = []) {
 // Nome em PT de uma opção de escolha (atributo, perícia, tamanho, ofício ou idioma).
 export function choiceOptionName(type, id, crafts = []) {
   switch (type) {
-    case 'ATTRIBUTE_CHOICE': return attrName(id)
+    case 'ATTRIBUTE_CHOICE':
+    case 'ARMOR_CLASS': return attrName(id)
     case 'SKILL_CHOICE': return SKILL_NAMES[id] ?? id
     case 'SIZE_CHOICE': return SIZE_NAMES[id] ?? id
     case 'CRAFT_CHOICE': return crafts.find(k => k.id === id)?.name ?? id

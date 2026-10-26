@@ -24,6 +24,8 @@ public record CreationPreview(
         double speed,
         // Todos os deslocamentos (caminhada primeiro).
         List<SpeedLine> speeds,
+        // CA com as opções de defesa da origem (sem inventário ainda). Nulo sem origem.
+        ArmorClassResponse armorClass,
         int gold,
         CreatureSize size,
         List<String> languages,

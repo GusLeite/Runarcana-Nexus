@@ -117,6 +117,35 @@
         15,
         10
       ]
+    },
+    {
+      "id": "t-casca",
+      "name": "Casca Teste",
+      "tier": "MAJOR",
+      "description": "CA 10 + DES + atributo.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Casca",
+          "options": [
+            "STRENGTH",
+            "CONSTITUTION"
+          ],
+          "armor": {
+            "base": 10,
+            "blocksArmor": true
+          }
+        },
+        {
+          "type": "AC_BONUS",
+          "name": "Couro",
+          "amount": 1,
+          "armor": {
+            "unarmoredOnly": true
+          }
+        }
+      ]
     }
   ],
   "drawbacks": [

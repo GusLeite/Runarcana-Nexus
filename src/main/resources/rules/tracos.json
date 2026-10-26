@@ -607,22 +607,22 @@
       "id": "armadura-natural",
       "name": "Armadura Natural",
       "tier": "SUPERIOR",
-      "description": "Escolha um de seus seis atributos, com exceção de Destreza.",
-      "silent": true,
+      "description": "Escolha um de seus seis atributos, com exceção de Destreza. Desde que não esteja utilizando uma armadura, você passa a calcular sua CA da seguinte maneira: 10 + seu modificador de Destreza + o modificador do atributo escolhido. Uma vez escolhido, o atributo não pode ser alterado.",
       "grants": [
         {
-          "type": "FEATURE",
-          "abilityType": "PASSIVE",
+          "type": "ARMOR_CLASS",
           "name": "Armadura Natural",
-          "description": "Desde que não esteja utilizando uma armadura, sua CA é 10 + seu modificador de Destreza + o modificador do atributo escolhido. Uma vez escolhido, o atributo não pode ser alterado.",
-          "label": "Armadura Natural: atributo",
+          "label": "Armadura Natural: atributo somado à CA",
           "options": [
-            "Força",
-            "Constituição",
-            "Inteligência",
-            "Sabedoria",
-            "Carisma"
-          ]
+            "STRENGTH",
+            "CONSTITUTION",
+            "INTELLIGENCE",
+            "WISDOM",
+            "CHARISMA"
+          ],
+          "armor": {
+            "base": 10
+          }
         }
       ]
     },

@@ -95,6 +95,17 @@ public class Character {
     @Enumerated(EnumType.STRING)
     private CreatureSize size;
 
+    // CAs alternativas e bônus de CA da origem/linhagem/traços (Pele de Árvore, Proteção Ajustável, Escorregadio...).
+    @ElementCollection
+    @CollectionTable(name = "character_armor_rules", joinColumns = @JoinColumn(name = "character_id"))
+    @OrderColumn(name = "position")
+    private List<ArmorRule> armorRules = new ArrayList<>();
+
+    // Defesa em uso, escolhida na ficha: "UNARMORED", "RULE:<n>" (n-ésima opção de defesa de armorRules, sem contar os bônus)
+    // ou "ITEM:<id do PlayerItems>".
+    // Nulo = a de maior CA.
+    private String defense;
+
     @ElementCollection
     @CollectionTable(name = "character_languages", joinColumns = @JoinColumn(name = "character_id"))
     @Column(name = "language")

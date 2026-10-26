@@ -13,6 +13,7 @@ import gusleite.runarcana_nexus.enums.SkillType;
 import gusleite.runarcana_nexus.enums.UsesFormula;
 import gusleite.runarcana_nexus.exception.ApiException;
 import gusleite.runarcana_nexus.model.auth.Account;
+import gusleite.runarcana_nexus.model.player.ArmorRule;
 import gusleite.runarcana_nexus.model.player.Background;
 import gusleite.runarcana_nexus.model.player.Character;
 import gusleite.runarcana_nexus.model.player.CharacterAbility;
@@ -40,6 +41,7 @@ import gusleite.runarcana_nexus.repository.BackGroundRepository;
 import gusleite.runarcana_nexus.repository.CharacterAbilityRepository;
 import gusleite.runarcana_nexus.repository.CharacterClassRepository;
 import gusleite.runarcana_nexus.repository.CharacterRepository;
+import gusleite.runarcana_nexus.rules.ArmorFormula;
 import gusleite.runarcana_nexus.rules.AttributeMethods;
 import gusleite.runarcana_nexus.rules.Grant;
 import gusleite.runarcana_nexus.rules.RuleCatalog;
@@ -144,6 +146,7 @@ public class CreationService {
         c.setCurrentHp(b.maxHp());
         c.setSpeed(b.speed());
         c.getOtherSpeeds().putAll(b.otherSpeedsTotal());
+        c.getArmorRules().addAll(b.armorRules);
         c.setSize(b.size);
         c.getLanguages().addAll(b.languages);
         // A ficha guarda o nome do ofício (não o id do catálogo), para mostrar sem depender do catálogo.
@@ -239,6 +242,10 @@ public class CreationService {
                     }
                     case CRAFT -> b.crafts.add(g.value());
                     case LANGUAGE -> b.languages.add(g.value());
+                    case ARMOR_CLASS -> {
+                        if (!g.hasOptions()) b.armorRules.add(armorRule(g, null));
+                    }
+                    case AC_BONUS -> b.armorRules.add(armorBonus(g));
                     case HERITAGE_POINTS -> {
                         b.heritagePoints += g.amount();
                         b.pools.merge(g.value() == null ? "ANY" : g.value(), g.amount(), Integer::sum);
@@ -302,6 +309,14 @@ public class CreationService {
                         }
                         b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, selected, s.label(), null));
                     }
+                    case ARMOR_CLASS -> {
+                        // CA com atributo à escolha (Armadura Natural da Runinata): options = atributos.
+                        if (!g.hasOptions()) break;
+                        String label = orLabel(g, g.name() + ": escolha o atributo");
+                        List<String> selected = choose(picked, g.options(), 1, label, b.errors);
+                        b.armorRules.add(armorRule(g, selected.isEmpty() ? null : Attribute.valueOf(selected.getFirst())));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, 1, g.options(), selected, s.label(), null));
+                    }
                     case SIZE_CHOICE -> {
                         // Tamanho fixo de outra fonte (ex.: traço Chaveirinho) vence a escolha.
                         if (b.sizeFixed) break;
@@ -347,6 +362,36 @@ public class CreationService {
         if (r.age() == null || r.age() < 1) b.errors.add("Informe a idade (1 ou mais).");
         if (r.height() == null || r.height() <= 0) b.errors.add("Informe a altura em metros.");
         return b;
+    }
+
+    // ---------- Classe de Armadura ----------
+
+    // Opção de defesa (ARMOR_CLASS). chosen: atributo escolhido quando a concessão tem options.
+    static ArmorRule armorRule(Grant g, Attribute chosen) {
+        ArmorFormula f = g.armor() == null ? new ArmorFormula(null, null, null, null, null, null, null, null) : g.armor();
+        ArmorRule r = new ArmorRule();
+        r.setName(ArmorClassCalculator.withAttribute(g.name() != null ? g.name() : g.label(), chosen));
+        r.setBase(f.base());
+        r.setDex(f.dexOrTrue());
+        r.setDexMax(f.dexMax());
+        r.setAttribute(chosen != null ? chosen : f.attribute());
+        r.setProficiency(Boolean.TRUE.equals(f.proficiency()));
+        r.setReduction(f.reduction());
+        r.setBlocksArmor(Boolean.TRUE.equals(f.blocksArmor()));
+        return r;
+    }
+
+    // Bônus de CA (AC_BONUS): amount e/ou o bônus de proficiência (usesFormula PROFICIENCY).
+    static ArmorRule armorBonus(Grant g) {
+        ArmorFormula f = g.armor();
+        ArmorRule r = new ArmorRule();
+        r.setName(g.name() != null ? g.name() : g.label() != null ? g.label() : "Bônus de CA");
+        r.setBonus(true);
+        r.setAmount(g.amount());
+        r.setProficiency(g.usesFormula() == UsesFormula.PROFICIENCY || (f != null && Boolean.TRUE.equals(f.proficiency())));
+        r.setUnarmoredOnly(f != null && Boolean.TRUE.equals(f.unarmoredOnly()));
+        r.setBlocksArmor(f != null && Boolean.TRUE.equals(f.blocksArmor()));
+        return r;
     }
 
     // ---------- Traços (Runinata) ----------
@@ -846,6 +891,8 @@ public class CreationService {
         // Bônus (ou redução) que vale para todos os deslocamentos ("Reduz 5 pés de todos os deslocamentos base").
         double allSpeedBonus;
         final Map<MovementType, Double> otherSpeeds = new EnumMap<>(MovementType.class);
+        // CAs alternativas e bônus de CA (viram Character.armorRules).
+        final List<ArmorRule> armorRules = new ArrayList<>();
         int gold;
 
         // Atributo sem valor base conta como 10 só para a prévia (a criação exige os seis).
@@ -904,7 +951,9 @@ public class CreationService {
                     .toList();
             return new CreationPreview(attrs, pointBuy, skillLines, saveLines, featureLines, List.copyOf(choices),
                     maxHp(), klass == null ? 0 : klass.hitDie(), speed(),
-                    origin == null ? List.of() : SpeedLine.of(speed(), otherSpeedsTotal()), gold, size, List.copyOf(languages),
+                    origin == null ? List.of() : SpeedLine.of(speed(), otherSpeedsTotal()),
+                    origin == null ? null : ArmorClassCalculator.calculate(this::modifier, LEVEL_ONE_PROFICIENCY, armorRules, List.of(), null),
+                    gold, size, List.copyOf(languages),
                     List.copyOf(crafts), heritagePoints,
                     pools.entrySet().stream()
                             .map(e -> new HeritagePool(e.getKey(), e.getValue(), spent.getOrDefault(e.getKey(), 0)))

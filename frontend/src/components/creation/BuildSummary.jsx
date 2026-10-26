@@ -41,6 +41,11 @@ export default function BuildSummary({ preview, catalog, draft }) {
 
           <dl className="build-facts">
             <div><dt>Tamanho</dt><dd>{SIZE_NAMES[preview.size] ?? '—'}</dd></div>
+            {preview.armorClass && (
+              <div><dt>Classe de Armadura</dt><dd>{preview.armorClass.value}
+                {preview.armorClass.reduction > 0 && ' · RD ' + preview.armorClass.reduction}
+                {' (' + preview.armorClass.options.find(o => o.key === preview.armorClass.selected)?.label + ')'}</dd></div>
+            )}
             {preview.traitBudget && (
               <div><dt>Traços</dt><dd>{preview.traits.filter(t => t.kind === 'TRAIT').reduce((s, t) => s + t.times, 0)} escolhidos
                 · {formatPoints(preview.traitBudget.pointsSpent)} de {formatPoints(preview.traitBudget.points)} pontos de Origem</dd></div>

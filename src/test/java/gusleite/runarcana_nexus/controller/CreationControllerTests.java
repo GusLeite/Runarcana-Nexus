@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -297,6 +298,43 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.speed").value(25.0))
                 .andExpect(jsonPath("$.speeds[1].type").value("SWIM"))
                 .andExpect(jsonPath("$.speeds[1].feet").value(35.0));
+    }
+
+    @Test
+    void caAlternativaNaPreviaENaFicha() throws Exception {
+        String token = login("gaudron");
+        // Casca: CA 10 + DES (14 → +2) + CON (14 → +2), e Couro +1 só sem armadura.
+        String body = "{\"characterName\":\"Casco\",\"age\":5,\"height\":1.2,\"regionId\":\"TARGON\",\"originId\":\"teste-runinata\","
+                + "\"classId\":\"ARCANIST\"," + ATTRS + ",\"choices\":{\"origin:teste-runinata:0\":[\"INTELLIGENCE\"],"
+                + "\"origin:teste-runinata:1\":[\"SMALL\"],\"class:ARCANIST:1\":[\"ARCANA\",\"INSIGHT\"],\"trait:t-casca:0:0\":[\"CONSTITUTION\"]},"
+                + "\"traitBudget\":\"TESTE\",\"traits\":[{\"id\":\"t-escalador\"},{\"id\":\"t-casca\"}]}";
+
+        preview(token, body)
+                .andExpect(jsonPath("$.complete").value(true))
+                .andExpect(jsonPath("$.armorClass.value").value(15))
+                .andExpect(jsonPath("$.armorClass.selected").value("RULE:0"))
+                .andExpect(jsonPath("$.armorClass.options[1].label").value("Casca (Constituição)"))
+                .andExpect(jsonPath("$.armorClass.options[0].value").value(13))
+                .andExpect(jsonPath("$.armorClass.bonuses[0]").value("Couro +1 (sem armadura)"))
+                .andExpect(jsonPath("$.armorClass.blockedBy").value("Casca (Constituição)"));
+
+        mvc.perform(post("/creation").header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isCreated());
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
+                .andExpect(jsonPath("$.armorClass.value").value(15));
+
+        // Escolher a defesa em uso: sem armadura (10 + 2 + 1) e uma opção que não existe.
+        mvc.perform(patch("/character/me/defense").header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"key\":\"UNARMORED\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.value").value(13))
+                .andExpect(jsonPath("$.selected").value("UNARMORED"));
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
+                .andExpect(jsonPath("$.armorClass.selected").value("UNARMORED"));
+        mvc.perform(patch("/character/me/defense").header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"key\":\"ITEM:999\"}"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test

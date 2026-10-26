@@ -352,6 +352,16 @@ public class RuleCatalogService {
                     if (g.feet() == null) p.add(at + " (SPEED): precisa de feet");
                     if (g.value() != null && !SPEED_TYPES.contains(g.value())) p.add(at + " (SPEED): value deve ser um destes: " + SPEED_TYPES);
                 }
+                case ARMOR_CLASS -> {
+                    if (blank(g.name()) && blank(g.label())) p.add(at + " (ARMOR_CLASS): precisa de name");
+                    if (g.armor() == null || g.armor().base() == null) p.add(at + " (ARMOR_CLASS): precisa de armor com base");
+                    checkOptions(at, g.options(), ATTRIBUTES, p);
+                }
+                case AC_BONUS -> {
+                    if (blank(g.name()) && blank(g.label())) p.add(at + " (AC_BONUS): precisa de name");
+                    boolean scales = g.usesFormula() == UsesFormula.PROFICIENCY || (g.armor() != null && Boolean.TRUE.equals(g.armor().proficiency()));
+                    if (g.amount() == null && !scales) p.add(at + " (AC_BONUS): precisa de amount ou usesFormula PROFICIENCY");
+                }
                 case SIZE -> {
                     if (g.value() == null || !SIZES.contains(g.value())) p.add(at + " (SIZE): value deve ser um destes: " + SIZES);
                 }

@@ -1,11 +1,12 @@
 import { ALIGNMENT_NAMES, CLASS_NAMES, REGION_NAMES, SIZE_NAMES, formatFeet } from '../../data/rules.js'
 import Num from './Num.jsx'
 import SpeedToggle from './SpeedToggle.jsx'
+import ArmorClass from './ArmorClass.jsx'
 
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 // Coluna da esquerda: splash do personagem (como no perfil do cliente), nível, PV e identidade.
-export default function SheetHero({ character, sheet }) {
+export default function SheetHero({ character, sheet, armorClass, onDefense }) {
   const level = sheet?.level ?? 0
   const hpMax = sheet?.maxHp ?? 0
   const hp = Math.min(sheet?.currentHp ?? 0, hpMax)
@@ -43,6 +44,8 @@ export default function SheetHero({ character, sheet }) {
               <div className={'hp-fill' + (hpPct < 35 ? ' low' : '')} style={{ width: hpPct + '%' }} />
             </div>
           </div>
+
+          <ArmorClass armorClass={armorClass} onChoose={onDefense} />
 
           <dl className="facts">
             <Fact label="Jogador" value={sheet.playerName} />

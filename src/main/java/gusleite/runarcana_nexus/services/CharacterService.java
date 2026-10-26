@@ -6,6 +6,10 @@ import gusleite.runarcana_nexus.model.auth.Account;
 import gusleite.runarcana_nexus.model.player.Background;
 import gusleite.runarcana_nexus.model.player.Character;
 import gusleite.runarcana_nexus.model.player.CharacterSkill;
+import gusleite.runarcana_nexus.model.player.PlayerItems;
+import gusleite.runarcana_nexus.model.items.Armor;
+import gusleite.runarcana_nexus.record.ArmorClassResponse;
+import org.hibernate.Hibernate;
 import gusleite.runarcana_nexus.model.roles.CharacterClass;
 import gusleite.runarcana_nexus.record.AbilityResponse;
 import gusleite.runarcana_nexus.record.CharacterResponse;
@@ -66,14 +70,43 @@ public class CharacterService {
     public CharacterSheetResponse getSheet(Account account) {
         Character character = characterOf(account);
 
-        List<InventoryItemResponse> inventory = itemsRepository.findByCharacterOrderByIdAsc(character).stream()
+        List<PlayerItems> items = itemsRepository.findByCharacterOrderByIdAsc(character);
+        List<InventoryItemResponse> inventory = items.stream()
                 .map(InventoryItemResponse::of)
                 .toList();
         List<AbilityResponse> abilities = abilityRepository.findByCharacterOrderByIdAsc(character).stream()
                 .map(AbilityResponse::of)
                 .toList();
 
-        return new CharacterSheetResponse(CharacterResponse.of(character), inventory, abilities);
+        return new CharacterSheetResponse(CharacterResponse.of(character), armorClassOf(character, items), inventory, abilities);
+    }
+
+    // Escolhe a defesa em uso ("UNARMORED", "RULE:<n>" ou "ITEM:<id>") entre as opções da ficha.
+    @Transactional
+    public ArmorClassResponse chooseDefense(Account account, String key) {
+        Character character = characterOf(account);
+        List<PlayerItems> items = itemsRepository.findByCharacterOrderByIdAsc(character);
+        ArmorClassResponse current = armorClassOf(character, items);
+        if (key == null || current.options().stream().noneMatch(o -> o.key().equals(key))) {
+            throw ApiException.badRequest("Essa defesa não está disponível para a sua ficha.");
+        }
+        character.setDefense(key);
+        charRepository.save(character);
+        return armorClassOf(character, items);
+    }
+
+    // CA da ficha: as regras da criação (Character.armorRules) e as armaduras do inventário.
+    private static ArmorClassResponse armorClassOf(Character character, List<PlayerItems> items) {
+        List<ArmorClassCalculator.ArmorItem> armors = items.stream()
+                .filter(e -> Hibernate.unproxy(e.getItem()) instanceof Armor)
+                .map(e -> {
+                    Armor a = (Armor) Hibernate.unproxy(e.getItem());
+                    return new ArmorClassCalculator.ArmorItem("ITEM:" + e.getId(), a.getName(), a.getArmorClass(),
+                            a.getModifierAttribute(), a.getArmorWeight(), a.getDamageReduction());
+                })
+                .toList();
+        return ArmorClassCalculator.calculate(character::getModifier, character.getProficiencyBonus(),
+                character.getArmorRules(), armors, character.getDefense());
     }
 
     @Transactional

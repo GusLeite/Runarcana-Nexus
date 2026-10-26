@@ -19,5 +19,7 @@ public enum GrantType {
     LANGUAGE,           // idioma fixo (value = nome)
     LANGUAGE_CHOICE,    // o jogador escolhe count idiomas (de options ou, com fromRegion, da região escolhida)
     HERITAGE_POINTS,    // +amount pontos de Herança (value: REGION, ORIGIN ou ANY)
-    PROFICIENCY_CHOICE  // count proficiências à escolha entre perícia, ofício e arma marcial (options = quais tipos valem)
+    PROFICIENCY_CHOICE, // count proficiências à escolha entre perícia, ofício e arma marcial (options = quais tipos valem)
+    ARMOR_CLASS,        // opção de defesa (CA) com a fórmula em armor; com options (atributos), o jogador escolhe o atributo somado
+    AC_BONUS            // bônus de CA somado à opção usada (amount ou usesFormula PROFICIENCY; armor.unarmoredOnly/blocksArmor)
 }

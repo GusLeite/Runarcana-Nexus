@@ -1,9 +1,12 @@
 package gusleite.runarcana_nexus.controller;
 
+import gusleite.runarcana_nexus.enums.ArmorWeight;
+import gusleite.runarcana_nexus.enums.Attribute;
 import gusleite.runarcana_nexus.enums.CharacterClassType;
 import gusleite.runarcana_nexus.enums.DamageType;
 import gusleite.runarcana_nexus.enums.Rarity;
 import gusleite.runarcana_nexus.enums.WeaponProperty;
+import gusleite.runarcana_nexus.model.items.Armor;
 import gusleite.runarcana_nexus.model.items.Consumable;
 import gusleite.runarcana_nexus.model.items.Item;
 import gusleite.runarcana_nexus.model.items.Weapon;
@@ -137,11 +140,24 @@ class CharacterControllerTests {
         potion.setRarity(Rarity.Common);
         inventory.save(entry(rudo, items.save(staff), 1));
         inventory.save(entry(rudo, items.save(potion), 3));
+        Armor scale = new Armor();
+        scale.setName("Cota de Escamas");
+        scale.setRarity(Rarity.Common);
+        scale.setArmorClass(14);
+        scale.setModifierAttribute(Attribute.DEXTERITY);
+        scale.setArmorWeight(ArmorWeight.MEDIUM);
+        scale.setDamageReduction(1);
+        inventory.save(entry(rudo, items.save(scale), 1));
 
         mvc.perform(get("/character/me").header("Authorization", "Bearer " + login("rudo")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.character.characterName").value("Rudo"))
-                .andExpect(jsonPath("$.inventory.length()").value(2))
+                // CA: sem armadura 10 + DES 13 (+1) = 11; Cota de Escamas 14 + 1 = 15 com RD 1 (a maior vale por padrão)
+                .andExpect(jsonPath("$.armorClass.options[0].value").value(11))
+                .andExpect(jsonPath("$.armorClass.value").value(15))
+                .andExpect(jsonPath("$.armorClass.reduction").value(1))
+                .andExpect(jsonPath("$.armorClass.options[1].label").value("Cota de Escamas"))
+                .andExpect(jsonPath("$.inventory.length()").value(3))
                 .andExpect(jsonPath("$.inventory[0].kind").value("WEAPON"))
                 .andExpect(jsonPath("$.inventory[0].damage").value("1d6"))
                 .andExpect(jsonPath("$.inventory[0].properties[0]").value("VERSATILE"))

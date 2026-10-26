@@ -1,5 +1,6 @@
 package gusleite.runarcana_nexus.controller;
 
+import gusleite.runarcana_nexus.record.ArmorClassResponse;
 import gusleite.runarcana_nexus.record.CharacterResponse;
 import gusleite.runarcana_nexus.record.CharacterSheetResponse;
 import gusleite.runarcana_nexus.record.CreateCharacterRequest;
@@ -36,6 +37,16 @@ public class CharacterController {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
         return ResponseEntity.ok(charService.getSheet(authService.authenticate(authorization)));
     }
+
+    // Defesa em uso na ficha (sem armadura, uma CA alternativa ou uma armadura do inventário).
+    @PatchMapping("/me/defense")
+    public ResponseEntity<ArmorClassResponse> chooseDefense(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @RequestBody DefenseRequest request) {
+        return ResponseEntity.ok(charService.chooseDefense(authService.authenticate(authorization), request.key()));
+    }
+
+    public record DefenseRequest(String key) {}
 
     @PostMapping
     public ResponseEntity<CharacterResponse> createCharacter(@Valid @RequestBody CreateCharacterRequest request) {

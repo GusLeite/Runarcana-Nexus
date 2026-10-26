@@ -355,6 +355,14 @@
               "description": "Devido ao seu couro grosso, os Auroques têm naturalmente +1 de CA desde que não estejam utilizando uma armadura."
             },
             {
+              "type": "AC_BONUS",
+              "name": "Armadura Natural",
+              "amount": 1,
+              "armor": {
+                "unarmoredOnly": true
+              }
+            },
+            {
               "type": "FEATURE",
               "abilityType": "ABILITY",
               "name": "Urro Triunfante",
@@ -451,6 +459,32 @@
           "abilityType": "PASSIVE",
           "name": "Proteção Ajustável",
           "description": "O corpo possui camadas defensivas que determinam sua Classe de Armadura (CA). Você não recebe benefícios por usar armaduras convencionais, mas pode somar normalmente a CA de um escudo.\n\nDurante um descanso longo, pode ajustar seu corpo para um modo de proteção. Cada modelo possui suas próprias limitações. Se possuir a característica de classe Defesa sem Armadura, você sempre terá acesso ao modo Nulo.\n\n• Nulo (sem requisito): +1 CA, RD 0.\n• Leve (sem requisito): CA 13 + mod. de Destreza, RD 0.\n• Médio (proficiência com armaduras médias): CA 16 + mod. de Destreza (máximo +2), RD 1.\n• Pesado (proficiência com armaduras pesadas; modelos Brutal ou Emissário): CA 19, RD 2.\n\nRD significa Redução de Dano."
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Proteção Ajustável: Nulo",
+          "armor": {
+            "base": 11,
+            "blocksArmor": true
+          }
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Proteção Ajustável: Leve",
+          "armor": {
+            "base": 13,
+            "blocksArmor": true
+          }
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Proteção Ajustável: Médio (exige proficiência com armaduras médias)",
+          "armor": {
+            "base": 16,
+            "dexMax": 2,
+            "reduction": 1,
+            "blocksArmor": true
+          }
         }
       ],
       "lineages": [
@@ -484,6 +518,16 @@
                 "Radiante"
               ],
               "description": "Resistência ao tipo de dano escolhido na criação (ácido, elétrico, energético, ígneo, gélido, necrótico, psíquico ou radiante)."
+            },
+            {
+              "type": "ARMOR_CLASS",
+              "name": "Proteção Ajustável: Pesado (exige proficiência com armaduras pesadas)",
+              "armor": {
+                "base": 19,
+                "dex": false,
+                "reduction": 2,
+                "blocksArmor": true
+              }
             }
           ]
         },
@@ -506,6 +550,16 @@
               "type": "PROFICIENCY_CHOICE",
               "count": 1,
               "label": "Funcional: proficiência em uma perícia, ofício ou arma marcial"
+            },
+            {
+              "type": "ARMOR_CLASS",
+              "name": "Proteção Ajustável: Pesado (exige proficiência com armaduras pesadas)",
+              "armor": {
+                "base": 19,
+                "dex": false,
+                "reduction": 2,
+                "blocksArmor": true
+              }
             }
           ]
         },
@@ -630,6 +684,15 @@
               "abilityType": "PASSIVE",
               "name": "Pele de Árvore",
               "description": "Um Arbóreo não pode usar armadura, no entanto sua casca provê defesa natural. A CA de um Arbóreo é igual a 10 + seu modificador de Destreza + modificador de Constituição."
+            },
+            {
+              "type": "ARMOR_CLASS",
+              "name": "Pele de Árvore",
+              "armor": {
+                "base": 10,
+                "attribute": "CONSTITUTION",
+                "blocksArmor": true
+              }
             },
             {
               "type": "FEATURE",
@@ -2055,6 +2118,11 @@
               "abilityType": "PASSIVE",
               "name": "Escorregadio",
               "description": "Você pode adicionar seu bônus de proficiência à sua CA e recebe resistência a dano contundente. Por outro lado, você não pode usar armadura que não seja adaptada para você."
+            },
+            {
+              "type": "AC_BONUS",
+              "name": "Escorregadio",
+              "usesFormula": "PROFICIENCY"
             }
           ]
         },
