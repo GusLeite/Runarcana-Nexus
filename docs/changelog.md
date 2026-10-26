@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-26 — Força ou Destreza e especialidade (`feature/character-sheet`)
+- `damageBonus` `STRENGTH_OR_DEXTERITY`: o dano usa o maior entre Força e Destreza. Aplicado nas Garras/Caudas do Meio-Dragão, Garras do Kiilash e Garras da Runinata.
+- **Especialidade**: `CharacterSkill.expertise` (bônus de proficiência em dobro, inclusive nas passivas); `SkillResponse` e a prévia trazem `expertise`. Concessões: `SKILL`/`SKILL_CHOICE` com `expertise` ("caso já tenha, especialidade", decidido no fim, com todas as perícias) e `EXPERTISE_CHOICE` (especialidade em perícia que já tem). Técnicos do Nocti e traço Especialista da Runinata.
+- Front: losango dourado duplo na perícia com especialidade; "especialidade" na ficha em construção.
+- Testes: `especialidadeNasPericiasQueJaTem` e dano "Força ou Destreza" em `CreationScalingTests`. Conferido no sandbox (Garras do Kiilash 1d6+4 com Força 15; Runinata com Atletismo especialista +4).
+
 ## 2026-10-26 — Novas fórmulas de usos (`feature/character-sheet`)
 - `usesFormula` ganha `DOUBLE_PROFICIENCY` e `HALF_LEVEL` (mínimo 1), e `usesPlus` soma um valor fixo à fórmula.
 - Fúria Símia (dobro do bônus: 4 no 1º nível), Plumadagas (3 + bônus: 5) e Autossacrifício (metade do nível: 1) passam a ter contador na ficha.

@@ -203,7 +203,14 @@
       "name": "Especialista",
       "tier": "MINOR",
       "description": "Você recebe especialidade com uma perícia que você possua proficiência.",
-      "detail": "Qual perícia?"
+      "silent": true,
+      "grants": [
+        {
+          "type": "EXPERTISE_CHOICE",
+          "count": 1,
+          "label": "Especialista: especialidade em uma perícia que você tenha"
+        }
+      ]
     },
     {
       "id": "flutuar",
@@ -493,7 +500,7 @@
           ],
           "damage": "1d4",
           "damageBonus": [
-            "STRENGTH"
+            "STRENGTH_OR_DEXTERITY"
           ],
           "castingTime": "Ataque ou ação bônus",
           "range": "Corpo a corpo"

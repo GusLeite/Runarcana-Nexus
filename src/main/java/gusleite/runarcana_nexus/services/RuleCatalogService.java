@@ -329,6 +329,10 @@ public class RuleCatalogService {
                     if (g.count() == null || g.count() < 1) p.add(at + " (SKILL_CHOICE): precisa de count");
                     checkOptions(at, g.options(), SKILLS, p);
                 }
+                case EXPERTISE_CHOICE -> {
+                    if (g.count() == null || g.count() < 1) p.add(at + " (EXPERTISE_CHOICE): precisa de count");
+                    checkOptions(at, g.options(), SKILLS, p);
+                }
                 case SAVING_THROW -> {
                     if (g.attribute() == null) p.add(at + " (SAVING_THROW): precisa de attribute");
                 }
@@ -405,7 +409,7 @@ public class RuleCatalogService {
         if (g.damageBonus() != null) {
             if (g.damage() == null && g.diceByProficiency() == null) p.add(at + " (FEATURE): damageBonus precisa de damage ou diceByProficiency");
             g.damageBonus().stream()
-                    .filter(t -> !Set.of("PROFICIENCY", "HALF_PROFICIENCY").contains(t) && !ATTRIBUTES.contains(t))
+                    .filter(t -> !Set.of("PROFICIENCY", "HALF_PROFICIENCY", "STRENGTH_OR_DEXTERITY").contains(t) && !ATTRIBUTES.contains(t))
                     .forEach(t -> p.add(at + " (FEATURE): damageBonus desconhecido \"" + t + "\""));
         }
         Map<String, String> table = g.diceByProficiency();

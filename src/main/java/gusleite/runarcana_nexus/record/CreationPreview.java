@@ -45,7 +45,8 @@ public record CreationPreview(
 
     public record PointBuyStatus(int spent, int budget) {}
 
-    public record SkillLine(SkillType skill, String source) {}
+    // expertise: especialidade (bônus de proficiência em dobro).
+    public record SkillLine(SkillType skill, String source, boolean expertise) {}
 
     public record SaveLine(Attribute attribute, String source) {}
 

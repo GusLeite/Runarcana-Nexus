@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { SKILL_NAMES, formatModifier, groupSkills } from '../../data/rules.js'
 
-// Todas as perícias agrupadas pelo atributo; o losango aceso marca proficiência.
+// Todas as perícias agrupadas pelo atributo; o losango aceso marca proficiência e o duplo, especialidade.
 export default function SkillList({ skills, onRoll }) {
   const [onlyProficient, setOnlyProficient] = useState(false)
   const visible = onlyProficient ? skills.filter(s => s.proficient) : skills
@@ -26,10 +26,11 @@ export default function SkillList({ skills, onRoll }) {
                 <button
                   key={s.skill}
                   type="button"
-                  className={'skill' + (s.proficient ? ' prof' : '') + (s.modifier === best ? ' best' : '')}
+                  className={'skill' + (s.proficient ? ' prof' : '') + (s.expertise ? ' expert' : '') + (s.modifier === best ? ' best' : '')}
                   style={{ '--n': n }}
                   onClick={() => onRoll(name, s.modifier)}
-                  aria-label={`${name}${s.proficient ? ', proficiente' : ''}, ${formatModifier(s.modifier)}. Rolar.`}
+                  aria-label={`${name}${s.expertise ? ', especialista' : s.proficient ? ', proficiente' : ''}, ${formatModifier(s.modifier)}. Rolar.`}
+                  title={s.expertise ? 'Especialidade: bônus de proficiência em dobro' : undefined}
                 >
                   <span className="pip" aria-hidden="true" />
                   <span className="skill-name">{name}</span>

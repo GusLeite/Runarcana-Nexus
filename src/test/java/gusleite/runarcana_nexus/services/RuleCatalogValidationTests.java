@@ -26,7 +26,7 @@ class RuleCatalogValidationTests {
 
     private static Grant grant(GrantType type, String value) {
         return new Grant(type, null, null, null, null, null, value, null, null, null, null, null, null, null, null, null,
-                null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     @Test

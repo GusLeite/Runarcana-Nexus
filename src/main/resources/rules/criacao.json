@@ -884,7 +884,8 @@
                 "SLEIGHT_OF_HAND",
                 "STEALTH"
               ],
-              "label": "Técnicos: Acrobacia, Prestidigitação ou Furtividade"
+              "label": "Técnicos: Acrobacia, Prestidigitação ou Furtividade (especialidade se já tiver)",
+              "expertise": true
             },
             {
               "type": "CRAFT_CHOICE",
@@ -1050,7 +1051,7 @@
               "description": "Arma natural da sua essência dracônica. Dano: 1d6 + modificador de Força ou Destreza, dano cortante.",
               "damage": "1d6",
               "damageBonus": [
-                "STRENGTH"
+                "STRENGTH_OR_DEXTERITY"
               ],
               "castingTime": "Ataque",
               "range": "Corpo a corpo"
@@ -1246,7 +1247,7 @@
               "description": "Arma natural da sua essência dracônica. Dano: 1d4 + modificador de Destreza ou Força, dano cortante.",
               "damage": "1d4",
               "damageBonus": [
-                "DEXTERITY"
+                "STRENGTH_OR_DEXTERITY"
               ],
               "castingTime": "Ataque",
               "range": "Corpo a corpo"
@@ -1344,7 +1345,7 @@
               "description": "Arma natural da sua essência dracônica. Dano: 1d4 + modificador de Força ou Destreza, dano contundente.",
               "damage": "1d4",
               "damageBonus": [
-                "STRENGTH"
+                "STRENGTH_OR_DEXTERITY"
               ],
               "castingTime": "Ataque",
               "range": "Corpo a corpo"
@@ -1430,7 +1431,7 @@
               "description": "Arma natural da sua essência dracônica. Dano: 1d4 + modificador de Força ou Destreza, dano cortante.",
               "damage": "1d4",
               "damageBonus": [
-                "STRENGTH"
+                "STRENGTH_OR_DEXTERITY"
               ],
               "castingTime": "Ataque",
               "range": "Corpo a corpo"
@@ -1933,7 +1934,7 @@
               "damage": "1d6",
               "damageBonus": [
                 "PROFICIENCY",
-                "DEXTERITY"
+                "STRENGTH_OR_DEXTERITY"
               ],
               "castingTime": "Ataque",
               "range": "Corpo a corpo"

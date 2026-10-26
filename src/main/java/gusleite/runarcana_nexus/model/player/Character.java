@@ -190,11 +190,19 @@ public class Character {
         return characterSkill != null && characterSkill.isProficient();
     }
 
-    // Bônus de um teste de perícia: modificador do atributo base + proficiência, se tiver.
+    public boolean isExpert(SkillType skill) {
+        CharacterSkill characterSkill = getSkill(skill);
+        return characterSkill != null && characterSkill.isProficient() && characterSkill.isExpertise();
+    }
+
+    // Bônus de um teste de perícia: modificador do atributo base + proficiência, se tiver (duas vezes com especialidade).
     public int getSkillModifier(SkillType skill) {
         int modifier = getModifier(skill.getBaseAttribute());
 
         if (isProficient(skill)) {
+            modifier += getProficiencyBonus();
+        }
+        if (isExpert(skill)) {
             modifier += getProficiencyBonus();
         }
 

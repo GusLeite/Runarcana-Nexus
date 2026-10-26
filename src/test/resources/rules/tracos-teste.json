@@ -146,6 +146,33 @@
           }
         }
       ]
+    },
+    {
+      "id": "t-especialista",
+      "name": "Especialista Teste",
+      "tier": "MINOR",
+      "description": "Especialidade.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "EXPERTISE_CHOICE",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "t-tecnico",
+      "name": "Técnico Teste",
+      "tier": "MINOR",
+      "description": "Arcanismo ou especialidade.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "ARCANA",
+          "expertise": true
+        }
+      ]
     }
   ],
   "drawbacks": [

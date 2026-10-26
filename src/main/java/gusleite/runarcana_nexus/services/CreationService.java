@@ -165,6 +165,7 @@ public class CreationService {
             s.setCharacter(c);
             s.setSkillType(skill);
             s.setProficient(true);
+            s.setExpertise(b.expertise.contains(skill));
             c.getSkills().add(s);
         }
         characters.save(c);
@@ -220,7 +221,11 @@ public class CreationService {
             for (Grant g : s.grants()) {
                 switch (g.type()) {
                     case ATTRIBUTE -> b.bonus.merge(g.attribute(), g.amount(), Integer::sum);
-                    case SKILL -> b.skills.putIfAbsent(g.skill(), s.label());
+                    case SKILL -> {
+                        // "Caso já tenha, especialidade": decide no fim, depois de todas as perícias.
+                        if (Boolean.TRUE.equals(g.expertise())) b.deferred.add(new Deferred(null, g, s.label()));
+                        else b.skills.putIfAbsent(g.skill(), s.label());
+                    }
                     case SAVING_THROW -> b.saves.putIfAbsent(g.attribute(), s.label());
                     case FEATURE -> {
                         if (!g.hasOptions()) b.features.add(new Sourced<>(g, s.label()));
@@ -273,7 +278,12 @@ public class CreationService {
                         sourceAttributes.addAll(selected);
                         b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, selected, s.label(), null));
                     }
+                    case EXPERTISE_CHOICE -> b.deferred.add(new Deferred(key, g, s.label()));
                     case SKILL_CHOICE -> {
+                        if (Boolean.TRUE.equals(g.expertise())) {
+                            b.deferred.add(new Deferred(key, g, s.label()));
+                            break;
+                        }
                         List<String> options = orAll(g.options(), SkillType.values()).stream()
                                 .filter(o -> !b.skills.containsKey(SkillType.valueOf(o))).toList();
                         String label = orLabel(g, "Escolha " + g.count() + " perícia(s)");
@@ -349,6 +359,7 @@ public class CreationService {
             }
         }
 
+        expertise(b, picks);
         b.features.addAll(b.traitFeatures);
         heritages(r, b);
 
@@ -363,6 +374,45 @@ public class CreationService {
         if (r.height() == null || r.height() <= 0) b.errors.add("Informe a altura em metros.");
         return b;
     }
+
+    // ---------- Especialidade ----------
+
+    // Por último, com todas as perícias já ganhas: "proficiência; caso já tenha, especialidade" (SKILL e SKILL_CHOICE
+    // com expertise) e a escolha de especialidade entre as perícias que o personagem tem (EXPERTISE_CHOICE).
+    private static void expertise(Build b, Map<String, List<String>> picks) {
+        for (Deferred d : b.deferred) {
+            Grant g = d.grant();
+            switch (g.type()) {
+                case SKILL -> gainOrExpert(b, g.skill(), d.source());
+                case SKILL_CHOICE -> {
+                    // As que ele já tem continuam nas opções: escolhê-las dá especialidade.
+                    List<String> options = orAll(g.options(), SkillType.values()).stream()
+                            .filter(o -> !b.expertise.contains(SkillType.valueOf(o))).toList();
+                    String label = orLabel(g, "Escolha " + g.count() + " perícia(s) (especialidade se já tiver)");
+                    List<String> selected = choose(picks.get(d.key()), options, g.count(), label, b.errors);
+                    selected.forEach(o -> gainOrExpert(b, SkillType.valueOf(o), d.source()));
+                    b.choices.add(new ChoiceLine(d.key(), g.type(), label, g.count(), options, selected, d.source(), null));
+                }
+                case EXPERTISE_CHOICE -> {
+                    List<String> options = orAll(g.options(), SkillType.values()).stream()
+                            .filter(o -> b.skills.containsKey(SkillType.valueOf(o)) && !b.expertise.contains(SkillType.valueOf(o)))
+                            .toList();
+                    String label = orLabel(g, "Escolha " + g.count() + " perícia(s) para especialidade");
+                    b.choices.add(optionalChoice(d.key(), g, label, options, picks.get(d.key()), d.source(), b,
+                            "Escolha primeiro as perícias em que o personagem é proficiente.",
+                            o -> b.expertise.add(SkillType.valueOf(o))));
+                }
+                default -> { }
+            }
+        }
+    }
+
+    private static void gainOrExpert(Build b, SkillType skill, String source) {
+        if (b.skills.containsKey(skill)) b.expertise.add(skill);
+        else b.skills.put(skill, source);
+    }
+
+    private record Deferred(String key, Grant grant, String source) {}
 
     // ---------- Classe de Armadura ----------
 
@@ -806,6 +856,8 @@ public class CreationService {
             bonus += switch (token) {
                 case "PROFICIENCY" -> proficiency;
                 case "HALF_PROFICIENCY" -> half(proficiency, roundUp);
+                // "Força ou Destreza": vale o maior dos dois (como uma arma com acuidade).
+                case "STRENGTH_OR_DEXTERITY" -> Math.max(modifier.applyAsInt(Attribute.STRENGTH), modifier.applyAsInt(Attribute.DEXTERITY));
                 default -> modifier.applyAsInt(Attribute.valueOf(token));
             };
         }
@@ -874,6 +926,9 @@ public class CreationService {
         final Map<Attribute, Integer> bonus = new EnumMap<>(Attribute.class);
         PointBuyStatus pointBuy;
         final Map<SkillType, String> skills = new LinkedHashMap<>();
+        // Perícias com especialidade (sempre entre as de skills) e as concessões decididas no fim (ver expertise()).
+        final Set<SkillType> expertise = new LinkedHashSet<>();
+        final List<Deferred> deferred = new ArrayList<>();
         final Map<Attribute, String> saves = new LinkedHashMap<>();
         final List<Sourced<Grant>> features = new ArrayList<>();
         final List<ChoiceLine> choices = new ArrayList<>();
@@ -951,7 +1006,7 @@ public class CreationService {
             List<AttributeLine> attrs = Arrays.stream(Attribute.values())
                     .map(a -> new AttributeLine(a, base.get(a), bonus.getOrDefault(a, 0), total(a), modifier(a)))
                     .toList();
-            List<SkillLine> skillLines = skills.entrySet().stream().map(e -> new SkillLine(e.getKey(), e.getValue())).toList();
+            List<SkillLine> skillLines = skills.entrySet().stream().map(e -> new SkillLine(e.getKey(), e.getValue(), expertise.contains(e.getKey()))).toList();
             List<SaveLine> saveLines = saves.entrySet().stream().map(e -> new SaveLine(e.getKey(), e.getValue())).toList();
             List<FeatureLine> featureLines = features.stream()
                     .map(f -> new FeatureLine(f.value().name(), f.value().description(),

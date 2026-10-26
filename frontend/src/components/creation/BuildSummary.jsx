@@ -61,7 +61,10 @@ export default function BuildSummary({ preview, catalog, draft }) {
             {preview.savingThrows.map(s => <li key={s.attribute} title={s.source}>{attributeById(s.attribute)?.name}<em>{s.source}</em></li>)}
           </Section>
           <Section title="Perícias" empty="Nenhuma ainda">
-            {preview.skills.map(s => <li key={s.skill} title={s.source}>{SKILL_NAMES[s.skill] ?? s.skill}<em>{s.source}</em></li>)}
+            {preview.skills.map(s => (
+              <li key={s.skill} title={s.source}>{SKILL_NAMES[s.skill] ?? s.skill}
+                {s.expertise && <span className="ft-extra" title="Bônus de proficiência em dobro"> especialidade</span>}<em>{s.source}</em></li>
+            ))}
           </Section>
           <Section title="Passivas e habilidades" empty="Nenhuma ainda">
             {preview.features.map((f, i) => (

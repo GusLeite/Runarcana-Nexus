@@ -301,6 +301,36 @@ class CreationControllerTests {
     }
 
     @Test
+    void especialidadeNasPericiasQueJaTem() throws Exception {
+        String token = login("gaudron");
+        // A classe dá Arcanismo e Intuição. Técnico: Arcanismo, e como já tem, vira especialidade.
+        // Especialista: especialidade à escolha entre as que já tem (Intuição).
+        String body = "{\"characterName\":\"Sábio\",\"age\":5,\"height\":1.2,\"regionId\":\"TARGON\",\"originId\":\"teste-runinata\","
+                + "\"classId\":\"ARCANIST\"," + ATTRS + ",\"choices\":{\"origin:teste-runinata:0\":[\"INTELLIGENCE\"],"
+                + "\"origin:teste-runinata:1\":[\"SMALL\"],\"class:ARCANIST:1\":[\"ARCANA\",\"INSIGHT\"],\"trait:t-garras:0:0\":[\"Cortante\"],"
+                + "\"trait:t-especialista:0:0\":[\"INSIGHT\"]},\"traitBudget\":\"TESTE\","
+                + "\"traits\":[{\"id\":\"t-garras\"},{\"id\":\"t-tecnico\"},{\"id\":\"t-especialista\"}],"
+                + "\"drawbacks\":[{\"id\":\"d-fraco\",\"detail\":\"Ígneo\"}]}";
+
+        preview(token, body)
+                .andExpect(jsonPath("$.complete").value(true))
+                .andExpect(jsonPath("$.skills[?(@.skill == 'ARCANA')].expertise").value(true))
+                .andExpect(jsonPath("$.skills[?(@.skill == 'INSIGHT')].expertise").value(true))
+                // Arcanismo já tem especialidade (Técnico), então sai das opções do Especialista.
+                .andExpect(jsonPath("$.choices[?(@.key == 'trait:t-especialista:0:0')].options[0]").value("INSIGHT"));
+        preview(token, body.replace("\"trait:t-especialista:0:0\":[\"INSIGHT\"]", "\"trait:t-especialista:0:0\":[\"STEALTH\"]"))
+                .andExpect(jsonPath("$.errors", hasItem("Opção inválida em \"Escolha 1 perícia(s) para especialidade\".")));
+
+        mvc.perform(post("/creation").header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isCreated());
+        // Arcanismo: INT 17 (+3) + proficiência 2 × 2 = 7.
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
+                .andExpect(jsonPath("$.character.skills[?(@.skill == 'ARCANA')].expertise").value(true))
+                .andExpect(jsonPath("$.character.skills[?(@.skill == 'ARCANA')].modifier").value(7));
+    }
+
+    @Test
     void caAlternativaNaPreviaENaFicha() throws Exception {
         String token = login("gaudron");
         // Casca: CA 10 + DES (14 → +2) + CON (14 → +2), e Couro +1 só sem armadura.

@@ -250,8 +250,9 @@ export function grantLabel(g, crafts = []) {
   switch (g.type) {
     case 'ATTRIBUTE': return signed(g.amount) + ' ' + attrName(g.attribute)
     case 'ATTRIBUTE_CHOICE': return g.label ?? signed(g.amount) + ' em ' + plural(g.count, 'atributo', 'atributos') + ' à escolha'
-    case 'SKILL': return 'Perícia: ' + (SKILL_NAMES[g.skill] ?? g.skill)
-    case 'SKILL_CHOICE': return g.label ?? plural(g.count, 'perícia', 'perícias') + ' à escolha'
+    case 'SKILL': return 'Perícia: ' + (SKILL_NAMES[g.skill] ?? g.skill) + (g.expertise ? ' (especialidade se já tiver)' : '')
+    case 'SKILL_CHOICE': return g.label ?? plural(g.count, 'perícia', 'perícias') + ' à escolha' + (g.expertise ? ' (especialidade se já tiver)' : '')
+    case 'EXPERTISE_CHOICE': return g.label ?? 'Especialidade em ' + plural(g.count, 'perícia', 'perícias') + ' que já tem'
     case 'SAVING_THROW': return 'Resistência: ' + attrName(g.attribute)
     case 'FEATURE': return (ABILITY_TYPES[g.abilityType ?? 'PASSIVE']?.name ?? 'Passiva') + ': ' + g.name + (g.options?.length ? ' (à escolha)' : '')
     case 'PROFICIENCY_CHOICE': return g.label ?? plural(g.count, 'proficiência', 'proficiências') + ' à escolha'
@@ -278,7 +279,8 @@ export function choiceOptionName(type, id, crafts = []) {
   switch (type) {
     case 'ATTRIBUTE_CHOICE':
     case 'ARMOR_CLASS': return attrName(id)
-    case 'SKILL_CHOICE': return SKILL_NAMES[id] ?? id
+    case 'SKILL_CHOICE':
+    case 'EXPERTISE_CHOICE': return SKILL_NAMES[id] ?? id
     case 'SIZE_CHOICE': return SIZE_NAMES[id] ?? id
     case 'CRAFT_CHOICE': return crafts.find(k => k.id === id)?.name ?? id
     // "SKILL:ARCANA", "CRAFT:alquimista" ou "MARTIAL_WEAPON"
