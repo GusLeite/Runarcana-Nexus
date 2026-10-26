@@ -6,6 +6,7 @@ import gusleite.runarcana_nexus.enums.CharacterClassType;
 import gusleite.runarcana_nexus.enums.CreatureSize;
 import gusleite.runarcana_nexus.enums.GrantType;
 import gusleite.runarcana_nexus.enums.HeritageCategory;
+import gusleite.runarcana_nexus.enums.MovementType;
 import gusleite.runarcana_nexus.enums.Recharge;
 import gusleite.runarcana_nexus.enums.Region;
 import gusleite.runarcana_nexus.enums.SkillType;
@@ -32,6 +33,7 @@ import gusleite.runarcana_nexus.record.CreationPreview.TraitBudgetStatus;
 import gusleite.runarcana_nexus.record.CreationPreview.TraitLine;
 import gusleite.runarcana_nexus.record.CreationPreview.TraitStatus;
 import gusleite.runarcana_nexus.record.CreationRequest;
+import gusleite.runarcana_nexus.record.SpeedLine;
 import gusleite.runarcana_nexus.record.CreationRequest.HeritagePick;
 import gusleite.runarcana_nexus.record.CreationRequest.TraitPick;
 import gusleite.runarcana_nexus.repository.BackGroundRepository;
@@ -141,6 +143,7 @@ public class CreationService {
         c.setMaxHp(b.maxHp());
         c.setCurrentHp(b.maxHp());
         c.setSpeed(b.speed());
+        c.getOtherSpeeds().putAll(b.otherSpeedsTotal());
         c.setSize(b.size);
         c.getLanguages().addAll(b.languages);
         // A ficha guarda o nome do ofício (não o id do catálogo), para mostrar sem depender do catálogo.
@@ -220,7 +223,15 @@ public class CreationService {
                         if (!g.hasOptions()) b.features.add(new Sourced<>(g, s.label()));
                     }
                     case HP_BONUS -> b.hpBonus += hpBonusFor(g, LEVEL_ONE_PROFICIENCY, b.roundUp);
-                    case SPEED -> b.speedBonus += g.feet();
+                    case SPEED -> {
+                        // value: tipo de deslocamento (sem value = caminhada; ALL = todos os que o personagem tiver).
+                        String mode = g.value() == null ? "WALK" : g.value();
+                        switch (mode) {
+                            case "WALK" -> b.speedBonus += g.feet();
+                            case "ALL" -> b.allSpeedBonus += g.feet();
+                            default -> b.otherSpeeds.merge(MovementType.valueOf(mode), g.feet(), Double::sum);
+                        }
+                    }
                     case GOLD -> b.gold += g.amount();
                     case SIZE -> {
                         b.size = CreatureSize.valueOf(g.value());
@@ -458,7 +469,13 @@ public class CreationService {
     private static void addTraitSources(Picked p, String key, String label, String kind, Build b) {
         RuleTrait t = p.trait();
         for (int n = 0; n < p.details().size(); n++) {
-            b.traitSources.add(new Source(key + ":" + t.id() + ":" + n, label + ": " + t.name(), t.grantsOrEmpty()));
+            List<Grant> grants = t.grantsOrEmpty();
+            // Deslocamento que cresce a cada escolha (Aquático: 15, 15, 10…): a n-ésima escolha usa o n-ésimo passo.
+            if (t.speedSteps() != null && !t.speedSteps().isEmpty()) {
+                Double step = t.speedSteps().get(Math.min(n, t.speedSteps().size() - 1));
+                grants = grants.stream().map(g -> g.type() == GrantType.SPEED ? g.withFeet(step) : g).toList();
+            }
+            b.traitSources.add(new Source(key + ":" + t.id() + ":" + n, label + ": " + t.name(), grants));
         }
         List<String> details = p.details().stream().filter(d -> d != null).toList();
         int times = p.details().size();
@@ -826,6 +843,9 @@ public class CreationService {
         int heritagePoints;
         double baseSpeed;
         double speedBonus;
+        // Bônus (ou redução) que vale para todos os deslocamentos ("Reduz 5 pés de todos os deslocamentos base").
+        double allSpeedBonus;
+        final Map<MovementType, Double> otherSpeeds = new EnumMap<>(MovementType.class);
         int gold;
 
         // Atributo sem valor base conta como 10 só para a prévia (a criação exige os seis).
@@ -842,7 +862,17 @@ public class CreationService {
         }
 
         double speed() {
-            return baseSpeed + speedBonus;
+            return baseSpeed + speedBonus + allSpeedBonus;
+        }
+
+        // Natação, escalada, voo e escavação, com o bônus de "todos os deslocamentos"; sem os que zeraram.
+        Map<MovementType, Double> otherSpeedsTotal() {
+            Map<MovementType, Double> out = new EnumMap<>(MovementType.class);
+            otherSpeeds.forEach((type, feet) -> {
+                double total = feet + allSpeedBonus;
+                if (total > 0) out.put(type, total);
+            });
+            return out;
         }
 
         // Gasta 1 ponto do primeiro tipo (na ordem dada) que ainda tiver saldo.
@@ -873,7 +903,8 @@ public class CreationService {
                             f.source()))
                     .toList();
             return new CreationPreview(attrs, pointBuy, skillLines, saveLines, featureLines, List.copyOf(choices),
-                    maxHp(), klass == null ? 0 : klass.hitDie(), speed(), gold, size, List.copyOf(languages),
+                    maxHp(), klass == null ? 0 : klass.hitDie(), speed(),
+                    origin == null ? List.of() : SpeedLine.of(speed(), otherSpeedsTotal()), gold, size, List.copyOf(languages),
                     List.copyOf(crafts), heritagePoints,
                     pools.entrySet().stream()
                             .map(e -> new HeritagePool(e.getKey(), e.getValue(), spent.getOrDefault(e.getKey(), 0)))

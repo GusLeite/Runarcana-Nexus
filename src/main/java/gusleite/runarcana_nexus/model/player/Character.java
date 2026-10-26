@@ -3,6 +3,7 @@ package gusleite.runarcana_nexus.model.player;
 import gusleite.runarcana_nexus.enums.Alignment;
 import gusleite.runarcana_nexus.enums.Attribute;
 import gusleite.runarcana_nexus.enums.CreatureSize;
+import gusleite.runarcana_nexus.enums.MovementType;
 import gusleite.runarcana_nexus.enums.Region;
 import gusleite.runarcana_nexus.enums.SkillType;
 import gusleite.runarcana_nexus.model.auth.Account;
@@ -13,9 +14,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 // @Getter/@Setter em vez de @Data: o equals/hashCode/toString do @Data entraria em ciclo com CharacterSkill.
@@ -80,6 +83,14 @@ public class Character {
 
     // Deslocamento em pés (como no livro). Nulo nas fichas antigas (o front mostra "—").
     private Double speed;
+
+    // Outros deslocamentos em pés: natação, escalada, voo, escavação (a caminhada é o speed).
+    @ElementCollection
+    @CollectionTable(name = "character_speeds", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name = "movement")
+    @Column(name = "feet")
+    private Map<MovementType, Double> otherSpeeds = new HashMap<>();
 
     @Enumerated(EnumType.STRING)
     private CreatureSize size;

@@ -1732,6 +1732,11 @@
               "feet": -5
             },
             {
+              "type": "SPEED",
+              "feet": 50,
+              "value": "SWIM"
+            },
+            {
               "type": "FEATURE",
               "abilityType": "PASSIVE",
               "name": "Anfíbios",
@@ -1821,10 +1826,9 @@
           "description": "Tribo de Targon que habita o topo das montanhas, inspirada em um ser celestial que compartilhou com os mortais os dons da cura. Um ou dois chifres curvos, pernas caprinas com cascos e rabo longo e peludo. De 1,2 a 1,7 metro.",
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Escalada",
-              "description": "Você possui um deslocamento de escalada de 20 pés."
+              "type": "SPEED",
+              "feet": 20,
+              "value": "CLIMB"
             },
             {
               "type": "FEATURE",
@@ -2036,6 +2040,11 @@
           "description": "Yordles sintonizados com a magia dos mares, adaptados à vida marinha. Até criaturas marinhas perigosas e gigantescas parecem formar vínculos e amizades com eles.",
           "grants": [
             {
+              "type": "SPEED",
+              "feet": 35,
+              "value": "SWIM"
+            },
+            {
               "type": "FEATURE",
               "abilityType": "PASSIVE",
               "name": "Marítimos",
@@ -2054,6 +2063,11 @@
           "name": "Feérico",
           "description": "Yordles sintonizados com a magia das criaturas da Clareira, que entendem coisas incompreensíveis e percebem estranhezas na realidade. Sua naturalidade com ilusões e energia quimérica lhes dá traços diferentes e certa resistência a feitiços.",
           "grants": [
+            {
+              "type": "SPEED",
+              "feet": 30,
+              "value": "FLY"
+            },
             {
               "type": "FEATURE",
               "abilityType": "PASSIVE",

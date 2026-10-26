@@ -57,6 +57,13 @@ public record Grant(
                 components, perLevel, feet, fromRegion, damageBonus);
     }
 
+    // A mesma concessão com outra quantidade de pés (SPEED que cresce a cada escolha do traço: 15, 15, 10…).
+    public Grant withFeet(Double newFeet) {
+        return new Grant(type, attribute, amount, count, options, skill, value, label, name, description, abilityType,
+                spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
+                components, perLevel, newFeet, fromRegion, damageBonus);
+    }
+
     // FEATURE com options: a habilidade pede uma escolha (ex.: o tipo de dano do Resistente).
     public boolean hasOptions() {
         return options != null && !options.isEmpty();

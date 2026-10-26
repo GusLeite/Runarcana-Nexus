@@ -47,6 +47,8 @@ public class RuleCatalogService {
     // Tipos de ponto de Herança (value da concessão HERITAGE_POINTS; sem value = ANY).
     static final Set<String> HERITAGE_SCOPES = Set.of("REGION", "ORIGIN", "GENERAL", "ANY");
     static final Set<String> TRAIT_TIERS = Set.of("MINOR", "MAJOR", "SUPERIOR");
+    // Tipo de deslocamento da concessão SPEED (sem value = WALK; ALL = todos os deslocamentos que o personagem tiver).
+    static final Set<String> SPEED_TYPES = Set.of("WALK", "SWIM", "CLIMB", "FLY", "BURROW", "ALL");
     private static final Set<String> CRAFT_KINDS = Set.of("MAJOR", "MINOR");
 
     private final RuleCatalog catalog;
@@ -348,6 +350,7 @@ public class RuleCatalogService {
                 }
                 case SPEED -> {
                     if (g.feet() == null) p.add(at + " (SPEED): precisa de feet");
+                    if (g.value() != null && !SPEED_TYPES.contains(g.value())) p.add(at + " (SPEED): value deve ser um destes: " + SPEED_TYPES);
                 }
                 case SIZE -> {
                     if (g.value() == null || !SIZES.contains(g.value())) p.add(at + " (SIZE): value deve ser um destes: " + SIZES);

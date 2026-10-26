@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-26 — Tipos de deslocamento (`feature/character-sheet`)
+- `SPEED` com `value` (`SWIM`, `CLIMB`, `FLY`, `BURROW`, `ALL`); a ficha guarda os outros deslocamentos em `character_speeds` (`MovementType`) e a ficha/prévia mandam `speeds`.
+- Catálogo: Marai nada 50, Ottrani escala 20, Yordle Aquático nada 35, Feérico voa 30; traços Aquático, Escalador, Alado e Escavação da Runinata crescem 15, 15, 10… (`speedSteps`); Deslocamento reduzido tira de todos.
+- Front: `SpeedToggle` no herói da ficha e na ficha em construção, clicar alterna o tipo exibido. Conferido no sandbox com um Marai (25 pés caminhada → 50 pés natação).
+
 ## 2026-10-26 — Variante Nebulon completa (`feature/character-sheet`)
 - **Variante Nebulon** com o texto do livro (Memória Longeva, Essência não humanóide, Mente Centenária, Gasoso) e a perícia da Memória Longeva como opção da Herança. A Progressão Tecnológica já tinha o texto completo.
 

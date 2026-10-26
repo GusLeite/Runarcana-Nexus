@@ -76,7 +76,7 @@ Escolhas sem opções cadastradas aparecem no assistente como aviso e **não blo
 | `PROFICIENCY_CHOICE` | `count`, `options`? (`SKILL`/`CRAFT`/`MARTIAL_WEAPON`; sem = os três), `label`? | Proficiência à escolha entre perícia, ofício e arma marcial (Funcional do Emissário). Perícia e ofício entram na ficha; arma marcial vira a passiva "Proficiência em arma marcial" (a ficha ainda não tem lista de armas). Opções na chave: `SKILL:ARCANA`, `CRAFT:alquimista`, `MARTIAL_WEAPON` |
 | `FEATURE` | `name`, `description`, `abilityType` (`PASSIVE`/`ABILITY`/`SPELL`), `spellLevel`, `damage` ("2d6+4"), `maxUses` **ou** `usesFormula`, `diceByProficiency`, `recharge` (`SHORT_REST`/`LONG_REST`/`NONE`), `castingTime`, `range`, `duration`, `components`, `options` (habilidade com escolha: o jogador escolhe 1 e ela vira "Resistente (Ígneo)"), `damageBonus` (somado ao dado: `PROFICIENCY`, `HALF_PROFICIENCY` ou um atributo, ex.: `["PROFICIENCY", "STRENGTH"]` → Chifres 1d6+5 com Força 17) | Vira uma passiva, habilidade ou magia na aba **Magias** |
 | `HP_BONUS` | `amount` **ou** `usesFormula`, `perLevel`?, `label`? | +PV (`perLevel` marca que se repete a cada nível). Com `usesFormula` (`HALF_PROFICIENCY`/`PROFICIENCY`) o valor sai do bônus de proficiência do nível: a Constituição Poderosa do Minotauro dá +1 no 1º nível e +12 até o 10º |
-| `SPEED` | `feet` | +deslocamento em pés |
+| `SPEED` | `feet`, `value`? (`WALK`, `SWIM`, `CLIMB`, `FLY`, `BURROW` ou `ALL`) | +deslocamento em pés. Sem `value` = caminhada; `SWIM` natação, `CLIMB` escalada, `FLY` voo, `BURROW` escavação (ex.: Marai nada 50); `ALL` soma (ou tira) de todos os deslocamentos que o personagem tiver. Na ficha, clicar no deslocamento alterna entre os tipos |
 | `GOLD` | `amount` | +ouro inicial |
 
 **Habilidades que escalam** (`FEATURE`): `usesFormula` = `FIXED` (usa `maxUses`), `HALF_PROFICIENCY` (metade do bônus de proficiência, arredondada por `rounding`, mínimo 1), `PROFICIENCY` ou `ATTRIBUTE_MODIFIER` (modificador do `attribute` da concessão, mínimo 1; ex.: Urro Triunfante = mod. de Constituição). "Descanso pleno" do livro é cadastrado como `LONG_REST`. `diceByProficiency` = dado por bônus, valendo o maior bônus atingido, ex.: `{ "2": "1d4", "4": "1d6", "6": "1d8" }`. Na criação (nível 1, bônus +2) o Inspirado do Humano fica com 1 uso de 1d4; a subida de nível vai recalcular. O arredondamento é **para baixo**: os exemplos da Constituição Poderosa do Minotauro (+1 no 1º nível, +12 no 10º) só fecham assim.
@@ -136,6 +136,7 @@ A origem com `"usesTraits": true` (a Runinata) não tem traços fixos: ganha a e
     "detail": "Qual tipo de dano?",   // pergunta de texto livre; a resposta entra no nome ("Resistência Natural (Ígneo)")
     "background": true,               // libera o Passado (Antecedente)
     "silent": true,                   // não vira passiva própria (quando as concessões bastam)
+    "speedSteps": [15, 15, 10],       // pés das concessões SPEED em cada escolha (1ª, 2ª, 3ª em diante)
     "grants": [ ... ]                 // concessões normais, aplicadas a cada escolha
   } ],
   "drawbacks": [ { "id": "um-olho", "name": "Apenas 1 olho", "group": "Forma", "points": 1, "description": "...", "maxTimes": 1 } ]
@@ -148,7 +149,8 @@ A origem com `"usesTraits": true` (a Runinata) não tem traços fixos: ganha a e
 - Cada escolha é uma fonte de concessões ("Traço: Garras"), então perícias, ofícios e habilidades com opção caem na etapa **Escolhas** com chave `trait:<id>:<n>:<índice>` (desvantagens: `drawback:...`). Sem `silent`, o traço vira uma passiva com o texto, a resposta no nome e "(2×)" quando repetido.
 - **Passado**: sem traço com `background`, a Runinata não tem Passado (escolher um é erro); com Antecedente, ele volta a ser obrigatório.
 - Tamanho fixo de uma concessão (`SIZE`, ex.: Chaveirinho → Miúdo) vence a escolha de tamanho (`SIZE_CHOICE`).
-- O que só existe como texto: deslocamentos de natação/escalada/voo/escavação, telepatia, idiomas (desligados), Oriundo (as regiões não dão proficiências no sistema), Resquício.
+- Aquático, Escalador, Alado e Escavação dão o deslocamento de verdade, crescendo a cada escolha pelo `speedSteps` do traço (15, 15, 10…); Deslocamento reduzido tira 5 pés de todos (`SPEED` com `ALL`).
+- O que só existe como texto: telepatia, idiomas (desligados), Oriundo (as regiões não dão proficiências no sistema), Resquício.
 
 ## O que falta definir (preencher com as regras do Runarcana)
 

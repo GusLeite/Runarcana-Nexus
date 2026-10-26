@@ -43,6 +43,8 @@ public record CharacterResponse(
         String lineage,
         // Em pés.
         Double speed,
+        // Todos os deslocamentos (caminhada primeiro, depois natação, escalada, voo, escavação).
+        List<SpeedLine> speeds,
         List<Attribute> savingThrows,
         CreatureSize size,
         List<String> languages,
@@ -84,6 +86,7 @@ public record CharacterResponse(
                 character.getOrigin(),
                 character.getLineage(),
                 character.getSpeed(),
+                SpeedLine.of(character),
                 // Na ordem da ficha (FOR, DES, CON, INT, SAB, CAR).
                 character.getSavingThrows().stream().sorted().toList(),
                 character.getSize(),

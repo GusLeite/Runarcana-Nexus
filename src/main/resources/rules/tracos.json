@@ -44,7 +44,19 @@
       "name": "Aquático",
       "tier": "MINOR",
       "description": "Você recebe 15 pés de deslocamento de natação. Cada vez que você escolhe esse traço, o deslocamento aumenta: 15, 15, 10… pés.",
-      "maxTimes": 4
+      "maxTimes": 4,
+      "grants": [
+        {
+          "type": "SPEED",
+          "feet": 15,
+          "value": "SWIM"
+        }
+      ],
+      "speedSteps": [
+        15,
+        15,
+        10
+      ]
     },
     {
       "id": "antecedente",
@@ -172,7 +184,19 @@
       "name": "Escalador",
       "tier": "MINOR",
       "description": "Você recebe 15 pés de deslocamento de escalada. Cada vez que você escolhe esse traço, o deslocamento aumenta: 15, 15, 10… pés.",
-      "maxTimes": 4
+      "maxTimes": 4,
+      "grants": [
+        {
+          "type": "SPEED",
+          "feet": 15,
+          "value": "CLIMB"
+        }
+      ],
+      "speedSteps": [
+        15,
+        15,
+        10
+      ]
     },
     {
       "id": "especialista",
@@ -280,7 +304,19 @@
       "name": "Alado",
       "tier": "MAJOR",
       "description": "Você possui deslocamento de voo. Cada vez que você escolhe esse traço, o deslocamento aumenta: 15, 15, 10… pés.",
-      "maxTimes": 4
+      "maxTimes": 4,
+      "grants": [
+        {
+          "type": "SPEED",
+          "feet": 15,
+          "value": "FLY"
+        }
+      ],
+      "speedSteps": [
+        15,
+        15,
+        10
+      ]
     },
     {
       "id": "anfibio",
@@ -406,7 +442,19 @@
       "name": "Escavação",
       "tier": "MAJOR",
       "description": "Você possui membros adaptados para escavação, recebendo deslocamento de escavação. Você não pode escavar rocha sólida. Cada vez que você escolhe esse traço, o deslocamento aumenta: 15, 15, 10… pés.",
-      "maxTimes": 4
+      "maxTimes": 4,
+      "grants": [
+        {
+          "type": "SPEED",
+          "feet": 15,
+          "value": "BURROW"
+        }
+      ],
+      "speedSteps": [
+        15,
+        15,
+        10
+      ]
     },
     {
       "id": "ferrao-venenoso",
@@ -647,7 +695,8 @@
       "grants": [
         {
           "type": "SPEED",
-          "feet": -5
+          "feet": -5,
+          "value": "ALL"
         }
       ]
     },

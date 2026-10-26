@@ -43,7 +43,7 @@ Conta sem ficha: a ficha mostra "Ficha em branco" com **CRIAR PERSONAGEM**, que 
 - **Ficha em construção** (`BuildSummary.jsx`, à direita): atributos com bônus, PV (com o dado), deslocamento, ouro, tamanho, pontos de Herança (gastos de total), idiomas (só se houver), ofícios, resistências, perícias e passivas (com usos e dado já calculados) — cada uma com a fonte ("Origem: …", "Classe: …") — e a lista do que falta. Vem de `POST /creation/preview`, chamado 220 ms depois de cada mudança: **as contas são do back**, o front só mostra.
 - `api/creation.js` (catálogo, prévia, criar); estilos em `styles/creation.css`.
 
-A ficha também passou a mostrar **Origem**, **Deslocamento** (pés), **Tamanho**, **Idiomas**, **Ofícios**, **Heranças** e **Pontos de Herança** a gastar no herói (os cinco últimos só quando existem); na aba **Magias**, as Heranças formam o grupo **Heranças** (tipo `HERITAGE`), "Passado" no lugar de "Antecedente" e o card **Resistências** (`SavingThrows.jsx`: mod. do atributo + proficiência da classe, clicável para rolar).
+A ficha também passou a mostrar **Origem**, **Deslocamento** (pés; com mais de um tipo, `SpeedToggle.jsx` vira um botão: clicar alterna entre caminhada, natação, escalada, voo e escavação, com o nome do tipo e "1/2". Também na ficha em construção), **Tamanho**, **Idiomas**, **Ofícios**, **Heranças** e **Pontos de Herança** a gastar no herói (os cinco últimos só quando existem); na aba **Magias**, as Heranças formam o grupo **Heranças** (tipo `HERITAGE`), "Passado" no lugar de "Antecedente" e o card **Resistências** (`SavingThrows.jsx`: mod. do atributo + proficiência da classe, clicável para rolar).
 
 ## Tela pós-login: ficha do personagem
 

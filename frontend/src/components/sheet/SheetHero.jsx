@@ -1,5 +1,6 @@
 import { ALIGNMENT_NAMES, CLASS_NAMES, REGION_NAMES, SIZE_NAMES, formatFeet } from '../../data/rules.js'
 import Num from './Num.jsx'
+import SpeedToggle from './SpeedToggle.jsx'
 
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
@@ -46,7 +47,8 @@ export default function SheetHero({ character, sheet }) {
           <dl className="facts">
             <Fact label="Jogador" value={sheet.playerName} />
             <Fact label="Origem" value={sheet.origin && (sheet.lineage ? sheet.origin + ' (' + sheet.lineage + ')' : sheet.origin)} />
-            <Fact label="Deslocamento" value={sheet.speed != null ? formatFeet(sheet.speed) : null} />
+            <Fact label="Deslocamento" value={sheet.speeds?.length ? <SpeedToggle speeds={sheet.speeds} />
+              : sheet.speed != null ? formatFeet(sheet.speed) : null} />
             {sheet.size && <Fact label="Tamanho" value={SIZE_NAMES[sheet.size]} />}
             {sheet.languages?.length > 0 && <Fact label="Idiomas" value={sheet.languages.join(', ')} />}
             {sheet.crafts?.length > 0 && <Fact label="Ofícios" value={sheet.crafts.join(', ')} />}

@@ -74,8 +74,9 @@ class RuleCatalogValidationTests {
 
     @Test
     void conferenciaDosTracos() {
-        RuleTrait noTier = new RuleTrait("t1", "T1", "ENORME", null, null, "texto", null, List.of("nao-existe"), null, null, null, null);
-        RuleTrait noPoints = new RuleTrait("d1", "D1", null, "Forma", 0.0, "texto", null, null, null, null, null, null);
+        RuleTrait noTier = new RuleTrait("t1", "T1", "ENORME", null, null, "texto", null, List.of("nao-existe"), null, null, null,
+                List.of(grant(GrantType.SPEED, "NADAR")), null);
+        RuleTrait noPoints = new RuleTrait("d1", "D1", null, "Forma", 0.0, "texto", null, null, null, null, null, null, null);
         RuleTraits traits = new RuleTraits(List.of(new RuleTraits.Budget("B", "Base", null, 1, null)), Map.of(),
                 Map.of("MINOR", 1), List.of(noTier), List.of(noPoints));
         RuleOption runinata = new RuleOption("runinata", "Runinata", null, null, null, null, null, null, List.of(), null, true, null);
@@ -89,6 +90,7 @@ class RuleCatalogValidationTests {
                 "traço t1: tier deve ser MINOR, MAJOR ou SUPERIOR",
                 "traço t1: requires cita traço inexistente \"nao-existe\"",
                 "desvantagem d1: points deve ser maior que 0");
+        assertThat(problems).anyMatch(p -> p.startsWith("traço t1, concessão 1 (SPEED): value deve ser"));
     }
 
     @Test

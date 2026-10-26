@@ -102,6 +102,8 @@ describe('criação de personagem', () => {
     expect(grantLabel({ type: 'HP_BONUS', amount: 1, perLevel: true })).toBe('+1 PV por nível')
     expect(grantLabel({ type: 'HP_BONUS', usesFormula: 'HALF_PROFICIENCY', perLevel: true })).toBe('+½ do bônus de proficiência em PV por nível')
     expect(grantLabel({ type: 'SPEED', feet: 5 })).toBe('+5 pés de deslocamento')
+    expect(grantLabel({ type: 'SPEED', feet: 50, value: 'SWIM' })).toBe('+50 pés de natação')
+    expect(grantLabel({ type: 'SPEED', feet: -5, value: 'ALL' })).toBe('−5 pés de todos os deslocamentos')
     expect(grantLabel({ type: 'GOLD', amount: 10 })).toBe('+10 de ouro')
     expect(grantLabel({ type: 'SIZE_CHOICE', options: ['SMALL', 'MEDIUM'] })).toBe('Tamanho: Pequeno ou Médio')
     expect(grantLabel({ type: 'CRAFT', value: 'ferraria' }, [{ id: 'ferraria', name: 'Ferraria' }])).toBe('Ofício: Ferraria')

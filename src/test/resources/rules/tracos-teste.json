@@ -98,6 +98,25 @@
       "tier": "SUPERIOR",
       "description": "Superior.",
       "detail": "Qual?"
+    },
+    {
+      "id": "t-nadador",
+      "name": "Nadador Teste",
+      "tier": "MINOR",
+      "description": "Nada.",
+      "maxTimes": 3,
+      "grants": [
+        {
+          "type": "SPEED",
+          "feet": 15,
+          "value": "SWIM"
+        }
+      ],
+      "speedSteps": [
+        15,
+        15,
+        10
+      ]
     }
   ],
   "drawbacks": [
@@ -112,7 +131,8 @@
       "grants": [
         {
           "type": "SPEED",
-          "feet": -5
+          "feet": -5,
+          "value": "ALL"
         }
       ]
     },

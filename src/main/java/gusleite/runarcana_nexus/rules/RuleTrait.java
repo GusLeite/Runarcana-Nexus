@@ -10,6 +10,7 @@ import java.util.List;
 // - background: o traço libera a escolha de um Passado (Antecedente).
 // - silent: não vira uma passiva com o texto (quando as concessões já bastam, ex.: Perícia).
 // - grants: concessões normais (as mesmas do criacao.json), aplicadas uma vez por escolha.
+// - speedSteps: quanto o deslocamento do traço cresce a cada escolha (troca os pés das concessões SPEED).
 public record RuleTrait(
         String id,
         String name,
@@ -22,7 +23,9 @@ public record RuleTrait(
         String detail,
         Boolean background,
         Boolean silent,
-        List<Grant> grants
+        List<Grant> grants,
+        // Pés de cada escolha para as concessões SPEED do traço (ex.: [15, 15, 10] = 15 na 1ª, 15 na 2ª, 10 da 3ª em diante).
+        List<Double> speedSteps
 ) {
     public int maxTimesOrOne() {
         return maxTimes == null ? 1 : maxTimes;

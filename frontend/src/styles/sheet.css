@@ -429,3 +429,12 @@ input.note-title{padding:10px 12px;font-family:'Cinzel',Georgia,serif;font-size:
 /* Testes de resistência (SavingThrows.jsx): mesmas linhas das perícias, em duas colunas. */
 .saves{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}
 @container (max-width:420px){.saves{grid-template-columns:1fr}}
+
+/* Deslocamento com vários tipos (SpeedToggle): clicar passa para o próximo */
+.speed-toggle{display:inline-flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:2px 6px;padding:0;border:0;border-bottom:1px dashed rgba(47,211,192,.45);background:none;color:inherit;font:inherit;cursor:pointer}
+.speed-toggle:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.speed-toggle .speed-value{animation:speed-in .25s ease}
+.speed-toggle .speed-type{font-family:inherit;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal)}
+.speed-toggle .speed-count{font-size:10px;letter-spacing:0;text-transform:none;color:var(--muted)}
+.speed-toggle:hover{border-bottom-color:var(--teal)}
+@keyframes speed-in{from{opacity:0;transform:translateY(-4px)}}

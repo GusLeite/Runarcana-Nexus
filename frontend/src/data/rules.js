@@ -229,6 +229,9 @@ export function setTraitDetail(picks, id, n, detail) {
 // Pontos de Origem com meio ponto: 2.5 → "2,5".
 export const formatPoints = n => n.toLocaleString('pt-BR', { maximumFractionDigits: 1 })
 
+// Tipos de deslocamento (concessão SPEED com value; ficha e prévia em "speeds"). ALL = todos os deslocamentos.
+export const MOVEMENT_NAMES = { WALK: 'Caminhada', SWIM: 'Natação', CLIMB: 'Escalada', FLY: 'Voo', BURROW: 'Escavação' }
+
 // Deslocamento em pés, como no livro.
 export const formatFeet = ft => ft.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' pés'
 
@@ -253,7 +256,8 @@ export function grantLabel(g, crafts = []) {
     case 'FEATURE': return (ABILITY_TYPES[g.abilityType ?? 'PASSIVE']?.name ?? 'Passiva') + ': ' + g.name + (g.options?.length ? ' (à escolha)' : '')
     case 'PROFICIENCY_CHOICE': return g.label ?? plural(g.count, 'proficiência', 'proficiências') + ' à escolha'
     case 'HP_BONUS': return g.label ?? (HP_FORMULAS[g.usesFormula] ?? signed(g.amount)) + ' PV' + (g.perLevel ? ' por nível' : '')
-    case 'SPEED': return signed(g.feet) + ' pés de deslocamento'
+    case 'SPEED': return signed(g.feet) + ' pés de ' + (!g.value || g.value === 'WALK' ? 'deslocamento'
+      : g.value === 'ALL' ? 'todos os deslocamentos' : MOVEMENT_NAMES[g.value]?.toLowerCase() ?? g.value)
     case 'GOLD': return signed(g.amount) + ' de ouro'
     case 'SIZE': return 'Tamanho: ' + (SIZE_NAMES[g.value] ?? g.value)
     case 'SIZE_CHOICE': return g.label ?? 'Tamanho: ' + g.options.map(o => SIZE_NAMES[o] ?? o).join(' ou ')

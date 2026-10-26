@@ -273,6 +273,17 @@ class CreationControllerTests {
         preview(token, superior.replace("{\"id\":\"d-lento\"},", ""))
                 .andExpect(jsonPath("$.errors", hasItem("Os traços escolhidos passam do que o modo Teste e as desvantagens permitem.")));
 
+        // Natação que cresce a cada escolha (15, 15, 10) e redução de 5 pés em todos os deslocamentos.
+        String swimmer = base + ",\"traitBudget\":\"TESTE\",\"traits\":[{\"id\":\"t-garras\"},{\"id\":\"t-nadador\"},{\"id\":\"t-nadador\"},"
+                + "{\"id\":\"t-nadador\"}],\"drawbacks\":[{\"id\":\"d-fraco\",\"detail\":\"Ígneo\"},{\"id\":\"d-fraco\",\"detail\":\"Gélido\"},"
+                + "{\"id\":\"d-lento\"}]}";
+        preview(token, swimmer)
+                .andExpect(jsonPath("$.complete").value(true))
+                .andExpect(jsonPath("$.speeds[0].type").value("WALK"))
+                .andExpect(jsonPath("$.speeds[0].feet").value(25.0))
+                .andExpect(jsonPath("$.speeds[1].type").value("SWIM"))
+                .andExpect(jsonPath("$.speeds[1].feet").value(35.0));
+
         // Tamanho fixo de um traço vence a escolha da origem; Herança dá pontos de Heranças Gerais.
         preview(token, base + ",\"traitBudget\":\"TESTE\",\"traits\":[{\"id\":\"t-chaveiro\"},{\"id\":\"t-heranca\"}]}")
                 .andExpect(jsonPath("$.size").value("TINY"))
@@ -280,9 +291,12 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.heritagePools[0].points").value(2));
 
         mvc.perform(post("/creation").header("Authorization", "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON).content(ok + "}"))
+                        .contentType(MediaType.APPLICATION_JSON).content(swimmer))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.origin").value("Runinata Teste"));
+                .andExpect(jsonPath("$.origin").value("Runinata Teste"))
+                .andExpect(jsonPath("$.speed").value(25.0))
+                .andExpect(jsonPath("$.speeds[1].type").value("SWIM"))
+                .andExpect(jsonPath("$.speeds[1].feet").value(35.0));
     }
 
     @Test

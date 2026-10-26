@@ -1,5 +1,6 @@
-import { ABILITY_TYPES, ATTRIBUTES, SIZE_NAMES, SKILL_NAMES, attributeById, formatFeet, formatModifier, formatPoints } from '../../data/rules.js'
+import { ABILITY_TYPES, ATTRIBUTES, SIZE_NAMES, SKILL_NAMES, attributeById, formatModifier, formatPoints } from '../../data/rules.js'
 import Num from '../sheet/Num.jsx'
+import SpeedToggle from '../sheet/SpeedToggle.jsx'
 
 // "Ficha em construção": o resultado calculado pelo back para as escolhas atuais.
 export default function BuildSummary({ preview, catalog, draft }) {
@@ -34,7 +35,7 @@ export default function BuildSummary({ preview, catalog, draft }) {
 
           <div className="build-stats">
             <div><b>{preview.hitDie ? <Num value={preview.maxHp} duration={400} /> : '—'}</b><span>PV{preview.hitDie ? ' (d' + preview.hitDie + ')' : ''}</span></div>
-            <div><b>{preview.speed ? formatFeet(preview.speed) : '—'}</b><span>Deslocamento</span></div>
+            <div><b>{preview.speeds?.length ? <SpeedToggle speeds={preview.speeds} /> : '—'}</b><span>Deslocamento</span></div>
             <div><b><Num value={preview.gold} duration={400} /></b><span>Ouro</span></div>
           </div>
 

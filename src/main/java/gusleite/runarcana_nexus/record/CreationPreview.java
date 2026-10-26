@@ -22,6 +22,8 @@ public record CreationPreview(
         int hitDie,
         // Em pés.
         double speed,
+        // Todos os deslocamentos (caminhada primeiro).
+        List<SpeedLine> speeds,
         int gold,
         CreatureSize size,
         List<String> languages,
