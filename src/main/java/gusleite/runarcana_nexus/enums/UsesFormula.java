@@ -11,5 +11,7 @@ public enum UsesFormula {
     // Dobro do bônus de proficiência. Ex.: Fúria Símia.
     DOUBLE_PROFICIENCY,
     // Metade do nível do personagem (arredondamento do catálogo), mínimo 1. Ex.: Autossacrifício.
-    HALF_LEVEL
+    HALF_LEVEL,
+    // Metade do modificador do atributo da concessão, mínimo 1. Ex.: Charme Sobrenatural = metade do mod. de Carisma.
+    HALF_ATTRIBUTE_MODIFIER
 }

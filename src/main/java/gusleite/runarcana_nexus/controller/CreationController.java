@@ -7,6 +7,8 @@ import gusleite.runarcana_nexus.rules.RuleCatalog;
 import gusleite.runarcana_nexus.services.AuthService;
 import gusleite.runarcana_nexus.services.CreationService;
 import gusleite.runarcana_nexus.services.RuleCatalogService;
+import gusleite.runarcana_nexus.services.TableSettingsService;
+import gusleite.runarcana_nexus.record.TableSettingsResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +22,13 @@ public class CreationController {
     private final CreationService creation;
     private final RuleCatalogService rules;
     private final AuthService auth;
+    private final TableSettingsService settings;
 
-    public CreationController(CreationService creation, RuleCatalogService rules, AuthService auth) {
+    public CreationController(CreationService creation, RuleCatalogService rules, AuthService auth, TableSettingsService settings) {
         this.creation = creation;
         this.rules = rules;
         this.auth = auth;
+        this.settings = settings;
     }
 
     @GetMapping("/catalog")
@@ -32,6 +36,23 @@ public class CreationController {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
         auth.authenticate(authorization);
         return ResponseEntity.ok(rules.catalog());
+    }
+
+    // Configurações da mesa que valem na criação (ex.: modo de traços da Runinata travado pelo mestre).
+    @GetMapping("/settings")
+    public ResponseEntity<TableSettingsResponse> settings(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        auth.authenticate(authorization);
+        return ResponseEntity.ok(settings.get());
+    }
+
+    // Só o mestre: trava (ou destrava, com null) o modo de traços da Runinata.
+    @PutMapping("/settings")
+    public ResponseEntity<TableSettingsResponse> updateSettings(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @RequestBody TableSettingsResponse request) {
+        auth.requireMaster(authorization);
+        return ResponseEntity.ok(settings.update(request.traitBudget()));
     }
 
     // Ficha em construção: não salva nada; errors diz o que falta para poder criar.

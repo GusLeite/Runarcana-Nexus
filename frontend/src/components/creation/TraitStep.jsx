@@ -24,6 +24,8 @@ export default function TraitStep({ system, preview, draft, onChange }) {
   const picks = drawbacksTab ? draft.drawbacks : draft.traits
   const setPicks = list => onChange(drawbacksTab ? 'drawbacks' : 'traits', list)
   const budget = preview?.traitBudget
+  // Modo travado pelo mestre: só ele aparece, sem poder trocar.
+  const locked = !!budget?.locked
   const names = useMemo(() => Object.fromEntries(system.traits.map(t => [t.id, t.name])), [system])
 
   const list = useMemo(() => {
@@ -42,17 +44,18 @@ export default function TraitStep({ system, preview, draft, onChange }) {
     <>
       <h4 className="step-title">Traços</h4>
       <p className="step-hint">
-        A Runinata monta a própria origem. Combine o modo com o mestre: ele diz quantos Traços Menores e Maiores você recebe.
+        A Runinata monta a própria origem. O modo, combinado com o mestre, diz quantos Traços Menores e Maiores você recebe.
         Desvantagens dão pontos de Origem, que compram mais traços (Menor {system.costs.MINOR}, Maior {system.costs.MAJOR},
         Superior {system.costs.SUPERIOR}). Se precisar, um traço de cada tipo do modo vira pontos sozinho.
       </p>
 
+      {locked && <p className="trait-converted">O mestre definiu o modo da mesa: {system.budgets.find(b => b.id === budget.budget)?.name}.</p>}
       <div className="options compact trait-budgets" role="radiogroup" aria-label="Modo de traços">
-        {system.budgets.map((b, n) => {
-          const on = b.id === draft.traitBudget
+        {system.budgets.filter(b => !locked || b.id === budget.budget).map((b, n) => {
+          const on = locked || b.id === draft.traitBudget
           return (
             <button key={b.id} type="button" role="radio" aria-checked={on} className={'option' + (on ? ' on' : '')} style={{ '--n': n }}
-              onClick={() => onChange('traitBudget', b.id)}>
+              disabled={locked} onClick={() => onChange('traitBudget', b.id)}>
               <span className="option-head"><span className="option-name">{b.name}</span></span>
               <span className="option-facts">
                 <span className="fact-chip">{b.minor} menores</span>

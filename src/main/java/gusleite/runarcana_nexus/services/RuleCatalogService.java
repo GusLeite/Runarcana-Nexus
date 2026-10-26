@@ -9,6 +9,7 @@ import gusleite.runarcana_nexus.enums.SkillType;
 import gusleite.runarcana_nexus.enums.UsesFormula;
 import gusleite.runarcana_nexus.rules.AttributeMethods;
 import gusleite.runarcana_nexus.rules.Grant;
+import gusleite.runarcana_nexus.rules.HeritageCondition;
 import gusleite.runarcana_nexus.rules.RuleCatalog;
 import gusleite.runarcana_nexus.rules.RuleClass;
 import gusleite.runarcana_nexus.rules.RuleHeritage;
@@ -242,7 +243,16 @@ public class RuleCatalogService {
             if (blank(h.name())) p.add(where + ": falta name");
             if (blank(h.description())) p.add(where + ": falta description");
             if (h.category() == null) p.add(where + ": category deve ser um destes: " + Arrays.toString(HeritageCategory.values()));
-            if (h.category() == HeritageCategory.ORIGIN && h.originsOrEmpty().isEmpty()) p.add(where + ": Herança de Origem precisa de origins");
+            if (h.category() == HeritageCategory.ORIGIN && h.originsOrEmpty().isEmpty() && h.anyOfOrEmpty().isEmpty()) {
+                p.add(where + ": Herança de Origem precisa de origins ou anyOf");
+            }
+            for (HeritageCondition cond : h.anyOfOrEmpty()) {
+                cond.lineagesOrEmpty().stream().filter(l -> !lineages.contains(l.toLowerCase()))
+                        .forEach(l -> p.add(where + ": anyOf cita linhagem desconhecida \"" + l + "\""));
+                if (cond.heritage() != null && !ids.contains(cond.heritage().toLowerCase())) {
+                    p.add(where + ": anyOf cita herança inexistente \"" + cond.heritage() + "\"");
+                }
+            }
             if (h.category() == HeritageCategory.REGION && h.regionsOrEmpty().isEmpty()) p.add(where + ": Herança de Região precisa de regions");
             h.regionsOrEmpty().stream().filter(r -> !regions.contains(r)).forEach(r -> p.add(where + ": região desconhecida \"" + r + "\""));
             h.lineagesOrEmpty().stream().filter(l -> !lineages.contains(l.toLowerCase()))
@@ -397,8 +407,18 @@ public class RuleCatalogService {
             p.add(at + " (FEATURE): damage deve ser como 2d6 ou 2d6+4");
         }
         if (g.maxUses() != null && g.maxUses() < 1) p.add(at + " (FEATURE): maxUses deve ser maior que 0");
-        if (g.usesFormula() == UsesFormula.ATTRIBUTE_MODIFIER && g.attribute() == null) {
-            p.add(at + " (FEATURE): usesFormula ATTRIBUTE_MODIFIER precisa de attribute");
+        if ((g.usesFormula() == UsesFormula.ATTRIBUTE_MODIFIER || g.usesFormula() == UsesFormula.HALF_ATTRIBUTE_MODIFIER) && g.attribute() == null) {
+            p.add(at + " (FEATURE): usesFormula " + g.usesFormula() + " precisa de attribute");
+        }
+        if (g.optionUses() != null) {
+            g.optionUses().forEach((option, u) -> {
+                if (!g.hasOptions() || !g.options().contains(option)) p.add(at + " (FEATURE): optionUses cita opção inexistente \"" + option + "\"");
+                if (u.usesFormula() == null && u.maxUses() == null) p.add(at + " (FEATURE): optionUses \"" + option + "\" precisa de usesFormula ou maxUses");
+                if ((u.usesFormula() == UsesFormula.ATTRIBUTE_MODIFIER || u.usesFormula() == UsesFormula.HALF_ATTRIBUTE_MODIFIER)
+                        && u.attribute() == null && g.attribute() == null) {
+                    p.add(at + " (FEATURE): optionUses \"" + option + "\" precisa de attribute");
+                }
+            });
         }
         if (g.usesPlus() != null && (g.usesFormula() == null || g.usesFormula() == UsesFormula.FIXED)) {
             p.add(at + " (FEATURE): usesPlus só vale com usesFormula (ex.: PROFICIENCY + 3)");

@@ -45,7 +45,9 @@ public record Grant(
         // Somado aos usos da fórmula: Plumadagas = 3 + bônus de proficiência (usesFormula PROFICIENCY, usesPlus 3).
         Integer usesPlus,
         // SKILL e SKILL_CHOICE: "proficiência; caso já tenha, especialidade" (perícia já proficiente vira especialidade).
-        Boolean expertise
+        Boolean expertise,
+        // FEATURE com options: usos próprios de cada opção (chave = a opção).
+        Map<String, UsesRule> optionUses
 ) {
     // A Herança escolhida vira uma habilidade do tipo HERITAGE com o texto completo.
     public static Grant heritage(String name, String description) {
@@ -54,21 +56,29 @@ public record Grant(
 
     public static Grant feature(AbilityType type, String name, String description) {
         return new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, name, description, type,
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     // A mesma concessão com outro nome (habilidade com opção: "Resistente" → "Resistente (Ígneo)").
     public Grant withName(String newName) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, newName, description, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
-                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise);
+                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses);
     }
 
     // A mesma concessão com outra quantidade de pés (SPEED que cresce a cada escolha do traço: 15, 15, 10…).
     public Grant withFeet(Double newFeet) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, name, description, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
-                components, perLevel, newFeet, fromRegion, damageBonus, armor, usesPlus, expertise);
+                components, perLevel, newFeet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses);
+    }
+
+    // A mesma concessão com os usos da opção escolhida (optionUses).
+    public Grant withUses(UsesRule u) {
+        return new Grant(type, u.attribute() != null ? u.attribute() : attribute, amount, count, options,
+                skill, value, label, name, description, abilityType, spellLevel, damage, u.maxUses(), u.usesFormula(),
+                diceByProficiency, u.recharge() == null ? recharge : u.recharge(), castingTime, range, duration, components,
+                perLevel, feet, fromRegion, damageBonus, armor, u.usesPlus(), expertise, optionUses);
     }
 
     // FEATURE com options: a habilidade pede uma escolha (ex.: o tipo de dano do Resistente).

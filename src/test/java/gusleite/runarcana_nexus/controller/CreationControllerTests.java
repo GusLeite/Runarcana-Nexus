@@ -18,6 +18,7 @@ import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -210,12 +211,21 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.features[?(@.name == 'Urro Teste')].uses").value(2))
                 // habilidade com opção e proficiência mista (aqui, um ofício)
                 .andExpect(jsonPath("$.features[?(@.name == 'Resistente (Gélido)')].source").value("Linhagem: Sol"))
+                // opção com usos próprios (optionUses)
+                .andExpect(jsonPath("$.features[?(@.name == 'Resistente (Gélido)')].uses").value(1))
+                // anyOf: vale pelo caminho "Resistente (Gélido)"
+                .andExpect(jsonPath("$.heritageOptions[?(@.id == 'teste-alternativa')].available").value(true))
                 // ganho do 2º nível da linhagem não entra na ficha de 1º nível
                 .andExpect(jsonPath("$.features[?(@.name == 'Sopro Teste')]").isEmpty())
                 .andExpect(jsonPath("$.crafts", hasItem("alquimia")));
 
         preview(token, tribal.replace("CRAFT:alquimia", "MARTIAL_WEAPON") + ",\"lineageId\":\"sol\"}")
                 .andExpect(jsonPath("$.features[?(@.name == 'Proficiência em arma marcial')].source").value("Linhagem: Sol"));
+
+        // anyOf: Resistente (Ígneo) não cumpre nenhum caminho; sem usos próprios.
+        preview(token, tribal.replace("Gélido", "Ígneo") + ",\"lineageId\":\"sol\"}")
+                .andExpect(jsonPath("$.heritageOptions[?(@.id == 'teste-alternativa')].available").value(false))
+                .andExpect(jsonPath("$.features[?(@.name == 'Resistente (Ígneo)')].uses").value(org.hamcrest.Matchers.contains((Object) null)));
 
         preview(token, tribal + ",\"lineageId\":\"lua\"}")
                 .andExpect(jsonPath("$.errors", hasItem("Herança Sol Teste: pré-requisito: Tribal Sol.")));
@@ -298,6 +308,39 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.speed").value(25.0))
                 .andExpect(jsonPath("$.speeds[1].type").value("SWIM"))
                 .andExpect(jsonPath("$.speeds[1].feet").value(35.0));
+    }
+
+    @Test
+    void mestreTravaOModoDeTracos() throws Exception {
+        String master = login("mestre");
+        String player = login("gaudron");
+        String body = "{\"originId\":\"teste-runinata\",\"traitBudget\":\"OUTRO\"}";
+
+        mvc.perform(put("/creation/settings").header("Authorization", "Bearer " + player)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"traitBudget\":\"TESTE\"}"))
+                .andExpect(status().isForbidden());
+        mvc.perform(put("/creation/settings").header("Authorization", "Bearer " + master)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"traitBudget\":\"NAO-EXISTE\"}"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(put("/creation/settings").header("Authorization", "Bearer " + master)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"traitBudget\":\"TESTE\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.traitBudget").value("TESTE"));
+
+        // Travado: vale o modo do mestre, mesmo que o jogador mande outro.
+        mvc.perform(get("/creation/settings").header("Authorization", "Bearer " + player))
+                .andExpect(jsonPath("$.traitBudget").value("TESTE"));
+        preview(player, body)
+                .andExpect(jsonPath("$.traitBudget.budget").value("TESTE"))
+                .andExpect(jsonPath("$.traitBudget.locked").value(true))
+                .andExpect(jsonPath("$.errors", not(hasItem("Modo de traços desconhecido."))));
+
+        // Destravado: o jogador volta a escolher.
+        mvc.perform(put("/creation/settings").header("Authorization", "Bearer " + master)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"traitBudget\":null}"))
+                .andExpect(jsonPath("$.traitBudget").doesNotExist());
+        preview(player, body)
+                .andExpect(jsonPath("$.errors", hasItem("Modo de traços desconhecido.")));
     }
 
     @Test

@@ -169,7 +169,13 @@
               "options": [
                 "Ígneo",
                 "Gélido"
-              ]
+              ],
+              "optionUses": {
+                "Gélido": {
+                  "maxUses": 1,
+                  "recharge": "LONG_REST"
+                }
+              }
             },
             {
               "type": "PROFICIENCY_CHOICE",

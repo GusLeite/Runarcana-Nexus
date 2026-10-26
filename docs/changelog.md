@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-26 — Usos por opção, pré-requisitos alternativos e regras da mesa (`feature/character-sheet`)
+- `optionUses` em habilidade com escolha e fórmula `HALF_ATTRIBUTE_MODIFIER`: Florescência (Charme Sobrenatural = metade do mod. de Carisma; Nictinastia, Sopro de Esporos e Sopro Polinizador = 1 por descanso) e Fibras (Cedro e Cerejeira = 1; Teixo = metade do bônus).
+- Heranças com `anyOf` (caminhos alternativos: origem, linhagem, outra Herança com opção, opção de habilidade): Cauda Preênsil também para Meio-Vastaya Shimon/Oovi-Kat; Variante Glacinata só para Construto/Humano/Minotauro/Yordle, Troll do Gelo e Floral com Flor Gélida.
+- Regras da mesa: tabela `table_setting`, `GET/PUT /creation/settings`; o mestre trava o modo de traços da Runinata na nova aba **Regras da mesa** e a etapa Traços respeita.
+- Testes: `mestreTravaOModoDeTracos`, usos por opção e `anyOf` em `linhagemEObrigatoriaEValeComoPreRequisito`, validação do `anyOf`. Conferido no sandbox.
+
 ## 2026-10-26 — Força ou Destreza e especialidade (`feature/character-sheet`)
 - `damageBonus` `STRENGTH_OR_DEXTERITY`: o dano usa o maior entre Força e Destreza. Aplicado nas Garras/Caudas do Meio-Dragão, Garras do Kiilash e Garras da Runinata.
 - **Especialidade**: `CharacterSkill.expertise` (bônus de proficiência em dobro, inclusive nas passivas); `SkillResponse` e a prévia trazem `expertise`. Concessões: `SKILL`/`SKILL_CHOICE` com `expertise` ("caso já tenha, especialidade", decidido no fim, com todas as perícias) e `EXPERTISE_CHOICE` (especialidade em perícia que já tem). Técnicos do Nocti e traço Especialista da Runinata.

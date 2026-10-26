@@ -28,8 +28,14 @@ public record RuleHeritage(
         String prerequisite,
         Integer maxTimes,
         List<String> options,
-        String description
+        String description,
+        // Pré-requisito com caminhos alternativos: basta cumprir um. Quando existe, substitui origins/lineages na conferência.
+        List<HeritageCondition> anyOf
 ) {
+    public List<HeritageCondition> anyOfOrEmpty() {
+        return anyOf == null ? List.of() : anyOf;
+    }
+
     public int maxTimesOrOne() {
         return maxTimes == null ? 1 : maxTimes;
     }

@@ -82,7 +82,7 @@ Escolhas sem opções cadastradas aparecem no assistente como aviso e **não blo
 | `ARMOR_CLASS` | `name`, `armor` { `base`, `dex` (padrão true), `dexMax`, `attribute`, `proficiency`, `reduction`, `blocksArmor` }, `options`?, `label`? | Uma **opção de defesa** (CA alternativa): base + mod. de Destreza (limitado por `dexMax`) + mod. de `attribute` + proficiência, com RD = `reduction`. Com `options` (atributos), o jogador escolhe o atributo somado (Armadura Natural da Runinata). `blocksArmor`: as armaduras do inventário deixam de servir. Ex.: Pele de Árvore, modos da Proteção Ajustável |
 | `AC_BONUS` | `name`, `amount` ou `usesFormula: PROFICIENCY`, `armor` { `unarmoredOnly`, `blocksArmor` }? | **Bônus de CA** somado à defesa em uso (Escorregadio + bônus de proficiência; Armadura Natural do Auroque +1 só sem armadura) |
 
-**Habilidades que escalam** (`FEATURE`): `usesFormula` = `FIXED` (usa `maxUses`), `HALF_PROFICIENCY` (metade do bônus de proficiência, arredondada por `rounding`, mínimo 1), `PROFICIENCY`, `ATTRIBUTE_MODIFIER` (modificador do `attribute` da concessão, mínimo 1; ex.: Urro Triunfante = mod. de Constituição), `DOUBLE_PROFICIENCY` (dobro do bônus; Fúria Símia) ou `HALF_LEVEL` (metade do nível do personagem, mínimo 1; Autossacrifício). `usesPlus` soma um valor fixo à fórmula (Plumadagas: `PROFICIENCY` + 3). "Descanso pleno" do livro é cadastrado como `LONG_REST`. `diceByProficiency` = dado por bônus, valendo o maior bônus atingido, ex.: `{ "2": "1d4", "4": "1d6", "6": "1d8" }`. Na criação (nível 1, bônus +2) o Inspirado do Humano fica com 1 uso de 1d4; a subida de nível vai recalcular. O arredondamento é **para baixo**: os exemplos da Constituição Poderosa do Minotauro (+1 no 1º nível, +12 no 10º) só fecham assim.
+**Habilidades que escalam** (`FEATURE`): `usesFormula` = `FIXED` (usa `maxUses`), `HALF_PROFICIENCY` (metade do bônus de proficiência, arredondada por `rounding`, mínimo 1), `PROFICIENCY`, `ATTRIBUTE_MODIFIER` (modificador do `attribute` da concessão, mínimo 1; ex.: Urro Triunfante = mod. de Constituição), `DOUBLE_PROFICIENCY` (dobro do bônus; Fúria Símia), `HALF_LEVEL` (metade do nível do personagem, mínimo 1; Autossacrifício) ou `HALF_ATTRIBUTE_MODIFIER` (metade do mod. do `attribute`, mínimo 1). `usesPlus` soma um valor fixo à fórmula (Plumadagas: `PROFICIENCY` + 3). Habilidade com escolha (`options`) pode ter **usos por opção** em `optionUses`: `{ "Charme Sobrenatural": { "usesFormula": "HALF_ATTRIBUTE_MODIFIER", "attribute": "CHARISMA", "recharge": "LONG_REST" }, "Cedro": { "maxUses": 1 } }` (campos: `usesFormula`, `maxUses`, `attribute`, `usesPlus`, `recharge`); as opções sem entrada ficam sem contador. "Descanso pleno" do livro é cadastrado como `LONG_REST`. `diceByProficiency` = dado por bônus, valendo o maior bônus atingido, ex.: `{ "2": "1d4", "4": "1d6", "6": "1d8" }`. Na criação (nível 1, bônus +2) o Inspirado do Humano fica com 1 uso de 1d4; a subida de nível vai recalcular. O arredondamento é **para baixo**: os exemplos da Constituição Poderosa do Minotauro (+1 no 1º nível, +12 no 10º) só fecham assim.
 
 Atributos: `STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENCE, WISDOM, CHARISMA`.
 Perícias: `ATHLETICS, ACROBATICS, SLEIGHT_OF_HAND, STEALTH, ARCANA, HISTORY, INVESTIGATION, NATURE, RELIGION, TECHNOLOGY, INSIGHT, ANIMAL_HANDLING, MEDICINE, PERCEPTION, SURVIVAL, DECEPTION, INTIMIDATION, PERFORMANCE, PERSUASION`.
@@ -106,6 +106,11 @@ Arquivo à parte (são muitas e com texto longo), no formato `{ "heritages": [ .
   "initial": true,                  // "Inicial": só na criação
   "excludes": ["operario"],         // não pode junto com essas Heranças
   "requires": ["variante-nebulon"], // precisa ter escolhido pelo menos uma destas Heranças
+  "anyOf": [                        // caminhos alternativos (basta um; substitui origins/lineages na conferência).
+    { "lineages": ["shimon", "oovi-kat"] },                                       // cada caminho: todos os campos
+    { "heritage": "variante-meio-vastaya", "heritageOptions": ["Shimon", "Oovi-Kat"] },  // preenchidos precisam bater
+    { "lineages": ["floral"], "feature": "Florescência", "featureOptions": ["Flor Gélida"] }  // opção de habilidade com escolha
+  ],
   "prerequisite": "Piltovense, não ter as Heranças Operário ou Privilegiado",  // o texto do livro, sempre mostrado
   "maxTimes": 2,                    // quantas vezes pode ser escolhida (padrão 1)
   "options": ["Marai", "Shimon"],   // sub-escolha obrigatória (tribo do Meio-Vastaya, fonte da Progressão Tecnológica...)
@@ -146,7 +151,7 @@ A origem com `"usesTraits": true` (a Runinata) não tem traços fixos: ganha a e
 }
 ```
 
-- O jogador escolhe o **modo** (combinado com o mestre), os traços e as desvantagens. As desvantagens somam pontos de Origem (pode haver meio ponto).
+- O jogador escolhe o **modo** (combinado com o mestre), os traços e as desvantagens. O mestre pode **travar o modo** na aba **Regras da mesa** do painel (`PUT /creation/settings`); travado, o assistente mostra só esse modo e o back ignora o que o jogador mandar. As desvantagens somam pontos de Origem (pode haver meio ponto).
 - Traços Menores e Maiores ocupam primeiro as vagas do modo; o que passar custa pontos. Superiores só com pontos.
 - **Conversão automática**: o back testa converter (ou não) 1 Traço Menor (+1 ponto) e 1 Maior (+2) e fica com a combinação que cobre as escolhas com menos sobra; a etapa mostra quando converteu. Faltar é erro ("passam do que o modo… permitem"); sobrar vaga ou ponto inteiro também ("Ainda sobram traços ou pontos de Origem").
 - Cada escolha é uma fonte de concessões ("Traço: Garras"), então perícias, ofícios e habilidades com opção caem na etapa **Escolhas** com chave `trait:<id>:<n>:<índice>` (desvantagens: `drawback:...`). Sem `silent`, o traço vira uma passiva com o texto, a resposta no nome e "(2×)" quando repetido.

@@ -96,6 +96,26 @@
       ],
       "prerequisite": "Targon Teste",
       "description": "Precisa da Targon Teste."
+    },
+    {
+      "id": "teste-alternativa",
+      "name": "Alternativa Teste",
+      "category": "ORIGIN",
+      "prerequisite": "Tribal Lua ou Resistente (Gélido)",
+      "description": "Dois caminhos.",
+      "anyOf": [
+        {
+          "lineages": [
+            "lua"
+          ]
+        },
+        {
+          "feature": "Resistente",
+          "featureOptions": [
+            "Gélido"
+          ]
+        }
+      ]
     }
   ]
 }

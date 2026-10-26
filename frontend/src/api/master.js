@@ -22,3 +22,10 @@ export const fetchRecipients = token => request('/documents/recipients', { token
 export const createDocument = (token, doc) => request('/documents', { method: 'POST', token, body: doc })
 
 export const deleteDocument = (token, id) => request('/documents/' + id, { method: 'DELETE', token })
+
+// Regras da mesa: modo de traços da Runinata travado (traitBudget: id do modo ou null = o jogador escolhe).
+export const fetchTableSettings = token => request('/creation/settings', { token })
+
+export const updateTableSettings = (token, settings) => request('/creation/settings', { method: 'PUT', token, body: settings })
+
+export { fetchCatalog } from './creation.js'

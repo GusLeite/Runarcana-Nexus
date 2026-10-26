@@ -1045,16 +1045,32 @@
       "id": "variante-glacinata",
       "name": "Variante Glacinata",
       "category": "ORIGIN",
-      "origins": [
-        "antroplantae",
-        "construto",
-        "humano",
-        "minotauro",
-        "troll",
-        "yordle"
-      ],
       "prerequisite": "Construto, Humano, Minotauro, Yordle, Antroplantæ Floral com Flor Gélida ou Troll do Gelo",
-      "description": "Você possui em seu sangue a força dos Glacinatas, uma experimentação feita pelos Observadores Gélidos em Freljordianos no passado, mas que ainda corre entre os dos dias atuais. Você não pode escolher as heranças Ignata ou Eletrinata.\n\n• Você recebe imunidade a Frio Extremo e resistência a Calor Extremo.\n• Você recebe redução de dano Gélido igual ao seu bônus de proficiência.\n• Você faz testes para usar gelo verdadeiro com vantagem e você utiliza o dobro de seu modificador de Constituição para a duração Adicionalmente, o dano gélido ou glacial causado por você tem seu dano aumentado em 1 categoria."
+      "description": "Você possui em seu sangue a força dos Glacinatas, uma experimentação feita pelos Observadores Gélidos em Freljordianos no passado, mas que ainda corre entre os dos dias atuais. Você não pode escolher as heranças Ignata ou Eletrinata.\n\n• Você recebe imunidade a Frio Extremo e resistência a Calor Extremo.\n• Você recebe redução de dano Gélido igual ao seu bônus de proficiência.\n• Você faz testes para usar gelo verdadeiro com vantagem e você utiliza o dobro de seu modificador de Constituição para a duração Adicionalmente, o dano gélido ou glacial causado por você tem seu dano aumentado em 1 categoria.",
+      "anyOf": [
+        {
+          "origins": [
+            "construto",
+            "humano",
+            "minotauro",
+            "yordle"
+          ]
+        },
+        {
+          "lineages": [
+            "troll-gelo"
+          ]
+        },
+        {
+          "lineages": [
+            "floral"
+          ],
+          "feature": "Florescência",
+          "featureOptions": [
+            "Flor Gélida"
+          ]
+        }
+      ]
     },
     {
       "id": "variante-meio-vastaya",
@@ -1695,15 +1711,23 @@
       "id": "cauda-preensil",
       "name": "Cauda Preênsil",
       "category": "ORIGIN",
-      "origins": [
-        "vastaya"
-      ],
-      "lineages": [
-        "shimon",
-        "oovi-kat"
-      ],
       "prerequisite": "Shimon, Oovi’kat ou Meio Vastaya Shimon ou Oovi’kat",
-      "description": "Sua cauda é quase uma terceira mão e braço para você. Você ganha os seguintes benefícios:\n\nComo uma ação bônus você pode realizar as seguintes ações com sua cauda:\nPegar ou segurar um objeto que pese até 1 quilo com sua cauda. Se fizer isso enquanto estiver roubando, você ganha vantagem no teste de Prestidigitação.\nAbrir e Fechar portas.\nUsar ferramentas de chaveiro.\nGanhar vantagem em jogadas de Agarrão.\nUsar a ação Ajuda a uma criatura amigável até 5 pés de você.\nSe pendurar."
+      "description": "Sua cauda é quase uma terceira mão e braço para você. Você ganha os seguintes benefícios:\n\nComo uma ação bônus você pode realizar as seguintes ações com sua cauda:\nPegar ou segurar um objeto que pese até 1 quilo com sua cauda. Se fizer isso enquanto estiver roubando, você ganha vantagem no teste de Prestidigitação.\nAbrir e Fechar portas.\nUsar ferramentas de chaveiro.\nGanhar vantagem em jogadas de Agarrão.\nUsar a ação Ajuda a uma criatura amigável até 5 pés de você.\nSe pendurar.",
+      "anyOf": [
+        {
+          "lineages": [
+            "shimon",
+            "oovi-kat"
+          ]
+        },
+        {
+          "heritage": "variante-meio-vastaya",
+          "heritageOptions": [
+            "Shimon",
+            "Oovi-Kat"
+          ]
+        }
+      ]
     },
     {
       "id": "centelha-magica-vesani",

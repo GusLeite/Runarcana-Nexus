@@ -44,6 +44,7 @@ import gusleite.runarcana_nexus.repository.CharacterRepository;
 import gusleite.runarcana_nexus.rules.ArmorFormula;
 import gusleite.runarcana_nexus.rules.AttributeMethods;
 import gusleite.runarcana_nexus.rules.Grant;
+import gusleite.runarcana_nexus.rules.HeritageCondition;
 import gusleite.runarcana_nexus.rules.RuleCatalog;
 import gusleite.runarcana_nexus.rules.RuleClass;
 import gusleite.runarcana_nexus.rules.RuleHeritage;
@@ -88,16 +89,18 @@ public class CreationService {
     private final CharacterClassRepository classes;
     private final BackGroundRepository backgrounds;
     private final CharacterAbilityRepository abilities;
+    private final TableSettingsService settings;
 
     public CreationService(RuleCatalogService rules, CharacterService characterService, CharacterRepository characters,
                            CharacterClassRepository classes, BackGroundRepository backgrounds,
-                           CharacterAbilityRepository abilities) {
+                           CharacterAbilityRepository abilities, TableSettingsService settings) {
         this.rules = rules;
         this.characterService = characterService;
         this.characters = characters;
         this.classes = classes;
         this.backgrounds = backgrounds;
         this.abilities = abilities;
+        this.settings = settings;
     }
 
     public CreationPreview preview(CreationRequest request) {
@@ -296,7 +299,13 @@ public class CreationService {
                         String label = orLabel(g, g.name() + ": escolha uma opção");
                         List<String> selected = choose(picked, g.options(), 1, label, b.errors);
                         String name = selected.isEmpty() ? g.name() : g.name() + " (" + selected.getFirst() + ")";
-                        b.features.add(new Sourced<>(g.withName(name), s.label()));
+                        Grant chosen = g.withName(name);
+                        // Opção com usos próprios (ex.: Charme Sobrenatural = metade do mod. de Carisma).
+                        if (!selected.isEmpty() && g.optionUses() != null && g.optionUses().containsKey(selected.getFirst())) {
+                            chosen = chosen.withUses(g.optionUses().get(selected.getFirst()));
+                        }
+                        if (!selected.isEmpty()) b.featureOptions.put(g.name(), selected.getFirst());
+                        b.features.add(new Sourced<>(chosen, s.label()));
                         b.choices.add(new ChoiceLine(key, g.type(), label, 1, g.options(), selected, s.label(), null));
                     }
                     case PROFICIENCY_CHOICE -> {
@@ -455,7 +464,9 @@ public class CreationService {
             b.errors.add("O sistema de traços não está cadastrado.");
             return;
         }
-        RuleTraits.Budget budget = pick(r.traitBudget(),
+        // Modo travado pelo mestre vence o que o jogador mandou.
+        String locked = settings.lockedTraitBudget();
+        RuleTraits.Budget budget = pick(locked != null ? locked : r.traitBudget(),
                 id -> system.budgetsOrEmpty().stream().filter(x -> x.id().equalsIgnoreCase(id)).findFirst(),
                 "Escolha o modo de traços combinado com o mestre.", "Modo de traços desconhecido.", b.errors);
         Map<String, Picked> traits = collectTraits(r.traits(), rules::trait, "Traço desconhecido.", b);
@@ -519,7 +530,7 @@ public class CreationService {
         double points = drawbackPoints + cm * system.conversionOf("MINOR") + cj * system.conversionOf("MAJOR");
         int cost = traitCost(system, minor - slotsMinor, major - slotsMajor, superior);
         b.traitBudget = new TraitBudgetStatus(budget.id(), slotsMinor, slotsMajor, Math.min(minor, slotsMinor),
-                Math.min(major, slotsMajor), cm == 1, cj == 1, drawbackPoints, points, cost);
+                Math.min(major, slotsMajor), cm == 1, cj == 1, drawbackPoints, points, cost, locked != null);
         if (best == null) {
             b.errors.add("Os traços escolhidos passam do que o modo " + budget.name() + " e as desvantagens permitem.");
         } else if (bestWaste > 0) {
@@ -613,7 +624,7 @@ public class CreationService {
         for (Map.Entry<String, Integer> e : times.entrySet()) {
             RuleHeritage h = byId.get(e.getKey());
             int t = e.getValue();
-            String reason = blockReason(h, b, times.keySet());
+            String reason = blockReason(h, b, times.keySet(), options);
             if (reason != null) b.errors.add("Herança " + h.name() + ": " + reason + ".");
             if (t > h.maxTimesOrOne()) {
                 b.errors.add(h.maxTimesOrOne() == 1 ? h.name() + " só pode ser escolhida uma vez."
@@ -642,7 +653,7 @@ public class CreationService {
 
         boolean canBuy = false;
         for (RuleHeritage h : rules.catalog().heritagesOrEmpty()) {
-            String reason = blockReason(h, b, times.keySet());
+            String reason = blockReason(h, b, times.keySet(), options);
             int t = times.getOrDefault(h.id(), 0);
             if (reason == null && t < h.maxTimesOrOne()) canBuy = true;
             b.heritageOptions.add(new HeritageStatus(h.id(), reason == null, reason, t));
@@ -654,7 +665,7 @@ public class CreationService {
     }
 
     // Por que a Herança não pode ser escolhida agora (null = pode). Na criação vale tudo que é "Inicial".
-    private String blockReason(RuleHeritage h, Build b, Set<String> chosen) {
+    private String blockReason(RuleHeritage h, Build b, Set<String> chosen, Map<String, String> chosenOptions) {
         if (h.category() == null) return "sem tipo";
         if (b.pools.keySet().stream().noneMatch(scope -> allows(scope, h.category()))) {
             if (b.pools.isEmpty()) return "você não tem pontos de Herança";
@@ -663,13 +674,18 @@ public class CreationService {
                     : "seus pontos não compram Heranças Gerais";
         }
         String pre = "pré-requisito: " + (h.prerequisite() == null ? "não atendido" : h.prerequisite());
-        if (!h.originsOrEmpty().isEmpty()
-                && (b.origin == null || h.originsOrEmpty().stream().noneMatch(o -> o.equalsIgnoreCase(b.origin.id())))) {
-            return pre;
-        }
-        if (!h.lineagesOrEmpty().isEmpty()
-                && (b.lineage == null || h.lineagesOrEmpty().stream().noneMatch(o -> o.equalsIgnoreCase(b.lineage.id())))) {
-            return pre;
+        if (!h.anyOfOrEmpty().isEmpty()) {
+            // Caminhos alternativos: basta cumprir um (substitui origins/lineages).
+            if (h.anyOfOrEmpty().stream().noneMatch(cond -> meets(cond, b, chosen, chosenOptions))) return pre;
+        } else {
+            if (!h.originsOrEmpty().isEmpty()
+                    && (b.origin == null || h.originsOrEmpty().stream().noneMatch(o -> o.equalsIgnoreCase(b.origin.id())))) {
+                return pre;
+            }
+            if (!h.lineagesOrEmpty().isEmpty()
+                    && (b.lineage == null || h.lineagesOrEmpty().stream().noneMatch(o -> o.equalsIgnoreCase(b.lineage.id())))) {
+                return pre;
+            }
         }
         if (!h.regionsOrEmpty().isEmpty()
                 && (b.region == null || h.regionsOrEmpty().stream().noneMatch(o -> o.equalsIgnoreCase(b.region.id())))) {
@@ -692,6 +708,28 @@ public class CreationService {
             }
         }
         return null;
+    }
+
+    // Um caminho do anyOf: todos os campos preenchidos precisam bater.
+    private static boolean meets(HeritageCondition c, Build b, Set<String> chosen, Map<String, String> chosenOptions) {
+        if (!c.originsOrEmpty().isEmpty()
+                && (b.origin == null || c.originsOrEmpty().stream().noneMatch(o -> o.equalsIgnoreCase(b.origin.id())))) {
+            return false;
+        }
+        if (!c.lineagesOrEmpty().isEmpty()
+                && (b.lineage == null || c.lineagesOrEmpty().stream().noneMatch(l -> l.equalsIgnoreCase(b.lineage.id())))) {
+            return false;
+        }
+        if (c.heritage() != null) {
+            String id = chosen.stream().filter(x -> x.equalsIgnoreCase(c.heritage())).findFirst().orElse(null);
+            if (id == null) return false;
+            if (!c.heritageOptionsOrEmpty().isEmpty() && !c.heritageOptionsOrEmpty().contains(chosenOptions.get(id))) return false;
+        }
+        if (c.feature() != null) {
+            String option = b.featureOptions.get(c.feature());
+            if (option == null || (!c.featureOptionsOrEmpty().isEmpty() && !c.featureOptionsOrEmpty().contains(option))) return false;
+        }
+        return true;
     }
 
     static boolean allows(String scope, HeritageCategory category) {
@@ -830,6 +868,7 @@ public class CreationService {
             case ATTRIBUTE_MODIFIER -> Math.max(1, modifier.applyAsInt(g.attribute()));
             case DOUBLE_PROFICIENCY -> proficiency * 2;
             case HALF_LEVEL -> Math.max(1, half(level, roundUp));
+            case HALF_ATTRIBUTE_MODIFIER -> Math.max(1, half(modifier.applyAsInt(g.attribute()), roundUp));
         };
         return g.usesPlus() == null ? uses : uses + g.usesPlus();
     }
@@ -931,6 +970,8 @@ public class CreationService {
         final List<Deferred> deferred = new ArrayList<>();
         final Map<Attribute, String> saves = new LinkedHashMap<>();
         final List<Sourced<Grant>> features = new ArrayList<>();
+        // Opção escolhida em cada habilidade com escolha (nome da habilidade → opção), para pré-requisitos de Herança.
+        final Map<String, String> featureOptions = new LinkedHashMap<>();
         final List<ChoiceLine> choices = new ArrayList<>();
         final Set<String> languages = new LinkedHashSet<>();
         final Set<String> crafts = new LinkedHashSet<>();

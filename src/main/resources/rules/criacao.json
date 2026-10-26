@@ -714,7 +714,21 @@
                 "Sequoia",
                 "Seringueira",
                 "Teixo"
-              ]
+              ],
+              "optionUses": {
+                "Cedro": {
+                  "maxUses": 1,
+                  "recharge": "LONG_REST"
+                },
+                "Cerejeira": {
+                  "maxUses": 1,
+                  "recharge": "LONG_REST"
+                },
+                "Teixo": {
+                  "usesFormula": "HALF_PROFICIENCY",
+                  "recharge": "LONG_REST"
+                }
+              }
             }
           ]
         },
@@ -761,7 +775,26 @@
                 "Raízes Detectoras",
                 "Sopro de Esporos",
                 "Sopro Polinizador"
-              ]
+              ],
+              "optionUses": {
+                "Charme Sobrenatural": {
+                  "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+                  "attribute": "CHARISMA",
+                  "recharge": "LONG_REST"
+                },
+                "Nictinastia": {
+                  "maxUses": 1,
+                  "recharge": "LONG_REST"
+                },
+                "Sopro de Esporos": {
+                  "maxUses": 1,
+                  "recharge": "LONG_REST"
+                },
+                "Sopro Polinizador": {
+                  "maxUses": 1,
+                  "recharge": "LONG_REST"
+                }
+              }
             }
           ]
         }

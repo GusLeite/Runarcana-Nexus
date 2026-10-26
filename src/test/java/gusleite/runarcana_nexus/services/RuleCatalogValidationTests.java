@@ -6,6 +6,7 @@ import gusleite.runarcana_nexus.rules.AttributeMethods;
 import gusleite.runarcana_nexus.rules.Grant;
 import gusleite.runarcana_nexus.rules.RuleCatalog;
 import gusleite.runarcana_nexus.rules.RuleClass;
+import gusleite.runarcana_nexus.rules.HeritageCondition;
 import gusleite.runarcana_nexus.rules.RuleHeritage;
 import gusleite.runarcana_nexus.rules.RuleLevel;
 import gusleite.runarcana_nexus.rules.RuleLineage;
@@ -26,13 +27,14 @@ class RuleCatalogValidationTests {
 
     private static Grant grant(GrantType type, String value) {
         return new Grant(type, null, null, null, null, null, value, null, null, null, null, null, null, null, null, null,
-                null, null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     @Test
     void conferenciaDasHerancas() {
         RuleHeritage noRegion = new RuleHeritage("h1", "H1", HeritageCategory.REGION, null, null, List.of("tribo-x"), List.of("MAGO"), null, null,
-                List.of("nao-existe"), List.of("tambem-nao"), null, 0, null, "texto");
+                List.of("nao-existe"), List.of("tambem-nao"), null, 0, null, "texto",
+                List.of(new HeritageCondition(null, List.of("tribo-y"), "sem-heranca", null, null, null)));
         RuleCatalog catalog = new RuleCatalog(new AttributeMethods(null, List.of(15, 14, 13, 12, 10, 8), null), 30.0, "DOWN",
                 List.of(new RuleCatalog.Craft("x", "X", "GRANDE")), List.of(), List.of(), List.of(), List.of(), List.of(noRegion), null);
 
@@ -42,6 +44,8 @@ class RuleCatalogValidationTests {
                 "herança h1: classe desconhecida \"MAGO\"",
                 "herança h1: excludes cita herança inexistente \"nao-existe\"",
                 "herança h1: requires cita herança inexistente \"tambem-nao\"",
+                "herança h1: anyOf cita linhagem desconhecida \"tribo-y\"",
+                "herança h1: anyOf cita herança inexistente \"sem-heranca\"",
                 "herança h1: maxTimes deve ser 1 ou mais",
                 "herança h1: linhagem desconhecida \"tribo-x\"",
                 "ofícios x: kind deve ser MAJOR ou MINOR");

@@ -101,3 +101,14 @@ font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:13px;letter-spacing
  .master-body{padding:16px 16px 40px}
  .master-badge{display:none}
 }
+
+/* Regras da mesa (MasterRules) */
+.rules-card{max-width:980px}
+.rules-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:12px}
+.rules-option{display:flex;flex-direction:column;gap:6px;padding:12px 14px;border:1px solid rgba(200,162,74,.25);background:rgba(0,0,0,.35);color:var(--text);font:inherit;text-align:left;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.rules-option:hover:not(:disabled){border-color:var(--gold-soft)}
+.rules-option.on{border-color:var(--gold-hi);box-shadow:0 0 0 1px var(--gold),0 0 22px rgba(240,199,94,.22);background:linear-gradient(180deg,rgba(40,30,8,.6),rgba(1,10,19,.9))}
+.rules-option:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.rules-option-name{font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:15px;color:var(--gold-hi)}
+.rules-option-facts{font-size:12px;letter-spacing:.06em;color:var(--teal)}
+.rules-option-desc{font-size:13px;line-height:1.45;color:#cfc7b2}

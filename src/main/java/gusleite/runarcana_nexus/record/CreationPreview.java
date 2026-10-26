@@ -64,9 +64,10 @@ public record CreationPreview(
 
     // Conta dos traços: os do modo (menores/maiores, menos os convertidos em pontos), quantos foram usados,
     // e os pontos de Origem (desvantagens + conversões) e quanto deles foi gasto. Pontos podem ter meio ponto.
+    // locked: o modo foi travado pelo mestre (o jogador não escolhe).
     public record TraitBudgetStatus(String budget, int minorSlots, int majorSlots, int minorUsed, int majorUsed,
                                     boolean minorConverted, boolean majorConverted, double drawbackPoints,
-                                    double points, double pointsSpent) {}
+                                    double points, double pointsSpent, boolean locked) {}
 
     // Traço ou desvantagem escolhido (kind TRAIT ou DRAWBACK). tier: MINOR, MAJOR, SUPERIOR (null na desvantagem).
     public record TraitLine(String id, String name, String kind, String tier, List<String> details, int times) {}
