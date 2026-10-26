@@ -1087,7 +1087,28 @@
         "construto"
       ],
       "prerequisite": "Construto",
-      "description": "Nem todos que partilham da origem Construto são criaturas construídas artificialmente. Os Nebulon são criaturas gasosas, quase dizimadas nas Guerras Rúnicas; os poucos sobreviventes fugiram para onde futuramente seria Piltover. Seu corpo real é um aglomerado de gás que, embora consiga se manter coeso, tem dificuldade em existir fora de um recipiente limitado, por isso criam corpos metálicos com os quais se integram completamente. Sua reprodução é extremamente rara; a maioria está bem consolidada em Piltover, com riquezas e influência conquistadas pela longevidade e pelo conhecimento acumulado.\n\nPara fins mecânicos, os Nebulons fazem parte da origem Construto; para ser um Nebulon é necessário possuir esta Herança.\n\nVeja mais detalhes no Capítulo 5: Personalização - Heranças Variantes - Nebulon."
+      "options": [
+        "Acrobacia",
+        "Adestrar Animais",
+        "Arcanismo",
+        "Atletismo",
+        "Atuação",
+        "Enganação",
+        "Furtividade",
+        "História",
+        "Intimidação",
+        "Intuição",
+        "Investigação",
+        "Medicina",
+        "Natureza",
+        "Percepção",
+        "Persuasão",
+        "Prestidigitação",
+        "Religião",
+        "Sobrevivência",
+        "Tecnologia"
+      ],
+      "description": "Você é um Nebulon, sua composição real é gasosa, o que faz com que possa se dispersar facilmente caso não esteja em um recipiente fechado, portanto você utiliza um corpo mecânico se adaptando totalmente a ele e fazendo parte da origem Construto.\n\nVocê recebe todos os traços de um Construto do Modelo escolhido, mas por pertencer a essa origem, recebe os seguintes modificadores:\n• Memória Longeva: Você possui provavelmente mais de algumas centenas de anos. Escolha uma perícia para receber especialidade e 2 idiomas.\n• Essência não humanóide: Você recebe apenas metade dos pontos de vida da magia reparar dano.\n• Mente Centenária: Você faz salvaguardas contra efeitos de controle mental e condições comportamentais com vantagem. São consideradas Condições Comportamentais as seguintes: Amedrontado, Enfeitiçado e Provocado.\n• Gasoso: Você recebe pontos de exaustão normalmente, mas eles são aplicados ao seu corpo robótico, e não a você. Ao alcançar 10 níveis de exaustão, você não morre, mas seu corpo robótico para de funcionar, você recebe a condição Atordoado até que elimine níveis de exaustão.\n\nOs Nebulons são criaturas gasosas, quase dizimadas nas Guerras Rúnicas; os poucos sobreviventes fugiram para onde futuramente seria Piltover, onde a maioria está bem consolidada, com riquezas e influência conquistadas pela longevidade e pelo conhecimento acumulado. Para fins mecânicos fazem parte da origem Construto, e para ser um Nebulon é necessário possuir esta Herança."
     },
     {
       "id": "variante-progressao-tecnologica",

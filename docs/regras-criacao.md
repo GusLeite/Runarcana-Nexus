@@ -154,7 +154,7 @@ A origem com `"usesTraits": true` (a Runinata) não tem traços fixos: ganha a e
 
 Para cada item, basta mandar o texto do livro ou um resumo; eu converto para o JSON.
 
-1. **Origens**: todas cadastradas. Falta o texto dos benefícios da **Variante Nebulon** (Capítulo 5: Heranças Variantes); hoje ela tem só a descrição da origem. Confirmado pelo usuário: Chireano com pontos de Origem, Chicote de Espinhos soma Destreza, bando do Troll não obriga a região. Os traços do Meio-Dragão por nível usam `levels` (ver **Formato**). Pode usar o mesmo para outros ganhos por nível de origem (ex.: Mordida do Troll 1d8 no 6º), quando a subida de nível existir.
+1. **Origens**: todas cadastradas, inclusive a **Variante Nebulon** completa. Confirmado pelo usuário: Chireano com pontos de Origem, Chicote de Espinhos soma Destreza, bando do Troll não obriga a região. Os traços do Meio-Dragão por nível usam `levels` (ver **Formato**). Pode usar o mesmo para outros ganhos por nível de origem (ex.: Mordida do Troll 1d8 no 6º), quando a subida de nível existir.
 2. **Métodos de atributos** que a mesa usa (compra de pontos com quantos pontos e qual tabela, arranjo padrão, rolagem) e limite máximo na criação.
 4. **Classes** (as 9): dado de vida, resistências, perícias à escolha, habilidades do 1º nível, ouro/equipamento inicial e os ganhos por nível.
 5. **Passados** (Capítulo 4): perícias, ouro e característica.

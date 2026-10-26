@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-26 — Variante Nebulon completa (`feature/character-sheet`)
+- **Variante Nebulon** com o texto do livro (Memória Longeva, Essência não humanóide, Mente Centenária, Gasoso) e a perícia da Memória Longeva como opção da Herança. A Progressão Tecnológica já tinha o texto completo.
+
 ## 2026-10-26 — Ganhos por nível na origem e na linhagem (`feature/character-sheet`)
 - `levels` em origem e linhagem (mesmo formato das classes, níveis 2 a 20), conferidos ao subir. Não entram na ficha de 1º nível; o cartão do assistente mostra "Ao subir de nível". Aplicação fica para a subida de nível.
 - **Meio-Dragão**: sopro de cada essência no 2º (usos = bônus de proficiência, dano bônus×d6, área da essência), Forma Dracônica da essência no 8º (usos = metade do bônus, até 3 horas) e Resistência Dracônica no 15º (dano mágico da essência). Saíram as passivas de texto do 1º nível.
