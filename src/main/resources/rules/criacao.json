@@ -478,12 +478,13 @@
         },
         {
           "type": "ARMOR_CLASS",
-          "name": "Proteção Ajustável: Médio (exige proficiência com armaduras médias)",
+          "name": "Proteção Ajustável: Médio",
           "armor": {
             "base": 16,
             "dexMax": 2,
             "reduction": 1,
-            "blocksArmor": true
+            "blocksArmor": true,
+            "requiresArmor": "MEDIUM"
           }
         }
       ],
@@ -521,12 +522,13 @@
             },
             {
               "type": "ARMOR_CLASS",
-              "name": "Proteção Ajustável: Pesado (exige proficiência com armaduras pesadas)",
+              "name": "Proteção Ajustável: Pesado",
               "armor": {
                 "base": 19,
                 "dex": false,
                 "reduction": 2,
-                "blocksArmor": true
+                "blocksArmor": true,
+                "requiresArmor": "HEAVY"
               }
             }
           ]
@@ -553,12 +555,13 @@
             },
             {
               "type": "ARMOR_CLASS",
-              "name": "Proteção Ajustável: Pesado (exige proficiência com armaduras pesadas)",
+              "name": "Proteção Ajustável: Pesado",
               "armor": {
                 "base": 19,
                 "dex": false,
                 "reduction": 2,
-                "blocksArmor": true
+                "blocksArmor": true,
+                "requiresArmor": "HEAVY"
               }
             }
           ]
@@ -2292,42 +2295,1341 @@
     {
       "id": "ARCANIST",
       "name": "Arcanista",
-      "description": "EXEMPLO (estrutura de 5e). Substituir pelo que o Arcanista do Runarcana ganha.",
-      "example": true,
+      "description": "Seres em quem a mana aflora de forma extremamente poderosa e que aprendem a controlá-la e direcioná-la. A magia de Runeterra divide-se em Celestial, Elemental e Espiritual, cada uma com seus Mistérios. Construção rápida: Inteligência mais alta, seguida de Constituição; Passado Andarilho ou Estudioso.\n\nEquipamento inicial: (a) besta leve e estojo com 20 virotes ou (b) qualquer arma simples; (a) bolsa de componentes, (b) foco arcano ou (c) grimório; (a) conjunto de explorador de masmorras ou (b) conjunto de aventureiro.",
       "hitDie": 6,
-      "startingGold": 40,
+      "subclassLabel": "Glifo",
       "grants": [
         {
           "type": "SAVING_THROW",
           "attribute": "INTELLIGENCE"
         },
         {
-          "type": "SAVING_THROW",
-          "attribute": "WISDOM"
+          "type": "SAVING_THROW_CHOICE",
+          "count": 1,
+          "options": [
+            "WISDOM",
+            "CHARISMA"
+          ],
+          "label": "Resistência: Sabedoria ou Carisma"
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Armas simples"
+        },
+        {
+          "type": "SKILL",
+          "skill": "ARCANA"
         },
         {
           "type": "SKILL_CHOICE",
           "count": 2,
-          "label": "Escolha 2 perícias de Arcanista",
           "options": [
-            "ARCANA",
+            "DECEPTION",
             "HISTORY",
+            "INTIMIDATION",
             "INSIGHT",
-            "INVESTIGATION",
-            "MEDICINE",
-            "RELIGION",
-            "TECHNOLOGY"
+            "NATURE",
+            "PERCEPTION",
+            "RELIGION"
+          ],
+          "label": "Perícias do Arcanista: escolha 2"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Pontos de Mana",
+          "description": "Você gasta Mana igual ao custo do nível da magia para conjurá-la (Capítulo 10: Magia); ex.: uma magia de 1º nível custa 2, de 2º custa 3, de 3º custa 5. Você recupera metade do seu nível de Arcanista (mínimo 1) + seu modificador de Inteligência em Mana num descanso longo, e toda a Mana num descanso pleno.",
+          "usesByLevel": {
+            "1": 4,
+            "2": 6,
+            "3": 10,
+            "4": 12,
+            "5": 16,
+            "6": 18,
+            "7": 22,
+            "8": 24,
+            "9": 28,
+            "10": 30,
+            "11": 34,
+            "12": 36,
+            "13": 40,
+            "14": 42,
+            "15": 46,
+            "16": 48,
+            "17": 52,
+            "18": 54,
+            "19": 56,
+            "20": 60
+          },
+          "recharge": "LONG_REST"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Conjuração",
+          "description": "Você conjura magias das listas dos Mistérios a que tem acesso (Capítulo 10). No 1º nível, recebe a lista de um Mistério à sua escolha, e novas listas nos níveis 7, 12 e 17. Não pode usar listas de outra Classe para aprender ou trocar magias ao subir de nível nesta Classe.\n\nConjuração Plena: a partir do 2º nível, ao manifestar um elemento, você também recebe o Mistério dele.\n\nTruques e magias conhecidas por nível (truques / magias / nível máximo): 1º 3/4/1º · 2º 3/5 · 3º 3/6/2º · 4º 4/7 · 5º 4/8/3º · 6º 4/9 · 7º 4/10/4º · 8º 4/11 · 9º 4/12/5º · 10º 5/12 · 11º 5/13/6º · 12º 5/13 · 13º 5/14/7º · 14º 5/14 · 15º 5/15/8º · 16º 5/15 · 17º 5/16/9º · 18º 5/16 · 19º 5/18 · 20º 5/18. Ao subir de nível, você pode trocar uma magia conhecida por outra.\n\nPreparando Magias: num descanso pleno, você prepara metade do seu nível de Arcanista (mínimo 1) + seu modificador de Inteligência em magias que conheça ou estejam no seu grimório, e só conjura essas até o próximo descanso pleno.\n\nAtributo de conjuração: Inteligência. CD para suas magias = 8 + bônus de proficiência + mod. de Inteligência. Modificador de ataque de magia = bônus de proficiência + mod. de Inteligência."
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Lista de Magias",
+          "description": "No 1º nível, você recebe a lista de magias de um Mistério a que tenha acesso, à sua escolha.",
+          "label": "Lista de magias do 1º nível: Mistério",
+          "options": [
+            "Cronomancia (Celestial)",
+            "Espaçomancia (Celestial)",
+            "Gravitomancia (Celestial)",
+            "Runomancia (Celestial)",
+            "Água (Elemental)",
+            "Flora (Elemental)",
+            "Fogo (Elemental)",
+            "Gelo (Elemental)",
+            "Magma (Elemental)",
+            "Tempestade (Elemental)",
+            "Terra (Elemental)",
+            "Vento (Elemental)",
+            "Adivinhação (Espiritual)",
+            "Encantamento (Espiritual)",
+            "Étermancia (Espiritual)",
+            "Hemomancia (Espiritual)",
+            "Ilusão (Espiritual)",
+            "Invocação (Espiritual)",
+            "Necromancia (Espiritual)",
+            "Oniromancia (Espiritual)",
+            "Transmutação (Espiritual)",
+            "Umbramancia (Espiritual)"
           ]
         },
         {
           "type": "FEATURE",
-          "abilityType": "SPELL",
-          "spellLevel": 0,
-          "name": "Raio Arcano",
-          "range": "36 m",
-          "castingTime": "1 ação",
-          "damage": "1d10",
-          "description": "EXEMPLO: um truque de dano à distância."
+          "abilityType": "PASSIVE",
+          "name": "Ritualista",
+          "description": "Você conjura como ritual qualquer magia de Arcanista que conheça e esteja preparada, se tiver o descritor Ritual. Magias anotadas no seu grimório podem ser conjuradas como ritual sem estarem preparadas, se você estiver com ele (não com o grimório de outro Arcano)."
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Foco de Conjuração Aprimorado",
+          "description": "Você pode usar um foco arcano (Capítulo 5) na mão como foco das suas magias, e cada tipo concede benefícios (só um foco ativo, definido num descanso pleno):\nArmas contundentes: alvo de magia de dano faz salvaguarda de Constituição ou fica Enfraquecido (metade do bônus de proficiência vezes por descanso pleno).\nArmas cortantes: +metade do bônus de proficiência na CD de uma magia (mesmos usos).\nArmas perfurantes: uma magia de ataque ignora meia cobertura (mesmos usos).\nCajados: magias de dano causam metade do seu nível de Arcanista (mínimo 1) a mais.\nCristais: num descanso longo, recupera metade do seu nível de Arcanista em Mana (mínimo 2).\nElementos: segurando algo do seu elemento, as magias dele custam metade do bônus de proficiência a menos (nunca 0) e você pode rolar de novo dados de dano (mesmos usos).\nFamiliares: +metade do mod. de Sabedoria (mínimo 1) na CD de magias de dano ou efeito negativo (mesmos usos).\nGrimório: magias preparadas e copiadas no grimório custam 1 Mana a menos (nunca 0) e uma troca de magia preparada adicional num descanso longo.\nHastes: magias de cura recuperam metade do seu nível de Arcanista (mínimo 1) a mais.\nOrbes: +5 pés × metade do seu nível de Arcanista de alcance (não em pessoal ou toque).\nVarinhas: +metade do bônus de proficiência no ataque e no dano de magias de ataque."
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Grimório",
+          "description": "Num grimório você anota magias conhecidas e encontradas. Copiar uma magia conhecida: 1 hora e 25 PO por nível. Copiar uma magia não conhecida (de um Mistério que você tenha e até seu nível máximo): 2 horas e 50 PO por nível. Fazer uma cópia do grimório: 30 minutos e 10 PO por nível.\n\nCom o grimório, num descanso curto você troca magias preparadas por outras anotadas nele; num descanso longo, troca 1 magia (2 no 5º nível, 3 no 10º, 4 no 15º, 5 no 20º). Magias com descritor Ritual anotadas podem ser conjuradas como ritual sem preparo. Sem o grimório, magias não conhecidas anotadas nele não podem ser preparadas no próximo descanso pleno."
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Despertar Arcano",
+          "description": "Qual tipo de magia você manifestou primeiro. Ele concede seu primeiro Mistério (veja Mistério do Despertar):\n\nCelestial (Cronomancia, Espaçomancia, Gravitomancia ou Runomancia). Canalização: +1 ponto de Mana por nível de Arcanista. Manifestação (2º nível): uma maestria para sua Runa, e outra nos níveis 9 e 16; você aprende o idioma Celestial.\nElemental (Água, Flora, Fogo, Gelo, Magma, Tempestade, Terra ou Vento). Foco Elemental: as magias do seu elemento custam 1 Mana a menos (nunca 0). Potência Elemental (2º nível): magias do seu elemento têm os dados de dano uma categoria acima, e você reduz o dano desse tipo que recebe em seu nível de Arcanista; aprende o idioma Elemental.\nEspiritual (Adivinhação, Encantamento, Étermancia, Hemomancia, Ilusão, Invocação, Necromancia, Oniromancia, Transmutação ou Umbramancia). Sintonia Espiritual: magias com descritor Ritual custam 1 Mana a menos (nunca 0) e rituais levam só 5 minutos adicionais. Auxílio Espiritual (2º nível): ao conjurar um ritual, use 10 minutos e 1 Mana para conjurá-lo um nível acima (no 10º nível, 20 minutos e 2 Mana para dois níveis; no 18º, 30 minutos e 3 Mana para três).",
+          "label": "Despertar Arcano: tipo de magia",
+          "options": [
+            "Celestial",
+            "Elemental",
+            "Espiritual"
+          ]
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Mistério do Despertar",
+          "description": "O Mistério concedido pelo seu Despertar Arcano (escolha um do mesmo tipo do Despertar).",
+          "label": "Mistério do Despertar",
+          "options": [
+            "Cronomancia (Celestial)",
+            "Espaçomancia (Celestial)",
+            "Gravitomancia (Celestial)",
+            "Runomancia (Celestial)",
+            "Água (Elemental)",
+            "Flora (Elemental)",
+            "Fogo (Elemental)",
+            "Gelo (Elemental)",
+            "Magma (Elemental)",
+            "Tempestade (Elemental)",
+            "Terra (Elemental)",
+            "Vento (Elemental)",
+            "Adivinhação (Espiritual)",
+            "Encantamento (Espiritual)",
+            "Étermancia (Espiritual)",
+            "Hemomancia (Espiritual)",
+            "Ilusão (Espiritual)",
+            "Invocação (Espiritual)",
+            "Necromancia (Espiritual)",
+            "Oniromancia (Espiritual)",
+            "Transmutação (Espiritual)",
+            "Umbramancia (Espiritual)"
+          ]
+        }
+      ],
+      "levels": [
+        {
+          "level": 2,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Pontos de Arcana",
+              "description": "A Arcana representa seu controle sobre a fonte de magia dentro de você. Você recupera todos os pontos de Arcana gastos num descanso longo. Conjuração Flexível: você pode usar pontos de Arcana como pontos de Mana, no máximo 7 pontos assim. Outras formas de usar a Arcana surgem com a Metamagia e o seu Glifo.",
+              "usesByLevel": {
+                "2": 2,
+                "3": 3,
+                "4": 4,
+                "5": 5,
+                "6": 6,
+                "7": 7,
+                "8": 8,
+                "9": 9,
+                "10": 10,
+                "11": 11,
+                "12": 12,
+                "13": 13,
+                "14": 14,
+                "15": 15,
+                "16": 16,
+                "17": 17,
+                "18": 18,
+                "19": 19,
+                "20": 20
+              },
+              "recharge": "LONG_REST"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Assinatura Arcana",
+              "description": "Seu estilo pessoal de conjuração liga suas magias a um atributo secundário:\nForça: condicionamento físico e disciplina aumentam a potência das magias.\nDestreza: velocidade e agilidade nos gestos e no fluxo de energia.\nConstituição: energia vital (sua ou dos inimigos) fortalece as conjurações.\nSabedoria: sensibilidade aos fluxos de mana do local.\nCarisma: força de vontade nas palavras e gestos.\n\n2º nível: num descanso longo, recupera Mana adicional igual ao modificador do atributo secundário (mínimo 1); +metade do modificador (mínimo 1) nos ataques de magia.\n7º nível: +o modificador (mínimo 1) no dano ou cura de magias.\n12º nível: +o modificador inteiro (em vez de metade) nos ataques de magia.\n17º nível: +o dobro do modificador (mínimo 1) no dano ou cura de magias.",
+              "label": "Assinatura Arcana: atributo secundário",
+              "options": [
+                "Força",
+                "Destreza",
+                "Constituição",
+                "Sabedoria",
+                "Carisma"
+              ]
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Metamagia",
+              "description": "Você distorce suas magias gastando pontos de Arcana. Escolha duas opções (outra no 10º e no 18º nível). Por padrão, uma Metamagia por conjuração.\n\nMagia Acelerada. Quando você conjurar uma magia com tempo de conjuração de 1 ação, pode gastar 2 pontos de Arcana para mudar o tempo de conjuração para ação bônus.\nMagia Aumentada. Quando você conjurar uma magia que obrigue uma criatura a realizar uma salvaguarda, pode gastar 3 pontos de Arcana para conferir desvantagem a um alvo na primeira salvaguarda.\nMagia Cuidadosa. Quando você conjurar uma magia que obrigue outras criaturas a realizarem uma salvaguarda, gaste 1 ponto de Arcana e escolha até seu modificador de Inteligência (mínimo 1) dessas criaturas: elas passam automaticamente na salvaguarda.\nMagia Distante. Gaste 1 ponto de Arcana para dobrar o alcance de uma magia com distância de 5 pés ou maior; numa magia de toque, o alcance passa a 30 pés.\nMagia Duplicada. Numa magia que só pode ter uma criatura como alvo e não tem alcance pessoal, gaste pontos de Arcana iguais ao nível da magia (1 para truque) para ter uma segunda criatura no alcance como alvo.\nMagia Estendida. Numa magia com duração de 1 minuto ou maior, gaste 1 ponto de Arcana para dobrar a duração, até no máximo 24 horas.\nMagia Poderosa. Numa magia ou truque que cause dano, gaste 1 ponto de Arcana para adicionar seu modificador de Inteligência ao dano (uma vez por magia). Pode ser usada junto com outra Metamagia.\nMagia Potencializada. Ao jogar o dano de uma magia, gaste 1 ponto de Arcana para jogar novamente até seu modificador de Inteligência (mínimo 1) em dados de dano, usando a nova jogada. Pode ser usada junto com outra Metamagia.\nMagia Sutil. Gaste 1 ponto de Arcana para conjurar uma magia sem componentes somáticos ou verbais.",
+              "label": "Metamagia: escolha duas",
+              "count": 2,
+              "options": [
+                "Magia Acelerada",
+                "Magia Aumentada",
+                "Magia Cuidadosa",
+                "Magia Distante",
+                "Magia Duplicada",
+                "Magia Estendida",
+                "Magia Poderosa",
+                "Magia Potencializada",
+                "Magia Sutil"
+              ]
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Aprimoramento",
+              "description": "No 4º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            }
+          ]
+        },
+        {
+          "level": 7,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Nova Lista de Magias",
+              "description": "No 7º nível, você recebe acesso à lista de magias de um novo Mistério à sua escolha.",
+              "label": "Nova lista de magias (7º nível): Mistério",
+              "options": [
+                "Cronomancia (Celestial)",
+                "Espaçomancia (Celestial)",
+                "Gravitomancia (Celestial)",
+                "Runomancia (Celestial)",
+                "Água (Elemental)",
+                "Flora (Elemental)",
+                "Fogo (Elemental)",
+                "Gelo (Elemental)",
+                "Magma (Elemental)",
+                "Tempestade (Elemental)",
+                "Terra (Elemental)",
+                "Vento (Elemental)",
+                "Adivinhação (Espiritual)",
+                "Encantamento (Espiritual)",
+                "Étermancia (Espiritual)",
+                "Hemomancia (Espiritual)",
+                "Ilusão (Espiritual)",
+                "Invocação (Espiritual)",
+                "Necromancia (Espiritual)",
+                "Oniromancia (Espiritual)",
+                "Transmutação (Espiritual)",
+                "Umbramancia (Espiritual)"
+              ]
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Magia de Assinatura",
+              "description": "No 7º nível (e de novo no 17º), escolha um truque de assinatura: você pode conjurá-lo como ação bônus gastando 1 ponto de Mana. Escolha também uma magia de 1º nível e uma de 2º nível e um benefício para elas: usar uma Metamagia sem gastar Arcana (escolhendo de novo, duas Metamagias, a segunda com custo normal), ou conjurá-las um nível acima sem custo adicional de Mana (escolhendo de novo, dois níveis acima). No 17º você pode escolher as mesmas magias para um benefício adicional."
+            }
+          ]
+        },
+        {
+          "level": 8,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Aprimoramento",
+              "description": "No 8º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            }
+          ]
+        },
+        {
+          "level": 10,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Metamagia Adicional",
+              "description": "Você aprende uma nova opção de Metamagia.",
+              "label": "Metamagia adicional (10º nível)",
+              "options": [
+                "Magia Acelerada",
+                "Magia Aumentada",
+                "Magia Cuidadosa",
+                "Magia Distante",
+                "Magia Duplicada",
+                "Magia Estendida",
+                "Magia Poderosa",
+                "Magia Potencializada",
+                "Magia Sutil"
+              ]
+            }
+          ]
+        },
+        {
+          "level": 11,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Sobrecarga Arcana",
+              "description": "Ao gastar Mana numa magia de 4º nível ou superior, você ganha 1 ponto de Sobrecarga. Com uma ação, gaste pontos de Sobrecarga iguais ao dobro do custo de Mana do nível da magia para conjurar uma magia sua de até 7º nível sem Mana (sem redução de custo nem benefícios de Classe). Pontos não usados se perdem num descanso pleno."
+            }
+          ]
+        },
+        {
+          "level": 12,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Nova Lista de Magias",
+              "description": "No 12º nível, você recebe acesso à lista de magias de um novo Mistério à sua escolha.",
+              "label": "Nova lista de magias (12º nível): Mistério",
+              "options": [
+                "Cronomancia (Celestial)",
+                "Espaçomancia (Celestial)",
+                "Gravitomancia (Celestial)",
+                "Runomancia (Celestial)",
+                "Água (Elemental)",
+                "Flora (Elemental)",
+                "Fogo (Elemental)",
+                "Gelo (Elemental)",
+                "Magma (Elemental)",
+                "Tempestade (Elemental)",
+                "Terra (Elemental)",
+                "Vento (Elemental)",
+                "Adivinhação (Espiritual)",
+                "Encantamento (Espiritual)",
+                "Étermancia (Espiritual)",
+                "Hemomancia (Espiritual)",
+                "Ilusão (Espiritual)",
+                "Invocação (Espiritual)",
+                "Necromancia (Espiritual)",
+                "Oniromancia (Espiritual)",
+                "Transmutação (Espiritual)",
+                "Umbramancia (Espiritual)"
+              ]
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Aprimoramento",
+              "description": "No 12º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            }
+          ]
+        },
+        {
+          "level": 16,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Aprimoramento",
+              "description": "No 16º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            }
+          ]
+        },
+        {
+          "level": 17,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Nova Lista de Magias",
+              "description": "No 17º nível, você recebe acesso à lista de magias de um novo Mistério à sua escolha.",
+              "label": "Nova lista de magias (17º nível): Mistério",
+              "options": [
+                "Cronomancia (Celestial)",
+                "Espaçomancia (Celestial)",
+                "Gravitomancia (Celestial)",
+                "Runomancia (Celestial)",
+                "Água (Elemental)",
+                "Flora (Elemental)",
+                "Fogo (Elemental)",
+                "Gelo (Elemental)",
+                "Magma (Elemental)",
+                "Tempestade (Elemental)",
+                "Terra (Elemental)",
+                "Vento (Elemental)",
+                "Adivinhação (Espiritual)",
+                "Encantamento (Espiritual)",
+                "Étermancia (Espiritual)",
+                "Hemomancia (Espiritual)",
+                "Ilusão (Espiritual)",
+                "Invocação (Espiritual)",
+                "Necromancia (Espiritual)",
+                "Oniromancia (Espiritual)",
+                "Transmutação (Espiritual)",
+                "Umbramancia (Espiritual)"
+              ]
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Força Arcana",
+              "description": "Ao usar uma Metamagia, você pode gastar 1 ponto de Arcana adicional (por Metamagia) para conjurar a magia um nível acima por ponto gasto."
+            }
+          ]
+        },
+        {
+          "level": 18,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Metamagia Adicional",
+              "description": "Você aprende uma nova opção de Metamagia.",
+              "label": "Metamagia adicional (18º nível)",
+              "options": [
+                "Magia Acelerada",
+                "Magia Aumentada",
+                "Magia Cuidadosa",
+                "Magia Distante",
+                "Magia Duplicada",
+                "Magia Estendida",
+                "Magia Poderosa",
+                "Magia Potencializada",
+                "Magia Sutil"
+              ]
+            }
+          ]
+        },
+        {
+          "level": 19,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Aprimoramento",
+              "description": "No 19º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            }
+          ]
+        }
+      ],
+      "subclasses": [
+        {
+          "id": "cinzas",
+          "name": "Glifo das Cinzas",
+          "description": "Conectado ao Homem Cinzento da lenda, explora os poderes da vida e da morte. Recebe o Mistério da Necromancia.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Relíquia da Morte",
+              "description": "Você confecciona uma Relíquia da Morte, um objeto pessoal capaz de capturar a alma dos mortos. Ela armazena as almas das criaturas que morrem a até 30 pés de você, até seu modificador de Inteligência por nível de Arcanista. Criaturas com a alma presa na Relíquia não podem ser ressuscitadas, a menos que restauração maior seja lançada sobre a Relíquia, liberando todas as almas.\n\nCom uma ação bônus, você consome até seu modificador de Inteligência em almas e recupera o dobro das almas consumidas em pontos de vida.\n\nVocê recebe o Mistério da Necromancia.\n\nA partir do 10º nível, com ao menos 50 almas, você pode passar 8 horas concentrado na Relíquia para consumi-las e torná-la imune a todos os tipos de dano (exceto danos verdadeiros e a magia desintegrar).",
+              "castingTime": "Ação bônus"
+            }
+          ],
+          "levels": [
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Controlar Espíritos",
+                  "description": "Você aprende a magia animar mortos (não conta para o máximo de magias conhecidas; no grimório, custa metade do tempo e valor).\n\nAo armazenar a alma de uma criatura, você pode manter sua personalidade e força inata, até seu modificador de Inteligência dessas almas; ao final de um descanso pleno, viram espíritos comuns. Só almas de criaturas com ND até dois abaixo do seu nível de Arcanista.\n\nCom uma ação, você convoca uma dessas almas como espírito morto-vivo com os atributos, sentidos, traços e ações que tinha em vida, mas vulnerável a dano radiante; ela age logo após você. Ela faz uma salvaguarda de Carisma contra sua CD de magias, em desvantagem: na falha, obedece você por 1 minuto; no sucesso, age livremente (hostil se você ou seus aliados estiverem envolvidos na morte dela). Desaparece após 1 minuto, a 0 pontos de vida ou dispensada com uma ação bônus (se não for hostil), libertando a alma da Relíquia."
+                }
+              ]
+            },
+            {
+              "level": 14,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Enganar a Morte",
+                  "description": "Ao final de um descanso pleno, você fica sob os efeitos de proteção contra morte até o início do próximo descanso pleno, e tem vantagem em salvaguardas contra a morte.\n\nBenefícios pelas almas na Relíquia:\n1 alma: +1 nas jogadas de ataque e na CD de magias de Necromancia.\n5 almas: ao abater uma criatura, ganha pontos de vida temporários iguais ao ND dela.\n15 almas: com ao menos 1 ponto de vida, recupera 1d10 pontos de vida a cada hora.\n25 almas: +1 adicional (total +2) em ataque e CD de Necromancia.\n50 almas: vantagem em salvaguardas de Inteligência, Sabedoria e Carisma.\n75 almas: +1 adicional (total +3) em ataque e CD de todas as suas magias.\n100 almas: Inteligência +2, assim como seu máximo."
+                }
+              ]
+            },
+            {
+              "level": 18,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Turbilhão de Almas",
+                  "description": "Com uma ação bônus, você cria uma aura de energia sombria de 20 pés de raio. Criaturas que estejam, entrem ou comecem o turno nela fazem uma salvaguarda de Constituição contra sua CD de magias: na falha, sofrem dano necrótico igual ao seu nível de Arcanista + as almas na Relíquia; no sucesso, metade. No início de cada turno após o primeiro, você consome 5 almas. Dura 1 minuto ou até você encerrar com uma ação bônus; acaba se você ficar Incapacitado.",
+                  "castingTime": "Ação bônus",
+                  "range": "20 pés de raio",
+                  "duration": "1 minuto"
+                }
+              ]
+            },
+            {
+              "level": 20,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Arcano das Cinzas",
+                  "description": "Você conjura animar mortos e toque vampírico como magias de 3º nível sem gastar Mana, um número de vezes igual ao seu modificador de Inteligência (mínimo 1) por descanso pleno, e aprende a magia réquiem. Escolha uma magia de até 7º nível de Necromancia: o custo de Mana dela é reduzido pela metade (arredondado para cima)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "efigie",
+          "name": "Glifo da Efígie",
+          "description": "Invocadores que criam formas animadas com mana e energia espiritual, cada invocação com traços do Arcanista. Recebe o Mistério da Invocação.",
+          "grants": [
+            {
+              "type": "SKILL",
+              "skill": "NATURE",
+              "expertise": true
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Efígie",
+              "description": "Você aprende a manifestar fisicamente sua mana numa invocação especial, a Efígie, que carrega parte da sua alma e energia vital e tem empatia e devoção por você. Você recebe proficiência em Natureza (ou especialidade, se já tiver).\n\nVocê aprende a magia especial manifestar efígie (não conta para o máximo de magias conhecidas; no grimório, custa metade do tempo e valor). Veja a magia para os detalhes.\n\nVocê recebe o Mistério da Invocação."
+            }
+          ],
+          "levels": [
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Lapidação",
+                  "description": "Com uma ação bônus, você compartilha os sentidos de uma criatura que invocou (até 500 pés) por 1 minuto, ficando Cego e Surdo para os seus próprios.\n\nO ND das criaturas que você conjura com magias de Invocação aumenta em 1. Ao conjurar uma única criatura, para cada ND acima de 1 você concede uma melhoria: Ataque (+1 para acertar), Classe de Armadura (+1, até +3), Classe de Dificuldade (+1 numa CD, até +3), Dano (+1), Deslocamento (+15 pés, até 60) ou Vida (1 dado de vida adicional)."
+                }
+              ]
+            },
+            {
+              "level": 14,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Arcanizar",
+                  "description": "Ao conjurar uma única criatura com magia, você concede uma característica: Ataque Adicional (um ataque extra com a mesma arma, uma vez por rodada); Aura de Medo (ação; salvaguarda de Sabedoria CD 8 + proficiência + metade do nível de Arcanista em 60 pés ou Amedrontado até o fim do próximo turno); Conjuração (usa suas magias e sua Mana, sem componentes verbais ou somáticos); Invisibilidade (ação; Invisível por 1 minuto até atacar); Proteger (reação; move 30 pés até você e recebe o ataque no seu lugar); Sopro de Energia (ação; cone de 15 pés, salvaguarda de Constituição ou 4d6 de dano energético; ou abdica da ação para um cone de 25 pés com 8d6 no próximo turno)."
+                }
+              ]
+            },
+            {
+              "level": 18,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Invocação Bélica",
+                  "description": "Criaturas que você invocar com magias de Invocação adicionam metade do seu nível de Arcanista ao dano de ataques e magias. Uma única criatura invocada causa dano mágico. Sua Efígie recebe duas características de Arcanizar."
+                }
+              ]
+            },
+            {
+              "level": 20,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Arcano da Invocação",
+                  "description": "Você conjura conjurar animais e guardiões espirituais como magias de 3º nível sem gastar Mana, um número de vezes igual ao seu modificador de Inteligência (mínimo 1) por descanso pleno; sua Efígie recebe três características de Arcanizar; e você aprende a magia egrégio. Escolha uma magia de até 7º nível de Invocação: o custo de Mana dela é reduzido pela metade (arredondado para cima)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "elementalista",
+          "name": "Glifo Elementalista",
+          "description": "Conectado a um elemento principal, desenvolve a magia canalizando esse elemento e alcançando novos elementos derivados.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Domar Elementos",
+              "description": "Você recebe o Mistério de um Elemento a que tenha acesso e escolhe um Mistério Elemental seu como Elemento Principal. Um número de vezes igual ao seu bônus de proficiência por descanso pleno, você pode gastar 1 ponto de Mana a mais numa magia elemental do seu Elemento Principal, Secundário ou Terciário para usar a magia do ambiente e dar a ela uma característica adicional (ou gastar 1 ponto de Arcana, sem limite de usos):\n\nÁgua: cura um aliado a até 20 pés em 1d6 + mod. de Inteligência (+1d4 por ponto de Arcana extra).\nCristal: escudo de 1d6 pontos de vida temporários por 1 minuto (+1d4 por ponto de Arcana).\nFlora: invisibilidade até o fim do seu próximo turno (+1 turno por ponto de Arcana).\nFogo: aquece uma arma de metal a até 20 pés, +1d6 ígneo no próximo ataque dela (+1d4 por ponto de Arcana).\nGelo: o alvo atingido faz salvaguarda de Constituição; na falha, deslocamento pela metade até o fim do seu próximo turno e 1d4 gélido (+1 na CD e +1d4 por ponto de Arcana).\nInfernal: tempestade de fogo de 15 pés ao redor do alvo; salvaguarda de Constituição ou 1d4 ígneo e Chamuscado (1d4 por rodada) (+1d4 por ponto de Arcana).\nMagma: +1 de CA até o fim do seu próximo turno e quem te acertar desarmado sofre 1d4 ígneo (+1 CA e +1d4 por ponto de Arcana).\nNevasca: tempestade de neve de 15 pés; salvaguarda de Constituição ou Cego até o fim do seu próximo turno (+1 turno por ponto de Arcana).\nTempestade: o alvo faz salvaguarda de Constituição ou fica Incapacitado até o fim do seu próximo turno (+1 turno por ponto de Arcana).\nTerra: o alvo faz salvaguarda de Destreza ou sofre 1d6 contundente (+1d4 por ponto de Arcana).\nVento: 15 pés de voo até o fim do seu próximo turno (+15 pés por ponto de Arcana).",
+              "label": "Domar Elementos: Elemento Principal",
+              "options": [
+                "Água",
+                "Cristal",
+                "Flora",
+                "Fogo",
+                "Gelo",
+                "Infernal",
+                "Magma",
+                "Nevasca",
+                "Tempestade",
+                "Terra",
+                "Vento"
+              ],
+              "usesFormula": "PROFICIENCY",
+              "recharge": "LONG_REST"
+            }
+          ],
+          "levels": [
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Aprumo Elemental",
+                  "description": "Você pode gastar pontos de Arcana para aumentar a categoria dos dados de dano e cura de uma magia, uma por ponto, até 5 pontos. O dano e a cura das magias do seu Elemento Principal sobem uma categoria. Escolha um Mistério Elemental seu como Elemento Secundário.",
+                  "label": "Aprumo Elemental: Elemento Secundário",
+                  "options": [
+                    "Água",
+                    "Cristal",
+                    "Flora",
+                    "Fogo",
+                    "Gelo",
+                    "Infernal",
+                    "Magma",
+                    "Nevasca",
+                    "Tempestade",
+                    "Terra",
+                    "Vento"
+                  ]
+                }
+              ]
+            },
+            {
+              "level": 14,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Dobrar Elementos",
+                  "description": "Ao conjurar uma magia de dano elemental, você pode trocar o tipo de dano por outro ligado a um Mistério Elemental a que tenha acesso. Suas magias de Mistérios Elementais causam dano mágico. Escolha um Mistério Elemental seu como Elemento Terciário.",
+                  "label": "Dobrar Elementos: Elemento Terciário",
+                  "options": [
+                    "Água",
+                    "Cristal",
+                    "Flora",
+                    "Fogo",
+                    "Gelo",
+                    "Infernal",
+                    "Magma",
+                    "Nevasca",
+                    "Tempestade",
+                    "Terra",
+                    "Vento"
+                  ]
+                }
+              ]
+            },
+            {
+              "level": 18,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Absorção Elemental",
+                  "description": "Quando receber dano elemental ligado a um Mistério Elemental a que tenha acesso, você pode usar sua reação e 5 pontos de Arcana para ignorar o dano e recuperar pontos de vida iguais ao dano. Seu Elemento Terciário passa a receber os benefícios do Elemento Principal.",
+                  "castingTime": "Reação"
+                }
+              ]
+            },
+            {
+              "level": 20,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Arcano Elemental",
+                  "description": "Escolha duas magias de até 3º nível de um Mistério Elemental: você as conjura como magias de 3º nível sem gastar Mana, um número de vezes igual ao seu modificador de Inteligência (mínimo 1) por descanso pleno, e aprende a magia fúria elemental. Escolha uma magia de até 7º nível de um Mistério Elemental: o custo de Mana dela é reduzido pela metade (arredondado para cima)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "escarlate",
+          "name": "Glifo Escarlate",
+          "description": "Hemomancia, a arte de má fama praticada hoje pelo Círculo Carmesim. Recebe o Mistério da Hemomancia.",
+          "grants": [
+            {
+              "type": "HP_BONUS",
+              "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+              "attribute": "INTELLIGENCE",
+              "perLevel": true,
+              "label": "+½ do mod. de Inteligência em PV por nível"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Pacto Carmesim",
+              "description": "Você recebe pontos de vida adicionais iguais a metade do seu modificador de Inteligência (mínimo 0) por nível de Arcanista. O custo em pontos de vida das magias de Hemomancia diminui em metade do seu modificador de Inteligência (mínimo 1 de custo), e o dano dessas conjurações não quebra sua concentração. Você recebe o Mistério da Hemomancia."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Gema Escarlate",
+              "description": "Com 8 horas de trabalho e um rubi de ao menos 25 PO, você cria uma Gema Escarlate (só uma por vez), com sua CA e metade dos seus pontos de vida, que serve como foco de conjuração (cristal) e recupera toda a vida num descanso pleno. Ela concede, conforme seu nível de Arcanista:\n\nNível 1. Num descanso pleno, armazena até seu nível de Arcanista em dados de vida (rolados e gastos normalmente); com uma ação bônus, você recupera os pontos de vida armazenados.\nNível 3. Ao conjurar Hemomancia, a Gema recupera pontos de vida iguais ao nível da magia.\nNível 5. Ao receber dano, reação para receber metade e transferir o resto à Gema.\nNível 7. Ação bônus: cause 1d6 de dano à Gema para receber 1 ponto de Arcana.\nNível 9. Cause 1d6 à Gema para armazenar uma magia de Hemomancia de 1º nível (+1d6 por nível acima); conjure-a como reação ao conjurar Hemomancia ou receber dano. Até seu mod. de Inteligência (mínimo 1) magias.\nNível 11. Ao falhar numa salvaguarda ou teste contra uma condição, negue a condição causando 3d6 de dano à Gema.\nNível 13. Ação: destrua e arremesse a Gema a até 60 pés; criaturas a 15 pés fazem salvaguarda de Destreza: o dobro da vida restante da Gema em dano necrótico, metade no sucesso.\nNível 15. Conjure Hemomancia através da Gema, a qualquer distância (ela recebe 1 de dano por nível da magia).\nNível 17. Ao reduzir uma criatura a 0 pontos de vida, você recupera metade do dano causado."
+            }
+          ],
+          "levels": [
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Frenesi Escarlate",
+                  "description": "A cada duas magias de Hemomancia de 1º nível ou superior conjuradas, você ganha 1 carga de Frenesi Escarlate (até metade do seu nível de Arcanista; perdidas num descanso pleno). Ao atingir alvos com uma magia de Hemomancia que cause dano, gaste 1 carga para deixá-los Sangrando (metade do seu bônus de proficiência de dano por turno). Ao atingir um alvo Sangrando com Hemomancia, use sua reação e 1 carga para aumentar o Sangramento em 1 ponto ou 1 dado a cada 2 níveis da magia."
+                }
+              ]
+            },
+            {
+              "level": 14,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Arcanum Vitæ",
+                  "description": "Com uma ação bônus, converta 10 pontos de vida em 1 ponto de Arcana. Além disso, gaste cargas de Frenesi Escarlate para aumentar 1 dado de dano ou cura de magias de Hemomancia por carga.",
+                  "castingTime": "Ação bônus",
+                  "usesFormula": "ATTRIBUTE_MODIFIER",
+                  "attribute": "CONSTITUTION",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 18,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Portal de Sangue",
+                  "description": "Com uma ação, transforme um corpo d’água que possa ver (até 30 pés cúbicos) e outro que já tenha visto (até 5 milhas) em fontes de sangue por 1 minuto; mergulhe numa para surgir na outra, sem se molhar. Você também pode conjurar poça de sangue como reação ao ser alvo de um ataque ou magia de dano.",
+                  "castingTime": "Ação",
+                  "duration": "1 minuto"
+                }
+              ]
+            },
+            {
+              "level": 20,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Arcano Carmesim",
+                  "description": "Você conjura maré de sangue e transfusão como magias de 3º nível sem gastar Mana, um número de vezes igual ao seu modificador de Inteligência (mínimo 1) por descanso pleno, e aprende a magia hemopraga. Escolha uma magia de até 7º nível de Hemomancia: o custo de Mana dela é reduzido pela metade (arredondado para cima)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "igneo",
+          "name": "Glifo Ígneo",
+          "description": "Compreende o fogo como um todo, sua natureza e seus aspectos. Recebe o Mistério do Fogo (ou Magma/Infernal, se já tiver).",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Iniciado das Chamas",
+              "description": "Escolha um aspecto do fogo:\n\nÉgide de Fogo. Após conjurar 2 magias de Fogo, Magma ou Infernal, um escudo magmático dá metade do seu nível de Arcanista em d6 de pontos de vida temporários (mínimo 1d6); quem te acertar corpo a corpo enquanto ele durar sofre os pontos de vida temporários atuais como dano ígneo.\nLabareda. Suas magias de dano ígneo deixam marcas de Labareda (até 3; cada uma dura até o fim do seu próximo turno). Ao atingir um alvo com 3 marcas com dano ígneo, no início do turno dele ele faz salvaguarda de Constituição contra sua CD de magias: metade do seu nível de Arcanista em d6 de dano ígneo (mínimo 1d6), metade no sucesso.\nPiromania. Após conjurar 4 magias de Fogo, Magma ou Infernal, sua próxima magia de dano ígneo Atordoa um alvo atingido por metade do seu nível de Arcanista em turnos (mínimo 1), com salvaguarda de Constituição no início de cada turno dele.\n\nVocê recebe o Mistério do Fogo; se já tiver, escolha entre Magma e Infernal.",
+              "label": "Iniciado das Chamas: aspecto",
+              "options": [
+                "Égide de Fogo",
+                "Labareda",
+                "Piromania"
+              ]
+            }
+          ],
+          "levels": [
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Discípulo das Chamas",
+                  "description": "Conforme sua escolha no 1º nível:\n\nÉgide Flamejante. Os pontos de vida temporários da Égide viram d8; com o escudo ativo, no início de cada turno seu, criaturas a 5 pés fazem salvaguarda de Constituição ou sofrem 1d8 + metade do seu nível de Arcanista de dano ígneo.\nLabareda Flamejante. O dano da Labareda vira d8; atingir um alvo com Labareda usando cauterizar também o Atordoa até o fim do seu próximo turno.\nChama Infernal. A Piromania Atordoa todos os alvos atingidos; alvos afetados têm desvantagem contra suas magias de Fogo, Magma ou Infernal por 1 minuto (depois, imunes por 24 horas).\n\nEscolha também entre o Mistério Infernal ou do Magma."
+                }
+              ]
+            },
+            {
+              "level": 14,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Mestre das Chamas",
+                  "description": "Conforme sua escolha:\n\nÉgide Infernal. Os pontos de vida temporários viram d10; com o escudo ativo, ao conjurar magias de dano incinerante você recupera 1 + o nível da magia em pontos de vida.\nLabareda Infernal. O dano da Labareda vira d10; atingir um alvo com Labareda com coluna elemental: chamas causa metade do dano da magia como dano adicional.\nDesolação Infernal. Alvos Atordoados por Piromania atingidos por dano incinerante sofrem metade do seu nível de Arcanista de dano incinerante adicional, e seus aliados têm vantagem e seu bônus de proficiência para atingi-los por 1 minuto.\n\nSempre que você causar dano ígneo, causa dano incinerante."
+                }
+              ]
+            },
+            {
+              "level": 18,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Grão-Mestre das Chamas",
+                  "description": "Conforme sua escolha:\n\nDevorador de Chamas. A Égide dá seu nível de Arcanista em d10 de pontos de vida temporários; com o escudo ativo, +metade do seu bônus de proficiência na CA.\nIncandescente. A Labareda causa dano num raio de 15 pés do alvo (salvaguarda de Destreza, metade no sucesso); conflagração num alvo com Labareda afeta 2 alvos adicionais a até 10 pés.\nPiromante. Alvos Atordoados por Piromania sofrem 3d6 de dano incinerante no início de cada turno deles e têm desvantagem em salvaguardas contra magias que causem condição."
+                }
+              ]
+            },
+            {
+              "level": 20,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Arcano das Chamas",
+                  "description": "Você conjura cauterizar e mãos flamejantes como magias de 3º nível sem gastar Mana, um número de vezes igual ao seu modificador de Inteligência (mínimo 1) por descanso pleno, e aprende a magia domínio do fogo. Escolha uma magia de até 7º nível de Fogo, Magma ou Infernal: o custo de Mana dela é reduzido pela metade (arredondado para cima)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "magus",
+          "name": "Glifo do Magus",
+          "description": "Talvez o primeiro Glifo: a compreensão da magia e da mana em suas formas mais puras.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Truque Adicional",
+              "description": "Você aprende o truque disparo arcano (não conta para o máximo de truques) e pode conjurá-lo como ação bônus. Escolha entre o Mistério da Étermancia ou da Runomancia.",
+              "label": "Glifo do Magus: Mistério",
+              "options": [
+                "Étermancia",
+                "Runomancia"
+              ]
+            }
+          ],
+          "levels": [
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Controle de Mana",
+                  "description": "Ao conjurar uma magia com tempo de conjuração de ação bônus, você pode conjurar uma de 1 ação no mesmo turno, um número de vezes igual a metade do seu modificador de Inteligência por descanso pleno. Escolha também:\n\nMaestria Arcana. Suas magias de dano causam metade do seu modificador de Inteligência de dano adicional por nível de magia a partir do 1º.\nOscilação de Mana. Ao atingir uma criatura com disparo arcano, você recupera seu modificador de Inteligência em Mana, metade do seu modificador de Inteligência (mínimo 1) vezes por descanso pleno.",
+                  "label": "Controle de Mana: opção",
+                  "options": [
+                    "Maestria Arcana",
+                    "Oscilação de Mana"
+                  ],
+                  "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+                  "attribute": "INTELLIGENCE",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 14,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Variação Arcana",
+                  "description": "Escolha uma opção (e outra nova nos níveis 18 e 20): Celeridade Arcana (ao atingir com uma magia de 1 ação, reação para conjurar uma de ação bônus; mod. de Inteligência vezes por descanso pleno); Conjuração Ampliada (5 pontos de Arcana: uma magia pessoal também em até 4 criaturas a 30 pés); Fortalecimento de Mana (dano adicional igual ao seu nível de Arcanista contra criatura sob efeito de outra magia); Manipulação de Mana (pontos de Arcana iguais ao nível da magia para trocar o tipo de dano por outro do mesmo grupo, nunca disruptivo); Mente Privilegiada (concentração em duas magias; 5 pontos de Arcana na segunda e 1 Mana por turno; metade do mod. de Inteligência vezes por descanso pleno); Penetração Mágica (4 pontos de Arcana: o alvo fica vulnerável a um tipo de dano da magia até o fim do seu próximo turno; metade do mod. de Inteligência vezes por descanso pleno); Pós-choque (Mana extra numa magia de alvo único: criaturas a 15 pés fazem salvaguarda de Constituição ou sofrem 1d6 a cada 2 de Mana extra); Proteção Arcana (reação ao ser alvo: pontos de vida temporários iguais ao seu nível × mod. de Inteligência; metade do mod. de Inteligência vezes por descanso pleno).\n\nSempre que causar dano energético, você causa dano rúnico.",
+                  "label": "Variação Arcana: opção",
+                  "options": [
+                    "Celeridade Arcana",
+                    "Conjuração Ampliada",
+                    "Fortalecimento de Mana",
+                    "Manipulação de Mana",
+                    "Mente Privilegiada",
+                    "Penetração Mágica",
+                    "Pós-choque",
+                    "Proteção Arcana"
+                  ]
+                }
+              ]
+            },
+            {
+              "level": 18,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Trançar Arcano",
+                  "description": "Uma vez por descanso pleno, escolha uma Característica de Glifo de até 14º nível de qualquer Glifo de Arcanista (inclusive este); ela fica com você até o próximo descanso pleno. Magias de um Mistério recebido assim só podem ser usadas enquanto tiver o Mistério, a não ser que estejam no grimório. Você também escolhe uma nova Variação Arcana.",
+                  "label": "Variação Arcana adicional (18º)",
+                  "options": [
+                    "Celeridade Arcana",
+                    "Conjuração Ampliada",
+                    "Fortalecimento de Mana",
+                    "Manipulação de Mana",
+                    "Mente Privilegiada",
+                    "Penetração Mágica",
+                    "Pós-choque",
+                    "Proteção Arcana"
+                  ]
+                }
+              ]
+            },
+            {
+              "level": 20,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Arcano do Magistrado",
+                  "description": "Escolha duas magias de até 3º nível de Étermancia ou Runomancia: você as conjura como magias de 3º nível sem gastar Mana, um número de vezes igual ao seu modificador de Inteligência (mínimo 1) por descanso pleno, e aprende a magia decreto do magistrado. Escolha uma magia de até 7º nível de Étermancia ou Runomancia: o custo de Mana dela é reduzido pela metade (arredondado para cima). Você também escolhe uma nova Variação Arcana.",
+                  "label": "Variação Arcana adicional (20º)",
+                  "options": [
+                    "Celeridade Arcana",
+                    "Conjuração Ampliada",
+                    "Fortalecimento de Mana",
+                    "Manipulação de Mana",
+                    "Mente Privilegiada",
+                    "Penetração Mágica",
+                    "Pós-choque",
+                    "Proteção Arcana"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "purpura",
+          "name": "Glifo Púrpura",
+          "description": "Mexe com a realidade e a percepção dela, moldando e transformando tudo, inclusive a mente de quem o pratica. Recebe o Mistério da Transmutação.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Tulipas, Cores e Marmotas",
+              "description": "Sua magia está conectada ao seu humor. Quando o Mestre considerar que você está instável (mais que o normal), logo após usar uma característica deste Glifo ou conjurar uma magia de Arcanista de 1º nível ou superior, jogue um d20: com 5 ou menos, role na tabela Magia Púrpura para um efeito aleatório (uma vez por turno; se for magia, ignora Metamagia e concentração e dura o máximo).\n\nPerturbações (escolha duas):\n\"…\": vantagem e +5 em Furtividade.\n\"A marmota ta falando\": repita uma jogada, metade do seu bônus de proficiência vezes por descanso pleno.\n\"Aquela tulipa… se mexeu?\": soma seu mod. de Carisma à Percepção Passiva.\n\"Essa pedra nunca faz NAAADA!\": +15 pés de caminhada e não precisa correr 10 pés para saltar.\n\"Hahahaha, kkkk, loool, jajaja\": inimigos têm desvantagem para atacar outra criatura que não você.\n\"Meus óleos…\": 30 pés de visão no escuro (ou +15).\n\"Ó céus, ó vida\": vantagem em salvaguardas contra magias que alterem ou controlem seus pensamentos.\n\"Prefiro verde… ou laranja!\": sabe quando algo é ilusão; vantagem para detectar ilusões e sua fonte.\n\"Que gosto tem isso?\": vantagem contra venenos e resistência a dano venenoso.\n\"Tem um gosto meio roxo\": vantagem em testes de Percepção.\n\"ZZzZzZzz…zzz\": uma vez por descanso longo, um descanso curto em 1 minuto.\n\nVocê recebe o Mistério da Transmutação.",
+              "label": "Perturbações: escolha duas",
+              "count": 2,
+              "options": [
+                "…",
+                "A marmota ta falando",
+                "Aquela tulipa… se mexeu?",
+                "Essa pedra nunca faz NAAADA!",
+                "Hahahaha, kkkk, loool, jajaja",
+                "Meus óleos…",
+                "Ó céus, ó vida",
+                "Prefiro verde… ou laranja!",
+                "Que gosto tem isso?",
+                "Tem um gosto meio roxo",
+                "ZZzZzZzz…zzz"
+              ]
+            }
+          ],
+          "levels": [
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Engrandecer",
+                  "description": "Você aprende aumentar/reduzir (não conta para o máximo de magias conhecidas; sem concentração). Quando você ou uma criatura que possa ver for alvo de um ataque, use sua reação para conjurá-la no alvo: ele recebe os benefícios de aumentar com 1d8 de dano adicional (em vez de 1d4) e um escudo de pontos de vida temporários igual ao seu nível de Arcanista + mod. de Inteligência contra esse ataque.",
+                  "castingTime": "Reação"
+                }
+              ]
+            },
+            {
+              "level": 14,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Transmogular!",
+                  "description": "Você aprende metamorfose (não conta para o máximo). Quando você ou uma criatura que possa ver for alvo de um ataque, use sua reação para conjurá-la no atacante. Você também pode conjurá-la como ação bônus.",
+                  "castingTime": "Reação",
+                  "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+                  "attribute": "INTELLIGENCE",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 18,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Enormibus!",
+                  "description": "Você aprende animar objetos (não conta para o máximo; sem concentração). Seus objetos animados somam metade do seu mod. de Inteligência à CA e seu nível de Arcanista aos pontos de vida, e você os comanda com uma ação. Você pode animar um objeto imenso, que conta como dez objetos: PV 100, CA 10, +10 para acertar, 3d10 + 6 de dano, FOR 20, DES 4."
+                }
+              ]
+            },
+            {
+              "level": 20,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Arcano Púrpura",
+                  "description": "Você conjura alterar-se e bom fruto sem gastar Mana, um número de vezes igual ao seu modificador de Inteligência (mínimo 1) por descanso pleno, e aprende a magia t.ulipas, p.apel, k.iwi. Escolha uma magia de até 7º nível de Transmutação: o custo de Mana dela é reduzido pela metade (arredondado para cima)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tecela",
+          "name": "Glifo da Tecelã",
+          "description": "Moldar terra, areia e pedra, e dobrar o que é inflexível. Recebe o Mistério Terra.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Voz da Rocha",
+              "description": "Você recebe 5 pés de sentido sísmico por nível de Arcanista (se já tiver, +5 pés no 1º nível). Você recebe o Mistério Terra."
+            }
+          ],
+          "levels": [
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Tecepedras",
+                  "description": "Ao atingir uma criatura com uma magia de alvo único de Terra, gaste 2 pontos de Arcana para um efeito: prender (salvaguarda de Destreza ou Contida por 1 minuto, repetindo no fim de cada turno); tremor de 5 pés (salvaguarda de Destreza ou Caída); condensar (+1d8 + mod. de Inteligência contundente); projétil de rocha (salvaguarda de Destreza ou Atordoada até o fim do seu próximo turno).\n\nGaste 1 ponto de Arcana para mudar o dano de uma magia de Terra para contundente, cortante ou perfurante (mágico a partir do 10º nível). Você aprende o truque moldar terra (não conta para o máximo) e pode conjurá-lo como ação bônus."
+                }
+              ]
+            },
+            {
+              "level": 14,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Muro da Tecelã",
+                  "description": "Você aprende muralha de pedra (não conta para o máximo) e pode conjurá-la com ação bônus. Quando for alvo de um ataque ou magia, use sua reação para conjurá-la com o dobro de painéis. Ao conjurá-la, você pode usar deslizar em pedras para subir e deslizar pelo topo da muralha. Sempre que causar dano contundente com suas magias ou características deste Glifo, causa dano esmagador.",
+                  "castingTime": "Reação",
+                  "usesFormula": "ATTRIBUTE_MODIFIER",
+                  "attribute": "WISDOM",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 18,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Controle Sísmico",
+                  "description": "Você aprende terremoto (não conta para o máximo). Uma vez por descanso pleno, conjure-o gastando metade dos seus pontos de Mana: o raio dobra, criaturas à sua escolha têm desvantagem nas salvaguardas, e uma área estável de 15 pés se move com você e seus aliados.",
+                  "maxUses": 1,
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 20,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Arcano da Terra",
+                  "description": "Você conjura empurrão sísmico e voleio entrelaçado como magias de 3º nível sem gastar Mana, um número de vezes igual ao seu modificador de Inteligência (mínimo 1) por descanso pleno, e aprende a magia terralogia. Escolha uma magia de até 7º nível de Terra: o custo de Mana dela é reduzido pela metade (arredondado para cima)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "vitreo",
+          "name": "Glifo Vítreo",
+          "description": "Estuda a mente como canalizadora da magia: Adivinhação, Ilusão, Encantamento e Oniromancia.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Janela da Mente",
+              "description": "Escolha um aspecto:\n\nCharme. Uma vez por descanso pleno, com uma ação, uma criatura que te veja e ouça faz salvaguarda de Sabedoria contra seu teste de Atuação; na falha, faz o que você pedir e responde o que perguntar por 1 hora (exceto o que lhe cause mal direto). Mistério do Encantamento.\nOneiros. Você aprende sono (não conta para o máximo); ao conjurá-la, jogue 1d8 × seu mod. de Inteligência (mínimo 0) em dados adicionais. Mistério da Oniromancia.\nPequeno Falsário. Você aprende ilusão menor (não conta para o máximo), conjurável como ação bônus. Mistério da Ilusão.\nVislumbre. Uma vez por descanso pleno, refaça uma jogada que tirou 1 natural. Mistério da Adivinhação.",
+              "label": "Janela da Mente: aspecto",
+              "options": [
+                "Charme",
+                "Oneiros",
+                "Pequeno Falsário",
+                "Vislumbre"
+              ]
+            }
+          ],
+          "levels": [
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Persistência",
+                  "description": "Quando uma criatura passar numa salvaguarda contra sua magia, use sua reação e 2 pontos de Arcana para exigir que ela repita a salvaguarda. Escolha também um dos Mistérios da Janela da Mente para receber.",
+                  "castingTime": "Reação",
+                  "usesFormula": "ATTRIBUTE_MODIFIER",
+                  "attribute": "CHARISMA",
+                  "recharge": "LONG_REST",
+                  "label": "Persistência: Mistério",
+                  "options": [
+                    "Encantamento",
+                    "Oniromancia",
+                    "Ilusão",
+                    "Adivinhação"
+                  ]
+                }
+              ]
+            },
+            {
+              "level": 14,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Janela da Alma",
+                  "description": "Ao receber dano mantendo concentração, some seu valor de Carisma à salvaguarda de Constituição (mod. de Carisma vezes por descanso pleno). Conforme sua escolha no 1º nível:\n\nEsquecimento (Charme). Ação: uma criatura a até 30 pés faz salvaguarda de Sabedoria; na falha, você passa até 1 minuto alterando a memória dela (até 24 horas atrás), ficando sem visão enquanto isso.\nNoite de Verão (Oneiros). Ação: uma criatura a até 60 pés faz salvaguarda de Sabedoria ou vaga aleatoriamente sem agir por 1 minuto (repete a cada turno; quem não dorme é imune).\nEspelho D’alma (Pequeno Falsário). Ação bônus e concentração: uma imagem espelhada a até 10 pés conjura magias por você (1 minuto em combate, 1 hora fora); você vê, ouve e fala através dela.\nTerceiro Olho (Vislumbre). Visão verdadeira a 10 pés × seu bônus de proficiência.\n\nAs três primeiras: mod. de Carisma (mínimo 1) vezes por descanso pleno.",
+                  "usesFormula": "ATTRIBUTE_MODIFIER",
+                  "attribute": "CHARISMA",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 18,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Especialização Mental",
+                  "description": "Conforme sua escolha: Controlador (dominar pessoa e imobilizar monstro como 5º nível sem Mana, usos compartilhados), Oniromante (sonho como 5º nível sem Mana), Falso (similaridade como 5º nível sem Mana) ou Mente Compartilhada (ligação telepática como 5º nível sem Mana), um número de vezes igual ao seu mod. de Carisma (mínimo 1) por descanso pleno.",
+                  "usesFormula": "ATTRIBUTE_MODIFIER",
+                  "attribute": "CHARISMA",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 20,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Arcano da Mente",
+                  "description": "Escolha duas magias de até 3º nível de Adivinhação, Encantamento, Ilusão ou Oniromancia: você as conjura como magias de 3º nível sem gastar Mana, um número de vezes igual ao seu mod. de Inteligência (mínimo 1) por descanso pleno, e aprende a magia incepção. Escolha uma magia de até 7º nível desses Mistérios: o custo de Mana dela é reduzido pela metade (arredondado para cima)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "zhonya",
+          "name": "Glifo de Zhonya",
+          "description": "Controlar o tempo, como Zhonya da antiga Icathia, enxergando segundos no passado e no futuro. Recebe o Mistério da Cronomancia.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Tempo Engarrafado",
+              "description": "Você tem vantagem em iniciativa e não pode ser surpreso (se não estiver Inconsciente). Você recebe o Mistério da Cronomancia.\n\nAo conjurar magias de Cronomancia de 1º nível ou superior, você recebe 1 carga de Tempo Engarrafado (até seu nível de Arcanista; zeram no início de um descanso pleno). Uma por turno:\n1 carga – Rebobinar: alguém repete a iniciativa (aliado com vantagem, inimigo com desvantagem).\n2 cargas – Tente Outra Vez: repita uma salvaguarda falhada com vantagem.\n3 cargas – Acelerar: seus deslocamentos dobram até o fim do seu próximo turno.\n3 cargas – Desacelerar: uma criatura a 30 pés faz salvaguarda de Constituição ou tem deslocamentos pela metade.\n4 cargas – Dádiva do Tempo: vantagem em Destreza para você ou criatura a 15 pés (ou desvantagem num inimigo, com salvaguarda); mod. de Inteligência vezes por descanso pleno.\n5 cargas – Enfraquecer: aumenta em uma categoria o dano de Envenenado ou Sangrando de uma criatura a 30 pés (salvaguarda).\n5 cargas – Fortificar: encerra Envenenado ou Sangrando de uma criatura a 30 pés.\n9 cargas – Paralisia Temporal: uma criatura a 20 pés faz salvaguarda de Constituição ou fica Paralisada por 1 minuto.\n10 cargas – Marco de Tempo: marca seu lugar e pontos de vida; após 1 minuto (ou antes, com ação bônus ou reação), você volta ao ponto com aquela vida.\n15 cargas – Auxílio Cronal: Marco de Tempo num aliado.\n20 cargas – Reboot: reação ao fim de uma rodada para jogar um novo turno antes dela terminar."
+            }
+          ],
+          "levels": [
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Proteção do Tempo",
+                  "description": "Você aprende proteção contra morte (não conta para o máximo; pode conjurá-la mesmo acima do seu nível máximo), a até 30 pés. Quando você ou uma criatura que possa ver for alvo de um ataque, use sua reação para conjurá-la no alvo: ele recupera metade dos pontos de vida máximos + seu nível de Arcanista em vez de ficar com 1.",
+                  "castingTime": "Reação",
+                  "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+                  "attribute": "INTELLIGENCE",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 14,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Alteração Temporal",
+                  "description": "Com 1 minuto de concentração, crie uma zona temporal de 15 pés por 10 minutos: você e criaturas escolhidas recebem os benefícios de um descanso longo ao fim (1 carga de Tempo Engarrafado por criatura). Hostis que tentem entrar fazem salvaguarda de Sabedoria ou ficam Paralisadas por 10 minutos. Quem você acelerar com velocidade age normalmente ao fim da magia, e você tem vantagem contra lentidão."
+                }
+              ]
+            },
+            {
+              "level": 18,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Celeridade",
+                  "description": "Ao conjurar Cronomancia de 1º nível ou superior, você recebe os efeitos de velocidade até o fim do seu próximo turno, agindo normalmente ao fim. Você é imune a parar o tempo."
+                }
+              ]
+            },
+            {
+              "level": 20,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Arcano do Tempo",
+                  "description": "Você conjura lentidão e velocidade sem gastar Mana, um número de vezes igual ao seu mod. de Inteligência (mínimo 1) por descanso longo, e aprende a magia dies irae. Escolha uma magia de até 7º nível de Cronomancia: o custo de Mana dela é reduzido pela metade (arredondado para cima)."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "MERCURIAL",
+      "name": "Mercurial",
+      "description": "Astúcia e ardis: ladrões, assassinos, espiões, exploradores, mensageiros, diplomatas. Vivem na área cinzenta entre a lei e as sombras e se especializam em uma área. Construção rápida: Destreza mais alta, seguida de Inteligência (ou Carisma, para interações sociais); Passado Criminoso ou Mercenário.\n\nEquipamento inicial: (a) rapieira ou (b) espada curta; (a) arco curto e aljava com 20 flechas ou (b) espada curta; (a) conjunto de assaltante, (b) de explorador de masmorras ou (c) de aventureiro; armadura de couro, duas adagas e ferramentas de chaveiro.",
+      "hitDie": 8,
+      "subclassLabel": "Cabala",
+      "grants": [
+        {
+          "type": "SAVING_THROW",
+          "attribute": "DEXTERITY"
+        },
+        {
+          "type": "SAVING_THROW",
+          "attribute": "INTELLIGENCE"
+        },
+        {
+          "type": "ARMOR_PROFICIENCY",
+          "value": "LIGHT"
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Armas simples"
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Bestas de mão"
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Espadas longas"
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Rapieiras"
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Espadas curtas"
+        },
+        {
+          "type": "CRAFT",
+          "value": "chaveiro"
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 4,
+          "options": [
+            "ACROBATICS",
+            "ATHLETICS",
+            "PERFORMANCE",
+            "DECEPTION",
+            "STEALTH",
+            "INTIMIDATION",
+            "INSIGHT",
+            "INVESTIGATION",
+            "PERCEPTION",
+            "PERSUASION",
+            "SLEIGHT_OF_HAND"
+          ],
+          "label": "Perícias do Mercurial: escolha 4"
+        },
+        {
+          "type": "EXPERTISE_CHOICE",
+          "value": "WITH_CRAFTS",
+          "count": 1,
+          "label": "Especialização: uma perícia ou ofício"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Especialização",
+          "description": "Escolha uma perícia proficiente ou um Ofício: você recebe especialidade nele (bônus de proficiência dobrado). Mais uma no 3º nível e mais duas no 6º nível."
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Ataque Furtivo",
+          "description": "Uma vez por turno, some o dano de Ataque Furtivo a uma criatura que acertar com vantagem, usando arma de acuidade ou à distância. Não precisa de vantagem se outro inimigo do alvo estiver a 5 pés dele (não Incapacitado) e você não tiver desvantagem. O dano cresce com o nível: 1d6 no 1º, 2d6 no 3º, 3d6 no 5º, até 10d6 no 19º.",
+          "diceByLevel": {
+            "1": "1d6",
+            "3": "2d6",
+            "5": "3d6",
+            "7": "4d6",
+            "9": "5d6",
+            "11": "6d6",
+            "13": "7d6",
+            "15": "8d6",
+            "17": "9d6",
+            "19": "10d6"
+          }
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Maestria de Armas",
+          "description": "Você usa a propriedade Maestria de 2 armas proficientes à sua escolha entre armas simples, bestas de mão, espadas longas, rapieiras, espadas curtas e marciais com a propriedade Leve. Num descanso pleno, pode trocar uma maestria por outra arma."
         }
       ],
       "levels": [
@@ -2337,8 +3639,844 @@
             {
               "type": "FEATURE",
               "abilityType": "PASSIVE",
-              "name": "Recuperação Arcana",
-              "description": "EXEMPLO: ganho do 2º nível (usado na subida de nível, que vem depois)."
+              "name": "Ação Ardilosa",
+              "description": "Você pode usar uma ação bônus em cada turno de combate para Desengajar, Disparar ou Esconder."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "grants": [
+            {
+              "type": "EXPERTISE_CHOICE",
+              "value": "WITH_CRAFTS",
+              "count": 1,
+              "label": "Especialização (3º nível): uma perícia ou ofício"
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Aprimoramento",
+              "description": "No 4º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "grants": [
+            {
+              "type": "EXPERTISE_CHOICE",
+              "value": "WITH_CRAFTS",
+              "count": 2,
+              "label": "Especialização (6º nível): duas perícias ou Ofício de Chaveiro"
+            }
+          ]
+        },
+        {
+          "level": 7,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Evasão",
+              "description": "Num efeito com salvaguarda de Destreza para metade do dano, você não sofre dano se passar e só metade se falhar."
+            }
+          ]
+        },
+        {
+          "level": 8,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Aprimoramento",
+              "description": "No 8º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            }
+          ]
+        },
+        {
+          "level": 10,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Aprimoramento",
+              "description": "No 10º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            }
+          ]
+        },
+        {
+          "level": 12,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Aprimoramento",
+              "description": "No 12º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            }
+          ]
+        },
+        {
+          "level": 14,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Sentido Cego",
+              "description": "Se puder ouvir, você sabe a localização de qualquer criatura escondida ou Invisível a até 10 pés."
+            }
+          ]
+        },
+        {
+          "level": 15,
+          "grants": [
+            {
+              "type": "SAVING_THROW",
+              "attribute": "WISDOM"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Essência Elusiva",
+              "description": "Proficiência em salvaguardas de Sabedoria. Se não estiver Incapacitado, nenhuma jogada de ataque tem vantagem contra você."
+            }
+          ]
+        },
+        {
+          "level": 16,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Aprimoramento",
+              "description": "No 16º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            }
+          ]
+        },
+        {
+          "level": 18,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Golpe de Sorte",
+              "description": "Se errar um ataque contra um alvo no alcance, transforme o erro em acerto; ou, se falhar num teste de atributo, trate o d20 como 20.",
+              "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+              "attribute": "INTELLIGENCE",
+              "recharge": "LONG_REST"
+            }
+          ]
+        },
+        {
+          "level": 19,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Aprimoramento",
+              "description": "No 19º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+            }
+          ]
+        }
+      ],
+      "subclasses": [
+        {
+          "id": "as-runico",
+          "name": "Cabala do Ás Rúnico",
+          "description": "Pessoas tocadas pelas runas desde o nascimento, manifestações da \"Chance\" capazes de afetar as probabilidades ao redor.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Munição Rúnica",
+              "description": "Você conjura e dispara sua munição rúnica de assinatura (bolinhas de gude, cartas, penas…), com o tipo de dano escolhido. Você é proficiente com ela: arma à distância, 1d6, propriedades acuidade e arremesso (20/60 pés). Você pode atacar com ela como ação bônus. Conjurar munição leva 1 hora ininterrupta e cria 50 peças, absorvidas pelos braços (você sempre sabe quantas tem); duram até o próximo descanso pleno ou até o ataque. Máximo de munições: 50 × metade do seu bônus de proficiência.",
+              "label": "Munição Rúnica: tipo de dano",
+              "options": [
+                "Contundente",
+                "Cortante",
+                "Perfurante"
+              ],
+              "damage": "1d6",
+              "damageBonus": [
+                "STRENGTH_OR_DEXTERITY"
+              ],
+              "castingTime": "Ataque ou ação bônus",
+              "range": "20/60 pés"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Carga Rúnica",
+              "description": "A runa que te favorece é uma fonte de recurso: 4 pontos de Carga Rúnica no 1º nível e mais 1 nos níveis 4, 7, 10, 13, 16 e 19. Os pontos viram dados para alguns efeitos: d6 no 1º nível, d8 no 5º, d10 no 11º e d12 no 17º. Você recupera toda a carga num descanso longo ou pleno.",
+              "usesByLevel": {
+                "1": 4,
+                "4": 5,
+                "7": 6,
+                "10": 7,
+                "13": 8,
+                "16": 9,
+                "19": 10
+              },
+              "diceByLevel": {
+                "1": "1d6",
+                "5": "1d8",
+                "11": "1d10",
+                "17": "1d12"
+              },
+              "recharge": "LONG_REST"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Recursos de Carga Rúnica",
+              "description": "Você conhece três recursos de Carga Rúnica (e aprende outro nos níveis 3, 6, 10, 14 e 18):\n\nArremesso Trapaceiro. Se sabe onde está uma criatura que não pode atacar, use sua ação e 1 Carga Rúnica para atacá-la com a Munição Rúnica fazendo curvas e ricochetes; o alcance aumenta em 5 × o resultado do dado de Carga Rúnica pés.\nChamariz. Ação e 1 Carga Rúnica: uma munição se multiplica numa distração; faça um teste de Furtividade com vantagem somando o dado de Carga Rúnica.\nEsguio. Ação bônus e 1 Carga Rúnica: ação Esquivar.\nFugaz. Ação e 1 Carga Rúnica: hostis a 10 pés fazem salvaguarda de Inteligência CD 8 + dado de Carga Rúnica ou têm desvantagem em testes, salvaguardas e ataques até o início do seu próximo turno, e o próximo ataque contra eles tem vantagem.\nImbuir. Na ação de Ataque, 1 Carga Rúnica: vantagem em todos os ataques com a Munição Rúnica neste turno; o primeiro soma o dado de Carga Rúnica ao ataque e ao dano (dano energético).\nJogada de Sorte. Após errar um ataque, 1 Carga Rúnica: salvaguarda de Destreza CD 20 − dado de Carga Rúnica; no sucesso, acerta automaticamente outra criatura que possa ver no alcance.\nJulgamento Errado. Reação e 1 Carga Rúnica quando uma criatura que possa ver fizer um ataque, salvaguarda ou teste: subtraia o dado de Carga Rúnica da jogada (antes do Mestre dizer o resultado).\nMeter o Pé. Ação livre e 1 Carga Rúnica: ação Desengajar.\nTorrente. Ação e 1 Carga Rúnica: ataque com a Munição Rúnica um número de alvos a até 20 pés igual ao seu mod. de Destreza (mínimo 1), com uma única jogada de ataque.\nTríplice. Ação e 1 Carga Rúnica: três munições num cone de 30 pés, cada uma numa linha; cada alvo faz salvaguarda de Destreza CD 8 + proficiência + dado de Carga Rúnica ou sofre o dano da Munição; no sucesso, a munição segue até o próximo alvo.",
+              "label": "Recursos de Carga Rúnica: escolha três",
+              "count": 3,
+              "options": [
+                "Arremesso Trapaceiro",
+                "Chamariz",
+                "Esguio",
+                "Fugaz",
+                "Imbuir",
+                "Jogada de Sorte",
+                "Julgamento Errado",
+                "Meter o Pé",
+                "Torrente",
+                "Tríplice"
+              ]
+            }
+          ],
+          "levels": [
+            {
+              "level": 3,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Energizar",
+                  "description": "Ao conjurar um novo lote de Munição Rúnica, gaste 1 Carga Rúnica para energizá-lo: as munições causam dano mágico até o próximo descanso pleno. Com uma ação bônus e 1 Carga Rúnica, encante duas munições do lote energizado (no 9º nível, 2 efeitos por munição):\nAtordoante: salvaguarda de Constituição CD 13 + dado de Carga Rúnica ou Atordoada até o fim do seu próximo turno.\nEncantadora: salvaguarda de Carisma CD 13 + dado ou Enfeitiçada até o fim do seu próximo turno (uma criatura por vez).\nEnvenenada: salvaguarda de Constituição CD 13 + dado ou 1d8 de dano letífero adicional e Intoxicada até o fim do seu próximo turno.\nFlamejante: o alvo fica Chamuscado, sofrendo o dado de Carga Rúnica em dano incinerante no início de cada turno dele.\nSanguinária: salvaguarda de Constituição CD 13 + dado ou Sangrando (1d4 por turno).\nNos efeitos com salvaguarda, gaste 1 Carga Rúnica adicional para subtrair um dado de Carga Rúnica da salvaguarda."
+                },
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Recurso de Carga Rúnica",
+                  "description": "No 3º nível, você aprende um novo recurso de Carga Rúnica.",
+                  "label": "Recurso de Carga Rúnica (3º nível)",
+                  "options": [
+                    "Arremesso Trapaceiro",
+                    "Chamariz",
+                    "Esguio",
+                    "Fugaz",
+                    "Imbuir",
+                    "Jogada de Sorte",
+                    "Julgamento Errado",
+                    "Meter o Pé",
+                    "Torrente",
+                    "Tríplice"
+                  ]
+                }
+              ]
+            },
+            {
+              "level": 5,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Mãos Rápidas",
+                  "description": "Sua Munição Rúnica aumenta a categoria de dano em 1 e o arremesso passa a 60/120 pés."
+                }
+              ]
+            },
+            {
+              "level": 6,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Recurso de Carga Rúnica",
+                  "description": "No 6º nível, você aprende um novo recurso de Carga Rúnica.",
+                  "label": "Recurso de Carga Rúnica (6º nível)",
+                  "options": [
+                    "Arremesso Trapaceiro",
+                    "Chamariz",
+                    "Esguio",
+                    "Fugaz",
+                    "Imbuir",
+                    "Jogada de Sorte",
+                    "Julgamento Errado",
+                    "Meter o Pé",
+                    "Torrente",
+                    "Tríplice"
+                  ]
+                }
+              ]
+            },
+            {
+              "level": 7,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Ataque Extra",
+                  "description": "Você ataca duas vezes ao usar a ação Atacar no seu turno (três no 18º nível de Mercurial)."
+                }
+              ]
+            },
+            {
+              "level": 9,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Hora do Duelo",
+                  "description": "Com uma ação, faça um teste de Persuasão contra a Intuição de uma criatura que te ouça e entenda seu idioma. No sucesso, se for hostil, ela tem desvantagem em ataques contra outros alvos e não faz ataques de oportunidade contra eles, por 1 minuto, até um companheiro seu atacá-la ou afetá-la com magia, ou até você terminar o turno a mais de 60 pés dela.",
+                  "castingTime": "Ação",
+                  "duration": "1 minuto"
+                }
+              ]
+            },
+            {
+              "level": 10,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Recurso de Carga Rúnica",
+                  "description": "No 10º nível, você aprende um novo recurso de Carga Rúnica.",
+                  "label": "Recurso de Carga Rúnica (10º nível)",
+                  "options": [
+                    "Arremesso Trapaceiro",
+                    "Chamariz",
+                    "Esguio",
+                    "Fugaz",
+                    "Imbuir",
+                    "Jogada de Sorte",
+                    "Julgamento Errado",
+                    "Meter o Pé",
+                    "Torrente",
+                    "Tríplice"
+                  ]
+                }
+              ]
+            },
+            {
+              "level": 11,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Especialização em Combate",
+                  "description": "Ao errar um ataque com a Munição Rúnica contra um alvo no alcance, gaste 1 Carga Rúnica para transformar o erro em acerto."
+                }
+              ]
+            },
+            {
+              "level": 13,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Recarga Rúnica",
+                  "description": "Num acerto crítico com a Munição Rúnica, ela volta para suas mãos. Ao fim de um combate, jogue um dado de Carga Rúnica e recupere essa quantidade de munições (até seu limite)."
+                }
+              ]
+            },
+            {
+              "level": 14,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Recurso de Carga Rúnica",
+                  "description": "No 14º nível, você aprende um novo recurso de Carga Rúnica.",
+                  "label": "Recurso de Carga Rúnica (14º nível)",
+                  "options": [
+                    "Arremesso Trapaceiro",
+                    "Chamariz",
+                    "Esguio",
+                    "Fugaz",
+                    "Imbuir",
+                    "Jogada de Sorte",
+                    "Julgamento Errado",
+                    "Meter o Pé",
+                    "Torrente",
+                    "Tríplice"
+                  ]
+                }
+              ]
+            },
+            {
+              "level": 17,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Intuição Superior",
+                  "description": "Numa salvaguarda de Inteligência, Sabedoria ou Carisma, gaste 1 Carga Rúnica para somar o dado de Carga Rúnica. Aliados que te ouçam podem somar esse bônus às salvaguardas deles, se você quiser."
+                }
+              ]
+            },
+            {
+              "level": 18,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Recurso de Carga Rúnica",
+                  "description": "No 18º nível, você aprende um novo recurso de Carga Rúnica.",
+                  "label": "Recurso de Carga Rúnica (18º nível)",
+                  "options": [
+                    "Arremesso Trapaceiro",
+                    "Chamariz",
+                    "Esguio",
+                    "Fugaz",
+                    "Imbuir",
+                    "Jogada de Sorte",
+                    "Julgamento Errado",
+                    "Meter o Pé",
+                    "Torrente",
+                    "Tríplice"
+                  ]
+                }
+              ]
+            },
+            {
+              "level": 20,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Ás na Manga",
+                  "description": "Ao falhar num teste de atributo ou salvaguarda, gaste 2 Cargas Rúnicas para refazer a jogada. Sua Munição Rúnica aumenta a categoria de dano em 1, a margem de crítico diminui em 1, o multiplicador de dados num crítico aumenta em 1, e cada munição que atingir um alvo aplica dano e efeitos duas vezes."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "assassino",
+          "name": "Cabala do Assassino",
+          "description": "Treinamento na arte da morte: assassinos de aluguel, caçadores de recompensa e sacerdotes que exterminam inimigos. Subterfúgio, veneno e disfarces.",
+          "grants": [
+            {
+              "type": "CRAFT",
+              "value": "artista"
+            },
+            {
+              "type": "CRAFT",
+              "value": "apotecario"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Armas Assassinas",
+              "description": "Você recebe proficiência com o Ofício de Artista (Maquiador) e o Ofício de Apotecário. Esta Cabala se especializa em Armas Assassinas: adagas, chakrans pequenos, dardos, espadas curtas e katares."
+            }
+          ],
+          "levels": [
+            {
+              "level": 3,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Fio da Lâmina",
+                  "description": "Escolha uma opção:\nCiclone de Adagas. +10 pés no arremesso de Armas Assassinas. Com sua ação, faça um ataque corpo a corpo; num acerto, faz um ataque giratório: cada criatura no alcance faz salvaguarda de Destreza CD 8 + proficiência + mod. de Destreza, sofrendo o dano do ataque (metade no sucesso); o alvo do ataque não é afetado.\nGume Venenoso. Ação bônus para aplicar veneno nas Armas Assassinas; especialidade no Ofício de Apotecário; ao criar ou extrair um veneno, cria doses iguais ao seu mod. de Inteligência (mínimo 1) sem custo adicional.\nLimiar da Lâmina. Cada acerto com Armas Assassinas dá 1 marca de Ferimento; com 3 marcas, o próximo ataque tem dano maximizado, as marcas zeram e a criatura faz salvaguarda de Constituição CD 8 + proficiência + mod. de Inteligência ou fica Sangrando (1d6 por turno).",
+                  "label": "Fio da Lâmina: opção",
+                  "options": [
+                    "Ciclone de Adagas",
+                    "Gume Venenoso",
+                    "Limiar da Lâmina"
+                  ]
+                }
+              ]
+            },
+            {
+              "level": 5,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Esquiva Sobrenatural",
+                  "description": "Quando uma criatura hostil que você possa ver te acerta com um ataque, você pode usar sua reação para reduzir o dano pela metade.",
+                  "castingTime": "Reação"
+                }
+              ]
+            },
+            {
+              "level": 7,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Espreitar",
+                  "description": "Escolha uma opção:\nAssinatura Vitriólica. Escolha um veneno: com ele, a CD aumenta em metade do bônus de proficiência, a duração na Arma Assassina vai a 2 minutos e o dano soma seu mod. de Inteligência. Nos níveis 11, 15 e 19, escolha um novo veneno e pode trocar um.\nInvisibilidade. Ação bônus: efeitos de invisibilidade no começo do seu próximo turno, com +10 pés de caminhada enquanto Invisível (mod. de Inteligência vezes por descanso pleno).\nShunpo. Ação bônus: teleporte para até 5 pés de um alvo ou de uma Arma Assassina arremessada que possa ver a até 30 pés (mod. de Inteligência vezes por descanso pleno); reduzindo uma criatura a 0 pontos de vida na rodada, pode usar de novo sem gastar uso. Com Ciclone de Adagas, pode usar a reação para o ataque giratório.",
+                  "label": "Espreitar: opção",
+                  "options": [
+                    "Assinatura Vitriólica",
+                    "Invisibilidade",
+                    "Shunpo"
+                  ],
+                  "usesFormula": "ATTRIBUTE_MODIFIER",
+                  "attribute": "INTELLIGENCE",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 9,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Silenciosamente Mortal",
+                  "description": "Vantagem em Furtividade que envolva som e, furtivo, não é detectado por sentido sísmico. Você ganha 60 pés de visão no escuro (ou +30)."
+                }
+              ]
+            },
+            {
+              "level": 11,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Ataque de Investida",
+                  "description": "Ao atacar com Arma Assassina uma criatura hostil fora do seu alcance, salte 10 pés até ela (fora do seu deslocamento, ignorando terreno difícil). Num acerto, some o Ataque Furtivo, e o dano conta como acerto crítico.",
+                  "usesFormula": "ATTRIBUTE_MODIFIER",
+                  "attribute": "DEXTERITY",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 13,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Fenda na Armadura",
+                  "description": "Com Armas Assassinas: margem de crítico −1, categoria de dano +1 e multiplicador de crítico +1."
+                }
+              ]
+            },
+            {
+              "level": 17,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Espreita Fantasmagórica",
+                  "description": "Seu Espreitar melhora: Assinatura Vitriólica (todo dano venenoso e letífero seu é maximizado); Invisibilidade (instantânea, também como reação ao ser alvo de um ataque); Shunpo (sem limite de usos). Você também escolhe uma nova opção de Espreitar, sem essa melhoria."
+                }
+              ]
+            },
+            {
+              "level": 20,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Contagem de Corpos",
+                  "description": "Ao reduzir uma criatura a 0 pontos de vida, você recupera pontos de vida iguais ao d20 do ataque, pode realizar uma ação adicional e tem seu deslocamento de caminhada restaurado."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "espiao",
+          "name": "Cabala do Espião",
+          "description": "Roubar informação sem que saibam: magia para nublar mentes, criar e explorar fraquezas, sempre como último recurso.",
+          "grants": [
+            {
+              "type": "CRAFT",
+              "value": "falsificador"
+            },
+            {
+              "type": "CRAFT",
+              "value": "artista"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Conjuração do Espião",
+              "description": "Você conjura magias da lista de Mercurial (Capítulo 10); Heranças, Aprimoramentos ou aprendizado podem dar outros Mistérios. Não pode usar listas de outra Classe nesta Classe.\n\nTruques: mãos mágicas e mais dois à sua escolha. Magias de 1º nível a partir do 3º nível (três).\nTruques / magias conhecidas / nível máximo: 1º 2/–/– · 3º 2/3/1º · 4º 2/4 · 5º 3/4 · 7º 3/5 · 8º 3/6/2º · 10º 4/7 · 11º 4/8 · 13º 4/9/3º · 14º 4/10 · 16º 4/11 · 19º 4/12/4º · 20º 4/13. Ao subir de nível, pode trocar uma magia conhecida.\n\nAtributo de conjuração: Inteligência. CD = 8 + proficiência + mod. de Inteligência; ataque de magia = proficiência + mod. de Inteligência.\n\nProficiência Adicional: Ofício de Falsificador e Ofício de Artista (Maquiador)."
+            }
+          ],
+          "levels": [
+            {
+              "level": 3,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Pontos de Mana",
+                  "description": "Você gasta Mana igual ao custo do nível da magia (Capítulo 10). Recupera seu mod. de Inteligência em Mana num descanso longo e toda a Mana num descanso pleno.",
+                  "usesByLevel": {
+                    "3": 4,
+                    "4": 6,
+                    "5": 8,
+                    "6": 9,
+                    "7": 10,
+                    "8": 13,
+                    "9": 14,
+                    "10": 15,
+                    "11": 16,
+                    "12": 17,
+                    "13": 20,
+                    "14": 21,
+                    "15": 22,
+                    "16": 23,
+                    "17": 24,
+                    "18": 25,
+                    "19": 28,
+                    "20": 30
+                  },
+                  "recharge": "LONG_REST"
+                },
+                {
+                  "type": "SKILL",
+                  "skill": "INVESTIGATION",
+                  "expertise": true
+                },
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Inspecionar Debilidades",
+                  "description": "Você recebe proficiência em Investigação (ou especialidade). Observando um alvo por 1 minuto, faça um teste de Investigação (CD do Mestre) para obter uma informação à sua escolha (sem saber se é verdadeira): Classe de Armadura, Dimensões, Imunidade a Dano, Imunidade a Condição, Peso, Pontos de Vida, Resistência a Dano, Sentidos, Tipo e Subtipo ou Vulnerabilidade a Dano; o Mestre pode dar vantagem em salvaguardas contra esse alvo. Contra objetos, vantagem no teste. Numa rotina, você descobre turnos de guarda e envolvidos, com vantagem em testes de Carisma relacionados. +1 informação no 10º nível e outra no 16º."
+                }
+              ]
+            },
+            {
+              "level": 5,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Duplipensar",
+                  "description": "Vantagem em Enganação; alvos de Inspecionar Debilidades têm desvantagem na Intuição para perceber suas mentiras. Contra magias ou perícias que extraiam informação à força, some seu mod. de Inteligência às salvaguardas, e num sucesso você pode inserir uma informação falsa. Vantagem para detectar mentiras e se infiltrar em pensamentos."
+                }
+              ]
+            },
+            {
+              "level": 7,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Magia Invisível",
+                  "description": "Conjure uma magia de 1 ação como ação bônus, ignorando componentes verbais e somáticos. Ao conjurar um truque de dano, você pode fazer um ataque adicional.",
+                  "castingTime": "Ação bônus",
+                  "usesFormula": "HALF_PROFICIENCY",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 9,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Criar Fraqueza",
+                  "description": "Ação: um alvo a até 120 pés faz salvaguarda de Constituição contra sua CD de magias ou recebe vulnerabilidade a um tipo de dano (exceto verdadeiro) ou desvantagem contra uma condição, à sua escolha, por 1 minuto (repete a cada turno; exige concentração). Também, com ação bônus, escolha um aliado a até 60 pés: hostis que o vejam ou ouçam fazem salvaguarda de Sabedoria ou têm desvantagem para atacar outro alvo por 1 minuto (mod. de Carisma vezes por descanso pleno).",
+                  "castingTime": "Ação",
+                  "range": "120 pés",
+                  "duration": "1 minuto",
+                  "usesFormula": "ATTRIBUTE_MODIFIER",
+                  "attribute": "INTELLIGENCE",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 11,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Enganar",
+                  "description": "Você conjura modificar memória como magia de 5º nível sem gastar Mana.",
+                  "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+                  "attribute": "INTELLIGENCE",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 13,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Mentira Convincente",
+                  "description": "Enganar afeta alvos adicionais iguais a metade do seu mod. de Inteligência (mínimo 1) com um só uso; você sabe quem resistiu e pode tentar de novo por 3 Mana. Alvos de Inspecionar Debilidades fazem a salvaguarda com desvantagem. Quem tentar desfazer a memória com remover maldição ou restauração maior faz um teste contra CD 10 + proficiência + seu mod. de Inteligência; na falha, a memória fica e ele não sabe."
+                }
+              ]
+            },
+            {
+              "level": 17,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Clareza Sombria",
+                  "description": "Numa salvaguarda de Inteligência, Sabedoria ou Carisma, gaste 2 Mana para somar seu modificador de ataque de magia (aliados que te ouçam também podem somar). Você está sempre sob efeito de ver o invisível (sem o Reino Espiritual; 1 Mana para o efeito completo por 1 hora) e tem vantagem para detectar falsificações."
+                }
+              ]
+            },
+            {
+              "level": 20,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Imbuir Sombra",
+                  "description": "Seu Ataque Furtivo funciona com magias de ataque e, num crítico, causa o dano de Ataque Furtivo como dano sombrio adicional. Ou seus ataques com arma ou magia podem causar dano sombrio. Ao Desengajar, você fica com os efeitos de invisibilidade até o fim do seu próximo turno."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "explorador",
+          "name": "Cabala do Explorador",
+          "description": "Desbravar catacumbas, lidar com maldições antigas e sair das situações mais improváveis: caçadores de tesouro, exploradores de masmorras e investigadores.",
+          "grants": [
+            {
+              "type": "CRAFT",
+              "value": "armadilheiro"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Sem Barreiras",
+              "description": "Você recebe proficiência com o Ofício de Armadilheiro e aprende dois idiomas comuns à sua escolha; escolha mais 4 idiomas que você só sabe identificar (ouvindo ou lendo). Nos níveis 7, 13 e 19, aprende um idioma à sua escolha. Escalar não custa deslocamento adicional, e com 10 pés de corrida antes de um salto, o alcance aumenta em seu mod. de Destreza pés."
+            }
+          ],
+          "levels": [
+            {
+              "level": 3,
+              "grants": [
+                {
+                  "type": "SKILL",
+                  "skill": "SLEIGHT_OF_HAND",
+                  "expertise": true
+                },
+                {
+                  "type": "CRAFT_CHOICE",
+                  "count": 1,
+                  "label": "Conhecimento Avançado: um ofício à escolha"
+                },
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Conhecimento Avançado",
+                  "description": "Com a ação bônus da Ação Ardilosa, você pode fazer um teste de Prestidigitação, usar ferramentas de chaveiro para desarmar armadilha ou abrir fechadura, Usar um Objeto ou recarregar uma arma com Capacidade. Proficiência em Prestidigitação (ou especialidade) e em um Ofício à sua escolha. Você conjura encontrar armadilhas de forma não mágica, uma vez por descanso pleno (recarrega se um aliado ativar ou desarmar uma armadilha que você não achou); no 11º nível, alcance de 300 pés e direção precisa.\n\nProficiência com bestas de repetição ou armas de fogo (a outra no 7º nível). Bestas, bestas de repetição e armas de fogo têm Mecanismos Complexos: com proficiência, somam seu mod. de Inteligência ao dano e têm margem de crítico −1.",
+                  "label": "Conhecimento Avançado: arma",
+                  "options": [
+                    "Bestas de repetição",
+                    "Armas de fogo"
+                  ]
+                }
+              ]
+            },
+            {
+              "level": 5,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Esquiva Sobrenatural",
+                  "description": "Quando uma criatura hostil que você possa ver te acerta com um ataque, você pode usar sua reação para reduzir o dano pela metade.",
+                  "castingTime": "Reação"
+                }
+              ]
+            },
+            {
+              "level": 7,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Esquemas Mentais",
+                  "description": "Uma vez por turno, ao acertar com uma arma de mecanismo complexo, faça um novo ataque contra o mesmo alvo. Você conjura detectar magia de forma não mágica, metade do seu mod. de Inteligência vezes por descanso pleno (o mod. inteiro no 13º nível).",
+                  "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+                  "attribute": "INTELLIGENCE",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 9,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Aprendizado Rápido",
+                  "description": "Você sempre sabe quando alguém mente para você (ou não sabe a resposta). Numa região desconhecida, com 10 PO e 3 horas de estudo, vantagem em Arcanismo, História, Natureza ou Religião sobre ela por uma semana, e você sabe as criaturas nativas. Vantagem em Furtividade se não se mover mais da metade do deslocamento no turno."
+                }
+              ]
+            },
+            {
+              "level": 11,
+              "grants": [
+                {
+                  "type": "EXPERTISE_CHOICE",
+                  "count": 1,
+                  "label": "Talento Confiável: especialidade em uma perícia"
+                },
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Talento Confiável",
+                  "description": "Em testes de atributo com bônus de proficiência, um 9 ou menos no d20 vale 10. Especialidade numa perícia proficiente à sua escolha. Com armas de Mecanismo Complexo proficientes, o dano do mod. de Inteligência dobra e o multiplicador de crítico aumenta em 1."
+                }
+              ]
+            },
+            {
+              "level": 13,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Explorador de Catacumbas",
+                  "description": "Vantagem em salvaguardas de Constituição contra Envenenado e Intoxicado e resistência a dano venenoso. Você conjura identificar de forma não mágica (mod. de Inteligência vezes por descanso pleno) e ignora requisitos de Classe, Origem e nível de itens mágicos. Ao usar uma carga de item mágico para causar dano, role 1d10 + mod. de Inteligência: com 10 ou mais, a carga não é gasta (no 20º nível, 1d4: com 2 ou mais).",
+                  "usesFormula": "ATTRIBUTE_MODIFIER",
+                  "attribute": "INTELLIGENCE",
+                  "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 17,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Reflexos de Explorador",
+                  "description": "Você joga um turno na sua iniciativa e outro na iniciativa 10, o que vier primeiro. Não funciona quando surpreso."
+                }
+              ]
+            },
+            {
+              "level": 20,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "PASSIVE",
+                  "name": "Experiência de Vida",
+                  "description": "Num teste de atributo ou Ofício (exceto criação de itens), mesmo sem proficiência, você pode ser automaticamente bem-sucedido, se possível, um número de vezes igual ao seu bônus de proficiência por descanso pleno. Ao usar arma de Mecanismo Complexo ou carga de item mágico para dano, role 1d4: com 4, o dano dobra. Você não pode ser surpreso.",
+                  "usesFormula": "PROFICIENCY",
+                  "recharge": "LONG_REST"
+                }
+              ]
             }
           ]
         }

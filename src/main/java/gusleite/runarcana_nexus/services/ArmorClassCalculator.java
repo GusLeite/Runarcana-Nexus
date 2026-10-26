@@ -7,6 +7,7 @@ import gusleite.runarcana_nexus.record.ArmorClassResponse;
 import gusleite.runarcana_nexus.record.ArmorClassResponse.DefenseOption;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +27,9 @@ public final class ArmorClassCalculator {
 
     private ArmorClassCalculator() {}
 
+    // armorProficiencies: LIGHT/MEDIUM/HEAVY/SHIELD; opções com requiresArmor só aparecem com a proficiência.
     public static ArmorClassResponse calculate(ToIntFunction<Attribute> modifier, int proficiency, List<ArmorRule> rules,
-                                               List<ArmorItem> items, String selected) {
+                                               Collection<String> armorProficiencies, List<ArmorItem> items, String selected) {
         int dex = modifier.applyAsInt(Attribute.DEXTERITY);
         List<DefenseOption> base = new ArrayList<>();
         base.add(new DefenseOption(UNARMORED, "Sem armadura", "UNARMORED", 10 + dex, 0));
@@ -38,6 +40,7 @@ public final class ArmorClassCalculator {
             if (r.isBlocksArmor() && blockedBy == null) blockedBy = r.getName().split(":")[0].trim();
             if (r.isBonus()) continue;
             int i = n++;
+            if (r.getRequiresArmor() != null && !armorProficiencies.contains(r.getRequiresArmor())) continue;
             int value = (r.getBase() == null ? 10 : r.getBase())
                     + (r.isDex() ? (r.getDexMax() == null ? dex : Math.min(dex, r.getDexMax())) : 0)
                     + (r.getAttribute() == null ? 0 : modifier.applyAsInt(r.getAttribute()))

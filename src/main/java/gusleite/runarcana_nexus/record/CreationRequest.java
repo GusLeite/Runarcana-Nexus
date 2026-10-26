@@ -19,6 +19,8 @@ public record CreationRequest(
         // Linhagem da origem (obrigatória quando a origem tem linhagens).
         String lineageId,
         String classId,
+        // Subclasse da classe (Glifo, Cabala...), obrigatória quando a classe tem subclasses.
+        String subclassId,
         String backgroundId,
         String attributeMethod,
         Map<Attribute, Integer> baseAttributes,

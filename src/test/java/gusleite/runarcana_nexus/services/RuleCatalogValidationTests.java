@@ -27,7 +27,7 @@ class RuleCatalogValidationTests {
 
     private static Grant grant(GrantType type, String value) {
         return new Grant(type, null, null, null, null, null, value, null, null, null, null, null, null, null, null, null,
-                null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     @Test
@@ -58,7 +58,7 @@ class RuleCatalogValidationTests {
         RuleOption origin = new RuleOption("elfo", "Elfo", null, null, null, null, null, null,
                 List.of(grant(GrantType.ATTRIBUTE, null), grant(GrantType.CRAFT, "pintura"), grant(GrantType.SIZE, "ENORME")), List.of(lineage), null,
                 List.of(new RuleLevel(1, List.of())));
-        RuleClass klass = new RuleClass("MAGO", "Mago", null, null, null, null, List.of(), List.of());
+        RuleClass klass = new RuleClass("MAGO", "Mago", null, null, null, null, List.of(), List.of(), null, null);
         RuleCatalog catalog = new RuleCatalog(new AttributeMethods(null, List.of(15, 14, 13, 12, 10, 8), null), 30.0, "MEIO",
                 List.of(), List.of(origin), List.of(klass), List.of(), List.of(), List.of(), null);
 

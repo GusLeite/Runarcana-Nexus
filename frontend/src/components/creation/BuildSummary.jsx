@@ -1,4 +1,4 @@
-import { ABILITY_TYPES, ATTRIBUTES, SIZE_NAMES, SKILL_NAMES, attributeById, formatModifier, formatPoints } from '../../data/rules.js'
+import { ABILITY_TYPES, ARMOR_NAMES, ATTRIBUTES, SIZE_NAMES, SKILL_NAMES, attributeById, formatModifier, formatPoints } from '../../data/rules.js'
 import Num from '../sheet/Num.jsx'
 import SpeedToggle from '../sheet/SpeedToggle.jsx'
 
@@ -13,6 +13,7 @@ export default function BuildSummary({ preview, catalog, draft }) {
         <span className="build-sub">
           {[name(catalog.origins, draft.originId),
             name(catalog.origins.find(o => o.id === draft.originId)?.lineages, draft.lineageId), name(catalog.regions, draft.regionId), name(catalog.classes, draft.classId),
+            name(catalog.classes.find(k => k.id === draft.classId)?.subclasses, draft.subclassId),
             name(catalog.backgrounds, draft.backgroundId)].filter(Boolean).join(' · ') || 'Escolha origem, região, classe e passado'}
         </span>
       </div>
@@ -54,7 +55,10 @@ export default function BuildSummary({ preview, catalog, draft }) {
               ? preview.heritagePools.reduce((s, p) => s + p.spent, 0) + ' de ' + preview.heritagePoints + ' gastos'
               : '—'}</dd></div>
             {preview.languages.length > 0 && <div><dt>Idiomas</dt><dd>{preview.languages.join(', ')}</dd></div>}
-            <div><dt>Ofícios</dt><dd>{preview.crafts.map(id => catalog.crafts?.find(k => k.id === id)?.name ?? id).join(', ') || '—'}</dd></div>
+            <div><dt>Ofícios</dt><dd>{preview.crafts.map(id => (catalog.crafts?.find(k => k.id === id)?.name ?? id)
+              + (preview.craftExpertise?.includes(id) ? ' (especialidade)' : '')).join(', ') || '—'}</dd></div>
+            {preview.armorProficiencies?.length > 0 && <div><dt>Armaduras</dt><dd>{preview.armorProficiencies.map(a => ARMOR_NAMES[a] ?? a).join(', ')}</dd></div>}
+            {preview.weaponProficiencies?.length > 0 && <div><dt>Armas</dt><dd>{preview.weaponProficiencies.join(', ')}</dd></div>}
           </dl>
 
           <Section title="Resistências" empty="Nenhuma ainda">

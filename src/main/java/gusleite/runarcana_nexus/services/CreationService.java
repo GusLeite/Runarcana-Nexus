@@ -139,6 +139,9 @@ public class CreationService {
         c.setBackground(b.background == null ? null : backgroundEntity(b.background));
         c.setOrigin(b.origin.name());
         c.setLineage(b.lineage == null ? null : b.lineage.name());
+        c.setSubclass(b.subclass == null ? null : b.subclass.name());
+        c.getArmorProficiencies().addAll(b.armorProficiencies);
+        c.getWeaponProficiencies().addAll(b.weaponProficiencies);
         c.setStr(b.total(Attribute.STRENGTH));
         c.setDex(b.total(Attribute.DEXTERITY));
         c.setCon(b.total(Attribute.CONSTITUTION));
@@ -156,6 +159,7 @@ public class CreationService {
         Map<String, String> craftNames = new LinkedHashMap<>();
         rules.catalog().craftsOrEmpty().forEach(k -> craftNames.put(k.id(), k.name()));
         b.crafts.forEach(id -> c.getCrafts().add(craftNames.getOrDefault(id, id)));
+        b.craftExpertise.forEach(id -> c.getCraftExpertise().add(craftNames.getOrDefault(id, id)));
         // Os pontos da criação são gastos no assistente; a ficha guarda o que sobrou (normalmente 0).
         c.setHeritagePoints(b.heritagePoints - b.heritagesSpent());
         b.heritages.forEach(h -> c.getHeritages().add(displayName(h)));
@@ -199,6 +203,11 @@ public class CreationService {
             b.region = pick(r.regionId(), rules::region, "Escolha uma região.", "Região desconhecida.", b.errors);
         }
         b.klass = pick(r.classId(), rules::characterClass, "Escolha uma classe.", "Classe desconhecida.", b.errors);
+        if (b.klass != null && !b.klass.subclassesOrEmpty().isEmpty()) {
+            List<RuleLineage> subs = b.klass.subclassesOrEmpty();
+            b.subclass = pick(r.subclassId(), id -> subs.stream().filter(x -> x.id().equalsIgnoreCase(id)).findFirst(),
+                    "Escolha: " + subclassLabel(b.klass) + ".", "Subclasse desconhecida.", b.errors);
+        }
         if (catalog.backgrounds() != null && !catalog.backgrounds().isEmpty()) {
             // Runinata só tem Passado com um traço que libera (Antecedente).
             if (traitOrigin && !b.traitBackground) {
@@ -215,6 +224,7 @@ public class CreationService {
         sources.addAll(b.traitSources);
         if (b.region != null) sources.add(new Source("region:" + b.region.id(), "Região: " + b.region.name(), b.region.grantsOrEmpty()));
         if (b.klass != null) sources.add(new Source("class:" + b.klass.id(), "Classe: " + b.klass.name(), b.klass.grantsOrEmpty()));
+        if (b.subclass != null) sources.add(new Source("subclass:" + b.subclass.id(), subclassLabel(b.klass) + ": " + b.subclass.name(), b.subclass.grantsOrEmpty()));
         if (b.background != null) sources.add(new Source("background:" + b.background.id(), "Passado: " + b.background.name(), b.background.grantsOrEmpty()));
 
         baseAttributes(r, catalog.attributeMethods(), b);
@@ -233,7 +243,10 @@ public class CreationService {
                     case FEATURE -> {
                         if (!g.hasOptions()) b.features.add(new Sourced<>(g, s.label()));
                     }
-                    case HP_BONUS -> b.hpBonus += hpBonusFor(g, LEVEL_ONE_PROFICIENCY, b.roundUp);
+                    // PV calculado no fim (maxHp), quando os atributos já estão definidos.
+                    case HP_BONUS -> b.hpGrants.add(g);
+                    case ARMOR_PROFICIENCY -> b.armorProficiencies.add(g.value());
+                    case WEAPON_PROFICIENCY -> b.weaponProficiencies.add(g.value());
                     case SPEED -> {
                         // value: tipo de deslocamento (sem value = caminhada; ALL = todos os que o personagem tiver).
                         String mode = g.value() == null ? "WALK" : g.value();
@@ -282,6 +295,14 @@ public class CreationService {
                         b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, selected, s.label(), null));
                     }
                     case EXPERTISE_CHOICE -> b.deferred.add(new Deferred(key, g, s.label()));
+                    case SAVING_THROW_CHOICE -> {
+                        List<String> options = orAll(g.options(), Attribute.values()).stream()
+                                .filter(o -> !b.saves.containsKey(Attribute.valueOf(o))).toList();
+                        String label = orLabel(g, "Escolha " + g.count() + " resistência(s)");
+                        List<String> selected = choose(picked, options, g.count(), label, b.errors);
+                        selected.forEach(a -> b.saves.put(Attribute.valueOf(a), s.label()));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, selected, s.label(), null));
+                    }
                     case SKILL_CHOICE -> {
                         if (Boolean.TRUE.equals(g.expertise())) {
                             b.deferred.add(new Deferred(key, g, s.label()));
@@ -296,17 +317,19 @@ public class CreationService {
                     }
                     case FEATURE -> {
                         if (!g.hasOptions()) break;
-                        String label = orLabel(g, g.name() + ": escolha uma opção");
-                        List<String> selected = choose(picked, g.options(), 1, label, b.errors);
-                        String name = selected.isEmpty() ? g.name() : g.name() + " (" + selected.getFirst() + ")";
+                        // count > 1: escolhe várias opções ("Perturbações (A, B)").
+                        int count = g.count() == null ? 1 : g.count();
+                        String label = orLabel(g, g.name() + (count == 1 ? ": escolha uma opção" : ": escolha " + count + " opções"));
+                        List<String> selected = choose(picked, g.options(), count, label, b.errors);
+                        String name = selected.isEmpty() ? g.name() : g.name() + " (" + String.join(", ", selected) + ")";
                         Grant chosen = g.withName(name);
                         // Opção com usos próprios (ex.: Charme Sobrenatural = metade do mod. de Carisma).
-                        if (!selected.isEmpty() && g.optionUses() != null && g.optionUses().containsKey(selected.getFirst())) {
+                        if (selected.size() == 1 && g.optionUses() != null && g.optionUses().containsKey(selected.getFirst())) {
                             chosen = chosen.withUses(g.optionUses().get(selected.getFirst()));
                         }
-                        if (!selected.isEmpty()) b.featureOptions.put(g.name(), selected.getFirst());
+                        if (!selected.isEmpty()) b.featureOptions.put(g.name(), selected);
                         b.features.add(new Sourced<>(chosen, s.label()));
-                        b.choices.add(new ChoiceLine(key, g.type(), label, 1, g.options(), selected, s.label(), null));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, count, g.options(), selected, s.label(), null));
                     }
                     case PROFICIENCY_CHOICE -> {
                         List<String> kinds = g.hasOptions() ? g.options() : List.of("SKILL", "CRAFT", "MARTIAL_WEAPON");
@@ -323,8 +346,11 @@ public class CreationService {
                         for (String o : selected) {
                             if (o.startsWith("SKILL:")) b.skills.put(SkillType.valueOf(o.substring(6)), s.label());
                             else if (o.startsWith("CRAFT:")) b.crafts.add(o.substring(6));
-                            else b.features.add(new Sourced<>(Grant.feature(AbilityType.PASSIVE, "Proficiência em arma marcial",
-                                    "Proficiência em uma arma marcial à escolha (combine qual com o mestre)."), s.label()));
+                            else {
+                                b.weaponProficiencies.add("Uma arma marcial à escolha");
+                                b.features.add(new Sourced<>(Grant.feature(AbilityType.PASSIVE, "Proficiência em arma marcial",
+                                        "Proficiência em uma arma marcial à escolha (combine qual com o mestre)."), s.label()));
+                            }
                         }
                         b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, selected, s.label(), null));
                     }
@@ -403,6 +429,22 @@ public class CreationService {
                     b.choices.add(new ChoiceLine(d.key(), g.type(), label, g.count(), options, selected, d.source(), null));
                 }
                 case EXPERTISE_CHOICE -> {
+                    if ("WITH_CRAFTS".equals(g.value())) {
+                        // Perícias ou ofícios que ele tem: opções "SKILL:..." e "CRAFT:..." (Especialização do Mercurial).
+                        List<String> options = new ArrayList<>();
+                        orAll(g.options(), SkillType.values()).stream()
+                                .filter(o -> b.skills.containsKey(SkillType.valueOf(o)) && !b.expertise.contains(SkillType.valueOf(o)))
+                                .forEach(o -> options.add("SKILL:" + o));
+                        b.crafts.stream().filter(k -> !b.craftExpertise.contains(k)).forEach(k -> options.add("CRAFT:" + k));
+                        String label = orLabel(g, "Escolha " + g.count() + " perícia(s) ou ofício(s) para especialidade");
+                        b.choices.add(optionalChoice(d.key(), g, label, options, picks.get(d.key()), d.source(), b,
+                                "Escolha primeiro as perícias e os ofícios do personagem.",
+                                o -> {
+                                    if (o.startsWith("SKILL:")) b.expertise.add(SkillType.valueOf(o.substring(6)));
+                                    else b.craftExpertise.add(o.substring(6));
+                                }));
+                        break;
+                    }
                     List<String> options = orAll(g.options(), SkillType.values()).stream()
                             .filter(o -> b.skills.containsKey(SkillType.valueOf(o)) && !b.expertise.contains(SkillType.valueOf(o)))
                             .toList();
@@ -427,7 +469,7 @@ public class CreationService {
 
     // Opção de defesa (ARMOR_CLASS). chosen: atributo escolhido quando a concessão tem options.
     static ArmorRule armorRule(Grant g, Attribute chosen) {
-        ArmorFormula f = g.armor() == null ? new ArmorFormula(null, null, null, null, null, null, null, null) : g.armor();
+        ArmorFormula f = g.armor() == null ? new ArmorFormula(null, null, null, null, null, null, null, null, null) : g.armor();
         ArmorRule r = new ArmorRule();
         r.setName(ArmorClassCalculator.withAttribute(g.name() != null ? g.name() : g.label(), chosen));
         r.setBase(f.base());
@@ -437,6 +479,7 @@ public class CreationService {
         r.setProficiency(Boolean.TRUE.equals(f.proficiency()));
         r.setReduction(f.reduction());
         r.setBlocksArmor(Boolean.TRUE.equals(f.blocksArmor()));
+        r.setRequiresArmor(f.requiresArmor());
         return r;
     }
 
@@ -726,8 +769,9 @@ public class CreationService {
             if (!c.heritageOptionsOrEmpty().isEmpty() && !c.heritageOptionsOrEmpty().contains(chosenOptions.get(id))) return false;
         }
         if (c.feature() != null) {
-            String option = b.featureOptions.get(c.feature());
-            if (option == null || (!c.featureOptionsOrEmpty().isEmpty() && !c.featureOptionsOrEmpty().contains(option))) return false;
+            List<String> chosenFeature = b.featureOptions.get(c.feature());
+            if (chosenFeature == null || (!c.featureOptionsOrEmpty().isEmpty()
+                    && chosenFeature.stream().noneMatch(c.featureOptionsOrEmpty()::contains))) return false;
         }
         return true;
     }
@@ -859,6 +903,8 @@ public class CreationService {
 
     // usesPlus soma um valor fixo à fórmula (Plumadagas = 3 + bônus de proficiência).
     static Integer usesFor(Grant g, int proficiency, int level, boolean roundUp, ToIntFunction<Attribute> modifier) {
+        // Tabela por nível do personagem (Mana do Arcanista, Carga Rúnica...) vence a fórmula.
+        if (g.usesByLevel() != null && !g.usesByLevel().isEmpty()) return byLevel(g.usesByLevel(), level);
         UsesFormula formula = g.usesFormula() == null ? UsesFormula.FIXED : g.usesFormula();
         // Fixo pode ser nulo (sem usos): fora do switch, que é numérico.
         if (formula == UsesFormula.FIXED) return g.maxUses();
@@ -876,6 +922,13 @@ public class CreationService {
     // Dado da habilidade: o da tabela por proficiência (maior bônus <= o atual) ou o "damage" fixo.
     // PV de uma concessão HP_BONUS em um nível: amount fixo ou a fórmula (ex.: metade do bônus de proficiência).
     static int hpBonusFor(Grant g, int proficiency, boolean roundUp) {
+        return hpBonusFor(g, proficiency, roundUp, a -> 0);
+    }
+
+    // Com atributo: Pacto Carmesim = metade do mod. de Inteligência por nível (mínimo 0).
+    static int hpBonusFor(Grant g, int proficiency, boolean roundUp, ToIntFunction<Attribute> modifier) {
+        if (g.usesFormula() == UsesFormula.ATTRIBUTE_MODIFIER) return Math.max(0, modifier.applyAsInt(g.attribute()));
+        if (g.usesFormula() == UsesFormula.HALF_ATTRIBUTE_MODIFIER) return Math.max(0, half(modifier.applyAsInt(g.attribute()), roundUp));
         if (g.usesFormula() == null || g.usesFormula() == UsesFormula.FIXED) return g.amount() == null ? 0 : g.amount();
         return g.usesFormula() == UsesFormula.PROFICIENCY ? proficiency : half(proficiency, roundUp);
     }
@@ -903,7 +956,21 @@ public class CreationService {
         return m.group(1) + (bonus == 0 ? "" : bonus > 0 ? "+" + bonus : String.valueOf(bonus));
     }
 
+    // Valor da tabela no maior nível <= o atual (null se a tabela só começa depois).
+    static <T> T byLevel(Map<String, T> table, int level) {
+        return table.entrySet().stream()
+                .filter(e -> Integer.parseInt(e.getKey()) <= level)
+                .max(Map.Entry.comparingByKey((a, c) -> Integer.compare(Integer.parseInt(a), Integer.parseInt(c))))
+                .map(Map.Entry::getValue)
+                .orElse(null);
+    }
+
     static String diceFor(Grant g, int proficiency) {
+        // Dado pelo nível (Ataque Furtivo 1d6 → 10d6); na criação, o 1º nível.
+        if (g.diceByLevel() != null && !g.diceByLevel().isEmpty()) {
+            String d = byLevel(g.diceByLevel(), 1);
+            return d == null ? null : d.replace(" ", "");
+        }
         if (g.diceByProficiency() == null || g.diceByProficiency().isEmpty()) {
             return g.damage() == null ? null : g.damage().replace(" ", "");
         }
@@ -945,6 +1012,11 @@ public class CreationService {
         return a;
     }
 
+    // Como o livro chama a subclasse da classe ("Glifo", "Cabala"); sem nome, "Subclasse".
+    static String subclassLabel(RuleClass klass) {
+        return klass == null || klass.subclassLabel() == null ? "Subclasse" : klass.subclassLabel();
+    }
+
     private static boolean blank(String s) {
         return s == null || s.isBlank();
     }
@@ -971,7 +1043,13 @@ public class CreationService {
         final Map<Attribute, String> saves = new LinkedHashMap<>();
         final List<Sourced<Grant>> features = new ArrayList<>();
         // Opção escolhida em cada habilidade com escolha (nome da habilidade → opção), para pré-requisitos de Herança.
-        final Map<String, String> featureOptions = new LinkedHashMap<>();
+        final Map<String, List<String>> featureOptions = new LinkedHashMap<>();
+        RuleLineage subclass;
+        final Set<String> armorProficiencies = new LinkedHashSet<>();
+        final Set<String> weaponProficiencies = new LinkedHashSet<>();
+        // Ofícios (ids) com especialidade.
+        final Set<String> craftExpertise = new LinkedHashSet<>();
+        final List<Grant> hpGrants = new ArrayList<>();
         final List<ChoiceLine> choices = new ArrayList<>();
         final Set<String> languages = new LinkedHashSet<>();
         final Set<String> crafts = new LinkedHashSet<>();
@@ -990,7 +1068,6 @@ public class CreationService {
         boolean traitBackground;
         CreatureSize size;
         boolean sizeFixed;
-        int hpBonus;
         int heritagePoints;
         double baseSpeed;
         double speedBonus;
@@ -1011,7 +1088,8 @@ public class CreationService {
         }
 
         int maxHp() {
-            return klass == null ? 0 : Math.max(1, klass.hitDie() + modifier(Attribute.CONSTITUTION) + hpBonus);
+            int bonus = hpGrants.stream().mapToInt(g -> hpBonusFor(g, LEVEL_ONE_PROFICIENCY, roundUp, this::modifier)).sum();
+            return klass == null ? 0 : Math.max(1, klass.hitDie() + modifier(Attribute.CONSTITUTION) + bonus);
         }
 
         double speed() {
@@ -1058,9 +1136,10 @@ public class CreationService {
             return new CreationPreview(attrs, pointBuy, skillLines, saveLines, featureLines, List.copyOf(choices),
                     maxHp(), klass == null ? 0 : klass.hitDie(), speed(),
                     origin == null ? List.of() : SpeedLine.of(speed(), otherSpeedsTotal()),
-                    origin == null ? null : ArmorClassCalculator.calculate(this::modifier, LEVEL_ONE_PROFICIENCY, armorRules, List.of(), null),
+                    origin == null ? null : ArmorClassCalculator.calculate(this::modifier, LEVEL_ONE_PROFICIENCY, armorRules, armorProficiencies, List.of(), null),
                     gold, size, List.copyOf(languages),
-                    List.copyOf(crafts), heritagePoints,
+                    List.copyOf(crafts), List.copyOf(craftExpertise), List.copyOf(armorProficiencies), List.copyOf(weaponProficiencies),
+                    heritagePoints,
                     pools.entrySet().stream()
                             .map(e -> new HeritagePool(e.getKey(), e.getValue(), spent.getOrDefault(e.getKey(), 0)))
                             .toList(),

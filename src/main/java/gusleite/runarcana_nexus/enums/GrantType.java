@@ -22,5 +22,9 @@ public enum GrantType {
     PROFICIENCY_CHOICE, // count proficiências à escolha entre perícia, ofício e arma marcial (options = quais tipos valem)
     ARMOR_CLASS,        // opção de defesa (CA) com a fórmula em armor; com options (atributos), o jogador escolhe o atributo somado
     AC_BONUS,           // bônus de CA somado à opção usada (amount ou usesFormula PROFICIENCY; armor.unarmoredOnly/blocksArmor)
-    EXPERTISE_CHOICE    // especialidade em count perícias que o personagem já tem (de options; vazio = qualquer uma proficiente)
+    EXPERTISE_CHOICE,   // especialidade em count perícias que o personagem já tem (de options; vazio = qualquer uma proficiente;
+                        // value WITH_CRAFTS = também ofícios que ele tem, opções "SKILL:..." e "CRAFT:...")
+    SAVING_THROW_CHOICE, // proficiência em count resistências à escolha (options = atributos)
+    ARMOR_PROFICIENCY,  // proficiência com armaduras: value LIGHT, MEDIUM, HEAVY ou SHIELD
+    WEAPON_PROFICIENCY  // proficiência com armas: value = o nome ("Armas simples", "Rapieiras")
 }

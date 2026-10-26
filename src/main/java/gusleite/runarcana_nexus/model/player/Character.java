@@ -81,6 +81,26 @@ public class Character {
     // Nome da linhagem (tribo) da origem, quando ela tem (ex.: "Aelus").
     private String lineage;
 
+    // Nome da subclasse (Glifo do Arcanista, Cabala do Mercurial...), quando a classe tem.
+    private String subclass;
+
+    // Proficiências com armaduras (LIGHT, MEDIUM, HEAVY, SHIELD) e com armas (pelo nome: "Armas simples", "Rapieiras").
+    @ElementCollection
+    @CollectionTable(name = "character_armor_proficiencies", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "armor")
+    private Set<String> armorProficiencies = new LinkedHashSet<>();
+
+    @ElementCollection
+    @CollectionTable(name = "character_weapon_proficiencies", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "weapon")
+    private Set<String> weaponProficiencies = new LinkedHashSet<>();
+
+    // Ofícios (pelo nome) com especialidade.
+    @ElementCollection
+    @CollectionTable(name = "character_craft_expertise", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "craft")
+    private Set<String> craftExpertise = new LinkedHashSet<>();
+
     // Deslocamento em pés (como no livro). Nulo nas fichas antigas (o front mostra "—").
     private Double speed;
 

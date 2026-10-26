@@ -47,7 +47,11 @@ public record Grant(
         // SKILL e SKILL_CHOICE: "proficiência; caso já tenha, especialidade" (perícia já proficiente vira especialidade).
         Boolean expertise,
         // FEATURE com options: usos próprios de cada opção (chave = a opção).
-        Map<String, UsesRule> optionUses
+        Map<String, UsesRule> optionUses,
+        // Usos e dado pelo NÍVEL do personagem (vale o maior nível <= o atual): Mana do Arcanista {"1": 4, "2": 6, ...},
+        // Ataque Furtivo {"1": "1d6", "3": "2d6", ...}. usesByLevel vence usesFormula/maxUses; diceByLevel vence damage.
+        Map<String, Integer> usesByLevel,
+        Map<String, String> diceByLevel
 ) {
     // A Herança escolhida vira uma habilidade do tipo HERITAGE com o texto completo.
     public static Grant heritage(String name, String description) {
@@ -56,21 +60,21 @@ public record Grant(
 
     public static Grant feature(AbilityType type, String name, String description) {
         return new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, name, description, type,
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     // A mesma concessão com outro nome (habilidade com opção: "Resistente" → "Resistente (Ígneo)").
     public Grant withName(String newName) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, newName, description, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
-                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses);
+                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel);
     }
 
     // A mesma concessão com outra quantidade de pés (SPEED que cresce a cada escolha do traço: 15, 15, 10…).
     public Grant withFeet(Double newFeet) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, name, description, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
-                components, perLevel, newFeet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses);
+                components, perLevel, newFeet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel);
     }
 
     // A mesma concessão com os usos da opção escolhida (optionUses).
@@ -78,7 +82,7 @@ public record Grant(
         return new Grant(type, u.attribute() != null ? u.attribute() : attribute, amount, count, options,
                 skill, value, label, name, description, abilityType, spellLevel, damage, u.maxUses(), u.usesFormula(),
                 diceByProficiency, u.recharge() == null ? recharge : u.recharge(), castingTime, range, duration, components,
-                perLevel, feet, fromRegion, damageBonus, armor, u.usesPlus(), expertise, optionUses);
+                perLevel, feet, fromRegion, damageBonus, armor, u.usesPlus(), expertise, optionUses, usesByLevel, diceByLevel);
     }
 
     // FEATURE com options: a habilidade pede uma escolha (ex.: o tipo de dano do Resistente).

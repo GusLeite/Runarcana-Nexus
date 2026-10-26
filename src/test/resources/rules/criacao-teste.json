@@ -264,6 +264,100 @@
           ]
         }
       ]
+    },
+    {
+      "id": "MERCURIAL",
+      "name": "Mercurial Teste",
+      "hitDie": 8,
+      "subclassLabel": "Cabala",
+      "grants": [
+        {
+          "type": "SAVING_THROW_CHOICE",
+          "count": 1,
+          "options": [
+            "WISDOM",
+            "CHARISMA"
+          ]
+        },
+        {
+          "type": "ARMOR_PROFICIENCY",
+          "value": "MEDIUM"
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Rapieiras"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Furtivo Teste",
+          "description": "Dado pelo nível.",
+          "diceByLevel": {
+            "1": "1d6",
+            "3": "2d6"
+          }
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Mana Teste",
+          "description": "Usos pelo nível.",
+          "usesByLevel": {
+            "1": 4,
+            "2": 6
+          },
+          "recharge": "LONG_REST"
+        },
+        {
+          "type": "EXPERTISE_CHOICE",
+          "value": "WITH_CRAFTS",
+          "count": 1
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Duas Teste",
+          "description": "Duas opções.",
+          "count": 2,
+          "options": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Placa Teste",
+          "armor": {
+            "base": 12,
+            "dex": false,
+            "requiresArmor": "MEDIUM"
+          }
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Couraça Teste",
+          "armor": {
+            "base": 14,
+            "dex": false,
+            "requiresArmor": "HEAVY"
+          }
+        }
+      ],
+      "subclasses": [
+        {
+          "id": "sombra",
+          "name": "Cabala Sombra",
+          "grants": [
+            {
+              "type": "HP_BONUS",
+              "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+              "attribute": "INTELLIGENCE",
+              "perLevel": true
+            }
+          ]
+        }
+      ]
     }
   ],
   "backgrounds": [

@@ -50,7 +50,7 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
         const methods = c.attributeMethods
         const method = methods.pointBuy ? 'POINT_BUY' : methods.standardArray ? 'STANDARD_ARRAY' : 'MANUAL'
         setDraft({
-          originId: null, lineageId: null, classId: null, backgroundId: null, regionId: null,
+          originId: null, lineageId: null, classId: null, subclassId: null, backgroundId: null, regionId: null,
           attributeMethod: method, baseAttributes: startingAttributes(method, methods), choices: {}, heritages: [],
           traitBudget: null, traits: [], drawbacks: [],
           characterName: '', playerName: defaultPlayer ?? '', age: '', height: '', alignment: null,
@@ -71,6 +71,8 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
   const set = (key, value) => setDraft(d => ({ ...d, [key]: value }))
   const origin = catalog?.origins.find(o => o.id === draft?.originId)
   const lineages = origin?.lineages ?? []
+  const klass = catalog?.classes.find(k => k.id === draft?.classId)
+  const subclasses = klass?.subclasses ?? []
   // Runinata: tem a etapa Traços e só tem Passado com um traço que libera (Antecedente).
   const usesTraits = !!origin?.usesTraits && !!catalog?.traits
   const traitBackground = usesTraits && draft.traits.some(p => catalog.traits.traits.find(t => t.id === p.id)?.background)
@@ -111,7 +113,7 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
     origin: !!draft.originId && (!lineages.length || !!draft.lineageId),
     traits: !!preview?.traitBudget && !traitErrors,
     region: !!draft.regionId,
-    class: !!draft.classId,
+    class: !!draft.classId && (!subclasses.length || !!draft.subclassId),
     background: noBackground ? !draft.backgroundId : !!draft.backgroundId,
     attributes: !!preview && !attributeErrors && (draft.attributeMethod !== 'POINT_BUY' || (preview.pointBuy?.spent ?? 0) > 0),
     choices: !!preview && !!draft.originId && !!draft.classId && !choiceErrors,
@@ -159,7 +161,16 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
               items={catalog.regions} crafts={catalog.crafts} selected={draft.regionId} onPick={id => set('regionId', id)} />
           )}
           {current === 'class' && (
-            <OptionStep kind="class" title="Escolha a classe" items={catalog.classes} crafts={catalog.crafts} selected={draft.classId} onPick={id => set('classId', id)} />
+            <>
+              <OptionStep kind="class" title="Escolha a classe" items={catalog.classes} crafts={catalog.crafts} selected={draft.classId}
+                onPick={id => setDraft(d => (d.classId === id ? d : { ...d, classId: id, subclassId: null }))} />
+              {subclasses.length > 0 && (
+                <div className="lineage-step" key={draft.classId}>
+                  <OptionStep kind="subclass" title={'Escolha: ' + (klass.subclassLabel ?? 'Subclasse') + ' (' + klass.name + ')'} items={subclasses} crafts={catalog.crafts}
+                    selected={draft.subclassId} onPick={id => set('subclassId', id)} />
+                </div>
+              )}
+            </>
           )}
           {current === 'background' && (noBackground ? (
             <>

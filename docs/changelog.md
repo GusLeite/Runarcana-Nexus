@@ -2,6 +2,13 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-26 — Classes Arcanista e Mercurial (`feature/character-sheet`)
+- **Arcanista** (d6; INT + SAB ou CAR; Mana e Arcana por nível; Despertar Arcano, Mistérios, Metamagia, Assinatura Arcana, Magia de Assinatura, Sobrecarga, Força Arcana) com os **10 Glifos**, e **Mercurial** (d8; armaduras leves e suas armas; Chaveiro; Especialização em perícia ou ofício; Ataque Furtivo 1d6 → 10d6; Ação Ardilosa, Evasão, Essência Elusiva, Golpe de Sorte) com as **4 Cabalas**, do 1º ao 20º nível. O Arcanista de exemplo saiu; o Lutador continua de exemplo.
+- Regras novas: subclasse (`subclasses`/`subclassLabel`, `subclassId`), `SAVING_THROW_CHOICE`, `ARMOR_PROFICIENCY`, `WEAPON_PROFICIENCY`, `EXPERTISE_CHOICE` com ofícios, `usesByLevel`/`diceByLevel`, escolha com `count` > 1, PV por atributo (`HALF_ATTRIBUTE_MODIFIER`), `requiresArmor` (Proteção Ajustável agora exige a proficiência).
+- Decisões: sem catálogo de magias por enquanto; descanso pleno = longo; equipamento vai para um catálogo de itens (aguardando as tabelas).
+- Front: Glifo/Cabala abaixo da classe no assistente; subclasse, armaduras, armas e especialidade em ofício na ficha.
+- Testes: `classeComSubclasseProficienciasETabelasPorNivel`. Conferido no sandbox (Mercurial do Ás Rúnico: Munição Rúnica 1d6+2, Carga Rúnica 4 × 1d6, Ataque Furtivo 1d6).
+
 ## 2026-10-26 — Usos por opção, pré-requisitos alternativos e regras da mesa (`feature/character-sheet`)
 - `optionUses` em habilidade com escolha e fórmula `HALF_ATTRIBUTE_MODIFIER`: Florescência (Charme Sobrenatural = metade do mod. de Carisma; Nictinastia, Sopro de Esporos e Sopro Polinizador = 1 por descanso) e Fibras (Cedro e Cerejeira = 1; Teixo = metade do bônus).
 - Heranças com `anyOf` (caminhos alternativos: origem, linhagem, outra Herança com opção, opção de habilidade): Cauda Preênsil também para Meio-Vastaya Shimon/Oovi-Kat; Variante Glacinata só para Construto/Humano/Minotauro/Yordle, Troll do Gelo e Floral com Flor Gélida.

@@ -58,11 +58,12 @@ export default function ChoiceStep({ choices, picks, onChange, crafts }) {
   )
 }
 
-// Proficiência mista (perícia, ofício ou arma) em grupos; as outras escolhas numa lista só.
+// Proficiência mista (perícia, ofício ou arma) e especialidade em perícia ou ofício em grupos; as outras numa lista só.
 const PROFICIENCY_GROUPS = [['SKILL', 'Perícias'], ['CRAFT', 'Ofícios'], ['MARTIAL_WEAPON', 'Armas']]
 
 function optionGroups(c) {
-  if (c.type !== 'PROFICIENCY_CHOICE') return [{ title: null, options: c.options }]
+  const mixed = c.type === 'PROFICIENCY_CHOICE' || c.options.some(o => /^(SKILL|CRAFT):/.test(o))
+  if (!mixed) return [{ title: null, options: c.options }]
   return PROFICIENCY_GROUPS
     .map(([kind, title]) => ({ title, options: c.options.filter(o => o.split(':')[0] === kind) }))
     .filter(g => g.options.length)

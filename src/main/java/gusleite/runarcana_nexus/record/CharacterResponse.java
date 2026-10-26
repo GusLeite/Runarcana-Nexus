@@ -50,7 +50,12 @@ public record CharacterResponse(
         List<String> languages,
         List<String> crafts,
         Integer heritagePoints,
-        List<String> heritages
+        List<String> heritages,
+        // Subclasse (Glifo, Cabala...), proficiências com armaduras e armas e ofícios com especialidade.
+        String subclass,
+        List<String> armorProficiencies,
+        List<String> weaponProficiencies,
+        List<String> craftExpertise
 ) {
     public static CharacterResponse of(Character character) {
         return new CharacterResponse(
@@ -93,7 +98,12 @@ public record CharacterResponse(
                 List.copyOf(character.getLanguages()),
                 List.copyOf(character.getCrafts()),
                 character.getHeritagePoints(),
-                List.copyOf(character.getHeritages())
+                List.copyOf(character.getHeritages()),
+                character.getSubclass(),
+                // Na ordem LIGHT, MEDIUM, HEAVY, SHIELD; armas em ordem alfabética.
+                character.getArmorProficiencies().stream().sorted(java.util.Comparator.comparingInt(List.of("LIGHT", "MEDIUM", "HEAVY", "SHIELD")::indexOf)).toList(),
+                character.getWeaponProficiencies().stream().sorted().toList(),
+                List.copyOf(character.getCraftExpertise())
         );
     }
 }

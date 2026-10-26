@@ -106,7 +106,7 @@ public class CharacterService {
                 })
                 .toList();
         return ArmorClassCalculator.calculate(character::getModifier, character.getProficiencyBonus(),
-                character.getArmorRules(), armors, character.getDefense());
+                character.getArmorRules(), character.getArmorProficiencies(), armors, character.getDefense());
     }
 
     @Transactional

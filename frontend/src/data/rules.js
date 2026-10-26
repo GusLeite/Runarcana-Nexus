@@ -235,6 +235,9 @@ export const MOVEMENT_NAMES = { WALK: 'Caminhada', SWIM: 'Natação', CLIMB: 'Es
 // Deslocamento em pés, como no livro.
 export const formatFeet = ft => ft.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' pés'
 
+// Proficiências com armaduras (concessão ARMOR_PROFICIENCY e ficha).
+export const ARMOR_NAMES = { LIGHT: 'Leves', MEDIUM: 'Médias', HEAVY: 'Pesadas', SHIELD: 'Escudos' }
+
 export const SIZE_NAMES = { TINY: 'Miúdo', SMALL: 'Pequeno', MEDIUM: 'Médio', LARGE: 'Grande', HUGE: 'Enorme' }
 
 const attrName = id => attributeById(id)?.name ?? id
@@ -254,6 +257,9 @@ export function grantLabel(g, crafts = []) {
     case 'SKILL_CHOICE': return g.label ?? plural(g.count, 'perícia', 'perícias') + ' à escolha' + (g.expertise ? ' (especialidade se já tiver)' : '')
     case 'EXPERTISE_CHOICE': return g.label ?? 'Especialidade em ' + plural(g.count, 'perícia', 'perícias') + ' que já tem'
     case 'SAVING_THROW': return 'Resistência: ' + attrName(g.attribute)
+    case 'SAVING_THROW_CHOICE': return g.label ?? 'Resistência à escolha: ' + (g.options ?? []).map(attrName).join(' ou ')
+    case 'ARMOR_PROFICIENCY': return 'Armaduras: ' + (ARMOR_NAMES[g.value] ?? g.value)
+    case 'WEAPON_PROFICIENCY': return 'Armas: ' + g.value
     case 'FEATURE': return (ABILITY_TYPES[g.abilityType ?? 'PASSIVE']?.name ?? 'Passiva') + ': ' + g.name + (g.options?.length ? ' (à escolha)' : '')
     case 'PROFICIENCY_CHOICE': return g.label ?? plural(g.count, 'proficiência', 'proficiências') + ' à escolha'
     case 'HP_BONUS': return g.label ?? (HP_FORMULAS[g.usesFormula] ?? signed(g.amount)) + ' PV' + (g.perLevel ? ' por nível' : '')
@@ -279,8 +285,14 @@ export function choiceOptionName(type, id, crafts = []) {
   switch (type) {
     case 'ATTRIBUTE_CHOICE':
     case 'ARMOR_CLASS': return attrName(id)
-    case 'SKILL_CHOICE':
-    case 'EXPERTISE_CHOICE': return SKILL_NAMES[id] ?? id
+    case 'SKILL_CHOICE': return SKILL_NAMES[id] ?? id
+    case 'SAVING_THROW_CHOICE': return attrName(id)
+    // Especialidade: perícia ("STEALTH") ou, com ofícios, "SKILL:STEALTH" / "CRAFT:chaveiro".
+    case 'EXPERTISE_CHOICE': {
+      const [kind, value] = id.includes(':') ? id.split(':') : ['SKILL', id]
+      if (kind === 'CRAFT') return 'Ofício: ' + (crafts.find(k => k.id === value)?.name ?? value)
+      return (id.includes(':') ? 'Perícia: ' : '') + (SKILL_NAMES[value] ?? value)
+    }
     case 'SIZE_CHOICE': return SIZE_NAMES[id] ?? id
     case 'CRAFT_CHOICE': return crafts.find(k => k.id === id)?.name ?? id
     // "SKILL:ARCANA", "CRAFT:alquimista" ou "MARTIAL_WEAPON"

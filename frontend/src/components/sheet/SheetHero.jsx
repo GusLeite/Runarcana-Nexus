@@ -1,4 +1,4 @@
-import { ALIGNMENT_NAMES, CLASS_NAMES, REGION_NAMES, SIZE_NAMES, formatFeet } from '../../data/rules.js'
+import { ALIGNMENT_NAMES, ARMOR_NAMES, CLASS_NAMES, REGION_NAMES, SIZE_NAMES, formatFeet } from '../../data/rules.js'
 import Num from './Num.jsx'
 import SpeedToggle from './SpeedToggle.jsx'
 import ArmorClass from './ArmorClass.jsx'
@@ -26,7 +26,7 @@ export default function SheetHero({ character, sheet, armorClass, onDefense }) {
         {sheet && <LevelRing level={level} />}
 
         <div className="hero-cap">
-          {sheet && <div className="hero-class">{CLASS_NAMES[sheet.characterClass] ?? sheet.characterClass}</div>}
+          {sheet && <div className="hero-class">{CLASS_NAMES[sheet.characterClass] ?? sheet.characterClass}{sheet.subclass && ' · ' + sheet.subclass}</div>}
           <h1 className="hero-name">{sheet?.characterName ?? character.name}</h1>
           <div className="hero-rule" />
           {sheet?.region && <div className="hero-region">{REGION_NAMES[sheet.region] ?? sheet.region}</div>}
@@ -54,7 +54,9 @@ export default function SheetHero({ character, sheet, armorClass, onDefense }) {
               : sheet.speed != null ? formatFeet(sheet.speed) : null} />
             {sheet.size && <Fact label="Tamanho" value={SIZE_NAMES[sheet.size]} />}
             {sheet.languages?.length > 0 && <Fact label="Idiomas" value={sheet.languages.join(', ')} />}
-            {sheet.crafts?.length > 0 && <Fact label="Ofícios" value={sheet.crafts.join(', ')} />}
+            {sheet.crafts?.length > 0 && <Fact label="Ofícios" value={sheet.crafts.map(k => k + (sheet.craftExpertise?.includes(k) ? ' (especialidade)' : '')).join(', ')} />}
+            {sheet.armorProficiencies?.length > 0 && <Fact label="Armaduras" value={sheet.armorProficiencies.map(a => ARMOR_NAMES[a] ?? a).join(', ')} />}
+            {sheet.weaponProficiencies?.length > 0 && <Fact label="Armas" value={sheet.weaponProficiencies.join(', ')} />}
             {sheet.heritages?.length > 0 && <Fact label="Heranças" value={sheet.heritages.join(', ')} />}
             {sheet.heritagePoints > 0 && <Fact label="Pontos de Herança" value={sheet.heritagePoints + ' a gastar'} />}
             <Fact label="Passado" value={sheet.background} />

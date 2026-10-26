@@ -30,6 +30,10 @@ public record CreationPreview(
         CreatureSize size,
         List<String> languages,
         List<String> crafts,
+        // Ofícios (ids) com especialidade e proficiências com armaduras (LIGHT/MEDIUM/HEAVY/SHIELD) e armas (nomes).
+        List<String> craftExpertise,
+        List<String> armorProficiencies,
+        List<String> weaponProficiencies,
         int heritagePoints,
         List<HeritagePool> heritagePools,
         List<HeritageLine> heritages,

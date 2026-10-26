@@ -48,6 +48,8 @@ public class RuleCatalogService {
     // Tipos de ponto de Herança (value da concessão HERITAGE_POINTS; sem value = ANY).
     static final Set<String> HERITAGE_SCOPES = Set.of("REGION", "ORIGIN", "GENERAL", "ANY");
     static final Set<String> TRAIT_TIERS = Set.of("MINOR", "MAJOR", "SUPERIOR");
+    // Armaduras das proficiências (ARMOR_PROFICIENCY) e do requiresArmor das CAs alternativas.
+    static final Set<String> ARMOR_TYPES = Set.of("LIGHT", "MEDIUM", "HEAVY", "SHIELD");
     // Tipo de deslocamento da concessão SPEED (sem value = WALK; ALL = todos os deslocamentos que o personagem tiver).
     static final Set<String> SPEED_TYPES = Set.of("WALK", "SWIM", "CLIMB", "FLY", "BURROW", "ALL");
     private static final Set<String> CRAFT_KINDS = Set.of("MAJOR", "MINOR");
@@ -167,6 +169,14 @@ public class RuleCatalogService {
             if (k.hitDie() == null || k.hitDie() < 2) p.add(where + ": hitDie deve ser o lado do dado de vida (ex.: 8)");
             validateGrants(where, k.grantsOrEmpty(), p, crafts);
             validateLevels(where, k.levelsOrEmpty(), p, crafts);
+            Set<String> subIds = new HashSet<>();
+            for (RuleLineage sub : k.subclassesOrEmpty()) {
+                String at = where + ", subclasse " + sub.id();
+                if (blank(sub.id()) || blank(sub.name())) p.add(where + ": cada subclasse precisa de id e name");
+                else if (!subIds.add(sub.id().toLowerCase())) p.add(at + ": id repetido");
+                validateGrants(at, sub.grantsOrEmpty(), p, crafts);
+                validateLevels(at, sub.levelsOrEmpty(), p, crafts);
+            }
         }
         Set<String> allLineages = new HashSet<>();
         for (RuleOption o : c.origins() == null ? List.<RuleOption>of() : c.origins()) {
@@ -343,6 +353,16 @@ public class RuleCatalogService {
                     if (g.count() == null || g.count() < 1) p.add(at + " (EXPERTISE_CHOICE): precisa de count");
                     checkOptions(at, g.options(), SKILLS, p);
                 }
+                case SAVING_THROW_CHOICE -> {
+                    if (g.count() == null || g.count() < 1) p.add(at + " (SAVING_THROW_CHOICE): precisa de count");
+                    checkOptions(at, g.options(), ATTRIBUTES, p);
+                }
+                case ARMOR_PROFICIENCY -> {
+                    if (g.value() == null || !ARMOR_TYPES.contains(g.value())) p.add(at + " (ARMOR_PROFICIENCY): value deve ser um destes: " + ARMOR_TYPES);
+                }
+                case WEAPON_PROFICIENCY -> {
+                    if (blank(g.value())) p.add(at + " (WEAPON_PROFICIENCY): precisa de value (o nome da arma ou grupo)");
+                }
                 case SAVING_THROW -> {
                     if (g.attribute() == null) p.add(at + " (SAVING_THROW): precisa de attribute");
                 }
@@ -369,6 +389,9 @@ public class RuleCatalogService {
                 case ARMOR_CLASS -> {
                     if (blank(g.name()) && blank(g.label())) p.add(at + " (ARMOR_CLASS): precisa de name");
                     if (g.armor() == null || g.armor().base() == null) p.add(at + " (ARMOR_CLASS): precisa de armor com base");
+                    if (g.armor() != null && g.armor().requiresArmor() != null && !ARMOR_TYPES.contains(g.armor().requiresArmor())) {
+                        p.add(at + " (ARMOR_CLASS): requiresArmor deve ser um destes: " + ARMOR_TYPES);
+                    }
                     checkOptions(at, g.options(), ATTRIBUTES, p);
                 }
                 case AC_BONUS -> {
@@ -418,6 +441,18 @@ public class RuleCatalogService {
                         && u.attribute() == null && g.attribute() == null) {
                     p.add(at + " (FEATURE): optionUses \"" + option + "\" precisa de attribute");
                 }
+            });
+        }
+        if (g.usesByLevel() != null) {
+            g.usesByLevel().forEach((lv, n) -> {
+                if (!lv.matches("\\d+") || Integer.parseInt(lv) < 1 || Integer.parseInt(lv) > 20) p.add(at + " (FEATURE): usesByLevel usa o nível (1 a 20) como chave");
+                if (n == null || n < 0) p.add(at + " (FEATURE): usesByLevel precisa de valores 0 ou mais");
+            });
+        }
+        if (g.diceByLevel() != null) {
+            g.diceByLevel().forEach((lv, dice) -> {
+                if (!lv.matches("\\d+") || Integer.parseInt(lv) < 1 || Integer.parseInt(lv) > 20) p.add(at + " (FEATURE): diceByLevel usa o nível (1 a 20) como chave");
+                if (dice == null || !DICE.matcher(dice.replace(" ", "")).matches()) p.add(at + " (FEATURE): dado inválido em diceByLevel: " + dice);
             });
         }
         if (g.usesPlus() != null && (g.usesFormula() == null || g.usesFormula() == UsesFormula.FIXED)) {

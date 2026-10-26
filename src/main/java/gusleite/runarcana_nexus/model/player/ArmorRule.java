@@ -32,4 +32,6 @@ public class ArmorRule {
     private Integer reduction;
     private boolean unarmoredOnly;
     private boolean blocksArmor;
+    // Proficiência com armadura exigida para a opção aparecer (MEDIUM, HEAVY).
+    private String requiresArmor;
 }

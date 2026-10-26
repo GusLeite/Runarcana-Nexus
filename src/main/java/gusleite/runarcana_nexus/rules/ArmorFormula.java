@@ -8,6 +8,7 @@ import gusleite.runarcana_nexus.enums.Attribute;
 // - reduction: Redução de Dano (RD) da opção.
 // - unarmoredOnly (AC_BONUS): o bônus só vale sem armadura do inventário (Armadura Natural do Auroque).
 // - blocksArmor: com essa regra, as armaduras do inventário não servem (Pele de Árvore, Proteção Ajustável).
+// - requiresArmor: a opção só existe com proficiência nessa armadura (MEDIUM/HEAVY; modos da Proteção Ajustável).
 public record ArmorFormula(
         Integer base,
         Boolean dex,
@@ -16,7 +17,8 @@ public record ArmorFormula(
         Boolean proficiency,
         Integer reduction,
         Boolean unarmoredOnly,
-        Boolean blocksArmor
+        Boolean blocksArmor,
+        String requiresArmor
 ) {
     public boolean dexOrTrue() {
         return dex == null || dex;

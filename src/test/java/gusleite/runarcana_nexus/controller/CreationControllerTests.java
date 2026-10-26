@@ -311,6 +311,42 @@ class CreationControllerTests {
     }
 
     @Test
+    void classeComSubclasseProficienciasETabelasPorNivel() throws Exception {
+        String token = login("gaudron");
+        String mercurial = FULL.replace("\"classId\":\"ARCANIST\"", "\"classId\":\"MERCURIAL\"")
+                .replace("\"class:ARCANIST:1\":[\"ARCANA\",\"INSIGHT\"]",
+                        "\"class:MERCURIAL:0\":[\"WISDOM\"],\"class:MERCURIAL:5\":[\"CRAFT:ferraria\"],\"class:MERCURIAL:6\":[\"A\",\"C\"]");
+
+        preview(token, mercurial)
+                .andExpect(jsonPath("$.errors", hasItem("Escolha: Cabala.")));
+
+        String full = mercurial.replace("\"classId\":\"MERCURIAL\"", "\"classId\":\"MERCURIAL\",\"subclassId\":\"sombra\"");
+        preview(token, full)
+                .andExpect(jsonPath("$.complete").value(true))
+                .andExpect(jsonPath("$.savingThrows[?(@.attribute == 'WISDOM')].source").value("Classe: Mercurial Teste"))
+                .andExpect(jsonPath("$.armorProficiencies[0]").value("MEDIUM"))
+                .andExpect(jsonPath("$.weaponProficiencies[0]").value("Rapieiras"))
+                .andExpect(jsonPath("$.craftExpertise[0]").value("ferraria"))
+                // dado e usos pela tabela do 1º nível
+                .andExpect(jsonPath("$.features[?(@.name == 'Furtivo Teste')].dice").value("1d6"))
+                .andExpect(jsonPath("$.features[?(@.name == 'Mana Teste')].uses").value(4))
+                // escolha de duas opções
+                .andExpect(jsonPath("$.features[?(@.name == 'Duas Teste (A, C)')].source").value("Classe: Mercurial Teste"))
+                // d8 + CON (+2) + origem (+1) + Cabala Sombra: metade do mod. de INT 17 (+3) = +1
+                .andExpect(jsonPath("$.maxHp").value(12))
+                // CA que exige armadura: média sim (proficiente), pesada não
+                .andExpect(jsonPath("$.armorClass.options[?(@.label == 'Placa Teste')].value").value(12))
+                .andExpect(jsonPath("$.armorClass.options[?(@.label == 'Couraça Teste')]").isEmpty());
+
+        mvc.perform(post("/creation").header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON).content(full))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.subclass").value("Cabala Sombra"))
+                .andExpect(jsonPath("$.armorProficiencies[0]").value("MEDIUM"))
+                .andExpect(jsonPath("$.craftExpertise[0]").value("Ferraria"));
+    }
+
+    @Test
     void mestreTravaOModoDeTracos() throws Exception {
         String master = login("mestre");
         String player = login("gaudron");
