@@ -249,11 +249,18 @@ public class CreationService {
                     case WEAPON_PROFICIENCY -> b.weaponProficiencies.add(g.value());
                     case SPEED -> {
                         // value: tipo de deslocamento (sem value = caminhada; ALL = todos os que o personagem tiver).
+                        // usesFormula PROFICIENCY: feet × bônus de proficiência (Brisa de Impulso: 5 pés × bônus).
+                        double feet = g.usesFormula() == UsesFormula.PROFICIENCY ? g.feet() * LEVEL_ONE_PROFICIENCY : g.feet();
                         String mode = g.value() == null ? "WALK" : g.value();
                         switch (mode) {
-                            case "WALK" -> b.speedBonus += g.feet();
-                            case "ALL" -> b.allSpeedBonus += g.feet();
-                            default -> b.otherSpeeds.merge(MovementType.valueOf(mode), g.feet(), Double::sum);
+                            case "WALK" -> b.speedBonus += feet;
+                            case "ALL" -> b.allSpeedBonus += feet;
+                            default -> {
+                                // amount: aumento quando ele já tem esse deslocamento (Aptidão Marinha: natação 30, ou +15).
+                                MovementType type = MovementType.valueOf(mode);
+                                double gain = g.amount() != null && b.otherSpeeds.containsKey(type) ? g.amount() : feet;
+                                b.otherSpeeds.merge(type, gain, Double::sum);
+                            }
                         }
                     }
                     case GOLD -> b.gold += g.amount();
@@ -264,7 +271,9 @@ public class CreationService {
                     case CRAFT -> b.crafts.add(g.value());
                     case LANGUAGE -> b.languages.add(g.value());
                     case ARMOR_CLASS -> {
-                        if (!g.hasOptions()) b.armorRules.add(armorRule(g, null));
+                        // Com feature: decide depois das escolhas (vale só se a opção foi escolhida).
+                        if (g.armor() != null && g.armor().feature() != null) b.optionArmor.add(g);
+                        else if (!g.hasOptions()) b.armorRules.add(armorRule(g, null));
                     }
                     case AC_BONUS -> b.armorRules.add(armorBonus(g));
                     case HERITAGE_POINTS -> {
@@ -404,6 +413,11 @@ public class CreationService {
         if (b.background != null && b.background.startingGold() != null) b.gold += b.background.startingGold();
         if (b.origin != null && b.origin.startingGold() != null) b.gold += b.origin.startingGold();
 
+        for (Grant g : b.optionArmor) {
+            List<String> chosen = b.featureOptions.get(g.armor().feature());
+            if (chosen != null && chosen.contains(g.armor().featureOption())) b.armorRules.add(armorRule(g, null));
+        }
+
         if (blank(r.characterName())) b.errors.add("Dê um nome ao personagem.");
         if (r.age() == null || r.age() < 1) b.errors.add("Informe a idade (1 ou mais).");
         if (r.height() == null || r.height() <= 0) b.errors.add("Informe a altura em metros.");
@@ -469,7 +483,7 @@ public class CreationService {
 
     // Opção de defesa (ARMOR_CLASS). chosen: atributo escolhido quando a concessão tem options.
     static ArmorRule armorRule(Grant g, Attribute chosen) {
-        ArmorFormula f = g.armor() == null ? new ArmorFormula(null, null, null, null, null, null, null, null, null) : g.armor();
+        ArmorFormula f = g.armor() == null ? new ArmorFormula(null, null, null, null, null, null, null, null, null, null, null) : g.armor();
         ArmorRule r = new ArmorRule();
         r.setName(ArmorClassCalculator.withAttribute(g.name() != null ? g.name() : g.label(), chosen));
         r.setBase(f.base());
@@ -904,6 +918,7 @@ public class CreationService {
     // usesPlus soma um valor fixo à fórmula (Plumadagas = 3 + bônus de proficiência).
     static Integer usesFor(Grant g, int proficiency, int level, boolean roundUp, ToIntFunction<Attribute> modifier) {
         // Tabela por nível do personagem (Mana do Arcanista, Carga Rúnica...) vence a fórmula.
+        // Valor nulo na tabela = sem limite a partir desse nível (Fúria do Bruto no 20º): sem contador.
         if (g.usesByLevel() != null && !g.usesByLevel().isEmpty()) return byLevel(g.usesByLevel(), level);
         UsesFormula formula = g.usesFormula() == null ? UsesFormula.FIXED : g.usesFormula();
         // Fixo pode ser nulo (sem usos): fora do switch, que é numérico.
@@ -915,6 +930,9 @@ public class CreationService {
             case DOUBLE_PROFICIENCY -> proficiency * 2;
             case HALF_LEVEL -> Math.max(1, half(level, roundUp));
             case HALF_ATTRIBUTE_MODIFIER -> Math.max(1, half(modifier.applyAsInt(g.attribute()), roundUp));
+            case LEVEL_PLUS_ATTRIBUTE -> Math.max(1, level + modifier.applyAsInt(g.attribute()));
+            case PROFICIENCY_PLUS_ATTRIBUTE -> Math.max(1, proficiency + modifier.applyAsInt(g.attribute()));
+            case TWO_ATTRIBUTES -> Math.max(1, modifier.applyAsInt(g.attribute()) + modifier.applyAsInt(Attribute.valueOf(g.value())));
         };
         return g.usesPlus() == null ? uses : uses + g.usesPlus();
     }
@@ -1040,6 +1058,8 @@ public class CreationService {
         // Perícias com especialidade (sempre entre as de skills) e as concessões decididas no fim (ver expertise()).
         final Set<SkillType> expertise = new LinkedHashSet<>();
         final List<Deferred> deferred = new ArrayList<>();
+        // CAs que dependem de uma opção escolhida numa habilidade (ArmorFormula.feature).
+        final List<Grant> optionArmor = new ArrayList<>();
         final Map<Attribute, String> saves = new LinkedHashMap<>();
         final List<Sourced<Grant>> features = new ArrayList<>();
         // Opção escolhida em cada habilidade com escolha (nome da habilidade → opção), para pré-requisitos de Herança.

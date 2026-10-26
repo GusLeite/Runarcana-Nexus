@@ -40,9 +40,9 @@ export const CLASS_NAMES = {
   ARCANIST: 'Arcanista',
   MARKSMAN: 'Atirador',
   BODHISATTVA: 'Bodisatva',
-  BRUTE: 'Brutamontes',
+  BRUTE: 'Bruto',
   HUNTER: 'Caçador',
-  FIGHTER: 'Lutador',
+  FIGHTER: 'Combatente',
   MERCURIAL: 'Mercurial',
   SHAMAN: 'Xamã',
 }

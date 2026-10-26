@@ -385,6 +385,10 @@ public class RuleCatalogService {
                 case SPEED -> {
                     if (g.feet() == null) p.add(at + " (SPEED): precisa de feet");
                     if (g.value() != null && !SPEED_TYPES.contains(g.value())) p.add(at + " (SPEED): value deve ser um destes: " + SPEED_TYPES);
+                    if (g.usesFormula() != null && g.usesFormula() != UsesFormula.PROFICIENCY) p.add(at + " (SPEED): usesFormula só aceita PROFICIENCY");
+                    if (g.amount() != null && (g.value() == null || g.value().equals("WALK") || g.value().equals("ALL"))) {
+                        p.add(at + " (SPEED): amount (aumento se já tiver) só vale para SWIM, CLIMB, FLY ou BURROW");
+                    }
                 }
                 case ARMOR_CLASS -> {
                     if (blank(g.name()) && blank(g.label())) p.add(at + " (ARMOR_CLASS): precisa de name");
@@ -393,6 +397,9 @@ public class RuleCatalogService {
                         p.add(at + " (ARMOR_CLASS): requiresArmor deve ser um destes: " + ARMOR_TYPES);
                     }
                     checkOptions(at, g.options(), ATTRIBUTES, p);
+                    if (g.armor() != null && (g.armor().feature() == null) != (g.armor().featureOption() == null)) {
+                        p.add(at + " (ARMOR_CLASS): feature e featureOption andam juntos");
+                    }
                 }
                 case AC_BONUS -> {
                     if (blank(g.name()) && blank(g.label())) p.add(at + " (AC_BONUS): precisa de name");
@@ -423,6 +430,9 @@ public class RuleCatalogService {
         }
     }
 
+    private static final Set<UsesFormula> NEEDS_ATTRIBUTE = Set.of(UsesFormula.ATTRIBUTE_MODIFIER, UsesFormula.HALF_ATTRIBUTE_MODIFIER,
+            UsesFormula.LEVEL_PLUS_ATTRIBUTE, UsesFormula.PROFICIENCY_PLUS_ATTRIBUTE, UsesFormula.TWO_ATTRIBUTES);
+
     private static void validateFeature(String at, Grant g, List<String> p) {
         if (blank(g.name())) p.add(at + " (FEATURE): precisa de name");
         if (g.options() != null && g.options().stream().anyMatch(RuleCatalogService::blank)) p.add(at + " (FEATURE): opção vazia em options");
@@ -430,8 +440,11 @@ public class RuleCatalogService {
             p.add(at + " (FEATURE): damage deve ser como 2d6 ou 2d6+4");
         }
         if (g.maxUses() != null && g.maxUses() < 1) p.add(at + " (FEATURE): maxUses deve ser maior que 0");
-        if ((g.usesFormula() == UsesFormula.ATTRIBUTE_MODIFIER || g.usesFormula() == UsesFormula.HALF_ATTRIBUTE_MODIFIER) && g.attribute() == null) {
+        if (g.usesFormula() != null && NEEDS_ATTRIBUTE.contains(g.usesFormula()) && g.attribute() == null) {
             p.add(at + " (FEATURE): usesFormula " + g.usesFormula() + " precisa de attribute");
+        }
+        if (g.usesFormula() == UsesFormula.TWO_ATTRIBUTES && (g.value() == null || !ATTRIBUTES.contains(g.value()))) {
+            p.add(at + " (FEATURE): usesFormula TWO_ATTRIBUTES precisa do segundo atributo em value");
         }
         if (g.optionUses() != null) {
             g.optionUses().forEach((option, u) -> {
@@ -446,7 +459,8 @@ public class RuleCatalogService {
         if (g.usesByLevel() != null) {
             g.usesByLevel().forEach((lv, n) -> {
                 if (!lv.matches("\\d+") || Integer.parseInt(lv) < 1 || Integer.parseInt(lv) > 20) p.add(at + " (FEATURE): usesByLevel usa o nível (1 a 20) como chave");
-                if (n == null || n < 0) p.add(at + " (FEATURE): usesByLevel precisa de valores 0 ou mais");
+                // null = sem limite a partir desse nível.
+                if (n != null && n < 0) p.add(at + " (FEATURE): usesByLevel precisa de valores 0 ou mais (ou null para sem limite)");
             });
         }
         if (g.diceByLevel() != null) {
@@ -462,7 +476,9 @@ public class RuleCatalogService {
             p.add(at + " (FEATURE): use maxUses ou usesFormula, não os dois");
         }
         if (g.damageBonus() != null) {
-            if (g.damage() == null && g.diceByProficiency() == null) p.add(at + " (FEATURE): damageBonus precisa de damage ou diceByProficiency");
+            if (g.damage() == null && g.diceByProficiency() == null && g.diceByLevel() == null) {
+                p.add(at + " (FEATURE): damageBonus precisa de damage, diceByProficiency ou diceByLevel");
+            }
             g.damageBonus().stream()
                     .filter(t -> !Set.of("PROFICIENCY", "HALF_PROFICIENCY", "STRENGTH_OR_DEXTERITY").contains(t) && !ATTRIBUTES.contains(t))
                     .forEach(t -> p.add(at + " (FEATURE): damageBonus desconhecido \"" + t + "\""));

@@ -41,6 +41,31 @@ class CreationScalingTests {
         Grant plus = new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, "Plumadagas", null, null, null, null,
                 null, UsesFormula.PROFICIENCY, null, null, null, null, null, null, null, null, null, null, null, 3, null, null, null, null);
         assertThat(CreationService.usesFor(plus, 2, false)).isEqualTo(5);
+        // Bênção do Espírito: nível de Acólito + mod. de Sabedoria, mínimo 1.
+        Grant blessing = new Grant(GrantType.FEATURE, Attribute.WISDOM, null, null, null, null, null, null, "Bênção do Espírito", null, null, null, null,
+                null, UsesFormula.LEVEL_PLUS_ATTRIBUTE, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        assertThat(CreationService.usesFor(blessing, 2, 1, false, a -> 3)).isEqualTo(4);
+        assertThat(CreationService.usesFor(blessing, 3, 5, false, a -> 3)).isEqualTo(8);
+        assertThat(CreationService.usesFor(blessing, 2, 1, false, a -> -2)).isEqualTo(1);
+        // Receptáculo Etéreo: proficiência + mod. de Sabedoria.
+        Grant vessel = new Grant(GrantType.FEATURE, Attribute.WISDOM, null, null, null, null, null, null, "Receptáculo Etéreo", null, null, null, null,
+                null, UsesFormula.PROFICIENCY_PLUS_ATTRIBUTE, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        assertThat(CreationService.usesFor(vessel, 4, 11, false, a -> 3)).isEqualTo(7);
+        // Estratégia: mod. de Inteligência + mod. de Carisma (o segundo atributo vai em value).
+        Grant strategy = new Grant(GrantType.FEATURE, Attribute.INTELLIGENCE, null, null, null, null, "CHARISMA", null, "Estratégia", null, null, null, null,
+                null, UsesFormula.TWO_ATTRIBUTES, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        assertThat(CreationService.usesFor(strategy, 2, 1, false, a -> a == Attribute.INTELLIGENCE ? 2 : 3)).isEqualTo(5);
+    }
+
+    @Test
+    void tabelaPorNivelComNuloFicaSemLimite() {
+        // Fúria do Bruto: 6 usos no 17º, ilimitada (sem contador) no 20º.
+        Map<String, Integer> rage = new java.util.HashMap<>(Map.of("1", 2, "17", 6));
+        rage.put("20", null);
+        Grant g = new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, "Fúria", null, null, null, null,
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, rage, null);
+        assertThat(CreationService.usesFor(g, 6, 19, false, a -> 0)).isEqualTo(6);
+        assertThat(CreationService.usesFor(g, 6, 20, false, a -> 0)).isNull();
     }
 
     @Test

@@ -2,6 +2,19 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-26 — Pendências mecânicas das classes (`feature/character-sheet`)
+- O Estilo de Luta "Defesa sem Armadura" do Combatente vira uma opção de CA (10 + DES + CON) quando escolhido: `ArmorFormula.feature`/`featureOption`.
+- Usos sem limite: valor `null` em `usesByLevel` (Fúria do Bruto, Forma Selvagem e Aura Etérea no 20º nível).
+- Fórmulas novas: `PROFICIENCY_PLUS_ATTRIBUTE` (Receptáculo Etéreo) e `TWO_ATTRIBUTES` (Estratégia = INT + CAR).
+- `SPEED` com `usesFormula: PROFICIENCY` (Brisa de Impulso: 5 pés × bônus) e `amount` como aumento se já tiver o deslocamento (Aptidão Marinha: Marai fica com natação 65).
+- Testes em `CreationScalingTests`. Conferido no sandbox. Os recursos do Capítulo 5 (Sutras, Iras, Técnicas etc.) seguem aguardando as páginas.
+
+## 2026-10-26 — As outras 7 classes (`feature/character-sheet`)
+- **Acólito** (d8; Mana de conjurador pleno; Liturgia, Preservar a Vida, Chamado Sagrado, Intervenção Quintessencial) com os **7 Ritos**; **Atirador** (d8; armas de fogo, Armeiro, Astra, Bravura, Ardis) com as **5 Trilhas**; **Bodisatva** (d10; Ki, dado Marcial 1d6 → 1d12, Sutras, Estilos) com as **5 Doutrinas**; **Bruto** (d12; Fúria com usos e Dano de Fúria por nível, Defesa sem Armadura 10 + DES + CON, Iras) com as **3 Animas**; **Caçador** (d10; Inimigo Favorito, Explorador Natural, Consciência Primitiva, Trunfos) com os **3 Enclaves**; **Combatente** (d10; todas as armaduras, Estilos de Luta, Retomar o Fôlego, Surto de Ação, Indomável) com as **4 Honras**, no lugar do Lutador de exemplo; **Xamã** (d8; conjura com Ki, Totem, Aliados Espirituais/posturas, Canalização Espiritual) com os **4 Caminhos**. Do 1º ao 20º nível.
+- Meia-conjuração (Ravasz, Cicatrizes Rúnicas, Arqueiro Rúnico) com Mana a partir do 3º nível; CAs alternativas da classe (Bruto, Duelista, Canalizador) como opções de defesa.
+- Regra nova: `usesFormula` `LEVEL_PLUS_ATTRIBUTE`; a validação aceita `damageBonus` com `diceByLevel`. Front: Bruto e Combatente com os nomes do livro.
+- Testes: fórmula nova em `CreationScalingTests`. Conferido no sandbox: as 45 combinações de classe e subclasse montam a prévia sem erro de regra (ex.: Bênção do Espírito 4 usos, Brisa de Impulso 40 pés, natação 30 do Rito das Marés, CA 14 do Bruto, Refinamento de Ki 1d6+2).
+
 ## 2026-10-26 — Classes Arcanista e Mercurial (`feature/character-sheet`)
 - **Arcanista** (d6; INT + SAB ou CAR; Mana e Arcana por nível; Despertar Arcano, Mistérios, Metamagia, Assinatura Arcana, Magia de Assinatura, Sobrecarga, Força Arcana) com os **10 Glifos**, e **Mercurial** (d8; armaduras leves e suas armas; Chaveiro; Especialização em perícia ou ofício; Ataque Furtivo 1d6 → 10d6; Ação Ardilosa, Evasão, Essência Elusiva, Golpe de Sorte) com as **4 Cabalas**, do 1º ao 20º nível. O Arcanista de exemplo saiu; o Lutador continua de exemplo.
 - Regras novas: subclasse (`subclasses`/`subclassLabel`, `subclassId`), `SAVING_THROW_CHOICE`, `ARMOR_PROFICIENCY`, `WEAPON_PROFICIENCY`, `EXPERTISE_CHOICE` com ofícios, `usesByLevel`/`diceByLevel`, escolha com `count` > 1, PV por atributo (`HALF_ATTRIBUTE_MODIFIER`), `requiresArmor` (Proteção Ajustável agora exige a proficiência).

@@ -9,6 +9,8 @@ import gusleite.runarcana_nexus.enums.Attribute;
 // - unarmoredOnly (AC_BONUS): o bônus só vale sem armadura do inventário (Armadura Natural do Auroque).
 // - blocksArmor: com essa regra, as armaduras do inventário não servem (Pele de Árvore, Proteção Ajustável).
 // - requiresArmor: a opção só existe com proficiência nessa armadura (MEDIUM/HEAVY; modos da Proteção Ajustável).
+// - feature/featureOption: a opção só existe se o personagem escolheu featureOption na habilidade feature
+//   (Estilo de Luta "Defesa sem Armadura" do Combatente).
 public record ArmorFormula(
         Integer base,
         Boolean dex,
@@ -18,7 +20,9 @@ public record ArmorFormula(
         Integer reduction,
         Boolean unarmoredOnly,
         Boolean blocksArmor,
-        String requiresArmor
+        String requiresArmor,
+        String feature,
+        String featureOption
 ) {
     public boolean dexOrTrue() {
         return dex == null || dex;
