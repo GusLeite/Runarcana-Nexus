@@ -1,4 +1,5 @@
-import { ALIGNMENT_NAMES, CLASS_NAMES, REGION_NAMES } from '../../data/rules.js'
+import { ALIGNMENT_NAMES, CLASS_NAMES, REGION_NAMES, SIZE_NAMES, formatFeet } from '../../data/rules.js'
+import Num from './Num.jsx'
 
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
@@ -35,7 +36,7 @@ export default function SheetHero({ character, sheet }) {
           <div className="hp" aria-label={`Pontos de vida: ${hp} de ${hpMax}`}>
             <div className="hp-head">
               <span>Pontos de vida</span>
-              <b>{hp} <small>/ {hpMax}</small></b>
+              <b><Num value={hp} duration={1100} /> <small>/ {hpMax}</small></b>
             </div>
             <div className="hp-bar" style={{ '--tick': tick + '%' }}>
               <div className={'hp-fill' + (hpPct < 35 ? ' low' : '')} style={{ width: hpPct + '%' }} />
@@ -44,7 +45,14 @@ export default function SheetHero({ character, sheet }) {
 
           <dl className="facts">
             <Fact label="Jogador" value={sheet.playerName} />
-            <Fact label="Antecedente" value={sheet.background} />
+            <Fact label="Origem" value={sheet.origin && (sheet.lineage ? sheet.origin + ' (' + sheet.lineage + ')' : sheet.origin)} />
+            <Fact label="Deslocamento" value={sheet.speed != null ? formatFeet(sheet.speed) : null} />
+            {sheet.size && <Fact label="Tamanho" value={SIZE_NAMES[sheet.size]} />}
+            {sheet.languages?.length > 0 && <Fact label="Idiomas" value={sheet.languages.join(', ')} />}
+            {sheet.crafts?.length > 0 && <Fact label="Ofícios" value={sheet.crafts.join(', ')} />}
+            {sheet.heritages?.length > 0 && <Fact label="Heranças" value={sheet.heritages.join(', ')} />}
+            {sheet.heritagePoints > 0 && <Fact label="Pontos de Herança" value={sheet.heritagePoints + ' a gastar'} />}
+            <Fact label="Passado" value={sheet.background} />
             <Fact label="Alinhamento" value={ALIGNMENT_NAMES[sheet.alignment]} />
             <Fact label="Idade" value={sheet.age + ' anos'} />
             <Fact label="Altura" value={sheet.height.toLocaleString('pt-BR') + ' m'} />

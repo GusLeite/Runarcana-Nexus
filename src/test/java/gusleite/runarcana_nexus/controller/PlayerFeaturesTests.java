@@ -115,6 +115,43 @@ class PlayerFeaturesTests {
     }
 
     @Test
+    void habilidadeGuardaIconeEMestreTrocaOuRemove() throws Exception {
+        String master = login("mestre");
+        String png = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
+
+        String body = mvc.perform(post("/character/" + rudoId + "/abilities").header("Authorization", "Bearer " + master)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Raio\",\"type\":\"SPELL\",\"spellLevel\":0,\"icon\":\"" + png + "\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.icon").value(png))
+                .andReturn().getResponse().getContentAsString();
+        long abilityId = idOf(body);
+        String iconUrl = "/character/" + rudoId + "/abilities/" + abilityId + "/icon";
+
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + login("rudo")))
+                .andExpect(jsonPath("$.abilities[0].icon").value(png));
+
+        mvc.perform(patch(iconUrl).header("Authorization", "Bearer " + master)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"icon\":\"https://exemplo.com/raio.png\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.icon").value("https://exemplo.com/raio.png"));
+
+        mvc.perform(patch(iconUrl).header("Authorization", "Bearer " + master)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"icon\":null}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.icon").doesNotExist());
+
+        mvc.perform(patch(iconUrl).header("Authorization", "Bearer " + master)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"icon\":\"data:text/html;base64,PHNjcmlwdD4=\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("O ícone deve ser uma imagem PNG, JPEG, WebP ou GIF, ou um link http(s)."));
+
+        mvc.perform(patch(iconUrl).header("Authorization", "Bearer " + login("rudo"))
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"icon\":null}"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void mestreVeQuemPodeReceberDocumentos() throws Exception {
         mvc.perform(get("/documents/recipients").header("Authorization", "Bearer " + login("mestre")))
                 .andExpect(status().isOk())

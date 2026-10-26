@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { replay } from '../utils/motion.js'
 import { validatePasswordChange } from '../validation.js'
 import { changePassword } from '../api/auth.js'
 
@@ -9,12 +10,18 @@ export default function PasswordForm({ character, session, onDone, onCancel, onE
   const [confirm, setConfirm] = useState('')
   const [msg, setMsg] = useState(null)
   const [busy, setBusy] = useState(false)
+  const form = useRef()
+  // Erro: mostra a mensagem e faz o painel tremer.
+  const fail = text => {
+    setMsg({ type: 'err', text })
+    replay(form.current, 'shake')
+  }
   const first = session.mustChangePassword
 
   const submit = async e => {
     e.preventDefault()
     const error = validatePasswordChange({ username: session.username, current, next, confirm })
-    if (error) return setMsg({ type: 'err', text: error })
+    if (error) return fail(error)
 
     setBusy(true)
     setMsg(null)
@@ -23,13 +30,13 @@ export default function PasswordForm({ character, session, onDone, onCancel, onE
       onDone(account)
     } catch (err) {
       if (err.status === 401) return onExpired()
-      setMsg({ type: 'err', text: err.message })
+      fail(err.message)
       setBusy(false)
     }
   }
 
   return (
-    <form className={'login' + (character.fx ? ' ' + character.fx : '')} onSubmit={submit} noValidate>
+    <form ref={form} className={'login' + (character.fx ? ' ' + character.fx : '')} onSubmit={submit} noValidate>
       <h2>{first ? 'Crie sua senha' : 'Alterar senha'}</h2>
       <p>{first ? 'Você ainda usa a senha inicial. Escolha uma só sua.' : character.name + ' · nova senha'}</p>
       <label htmlFor="cur">Senha atual</label>

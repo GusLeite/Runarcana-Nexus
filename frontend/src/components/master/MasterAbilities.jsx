@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
-import { createAbility, deleteAbility, fetchAbilities, fetchCharacters } from '../../api/master.js'
+import { createAbility, deleteAbility, fetchAbilities, fetchCharacters, setAbilityIcon } from '../../api/master.js'
+import IconPicker, { IconSwap } from './IconPicker.jsx'
 import { ABILITY_TYPES, CLASS_NAMES, RECHARGES, parseDice, spellLevelName } from '../../data/rules.js'
 import { CHARACTERS } from '../../data/characters.js'
 import { AbilityDetail } from '../sheet/AbilitiesTab.jsx'
+import { afterLeave } from '../../utils/motion.js'
 
 const EMPTY = {
   name: '', type: 'ABILITY', spellLevel: 1, school: '', castingTime: '', range: '', duration: '',
-  components: '', damage: '', maxUses: '', recharge: 'LONG_REST', description: '',
+  components: '', damage: '', maxUses: '', recharge: 'LONG_REST', description: '', icon: '',
 }
 const artOf = name => CHARACTERS.find(c => c.id === name.trim().toLowerCase())
 const noop = () => {}
@@ -20,6 +22,7 @@ export default function MasterAbilities({ token, onError, onToast }) {
   const [msg, setMsg] = useState(null)
   const [busy, setBusy] = useState(false)
   const [confirmId, setConfirmId] = useState(null)
+  const [leavingId, setLeavingId] = useState(null)
 
   useEffect(() => {
     fetchCharacters(token)
@@ -57,6 +60,7 @@ export default function MasterAbilities({ token, onError, onToast }) {
     maxUses: uses,
     usesLeft: uses,
     recharge: uses ? form.recharge : 'NONE',
+    icon: form.icon || null,
   }
 
   const submit = async e => {
@@ -80,11 +84,27 @@ export default function MasterAbilities({ token, onError, onToast }) {
     }
   }
 
-  const remove = ability => {
-    deleteAbility(token, characterId, ability.id)
-      .then(() => { setAbilities(list => list.filter(a => a.id !== ability.id)); onToast(ability.name + ' removida.') })
+  // icon nulo tira a imagem; a lista atualiza com a resposta do back.
+  const changeIcon = (ability, icon) => {
+    setAbilityIcon(token, characterId, ability.id, icon)
+      .then(updated => {
+        setAbilities(list => list.map(a => (a.id === updated.id ? updated : a)))
+        onToast(icon ? 'Ícone de ' + ability.name + ' atualizado.' : 'Ícone de ' + ability.name + ' removido.')
+      })
       .catch(onError)
-      .finally(() => setConfirmId(null))
+  }
+
+  // A linha encolhe (leaving) e só depois sai da lista.
+  const remove = ability => {
+    setConfirmId(null)
+    setLeavingId(ability.id)
+    deleteAbility(token, characterId, ability.id)
+      .then(() => afterLeave(() => {
+        setAbilities(list => list.filter(a => a.id !== ability.id))
+        setLeavingId(null)
+        onToast(ability.name + ' removida.')
+      }))
+      .catch(err => { setLeavingId(null); onError(err) })
   }
 
   return (
@@ -123,6 +143,9 @@ export default function MasterAbilities({ token, onError, onToast }) {
             <form onSubmit={submit} noValidate>
               <h3 className="card-title">Nova para {character.characterName}</h3>
               <div className="mform">
+                <span className="mlabel first">Ícone</span>
+                <IconPicker ability={draft} value={form.icon} onChange={icon => { set('icon', icon); setMsg(null) }} onError={setMsg} />
+
                 <label htmlFor="a-name">Nome</label>
                 <input id="a-name" value={form.name} maxLength={120} onChange={e => set('name', e.target.value)} placeholder="Ex.: Seta Estelar" />
 
@@ -203,11 +226,9 @@ export default function MasterAbilities({ token, onError, onToast }) {
             <h3 className="card-title">De {character.characterName} <small>{abilities.length}</small></h3>
             {abilities.length === 0 && <p className="muted-note">Nenhuma magia ou habilidade ainda.</p>}
             <ul className="docs">
-              {abilities.map(a => (
-                <li key={a.id} className={'sent-row t-' + a.type.toLowerCase()}>
-                  <span className={'abl-icon t-' + a.type.toLowerCase()} aria-hidden="true">
-                    <span className="abl-glyph">{a.name.trim().charAt(0).toUpperCase()}</span>
-                  </span>
+              {abilities.map((a, n) => (
+                <li key={a.id} className={'sent-row t-' + a.type.toLowerCase() + (a.id === leavingId ? ' leaving' : '')} style={{ '--n': n }}>
+                  <IconSwap ability={a} onPick={icon => changeIcon(a, icon)} onError={onToast} />
                   <span className="doc-info">
                     <span className="doc-name">{a.name}</span>
                     <span className="doc-meta">

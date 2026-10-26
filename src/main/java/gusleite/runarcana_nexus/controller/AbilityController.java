@@ -1,5 +1,6 @@
 package gusleite.runarcana_nexus.controller;
 
+import gusleite.runarcana_nexus.record.AbilityIconRequest;
 import gusleite.runarcana_nexus.record.AbilityRequest;
 import gusleite.runarcana_nexus.record.AbilityResponse;
 import gusleite.runarcana_nexus.record.AbilityUsesRequest;
@@ -43,6 +44,17 @@ public class AbilityController {
             @Valid @RequestBody AbilityRequest request) {
         auth.requireMaster(authorization);
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(characterId, request));
+    }
+
+    // Mestre: troca ou remove (icon nulo) o ícone de uma habilidade já cadastrada.
+    @PatchMapping("/{characterId}/abilities/{abilityId}/icon")
+    public ResponseEntity<AbilityResponse> setIcon(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @PathVariable Long characterId,
+            @PathVariable Long abilityId,
+            @Valid @RequestBody AbilityIconRequest request) {
+        auth.requireMaster(authorization);
+        return ResponseEntity.ok(service.setIcon(characterId, abilityId, request.icon()));
     }
 
     @DeleteMapping("/{characterId}/abilities/{abilityId}")

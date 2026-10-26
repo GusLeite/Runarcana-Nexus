@@ -23,8 +23,26 @@ Responsivo: abaixo de 760px os painéis empilham na vertical e a lore some. Com 
 - **Sessão**: a resposta do login traz `master: true`; o `App` aceita sessão salva de mestre (não precisa estar em `CHARACTERS`) e, logado, mostra o `MasterPanel` no lugar da seleção. "Sair" volta para a seleção.
 - **Painel** (`MasterPanel.jsx`): mesma moldura da ficha (barra do topo, cards, abas), com selo "MESTRE" e fundo dourado/turquesa sem arte. Abas:
   - **Documentos** (`MasterDocuments.jsx`): título, tipo (chips coloridos por tipo), destinatários ("Todos os jogadores" ou um ou mais, vindos de `GET /documents/recipients`; nomes de `CHARACTERS`), texto com a mesma formatação da leitura, link de imagem. "Escrever / Prévia": a prévia usa o `DocumentView` da ficha, então é exatamente o que o jogador vê. O botão diz para quem vai ("ENVIAR PARA RUDO"). À direita, os enviados com destinatários e "Apagar" com confirmação.
-  - **Habilidades** (`MasterAbilities.jsx`): escolhe o personagem (cartões com a arte de `CHARACTERS` quando o nome bate), formulário (nome, tipo, círculo e escola/componentes só para magia, tempo, alcance, duração, dano validado com `parseDice`, usos — vazio = livre — e recarga, descrição), **prévia ao vivo** com o `AbilityDetail` da ficha e a lista do personagem com "Apagar". Depois de adicionar, o formulário limpa mas mantém o tipo e o círculo.
+  - **Habilidades** (`MasterAbilities.jsx`): escolhe o personagem (cartões com a arte de `CHARACTERS` quando o nome bate), formulário (**ícone**, nome, tipo, círculo e escola/componentes só para magia, tempo, alcance, duração, dano validado com `parseDice`, usos — vazio = livre — e recarga, descrição), **prévia ao vivo** com o `AbilityDetail` da ficha e a lista do personagem com "Apagar". Depois de adicionar, o formulário limpa mas mantém o tipo e o círculo.
+  - **Ícone** (`IconPicker.jsx`): "Enviar imagem" (ou arrastar e soltar no quadrado), "colar um link" ou "Remover". O arquivo (PNG/JPG/WebP/GIF até 8 MB) passa por `utils/iconImage.js` (`fileToIcon`): recorte quadrado central e redução para **128×128 WebP** num canvas, antes de ir para o back. GIF animado vira imagem parada. Na lista do personagem, clicar no ícone (`IconSwap`) troca a imagem de uma habilidade já cadastrada e o "×" tira (`PATCH .../icon`).
 - API em `api/master.js`; estilos em `styles/master.css` (usa também `sheet.css`).
+
+## Criação de personagem (assistente)
+
+Conta sem ficha: a ficha mostra "Ficha em branco" com **CRIAR PERSONAGEM**, que abre o `CreationWizard` (`components/creation/`) no lugar do conteúdo (o herói continua à esquerda). Ao criar, a ficha recarrega já pronta.
+
+- **Etapas** (barra no topo, com losango ✓ quando a etapa está completa; dá para pular entre elas): Origem → Região → Classe → Passado (Região e Passado somem se o catálogo não tiver) → Atributos → Escolhas → Detalhes. Atributos só fica ✓ depois de gastar algum ponto; Escolhas, depois de origem e classe definidas. O botão final é **CRIAR PERSONAGEM**, ativo só quando a prévia não tem erros.
+- **Origem/Região/Classe/Passado** (`OptionStep.jsx`): cartões com descrição, `details` do livro (Idade, Tamanho…), fatos (dado de vida, deslocamento em pés, ouro), a lista do que concede (`grantLabel` em `rules.js`, cor por tipo) e etiqueta **EXEMPLO** nos itens provisórios.
+- **Atributos** (`AttributeStep.jsx`): só os métodos ligados no catálogo. Compra de pontos com − / + , custo e barra de orçamento; arranjo padrão com seleção (cada valor uma vez); manual com campo e "Rolar 4d6 (descarta o menor)". Ao lado de cada atributo: bônus que veio das escolhas + total + modificador.
+- **Escolhas** (`ChoiceStep.jsx`): as escolhas que a prévia pede (atributos/perícias à escolha), com contador; perícias já ganhas não aparecem.
+- **Escolhas** sem opções cadastradas aparecem tracejadas, só com o aviso, e não bloqueiam. A proficiência mista (`PROFICIENCY_CHOICE`) aparece em grupos: Perícias, Ofícios e Armas.
+- **Linhagem**: quando a origem escolhida tem `lineages` (ex.: Minotauro), os cartões das tribos aparecem logo abaixo, na mesma etapa (`.lineage-step`); trocar de origem limpa a linhagem e a etapa só fica ✓ com as duas escolhidas.
+- **Heranças** (`HeritageStep.jsx`, só aparece se o catálogo tiver Heranças): losangos com os pontos de cada tipo (gastos/total), filtro por tipo (Gerais, De Região, De Origem), busca e "Só as que posso escolher" (ligado por padrão). Cada cartão mostra tipo, pré-requisito, o texto (4 linhas, "Ler tudo" abre), o motivo quando não dá para escolher (vem do back), opção à escolha (ex.: tribo) e "Escolher de novo" quando `maxTimes` > 1. As escolhidas ficam no topo. Helpers `addHeritage`, `removeHeritage`, `setHeritageOption`, `heritageTimes` em `rules.js`.
+- **Detalhes** (`DetailsStep.jsx`): nome, jogador (vem com o usuário), idade, altura (aceita vírgula) e alinhamento.
+- **Ficha em construção** (`BuildSummary.jsx`, à direita): atributos com bônus, PV (com o dado), deslocamento, ouro, tamanho, pontos de Herança (gastos de total), idiomas (só se houver), ofícios, resistências, perícias e passivas (com usos e dado já calculados) — cada uma com a fonte ("Origem: …", "Classe: …") — e a lista do que falta. Vem de `POST /creation/preview`, chamado 220 ms depois de cada mudança: **as contas são do back**, o front só mostra.
+- `api/creation.js` (catálogo, prévia, criar); estilos em `styles/creation.css`.
+
+A ficha também passou a mostrar **Origem**, **Deslocamento** (pés), **Tamanho**, **Idiomas**, **Ofícios**, **Heranças** e **Pontos de Herança** a gastar no herói (os cinco últimos só quando existem); na aba **Magias**, as Heranças formam o grupo **Heranças** (tipo `HERITAGE`), "Passado" no lugar de "Antecedente" e o card **Resistências** (`SavingThrows.jsx`: mod. do atributo + proficiência da classe, clicável para rolar).
 
 ## Tela pós-login: ficha do personagem
 
@@ -37,7 +55,7 @@ Responsivo: abaixo de 760px os painéis empilham na vertical e a lore some. Com 
 - **Atributos** (`AttributeGrid.jsx`): seis hexágonos com o modificador em destaque e o valor embaixo.
 - **Estatísticas**: proficiência, iniciativa (mod. de DES, clicável), percepção e intuição passivas, **dados de vida** (`nível`d`hitDie`; clicar rola 1 dado + CON) e inspiração.
 - **Coluna direita da Ficha** (`OverviewTab.jsx`): Rolagens (com o seletor **Desvantagem / Normal / Vantagem**, que vale para todo teste de d20), **Habilidades** (barra rápida com até 5 ativas; clicar rola o dano ou abre a aba), **Documentos** (os 3 mais recentes, com selo NOVO) e **Anotação fixada** (ou a última editada).
-- **Magias** (`AbilitiesTab.jsx`): habilidades, passivas e magias por círculo (truques primeiro). Ícone quadrado com a inicial e borda na cor do tipo (dourado = habilidade, turquesa = passiva, roxo = magia); como no LoL, as 4 primeiras habilidades ativas ganham as teclas **Q/W/E/R** e as passivas **P** (a barra rápida da Ficha usa a mesma regra, `keysFor`). Usos em losangos: clicar num aceso gasta 1, num apagado recupera 1 (`PATCH`, com atualização otimista e volta atrás se falhar). Botões de **Descanso curto/longo**. Dano com botão para rolar a expressão ("2d8+4"). Dica ao lado com tempo, alcance, duração, componentes, escola, descrição e usos.
+- **Magias** (`AbilitiesTab.jsx`): habilidades, passivas e magias por círculo (truques primeiro). Ícone quadrado (`AbilityIcon.jsx`, o mesmo na aba, na barra rápida da Ficha e no painel do mestre) com a imagem enviada pelo mestre — ou a inicial, se não houver ou se o link quebrar — e borda na cor do tipo (dourado = habilidade, turquesa = passiva, roxo = magia); como no LoL, as 4 primeiras habilidades ativas ganham as teclas **Q/W/E/R** e as passivas **P** (a barra rápida da Ficha usa a mesma regra, `keysFor`). Usos em losangos: clicar num aceso gasta 1, num apagado recupera 1 (`PATCH`, com atualização otimista e volta atrás se falhar). Botões de **Descanso curto/longo**. Dano com botão para rolar a expressão ("2d8+4"). Dica ao lado com tempo, alcance, duração, componentes, escola, descrição e usos.
 - **Documentos** (`DocumentsTab.jsx`): lista com selo na cor do tipo (carta, pista, mapa, lore, segredo, recompensa) e "NOVO"; filtro "Todos / Não lidos". Leitura num "pergaminho" com selo de cera, imagem (se houver) e texto com `## título`, `**negrito**` e `*itálico*` (`RichText`, sem HTML). Segredos ganham o carimbo CONFIDENCIAL. O documento mostrado é marcado como lido (uma chamada por documento, mesmo no StrictMode).
 - **Anotações** (`NotesTab.jsx`): lista (fixadas primeiro) e editor com **salvamento automático** 700 ms depois de parar de digitar (e ao sair do campo ou trocar de nota), "Fixar" (vai para o topo e para o card da Ficha) e "Apagar" com confirmação.
 - **Perícias** (`SkillList.jsx`): as 19 agrupadas pelo atributo; losango turquesa = proficiente; o maior bônus brilha; filtro "Todas / Proficientes".
@@ -48,6 +66,19 @@ Responsivo: abaixo de 760px os painéis empilham na vertical e a lore some. Com 
 Os números que contam (bônus de perícia, proficiência, passivas) vêm prontos do back-end. `data/rules.js` (+ `.test.js`) só traduz os enums para PT (perícias, classes, regiões, alinhamentos, raridades, propriedades), formata (`+3`, `−1`, `67,5 kg`, datas) e calcula o que sai direto dos atributos ou dos dados (modificador, carga, d20 com vantagem/desvantagem em `rollCheck`, expressões "2d6+4" em `parseDice`/`rollDice`, agrupamento de habilidades).
 
 Layout: 3 colunas acima de 1240px; 2 colunas (herói + conteúdo, rolagens embaixo) até 860px; 1 coluna no celular. Atributos e estatísticas usam **container queries** na coluna (`.sheet-col` é `container-type: inline-size`): com a coluna abaixo de 640px os hexágonos passam de 6 para 3 por linha (e as estatísticas de 6 para 3 abaixo de 680px), e o texto dos hexágonos escala em `cqi`, para a sigla não ser cortada pelas pontas. O CSS fica em `styles/sheet.css`, importado pelo `CharacterSheet`.
+
+## Animações de polimento
+
+Ficam quase todas em `styles/motion.css`, importado **por último** no `main.jsx` (o Vite põe o CSS dos componentes antes do `global.css`, então a ordem importa).
+
+- **Entradas em cascata**: hexágonos de atributo (giram e crescem), perícias, linhas de habilidade, casas do inventário, barra rápida, documentos, anotações, enviados do mestre e histórico de rolagens. Cada item recebe `style={{ '--n': índice }}` e o atraso é `calc(var(--n) * …)`. Entradas usam `animation-fill-mode: backwards`, para não travar o `transform` do hover depois de terminar.
+- **Troca de conteúdo**: dica do item, dica da habilidade e editor de nota entram deslizando (os componentes têm `key` pelo id). O pergaminho do documento se desenrola de cima para baixo, o selo de cera "carimba" e o CONFIDENCIAL bate depois.
+- **Números que contam** (`hooks/useCountUp.js` + `components/sheet/Num.jsx`): modificadores e valores dos atributos, estatísticas, PV, ouro e valor do inventário contam até o valor (de 0 na primeira vez; depois, do valor anterior).
+- **Abas** (`components/sheet/TabBar.jsx`, na ficha e no mestre): um sublinhado dourado único desliza até a aba ativa (mede `offsetLeft/offsetWidth`; recalcula ao trocar de aba, mudar contador ou redimensionar). O contador "pula" quando muda.
+- **Toques de jogo**: flash dourado ao entrar na ficha ou no painel (lock-in), brilho que atravessa o botão "Rolar d20" e a barra de PV de tempos em tempos, zoom lento contínuo na arte do herói, pulso no anel de nível, moeda que gira no hover, brilho que passa no hexágono no hover, 14 faíscas no 20 natural, selo NOVO pulsando, casa do item escolhido com anel pulsando.
+- **Usos de habilidade**: o losango gasto encolhe; no descanso eles reacendem em onda (`transition-delay` pelo índice).
+- **Feedback**: login e troca de senha **tremem** no erro (`utils/motion.js` `replay` recoloca a classe `shake`); itens apagados (anotação, documento e habilidade do mestre) encolhem e deslizam antes de sair (`leaving` + `afterLeave`, 260 ms); toast entra pela lateral com uma barra que esvazia nos 4 s; foco dos campos com halo turquesa; botões afundam ao clicar.
+- **Menos movimento**: com `prefers-reduced-motion: reduce` (no Windows, "Efeitos de animação" desligado) tudo isso é desligado, inclusive `::before/::after`, e os números já aparecem no valor final. O navegador do preview do Claude vem com essa opção ligada; para ver as animações nele foi preciso desligá-la só na aba de teste.
 
 ## Estrutura
 
@@ -70,14 +101,20 @@ frontend/
     │   ├── LoginForm.jsx      formulário de login do personagem escolhido
     │   ├── PasswordForm.jsx   troca de senha (senha atual, nova, confirmação)
     │   ├── effects/Embers.jsx brasas e calor (Gaudron)
+    │   ├── effects/BloodMagic.jsx magia de sangue (Rudo)
     │   └── sheet/             ficha pós-login: CharacterSheet (abas e estado), SheetHero, OverviewTab, AttributeGrid,
-    │                          SkillList, AbilitiesTab, Inventory, DocumentsTab, NotesTab, DiceRoll, icons
+    │                          SkillList, AbilitiesTab, AbilityIcon, Inventory, DocumentsTab, NotesTab, DiceRoll,
+    │                          TabBar (abas com sublinhado deslizante), Num (número que conta), icons
     │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities
     ├── hooks/usePanelSprings.js  animação por mola (requestAnimationFrame)
+    ├── hooks/useCountUp.js (+ .test.js)  número que conta até o valor; prefersReducedMotion
+    ├── utils/motion.js        replay (reinicia animação de classe) e afterLeave (espera a saída)
     ├── utils/placeholderArt.js   gera um retrato SVG para quem ainda não tem arte
+    ├── utils/iconImage.js (+ .test.js)  valida e reduz a imagem do ícone de habilidade para 128x128
     ├── styles/global.css      visual da seleção e do login (tokens em :root)
     ├── styles/sheet.css       visual da ficha
     ├── styles/master.css      botão, portal e painel do mestre
+    ├── styles/motion.css      animações de polimento (importado por último no main.jsx)
     ├── api/master.js          rotas do mestre (personagens, habilidades, documentos, destinatários)
     ├── validation.js (+ .test.js)
     └── assets/characters/     rudo.jpg/.mp4, gaudron.jpg/.mp4
@@ -108,10 +145,11 @@ Definidos em `src/data/characters.js`:
 | `vid` | MP4 mudo em loop sobre a imagem (`img` vira o poster) |
 | `pos` | enquadramento da arte (`background-position`/`object-position`) |
 | `fx: 'embers'` | brasas subindo e calor no chão (`Embers.jsx`) |
+| `fx: 'blood'` | ritual de sangue (`BloodMagic.jsx`): ao ganhar `.hot`, um símbolo de ritual (anéis com runas, hexagrama com círculos nas pontas, gota central) aparece **de frente, cobrindo o painel inteiro**, se desenha (`stroke-dashoffset` com `pathLength=100`, em ondas), gira (anel e hexagrama em sentidos opostos), cresce junto com a expansão do painel, solta um pulso de luz no centro e **some sozinho** em ~2 s (`.bl-sigil`, `mix-blend-mode: screen`). Fora do `.fx`, então não depende do `--t`; sem hover fica invisível. O painel de login do personagem ganha borda e título em vermelho-sangue (`.login.blood`) |
 | `impact` | ondas de choque, explosão laranja e tremor da arte ao entrar |
 | `burst` | pulso radial vermelho ao entrar |
 
-Estado atual: **Rudo** (vídeo + burst vermelho) e **Gaudron** (vídeo + brasas + impacto) têm arte real; **Proto, Titan e Loge** usam placeholders.
+Estado atual: **Rudo** (vídeo + burst vermelho + magia de sangue) e **Gaudron** (vídeo + brasas + impacto) têm arte real; **Proto, Titan e Loge** usam placeholders.
 
 ### Adicionar ou trocar a arte de um personagem
 1. Coloque o arquivo em `src/assets/characters/` (JPG para a imagem; MP4 H.264 sem áudio para o vídeo).
@@ -125,7 +163,7 @@ Tokens em `:root` (`global.css`): fundo `--bg #050b14`, painel `--panel #0a1626`
 ## Origem
 
 A tela foi prototipada num `index.html` único (React via CDN, imagens e vídeo em base64, cerca de 12 MB) numa sessão anterior do Claude e depois portada para este projeto Vite. Ficaram de fora do porte:
-- um efeito de "sangue escorrendo" (`BloodFx`) para o Rudo que estava no protótipo, mas não era usado (`fx: 'blood'` não estava ativo);
+- um efeito de "sangue escorrendo" (`BloodFx`) para o Rudo que estava no protótipo, mas não era usado. Depois o Rudo ganhou um efeito novo, a magia de sangue (`BloodMagic.jsx`, `fx: 'blood'`);
 - o fallback que convertia vídeo base64 em Blob (não é necessário com arquivos de verdade).
 
 ## Pendências / problemas conhecidos

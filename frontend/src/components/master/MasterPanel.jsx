@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import MasterDocuments from './MasterDocuments.jsx'
 import MasterAbilities from './MasterAbilities.jsx'
+import TabBar from '../sheet/TabBar.jsx'
 import { CrownIcon, ExitIcon, KeyIcon } from '../sheet/icons.jsx'
 import '../../styles/sheet.css'
 import '../../styles/master.css'
@@ -38,13 +39,7 @@ export default function MasterPanel({ session, notice, onChangePassword, onLogou
           <div className="logo">RUNARCANA</div>
           <span className="master-badge"><CrownIcon /> MESTRE</span>
         </div>
-        <nav className="tabs" role="tablist" aria-label="Seções do mestre">
-          {TABS.map(t => (
-            <button key={t.id} type="button" role="tab" className={'tab' + (tab === t.id ? ' on' : '')} aria-selected={tab === t.id} onClick={() => setTab(t.id)}>
-              {t.label}
-            </button>
-          ))}
-        </nav>
+        <TabBar tabs={TABS} active={tab} onChange={setTab} label="Seções do mestre" />
         <div className="topbar-right">
           <div className="who">
             <span className="who-name">Mestre</span>
@@ -60,7 +55,7 @@ export default function MasterPanel({ session, notice, onChangePassword, onLogou
         {tab === 'abilities' && <MasterAbilities token={session.token} onError={onError} onToast={setToast} />}
       </main>
 
-      {toast && <div className="toast" role="status">{toast}</div>}
+      {toast && <div key={toast} className="toast" role="status">{toast}</div>}
     </div>
   )
 }

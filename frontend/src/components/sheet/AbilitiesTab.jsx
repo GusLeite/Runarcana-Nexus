@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ABILITY_TYPES, RECHARGES, groupAbilities, parseDice, spellLevelName } from '../../data/rules.js'
+import AbilityIcon from './AbilityIcon.jsx'
 
 const KEYS = ['Q', 'W', 'E', 'R']
 
@@ -47,10 +48,11 @@ export default function AbilitiesTab({ abilities, onSetUses, onRest, onRollDice,
         {groups.map(group => (
           <div className="abl-group" key={group.key}>
             <div className="skill-group-name">{group.title}</div>
-            {group.list.map(a => (
+            {group.list.map((a, n) => (
               <div
                 key={a.id}
                 className={'abl-row' + (a.id === selected?.id ? ' on' : '') + ' t-' + a.type.toLowerCase()}
+                style={{ '--n': n }}
                 onClick={() => setSelectedId(a.id)}
               >
                 <button type="button" className="abl-pick" onClick={() => setSelectedId(a.id)} aria-label={'Ver ' + a.name}>
@@ -75,7 +77,7 @@ export default function AbilitiesTab({ abilities, onSetUses, onRest, onRollDice,
       </div>
 
       <div className="abl-side">
-        {selected && <AbilityDetail ability={selected} hotkey={keys[selected.id]} onSetUses={onSetUses} onRollDice={onRollDice} busy={busy} />}
+        {selected && <AbilityDetail key={selected.id} ability={selected} hotkey={keys[selected.id]} onSetUses={onSetUses} onRollDice={onRollDice} busy={busy} />}
       </div>
     </div>
   )
@@ -98,21 +100,13 @@ function Pips({ ability, onSetUses, disabled }) {
           key={i}
           type="button"
           className={'use-pip' + (i < usesLeft ? ' on' : '')}
+          style={{ '--n': i }}
           disabled={disabled}
           onClick={() => onSetUses(ability, i < usesLeft ? usesLeft - 1 : usesLeft + 1)}
           aria-label={i < usesLeft ? 'Gastar 1 uso' : 'Recuperar 1 uso'}
         />
       ))}
     </div>
-  )
-}
-
-function AbilityIcon({ ability, hotkey, big }) {
-  return (
-    <span className={'abl-icon t-' + ability.type.toLowerCase() + (big ? ' big' : '')} aria-hidden="true">
-      <span className="abl-glyph">{ability.name.trim().charAt(0).toUpperCase()}</span>
-      {hotkey && <span className="abl-key">{hotkey}</span>}
-    </span>
   )
 }
 

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ITEM_KINDS, carryCapacity, formatKg, itemStats, rarityOf, totalValue, totalWeight } from '../../data/rules.js'
 import { CoinIcon } from './icons.jsx'
+import Num from './Num.jsx'
 
 const MIN_SLOTS = 24
 const FILTERS = [
@@ -47,14 +48,14 @@ export default function Inventory({ items, strength }) {
         </div>
 
         <div className="slots">
-          {visible.map(item => {
+          {visible.map((item, n) => {
             const rarity = rarityOf(item.rarity)
             return (
               <button
                 key={item.id}
                 type="button"
                 className={'slot' + (item.id === selected?.id ? ' on' : '')}
-                style={{ '--r': rarity.color }}
+                style={{ '--r': rarity.color, '--n': n }}
                 onClick={() => setSelectedId(item.id)}
                 onMouseEnter={() => setSelectedId(item.id)}
                 aria-label={`${item.name}, ${rarity.name}${item.quantity > 1 ? ', ' + item.quantity + ' unidades' : ''}`}
@@ -77,13 +78,13 @@ export default function Inventory({ items, strength }) {
           </div>
           <div className="inv-value" title="Soma do preço dos itens">
             <span>Valor estimado</span>
-            <b><CoinIcon />{totalValue(items).toLocaleString('pt-BR')}</b>
+            <b><CoinIcon /><Num value={totalValue(items)} /></b>
           </div>
         </div>
       </div>
 
       <div className="inv-side">
-        {selected ? <ItemDetail item={selected} /> : (
+        {selected ? <ItemDetail key={selected.id} item={selected} /> : (
           <div className="item-detail empty-detail">
             <p className="muted-note">Mochila vazia. Quando o mestre entregar itens, eles aparecem aqui.</p>
           </div>

@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CharacterService {
@@ -49,10 +50,16 @@ public class CharacterService {
         return charRepository.findAll().stream().map(CharacterResponse::of).toList();
     }
 
-    // A conta e o personagem têm o mesmo nome (conta "rudo" ↔ personagem "Rudo").
+    // Ficha da conta: pela ligação direta (fichas criadas pelo assistente) ou, nas fichas antigas,
+    // pelo nome (conta "rudo" ↔ personagem "Rudo").
+    public Optional<Character> findCharacterOf(Account account) {
+        return charRepository.findFirstByAccountOrderByIdAsc(account)
+                .or(() -> charRepository.findFirstByCharacterNameIgnoreCaseAndAccountIsNullOrderByIdAsc(account.getUsername()));
+    }
+
     public Character characterOf(Account account) {
-        return charRepository.findFirstByCharacterNameIgnoreCaseOrderByIdAsc(account.getUsername())
-                .orElseThrow(() -> ApiException.notFound("Sua ficha ainda não foi criada. Fale com o mestre."));
+        return findCharacterOf(account)
+                .orElseThrow(() -> ApiException.notFound("Sua ficha ainda não foi criada. Crie seu personagem."));
     }
 
     @Transactional(readOnly = true)

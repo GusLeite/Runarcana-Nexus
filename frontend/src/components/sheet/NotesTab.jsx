@@ -1,12 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 import { formatDateTime } from '../../data/rules.js'
 import { PinIcon } from './icons.jsx'
+import { afterLeave } from '../../utils/motion.js'
 
 const SAVE_DELAY = 700
 
 // Aba de anotações do jogador: lista à esquerda e editor à direita, que salva sozinho enquanto digita.
 export default function NotesTab({ notes, selectedId, onSelect, onCreate, onSave, onDelete, busy }) {
   const selected = notes.find(n => n.id === selectedId) ?? notes[0]
+  const [leavingId, setLeavingId] = useState(null)
+  // A linha encolhe antes de a nota sair da lista.
+  const remove = note => {
+    setLeavingId(note.id)
+    afterLeave(() => { onDelete(note); setLeavingId(null) })
+  }
 
   return (
     <div className="notes">
@@ -17,9 +24,9 @@ export default function NotesTab({ notes, selectedId, onSelect, onCreate, onSave
         </div>
         {notes.length === 0 && <p className="muted-note">Nada anotado ainda. Crie uma nota para pistas, nomes e planos do grupo.</p>}
         <ul className="docs">
-          {notes.map(note => (
+          {notes.map((note, n) => (
             <li key={note.id}>
-              <button type="button" className={'doc-row note-row' + (note.id === selected?.id ? ' on' : '')} onClick={() => onSelect(note.id)}>
+              <button type="button" className={'doc-row note-row' + (note.id === selected?.id ? ' on' : '') + (note.id === leavingId ? ' leaving' : '')} style={{ '--n': n }} onClick={() => onSelect(note.id)}>
                 <span className="doc-info">
                   <span className="doc-name">{note.pinned && <PinIcon />}{note.title}</span>
                   <span className="doc-meta">{preview(note.body)}</span>
@@ -33,7 +40,7 @@ export default function NotesTab({ notes, selectedId, onSelect, onCreate, onSave
 
       <div className="note-editor-wrap">
         {selected
-          ? <NoteEditor key={selected.id} note={selected} onSave={onSave} onDelete={onDelete} />
+          ? <NoteEditor key={selected.id} note={selected} onSave={onSave} onDelete={remove} />
           : <div className="item-detail empty-detail"><p className="muted-note">Escolha ou crie uma anotação.</p></div>}
       </div>
     </div>

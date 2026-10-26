@@ -154,7 +154,7 @@ class CharacterControllerTests {
         mvc.perform(get("/character/me")).andExpect(status().isUnauthorized());
         mvc.perform(get("/character/me").header("Authorization", "Bearer " + login("gaudron")))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Sua ficha ainda não foi criada. Fale com o mestre."));
+                .andExpect(jsonPath("$.message").value("Sua ficha ainda não foi criada. Crie seu personagem."));
     }
 
     @Test

@@ -20,6 +20,7 @@ model/        entidades JPA
 record/       DTOs de entrada e saída (Java records)
 enums/        enums de domínio (regras do sistema Runarcana)
 config/       beans de configuração (AuthConfig: BCrypt + seed das contas)
+rules/        modelo do catálogo de regras de criação (RuleCatalog, RuleOption, RuleClass, Grant…)
 exception/    ApiException + ApiExceptionHandler (erros viram { "message": ... })
 ```
 
@@ -44,6 +45,7 @@ Configuração em `src/main/resources/application.properties`:
 | GET | `/character/me` | – (Bearer) | Ficha do personagem da conta logada: `{ character: CharacterResponse, inventory: InventoryItemResponse[], abilities: AbilityResponse[] }`. 401 sem sessão; 404 com `message` se a ficha não existir |
 | POST | `/character/{id}/abilities` | `AbilityRequest` (Bearer **mestre**) | Cadastra magia/habilidade no personagem. 201; 403 para jogador |
 | GET | `/character/{id}/abilities` | – (Bearer **mestre**) | Habilidades do personagem (painel do mestre) |
+| PATCH | `/character/{id}/abilities/{abilityId}/icon` | `{ icon }` (Bearer **mestre**) | Troca o ícone (data URL ou link); `icon: null` remove. 400 se não for imagem PNG/JPEG/WebP/GIF ou link http(s) |
 | DELETE | `/character/{id}/abilities/{abilityId}` | – (Bearer **mestre**) | Remove. 204 |
 | PATCH | `/character/me/abilities/{abilityId}` | `{ usesLeft }` (Bearer) | Jogador gasta/recupera usos. 400 se passar do máximo ou a habilidade não tiver usos |
 | POST | `/character/me/rest` | `{ type: SHORT \| LONG }` (Bearer) | Descanso: curto recupera o que é `SHORT_REST`; longo recupera tudo que recarrega. Devolve as habilidades |
@@ -56,6 +58,9 @@ Configuração em `src/main/resources/application.properties`:
 | GET | `/documents` | – (Bearer **mestre**) | Todos os documentos, com `recipients` |
 | GET | `/documents/recipients` | – (Bearer **mestre**) | Usernames que podem receber documentos (todas as contas de jogador, em ordem) |
 | POST | `/documents` | `DocumentRequest` (Bearer **mestre**) | Envia um documento. 201 |
+| GET | `/creation/catalog` | – (Bearer) | Catálogo de regras de criação (origens, classes, passados, regiões, ofícios, Heranças, métodos de atributos) |
+| POST | `/creation/preview` | `CreationRequest` (Bearer) | Ficha em construção calculada (não salva). `errors` vazio = pode criar |
+| POST | `/creation` | `CreationRequest` (Bearer) | Cria a ficha da conta logada. 201; 400 com o 1º erro da prévia; 409 se a conta já tem ficha; 403 para o mestre |
 | DELETE | `/documents/{id}` | – (Bearer **mestre**) | Apaga (e as marcas de lido). 204 |
 | POST | `/auth/login` | `LoginRequest { username, password }` | Entra; devolve `{ token, expiresAt, account: { username, mustChangePassword, master } }`. 401 se errar |
 | GET | `/auth/me` | – (Bearer) | Conta do token. 401 se o token for inválido ou expirado |
@@ -73,16 +78,30 @@ O endpoint não recebe a entidade `Character`: recebe o DTO `record/CreateCharac
 - Validações com mensagem em PT: nomes obrigatórios, `level` 1–20, atributos e PV máx. > 0, `currentHp` ≤ `maxHp`.
 - A resposta (`record/CharacterResponse`) é achatada: classe como enum, antecedente como nome, mais `proficiencyBonus`, `passivePerception`, `passiveInsight` calculados e `hitDie` (dado de vida da classe). `skills` traz **todas** as 19 perícias como `SkillResponse { skill, attribute, proficient, modifier }`, com o bônus já somado (atributo + proficiência). Isso evita o ciclo `Character` ↔ `CharacterSkill` na serialização.
 
+### Assistente de criação (`/creation`)
+
+As regras (o que cada origem, classe, antecedente e região concede) ficam em `src/main/resources/rules/criacao.json`, descritas em [regras-criacao.md](regras-criacao.md). `RuleCatalogService` lê o arquivo ao subir (Jackson 3 estrito: chave desconhecida é erro) e confere tudo; problema no arquivo impede a aplicação de subir, com a lista de erros e onde estão. O caminho vem de `runarcana.rules.catalog` (os testes usam `rules/criacao-teste.json`). As **Heranças** ficam num arquivo à parte, `rules/herancas.json` (`runarcana.rules.heritages`; testes: `rules/herancas-teste.json`), juntado ao catálogo ao subir e conferido junto.
+
+`CreationService.evaluate` faz a conta uma vez só, usada pela prévia e pela criação:
+1. resolve origem (e a **linhagem**, obrigatória quando a origem tem `lineages`; as concessões dela viram a fonte "Linhagem: …"), região, classe e passado (região e passado são obrigatórios se o catálogo tiver algum);
+2. valida os atributos base pelo método (`POINT_BUY` com custo e orçamento, `STANDARD_ARRAY` usando cada valor uma vez, `MANUAL` na faixa);
+3. (`FEATURE` com `options` e `PROFICIENCY_CHOICE` são escolhas da 2ª passada.) Aplica as concessões **fixas** (atributo, perícia, resistência, passiva/habilidade, PV, deslocamento, ouro, tamanho, ofício, idioma, pontos de Herança de Região) e depois as **escolhas** (`ATTRIBUTE_CHOICE`, `SKILL_CHOICE`, `SIZE_CHOICE`, `CRAFT_CHOICE`, `LANGUAGE_CHOICE`). Cada escolha tem uma chave `"<fonte>:<id>:<índice>"` (ex.: `class:ARCANIST:2`), que a prévia devolve e o front manda de volta em `choices`. O que já foi ganho some das opções. Escolha de ofício/idioma **sem opções cadastradas** volta com `note` e não bloqueia a criação;
+4. compra as **Heranças** (`CreationRequest.heritages`, lista de `{ id, option }`; repetir o id = escolher de novo): cada uma custa 1 ponto do tipo certo (`HERITAGE_POINTS` com `value` REGION compra Heranças de Região e Gerais; ORIGIN, de Origem e Gerais; sem value, qualquer uma; as Gerais usam o ponto que sobrar). Confere os pré-requisitos que dá para checar (origem, região, classe, atributo mínimo, `excludes`), `maxTimes` e a opção obrigatória (`options`). A prévia devolve `heritagePools` (pontos e gastos por tipo), `heritages` (escolhidas) e `heritageOptions` (cada Herança do catálogo com `available` e o motivo quando não dá). Ponto sobrando com Herança disponível é erro. Cada Herança escolhida entra em `features` como `HERITAGE` (nome com a opção e "(2×)" quando repetida);
+5. calcula PV (dado de vida + mod. CON + bônus), deslocamento em **pés** (da origem ou `baseSpeed`) e ouro; habilidades que escalam (`usesFormula`, `diceByProficiency`) saem calculadas para o bônus de proficiência +2 (`CreationService.usesFor`/`diceFor`, arredondamento por `rounding`); junta os erros (o que falta escolher, nome, idade e altura).
+
+Na criação: a classe vira/atualiza a linha de `CharacterClass` (com o dado de vida do catálogo); o antecedente vira um `Background` (criado se não existir); a ficha nasce no nível 1, **ligada à conta** (`Character.account`), com perícias, resistências (`character_saving_throws`), origem, deslocamento (pés), tamanho (`CreatureSize`), idiomas (`character_languages`), ofícios pelo **nome** (`character_crafts`), Heranças pelo nome (`character_heritages`), pontos de Herança que **sobraram** (`heritagePoints`, normalmente 0) e as escolhas guardadas em `Character.build` (JSON, para a subida de nível); cada `FEATURE` e cada Herança (tipo `HERITAGE`, com o texto completo) vira uma `CharacterAbility`.
+
 ### Ficha do jogador logado (`GET /character/me`)
 
-- A conta e o personagem se ligam **pelo nome**: a conta `rudo` abre o personagem cujo `characterName` é "Rudo" (sem diferenciar maiúsculas; se houver dois, vale o de menor `id`). Não há chave estrangeira entre `Account` e `Character`.
+- A ficha da conta é achada pela **ligação direta** (`Character.account`, preenchida pelo assistente de criação). Fichas antigas, sem dono (como o Rudo criado pelo `POST /character`), ainda são achadas **pelo nome**: a conta `rudo` abre o personagem "Rudo" (sem diferenciar maiúsculas). A busca por nome ignora fichas que já têm dono.
 - O inventário vem de `PlayerItems` (`PlayerItemsRepository.findByCharacterOrderByIdAsc`) e cada entrada vira um `InventoryItemResponse`: `name, description, effect, rarity, kind (WEAPON | ARMOR | CONSUMABLE | OBJECT), quantity, weight, price` e, conforme o tipo, `damage` ("1d6"), `damageType`, `properties` (arma) ou `armorClass`, `armorWeight` (armadura).
 - `Armor` tem um campo `weight` (`ArmorWeight`) com o mesmo nome do peso em kg do `Item`; por isso o getter dele é `getArmorWeight()` (o Lombok está desligado nesse campo).
 - `Character` usa `@Getter @Setter` (não `@Data`): o `equals`/`hashCode`/`toString` do `@Data` entraria em recursão com o `@Data` do `CharacterSkill`.
 
 ### Magias e habilidades (`CharacterAbility`)
 
-- Campos: `name`, `type` (`SPELL | ABILITY | PASSIVE`), `spellLevel` (0 = truque, 1–9; só em magia), `school`, `castingTime`, `range` (coluna `ability_range`), `duration`, `components`, `damage` (expressão "2d6+4"; o front rola direto dela), `description`, `maxUses`/`usesLeft` (nulos = uso livre) e `recharge` (`SHORT_REST | LONG_REST | NONE`; padrão `LONG_REST` quando há usos).
+- Campos: `name`, `type` (`SPELL | ABILITY | PASSIVE`), `spellLevel` (0 = truque, 1–9; só em magia), `school`, `castingTime`, `range` (coluna `ability_range`), `duration`, `components`, `damage` (expressão "2d6+4"; o front rola direto dela), `description`, `maxUses`/`usesLeft` (nulos = uso livre) e `recharge` (`SHORT_REST | LONG_REST | NONE`; padrão `LONG_REST` quando há usos), `icon` (opcional).
+- **Ícone**: guardado na própria linha (`icon`, até 300.000 caracteres) como **data URL** (`data:image/png|jpeg|webp|gif;base64,...`) ou **link http(s)**; qualquer outra coisa dá 400 (`AbilityIconRequest.ICON_PATTERN`, também usado no `AbilityRequest`). O front já manda a imagem reduzida para 128×128 em WebP (uns 3–20 KB), então não há rota de upload nem arquivo em disco; o ícone vem junto em `/character/me`.
 - O mestre cadastra; o jogador só gasta/recupera usos e descansa. Os usos começam cheios.
 - Exemplo (mestre, `POST /runarcana/character/1/abilities`): `{ "name": "Seta Estelar", "type": "SPELL", "spellLevel": 1, "range": "36 m", "damage": "3d4+3", "maxUses": 4, "recharge": "LONG_REST", "description": "Três dardos de luz." }`
 
@@ -111,7 +130,7 @@ Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spri
 
 ## Testes
 
-`./mvnw test` usa H2 em memória (`src/test/resources/application.properties`), então não precisa do PostgreSQL. `controller/AuthControllerTests` cobre seed, login, senha errada, token inválido, troca de senha, sessões derrubadas e logout. `controller/CharacterControllerTests` cria o Rudo com o payload real (números como string) e cobre classe/antecedente inexistente, campo obrigatório vazio e enum inválido, além de `/character/me` (ficha com inventário, 401 sem login e 404 sem ficha). `controller/PlayerFeaturesTests` cobre habilidades (cadastro, listagem e exclusão pelo mestre, 403 para jogador, usos e descanso), a lista de destinatários, anotações (CRUD e isolamento entre contas) e documentos (destinatários, lido, exclusão, 403 e destinatário inexistente). As tabelas antigas `character`/`character_skill` geram avisos de DDL no H2 (usam `tinyint`), sem afetar os testes.
+`./mvnw test` usa H2 em memória (`src/test/resources/application.properties`), então não precisa do PostgreSQL. `controller/AuthControllerTests` cobre seed, login, senha errada, token inválido, troca de senha, sessões derrubadas e logout. `controller/CharacterControllerTests` cria o Rudo com o payload real (números como string) e cobre classe/antecedente inexistente, campo obrigatório vazio e enum inválido, além de `/character/me` (ficha com inventário, 401 sem login e 404 sem ficha). `controller/PlayerFeaturesTests` cobre habilidades (cadastro, listagem e exclusão pelo mestre, 403 para jogador, usos e descanso, ícone: guardar, trocar por link, remover e recusar tipo inválido), a lista de destinatários, anotações (CRUD e isolamento entre contas) e documentos (destinatários, lido, exclusão, 403 e destinatário inexistente). `controller/CreationControllerTests` cobre o assistente (catálogo exige login, prévia aplicando cada tipo de concessão, o que falta, compra de pontos estourada, criação ligada à conta, 409 na segunda, 403 para o mestre e as Heranças: tipo de ponto, pré-requisitos, exclusão, opção, repetição e pontos sobrando) e `services/RuleCatalogValidationTests` cobre a conferência do catálogo (inclusive Heranças e ofícios) e garante que o `rules/criacao.json` e o `rules/herancas.json` reais continuam válidos. As tabelas antigas `character`/`character_skill` geram avisos de DDL no H2 (usam `tinyint`), sem afetar os testes.
 
 ## Modelo de dados
 
@@ -149,8 +168,11 @@ Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spri
 | `WeaponCategory` / `WeaponType` | SIMPLE, MARTIAL, IMPROVISED, FIREARM / FIREARM, CHAIN, REGIONAL, SPECIAL |
 | `DamageType`, `ArmorWeight`, `ItemSize`, `ItemWeight` | B/P/S; LIGHT/MEDIUM/HEAVY; SMALL/MEDIUM/LARGE; LIGHT/MEDIUM/HEAVY |
 | `AccountRole` | PLAYER, MASTER |
-| `AbilityType`, `Recharge`, `RestType` | SPELL/ABILITY/PASSIVE; SHORT_REST/LONG_REST/NONE; SHORT/LONG |
+| `AbilityType`, `Recharge`, `RestType` | SPELL/ABILITY/PASSIVE/HERITAGE; SHORT_REST/LONG_REST/NONE; SHORT/LONG |
+| `HeritageCategory` | GENERAL, ORIGIN, REGION (tipo de Herança) |
 | `DocumentKind` | LETTER, CLUE, MAP, LORE, SECRET, REWARD |
+| `GrantType` | ATTRIBUTE, ATTRIBUTE_CHOICE, SKILL, SKILL_CHOICE, SAVING_THROW, FEATURE, HP_BONUS, SPEED, GOLD, SIZE, SIZE_CHOICE, CRAFT, CRAFT_CHOICE, LANGUAGE, LANGUAGE_CHOICE, HERITAGE_POINTS (concessões das regras de criação) |
+| `CreatureSize`, `UsesFormula` | TINY/SMALL/MEDIUM/LARGE/HUGE; FIXED/HALF_PROFICIENCY/PROFICIENCY |
 
 ## Convenções
 
@@ -175,3 +197,10 @@ Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spri
 - Documentos aceitam só link de imagem (`imageUrl`); não há upload de arquivos.
 - Não há CORS configurado: em dev o Vite faz proxy de `/runarcana`. Num deploy com front e API em domínios diferentes, será preciso configurar CORS.
 - Testes não cobrem `/background`, `/character-classes` nem itens.
+- **Regras de criação incompletas**: só a origem Humano é real; classes e passados ainda são de exemplo (lista do que falta em [regras-criacao.md](regras-criacao.md)). Idiomas estão desligados por decisão do usuário (a estrutura continua no código).
+- Heranças: o efeito de cada uma é **texto** (habilidade `HERITAGE`); nada é aplicado na ficha automaticamente (ex.: Inspirar Aliados não muda os usos do Inspirado). Pré-requisitos como "Conjuração" ou "Ofício de Artista" não são conferidos, só mostrados. Só estão cadastradas as Gerais, as de Região e as de Origem do Humano e do Minotauro; o pré-requisito de linhagem (Brutalizador → Auroque, Hospitaleiro → Alnuk, Vislumbre Estelar → Aelus) é conferido.
+- Construto: Proteção Ajustável (modos de CA/RD), Construto Vivo e Peculiaridades ficam no texto; a "Variante Nebulon" ainda não foi cadastrada (entra com a origem Nebulons).
+- Efeitos de linhagem como "+1 de CA sem armadura" (Auroque) e "RD de metade da proficiência" (Alnuk) ficam no texto: a ficha ainda não calcula CA nem RD.
+- Dano com `damageBonus` (ex.: Chifres 1d6+5) e PV por nível são calculados na criação; mudar Força depois não atualiza o dado, e a subida de nível ainda não soma os PV dos próximos níveis.
+- Subida de nível ainda não existe: as classes já guardam os ganhos por nível (`levels`) e a ficha guarda as escolhas da criação (`build`), mas não há rota nem tela.
+- `POST /character` (antigo, sem assistente) continua aberto e não liga a ficha a uma conta.

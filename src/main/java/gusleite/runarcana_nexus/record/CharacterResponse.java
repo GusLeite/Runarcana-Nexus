@@ -1,6 +1,8 @@
 package gusleite.runarcana_nexus.record;
 
 import gusleite.runarcana_nexus.enums.Alignment;
+import gusleite.runarcana_nexus.enums.Attribute;
+import gusleite.runarcana_nexus.enums.CreatureSize;
 import gusleite.runarcana_nexus.enums.CharacterClassType;
 import gusleite.runarcana_nexus.enums.Region;
 import gusleite.runarcana_nexus.enums.SkillType;
@@ -36,7 +38,17 @@ public record CharacterResponse(
         int passivePerception,
         int passiveInsight,
         // Dado de vida da classe (6 = d6).
-        int hitDie
+        int hitDie,
+        String origin,
+        String lineage,
+        // Em pés.
+        Double speed,
+        List<Attribute> savingThrows,
+        CreatureSize size,
+        List<String> languages,
+        List<String> crafts,
+        Integer heritagePoints,
+        List<String> heritages
 ) {
     public static CharacterResponse of(Character character) {
         return new CharacterResponse(
@@ -68,7 +80,17 @@ public record CharacterResponse(
                 character.getProficiencyBonus(),
                 character.getPassivePerception(),
                 character.getPassiveInsight(),
-                character.getCharacterClass().getHitHpDice()
+                character.getCharacterClass().getHitHpDice(),
+                character.getOrigin(),
+                character.getLineage(),
+                character.getSpeed(),
+                // Na ordem da ficha (FOR, DES, CON, INT, SAB, CAR).
+                character.getSavingThrows().stream().sorted().toList(),
+                character.getSize(),
+                List.copyOf(character.getLanguages()),
+                List.copyOf(character.getCrafts()),
+                character.getHeritagePoints(),
+                List.copyOf(character.getHeritages())
         );
     }
 }

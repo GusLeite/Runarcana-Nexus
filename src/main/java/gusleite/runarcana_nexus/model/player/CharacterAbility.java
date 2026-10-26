@@ -46,4 +46,8 @@ public class CharacterAbility {
 
     @Enumerated(EnumType.STRING)
     private Recharge recharge;
+
+    // Imagem do ícone: data URL (o front já manda reduzida para 128x128) ou link http(s). Nulo = inicial do nome.
+    @Column(length = 300000)
+    private String icon;
 }

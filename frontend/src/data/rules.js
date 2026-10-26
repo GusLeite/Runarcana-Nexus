@@ -159,6 +159,7 @@ export const ABILITY_TYPES = {
   ABILITY: { name: 'Habilidade', plural: 'Habilidades' },
   PASSIVE: { name: 'Passiva', plural: 'Passivas' },
   SPELL: { name: 'Magia', plural: 'Magias' },
+  HERITAGE: { name: 'Herança', plural: 'Heranças' },
 }
 
 export const RECHARGES = {
@@ -178,7 +179,97 @@ export function groupAbilities(abilities) {
   const spells = abilities.filter(a => a.type === 'SPELL')
   const levels = [...new Set(spells.map(s => s.spellLevel ?? 0))].sort((a, b) => a - b)
   levels.forEach(l => push('SPELL-' + l, l === 0 ? 'Truques' : 'Magias de ' + l + 'º círculo', spells.filter(s => (s.spellLevel ?? 0) === l)))
+  push('HERITAGE', 'Heranças', abilities.filter(a => a.type === 'HERITAGE'))
   return groups
+}
+
+// ---------- criação de personagem ----------
+
+// Tipo de Herança (rules/herancas.json) e de ponto de Herança (concessão HERITAGE_POINTS).
+export const HERITAGE_CATEGORIES = { GENERAL: 'Geral', ORIGIN: 'de Origem', REGION: 'de Região' }
+export const HERITAGE_SCOPES = { REGION: 'Herança de Região', ORIGIN: 'Herança de Origem', ANY: 'Herança' }
+
+// As Heranças escolhidas vão para o back como lista de { id, option }; repetir o id = escolher de novo.
+export const heritageTimes = (picks, id) => picks.filter(p => p.id === id).length
+
+export function addHeritage(picks, id) {
+  const option = picks.find(p => p.id === id)?.option ?? null
+  return [...picks, { id, option }]
+}
+
+// Tira uma escolha (a última) da Herança.
+export function removeHeritage(picks, id) {
+  const i = picks.map(p => p.id).lastIndexOf(id)
+  return i < 0 ? picks : picks.filter((_, n) => n !== i)
+}
+
+// A opção (ex.: tribo do Meio-Vastaya) vale para todas as escolhas da mesma Herança.
+export const setHeritageOption = (picks, id, option) => picks.map(p => (p.id === id ? { ...p, option } : p))
+
+// Deslocamento em pés, como no livro.
+export const formatFeet = ft => ft.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' pés'
+
+export const SIZE_NAMES = { TINY: 'Miúdo', SMALL: 'Pequeno', MEDIUM: 'Médio', LARGE: 'Grande', HUGE: 'Enorme' }
+
+const attrName = id => attributeById(id)?.name ?? id
+const signed = n => (n < 0 ? '−' + Math.abs(n) : '+' + n).replace('.', ',')
+const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many)
+
+// PV que escala com o bônus de proficiência (HP_BONUS com usesFormula).
+const HP_FORMULAS = { HALF_PROFICIENCY: '+½ do bônus de proficiência em', PROFICIENCY: '+bônus de proficiência em' }
+
+// Texto curto de uma concessão do catálogo (rules/criacao.json), para os cartões do assistente.
+// crafts: lista de ofícios do catálogo, para mostrar o nome no lugar do id.
+export function grantLabel(g, crafts = []) {
+  switch (g.type) {
+    case 'ATTRIBUTE': return signed(g.amount) + ' ' + attrName(g.attribute)
+    case 'ATTRIBUTE_CHOICE': return g.label ?? signed(g.amount) + ' em ' + plural(g.count, 'atributo', 'atributos') + ' à escolha'
+    case 'SKILL': return 'Perícia: ' + (SKILL_NAMES[g.skill] ?? g.skill)
+    case 'SKILL_CHOICE': return g.label ?? plural(g.count, 'perícia', 'perícias') + ' à escolha'
+    case 'SAVING_THROW': return 'Resistência: ' + attrName(g.attribute)
+    case 'FEATURE': return (ABILITY_TYPES[g.abilityType ?? 'PASSIVE']?.name ?? 'Passiva') + ': ' + g.name + (g.options?.length ? ' (à escolha)' : '')
+    case 'PROFICIENCY_CHOICE': return g.label ?? plural(g.count, 'proficiência', 'proficiências') + ' à escolha'
+    case 'HP_BONUS': return g.label ?? (HP_FORMULAS[g.usesFormula] ?? signed(g.amount)) + ' PV' + (g.perLevel ? ' por nível' : '')
+    case 'SPEED': return signed(g.feet) + ' pés de deslocamento'
+    case 'GOLD': return signed(g.amount) + ' de ouro'
+    case 'SIZE': return 'Tamanho: ' + (SIZE_NAMES[g.value] ?? g.value)
+    case 'SIZE_CHOICE': return g.label ?? 'Tamanho: ' + g.options.map(o => SIZE_NAMES[o] ?? o).join(' ou ')
+    case 'CRAFT': return 'Ofício: ' + (crafts.find(k => k.id === g.value)?.name ?? g.value)
+    case 'CRAFT_CHOICE': return g.label ?? plural(g.count, 'ofício', 'ofícios') + ' à escolha'
+    case 'LANGUAGE': return 'Idioma: ' + g.value
+    case 'LANGUAGE_CHOICE': return g.label ?? plural(g.count, 'idioma', 'idiomas') + (g.fromRegion ? ' da região' : ' à escolha')
+    case 'HERITAGE_POINTS': return g.label ?? signed(g.amount) + (Math.abs(g.amount) === 1 ? ' ponto de ' : ' pontos de ') + HERITAGE_SCOPES[g.value ?? 'ANY']
+    default: return g.type
+  }
+}
+
+// Nome em PT de uma opção de escolha (atributo, perícia, tamanho, ofício ou idioma).
+export function choiceOptionName(type, id, crafts = []) {
+  switch (type) {
+    case 'ATTRIBUTE_CHOICE': return attrName(id)
+    case 'SKILL_CHOICE': return SKILL_NAMES[id] ?? id
+    case 'SIZE_CHOICE': return SIZE_NAMES[id] ?? id
+    case 'CRAFT_CHOICE': return crafts.find(k => k.id === id)?.name ?? id
+    // "SKILL:ARCANA", "CRAFT:alquimista" ou "MARTIAL_WEAPON"
+    case 'PROFICIENCY_CHOICE': {
+      const [kind, value] = id.split(':')
+      if (kind === 'SKILL') return 'Perícia: ' + (SKILL_NAMES[value] ?? value)
+      if (kind === 'CRAFT') return 'Ofício: ' + (crafts.find(k => k.id === value)?.name ?? value)
+      return 'Arma marcial'
+    }
+    default: return id
+  }
+}
+
+// Custo total da compra de pontos com os valores atuais (null onde ainda não há valor).
+export function pointBuySpent(pointBuy, values) {
+  return Object.values(values).reduce((sum, v) => sum + (v == null ? 0 : pointBuy.costs[String(v)] ?? 0), 0)
+}
+
+// 4d6 descartando o menor, o jeito clássico de rolar atributos.
+export function roll4d6DropLowest(random) {
+  const dice = [rollDie(6, random), rollDie(6, random), rollDie(6, random), rollDie(6, random)].sort((a, b) => a - b)
+  return dice[1] + dice[2] + dice[3]
 }
 
 // ---------- documentos ----------

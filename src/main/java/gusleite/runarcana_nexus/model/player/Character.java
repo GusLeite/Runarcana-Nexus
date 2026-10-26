@@ -2,8 +2,10 @@ package gusleite.runarcana_nexus.model.player;
 
 import gusleite.runarcana_nexus.enums.Alignment;
 import gusleite.runarcana_nexus.enums.Attribute;
+import gusleite.runarcana_nexus.enums.CreatureSize;
 import gusleite.runarcana_nexus.enums.Region;
 import gusleite.runarcana_nexus.enums.SkillType;
+import gusleite.runarcana_nexus.model.auth.Account;
 import gusleite.runarcana_nexus.model.roles.CharacterClass;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -11,7 +13,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 // @Getter/@Setter em vez de @Data: o equals/hashCode/toString do @Data entraria em ciclo com CharacterSkill.
 @Entity
@@ -61,6 +66,54 @@ public class Character {
     private Background background;
     private Alignment alignment;
     private int inspiration;
+
+    // Dono da ficha. Nulo nas fichas antigas (ligadas à conta pelo nome; ver CharacterService.characterOf).
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    // Nome da origem escolhida no catálogo de regras (rules/criacao.json).
+    private String origin;
+
+    // Nome da linhagem (tribo) da origem, quando ela tem (ex.: "Aelus").
+    private String lineage;
+
+    // Deslocamento em pés (como no livro). Nulo nas fichas antigas (o front mostra "—").
+    private Double speed;
+
+    @Enumerated(EnumType.STRING)
+    private CreatureSize size;
+
+    @ElementCollection
+    @CollectionTable(name = "character_languages", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "language")
+    private Set<String> languages = new LinkedHashSet<>();
+
+    // Nomes dos ofícios em que é proficiente (vindos de "crafts" do rules/criacao.json).
+    @ElementCollection
+    @CollectionTable(name = "character_crafts", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "craft")
+    private Set<String> crafts = new LinkedHashSet<>();
+
+    // Pontos de Herança ainda não gastos (os da criação são gastos no assistente).
+    private Integer heritagePoints;
+
+    // Nomes das Heranças escolhidas, com a opção e as repetições: "Variante Meio-Vastaya (Marai)", "Variante Colosso (2×)".
+    // O texto completo de cada uma vira uma habilidade do tipo HERITAGE.
+    @ElementCollection
+    @CollectionTable(name = "character_heritages", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "heritage")
+    private Set<String> heritages = new LinkedHashSet<>();
+
+    @ElementCollection
+    @CollectionTable(name = "character_saving_throws", joinColumns = @JoinColumn(name = "character_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "attribute")
+    private Set<Attribute> savingThrows = new HashSet<>();
+
+    // Escolhas feitas na criação (JSON do CreationRequest), para a subida de nível reaproveitar.
+    @Column(length = 20000)
+    private String build;
 
 
     private int getModifier(int attribute){

@@ -59,8 +59,22 @@ public class AbilityService {
         ability.setUsesLeft(request.maxUses());
         ability.setRecharge(request.maxUses() == null ? Recharge.NONE
                 : request.recharge() == null ? Recharge.LONG_REST : request.recharge());
+        ability.setIcon(blankToNull(request.icon()));
 
         return AbilityResponse.of(abilities.save(ability));
+    }
+
+    @Transactional
+    public AbilityResponse setIcon(Long characterId, Long abilityId, String icon) {
+        Character character = characters.findById(characterId)
+                .orElseThrow(() -> ApiException.notFound("Personagem não encontrado."));
+        CharacterAbility ability = find(character, abilityId);
+        ability.setIcon(blankToNull(icon));
+        return AbilityResponse.of(ability);
+    }
+
+    private static String blankToNull(String value) {
+        return value == null || value.isBlank() ? null : value.trim();
     }
 
     @Transactional

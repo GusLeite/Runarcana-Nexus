@@ -1,9 +1,12 @@
 import { documentKindOf, formatDate, formatModifier, modifier } from '../../data/rules.js'
 import AttributeGrid from './AttributeGrid.jsx'
 import SkillList from './SkillList.jsx'
+import SavingThrows from './SavingThrows.jsx'
 import { RollLog } from './DiceRoll.jsx'
 import { RichText } from './DocumentsTab.jsx'
 import { keysFor } from './AbilitiesTab.jsx'
+import AbilityIcon from './AbilityIcon.jsx'
+import Num from './Num.jsx'
 import { DocIcon, PinIcon } from './icons.jsx'
 
 const MODES = [
@@ -30,10 +33,10 @@ export default function OverviewTab({ sheet, abilities, documents, notes, rolls,
           <AttributeGrid sheet={sheet} onRoll={onRoll} />
         </section>
         <section className="card stats" style={{ '--i': 2 }}>
-          <Stat label="Proficiência" value={formatModifier(sheet.proficiencyBonus)} />
-          <Stat label="Iniciativa" value={formatModifier(initiative)} onClick={() => onRoll('Iniciativa', initiative)} />
-          <Stat label="Percepção passiva" value={sheet.passivePerception} />
-          <Stat label="Intuição passiva" value={sheet.passiveInsight} />
+          <Stat label="Proficiência" value={<Num value={sheet.proficiencyBonus} format={formatModifier} />} />
+          <Stat label="Iniciativa" value={<Num value={initiative} format={formatModifier} />} onClick={() => onRoll('Iniciativa', initiative)} />
+          <Stat label="Percepção passiva" value={<Num value={sheet.passivePerception} />} />
+          <Stat label="Intuição passiva" value={<Num value={sheet.passiveInsight} />} />
           <Stat
             label="Dados de vida"
             value={sheet.level + 'd' + sheet.hitDie}
@@ -43,6 +46,9 @@ export default function OverviewTab({ sheet, abilities, documents, notes, rolls,
           <Stat label="Inspiração" value={sheet.inspiration > 0 ? '◆'.repeat(Math.min(sheet.inspiration, 5)) : '—'} lit={sheet.inspiration > 0} />
         </section>
         <section className="card" style={{ '--i': 3 }}>
+          <SavingThrows sheet={sheet} onRoll={onRoll} />
+        </section>
+        <section className="card" style={{ '--i': 4 }}>
           <SkillList skills={sheet.skills} onRoll={onRoll} />
         </section>
       </div>
@@ -69,18 +75,16 @@ export default function OverviewTab({ sheet, abilities, documents, notes, rolls,
           </div>
           {quick.length === 0 ? <p className="muted-note">Sem habilidades ativas ainda.</p> : (
             <div className="hotbar">
-              {quick.map(a => (
+              {quick.map((a, n) => (
                 <button
                   key={a.id}
                   type="button"
                   className={'hot-slot t-' + a.type.toLowerCase() + (a.maxUses != null && a.usesLeft === 0 ? ' spent' : '')}
+                  style={{ '--n': n }}
                   onClick={() => (a.damage ? onRollDice(a.name, a.damage) : onGo('abilities', a.id))}
                   title={a.damage ? `${a.name}: rolar ${a.damage}` : a.name}
                 >
-                  <span className="abl-icon t-ability-mini">
-                    <span className="abl-glyph">{a.name.trim().charAt(0).toUpperCase()}</span>
-                    <span className="abl-key">{keys[a.id] ?? (a.type === 'SPELL' ? (a.spellLevel ? a.spellLevel : 'T') : '')}</span>
-                  </span>
+                  <AbilityIcon ability={a} hotkey={keys[a.id] ?? (a.type === 'SPELL' ? (a.spellLevel ? String(a.spellLevel) : 'T') : null)} />
                   <span className="hot-name">{a.name}</span>
                   {a.maxUses != null && <span className="hot-uses">{a.usesLeft}/{a.maxUses}</span>}
                 </button>
@@ -96,11 +100,11 @@ export default function OverviewTab({ sheet, abilities, documents, notes, rolls,
           </div>
           {recentDocs.length === 0 ? <p className="muted-note">Nenhum documento do mestre ainda.</p> : (
             <ul className="docs compact">
-              {recentDocs.map(doc => {
+              {recentDocs.map((doc, n) => {
                 const kind = documentKindOf(doc.kind)
                 return (
                   <li key={doc.id}>
-                    <button type="button" className={'doc-row' + (doc.read ? '' : ' unread')} style={{ '--k': kind.color }} onClick={() => onGo('documents', doc.id)}>
+                    <button type="button" className={'doc-row' + (doc.read ? '' : ' unread')} style={{ '--k': kind.color, '--n': n }} onClick={() => onGo('documents', doc.id)}>
                       <span className="doc-seal"><DocIcon kind={doc.kind} /></span>
                       <span className="doc-info">
                         <span className="doc-name">{doc.title}</span>

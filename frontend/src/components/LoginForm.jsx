@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { replay } from '../utils/motion.js'
 import { validateLogin } from '../validation.js'
 import { login, logout } from '../api/auth.js'
 
@@ -9,11 +10,17 @@ export default function LoginForm({ character, onLogin, onBack, backLabel = 'Tro
   const [password, setPassword] = useState('')
   const [msg, setMsg] = useState(null)
   const [busy, setBusy] = useState(false)
+  const form = useRef()
+  // Erro: mostra a mensagem e faz o painel tremer.
+  const fail = text => {
+    setMsg({ type: 'err', text })
+    replay(form.current, 'shake')
+  }
 
   const submit = async e => {
     e.preventDefault()
     const error = validateLogin({ user, password })
-    if (error) return setMsg({ type: 'err', text: error })
+    if (error) return fail(error)
 
     setBusy(true)
     setMsg(null)
@@ -25,13 +32,13 @@ export default function LoginForm({ character, onLogin, onBack, backLabel = 'Tro
       }
       onLogin({ token: res.token, ...res.account })
     } catch (err) {
-      setMsg({ type: 'err', text: err.message })
+      fail(err.message)
       setBusy(false)
     }
   }
 
   return (
-    <form className={'login' + (character.fx ? ' ' + character.fx : '')} onSubmit={submit} noValidate>
+    <form ref={form} className={'login' + (character.fx ? ' ' + character.fx : '')} onSubmit={submit} noValidate>
       <h2>{character.name}</h2>
       <p>{character.role} · acesse sua campanha</p>
       <label htmlFor="u">Usuário</label>

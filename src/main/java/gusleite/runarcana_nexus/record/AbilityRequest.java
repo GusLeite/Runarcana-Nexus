@@ -25,5 +25,8 @@ public record AbilityRequest(
         String description,
         @Positive(message = "Os usos devem ser maiores que 0.")
         Integer maxUses,
-        Recharge recharge
+        Recharge recharge,
+        @Size(max = AbilityIconRequest.MAX_ICON, message = "A imagem do ícone é grande demais (máx. ~200 KB).")
+        @Pattern(regexp = AbilityIconRequest.ICON_PATTERN, message = AbilityIconRequest.ICON_MESSAGE)
+        String icon
 ) {}

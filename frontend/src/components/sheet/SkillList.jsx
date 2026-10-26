@@ -20,13 +20,14 @@ export default function SkillList({ skills, onRoll }) {
         {groupSkills(visible).map(({ attr, skills: group }) => (
           <div className="skill-group" key={attr.id}>
             <div className="skill-group-name">{attr.name}</div>
-            {group.map(s => {
+            {group.map((s, n) => {
               const name = SKILL_NAMES[s.skill] ?? s.skill
               return (
                 <button
                   key={s.skill}
                   type="button"
                   className={'skill' + (s.proficient ? ' prof' : '') + (s.modifier === best ? ' best' : '')}
+                  style={{ '--n': n }}
                   onClick={() => onRoll(name, s.modifier)}
                   aria-label={`${name}${s.proficient ? ', proficiente' : ''}, ${formatModifier(s.modifier)}. Rolar.`}
                 >

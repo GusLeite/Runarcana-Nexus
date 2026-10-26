@@ -1,0 +1,58 @@
+{
+  "attributeMethods": {
+    "pointBuy": { "points": 27, "min": 8, "max": 15,
+      "costs": { "8": 0, "9": 1, "10": 2, "11": 3, "12": 4, "13": 5, "14": 7, "15": 9 } },
+    "standardArray": [15, 14, 13, 12, 10, 8],
+    "manual": { "min": 3, "max": 18 }
+  },
+  "baseSpeed": 30,
+  "rounding": "DOWN",
+  "crafts": [ { "id": "alquimia", "name": "Alquimia" }, { "id": "ferraria", "name": "Ferraria" } ],
+  "origins": [
+    { "id": "teste-origem", "name": "Origem Teste", "speed": 30,
+      "details": [ { "name": "Idade", "text": "Vive muito." } ],
+      "grants": [
+        { "type": "ATTRIBUTE", "attribute": "INTELLIGENCE", "amount": 2 },
+        { "type": "ATTRIBUTE_CHOICE", "count": 1, "amount": 1, "options": ["STRENGTH", "DEXTERITY"] },
+        { "type": "SKILL", "skill": "HISTORY" },
+        { "type": "SPEED", "feet": 5 },
+        { "type": "FEATURE", "abilityType": "PASSIVE", "name": "Visão no Escuro", "description": "Enxerga no escuro." },
+        { "type": "SIZE_CHOICE", "options": ["SMALL", "MEDIUM"] },
+        { "type": "CRAFT_CHOICE", "count": 1 },
+        { "type": "LANGUAGE_CHOICE", "count": 1, "fromRegion": true },
+        { "type": "HERITAGE_POINTS", "amount": 2, "value": "REGION" },
+        { "type": "FEATURE", "abilityType": "ABILITY", "name": "Inspirado", "usesFormula": "HALF_PROFICIENCY",
+          "recharge": "LONG_REST", "diceByProficiency": { "2": "1d4", "4": "1d6", "6": "1d8" } },
+        { "type": "ATTRIBUTE_CHOICE", "count": 1, "amount": 1, "options": ["STRENGTH", "DEXTERITY"] },
+        { "type": "HP_BONUS", "usesFormula": "HALF_PROFICIENCY", "perLevel": true },
+        { "type": "FEATURE", "abilityType": "ABILITY", "name": "Chifres", "damage": "1d6", "damageBonus": ["PROFICIENCY", "STRENGTH"] }
+      ] },
+    { "id": "teste-tribal", "name": "Origem Tribal",
+      "grants": [ { "type": "HERITAGE_POINTS", "amount": 1, "value": "ORIGIN" } ],
+      "lineages": [
+        { "id": "sol", "name": "Sol", "description": "Tribo do sol.",
+          "grants": [ { "type": "FEATURE", "abilityType": "ABILITY", "name": "Urro Teste", "usesFormula": "ATTRIBUTE_MODIFIER",
+            "attribute": "CONSTITUTION", "recharge": "LONG_REST" },
+          { "type": "FEATURE", "name": "Resistente", "options": ["Ígneo", "Gélido"] },
+          { "type": "PROFICIENCY_CHOICE", "count": 1 } ] },
+        { "id": "lua", "name": "Lua" }
+      ] }
+  ],
+  "classes": [
+    { "id": "ARCANIST", "name": "Arcanista", "hitDie": 6, "startingGold": 40,
+      "grants": [
+        { "type": "SAVING_THROW", "attribute": "INTELLIGENCE" },
+        { "type": "SKILL_CHOICE", "count": 2, "options": ["ARCANA", "HISTORY", "INSIGHT", "RELIGION"] },
+        { "type": "FEATURE", "abilityType": "SPELL", "spellLevel": 0, "name": "Raio", "damage": "1d10" }
+      ],
+      "levels": [ { "level": 2, "grants": [ { "type": "HP_BONUS", "amount": 1 } ] } ] }
+  ],
+  "backgrounds": [
+    { "id": "estudioso", "name": "Estudioso", "startingGold": 10,
+      "grants": [ { "type": "SKILL", "skill": "INVESTIGATION" }, { "type": "SKILL", "skill": "MEDICINE" } ] }
+  ],
+  "regions": [
+    { "id": "TARGON", "name": "Targon", "languages": ["Comum", "Targoniano"] },
+    { "id": "NOXUS", "name": "Noxus" }
+  ]
+}

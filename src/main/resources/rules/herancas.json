@@ -1,0 +1,1283 @@
+{
+  "heritages": [
+    {
+      "id": "acolito-arcanista",
+      "name": "Acólito Arcanista",
+      "category": "GENERAL",
+      "classes": [
+        "ACOLYTE"
+      ],
+      "prerequisite": "Acólito",
+      "description": "Seu estudo do mundo espiritual deixou um toque mágico em sua alma, fazendo com que você se torne mais versado magicamente conhecendo outras magias. Você recebe os seguintes benefícios:\n\nAo escolher essa Herança, você deve escolher um Mistério a que tenha acesso. Quando você se tornar capaz de conjurar um novo nível de magia, você pode escolher uma magia desse Mistério, de um nível que você possa conjurar, essa magia está sempre preparada e conta como uma magia de Acólito para você.\nVocê recebe proficiência com Arcanismo"
+    },
+    {
+      "id": "acordes-de-poder",
+      "name": "Acordes de Poder",
+      "category": "GENERAL",
+      "prerequisite": "Conjuração, Ofício de Artista (Músico)",
+      "description": "A música não é apenas uma atividade para você, mas uma forma de se expressar e se conectar com o universo. Você recebe os seguintes benefícios:\n\nVocê recebe o Mistério do Som\nVocê pode utilizar um instrumento musical como Foco de Conjuração e pode utilizar Carisma como atributo de Conjuração de sua classe ou subclasse e substituir o uso de componentes verbais de suas magias por acordes de seu instrumento musical.\nApós conjurar 3 magias, você pode utilizar sua ação bônus para realizar um ataque com arma que causará seu dado Base de Pulso em dano adicional do tipo igual a sua última magia de dano conjurada, por exemplo, caso você tenha utilizado o truque raio elemental (fogo), o dano adicional de sua arma será ígneo."
+    },
+    {
+      "id": "agilidade-primal",
+      "name": "Agilidade Primal",
+      "category": "GENERAL",
+      "description": "Você tem algum parentesco muito distante com Vastayeses ou uma conexão muito grande com seus instintos. Você ganha os seguintes benefícios:\n\nQualquer rolagem para resistir às condições Agarrado ou Caído são feitas com vantagem.\nCaso esteja Caído, se levantar custa apenas 5 pés de sua movimentação ao invés de metade dela."
+    },
+    {
+      "id": "alma-da-caca",
+      "name": "Alma da Caça",
+      "category": "GENERAL",
+      "classes": [
+        "HUNTER"
+      ],
+      "prerequisite": "Caçador",
+      "description": "Por algum motivo, você estuda seus inimigos favoritos desde cedo, antes mesmo de se tornar um Caçador. Você recebe os seguintes benefícios:\n\nA cada rodada, o primeiro ataque feito por um inimigo favorito contra você, tem seu dano reduzido em um valor igual a metade do seu bônus de Proficiência.\nVocê recebe proficiência com a perícia Sobrevivência. Caso já tenha, recebe especialidade com a mesma."
+    },
+    {
+      "id": "ambidestro",
+      "name": "Ambidestro",
+      "category": "GENERAL",
+      "description": "Você é eficiente com ambas as mãos, sem que haja uma dominância entre elas. Você ganha os seguintes benefícios:\n\nVocê pode sacar duas armas de uma vez\nVocê recebe um grau em Combate com duas Armas\nTodas as suas mãos são consideradas hábeis, fazendo com que você não tenha desvantagem para realizar qualquer tipo de ação que esteja relacionada a utilizar uma mão diferente."
+    },
+    {
+      "id": "armas-avancadas",
+      "name": "Armas Avançadas",
+      "category": "GENERAL",
+      "prerequisite": "Especial",
+      "description": "Algumas armas são contra-intuitivas, seja pela sua forma, ou mesmo como se dá o seu manejo efetivo, sendo necessário além de um treinamento para utilizá-las, uma intensificação no estudo da mesma para poder utilizá-las de forma adequada. Cada vez que você escolhe essa Herança, você deve atender aos pré-requisitos da opção que escolher. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência com a arma escolhida\nA característica “Imprópria” não se aplica ao seu uso dessa arma. Escolha uma entre:\nArma de Corrente: Adaga com Corrente - Pré-requisito: Ioniano ou proficiência com Adaga\nArma de Corrente: Cão Dragão - Pré-requisito: Noxiano ou Proficiência com Katar\nArma de Corrente: Corrente Espinhosa - Pré-requisito: Proficiência com Chicote\nArma de Corrente: Foice de Corrente - Pré-requisito: Proficiência com Foice\nArma de Corrente: Lâmina do Caos - Pré-requisito: Ioniano ou Noxiano ou proficiência com Espada Curta\nArma de Corrente: Manopla com Corrente - Pré-requisito: Proficiência com Manopla\nArma de Corrente: Martelo Meteoro - Pré-requisito: Proficiência com Maça\nBaioneta: Canhão Machado - Pré-requisito: Proficiência com Canhão e Machado\nBaioneta: Mosquete Espada - Pré-requisito: Proficiência com Mosquete e Espada Longa\nBaioneta: Pistola faca - Pré-requisito: Proficiência com Pistola e Faca\nBaioneta: Revólver laminar - Pré-requisito: Proficiência com Pistola e Espada Longa\nChakram Grande - Pré-requisito: Ixtali ou proficiência com Chakram Médio\nCutelo Crescente - Pré-requisito: Shurimane ou proficiência com Machado Grande\nDracocida - Pré-requisitos: Proficiência com Lanças\nEspada Javali - Pré-requisitos: Freljordiano ou proficiência com Espada Grande\nHan Kote - Pré-requisitos: Proficiência com Manopla\nÍdolo do Deus Ancião - Pré-requisitos: Sentinense ou proficiência com Clava Grande\nKatana- Pré-requisitos: Ionia ou proficiência com Espada Longa\nLâmina Navori- Pré-requisitos: Ionia ou proficiência com Adaga\nNodachi - Pré-requisitos: Ionia ou Proficiência com Espada Grande\nNtofo - Pré-requisitos: Nazumah ou proficiência com Tonfa\nNunchaku - Pré-requisitos: Ionia ou Proficiência com Porrete\nSai - Pré-requisitos: Ionia ou Proficiência com Espada Curta\nShuriken - Pré-requisitos: Ionia ou proficiência com dardo\nTonfa - Pré-requisitos: Ionia ou Nazumah ou Proficiência com Porrete"
+    },
+    {
+      "id": "ataques-debilitantes",
+      "name": "Ataques Debilitantes",
+      "category": "GENERAL",
+      "classes": [
+        "MERCURIAL"
+      ],
+      "prerequisite": "Mercurial",
+      "description": "Seu ataque furtivo é ainda mais perigoso. Você recebe os seguintes benefícios:\n\nUm número de vezes igual ao seu bônus de proficiência por descanso pleno, você pode fortalecer seu próximo ataque, fazendo com que um alvo acertado precise realizar uma salvaguarda de Constituição CD 8 + seu bônus de proficiência + seu modificador de Destreza. Em uma falha, o alvo fica Enfraquecido até o início do seu próximo turno. Este efeito deve ser anunciado antes de realizar a jogada de acerto do ataque.\nO dado de dano de seus ataques furtivos aumenta para d8."
+    },
+    {
+      "id": "atravessar",
+      "name": "Atravessar",
+      "category": "GENERAL",
+      "minAttributes": {
+        "DEXTERITY": 16
+      },
+      "prerequisite": "Destreza 16, proficiência com um tipo de arma de fogo",
+      "description": "Você busca que sua mira ao atirar com sua arma de fogo sempre favoreça seus confrontos, mesmo que tenham que fazer uma fila para acabar com você. Na verdade, você até prefere assim. Você recebe os seguintes benefícios:\n\nVocê recebe Maestria com um tipo de arma de fogo com a qual é proficiente.\nAo reduzir uma criatura a 0 pontos de vida com um ataque com a arma escolhida, você pode escolher outra criatura atrás do alvo original e dentro do alcance da arma para receber o dano excedente deste ataque, caso a jogada de acerto feita no ataque seja suficiente para acertar esta criatura. Você pode fazer pequenos ajustes de 5 pés para qualquer um dos dois lados mas, uma vez que o ajuste seja feito, um novo ajuste só pode ser feito em 5 pés para a mesma direção. Caso o efeito reduza a criatura atacada a 0 pontos de vida, você pode repetir o efeito, passando o dano restante para outra criatura até que não restem mais alvos, até o dano restante se tornar 0 ou até uma criatura não ser reduzida a 0 pontos de vida."
+    },
+    {
+      "id": "beneficio-colateral",
+      "name": "Benefício Colateral",
+      "category": "GENERAL",
+      "prerequisite": "Herança Experimento Bem-Sucedido, Herança Variante Progressão Tecnológica ou Aprimoramento Adaptação Tecnológica",
+      "description": "O experimento que foi feito em você recebeu um benefício não previsto. Você recebe os seguintes benefícios:\n\nEscolha uma Vantagem Tecnológica da Herança Variante Progressão Tecnológica.\nEscolha um truque, você pode utilizar esse truque de forma não mágica uma vez por descanso longo sem componentes verbais, somáticos ou materiais. Esse truque é conjurado em um nível condizente com o máximo de um Conjurador Pleno, usando seu atributo de conjuração ou Constituição, o que for maior.\nCaso você possua 5 ou mais Vantagens Tecnológicas, você recebe os traços de Limiar Tecnológico ligados à sua fonte de energia."
+    },
+    {
+      "id": "bioenergia",
+      "name": "Bioenergia",
+      "category": "GENERAL",
+      "description": "Talvez tenha sido a proximidade de cristais hextec, talvez uma mutação positiva em contato com alguma fonte tecnológica. O interessante é que você possui uma fagulha do que os Tecmaturgos buscam, energia. Você recebe os seguintes benefícios:\n\nVocê recebe seu bônus de Proficiência em pontos de Energia por descanso longo.\nVocê adquire proficiência em Tecnologia, caso já possua, você recebe especialidade."
+    },
+    {
+      "id": "canalizador-versatil",
+      "name": "Canalizador Versátil",
+      "category": "GENERAL",
+      "classes": [
+        "ACOLYTE"
+      ],
+      "prerequisite": "Acólito",
+      "description": "Sua habilidade com a manipulação da energia espiritual que permeia você é extremamente poderosa, conseguindo direcionar essa energia para suas magias. Você recebe os seguintes benefícios:\n\nAo usar uma Liturgia, você recupera seu bônus de proficiência em pontos de Mana, esse efeito acontece uma vez por descanso longo. Após esse uso, ao utilizar uma Liturgia, você recupera apenas metade do seu bônus de proficiência em pontos de mana.\nAo usar uma Liturgia, até o fim do seu próximo turno, caso você conjure uma magia que erre o alvo ou não surta efeitos, você restitui metade do custo de mana dessa magia."
+    },
+    {
+      "id": "centelha-magica",
+      "name": "Centelha Mágica",
+      "category": "GENERAL",
+      "description": "A magia floresceu em você ainda jovem e cabe a você explorar essa habilidade ou não. Você ganha os seguintes benefícios:\n\nVocê recebe dois Mistérios que você possua acesso à sua escolha.\nVocê recebe uma magia de 1º nível à sua escolha de um dos dois mistérios escolhidos. Essa magia pode ser usada sem gastar mana um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno e o atributo de Conjuração dela é Inteligência."
+    },
+    {
+      "id": "comandante",
+      "name": "Comandante",
+      "category": "GENERAL",
+      "description": "Sua visão estratégica é privilegiada e isso pode ser aproveitado por você e seus aliados. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Intimidação ou Persuasão, caso já possua proficiência na perícia escolhida, você recebe especialidade com a mesma.\nVocê pode utilizar seu modificador de Força ao invés de Carisma ao utilizar a perícia Intimidação\nUtilizando sua ação bônus, você pode conceder aos seus aliados que possam vê-lo ou ouvi-lo um bônus de Moral em seu acerto igual ao seu bônus de Proficiência pelo próximo minuto. O bônus no acerto não se acumula. Você pode utilizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+    },
+    {
+      "id": "conjurador-natural",
+      "name": "Conjurador Natural",
+      "category": "GENERAL",
+      "classes": [
+        "SHAMAN"
+      ],
+      "prerequisite": "Xamã",
+      "description": "A energia espiritual flui facilmente por você, fazendo com que consiga invocar magias espirituais com mais facilidade. Você recebe os seguintes benefícios:\n\nVocê recebe uma quantidade de pontos de Ki adicionais para Conjuração igual ao seu bônus de proficiência.\nEscolha uma magia da lista de Xamã, você pode conjurá-la. Ao adquirir níveis de Xamã, esta magia pode ser trocada por outra magia da lista de Xamã, desde que o nível da magia escolhida seja igual ou inferior à metade de seu bônus de proficiência."
+    },
+    {
+      "id": "convocar-auxilio",
+      "name": "Convocar Auxílio",
+      "category": "GENERAL",
+      "description": "Por algum motivo que você provavelmente sequer saiba, uma criatura nutre simpatia por você, vindo ao seu auxílio quando necessário. Você ganha os seguintes benefícios:\n\nVocê aprende a magia convocar familiar, podendo conjurá-la como um Truque um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nCaso seja capaz de conjurar magias de níveis superiores, você pode utilizar um uso dessa Herança para conjurar essa magia com custo de mana ou Ki reduzido em um valor igual a metade do seu bônus de Proficiência (esse custo não pode ser reduzido a 0)."
+    },
+    {
+      "id": "cultivo-de-ki",
+      "name": "Cultivo de Ki",
+      "category": "GENERAL",
+      "description": "Você aprendeu a canalizar a energia de seu próprio corpo para realizar feitos quase sobrenaturais.. Você ganha os seguintes benefícios:\n\nVocê recebe +1 de ponto de Ki caso já tenha Ki ou 2 pontos de Ki caso sua classe não tenha um valor de Ki.\nVocê pode escolher um Sutra geral ou um Sutra de Bodisatva, desde que atenda aos pré-requisitos do mesmo."
+    },
+    {
+      "id": "curandeiro-abencoado",
+      "name": "Curandeiro Abençoado",
+      "category": "GENERAL",
+      "description": "Em seu sangue corre um talento inato para a cura das mazelas que afligem o mundo. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Medicina, caso já possua você recebe especialidade.\nVocê aprende a magia palavra curativa, podendo conjurá-la sem gastar pontos de mana um número de vezes igual à metade do seu bônus de Proficiência por descanso pleno. O valor de cura dessa magia é 1d4 + seu bônus de Proficiência.\nVocê recebe o Mistério Água"
+    },
+    {
+      "id": "detectar-fraquezas",
+      "name": "Detectar Fraquezas",
+      "category": "GENERAL",
+      "description": "Você é frio e calculista, quase como Tomé Celso. Você ganha os seguintes benefícios:\n\nEscolha entre: você pode adicionar metade do seu modificador de Inteligência ao dano causado por ataques ou, você substitui o modificador de Força por metade do modificador de Inteligência para ataques."
+    },
+    {
+      "id": "distracao-de-combate",
+      "name": "Distração de Combate",
+      "category": "GENERAL",
+      "description": "Seja por ter uma boca muito suja ou por ser um verdadeiro provocador, você sabe como agir para distrair seus adversários. Você ganha os seguintes benefícios:\n\nQuando uma criatura que possa vê-lo ou ouvi-lo realizar um ataque, você pode utilizar sua reação para impor desvantagem ao ataque dessa criatura. Você pode realizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+    },
+    {
+      "id": "enxofre-salitre-e-carvao",
+      "name": "Enxofre, Salitre e Carvão",
+      "category": "GENERAL",
+      "prerequisite": "Proficiência com uma arma de fogo",
+      "description": "Talvez você tenha nascido em Águas de Sentina e tenha tocado sua primeira arma de fogo ainda criança, ou talvez você seja de Zaun e usá-las foi necessário para a sua sobrevivência, não importa o motivo, você teve contato com armas de fogo logo cedo e isso fez com que você tenha um entendimento melhor dessas “cuspidoras de fogo”. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência com uma arma de fogo à sua escolha.\nVocê é capaz de desemperrar uma arma de fogo com a qual tenha proficiência utilizando uma ação bônus.\nVocê é capaz de cancelar que sua arma emperre um número de vezes igual ao seu bônus de Proficiência por descanso pleno.\nEspiritualista Habilidoso\nPré-requisito: Xamã\n\nSua naturalidade em lidar com entidades espirituais permite que você aprenda mais invocações. Você recebe os seguintes benefícios:\n\nVocê recebe uma invocação espiritual adicional com pré-requisito que você atenda. Você pode trocá-la ao receber acesso a uma nova Invocação, desde que o nível de requisito da mesma seja igual ou menor ao nível em que adquiriu sua última herança.\nQuando você gasta pontos de Ki para ativar uma Invocação Espiritual, por um número de rodadas igual a metade do seu bônus de proficiência, o primeiro dano causado por você em cada turno causa metade do seu bônus de proficiência em dano energético adicional."
+    },
+    {
+      "id": "essencia-etilica",
+      "name": "Essência Etílica",
+      "category": "GENERAL",
+      "description": "A capacidade de ingerir álcool é comum à maioria das criaturas. O que as divide é qual sua tolerância a essa ingestão. Você, talvez por ser um traço comum em sua família, ou um hábito desenvolvido, tem não apenas uma grande capacidade de ingerir bebidas alcoólicas, como elas também causam pouca ou nenhuma intoxicação em você, restando apenas um efeito agradável e energizante. Você ganha os seguintes benefícios:\n\nResistência: Imunidade à condição Intoxicado advinda da ingestão de bebidas alcoólicas e vantagem em salvaguardas para resistir à condição Intoxicado.\nÁgua Vivente: Você pode recuperar pontos de vida igual ao seu dado de vida + seu bônus de Proficiência por descanso curto, através do consumo de um litro de bebida alcoólica.\nGole: Utilizando uma ação bônus você pode ingerir um gole (aproximadamente 200 ml) de sua bebida, você adiciona metade do seu bônus de Proficiência ao dano de seus ataques desarmados até o início de seu próximo turno.\nCombustível: Você pode carregar um recipiente com uma quantidade de litros igual ao seu modificador de Força (mínimo de 0) sem que isso afete seu limite de capacidade de carga."
+    },
+    {
+      "id": "estudioso-de-armas",
+      "name": "Estudioso de Armas",
+      "category": "GENERAL",
+      "description": "Você se interessa pelos mais diversos tipos de armas, tendo conhecido algum tipo de arma não comum em sua região e se tornando hábil com a mesma. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência em uma arma regional à sua escolha.\nVocê sabe a fórmula dessa arma, ela não conta para o máximo de fórmulas que você possui.\nAdicione metade do seu bônus de Proficiência aos níveis de ofício necessários quando criar essa arma."
+    },
+    {
+      "id": "experimento-reconhecido",
+      "name": "Experimento Reconhecido",
+      "category": "GENERAL",
+      "description": "Você fez parte de algum experimento sancionado pelas autoridades locais, utilizando alguma fonte de tecnologia disponível nesta região. Você recebe os seguintes benefícios:\n\nEscolha uma Vantagem Tecnológica da Herança Variante Progressão Tecnológica.\nVantagem em lidar com autoridades e estudiosos da região de origem de seu experimento\nVocê recebe metade do seu bônus de Proficiência em pontos de Energia por descanso longo.\nCaso você possua 5 ou mais Vantagens Tecnológicas, você recebe os traços de Limiar Tecnológico ligados à sua fonte de energia."
+    },
+    {
+      "id": "filho-da-escuridao",
+      "name": "Filho da Escuridão",
+      "category": "GENERAL",
+      "initial": true,
+      "prerequisite": "Inicial",
+      "description": "“Então você acha que a escuridão é a sua aliada? Você só adotou ela, eu nasci nela, fui moldado por ela, eu só vi a luz depois de virar adulto, só o que ela me fez foi me cegar”. Você ganha os seguintes benefícios:\n\nQuando você errar um ataque em uma área de penumbra ou escuridão você pode usar sua reação para realizar a ação Esconder-se\nVocê aprende a magia escuridão, podendo conjurá-la sem gastar pontos de mana. Você pode conjurar essa magia um número de vezes igual ao seu bônus de Proficiência por descanso pleno. Você é capaz de enxergar normalmente na área da escuridão conjurada por essa característica ou por você.\nEscolha entre um desses Mistérios para receber: Sombrio ou Umbramancia"
+    },
+    {
+      "id": "fluencia-espiritual",
+      "name": "Fluência Espiritual",
+      "category": "GENERAL",
+      "classes": [
+        "SHAMAN"
+      ],
+      "prerequisite": "Xamã",
+      "description": "A marca do mundo espiritual é mais forte em você, fazendo com que sua conexão com os Grandes Espíritos seja ainda mais ampla. Você se conecta a outro Grande Espírito recebendo os seguintes benefícios:\n\nEscolha um outro Grande Espírito, você pode confeccionar um Totem desse espírito e receber seus benefícios em adição aos que já recebe.\nQuando você recebe a característica de Classe “Canalização Espiritual” você pode escolher por canalizar esse Grande Espírito\nQuando você falha na canalização desse Grande Espírito, você ignora o efeito de Falha. Isso pode acontecer apenas uma vez por descanso pleno."
+    },
+    {
+      "id": "ferromante",
+      "name": "Ferromante",
+      "category": "GENERAL",
+      "initial": true,
+      "prerequisite": "Inicial",
+      "description": "Seu organismo ressona com os metais desde cedo, concedendo a você uma magia extremamente rara. Você recebe os seguintes benefícios:\n\nVocê recebe o Mistério do Metal\nSuas magias do Mistério do Metal custam 1 ponto de mana a menos (o custo de uma magia não pode chegar a 0 dessa forma).\nVocê recebe proficiência com uma arma marcial de sua região à sua escolha"
+    },
+    {
+      "id": "graciosidade",
+      "name": "Graciosidade",
+      "category": "GENERAL",
+      "description": "Sua movimentação e seu andar possuem uma graciosidade única e natural. Você ganha os seguintes benefícios:\n\nVocê pode realizar a ação de Esquivar utilizando uma ação bônus um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê possui proficiência em Salvaguardas de Carisma, caso já possua proficiência você recebe especialidade com essa salvaguarda."
+    },
+    {
+      "id": "guerreiro-primal",
+      "name": "Guerreiro Primal",
+      "category": "GENERAL",
+      "description": "Seus instintos são extremamente aflorados, seja pela sua agressividade em combate que é similar à de um predador, seja pela familiaridade que você tem com as criaturas irracionais. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em uma das seguintes perícias: Intimidação, Lidar com Animais, Natureza ou Sobrevivência, caso já possua proficiência na perícia escolhida, você recebe especialidade com a mesma.\nDesde que não esteja utilizando armadura, sua CA se torna 10 + seu modificador de Constituição (mínimo de 1). Se receber a característica defesa sem armadura de qualquer fonte, você ignora a habilidade dessa Herança.\nQuando atingir com um ataque corpo a corpo uma criatura que ainda não tenha recebido dano nessa rodada, você causa 1d4 + seu bônus de proficiência de dano adicional."
+    },
+    {
+      "id": "habilidoso",
+      "name": "Habilidoso",
+      "category": "GENERAL",
+      "description": "Você sabe fazer de tudo um pouco, mas é ruim em tudo? Seus problemas acabaram! Você ganha os seguintes benefícios:\n\nVocê recebe 3 proficiências à sua escolha, cada uma podendo ser com uma perícias ou um ofícios."
+    },
+    {
+      "id": "hiperatividade-runica",
+      "name": "Hiperatividade Rúnica",
+      "category": "GENERAL",
+      "description": "A energia natural rúnica percorre seu corpo com maior facilidade que as outras pessoas. Você ganha os seguintes benefícios:\n\nVocê possui um número de cargas de Hiperatividade igual a metade do seu bônus de Proficiência por Descanso Pleno. Você pode utilizar uma dessas cargas para utilizar uma de suas Runas sem gastar um uso da mesma.\nVocê pode fazer uma nova jogada de seu Pulso Rúnico durante um Descanso Pleno. Você deve ficar com o novo resultado.\nSempre que estiver usando armaduras leves ou nenhuma, você recebe 1 de RD/dano verdadeiro.\nVocê recebe o Mistério da Runomancia"
+    },
+    {
+      "id": "instinto-assassino",
+      "name": "Instinto Assassino",
+      "category": "GENERAL",
+      "classes": [
+        "MERCURIAL"
+      ],
+      "prerequisite": "Mercurial",
+      "description": "As oportunidades são conquistadas apenas pelos que são capazes de percebê-las. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência com a perícia Medicina. Caso já tenha, recebe especialidade com a mesma.\nEm seu turno, caso uma criatura tenha falhado em alguma salvaguarda desde sua última ação, você pode fazer um ataque contra essa criatura usando sua Ação Ardilosa."
+    },
+    {
+      "id": "isso-e-pessoal",
+      "name": "Isso é Pessoal",
+      "category": "GENERAL",
+      "classes": [
+        "HUNTER"
+      ],
+      "prerequisite": "Caçador",
+      "description": "Os motivos que fazem você ter um inimigo favorito são um pouco mais complexos e profundos. Quando você os caça, é sim algo pessoal. Você recebe os seguintes benefícios:\n\nAo selecionar essa herança, seu primeiro inimigo favorito se torna seu Foco de Caça.\nQuando você combate seu Foco de Caça, você pode entrar em um estado alterado de consciência recebendo por 1 minuto um bônus de dano adicional igual ao seu Dado Base de Pulso em todos os seus ataques contra esse foco. Você pode fazer isso um número de vezes igual a metade do seu bônus de proficiência por descanso longo."
+    },
+    {
+      "id": "iniciado-nos-misterios",
+      "name": "Iniciado nos Mistérios",
+      "category": "GENERAL",
+      "classes": [
+        "ARCANIST"
+      ],
+      "prerequisite": "Arcanista",
+      "description": "Você estudou magia desde cedo, conseguindo entender muitos aspectos profundos antes mesmo de conseguir utilizá-los. Você recebe os seguintes benefícios:\n\nVocê recebe 2 mistérios ou manifesta 2 elementos (e seus mistérios) que tenha acesso\nVocê recebe especialidade em Arcanismo\nAo falhar em uma jogada que envolva Arcanismo, você pode fazer uma nova jogada sem especialidade e ficar com o novo resultado. Você pode fazer isso apenas uma vez por jogada e um número de vezes igual ao seu bônus de proficiência por descanso longo."
+    },
+    {
+      "id": "lamina-sanguinaria",
+      "name": "Lâmina Sanguinária",
+      "category": "GENERAL",
+      "description": "“Violência é elegância”. Você ganha os seguintes benefícios:\n\nQuando você acertar um ataque crítico com uma arma de dano cortante, você pode fazer um novo ataque contra o mesmo alvo, esse efeito só pode ser utilizado uma vez por rodada."
+    },
+    {
+      "id": "lutador-evasivo",
+      "name": "Lutador Evasivo",
+      "category": "GENERAL",
+      "description": "Você é perito na mais avançada e refinada arte do combate: Sebo nas canelas!. Você ganha os seguintes benefícios:\n\nQuando uma criatura se aproximar a 5 pés de você, você pode utilizar sua reação para se mover 10 pés em qualquer direção. Se mover dessa maneira não causa ataques de oportunidade.\nAo falhar em uma salvaguarda de Destreza ou Sabedoria, você pode refazer a rolagem. Você pode usar essa habilidade um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno."
+    },
+    {
+      "id": "magia-da-floresta",
+      "name": "Magia da Floresta",
+      "category": "GENERAL",
+      "description": "Você consegue sintonizar com as energias da natureza e das florestas. Você recebe os seguintes benefícios:\n\nVocê aprende a magia constrição, podendo conjurá-la sem gastar pontos de mana. Você pode conjurar essa magia um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério Flora."
+    },
+    {
+      "id": "manifestacao-primordial",
+      "name": "Manifestação Primordial",
+      "category": "GENERAL",
+      "initial": true,
+      "prerequisite": "Inicial",
+      "description": "O elemento primordial que tocou sua existência aflorou durante o seu desenvolvimento. Ao escolher essa Herança, você deve escolher entre Luz e Sombra, você manifesta esse elemento e recebe os seguintes benefícios:\n\nVocê recebe o mistério do elemento primordial escolhido para essa Herança\nCaso tenha escolhido Luz, você recebe imunidade à condição Cego causada por magias do mistério da Luz ou luz forte, como o efeito da magia lâmina de fogo\nCaso tenha escolhido Sombra, você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza e escuridão mágica não afeta sua visão no escuro."
+    },
+    {
+      "id": "mediador",
+      "name": "Mediador",
+      "category": "GENERAL",
+      "description": "“Vou fazer uma oferta que ele não pode recusar.” Ok, padrinho. Você ganha os seguintes benefícios:\n\nEscolha uma entre Enganação, Intimidação, Intuição ou Persuasão, você recebe proficiência com essa perícia. Caso já possua proficiência na perícia escolhida, você recebe especialidade com a mesma.\nVocê possui vantagem em interações sociais com criaturas que estejam hostis em relação à você ou seus aliados."
+    },
+    {
+      "id": "meditacao-profunda",
+      "name": "Meditação Profunda",
+      "category": "GENERAL",
+      "description": "Você está acostumado a manter sua mente calma e corpo relaxado. Você ganha os seguintes benefícios:\n\nDurante um Descanso Curto você pode utilizar um número de dados de vida adicionais igual a metade do seu bônus de Proficiência.\nEscolha entre um desses Mistérios para receber: Encantamento, Ilusão ou Oniromancia"
+    },
+    {
+      "id": "mente-intuitiva",
+      "name": "Mente Intuitiva",
+      "category": "GENERAL",
+      "description": "Seu conhecimento e seu raciocínio funcionam muito bem em conjunto, conseguindo acessar seu conhecimento de forma rápida e efetiva. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Investigação ou Intuição, caso você já possua proficiência na perícia escolhida, você recebe especialidade com essa perícia.\nVocê pode escolher substituir o atributo das perícias Investigação e Intuição para Inteligência ou Sabedoria."
+    },
+    {
+      "id": "mestre-artesao",
+      "name": "Mestre Artesão",
+      "category": "GENERAL",
+      "description": "“Eu que fiz esse martelo, ficou tão bom que eu chamei de… Martelo”. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência com um Ofício à sua escolha, além disso, recebe também especialidade com a mesma.\nVocê recebe bônus de 1PO/dia para a criação de um item utilizando o Ofício escolhido por essa herança."
+    },
+    {
+      "id": "mestre-tatico",
+      "name": "Mestre Tático",
+      "category": "GENERAL",
+      "description": "Estratégia e punho firme são as coisas que ditam o rumo em um combate, e você sabe tirar proveito de ambos. Você ganha os seguintes benefícios:\n\nEscolha uma Técnica de Combatente, à sua escolha que você preencha os requisitos (exceto o de Classe).\nO CD de suas Técnicas de Combate aumenta em 2."
+    },
+    {
+      "id": "musicista-prodigio",
+      "name": "Musicista Prodígio",
+      "category": "GENERAL",
+      "description": "A música não é apenas uma atividade para você, mas uma forma de se expressar e se conectar com o universo. Você recebe os seguintes benefícios:\n\nVocê recebe o Ofício de Artista (Músico) ou especialidade, caso já o possua\nVocê conhece um truque à sua escolha do Mistério do Som. Você pode usar esse truque um número de vezes igual ao seu bônus de proficiência por descanso pleno usando eu atributo de conjuração ou Carisma, o que for maior\nA CD de execução suas músicas é reduzida em 1 e a CD para resistir a elas é aumentada em 1"
+    },
+    {
+      "id": "pele-rigida",
+      "name": "Pele Rígida",
+      "category": "GENERAL",
+      "description": "Sua pele grossa é capaz de atos inacreditáveis. Essa Herança pode ser escolhida apenas uma vez. Você ganha os seguintes benefícios:\n\nEscolha um tipo de dano entre Cortante, Perfurante ou Contundente, você se torna resistente a ele. Caso já tenha resistência, ou a receba, se torna imune à esse dano."
+    },
+    {
+      "id": "perceber-fraquezas",
+      "name": "Perceber Fraquezas",
+      "category": "GENERAL",
+      "description": "Para você pontos fracos em seus inimigos é algo natural, quase que como um ponto reluzente lhe chamando atenção. Você ganha os seguintes benefícios:\n\nEscolha entre: você pode adicionar metade do seu modificador de Sabedoria ao dano causado por ataques ou, você substitui o modificador de Força por metade do modificador de Sabedoria em ataques."
+    },
+    {
+      "id": "persistencia-adaptavel",
+      "name": "Persistência Adaptável",
+      "category": "GENERAL",
+      "description": "Sua resistência física e mental chegam a ser irritantes para aqueles ao seu redor. Você ganha os seguintes benefícios:\n\nQuando você realizar Salvaguardas de Morte, você possui um sucesso garantido.\nCom uma reação, você pode escolher receber resistência ao primeiro ataque recebido em combate (exceto para danos verdadeiros). Você pode fazer isso um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+    },
+    {
+      "id": "piromaniaco",
+      "name": "Piromaníaco",
+      "category": "GENERAL",
+      "description": "Com os olhos vendo apenas o vermelho das chamas, você segue querendo o calor cada vez mais próximo e sentir o cheiro de carne carbonizada. Você ganha os seguintes benefícios:\n\nQuando causar dano ígneo por qualquer fonte que seja originada de você, você pode rolar novamente qualquer 1 natural na jogada de dano ígneo, você deve utilizar a nova rolagem.\nVocê recebe acesso ao Mistério do Fogo"
+    },
+    {
+      "id": "prestidigitador",
+      "name": "Prestidigitador",
+      "category": "GENERAL",
+      "description": "A agilidade nunca foi um problema para você, sua habilidade de desviar ataques com suas próprias mãos e sua velocidade de reação é algo de impressionar até mesmo um general noxiano. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência com Prestidigitação. Caso já possua, você recebe especialização\nAo receber um ataque corpo a corpo, você pode utilizar sua reação para fazer um ataque corpo a corpo contra a criatura que o atingiu ou realizar a ação de Desarmar. Você pode realizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+    },
+    {
+      "id": "principio-elemental",
+      "name": "Princípio Elemental",
+      "category": "GENERAL",
+      "classes": [
+        "ARCANIST"
+      ],
+      "prerequisite": "Arcanista",
+      "description": "Você possui uma relação rara e direta com uma natureza elemental composta. Você recebe os seguintes benefícios:\n\nVocê manifesta um elemento terciário ou de transição sem a necessidade de atender aos caminhos elementais e recebe o Mistério desse elemento. Ao manifestar a esse elemento através dessa Herança, você não recebe acesso a ele nem aos elementos que compõem esse elemento. Ex. Manifestar o Elemento Metal dessa forma, não dá a você acesso aos elementos Magma e Tempestade, assim como manifestar o elemento Veneno, não dá você acesso ao elemento Sombra nem concede o elemento Água ou Fogo.\nAo conjurar magias do Mistério escolhido por essa Herança, você pode conjurá-la em um nível acima da mesma (caso possa conjurar nesse nível) sem gasto adicional de mana. Você pode realizar isso uma quantidade de vezes igual ao seu bônus de proficiência por descanso pleno."
+    },
+    {
+      "id": "punguista",
+      "name": "Punguista",
+      "category": "GENERAL",
+      "description": "Como se fosse uma criança criada nas ruas, você aprendeu a treinar sua visão para coisas de valor, sabendo quem e onde deve praticar suas habilidades. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Prestidigitação, caso já possua você recebe especialidade.\nVocê possui vantagem em testes de Prestidigitação sempre que estiver tentando roubar um objeto pequeno de alguém.\nOutras criaturas possuem desvantagem em testes de Investigação ou Percepção para perceber um objeto oculto que esteja em suas mãos\nVocê pode passar 1 minuto observando uma criatura fora de combate, ao fazer isso você pode descobrir se ela possui algum objeto de valor que custe ao menos 1 PO, como um brinco, um colar ou uma joia."
+    },
+    {
+      "id": "resiliencia-adaptativa",
+      "name": "Resiliência Adaptativa",
+      "category": "GENERAL",
+      "description": "Acostumado às mais diversas situações, você foi forçado a criar uma versatilidade para se proteger. Quando você escolhe essa Herança você deve escolher entre velocidade ou rigidez, recebendo um dos dois benefícios:\n\nVelocidade. Ao invés de adicionar seu modificador de Constituição aos seus Pontos de Vida, você pode usar metade do seu modificador de Destreza.\nRigidez. Ao invés de adicionar seu modificador de Destreza à sua CA (respeitando os limites estabelecidos) adicione metade do seu modificador de Constituição."
+    },
+    {
+      "id": "ritualista",
+      "name": "Ritualista",
+      "category": "GENERAL",
+      "minAttributes": {
+        "CHARISMA": 13
+      },
+      "prerequisite": "Carisma 13 e Proficiência com Arcanismo ou Natureza ou Religião",
+      "description": "Você tem facilidade com Rituais, fazendo com que a cerimônia para eles sejam comuns para você, mesmo que você não seja um conjurador, você aprendeu como conjurar uma magia através de um ritual e possui um livro com instruções para Rituais, talvez ele tenha sido passado de geração a geração em sua família, talvez você o tenha escrito enquanto oficiante em algum templo, entre outras opções. Você ganha os seguintes benefícios:\n\nAo escolher essa Herança, você recebe a característica Ritualista.\nEscolha uma magia de 1º nível entre as magias do Combatente Arcano, do Acólito ou do Xamã, com o descritor Ritual. A Classe que você escolheu também determina o atributo ou a perícia com a qual você conjura essas magias através de Conjuração Ritual ou de Conjuração caso você tenha essa Característica: Inteligência ou Arcanismo para magias Arcanas e Sabedoria ou Religião para magias de Acólito ou de Xamã.\nVocê também pode copiar Rituais para o seu livro na metade do tempo necessário."
+    },
+    {
+      "id": "sangue-arcano",
+      "name": "Sangue Arcano",
+      "category": "GENERAL",
+      "description": "O sangue de magos do passado correm em suas veias, criando um vínculo especial com a magia. Você ganha os seguintes benefícios:\n\nVocê pode adicionar o dobro do seu bônus de Proficiência ao dano de suas magias que acertem apenas um alvo uma única vez.\nVocê pode adicionar o seu bônus de Proficiência ao dano de suas magias que acertem um alvo mais de uma vez ou que acerte vários alvos.\nVocê recebe um Mistério, a que você tenha acesso, à sua escolha."
+    },
+    {
+      "id": "segredos-da-polvora",
+      "name": "Segredos da Pólvora",
+      "category": "GENERAL",
+      "classes": [
+        "MARKSMAN"
+      ],
+      "prerequisite": "Atirador",
+      "description": "O mecanismo por trás de uma arma de fogo é alvo de grande estudo e entendimento em sua jornada. Você recebe os seguintes benefícios:\n\nAprimoramentos de Armas de Fogo em sua Astra custam metade do valor original.\nA força necessária para utilizar armas de fogo diminui em 1."
+    },
+    {
+      "id": "sono-leve",
+      "name": "Sono Leve",
+      "category": "GENERAL",
+      "description": "Como um felino, você não confia em nada ao seu redor se mantendo atento até mesmo em suas horas de sono. Você ganha os seguintes benefícios:\n\nVocê possui vantagem em Salvaguardas para resistir à efeitos que o deixariam Inconsciente\nDesde que você não tenha recebido a condição Inconsciente de maneira forçada, ataques à você nessa condição não são realizados em vantagem e caso acertem não são considerados acertos críticos."
+    },
+    {
+      "id": "teimosia",
+      "name": "Teimosia",
+      "category": "GENERAL",
+      "description": "“Nicole, ta errado isso aí” “Não… não tá!”. Você ganha os seguintes benefícios:\n\nVocê possui vantagem em salvaguardas para resistir a condição Amedrontado ou Enfeitiçado.\nQuando uma criatura tentar ler sua mente através de algum meio mágico, você imediatamente saberá o que está acontecendo e possuirá vantagem na Salvaguarda para resistir a magia embora não tenha indícios de quem esteja fazendo isso caso não possa ver a pessoa. Caso tenha sucesso na Salvaguarda você pode mostrar um pensamento ou memória falsa para a criatura que está tentando ler sua mente."
+    },
+    {
+      "id": "trespassar",
+      "name": "Trespassar",
+      "category": "GENERAL",
+      "minAttributes": {
+        "STRENGTH": 16
+      },
+      "prerequisite": "Força 16, proficiência com uma arma corpo a corpo com a propriedade duas mãos ou versátil",
+      "description": "Sua brutalidade com uma arma longa ou grande em específico é tamanha, que ao brandi-la em um campo de batalha, você sabe que irá atravessar tropas de forma brutal. Você recebe os seguintes benefícios:\n\nVocê recebe Maestria com uma arma corpo a corpo com a propriedade duas mãos ou versátil com a qual é proficiente.\nAo reduzir uma criatura a 0 pontos de vida com um ataque com a arma escolhida, você pode escolher outra criatura como alvo dentro do alcance para receber o dano excedente deste ataque, caso a jogada de acerto feita no ataque seja suficiente para acertar esta criatura. Caso o efeito reduza a criatura atacada a 0 pontos de vida, você pode repetir o efeito, passando o dano restante para outra criatura até que não restem mais alvos, até o dano restante se tornar 0 ou até uma criatura não ser reduzida a 0 pontos de vida."
+    },
+    {
+      "id": "visao-treinada",
+      "name": "Visão Treinada",
+      "category": "GENERAL",
+      "description": "Após anos treinando por entre matas escuras ou salas especiais, você aprendeu a lidar com ameaças que você era incapaz de enxergar e seus olhos se tornaram capazes de se adaptar a escuridão. Você ganha os seguintes benefícios:\n\nVocê não possui desvantagem em testes de Percepção quando estiver na Penumbra.\nVocê recebe visão no escuro de 15 pés, caso já possua visão no escuro ela aumenta em 15 pés."
+    },
+    {
+      "id": "voz-sedosa",
+      "name": "Voz Sedosa",
+      "category": "GENERAL",
+      "description": "Sua voz soa como melodia àqueles que não o conhecem, fazendo com que você pareça uma pessoa extremamente importante dentro de qualquer sociedade. Você ganha os seguintes benefícios:\n\nVocê tem vantagem em teste de Persuasão contra desconhecidos que não estejam hostis à você.\nVocê recebe o Mistério do Encantamento"
+    },
+    {
+      "id": "bencao-da-fortuna",
+      "name": "Bênção da Fortuna",
+      "category": "REGION",
+      "regions": [
+        "BILGEWATER"
+      ],
+      "prerequisite": "Sentinense",
+      "description": "Seu povo têm uma sorte extraordinária, o que você aprendeu a emprestar misticamente a seus companheiros quando vê-los hesitar. Você não tem certeza de como fazê-lo; você apenas deseja, e isso acontece. Certamente, um sinal de favor da fortuna!\n\nQuando você ou um aliado que você possa ver e esteja a até 30 pés de você, rolar um 1 natural no d20 para uma rolagem de ataque, um teste de atributo ou uma Salvaguarda, você pode usar sua reação para permitir que o alvo refaça a rolagem. O alvo deve usar o novo resultado. Você pode usar essa habilidade um um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+    },
+    {
+      "id": "sangue-buhru",
+      "name": "Sangue Buhru",
+      "category": "REGION",
+      "regions": [
+        "BILGEWATER"
+      ],
+      "prerequisite": "Sentinense",
+      "description": "Você não é um Buhru, mas também não é um Paylangi. Talvez sua mãe seja Buhru, talvez seu pai, ou talvez até mesmo um avô distante. Essa conexão traz a você algumas coisas curiosas, você recebe os seguintes benefícios:\n\nVocê recebe o truque chama sagrada, você pode conjurar esse truque sem quaisquer componentes um número de vezes igual ao seu bônus de Proficiência por descanso pleno usando seu atributo de conjuração ou Sabedoria, o que for maior.\nVocê é capaz de sentir a presença de criaturas que interrompem o fluxo da vida que estejam a até 5 vezes metade do seu bônus de Proficiência pés de você. Seu bônus de proficiência é adicionado para calcular se você é surpreendido por mortos-vivos e espíritos."
+    },
+    {
+      "id": "vida-marinha",
+      "name": "Vida Marinha",
+      "category": "REGION",
+      "regions": [
+        "BILGEWATER"
+      ],
+      "prerequisite": "Sentinense",
+      "description": "Boa parte de sua vida foi ao redor do mar, o cheiro da maresia e a sensação das ondas aos seus pés lhe trazem incrível conforto. Você ganha os seguintes benefícios:\n\nVocê possui vantagem em testes de Atletismo relacionado à Natação e ignora terrenos difíceis relacionados à água.\nVocê possui um deslocamento de Natação igual ao seu deslocamento normal.\nVocê tem vantagem nas Salvaguardas para resistir a efeitos de estar no Mar.\nVocê manifesta o Elemento Água"
+    },
+    {
+      "id": "aparentemente-inofensivo",
+      "name": "Aparentemente Inofensivo",
+      "category": "REGION",
+      "regions": [
+        "BANDLE_CITY"
+      ],
+      "prerequisite": "Bandopolitense",
+      "description": "As criaturas de sua terra natal costumam ter aparências adoráveis mesmo quando escondem um grande poder, incluindo você. Você recebe os seguintes benefícios:\n\nEnquanto não estiver em combate, você pode fazer uma jogada de Atuação contra uma criatura, com CD definida pelo Mestre. Em um sucesso, a criatura se torna Enfeitiçada por você até seu próximo descanso longo ou até que você ou seus aliados a ataquem. Você pode tentar fazer isso um número de vezes igual ao seu bônus de proficiência por Descanso Pleno.\nO primeiro ataque que você faz em um combate contra uma criatura Enfeitiçada por você é considerado um ataque surpresa."
+    },
+    {
+      "id": "jeitinho-especial",
+      "name": "Jeitinho Especial",
+      "category": "REGION",
+      "regions": [
+        "BANDLE_CITY"
+      ],
+      "prerequisite": "Bandopolitense",
+      "description": "Talvez seja a água de Bandópolis, talvez seja alguma coisa que os alimentos plantados lá tenham, você carrega um pouco daquela dimensão com você para onde quer que vá, você recebe os seguintes benefícios:\n\nVocê é capaz de emitir um pulso de Magia Descontrolada Yordle de maneira voluntária. Com uma ação bônus, ou uma reação ao conjurar uma magia, role 2 resultados da tabela de Magia Descontrolada Yordle e escolha um deles para ser aplicado em aliados num raio de 10 pés a partir de você. Você pode fazer isso um número de vezes igual a metade do seu bônus de proficiência por descanso longo."
+    },
+    {
+      "id": "toque-feerico",
+      "name": "Toque Feérico",
+      "category": "REGION",
+      "regions": [
+        "BANDLE_CITY"
+      ],
+      "prerequisite": "Bandopolitense",
+      "description": "Você foi tocado pela essência feérica, talvez por conta da sua vida em Bandópolis, talvez por conta de uma influência da Clareira. Você recebe os seguintes benefícios:\n\nVocê possui vantagem em salvaguardas para resistir à condição Enfeitiçado e não pode ser colocado para dormir por magias.\nVocê pode utilizar o truque ilusão menor sem utilizar quaisquer componentes verbais, somáticos ou materiais. Você pode usar esse truque dessa maneira um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê recebe o subtipo Feérico"
+    },
+    {
+      "id": "cacador-de-magos",
+      "name": "Caçador de Magos",
+      "category": "REGION",
+      "regions": [
+        "DEMACIA"
+      ],
+      "prerequisite": "Demaciano",
+      "description": "Você recebeu um treinamento especial para utilizar contra conjuradores. Você recebe os seguintes benefícios:\n\nSe uma criatura que esteja a 5 pés de você conjurar uma magia você pode utilizar sua reação para realizar um ataque corpo a corpo contra ela.\nVocê implica desvantagem à concentração de uma criatura caso a atinja.\nVocê possui vantagem em salvaguardas contra magias conjuradas a até 5 pés de você."
+    },
+    {
+      "id": "resistencia-magica",
+      "name": "Resistência Mágica",
+      "category": "REGION",
+      "regions": [
+        "DEMACIA"
+      ],
+      "prerequisite": "Demaciano e não pode ser capaz de conjurar magias",
+      "description": "Anos em uma cidade feita de pedras capazes de absorver a magia, fizeram com que suas capacidade arcanas fossem prejudicadas. Você ganha os seguintes benefícios:\n\nVocê tem vantagem em salvaguardas para resistir a efeitos mágicos.\nVocê é incapaz de aprender magia."
+    },
+    {
+      "id": "treinamento-demaciano",
+      "name": "Treinamento Demaciano",
+      "category": "REGION",
+      "regions": [
+        "DEMACIA"
+      ],
+      "prerequisite": "Demaciano",
+      "description": "O treinamento rígido do exército lhe trouxe uma adaptabilidade incomum para todo e qualquer combate. Você ganha os seguintes benefícios:\n\nVocê possui proficiência com armas marciais corpo a corpo, com escudos e armaduras leves e médias."
+    },
+    {
+      "id": "valor-da-justiceira",
+      "name": "Valor da Justiceira",
+      "category": "REGION",
+      "regions": [
+        "DEMACIA"
+      ],
+      "prerequisite": "Demaciano",
+      "description": "Você possui um senso de justiça extremamente poderoso e que molda seus atos doa a quem doer, a justiça deve sempre prevalecer, você recebe os seguintes benefícios:\n\nVocê adquire proficiência em Investigação, caso já tenha, recebe especialidade.\nVocê tem vantagem em testes para detectar mentiras.\nSeu primeiro ataque contra um alvo que tenha cometido uma injustiça possui vantagem. A margem de crítico de todos seus ataques contra essa criatura é reduzida em 1 enquanto ela não tiver se acertado com a justiça.\nVocê é afligido pelo Abalo Fardo da Justiça."
+    },
+    {
+      "id": "gelo-ancestral",
+      "name": "Gelo Ancestral",
+      "category": "REGION",
+      "regions": [
+        "FRELJORD"
+      ],
+      "prerequisite": "Freljordiano",
+      "description": "Você aprende a invocar o gelo ancestral para servir seus comandos. Você ganha os seguintes benefícios:\n\nQuando causar dano gélido por qualquer fonte que seja originada de você, você pode rolar novamente qualquer 1 natural na rolagem de dado de dano gélido, você deve utilizar a nova rolagem.\nVocê recebe o Mistério Gelo"
+    },
+    {
+      "id": "quebra-gelo",
+      "name": "Quebra Gelo",
+      "category": "REGION",
+      "regions": [
+        "FRELJORD"
+      ],
+      "prerequisite": "Freljordiano",
+      "description": "Você nasceu em uma região inóspita sem nenhuma vantagem adaptativa, mas conseguiu encontrar formas de compensar esse fato, você recebe os seguintes benefícios:\n\nAo receber dano gélido ou glacial, você pode usar sua reação para reduzir o dano recebido em um valor igual ao dobro do seu bônus de Proficiência. Você pode utilizar essa habilidade apenas uma vez por rodada, um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê adquire proficiência em Sobrevivência, caso já tenha, recebe especialidade.\nVocê recebe vantagens em salvaguardas e testes relacionados a um ambiente ártico."
+    },
+    {
+      "id": "resistencia-gelida",
+      "name": "Resistência Gélida",
+      "category": "REGION",
+      "regions": [
+        "FRELJORD"
+      ],
+      "prerequisite": "Freljordiano",
+      "description": "O espírito invernal não tem pena de ninguém, mas você… você aprendeu a lutar contra ele. Você ganha os seguintes benefícios:\n\nVocê tem vantagem em salvaguardas relacionadas ao clima gélido e em rolagens contra magias que causem dano gélido. Adicionalmente, sua movimentação na neve aumenta em 10 pés e faz com que terreno difícil relacionado a neve fina ou profunda seja ignorado.\nVocê manifesta o Elemento Gelo"
+    },
+    {
+      "id": "linhagem-vastaya",
+      "name": "Linhagem Vastaya",
+      "category": "REGION",
+      "regions": [
+        "IONIA"
+      ],
+      "prerequisite": "Ioniano",
+      "description": "A magia Vastayesa corre forte em seu sangue, você ganha os seguintes benefícios:\n\nVocê possui vantagem nas Salvaguardas para resistir a ser enfeitiçado e magias não podem colocá-lo para dormir.\nVocê soma metade do seu bônus de proficiência em salvaguardas para resistir a Doenças Mágicas."
+    },
+    {
+      "id": "medicina-natural",
+      "name": "Medicina Natural",
+      "category": "REGION",
+      "regions": [
+        "IONIA"
+      ],
+      "prerequisite": "Ioniano",
+      "description": "Tudo tem seu ritmo, harmonia e fluxo, você aprendeu a ler os sinais vitais das criaturas e é capaz de auxiliar suas aflições. Você recebe os seguintes benefícios:\n\nVocê recebe a magia Curar Ferimentos, podendo conjurá-la sem gastar pontos de mana em um nível igual ao seu bônus de proficiência. Você pode fazer isso um número de vezes igual ao seu bônus de Proficiência por descanso pleno.\nVocê tem vantagem em testes para identificar aflições mundanas e, caso a aflição seja nativa de Ionia, tem vantagem em testes para identificar seu tratamento.\nVocê adquire proficiência em Medicina, caso já tenha, recebe especialidade."
+    },
+    {
+      "id": "talento-magico-ioniano",
+      "name": "Talento Mágico Ioniano",
+      "category": "REGION",
+      "regions": [
+        "IONIA"
+      ],
+      "prerequisite": "Ioniano",
+      "description": "Você possui uma maior noção da magia natural que corre por toda Ionia através do fluxo dos espíritos, aprendendo a controlar parcialmente a magia espiritual do local à seu favor. Você ganha os seguintes benefícios:\n\nVocê pode conjurar druidismo e orientação. Você pode conjurar cada um desses truques um número de vezes igual ao seu bônus de Proficiência por descanso pleno.\nVocê recebe um Mistério Espiritual à sua escolha."
+    },
+    {
+      "id": "aptidao-elemental",
+      "name": "Aptidão Elemental",
+      "category": "REGION",
+      "regions": [
+        "IXTAL"
+      ],
+      "prerequisite": "Ixtali, habilidade de conjuração",
+      "description": "Você possui uma habilidade nata em relação à magia elemental, sabendo alterar suas propriedades básicas. Você ganha os seguintes benefícios:\n\nVocê recebe um Mistério Elemental à sua escolha de um elemento que você tenha acesso.\nAo obter essa Herança, você deve escolher dois elementos que você tenha acesso. Você é capaz de trocar o dano das magias desses dois elementos. Ao fazer isso, você deve declarar previamente para seu mestre o novo elemento que está sendo usado, use a tabela Elementos e Tipos de Dano do Capítulo 10: Conjuração. Por exemplo, caso você escolha os elementos Água e Fogo, ao conjurar magias de fogo que causem dano, você pode mudar o tipo de dano das magias de fogo para perfurante ao invés do dano normal da magia."
+    },
+    {
+      "id": "tocado-pela-mana",
+      "name": "Tocado pela Mana",
+      "category": "REGION",
+      "regions": [
+        "IXTAL"
+      ],
+      "prerequisite": "Ixtali",
+      "description": "Nascer e viver em uma região com uma conexão profunda com a mana faz com que você tenha um maior entendimento da mesma, você recebe os seguintes benefícios:\n\nVocê adquire proficiência em Arcanismo, caso já tenha, recebe especialidade.\nAo escolher essa Herança você se torna capaz de utilizar a mana com maior precisão. Você pode reduzir o custo de mana de uma magia num valor igual ao modificador do seu atributo de Conjuração (não podendo reduzir para 0) um número de vezes igual ao seu bônus de Proficiência por descanso pleno.\nAo utilizar qualquer recurso que recupere mana, você pode recuperar 1 dado de vida."
+    },
+    {
+      "id": "sinergia-elemental",
+      "name": "Sinergia Elemental",
+      "category": "REGION",
+      "regions": [
+        "IXTAL"
+      ],
+      "prerequisite": "Ixtali",
+      "description": "Você possui uma afinidade natural para o uso de um elemento específico, seja por conta de seu treinamento com os Yun Tal ou puramente por conta do ambiente naturalmente arcano onde viveu. Você recebe os seguintes benefícios:\n\nVocê manifesta um Elemento ao qual tenha acesso.\nVocê aprende o truque Raio Elemental utilizando o Elemento escolhido, podendo conjurá-lo um número de vezes igual ao seu bônus de proficiência por descanso pleno, utilizando sua Constituição, Sabedoria ou seu atributo de conjuração, o que for maior.\nDanos causados por magias do Elemento escolhido ignoram um valor de RD do alvo igual à metade do seu bônus de proficiência."
+    },
+    {
+      "id": "artesao-nazumita",
+      "name": "Artesão Nazumita",
+      "category": "REGION",
+      "regions": [
+        "NAZUMAH"
+      ],
+      "prerequisite": "Nazumita",
+      "description": "Você conhece diversos segredos de como utilizar as partes de criatura caçadas com mais velocidade, funcionalidade e eficiência. Você recebe os seguintes benefícios:\n\nEscolha um Ofício entre Alquimista, Armoreiro, Arqueirista, Cuteleiro, Encantador ou Tecmaturgo. Caso você já possua esse Ofício, você recebe especialidade\nAo criar algum item utilizando na maioria partes coletadas por você de um monstro ou criatura você faz a jogada com vantagem e caso obtenha um 19 ou 20, adiciona dois dias de trabalho pelo custo de apenas 1 dia"
+    },
+    {
+      "id": "cacador-nazumita",
+      "name": "Caçador Nazumita",
+      "category": "REGION",
+      "regions": [
+        "NAZUMAH"
+      ],
+      "prerequisite": "Nazumita",
+      "description": "Sua capacidade de observação para a caça é memorável até mesmo em Nazumah. Se você puder estudar uma criatura ou monstro por pelo menos 5 minutos, você recebe os seguintes benefícios contra essa criatura ou monstro:\n\nSua CA e suas jogadas de ataque aumentam em 1 contra essa criatura\nCaso a criatura seja ao menos 1 categoria maior que você, esse bônus é dobrado e você adiciona 1d4 às suas jogadas de dano contra essa criatura\nCaso a criatura seja um Baccai, esse bônus é dobrado e você adiciona 2d4 às suas jogadas de dano contra essa criatura"
+    },
+    {
+      "id": "coletor-nazumita",
+      "name": "Coletor Nazumita",
+      "category": "REGION",
+      "regions": [
+        "NAZUMAH"
+      ],
+      "prerequisite": "Nazumita",
+      "description": "Estudar a anatomia das criaturas e monstros com foco na obtenção de recursos é algo que você faz com imensa naturalidade. Você recebe os seguintes benefícios:\n\nVocê recebe os ofícios de Coletor - Biologista e Coletor - Curtidor. Caso já tenha, você recebe Especialidade\nVocê leva apenas metade do tempo ao utilizar as fórmulas Dissecar e Curtir Couro"
+    },
+    {
+      "id": "artifice",
+      "name": "Artífice",
+      "category": "REGION",
+      "regions": [
+        "NOXUS"
+      ],
+      "prerequisite": "Noxiano",
+      "description": "Você atuou como ou foi instruído pelos Artífices Noxianos, criando armas para os guerreiros e construindo fortalezas nas cidades conquistadas, abastecendo-os e provendo segurança em momentos de necessidade. Você recebe os seguintes benefícios:\n\nVocê adiciona metade do seu Bônus de Proficiência ao valor de PO que você pode produzir por dia.\nVocê adiciona seu Bônus de Proficiência, em vez de metade, ao valor de PO que pode produzir por dia ao construir um item que seja de grande necessidade para a equipe. Apenas um item pode ser beneficiado por este efeito por vez.\nA margem para a criação de Obras-Primas diminui em 1 para um de seus ofícios."
+    },
+    {
+      "id": "autoridade-alfa",
+      "name": "Autoridade Alfa",
+      "category": "REGION",
+      "regions": [
+        "NOXUS"
+      ],
+      "prerequisite": "Noxiano",
+      "description": "Você é imbuído pelos valores Noxianos com isso intimamente ligado ao seu ser. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Intimidação ou Persuasão, caso já possua proficiência na perícia escolhida, você recebe especialidade com a perícia escolhida.\nSe uma criatura obtiver sucesso em um ataque contra você, você tem vantagem em rolagens de acerto com armas corpo a corpo contra aquela criatura até o final do seu próximo turno. Você pode utilizar essa habilidade dessa maneira um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+    },
+    {
+      "id": "disciplina-e-forca",
+      "name": "Disciplina é Força",
+      "category": "REGION",
+      "regions": [
+        "NOXUS"
+      ],
+      "prerequisite": "Noxiano",
+      "description": "Se você nasceu abraçado com essa arma ou se você se apaixonou pela mesma em seu crescimento, não importa, você se tornou perito no uso da mesma. Essa herança pode ser escolhida mais de uma vez. Você recebe os seguintes benefícios:\n\nAo escolher essa Herança você recebe proficiência com uma arma à sua escolha.\nVocê adiciona seu bônus de proficiência ao dano causado com essa arma, ao escolher essa Herança novamente, você só pode receber esse bônus ao dano de uma outra arma escolhida por essa Herança."
+    },
+    {
+      "id": "determinacao-noxiana",
+      "name": "Determinação Noxiana",
+      "category": "REGION",
+      "regions": [
+        "NOXUS"
+      ],
+      "prerequisite": "Noxiano",
+      "description": "Desistir ou se deixar levar não é uma opção. Você sempre dá o seu máximo para obter os melhores resultados e construir o seu próprio destino. Você recebe os seguintes benefícios:\n\nAo falhar em uma rolagem, você pode rolá-la novamente e escolher o melhor resultado. Você pode fazer isso um número de vezes igual à metade do seu Bônus de Proficiência por Descanso Pleno.\nRolagens de Intimidação e Persuasão são feitas em Desvantagem contra você. Isto pode acontecer um número de vezes igual ao seu Bônus de Proficiência por Descanso Longo.\nVocê recebe Vantagem em salvaguardas contra Condições Comportamentais um número de vezes igual ao seu Bônus de Proficiência por Descanso Longo. São consideradas Condições Comportamentais as seguintes: Amedrontado, Enfeitiçado e Provocado."
+    },
+    {
+      "id": "floricorvus",
+      "name": "Floricorvus",
+      "category": "REGION",
+      "regions": [
+        "NOXUS"
+      ],
+      "prerequisite": "Noxiano",
+      "description": "Ser treinado por uma instituição mágica aprimorou o seu domínio de magia de uma maneira que não seria possível treinando por conta própria, expandindo seu potencial. Você recebe os seguintes benefícios:\n\nVocê adiciona seu Bônus de Proficiência aos efeitos causados por suas magias (dano, cura, escudo, etc). Efeitos que afetem atributos e rolagens não recebem esse adicional.\nEscolha entre Ataque ou Classe de Dificuldade. Suas magias possuem a característica escolhida aumentada em um valor igual metade do seu Bônus de Proficiência.\nCaso tenha escolhido Ataque, a Margem de Crítico para suas magias diminui em 1.\nCaso tenha escolhido Classe de Dificuldade, alvos que rolarem 1 na Salvaguarda de suas magias a receberão como um efeito crítico.\nFluidez de Ki\nPré-requisito: Bodisatva\n\nVocê possui uma naturalidade em lidar com sua plenitude, seja em seus estudos ou em suas práticas. Você recebe os seguintes benefícios:\n\nVocê recebe seu nível de Bodisatva em pontos de Ki.\nVocê pode escolher um Sutra adicional no 1º e no 4º nível de Bodisatva."
+    },
+    {
+      "id": "lider-carmesim",
+      "name": "Líder Carmesim",
+      "category": "REGION",
+      "regions": [
+        "NOXUS"
+      ],
+      "prerequisite": "Noxiano",
+      "description": "Você transborda força e capacidade, fazendo com que seus aliados lhe vejam como uma figura inspiradora, enquanto seus inimigos lhe veem como alguém a temer. Você recebe os seguintes benefícios:\n\nApós um descanso longo você pode afetar uma quantidade de aliados igual ao seu Bônus de Proficiência com os seguintes efeitos, que duram até o próximo descanso longo. Os efeitos se encerram prematuramente caso você seja Agarrado, Contido, Incapacitado, Inconsciente ou Petrificado:\nEstes aliados são imunizados contra Falhas Críticas, que serão consideradas falhas comuns.\nVocê pode escolher uma das seguintes características para cada aliado: Rolagens de Ataque, CA, CD, Salvaguardas ou Rolagens de Atributo. Aliados recebem +1 como adicional à característica que você escolheu dar a eles."
+    },
+    {
+      "id": "patrulheiro",
+      "name": "Patrulheiro",
+      "category": "REGION",
+      "regions": [
+        "NOXUS"
+      ],
+      "prerequisite": "Noxiano",
+      "description": "Observar os arredores e manter-se vigilante durante patrulhas nas fronteiras e em postos avançados lhe tornou atento e precavido. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em uma das perícias a seguir: Intuição, Investigação, Percepção ou Prestidigitação. Você faz rolagens com Vantagem caso já tenha Proficiência na perícia escolhida.\nEnquanto estiver consciente, você não pode ser surpreendido ou atacado com vantagem por criaturas escondidas.\nSua Percepção Passiva aumenta em um valor igual a metade do seu Bônus de Proficiência."
+    },
+    {
+      "id": "temor-noxiano",
+      "name": "Temor Noxiano",
+      "category": "REGION",
+      "regions": [
+        "NOXUS"
+      ],
+      "prerequisite": "Noxiano",
+      "description": "Quando estiver com raiva, pode irradiar ameaça. Você ganha os seguintes benefícios:\n\nVocê pode utilizar sua ação para intimidar seus inimigos, forçando uma criatura a sua escolha a até 30 pés de você a fazer uma salvaguarda de Sabedoria CD 8 + seus bônus de proficiência + seu modificador de Carisma. Um alvo automaticamente tem sucesso na Salvaguarda se ele não puder ouvir ou vê-lo. Em caso de falha, o alvo fica amedrontado por você durante 1 minuto. Se o alvo amedrontado receber qualquer dano, ele pode repetir a salvaguarda, terminando o efeito em caso de sucesso."
+    },
+    {
+      "id": "abastado",
+      "name": "Abastado",
+      "category": "REGION",
+      "regions": [
+        "PILTOVER"
+      ],
+      "excludes": [
+        "operario",
+        "privilegiado"
+      ],
+      "prerequisite": "Piltovense, não ter as Heranças Operário ou Privilegiado",
+      "description": "Você pertence a uma das Casas Maiores de Piltover e teve acesso às melhores oportunidades, destacando-se em áreas que nem todos puderam acessar. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em uma Perícia à sua escolha. Você recebe Especialidade caso já tenha Proficiência na Perícia escolhida.\nFora de combate, ao realizar Testes de Atributo os quais seus aliados não tenham Proficiência, mas você sim, você os faz como se tivesse Especialidade. Caso já tenha Especialidade, você os faz com Vantagem. Você pode executar esta habilidade um número de vezes igual ao seu Bônus de Proficiência por Descanso Pleno.\nVocê recebe um pertence que custa até 200 PO, 2 pertences que custem até 100 PO cada ou 3 pertences que custem até 75 PO cada."
+    },
+    {
+      "id": "autoridade-justa",
+      "name": "Autoridade Justa",
+      "category": "REGION",
+      "regions": [
+        "PILTOVER"
+      ],
+      "prerequisite": "Piltovense",
+      "description": "Você tem as ferramentas necessárias para a aplicação da lei. Você ganha os seguintes benefícios:\n\nDesde que você esteja usando roupas finas, você tem vantagem em testes de Persuasão e Intimidação.\nVocê aprende o truque taumaturgia sem utilizar quaisquer componentes verbais, somáticos ou materiais. Você pode usar esse truque dessa maneira um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+    },
+    {
+      "id": "bom-comerciante",
+      "name": "Bom Comerciante",
+      "category": "REGION",
+      "regions": [
+        "PILTOVER"
+      ],
+      "prerequisite": "Piltovense",
+      "description": "Você cresceu no meio de feiras e lojas, observando diversos tipos de interação entre mercadores e seus clientes, desenvolvendo ótimas habilidades de comunicação quando se trata de vender seu peixe. Você recebe os seguintes benefícios:\n\nVocê recebe vantagem nas rolagens de perícia de Carisma ao negociar uma venda. A vantagem também se aplica a outras perícias relacionadas ao produto a ser vendido, caso precise delas durante a argumentação, como Tecnologia caso esteja vendendo um eletrônico, ou Medicina caso esteja vendendo um remédio.\nAo concluir uma venda, você recebe um extra igual a 5x seu Bônus de Proficiência como PO adicional. Este extra não pode ser maior que metade do valor total da venda.\nAo conseguir um 20 natural durante uma negociação bem-sucedida, seu cliente se torna um Contato. Você adquire acesso para contatar este cliente caso tenha novos produtos que sejam da linha de interesse dele e vice-versa."
+    },
+    {
+      "id": "inventor-renomado",
+      "name": "Inventor Renomado",
+      "category": "REGION",
+      "regions": [
+        "PILTOVER"
+      ],
+      "prerequisite": "Piltovense",
+      "description": "Você é ou conheceu um dos grandes inventores de Piltover, aprendendo mais sobre a tecnologia Hextec e aplicando no próprio corpo. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência com Tecnologia, caso já possua proficiência, você recebe especialidade.\nVocê recebe seu bônus de proficiência em qualquer rolagem que utilize Tecnologia\nEscolha uma Vantagem da lista Hextec do Capítulo 5: Personalização – Variantes."
+    },
+    {
+      "id": "minucioso",
+      "name": "Minucioso",
+      "category": "REGION",
+      "regions": [
+        "PILTOVER"
+      ],
+      "prerequisite": "Piltovense",
+      "description": "Você é atento aos detalhes, gosta de fazer um bom trabalho e não deixa nada passar despercebido. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em uma das perícias a seguir: Intuição, Investigação, Percepção ou Prestidigitação. Você recebe Especialidade caso já tenha Proficiência.\nVocê aumenta 1 nível em um de seus ofícios. Caso já tenha aumentado o nível de um ofício através de Heranças, você deverá escolher um ofício diferente.\nSua Percepção Passiva aumenta em um valor igual a metade do seu Bônus de Proficiência."
+    },
+    {
+      "id": "operario",
+      "name": "Operário",
+      "category": "REGION",
+      "regions": [
+        "PILTOVER"
+      ],
+      "excludes": [
+        "abastado",
+        "privilegiado"
+      ],
+      "prerequisite": "Piltovense, não ter as Heranças Abastado ou Privilegiado",
+      "description": "Você não pertence a nenhuma Casa Piltovense, seja grande ou pequena e sempre precisou trabalhar duro para conseguir um lugar no meio de tantos grandes nomes. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência em duas Perícias à sua escolha.\nVocê adiciona metade do seu Bônus de Proficiência ao valor de PO que você pode produzir por dia.\nVocê aumenta 1 nível em um de seus ofícios. Caso já tenha aumentado o nível de um ofício através de Heranças, você deverá escolher um ofício diferente."
+    },
+    {
+      "id": "patrocinio",
+      "name": "Patrocínio",
+      "category": "REGION",
+      "regions": [
+        "PILTOVER"
+      ],
+      "prerequisite": "Piltovense",
+      "description": "Você possui um patrono que financia seu trabalho, provendo-o melhores condições de botar suas ideias em prática e concretizar seus projetos. Você recebe os seguintes benefícios:\n\nAo acessar uma oficina, você pode aumentar o nível dela em 1, tornando-a até no máximo uma oficina de nível 3, desde que tenha ao menos 6h para instalar seus recursos.\nVocê possui Conjuntos, Suprimentos e Equipamentos para até 3 de seus ofícios.\nVocê recebe um pertence que custa até 100 PO ou 2 pertences que custem até 50 PO cada."
+    },
+    {
+      "id": "privilegiado",
+      "name": "Privilegiado",
+      "category": "REGION",
+      "regions": [
+        "PILTOVER"
+      ],
+      "excludes": [
+        "abastado",
+        "operario"
+      ],
+      "prerequisite": "Piltovense, não ter a Heranças Abastado ou Operário",
+      "description": "Você pertence a uma das Casas Menores de Piltover e trabalhou prestando assistência ao lado de grandes nomes para se manter em condições favoráveis. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em duas Perícias de Carisma, Inteligência ou Sabedoria à sua escolha.\nFora de combate, quando um aliado fizer um Teste de Atributo, ele pode pedir que você realize o mesmo teste e então ficar com o maior resultado. Você faz o teste como se tivesse Proficiência, mesmo que não tenha. Caso já tenha Proficiência, você os faz com vantagem. Você pode executar esta habilidade um número de vezes igual ao seu Bônus de Proficiência por Descanso Pleno.\nVocê aumenta 1 nível em um de seus ofícios. Caso já tenha aumentado o nível de um ofício através de Heranças, você deverá escolher um ofício diferente."
+    },
+    {
+      "id": "resistencia-ao-sai",
+      "name": "Resistência ao Sai",
+      "category": "REGION",
+      "regions": [
+        "SHURIMA"
+      ],
+      "prerequisite": "Shurimane",
+      "description": "Tu és o boladão do deserto, parsero! Você ganha os seguintes benefícios:\n\nVocê tem vantagem em salvaguardas relacionadas ao clima desértico e em rolagens contra magias que causem dano ígneo. Adicionalmente, sua movimentação na areia aumenta em 10 pés e faz com que terreno difícil relacionado a areia fina, grossa ou por vento seja ignorado.\nVocê manifesta o Elemento Deserto"
+    },
+    {
+      "id": "taticas-de-guerrilha",
+      "name": "Táticas de Guerrilha",
+      "category": "REGION",
+      "regions": [
+        "SHURIMA"
+      ],
+      "prerequisite": "Shurimane",
+      "description": "Você vive nas areias, aprendeu a emboscar para sobreviver, seja para obter alimento, seja para atacar uma caravana desavisada, você recebe os seguintes benefícios:\n\nSeu primeiro ataque em um combate contra qualquer criatura tem sua margem de crítico reduzida em 1.\nCaso você ataque uma criatura surpresa, sua margem de crítico diminui em 1 e o multiplicador de dados de um acerto crítico aumenta em 1."
+    },
+    {
+      "id": "vida-nomade",
+      "name": "Vida Nômade",
+      "category": "REGION",
+      "regions": [
+        "SHURIMA"
+      ],
+      "prerequisite": "Shurimane",
+      "description": "Tu sabes os paranauê da vida loka! Você ganha os seguintes benefícios:\n\nVocê tem proficiência em Sobrevivência, caso já possua proficiência você recebe especialidade com essa perícia.\nVocê tem uma memória excelente para mapas e geografia do deserto e terras áridas, você sempre pode recobrar o plano geral de terrenos, assentamentos ou outras características ao seu redor. Além disso, você pode encontrar comida e água fresca no deserto para você e até cinco outras pessoas a cada dia."
+    },
+    {
+      "id": "bencao-dourada",
+      "name": "Bênção Dourada",
+      "category": "REGION",
+      "regions": [
+        "TARGON"
+      ],
+      "prerequisite": "Targonense",
+      "description": "Você recebeu uma bênção especial entre os Solari, personificando os poderes do Sol. Você recebe os seguintes benefícios:\n\nUma vez por rodada, ao receber dano radiante, simples ou mágico, você reduz o dano recebido em um valor igual ao seu bônus de Proficiência.\nUma vez por rodada, ao causar dano radiante, simples ou mágico, você recebe seu bônus de Proficiência em pontos de vida temporários por 1 minuto ou até serem gastos."
+    },
+    {
+      "id": "bencao-prateada",
+      "name": "Bênção Prateada",
+      "category": "REGION",
+      "regions": [
+        "TARGON"
+      ],
+      "prerequisite": "Targonense",
+      "description": "Ser um Lunari não é o bastante, a Irmã Prateada marcou você como pertencente ao seu povo. Você recebe os seguintes benefícios:\n\nVocê recebe uma bênção baseada na fase da lua atual:\nLua Nova. Enquanto estiver sob a benção dessa fase da lua, você recebe proficiência em Furtividade, caso já possua proficiência nessa perícia você recebe vantagem em seus testes de Furtividade.\nLua Crescente. Enquanto estiver sob a benção dessa fase da lua, seus ataques com arma causam dano adicional igual a metade do seu bônus de proficiência.\nLua Cheia. Enquanto estiver sob a benção dessa fase da lua, você recebe vantagem em salvaguardas contra efeitos que te deixariam Enfeitiçado e resistência à dano radiante.\nLua Minguante. Enquanto estiver sob a benção dessa fase da lua, você recebe vantagem em salvaguardas contra efeitos que causariam exaustão a você e resistência a dano necrótico.\nSeus ataques surpresa causam seu bônus de proficiência como dano adicional"
+    },
+    {
+      "id": "bencao-rakkor",
+      "name": "Benção Rakkor",
+      "category": "REGION",
+      "regions": [
+        "TARGON"
+      ],
+      "prerequisite": "Targonense",
+      "description": "Sua fúria interior queima incansavelmente. Você ganha os seguintes benefícios:\n\nQuando acertar um ataque usando uma arma simples ou marcial corpo a corpo, você pode rolar um dos dados de dano da arma uma vez adicionalmente e somar o resultado à jogada. O tipo de dano é o mesmo original da arma. Você pode usar essa habilidade um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nImediatamente após usar essa Herança, você pode usar sua reação para realizar um ataque adicional com arma corpo a corpo."
+    },
+    {
+      "id": "fortitude-targonense",
+      "name": "Fortitude Targonense",
+      "category": "REGION",
+      "regions": [
+        "TARGON"
+      ],
+      "prerequisite": "Targonense",
+      "description": "Você tem o sangue de heróis de Targon correndo em suas veias. Você ganha os seguintes benefícios:\n\nSempre que você realiza a ação Esquivar em combate, você pode gastar um dado de vida para se curar. Role o dado, e adicione seu modificador de Constituição, e recupere um número de pontos de vida igual a este total (mínimo de 1)."
+    },
+    {
+      "id": "incentivo-celeste",
+      "name": "Incentivo Celeste",
+      "category": "REGION",
+      "regions": [
+        "TARGON"
+      ],
+      "prerequisite": "Targonense",
+      "description": "Você ou um de seus ancestrais alcançou ou se aproximou muito do Cume de Targon e desde então os seres divinos possuem algum tipo de apreço por você, lhe mostrando tramas de magia e lhe concedendo favores mágicos periodicamente. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em Arcanismo. Você recebe Especialidade caso já tenha Proficiência.\nVocê pode conjurar a magia Detectar Magia de maneira não mágica um número de vezes igual a metade do seu Bônus de Proficiência por Descanso Longo.\nUma vez por Descanso Pleno você pode utilizar um Truque de qualquer Mistério Celestial de maneira não mágica. Escolha entre Inteligência, Sabedoria ou Carisma como seu atributo de conjuração para esse Truque."
+    },
+    {
+      "id": "nucleo-solar",
+      "name": "Núcleo Solar",
+      "category": "REGION",
+      "regions": [
+        "TARGON"
+      ],
+      "excludes": [
+        "visao-lunar"
+      ],
+      "prerequisite": "Targonense, Nascido e criado em Targon, não ter a Herança Visão Lunar",
+      "description": "Você cresceu sob os cuidados e treinamentos dos templários guerreiros Ra’Horak, glorificando o Sol e extraindo dele uma forte vitalidade e resiliência. Você recebe os seguintes benefícios:\n\nVocê ganha seu Bônus de Proficiência em Dados de Vida adicionais para seus descansos.\nVocê possui Resistência a Calor Extremo.\nVocê possui Vantagem em Salvaguardas contra Frio Extremo."
+    },
+    {
+      "id": "pastor-da-montanha",
+      "name": "Pastor da Montanha",
+      "category": "REGION",
+      "regions": [
+        "TARGON"
+      ],
+      "prerequisite": "Targonense",
+      "description": "Trabalhar e/ou viver em uma fazenda lhe ajudou a desenvolver empatia com os animais. Você sabe como se portar diante de diferentes tipos de criatura e elas costumam se sentir confortáveis na sua presença. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em Lidar com Animais. Você recebe Especialidade caso já tenha Proficiência.\nVocê recebe Proficiência com o Ofício de Guia (Piloto) de Veículos Terrestres ou Apotecário.\nVocê recebe um animal de até 100 PO da tabela Montaria e Outros Animais do Capítulo 6."
+    },
+    {
+      "id": "pes-cascudos",
+      "name": "Pés Cascudos",
+      "category": "REGION",
+      "regions": [
+        "TARGON"
+      ],
+      "prerequisite": "Targonense, Crescido em Targon",
+      "description": "Você foi uma criança destemida, ou imprudente, e não tinha medo de se aventurar em meio a perigosa geografia de Targon, escalando rochedos, saltando sobre fendas e deslizando em desfiladeiros que lhe serviam como atalho. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em uma das perícias a seguir: Atletismo ou Sobrevivência. Você recebe Especialidade caso já tenha Proficiência.\nVocê ignora Terrenos Difíceis rochosos.\nSeu Deslocamento de Escalada é o mesmo que o seu Deslocamento de Caminhada."
+    },
+    {
+      "id": "viajante-cauteloso",
+      "name": "Viajante Cauteloso",
+      "category": "REGION",
+      "regions": [
+        "TARGON"
+      ],
+      "prerequisite": "Targonense",
+      "description": "Targon tem geografias variadas e depois de tanto percorrer a região em quase toda sua totalidade, você aprendeu a lidar com diferentes tipos de ambientes. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em Sobrevivência. Você recebe Especialidade caso já tenha Proficiência.\n\nVocê recebe Proficiência em uma disciplina do Ofício de Guia.\n\nApós um Descanso Pleno, você pode escolher um tipo qualquer de Terreno Difícil para ignorar. Você não pode mudar o tipo de terreno até o próximo Descanso Pleno."
+    },
+    {
+      "id": "visao-lunar",
+      "name": "Visão Lunar",
+      "category": "REGION",
+      "regions": [
+        "TARGON"
+      ],
+      "excludes": [
+        "nucleo-solar"
+      ],
+      "prerequisite": "Targonense, Nascido e criado em Targon, não ter a Herança Núcleo Solar",
+      "description": "Observando e estudando o movimento dos astros e acostumando sua visão ao escuro da noite, você aprendeu a adivinhar o futuro e ver além do que o dia permite. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em Intuição. Você recebe Especialidade caso já tenha Proficiência.\nDurante a noite, você tem Vantagem em testes de Intuição. Adicionalmente, você recebe o Mistério da Adivinhação.\nVocê recebe 15 pés de Visão no Escuro ou adiciona 15 pés caso já tenha."
+    },
+    {
+      "id": "experimento-bem-sucedido",
+      "name": "Experimento Bem-Sucedido",
+      "category": "REGION",
+      "regions": [
+        "ZAUN"
+      ],
+      "prerequisite": "Zaunita",
+      "description": "Você participou de um ou mais experimentos biológicos em Zaun com resultado de sucesso, com isso, seu organismo responde de forma integrada com suas modificações. Você recebe os seguintes benefícios:\n\nEscolha uma Vantagem Tecnológica da Herança Variante Progressão Tecnológica.\nVocê pode utilizar sua ação ou reação, caso receba dano, para recuperar um dado de vida. Você pode fazer isso um número de vezes igual ao seu bônus de Proficiência por descanso pleno.\nQuando você recebe algum efeito de cura, você adiciona metade do seu bônus de proficiência aos pontos de vida curados.\nCaso você possua 5 ou mais Vantagens Tecnológicas, você recebe os traços de Limiar Tecnológico ligados à sua fonte de energia."
+    },
+    {
+      "id": "experimento-zaunita",
+      "name": "Experimento Zaunita",
+      "category": "REGION",
+      "regions": [
+        "ZAUN"
+      ],
+      "prerequisite": "Zaunita",
+      "description": "Experimentos foram feitos em você em Zaun. Você recebe os seguintes benefícios:\n\nEscolha uma Vantagem Tecnológica da Herança Variante Progressão Tecnológica.\nEscolha uma Perícia e um Ofício, você recebe proficiência com os dois.\nVocê possui imunidade à Cinza de Zaun\nCaso você possua 5 ou mais Vantagens Tecnológicas, você recebe os traços de Limiar Tecnológico ligados à sua fonte de energia."
+    },
+    {
+      "id": "ladrao-de-segredos",
+      "name": "Ladrão de Segredos",
+      "category": "REGION",
+      "regions": [
+        "ZAUN"
+      ],
+      "prerequisite": "Zaunita",
+      "description": "Sua mente genial é superior à dos outros. Você ganha os seguintes benefícios:\n\nVocê aprende os truques mensagem e zombaria viciosa e pode utilizá-los sem componentes verbais, somáticos ou materiais. Você pode usar esses truque dessa maneira um número de vezes igual ao seu bônus de Proficiência por descanso pleno. Seu atributo de conjuração para essas magias é o seu atributo de conjuração normal ou Carisma, o que for mais alto."
+    },
+    {
+      "id": "inspirar-aliados",
+      "name": "Inspirar Aliados",
+      "category": "ORIGIN",
+      "origins": [
+        "humano"
+      ],
+      "prerequisite": "Humano",
+      "description": "Você possui grandes feitos em sua mente, sendo capaz de ampliar sua inspiração e até estendê-la para aliados. Você recebe os seguintes benefícios:\n\nSua quantidade de dados de Inspiração passa a ser seu bônus de Proficiência ao invés de apenas metade.\nUsando uma ação bônus, você pode usar sua Inspiração para inspirar um aliado que esteja a até 30 pés de você e possa ouví-lo. Pelos próximos 10 minutos, esse aliado pode utilizar esse dado uma vez. O aliado pode jogar esse dado e adicionar o resultado a qualquer teste de atributo, salvaguarda ou jogada de ataque que realizar pela duração. Ele pode jogar o d20 antes de decidir se usará o dado de Inspiração, mas precisa decidir antes do Mestre dizer se a jogada foi bem-sucedida ou não. Uma vez que o dado de Inspiração tenha sido jogado, ele terá sido gasto. Uma criatura pode ganhar apenas um dado de Inspiração por vez."
+    },
+    {
+      "id": "perceptivo",
+      "name": "Perceptivo",
+      "category": "ORIGIN",
+      "origins": [
+        "humano",
+        "vastaya"
+      ],
+      "prerequisite": "Vastaya ou Humano",
+      "description": "Sua capacidade de perceber o mundo ao seu redor está além do que a maioria pode imaginar. Você ganha os seguintes benefícios:\n\nVocê recebe metade do seu bônus de Proficiência em sua Percepção Passiva.\nAo realizar um teste de Percepção, você pode optar por fazer novamente a jogada, aceitando o novo resultado. Você pode usar essa Herança depois de ver o resultado, mas antes do Mestre determinar se a jogada em questão foi ou não bem-sucedida. Você pode realizar isso um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê tem visão às cegas com um alcance de 10 pés. Dentro desse alcance, você pode ver com eficácia qualquer coisa que não esteja atrás de uma cobertura total, mesmo se estiver Cego ou em escuridão. Além disso, você pode perceber criaturas Invisíveis dentro desse alcance, a menos que a criatura esteja furtiva."
+    },
+    {
+      "id": "sangue-vastaya",
+      "name": "Sangue Vastaya",
+      "category": "ORIGIN",
+      "origins": [
+        "humano",
+        "construto"
+      ],
+      "prerequisite": "Humano ou Construto",
+      "description": "Você é de descendência vastayesa. Algum de seus antepassados, talvez um de seus avós ou até antes, era Vastaya. Isso faz com que, embora você seja de outra origem e não tenha traços aparentes que o ligue aos Vastaya, você tem uma carga espiritual diferente. Talvez isso tenha sido algo que pulou gerações até se manifestar em você ou talvez seja algo que, embora seus parentes tenham, não encontrou a condição certa para se manifestar. Os Vastaya percebem isso em você e, embora um Meio Vastaya seja um tabu, isso não se aplica a pessoas com sangue vastaya. Você ganha os seguintes benefícios:\n\nVocê pode, uma vez por descanso longo, usar uma ação para curar a si mesmo ou a uma outra criatura a até 20 pés de você, um total de pontos de vida igual à 5 x seu bônus de proficiência. Adicionalmente, você tem vantagem em testes de Medicina.\nVocê recebe um Mistério Espiritual"
+    },
+    {
+      "id": "variante-anfibio",
+      "name": "Variante Anfíbio",
+      "category": "ORIGIN",
+      "origins": [
+        "antroplantae",
+        "construto",
+        "humano",
+        "yordle"
+      ],
+      "prerequisite": "Antroplantæ, Construto, Humano ou Yordle",
+      "maxTimes": 2,
+      "description": "Por algum motivo de herança você é capaz de respirar debaixo da água.\n\nSeja por ter conexão com algum antepassado Marai em seu sangue, por ter sido construído com isso em mente, ou mesmo por ser de uma família de Yordles que se adaptaram à vida debaixo da água, você consegue respirar tanto debaixo dela quanto em terra firme. Você recebe os seguintes modificadores:\n• Você pode respirar debaixo da água, além de não receber qualquer penalidade por um combate submerso.\n• Seu deslocamento de natação aumenta em um valor igual a metade do seu bônus de proficiência vezes 5, em pés e você não sofre penalidade de terrenos difíceis compostos de água.\n• Você tem proficiência no uso da rede, da lança e do tridente.\nEssa Herança pode ser escolhida uma segunda vez apenas durante a criação do personagem, concedendo os seguintes modificadores:\n• Você recebe 30 pés de visão no escuro debaixo da água. Caso já tenha, você soma esses 30 pés.\n• Você tem vantagem em salvaguardas de Destreza contra ser Agarrado ou Impedido."
+    },
+    {
+      "id": "variante-colosso",
+      "name": "Variante Colosso",
+      "category": "ORIGIN",
+      "origins": [
+        "antroplantae",
+        "construto",
+        "humano",
+        "minotauro",
+        "meio-dragao",
+        "troll",
+        "vastaya",
+        "yordle"
+      ],
+      "maxTimes": 2,
+      "description": "Por algum motivo, talvez genes, talvez influência mágica ou apenas você foi construído assim, você tem um tamanho incomum para a sua espécie, superando a maioria daqueles ao seu redor.\n\nVocê possui um tamanho incomum a sua espécie, superando a maioria daqueles ao seu redor. Você recebe os seguintes modificadores:\n• Seu tamanho para fins de capacidade de carga e peso que você pode empurrar, arrastar ou levantar, conta como uma categoria acima\n• Seus ataques corpo a corpo causam 1 de dano adicional, em contrapartida, suas roupas, armaduras e armas custam 50% a mais arredondado para cima.\nEssa Herança pode ser escolhida uma segunda vez apenas durante a criação do personagem, concedendo os seguintes modificadores:\n• Seu tamanho aumenta em uma categoria\n• Você recebe os Ajustes de Tamanho descritos no Capítulo 9: Combate Tamanho da Criatura\n• Todas as suas roupas, armas e armaduras custam o dobro do valor.\nNota: Criaturas de tamanho Grande tem várias dificuldades sociais como entrar em estabelecimentos, encontrar roupas além de terem um maior gasto em alimentação e dificilmente encontrarem montarias."
+    },
+    {
+      "id": "variante-glacinata",
+      "name": "Variante Glacinata",
+      "category": "ORIGIN",
+      "origins": [
+        "construto",
+        "humano",
+        "minotauro",
+        "yordle"
+      ],
+      "prerequisite": "Construto, Humano, Minotauro ou Yordle",
+      "description": "Você possui em seu sangue a força dos Glacinatas, uma experimentação feita pelos Observadores Gélidos em Freljordianos no passado, mas que ainda corre entre os dos dias atuais. Você não pode escolher as heranças Ignata ou Eletrinata.\n\n• Você recebe imunidade a Frio Extremo e resistência a Calor Extremo.\n• Você recebe redução de dano Gélido igual ao seu bônus de proficiência.\n• Você faz testes para usar gelo verdadeiro com vantagem e você utiliza o dobro de seu modificador de Constituição para a duração Adicionalmente, o dano gélido ou glacial causado por você tem seu dano aumentado em 1 categoria."
+    },
+    {
+      "id": "variante-meio-vastaya",
+      "name": "Variante Meio-Vastaya",
+      "category": "ORIGIN",
+      "origins": [
+        "construto",
+        "humano",
+        "minotauro",
+        "vastaya"
+      ],
+      "prerequisite": "Construto, Humano, Minotauro ou Vastaya",
+      "options": [
+        "Oovi-Kat",
+        "Marai",
+        "Shimon",
+        "Fauhwoon",
+        "Ottrani",
+        "Kiilash",
+        "Lhotlan",
+        "Vesani"
+      ],
+      "description": "Você é fruto de um relacionamento “proibido” entre um humano e um vastaya, um relacionamento que é considerado um tabu pelas duas espécies. Caso você já seja um vastaya, você não pode escolher uma herança variante da mesma tribo que a sua. Ao escolher uma tribo de ascendência, você recebe os seguintes modificadores:\nMeio-Oovi-kat\nSua herança Vastaya aflorou em você uma característica dos Oovi-Kat:\nHerança de Sho’ma. Usando uma ação e fazendo uma jogada de Transformação CD 17, você pode mudar algum aspecto menor de sua aparência, como cor de cabelo ou olhos, podendo manter um número de características diferentes igual ao seu bônus de Proficiência. Adicionalmente, um número de vezes igual ao seu bônus de Proficiência por descanso pleno, você pode fazer essa jogada de Transformação para se transformar em um ser diferente, sentir emoções e vislumbrar parte da memória recente desse ser. Para se transformar em outra criatura é necessário 2 minutos de observação, para sentir suas emoções e um vislumbre das suas memórias recentes é necessário observar por pelo menos 10 minutos. Essas memórias recentes são sensações e imagens sobre o que houve nas última hora, antes de você tentar entender suas memórias. Quando em outra forma, você mantém todas suas características. Em um sucesso você assume a aparência dessa criatura por no máximo 10 vezes seu bônus de Proficiência em minutos. Essa transformação requer Concentração.\nMeio-Marai\nSua herança Vastaya aflorou em você uma característica dos Marai:\nHerança Profunda. Você consegue respirar tanto em terra quanto na água e, combate debaixo da água não causa penalidades ou desvantagens de movimentação em você. Enquanto debaixo da água você possui visão no escuro de 60 pés. Adicionalmente, um número de vezes igual ao seu bônus de Proficiência por descanso pleno, você pode usar sua ação para acionar um sonar, desferindo um cone de 10 pés que causa 1d4 + metade de seu bônus de proficiência + seu modificador de Constituição de dano trovejante. Todas as criaturas no alcance devem fazer uma salvaguarda de constituição CD 8 + bônus de proficiência + modificador de Constituição ou recebem esse dano. Em um sucesso, recebem apenas metade. Criaturas surdas tem vantagem nessa salvaguarda.\nMeio-Shimon\nSua herança Vastaya aflorou em você uma característica dos Shimon:\nHerança Símia. Você pode re-rolar uma falha em um teste de Força, Destreza ou Constituição um número de vezes igual ao a metade do seu bônus de proficiência por descanso pleno. Adicionalmente, seus ataques desarmados têm seu dano aumentado em uma categoria.\nMeio-Fauhwoon\nSua herança Vastaya aflorou em você uma característica dos Fauhwoon\nHerança Protetora. Você possui um par de chifres menor que os dos Fauhwoon. O dano causado pelos chifres é de 1d4 + seu modificador de Força em dano contundente. Adicionalmente, sempre que você curar ou proteger um aliado de alguma forma usando uma ação ou ação bônus, o dano de seu próximo ataque corpo a corpo aumenta em um na escala e recebe o seu bônus de proficiência como dano adicional.\nMeio-Ottrani\nSua herança Vastaya aflorou em você uma característica dos Ottrani\nHerança Estelar. Utilizando uma ação, você pode curar uma criatura que esteja a até 30 pés de você gastando um dado de vida, ao fazer isso você recebe metade do valor curado como dano para si mesmo (esse dano não pode ser reduzido ou mitigado). Você pode gastar uma quantidade de dados igual à metade de seu bônus de proficiência por descanso pleno. Adicionalmente, você pode tocar uma criatura que esteja a até 5 pés de você para curá-la em uma quantidade de pontos de vida igual a metade do seu bônus de proficiência + metade de seu modificador de Sabedoria. Você pode utilizar essa habilidade um número de vezes igual à metade do seu bônus de Proficiência por descanso pleno.\nMeio-Kiilash\nSua herança Vastaya aflorou em você uma característica dos Killash\nHerança Predatória. Você possui garras e presas que podem ser usadas como armas, sendo proficiente com ambos. Suas garras causam 1d4 + metade do seu bônus de proficiência + seu modificador de Destreza ou Força de dano cortante e sua mordida causa 1d6 + metade do seu bônus de proficiência + seu modificador de Força de dano perfurante. Adicionalmente, você enxerga na penumbra a até 30 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza.\nMeio-Lhotlan\nSua herança Vastaya aflorou em você uma característica dos Lhotlan\nHerança Aérea. Ao realizar saltos em altura, você pode saltar até um número de vezes igual a até 3 + uma vez e meia seu modificador de Força (mínimo de 1) pés de altura. Adicionalmente, você pode usar uma ação bônus para criar 1 pena afiada e usá-la como adagas causando seu bônus de Proficiência como dano adicional aos ataques feitos por você com ela. Você pode fazer isso um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno. Você pode manter um número de Plumadagas igual ao seu bônus de Proficiência.\nMeio-Vesani\nSua herança Vastaya aflorou em você uma característica dos Vesani:\nHerança Vulpina. Ao adquirir esta Herança Variante, você deve escolher um atributo entre Carisma ou Sabedoria para definir as características da mesma. Você conhece o truque Disparo Arcano e é capaz de conjurar uma versão especial do mesmo um número de vezes igual à metade do seu seu bônus de proficiência por descanso longo com uma ação bônus. Ao conjurar esse truque dessa forma especial, surgem acima de sua mão até três orbes espirituais que duram por até 5 rodadas. Você pode dispará-las, cada uma, com uma ação de ataque utilizando o atributo escolhido como atributo de Conjuração. Adicionalmente, você pode utilizar uma ação para devorar a essência vital de uma criatura que esteja Inconsciente com 0 pontos de vida a menos de 5 pés de você; aquela criatura então morre e não pode ser revivida de nenhuma outra forma que não seja a magia desejo. Ao fazer isso, você recupera pontos de vida iguais ao seu modificador do atributo escolhido. Você pode utilizar essa característica um número de vezes igual à metade do seu bônus de proficiência por descanso longo. Adicionalmente, quando você faz isso, você recebe alguns fragmentos de memória e emoções da criatura. Você pode optar por não consumir a essência, armazenando-a em você. Você pode armazenar um máximo de essências igual a metade do seu bônus de proficiência + metade do seu modificador do atributo escolhido. Tentar armazenar mais essências pode provocar confusão em suas próprias memórias e sentimentos. Essas essências duram indeterminadamente ou até você morrer. Além disso, você é afligido pela dependência Fome de Essência, somando metade do seu bônus de proficiência à quantidade de dias que que pode passar sem se alimentar de Essência."
+    },
+    {
+      "id": "variante-progressao-tecnologica",
+      "name": "Variante Progressão Tecnológica",
+      "category": "ORIGIN",
+      "origins": [
+        "antroplantae",
+        "construto",
+        "humano",
+        "minotauro",
+        "meio-dragao",
+        "troll",
+        "vastaya",
+        "yordle"
+      ],
+      "maxTimes": 2,
+      "options": [
+        "Fonte Estável",
+        "Fonte Instável"
+      ],
+      "description": "Seu corpo foi modificado através de procedimentos irreversíveis. Embora você fosse originalmente um membro normal de sua origem, seu corpo agora foi modificado por algum processo. Ao escolher essa Herança, você deve escolher entre uma Fonte Estável ou uma Fonte Instável, cada região possui várias possibilidades e a sua escolha definirá os benefícios que você possui:\nEstável. Você possui uma fonte de energia proveniente de uma fonte Estável encontrada em algum lugar do seu corpo. Escolha 1 item da lista de Vantagens Tecnológicas da Variante Tecnológica. Instável. Você possui uma fonte de energia proveniente de uma fonte Instável encontrada em algum lugar do seu corpo. Escolha 2 itens da lista de Vantagens Tecnológicas da Variante Tecnológica e 1 item da lista de Desvantagens Tecnológicas da Variante Tecnológica.\nAo escolher essa Variante após a primeira vez, você pode optar por receber uma nova fonte de energia, lhe garantindo todas as características da mesma ou apenas aprimorar a fonte que você possui recebendo novas Vantagens Tecnológicas. Caso escolha uma segunda vez a fonte Instável, você pode escolher entre receber 1 Vantagem Tecnológica ou 2 Vantagens Tecnológicas e uma nova Desvantagem Tecnológica.\nUma vez que você escolha essa Herança Variante durante a criação de personagem, ao receber novos pontos de Origem em níveis posteriores, você pode escolher gastar esses pontos aprimorando essa Herança Variante.\nFontes de Energia\nCada região em determinados momentos do tempo pode possuir diversas fontes de energia tecmatúrgica, especialmente regiões que possuem trocas culturais com outras. Abaixo está uma sugestão de fontes de energia tecmatúrgica, uma estável e uma instável, baseando-se nas regiões.\nA distinção entre Estável e Instável está ligada principalmente a contextos de história, sobre quão aprofundada é a ciência que utiliza essa fonte ou quão consistentes são os resultados obtidos pela mesma.\nEstável. Magia Buhru\n• \nInstável. Implantes Marítimos\n• \nEstável. Petricita\n• \nInstável. Azakana\n• \nEstável. Gelo Verdadeiro\n• \nInstável. Gelo Sombrio\n• \nEstável. Natureza\n• \nInstável. Azakana ou Quimtec\n• \nEstável. Axiomata\n• \nInstável. Flora\n• \nEstável. Hemomante\n• \nInstável. Azakana ou Quimtec\n• \nEstável. Hextec\n• \nInstável. Quimtec\n• \nEstável. Tecnologia Ascendente\n• \nInstável. Tecnologia Baccai\n• \nEstável. Celestial\n• \nInstável. Cristal\n• \nVocê pode escolher essa Variante mais de uma vez para escolher uma nova fonte de energia, lhe garantindo todas as características da mesma.\nVantagens da Variante Tecnológica\n• Adaptação de Escalada. Você recebe deslocamento de escalada igual a metade do seu deslocamento de caminhada.\n• Adaptação Subaquática. Você pode respirar tanto ar quanto água e recebe deslocamento de natação igual a metade do seu deslocamento de caminhada.\n• Arma Integrada. Criaturas aprimoradas por tecnologia podem substituir um membro do seu corpo por uma arma corpo a corpo ou à distância que esteja em seu equipamento inicial, você utiliza essa arma normalmente. Essa vantagem pode ser escolhida mais de uma vez.\n• Armas Naturais. Você possui garras que podem causar 1d8 + seu modificador de Força de dano cortante, e presas que podem causar 1d6 + seu modificador de Força de dano perfurante.\n• Bolsa de Tinta. Você pode usar um ataque para fazer um ataque à distância especial para cegar uma criatura em sua linha de visão a até 15 pés de você caso a mesma falhe em uma Salvaguarda de Destreza CD 12. Criaturas que não precisem da visão não são afetadas por esse ataque e criaturas afetadas precisam usar uma ação para limpar a tinta. Essa habilidade funciona de forma diferente debaixo da água: com uma ação bônus você pode criar uma área de obscurecimento pesada em um raio de 5 pés a partir de você. Você pode utilizar essa habilidade um número de vezes igual a metade do seu bônus de Proficiência por descanso longo. Você pode escolher essa habilidade mais de uma vez.\n• Carapaça. Sua pele tem uma cobertura adicional. Você recebe Redução de Dano igual a metade do seu bônus de proficiência, exceto a dano verdadeiro e espiritual. Você não diminui o dano recebido através de condições.\n• Defesa Adaptativa. Utilizando uma ação bônus, você envia um comando para sua fonte de energia, fazendo com que ela emita um campo que te protege de ataques por 1 minuto. Ao enviar o comando você deve direcioná-lo para ataques físicos ou magia, ataques do tipo escolhido possuem desvantagem contra você (caso o ataque exija salvaguarda, você faz a mesma com vantagem). Você pode utilizar essa característica um número de vezes igual a metade do seu bônus de proficiência por Descanso Pleno.\n• Epiderme Cromática. Você tem vantagens em testes de Furtividade que você faz para se ocultar. Adicionalmente, enquanto estiver sem armadura, você pode tentar se esconder mesmo sem estar com cobertura leve ou pesada, contanto que permaneça parado.\n• Gancho de Manobras. Você possui um gancho atrelado a uma linha metálica com 60 pés de comprimento. Utilizando uma ação, você pode disparar o gancho em uma superfície dentro do alcance, se prendendo na mesma. Adicionalmente, utilizando uma ação bônus, você pode se soltar e saltar em um alvo a até 15 pés de você, podendo realizar um ataque corpo a corpo contra o mesmo.\n• Idade Congelada. Sua idade física pode não corresponder aos anos que você viveu, diferente de um humano normal.\n• Membro Robótico. Você possui 1 membro mecânico superior em alguma parte do seu corpo e tem controle sobre ele normalmente. Essa vantagem pode ser escolhida mais de uma vez para membros adicionais. Consulte o Capítulo 9 - Membros Múltiplos para as regras de combate com membros adicionais\n• Patagia. Você tem membranas que atuam como barbatanas e podem ser usadas como asas para desacelerar sua queda ou permitir que você plane. Se você sofrer uma queda e não estiver Incapacitado, você pode subtrair até 100 pés do cálculo de dano da queda, você pode também se mover 2 pés para a frente para cada 1 pé que você esteja em queda.\n• Pele Intoxicante. Qualquer criatura que agarre você ou entre em contato direto com sua pele deve passar em uma salvaguarda de Constituição de CD 12 ou é Intoxicada por 1 minuto. Uma criatura Intoxicada que não esteja mais em contato com sua pele pode repetir a salvaguarda no fim de seu turno, encerrando o efeito em caso de sucesso.\n• Proteção Metálica. Você revestiu sua pele com um liga metálica que concede à você uma proteção natural. Desde que não esteja utilizando nenhuma armadura, sua CA é igual a 13 + seu modificador de Destreza.\n• Sentido Superior. Criaturas aprimoradas por tecnologia possuem vantagem em testes de Percepção através da audição, olfato ou visão.\n• Visão no Escuro. Seus olhos foram substituídos por câmeras com a capacidade de se adaptar à escuridão. Você enxerga na penumbra a até 30 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza.\nDesvantagens da Variante Tecnológica\n• Aparato Respiratório. Você possui problemas para respirar normalmente, tendo a necessidade de um dispositivo que te ajude nesse processo vital, caso seu dispositivo quebre ou você esteja sem ele, você possui desvantagem em salvaguardas de Constituição relacionados à respiração, você usa apenas metade do seu modificador de Constituição arredondado para baixo, se o valor for positivo, para prender a respiração e ao sufocar. O dispositivo é a prova d’água e caso ele quebre é necessário 1 hora de trabalho e um teste bem-sucedido CD 10 usando Conjunto de Tecmaturgo para arrumá-lo.\n• Canos e Fumaça. Você tem canos saindo do seu corpo e deles saem fumaça, quando rolar um teste de Furtividade você possui desvantagem devido a fumaça dos canos .\n• Cara da Morte. Você sofreu algum acidente decorrente ou não de sua modificação causando uma deformidade facial, você possui desvantagem em testes de Persuasão e Enganação.\n• Loucura. Você sofreu com um trauma durante ou ao acordar de sua modificação. Junto ao seu Mestre você deve definir um tipo de Abalo Mental Indefinido ou Episódico para receber com base em sua modificação.\n• Metamorfo. Sua aparência difere muito da humana, seja você um humano com características animais ou um animal com características humanas.\n• Modulador de Voz. Você não é capaz de falar, para isso você utiliza um dispositivo que substitui sua voz. Você possui desvantagem em testes de Atuação relacionados à voz.\n• Sede de Sangue. Você possui uma obsessão por sangue, seja para consumir, sentir seu cheiro no ar ou apenas uma forte vontade de derramar cada vez mais sangue. Você tem um olfato bem sensível para detectar sangue. Você recebe a Dependência Sede de Sangue.\n• Sobrecarga. Se tirar 1 no dado, role mais um d20, se cair um número menor que 7 você recebe 1 ponto de exaustão.\n• Tubos Quimtec. Você tem diversos tubos acoplados ao seu corpo te tornando vulnerável a certos ataques, ao receber um ataque crítico, você fica Enfraquecido até que gaste 1 ação reparando o dano aos tubos.\nLimiar Tecnológico\nAo receber sucessivas modificações em seu corpo, aos poucos ele deixa de ser considerado um corpo de sua Origem, quando o número de modificações é alto, ele pode mesmo até vir a se transformar em sua essência orgânica, passando do limiar de sua origem. Essas modificações podem ser derivadas de Heranças, Aprimoramentos e até mesmo modificações feitas dentro de história que concedam Vantagens Tecnológicas.\nCaso escolha uma fonte Estável e receba 5 vantagens, você passa a ser considerado um Construto Vivo e recebe os seguintes modificadores:\n• Habilidades que afetam Construtos passam a afetar você\n• Resistência a venenos e a dano venenoso\n• Imunidade a doenças não mágicas\n• Não precisa comer, beber ou respirar\n• Não precisa dormir, não sofre efeito de exaustão por falta de descanso e não sofre efeitos de magia de sono\n• Cura apenas metade da vida com magias e efeitos de cura. A magia reparar dano cura normalmente.\nCaso escolha uma fonte Instável e receba 5 vantagens, você passa a ser considerado um Mutante e recebe os seguintes modificadores:\n• Você passa a ser considerado uma Mutação\n• Resistência a venenos e a dano venenoso\n• Imunidade a doenças não mágicas\n• Sua necessidade diária de comer e beber é reduzida pela metade\n• Não sofre efeitos da magia sono\nUm personagem que possua as duas fontes de energia e receba vantagens, deve escolher qual será a dominante, Estável ou Instável, essa mudança é irreversível."
+    },
+    {
+      "id": "variante-ressurgido",
+      "name": "Variante Ressurgido",
+      "category": "ORIGIN",
+      "origins": [
+        "antroplantae",
+        "construto",
+        "humano",
+        "minotauro",
+        "meio-dragao",
+        "troll",
+        "vastaya",
+        "yordle"
+      ],
+      "maxTimes": 2,
+      "options": [
+        "Espectral",
+        "Meio-Azakana",
+        "Meio-Kanmei"
+      ],
+      "description": "Você morreu. Entretanto, não foi capaz de superar sua própria morte se tornando um espírito que ainda busca algo no reino dos vivos, seja vingança, culpa ou algum outro motivo. Cuidado, os Kindred estão atrás de você.\n\nOs meio Azakana e meio Kanmei são bem próximos pois a diferença entre um senso de missão e obsessão é algo bem tênue. Já os Espectrais, acabam por retornar para o mundo físico de uma forma diferente, sem a intercessão de Kanmei ou Azakanas, muitas vezes através de outras entidade ainda mais poderosas como Nagacáburos, substâncias mágicas potentes como o líquido de Peixe-Jaula ou mesmo através de magia pura, seja ela Espiritual ou Celestial.\nVocê pode escolher essa Herança no momento de criação de seu personagem ou caso você morra em níveis mais altos, caso seu Mestre permita. Ao escolhê-la em níveis mais altos, você deve abdicar de uma de suas Heranças e substituí-la por essa. Escolha entre se tornar um Espectral, Meio-Azakana ou Meio-Kanmei, recebendo os seguintes modificadores:\nEspectral\nA vida aconteceu. Mas a sua chegou a um fim, com isso, alguma forma de energia necromântica foi capaz de trazer você de volta, seja por uma obsessão, seja por um senso de justiça. Você ainda tem contas a acertar mas graças à energia do mundo dos mortos, você acabou por retornar como um Espectro. Você recebe as seguintes características:\n• Você pode falar o idioma Ochnum.\n• Resiliência das Sombras. Você é imune a doenças mundanas e envenenamento, recebe apenas metade do valor com feitiços e efeitos de cura, recebe absorção a dano necrótico e resistência a dano venenoso, porém, tem vulnerabilidade a dano radiante, armas de ouro e de prata.\n• Você passa a ser afetado por feitiços, habilidades ou qualquer outro efeito que funcione em mortos-vivos. Habilidades de classe como Expulsar e Destruir Mortos-vivos do Acólito do Rito Espiritual possuem suas regras modificadas para você como descrito abaixo.\nExpulsar e Destruir Mortos-Vivos. Como são mortos-vivos, os espectros são suscetíveis a magias que afetem esse tipo de criatura, isso inclui a Liturgia responsável por Expulsar ou Destruir Mortos-Vivos, no entanto a mecânica para isso é levemente diferente.\nPara a característica Expulsar Mortos-Vivos do Acólito do Rito de Espiritual, se falhar na salvaguarda, ao invés de fugir da melhor maneira possível, você apenas fica Amedrontado perante quem usou a habilidade e evitará se aproximar dela.\nPara a característica Destruir Mortos-Vivos do Acólito do Rito Espiritual, se falhar na salvaguarda, você recebe ¼ do nível de Acólito usado para a característica em d10 de dano radiante.\nEssa Herança pode ser escolhida uma segunda vez a partir do 5º nível, concedendo os seguintes modificadores:\n• Alternância. Utilizando uma ação, você pode se mover através de outras criaturas e objetos como se fossem terreno difícil. Por 1 minuto você se torna imune a ataques não mágicos e ainda é capaz de conjurar magias, mas se torna incapaz de realizar ataques físicos. Se você encerrar seu turno dentro de uma criatura ou objeto, você recebe 1d10 de dano energético e é empurrado para o espaço desocupado mais próximo. Você só pode realizar essa ação um número de vezes igual ao seu bônus de Proficiência por descanso longo.\n• Você recebe apenas metade do dano causado por Destruir Mortos-Vivos\nMeio-Azakana\nVocê morreu. Mas algo no mundo dos espíritos mexeu com sua existência e a sua essência, fazendo com que parte dela se mesclasse à de uma criatura do mundo espiritual, um Azakana. Uma entidade maligna que preda nas emoções mais terríveis dos seres vivos. Embora você tenha se tornado parcialmente uma criatura ínfera, isso não significa que você se tornou maligno. Você recebe as seguintes características:\n• Você pode ler, escrever e falar o idioma Demoníaco.\n• Resiliência Ínfera. Você possui resistência à dano ígneo e necrótico, caso já possua resistência a um desses danos, você recebe imunidade ao invés disso. Além disso, você possui vulnerabilidade a dano radiante, armas de ouro e de prata.\n• Você passa a ser afetado por magias, habilidades ou qualquer outro efeito que funcione em ínferos.\nEssa Herança pode ser escolhida uma segunda vez apenas durante a criação do personagem, concedendo os seguintes modificadores:\n• Aura de Medo. Sua mera presença pode aterrorizar outras criaturas. Utilizando uma ação, você pode criar uma aura ao seu redor em um raio de 30 pés centrado em você, essa aura dura por até 1 minuto ou até que você fique Incapacitado. Criaturas que estejam nessa área, iniciem seu turno dentro dela ou entrem nela devem realizar uma salvaguarda de Sabedoria CD 10 + seu bônus de proficiência + metade do seu nível de personagem. Em uma falha, a criatura estará Amedrontada por você até o final da duração dessa aura. Uma criatura afetada pode repetir a salvaguarda no início de cada um de seus turnos para encerrar essa condição. Em um sucesso, a criatura ficará imune a esse efeito pelo próximo minuto. Você pode utilizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por descanso pleno.\n• Você não possui mais vulnerabilidade a dano radiante.\nMeio-Kanmei\nSeu espírito ascendeu. O mundo dos espíritos é um terreno complexo, por vezes algumas pessoas chegam a ele após seu desencarne, mas uma motivação maior e nobre faz com que seu senso de dever não os deixe descansar. Espíritos bondosos, Kanmei, podem se aproximar de você e perceber em sua missão a sinceridade e a bondade, cedendo parte de sua essência para que você retorne ao mundo físico e cumpra seu papel. Você recebe as seguintes características:\n• Você pode ler, escrever e falar o idioma Espiritual.\n• Resiliência Espiritual. Você possui resistência à dano radiante, caso já possua resistência, você recebe imunidade ao invés disso. Você possui vantagem em salvaguardas para resistir a qualquer efeito que fosse lhe causar a condição Enfeitiçado. Além disso, você possui vulnerabilidade a dano necrótico.\n• Você passa a ser afetado por magias, habilidades ou qualquer outro efeito que funcione em espíritos.\nEssa Herança pode ser escolhida uma segunda vez apenas durante a criação do personagem, concedendo os seguintes modificadores:\n• Super Camaradinha. Você possui charme sobrenatural natural, algo praticamente etéreo. Utilizando uma ação, você pode tentar encantar uma criatura que esteja a até 60 pés de você que possa vê-lo ou ouvi-lo. Essa criatura deve realizar uma salvaguarda de Sabedoria CD 10 + seu bônus de proficiência + metade do seu nível de personagem. Em uma falha, a criatura ficará Enfeitiçada por você pelo próximo minuto, podendo repetir a salvaguarda no final de cada um de seus turnos para encerrar essa condição. Apenas uma criatura pode ser Enfeitiçada por vez. Você pode utilizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por descanso pleno.\n• Você deixa de ter vulnerabilidade a dano necrótico."
+    },
+    {
+      "id": "brutalizador",
+      "name": "Brutalizador",
+      "category": "ORIGIN",
+      "origins": [
+        "minotauro"
+      ],
+      "lineages": [
+        "auroque"
+      ],
+      "prerequisite": "Minotauro Auroque",
+      "description": "Quando você entra em combate, seu corpo é a arma mais perigosa que você tem a sua disposição, você recebe os seguintes benefícios:\n\nO dano de seus ataques desarmados e com chifres aumenta em 1 na escala de dano.\nSeus ataques desarmados e com chifres tem sua margem de crítico reduzida em 1."
+    },
+    {
+      "id": "brutalidade-de-combate",
+      "name": "Brutalidade de Combate",
+      "category": "ORIGIN",
+      "origins": [
+        "minotauro"
+      ],
+      "prerequisite": "Minotauro",
+      "description": "Você consegue canalizar o máximo da brutalidade mais primitiva dos Minotauros. Você recebe os seguintes benefícios:\n\nAo fazer um ataque corpo a corpo você pode realizar um ataque com seus Chifres utilizando sua ação bônus. Você pode exigir que o alvo deste ataque, que deve estar até 5 pés de você e, seja no máximo uma categoria de tamanho acima de você, faça uma salvaguarda de Força CD 8 + seu bônus de proficiência + seu modificador de Força. Em uma falha, o alvo fica Caído e é empurrado 5 pés de você. Caso a criatura seja de uma categoria de tamanho acima que a sua, ela possui vantagem na salvaguarda. Você pode realizar isso um número de vezes igual ao seu bônus de Proficiência por Descanso Pleno.\nAo usar uma ação de Disparada você passa a poder se mover quatro vezes o seu deslocamento, ao invés de duas e, adicionalmente, você pode fazer um ataque com seus Chifres com uma ação bônus. Caso se mova ao menos 30 pés em linha reta antes de atingir um alvo, os dados de dano de seu Chifres são dobrados."
+    },
+    {
+      "id": "espirito-de-aco",
+      "name": "Espírito de Aço",
+      "category": "ORIGIN",
+      "origins": [
+        "construto",
+        "minotauro"
+      ],
+      "prerequisite": "Minotauro ou Construto",
+      "description": "Sua resistência é muito superior à dos outros, curiosamente, ao usar óculos, amigos tem dificuldade em reconhecê-lo. Você ganha os seguintes benefícios:\n\nQuando uma jogada de ataque feita contra você marcar um acerto crítico, você pode usar sua reação para anular o acerto crítico, fazendo com que o ataque seja tratado como um acerto normal. Você pode utilizar essa habilidade um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno."
+    },
+    {
+      "id": "hospitaleiro",
+      "name": "Hospitaleiro",
+      "category": "ORIGIN",
+      "origins": [
+        "minotauro"
+      ],
+      "lineages": [
+        "alnuk"
+      ],
+      "prerequisite": "Minotauro Alnuk",
+      "description": "Quem é abrigado por um Alnuk pode afirmar categoricamente que eles são as criaturas mais hospitaleiras de toda Runeterra, Você recebe os seguintes benefícios:\n\nVocê recebe proficiência com o Ofício de Cozinheiro.\nAo utilizar seu Ofício de Cozinheiro para preparar uma refeição, o resultado do “20” natural também é alcançado com um 19.\nVocê recebe a magia bom fruto e pode usá-la sem gastar pontos de mana um número de vezes igual ao seu bônus de Proficiência por Descanso Pleno."
+    },
+    {
+      "id": "selvagem",
+      "name": "Selvagem",
+      "category": "ORIGIN",
+      "origins": [
+        "minotauro"
+      ],
+      "prerequisite": "Minotauro",
+      "description": "Seus chifres são mais fortes do que de outros Minotauros. Você ganha os seguintes benefícios:\n\nQuando você usar a ação Disparada, você pode realizar um ataque corpo a corpo com seus chifres contra uma uma criatura após se mover ao menos 20 pés. Caso o ataque seja bem sucedido, o alvo deve realizar uma salvaguarda de Força CD 8 + seu bônus de Proficiência + seu modificador de Força. Em uma falha, ele ficará Caído. Caso o alvo possua duas categorias de tamanho acima da sua, ele é automaticamente bem-sucedido nessa salvaguarda.\nAtaques com seu chifre tem seu dano aumentado em uma categoria."
+    },
+    {
+      "id": "vislumbre-estelar",
+      "name": "Vislumbre Estelar",
+      "category": "ORIGIN",
+      "origins": [
+        "minotauro"
+      ],
+      "lineages": [
+        "aelus"
+      ],
+      "prerequisite": "Minotauro Aelus",
+      "description": "Você tem uma predileção especial em observar as estrelas através da sabedoria de seus ancestrais, você recebe os seguintes benefícios:\n\nEscolha entre Adivinhação e Oniromancia. Você recebe o Mistério escolhido.\nVocê recebe uma magia de 1º nível do Mistério da Adivinhação ou da Oniromancia, você pode conjurar essa magia como uma magia de 1º nível sem gastar pontos de mana uma número de vezes igual a metade do seu bônus de Proficiência por descanso pleno usando seu atributo de conjuração ou Sabedoria, o que for maior."
+    },
+    {
+      "id": "construcao-primorosa",
+      "name": "Construção Primorosa",
+      "category": "ORIGIN",
+      "origins": [
+        "construto"
+      ],
+      "lineages": [
+        "brutal"
+      ],
+      "prerequisite": "Construto Brutal",
+      "description": "Os materiais empregados em sua construção foram de excelente qualidade ou tiveram uma excelente sinergia entre si, conferindo a você uma resistência adicional. Você recebe os seguintes benefícios:\n\nVocê recebe uma segunda resistência das disponíveis na lista Resistente do Construto Brutal."
+    },
+    {
+      "id": "corpo-leve",
+      "name": "Corpo Leve",
+      "category": "ORIGIN",
+      "origins": [
+        "construto"
+      ],
+      "lineages": [
+        "ligeiro"
+      ],
+      "prerequisite": "Construto Ligeiro",
+      "description": "Os materiais empregados em seu corpo possuem uma ressonância particular que permite a você uma agilidade sobrenatural, você recebe os seguintes benefícios:\n\nAo ser atingido por um ataque corpo a corpo, após saber o dano causado pelo mesmo, você pode optar por usar sua reação para que o ataque seja considerado uma falha ao invés de um acerto. Você pode fazer isso um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+    },
+    {
+      "id": "eletrostatico",
+      "name": "Eletrostático",
+      "category": "ORIGIN",
+      "origins": [
+        "construto"
+      ],
+      "lineages": [
+        "emissario"
+      ],
+      "prerequisite": "Construto Emissário",
+      "description": "Sua fonte energética gera um pulso elétrico todo rodada que se dissipa rapidamente, você é capaz de usar esse pulso para alguns efeitos:\n\nPulso de Ataque. Utilizando esse pulso, você pode adicionar 1d4 de dano elétrico a um de seus ataques desarmados ou com arma corpo a corpo por turno, desde que elas sejam feitas de metal. Esse bônus aumenta para 1d8 no nível 5, 1d10 no nível 13 e 2d6 no nível 17.\nPulso de Defesa. Você pode utilizar esse pulso com uma ação bônus para criar um escudo de pontos de vida temporários que dura até o começo de seu próximo turno. Você faz a rolagem do dado de dano e adiciona o valor como pontos de vida temporários que duram até o início de seu próximo turno ou serem consumidos, o que acontecer primeiro."
+    },
+    {
+      "id": "essencia-volatil",
+      "name": "Essência Volátil",
+      "category": "ORIGIN",
+      "origins": [
+        "construto"
+      ],
+      "prerequisite": "Construto",
+      "description": "Seu processo de construção envolveu alguma sinergia especial com uma fonte de energia, dando a você uma particularidade de interação com a mesma. Isso se reflete em sua aparência. Você ganha os seguintes benefícios:\n\nEscolha dois entre os seguintes tipos de danos: ácido, elétrico, ígneo, gélido, trovejante ou venenoso, você recebe absorção de um e vulnerabilidade ao outro."
+    },
+    {
+      "id": "forca-pneumatica",
+      "name": "Força Pneumática",
+      "category": "ORIGIN",
+      "origins": [
+        "construto"
+      ],
+      "prerequisite": "Construto",
+      "description": "Seu corpo possui engrenagens reforçadas que podem ser alavancadas para movimentos mais poderosos. Você recebe os seguintes benefícios:\n\nUsando sua ação de movimento, você abdica de se mover durante seu turno para amplificar seu primeiro ataque corpo a corpo. O dano de seu primeiro ataque nesse turno tem seu modificador de Força dobrado (mínimo de 0). Você pode utilizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por Descanso Pleno. Ao alcançar o 7º nível, ao invés de abdicar de seu movimento, ele é apenas reduzido pela metade e, ao alcançar o 10º nível, o modificador de Força é dobrado para todos ataques corpo a corpo feitos nesse turno.\nSeu modificador de Força adicionado ao dano de seus ataques corpo a corpo é afetado pelo multiplicador de seu ataques críticos.\nForça Predatória\nPré-requisito: Troll\n\nA capacidade de adaptação do seu organismo ao meio ambiente concede a você os seguintes benefícios:\n\nVocê recebe proficiência em Sobrevivência, caso já tenha, recebe especialidade. Você pode encontrar comida em lugares quase impossíveis (embora essa comida possa não servir para não Trolls).\nSeus olhos se adaptaram de forma surpreendente ao escuro. Você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+    },
+    {
+      "id": "modularidade",
+      "name": "Modularidade",
+      "category": "ORIGIN",
+      "origins": [
+        "construto"
+      ],
+      "prerequisite": "Construto",
+      "description": "Seu corpo possui características bem particulares que permitem que você utilize aprimoramentos de Mechas. Você recebe os seguintes benefícios:\n\nSeu corpo permite que Aprimoramentos de Aparatos como Mecha e Armamento Aprimorado sejam instalados. O tempo necessário para isso é reduzido pela metade\nEscolha uma vantagem da Herança Variante Progressão Tecnológica. Você pode trocar essa vantagem por outra à sua escolha utilizando ferramentas de tecmaturgo durante um descanso pleno."
+    },
+    {
+      "id": "puxao-bionico",
+      "name": "Puxão Biônico",
+      "category": "ORIGIN",
+      "origins": [
+        "construto"
+      ],
+      "prerequisite": "Construto",
+      "description": "Em sua construção, seu criador colocou uma maneira de você impedir que seus inimigos pudessem fugir impunes. Você recebe os seguintes benefícios:\n\nVocê pode utilizar uma ação de Ataque para disparar sua mão em uma linha de 20 pés a partir de você, parando no primeiro alvo que atingir. Ele deve realizar uma salvaguarda de Destreza CD 8 + seu bônus de proficiência + seu modificador de Força. Em uma falha, o alvo sofre o dano de seu ataque desarmado e, caso a criatura seja de uma categoria de tamanho igual ou menor que a sua, ela é puxada para ficar a 5 pés de você. Em um sucesso, sua mão continua a percorrer a linha até que atinja um alvo que falhe na salvaguarda ou chegar ao seu alcance limite, o que acontecer primeiro."
+    },
+    {
+      "id": "voltagem-de-escape",
+      "name": "Voltagem de Escape",
+      "category": "ORIGIN",
+      "origins": [
+        "construto"
+      ],
+      "prerequisite": "Construto",
+      "description": "Seu núcleo emite mais energia do que seu corpo precisa para funcionar, com essa energia residual sendo expelida em seus ataques. Você recebe os seguintes benefícios:\n\nUm número de vezes igual ao seu bônus de Proficiência por Descanso Pleno, você pode adicionar 1d4 de dano elétrico a um de seus ataques desarmados ou com arma corpo a corpo, desde que elas sejam feitas de metal. Esse bônus aumenta para 1d8 no nível 6, 1d10 no nível 12 e 2d8 no nível 18."
+    }
+  ]
+}

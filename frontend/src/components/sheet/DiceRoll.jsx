@@ -71,9 +71,20 @@ export default function DiceRoll({ roll, onClose }) {
           </div>
         )}
         {kind === 'crit' && <div className="roll-tag">CRÍTICO!</div>}
+        {kind === 'crit' && <Sparks />}
         {kind === 'fumble' && <div className="roll-tag">FALHA CRÍTICA</div>}
       </div>
     </div>
+  )
+}
+
+// Faíscas douradas saindo do dado no 20 natural (cada uma num ângulo, --a).
+const SPARKS = Array.from({ length: 14 }, (_, i) => ({ '--a': (i * 360) / 14 + 'deg', '--d': 40 + (i % 3) * 22 + 'px' }))
+function Sparks() {
+  return (
+    <span className="sparks" aria-hidden="true">
+      {SPARKS.map((style, i) => <span key={i} style={style} />)}
+    </span>
   )
 }
 
@@ -84,8 +95,8 @@ export function RollLog({ rolls }) {
   }
   return (
     <ol className="log">
-      {rolls.map(r => (
-        <li key={r.id} className={outcome(r)}>
+      {rolls.map((r, n) => (
+        <li key={r.id} className={outcome(r)} style={{ '--n': n }}>
           <span className="log-label">
             {r.label}
             {r.mode === 'adv' && <abbr className="log-mode adv" title="Vantagem">V</abbr>}

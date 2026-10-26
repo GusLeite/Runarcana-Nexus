@@ -4,6 +4,7 @@ import { DOCUMENT_KINDS, documentKindOf, formatDate } from '../../data/rules.js'
 import { CHARACTERS } from '../../data/characters.js'
 import { DocumentView } from '../sheet/DocumentsTab.jsx'
 import { DocIcon } from '../sheet/icons.jsx'
+import { afterLeave } from '../../utils/motion.js'
 
 const EMPTY = { title: '', kind: 'LETTER', body: '', imageUrl: '' }
 const nameOf = username => CHARACTERS.find(c => c.id === username)?.name ?? username
@@ -18,6 +19,7 @@ export default function MasterDocuments({ token, onError, onToast }) {
   const [msg, setMsg] = useState(null)
   const [busy, setBusy] = useState(false)
   const [confirmId, setConfirmId] = useState(null)
+  const [leavingId, setLeavingId] = useState(null)
 
   useEffect(() => {
     fetchRecipients(token).then(setPlayers).catch(onError)
@@ -48,11 +50,17 @@ export default function MasterDocuments({ token, onError, onToast }) {
     }
   }
 
+  // A linha encolhe (leaving) e só depois sai da lista.
   const remove = doc => {
+    setConfirmId(null)
+    setLeavingId(doc.id)
     deleteDocument(token, doc.id)
-      .then(() => { setSent(list => list.filter(d => d.id !== doc.id)); onToast('Documento apagado.') })
-      .catch(onError)
-      .finally(() => setConfirmId(null))
+      .then(() => afterLeave(() => {
+        setSent(list => list.filter(d => d.id !== doc.id))
+        setLeavingId(null)
+        onToast('Documento apagado.')
+      }))
+      .catch(err => { setLeavingId(null); onError(err) })
   }
 
   const draft = { id: 0, ...form, createdAt: new Date().toISOString(), toAll: to.length === 0, body: form.body, imageUrl: form.imageUrl || null }
@@ -122,10 +130,10 @@ export default function MasterDocuments({ token, onError, onToast }) {
         <h3 className="card-title">Enviados <small>{sent.length}</small></h3>
         {sent.length === 0 && <p className="muted-note">Nenhum documento enviado ainda.</p>}
         <ul className="docs">
-          {sent.map(doc => {
+          {sent.map((doc, n) => {
             const kind = documentKindOf(doc.kind)
             return (
-              <li key={doc.id} className="sent-row" style={{ '--k': kind.color }}>
+              <li key={doc.id} className={'sent-row' + (doc.id === leavingId ? ' leaving' : '')} style={{ '--k': kind.color, '--n': n }}>
                 <span className="doc-seal"><DocIcon kind={doc.kind} /></span>
                 <span className="doc-info">
                   <span className="doc-name">{doc.title}</span>

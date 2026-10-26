@@ -18,11 +18,12 @@ public record AbilityResponse(
         String description,
         Integer maxUses,
         Integer usesLeft,
-        Recharge recharge
+        Recharge recharge,
+        String icon
 ) {
     public static AbilityResponse of(CharacterAbility a) {
         return new AbilityResponse(a.getId(), a.getName(), a.getType(), a.getSpellLevel(), a.getSchool(),
                 a.getCastingTime(), a.getAbilityRange(), a.getDuration(), a.getComponents(), a.getDamage(),
-                a.getDescription(), a.getMaxUses(), a.getUsesLeft(), a.getRecharge());
+                a.getDescription(), a.getMaxUses(), a.getUsesLeft(), a.getRecharge(), a.getIcon());
     }
 }

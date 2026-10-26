@@ -31,14 +31,14 @@ export default function DocumentsTab({ documents, selectedId, onSelect, onOpen }
         {documents.length === 0 && <p className="muted-note">O mestre ainda não te entregou nenhum documento.</p>}
 
         <ul className="docs">
-          {visible.map(doc => {
+          {visible.map((doc, n) => {
             const kind = documentKindOf(doc.kind)
             return (
               <li key={doc.id}>
                 <button
                   type="button"
                   className={'doc-row' + (doc.id === selected?.id ? ' on' : '') + (doc.read ? '' : ' unread')}
-                  style={{ '--k': kind.color }}
+                  style={{ '--k': kind.color, '--n': n }}
                   onClick={() => open(doc)}
                 >
                   <span className="doc-seal"><DocIcon kind={doc.kind} /></span>
@@ -55,7 +55,7 @@ export default function DocumentsTab({ documents, selectedId, onSelect, onOpen }
       </div>
 
       <div className="doc-view">
-        {selected ? <DocumentView doc={selected} /> : (
+        {selected ? <DocumentView key={selected.id} doc={selected} /> : (
           <div className="item-detail empty-detail"><p className="muted-note">Escolha um documento para ler.</p></div>
         )}
       </div>

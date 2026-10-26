@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
-  carryCapacity, formatKg, formatModifier, groupAbilities, groupSkills, itemStats, modifier, parseDice, rollCheck,
-  rollD20, rollDice, totalValue, totalWeight,
+  addHeritage, carryCapacity, choiceOptionName, heritageTimes, removeHeritage, setHeritageOption, formatFeet, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
+  pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
 } from './rules.js'
 
 describe('modificadores', () => {
@@ -82,9 +82,66 @@ describe('vantagem e desvantagem', () => {
 describe('magias e habilidades', () => {
   it('agrupa habilidades, passivas e magias por círculo', () => {
     const groups = groupAbilities([
-      { type: 'SPELL', spellLevel: 1 }, { type: 'PASSIVE' }, { type: 'SPELL', spellLevel: 0 }, { type: 'ABILITY' },
+      { type: 'HERITAGE' }, { type: 'SPELL', spellLevel: 1 }, { type: 'PASSIVE' }, { type: 'SPELL', spellLevel: 0 }, { type: 'ABILITY' },
     ])
-    expect(groups.map(g => g.title)).toEqual(['Habilidades', 'Passivas', 'Truques', 'Magias de 1º círculo'])
+    expect(groups.map(g => g.title)).toEqual(['Habilidades', 'Passivas', 'Truques', 'Magias de 1º círculo', 'Heranças'])
+  })
+})
+
+describe('criação de personagem', () => {
+  it('descreve cada concessão do catálogo', () => {
+    expect(grantLabel({ type: 'ATTRIBUTE', attribute: 'INTELLIGENCE', amount: 2 })).toBe('+2 Inteligência')
+    expect(grantLabel({ type: 'ATTRIBUTE', attribute: 'CHARISMA', amount: -1 })).toBe('−1 Carisma')
+    expect(grantLabel({ type: 'ATTRIBUTE_CHOICE', amount: 1, count: 2 })).toBe('+1 em 2 atributos à escolha')
+    expect(grantLabel({ type: 'SKILL', skill: 'ARCANA' })).toBe('Perícia: Arcanismo')
+    expect(grantLabel({ type: 'SKILL_CHOICE', count: 1, label: 'Escolha uma' })).toBe('Escolha uma')
+    expect(grantLabel({ type: 'SAVING_THROW', attribute: 'WISDOM' })).toBe('Resistência: Sabedoria')
+    expect(grantLabel({ type: 'FEATURE', abilityType: 'SPELL', name: 'Raio' })).toBe('Magia: Raio')
+    expect(grantLabel({ type: 'FEATURE', name: 'Visão' })).toBe('Passiva: Visão')
+    expect(grantLabel({ type: 'HP_BONUS', amount: 1, perLevel: true })).toBe('+1 PV por nível')
+    expect(grantLabel({ type: 'HP_BONUS', usesFormula: 'HALF_PROFICIENCY', perLevel: true })).toBe('+½ do bônus de proficiência em PV por nível')
+    expect(grantLabel({ type: 'SPEED', feet: 5 })).toBe('+5 pés de deslocamento')
+    expect(grantLabel({ type: 'GOLD', amount: 10 })).toBe('+10 de ouro')
+    expect(grantLabel({ type: 'SIZE_CHOICE', options: ['SMALL', 'MEDIUM'] })).toBe('Tamanho: Pequeno ou Médio')
+    expect(grantLabel({ type: 'CRAFT', value: 'ferraria' }, [{ id: 'ferraria', name: 'Ferraria' }])).toBe('Ofício: Ferraria')
+    expect(grantLabel({ type: 'CRAFT_CHOICE', count: 1 })).toBe('1 ofício à escolha')
+    expect(grantLabel({ type: 'LANGUAGE_CHOICE', count: 1, fromRegion: true })).toBe('1 idioma da região')
+    expect(grantLabel({ type: 'HERITAGE_POINTS', amount: 2, value: 'REGION' })).toBe('+2 pontos de Herança de Região')
+    expect(grantLabel({ type: 'HERITAGE_POINTS', amount: 1 })).toBe('+1 ponto de Herança')
+  })
+
+  it('escolhe, repete e tira Heranças mantendo a opção', () => {
+    let picks = addHeritage([], 'colosso')
+    picks = addHeritage(picks, 'meio-vastaya')
+    picks = setHeritageOption(picks, 'meio-vastaya', 'Marai')
+    picks = addHeritage(picks, 'colosso')
+    expect(heritageTimes(picks, 'colosso')).toBe(2)
+    expect(addHeritage(picks, 'meio-vastaya').at(-1)).toEqual({ id: 'meio-vastaya', option: 'Marai' })
+    picks = removeHeritage(picks, 'colosso')
+    expect(picks).toEqual([{ id: 'colosso', option: null }, { id: 'meio-vastaya', option: 'Marai' }])
+    expect(removeHeritage(picks, 'nao-tem')).toBe(picks)
+  })
+
+  it('dá nome às opções de cada tipo de escolha', () => {
+    expect(choiceOptionName('SIZE_CHOICE', 'SMALL')).toBe('Pequeno')
+    expect(choiceOptionName('CRAFT_CHOICE', 'alq', [{ id: 'alq', name: 'Alquimia' }])).toBe('Alquimia')
+    expect(choiceOptionName('LANGUAGE_CHOICE', 'Targoniano')).toBe('Targoniano')
+    expect(choiceOptionName('PROFICIENCY_CHOICE', 'SKILL:ARCANA')).toBe('Perícia: Arcanismo')
+    expect(choiceOptionName('PROFICIENCY_CHOICE', 'CRAFT:alq', [{ id: 'alq', name: 'Alquimista' }])).toBe('Ofício: Alquimista')
+    expect(choiceOptionName('PROFICIENCY_CHOICE', 'MARTIAL_WEAPON')).toBe('Arma marcial')
+    expect(grantLabel({ type: 'FEATURE', name: 'Resistente', options: ['Ígneo'] })).toBe('Passiva: Resistente (à escolha)')
+    expect(grantLabel({ type: 'PROFICIENCY_CHOICE', count: 1 })).toBe('1 proficiência à escolha')
+    expect(formatFeet(30)).toBe('30 pés')
+  })
+
+  it('soma o custo da compra de pontos', () => {
+    const pb = { costs: { 8: 0, 13: 5, 14: 7, 15: 9 } }
+    expect(pointBuySpent(pb, { a: 15, b: 14, c: 13, d: 8, e: null })).toBe(21)
+  })
+
+  it('rola 4d6 e descarta o menor', () => {
+    const seq = [0, 0.5, 0.99, 0.2] // 1, 4, 6, 2 → descarta o 1
+    expect(roll4d6DropLowest(() => seq.shift())).toBe(12)
   })
 })
 

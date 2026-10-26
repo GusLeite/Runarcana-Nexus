@@ -45,7 +45,9 @@ Trabalho novo: crie um branch a partir de `main`.
 
 A API sobe em `http://localhost:8080/runarcana` (context-path `/runarcana`). O Swagger fica em `/runarcana/swagger-ui.html`. Na primeira subida são criadas as contas dos 5 personagens (ver `backend.md`, seção Autenticação). Testes: `./mvnw test` (usa H2, não precisa do PostgreSQL).
 
-Para o login funcionar no front, suba o back-end antes: o Vite repassa `/runarcana` para `localhost:8080`.
+Para o login funcionar no front, suba o back-end antes: o Vite repassa `/runarcana` para `localhost:8080` (ou para `VITE_PROXY_TARGET`, se definido).
+
+**Sandbox (testar sem tocar no PostgreSQL):** a classe de teste `SandboxApplication` sobe o back na porta 8090 com H2 em memória e as regras reais (perfil `sandbox`, `src/test/resources/application-sandbox.properties`); tudo some ao desligar. Ela força o H2 por argumento, então nunca conecta no PostgreSQL. No preview do Claude, use as configurações `backend-sandbox` e `frontend-sandbox` do `.claude/launch.json`. Na mão: `mvnw test-compile spring-boot:test-run -Dspring-boot.test-run.main-class=gusleite.runarcana_nexus.SandboxApplication`; o front: `VITE_PROXY_TARGET=http://localhost:8090 npm run dev`. Atenção: no Spring Boot 4 o `spring-boot:run -Dspring-boot.run.useTestClasspath=true` **não** usa mais o classpath de testes (cai na configuração principal, a do PostgreSQL).
 
 **Front-end:**
 

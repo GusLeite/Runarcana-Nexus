@@ -10,6 +10,9 @@ import Inventory from './Inventory.jsx'
 import DocumentsTab from './DocumentsTab.jsx'
 import NotesTab from './NotesTab.jsx'
 import DiceRoll from './DiceRoll.jsx'
+import TabBar from './TabBar.jsx'
+import CreationWizard from '../creation/CreationWizard.jsx'
+import Num from './Num.jsx'
 import { CoinIcon, ExitIcon, KeyIcon } from './icons.jsx'
 import '../../styles/sheet.css'
 
@@ -40,6 +43,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const [current, setCurrent] = useState(null)
   const [mode, setMode] = useState('normal')
   const [busy, setBusy] = useState(false)
+  const [creating, setCreating] = useState(false)
   const [toast, setToast] = useState(notice)
   // Em ref para as buscas não repetirem a cada render do App (o callback muda de identidade).
   const expired = useRef(onExpired)
@@ -201,26 +205,12 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             <span>ROLAR D20{MODE_SHORT[mode] && <i className={'play-mode ' + mode}>{MODE_SHORT[mode]}</i>}</span>
           </button>
         </div>
-        <nav className="tabs" role="tablist" aria-label="Seções">
-          {TABS.map(t => (
-            <button
-              key={t.id}
-              type="button"
-              role="tab"
-              className={'tab' + (tab === t.id ? ' on' : '')}
-              aria-selected={tab === t.id}
-              onClick={() => setTab(t.id)}
-            >
-              {t.label}
-              {badges[t.id] > 0 && <span className={'tab-count' + (t.id === 'documents' ? ' alert' : '')}>{badges[t.id]}</span>}
-            </button>
-          ))}
-        </nav>
+        <TabBar tabs={TABS} active={tab} onChange={setTab} badges={badges} alertId="documents" label="Seções" />
         <div className="topbar-right">
           {sheet && (
             <div className="purse" title="Ouro">
               <CoinIcon />
-              <b>{sheet.gold.toLocaleString('pt-BR')}</b>
+              <b><Num value={sheet.gold} duration={1000} /></b>
             </div>
           )}
           <div className="who">
@@ -242,11 +232,33 @@ export default function CharacterSheet({ character, session, notice, onChangePas
         {state.status === 'loading' && (
           <div className="sheet-state" role="status"><div className="hex-spinner" />Abrindo a ficha…</div>
         )}
-        {(state.status === 'empty' || state.status === 'error') && (
+        {state.status === 'error' && (
           <div className="sheet-state card">
-            <h3>{state.status === 'empty' ? 'Ficha em branco' : 'Algo deu errado'}</h3>
+            <h3>Algo deu errado</h3>
             <p>{state.message}</p>
-            {state.status === 'error' && <button className="ghost-btn" type="button" onClick={load}>Tentar de novo</button>}
+            <button className="ghost-btn" type="button" onClick={load}>Tentar de novo</button>
+          </div>
+        )}
+        {/* Sem ficha: convite para criar e, depois, o assistente de criação. */}
+        {state.status === 'empty' && !creating && (
+          <div className="sheet-state card empty-cta">
+            <h3>Ficha em branco</h3>
+            <p>Seu personagem ainda não existe. Escolha origem, classe e antecedente e veja a ficha se montar.</p>
+            <button className="btn" type="button" onClick={() => setCreating(true)}>CRIAR PERSONAGEM</button>
+          </div>
+        )}
+        {state.status === 'empty' && creating && (
+          <div className="sheet-col wide">
+            <CreationWizard
+              token={token}
+              defaultPlayer={session.username}
+              onError={fail}
+              onCreated={created => {
+                setCreating(false)
+                setToast(created.characterName + ' foi criado!')
+                load()
+              }}
+            />
           </div>
         )}
 
@@ -292,7 +304,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       </main>
 
       <DiceRoll roll={current} onClose={closeRoll} />
-      {toast && <div className="toast" role="status">{toast}</div>}
+      {toast && <div key={toast} className="toast" role="status">{toast}</div>}
     </div>
   )
 }

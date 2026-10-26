@@ -1,0 +1,19 @@
+{
+  "heritages": [
+    { "id": "teste-geral", "name": "Geral Teste", "category": "GENERAL", "description": "Vale para todos." },
+    { "id": "teste-forte", "name": "Força Teste", "category": "GENERAL", "minAttributes": { "STRENGTH": 18 },
+      "prerequisite": "Força 18", "description": "Só para os fortes." },
+    { "id": "teste-targon", "name": "Targon Teste", "category": "REGION", "regions": ["TARGON"], "excludes": ["teste-rival"],
+      "prerequisite": "Targonense, não ter Rival Teste", "description": "Do monte." },
+    { "id": "teste-rival", "name": "Rival Teste", "category": "REGION", "regions": ["TARGON"], "excludes": ["teste-targon"],
+      "description": "Rival do monte." },
+    { "id": "teste-tribo", "name": "Tribo Teste", "category": "REGION", "regions": ["TARGON"], "maxTimes": 2,
+      "options": ["Sol", "Lua"], "description": "Escolha uma tribo." },
+    { "id": "teste-noxus", "name": "Noxus Teste", "category": "REGION", "regions": ["NOXUS"], "prerequisite": "Noxiano",
+      "description": "De Noxus." },
+    { "id": "teste-origem-heranca", "name": "Origem Teste Herança", "category": "ORIGIN", "origins": ["teste-origem"],
+      "description": "Só com pontos de Origem." },
+    { "id": "teste-sol", "name": "Sol Teste", "category": "ORIGIN", "origins": ["teste-tribal"], "lineages": ["sol"],
+      "prerequisite": "Tribal Sol", "description": "Só para a linhagem Sol." }
+  ]
+}

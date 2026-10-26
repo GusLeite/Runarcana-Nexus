@@ -1,0 +1,740 @@
+{
+  "attributeMethods": {
+    "pointBuy": {
+      "points": 27,
+      "min": 8,
+      "max": 15,
+      "costs": {
+        "8": 0,
+        "9": 1,
+        "10": 2,
+        "11": 3,
+        "12": 4,
+        "13": 5,
+        "14": 7,
+        "15": 9
+      }
+    },
+    "standardArray": [
+      15,
+      14,
+      13,
+      12,
+      10,
+      8
+    ],
+    "manual": {
+      "min": 3,
+      "max": 18
+    }
+  },
+  "baseSpeed": 30,
+  "rounding": "DOWN",
+  "crafts": [
+    {
+      "id": "alquimista",
+      "name": "Alquimista",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "apotecario",
+      "name": "Apotecário",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "armadilheiro",
+      "name": "Armadilheiro",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "armeiro",
+      "name": "Armeiro",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "armoreiro",
+      "name": "Armoreiro",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "arqueirista",
+      "name": "Arqueirista",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "chaveiro",
+      "name": "Chaveiro",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "cozinheiro",
+      "name": "Cozinheiro",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "cuteleiro",
+      "name": "Cuteleiro",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "encantador",
+      "name": "Encantador",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "encarrocador",
+      "name": "Encarroçador",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "fermentador",
+      "name": "Fermentador",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "joalheiro",
+      "name": "Joalheiro",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "modista",
+      "name": "Modista",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "pedreiro",
+      "name": "Pedreiro",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "tecmaturgo",
+      "name": "Tecmaturgo",
+      "kind": "MAJOR"
+    },
+    {
+      "id": "artesanato",
+      "name": "Artesanato",
+      "kind": "MINOR"
+    },
+    {
+      "id": "artista",
+      "name": "Artista",
+      "kind": "MINOR"
+    },
+    {
+      "id": "coletor",
+      "name": "Coletor",
+      "kind": "MINOR"
+    },
+    {
+      "id": "falsificador",
+      "name": "Falsificador",
+      "kind": "MINOR"
+    },
+    {
+      "id": "guia",
+      "name": "Guia",
+      "kind": "MINOR"
+    },
+    {
+      "id": "jogador",
+      "name": "Jogador",
+      "kind": "MINOR"
+    }
+  ],
+  "origins": [
+    {
+      "id": "humano",
+      "name": "Humano",
+      "description": "A espécie mais numerosa de Runeterra, presente em todas as regiões e moldada por diferentes culturas e tradições.",
+      "speed": 30,
+      "details": [
+        {
+          "name": "Idade",
+          "text": "Humanos chegam à idade adulta no final da adolescência e vivem menos de um século."
+        },
+        {
+          "name": "Tamanho",
+          "text": "Pequeno ou Médio, à escolha do jogador."
+        },
+        {
+          "name": "Passado",
+          "text": "Escolha um Passado disponível no Capítulo 4: Detalhamento."
+        },
+        {
+          "name": "Região",
+          "text": "A região representa onde o personagem cresceu e influencia sua visão de mundo."
+        }
+      ],
+      "grants": [
+        {
+          "type": "SIZE_CHOICE",
+          "options": [
+            "SMALL",
+            "MEDIUM"
+          ],
+          "label": "Tamanho: Pequeno ou Médio"
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "label": "Proficiência em uma perícia à escolha"
+        },
+        {
+          "type": "CRAFT_CHOICE",
+          "count": 1,
+          "label": "Proficiência em um ofício à escolha"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 2,
+          "value": "REGION",
+          "label": "2 pontos de Herança de Região"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Inspirado",
+          "castingTime": "Reação",
+          "usesFormula": "HALF_PROFICIENCY",
+          "recharge": "LONG_REST",
+          "diceByProficiency": {
+            "2": "1d4",
+            "4": "1d6",
+            "6": "1d8"
+          },
+          "description": "Humanos conseguem extrair mais de sua força de vontade para superar seus limites.\n\nVocê possui dados de Inspiração em quantidade igual à metade do seu bônus de Proficiência por descanso longo. Dados não utilizados são perdidos.\n\nVocê pode gastar um dado de Inspiração como reação ao realizar um teste de atributo, salvaguarda ou ataque, adicionando o resultado à rolagem. Pode decidir usá-lo após ver o resultado do d20, mas antes de o Mestre determinar o sucesso ou fracasso. Apenas um dado de Inspiração pode ser usado por vez.\n\nDado de Inspiração: 1d4 (bônus +2 a +3), 1d6 (+4 a +5), 1d8 (+6)."
+        }
+      ]
+    },
+    {
+      "id": "minotauro",
+      "name": "Minotauro",
+      "description": "Minotauros são povos tribais de grande vigor, espalhados por Valoran e especialmente concentrados nas montanhas da Grande Barreira, com fortes laços com o Império de Noxus.",
+      "speed": 30,
+      "details": [
+        {
+          "name": "Idade",
+          "text": "Atingem a idade adulta por volta dos 17 anos e vivem até 150 anos."
+        },
+        {
+          "name": "Tamanho",
+          "text": "Pequeno ou Médio, à escolha do jogador."
+        },
+        {
+          "name": "Herança",
+          "text": "2 pontos de Herança de Origem e mais 1 ponto nos níveis 5, 9, 13 e 17."
+        },
+        {
+          "name": "Passado",
+          "text": "Escolha um Passado disponível no Capítulo 4: Detalhamento."
+        },
+        {
+          "name": "Região",
+          "text": "1 ponto de Herança de Região. Sua região representa onde você cresceu e influencia sua visão de mundo."
+        },
+        {
+          "name": "Linhagem",
+          "text": "Escolha uma das tribos minotáuricas: Aelus, Alnuk ou Auroque."
+        }
+      ],
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 2,
+          "label": "+2 em um atributo"
+        },
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um segundo atributo"
+        },
+        {
+          "type": "SIZE_CHOICE",
+          "options": [
+            "SMALL",
+            "MEDIUM"
+          ],
+          "label": "Tamanho: Pequeno ou Médio"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 2,
+          "value": "ORIGIN",
+          "label": "2 pontos de Herança de Origem"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 1,
+          "value": "REGION",
+          "label": "1 ponto de Herança de Região"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Chifres",
+          "damage": "1d6",
+          "damageBonus": [
+            "PROFICIENCY",
+            "STRENGTH"
+          ],
+          "castingTime": "Ataque (ou ação bônus junto com outro ataque corpo a corpo)",
+          "range": "Corpo a corpo",
+          "description": "Os chifres são as principais armas naturais dos Minotauros, e todos possuem proficiência com eles.\n\nDano: 1d6 + bônus de proficiência + modificador de Força, dano perfurante.\nCrítico: 19–20, multiplicador ×3.\nAtaque adicional: você pode realizar um ataque com os chifres usando uma ação bônus quando fizer outro ataque corpo a corpo."
+        },
+        {
+          "type": "HP_BONUS",
+          "usesFormula": "HALF_PROFICIENCY",
+          "perLevel": true,
+          "label": "+½ do bônus de proficiência em PV por nível"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Constituição Poderosa",
+          "description": "Seu vigor natural aumenta seus pontos de vida permanentes em metade do bônus de proficiência a cada nível (arredondado para baixo, nível a nível): +1 no 1º nível e +12 no total ao chegar ao 10º."
+        }
+      ],
+      "lineages": [
+        {
+          "id": "aelus",
+          "name": "Aelus",
+          "description": "Mais comuns em Noxus, os Aelus são Minotauros de estatura menor que a das outras tribos, mais próximos do padrão entre os humanos. São desconfiados por natureza e estão sempre atentos ao seu redor.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Armadura da Percepção",
+              "description": "Os Aelus dificilmente são surpreendidos, possuindo vantagem em jogadas de Iniciativa e em testes de Percepção contra surpresa."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Reativos",
+              "castingTime": "Reação adicional",
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST",
+              "description": "Aelus podem fazer uma reação adicional durante uma rodada. Eles podem fazer isso um número de vezes igual a metade de seu bônus de proficiência por descanso pleno."
+            }
+          ]
+        },
+        {
+          "id": "alnuk",
+          "name": "Alnuk",
+          "description": "Os Alnuk são uma tribo de Minotauros que existem em uma região de Freljord, seu pelo é mais longo e eles são excelentes agricultores além de extremamente bem humorados.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Armadura Muscular",
+              "description": "Os Alnuk têm vantagem em salvaguardas contra o Frio Extremo e possuem metade do seu bônus de proficiência como RD/ dano verdadeiro."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Palavras de Conforto",
+              "castingTime": "Ação",
+              "range": "30 pés",
+              "usesFormula": "PROFICIENCY",
+              "recharge": "LONG_REST",
+              "description": "Os Alnuk são capazes de confortar outros seres vivos graças ao tom de sua voz. Utilizando uma ação, você pode falar com uma criatura que esteja Amedrontada ou Enfeitiçada a até 30 pés de você, encerrando uma dessas condições na criatura, a criatura deve poder ouví-lo para que esse traço tenha efeito. Você pode fazer isso um número de vezes igual ao seu bônus de proficiência por descanso longo."
+            }
+          ]
+        },
+        {
+          "id": "auroque",
+          "name": "Auroque",
+          "description": "Os Auroque são a tribo mais numerosa de Minotauros que existem em Valoran, se espalhando por várias regiões desde Demacia até Noxus.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Armadura Natural",
+              "description": "Devido ao seu couro grosso, os Auroques têm naturalmente +1 de CA desde que não estejam utilizando uma armadura."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Urro Triunfante",
+              "castingTime": "Ação bônus",
+              "range": "15 pés (aliados) / 10 pés (inimigos)",
+              "usesFormula": "ATTRIBUTE_MODIFIER",
+              "attribute": "CONSTITUTION",
+              "recharge": "LONG_REST",
+              "description": "Os Auroques são os mais combativos dos Minotauros e possuem a capacidade de soltar um urro selvagem, capaz de animar seus aliados e simultaneamente afugentar seus inimigos. Utilizando uma ação bônus, você pode fazer com que seus aliados a até 15 pés de você, recebam pontos de vida temporários igual ao seu bônus de proficiência + seu modificador de Constituição. Além disso, todos os inimigos que estejam a até 10 pés de você devem realizar uma salvaguarda de Sabedoria CD 10 + seu bônus de proficiência + seu modificador de Constituição. Em uma falha, uma criatura afetada está Amedrontadas por você pelo próximo minuto, podendo repetir a salvaguarda no final de cada um de seus turnos para encerrar esse efeito. Em um sucesso, a criatura fica imune a esse efeito por 24 horas. Você pode utilizar esse traço um número de vezes igual ao seu modificador de Constituição (mínimo de 1) por descanso longo."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "construto",
+      "name": "Construto",
+      "speed": 30,
+      "details": [
+        {
+          "name": "Idade",
+          "text": "Sua expectativa de vida é indeterminada. Enquanto possuir energia e permanecer inteiro, pode durar indefinidamente."
+        },
+        {
+          "name": "Tamanho",
+          "text": "Pequeno ou Médio, à escolha do jogador (de 1,5 a 2 metros; até 2,9 metros no modelo Brutal)."
+        },
+        {
+          "name": "Herança",
+          "text": "2 pontos de Herança de Origem e mais 1 ponto nos níveis 5, 9, 13 e 17."
+        },
+        {
+          "name": "Passado",
+          "text": "Escolha um Passado disponível no Capítulo 4: Detalhamento."
+        },
+        {
+          "name": "Região",
+          "text": "1 ponto de Herança de Região."
+        },
+        {
+          "name": "Modelo",
+          "text": "Escolha um dos três modelos: Brutal, Emissário ou Ligeiro."
+        },
+        {
+          "name": "Peculiaridades",
+          "text": "Uma ou duas, à escolha ou rolando 1d10: 1. Analisa em voz alta o nível de ameaça de cada criatura que conhece. 2. Não entende emoções e interpreta mal situações emocionais. 3. É extremamente protetor com seus amigos. 4. Fala em voz alta o que está pensando sem perceber. 5. Tenta aplicar táticas de guerra e disciplina a todas as situações. 6. Tem dificuldade em filtrar emoções e as expressa dramaticamente. 7. Interpreta roupas como indicadores de profissão e status. 8. É obcecado com a própria aparência e lustra constantemente sua armadura. 9. Preocupa-se profundamente em seguir procedimentos e protocolos. 10. Considera a guerra a única coisa que faz sentido e está sempre procurando uma luta."
+        },
+        {
+          "name": "Nomes",
+          "text": "Códigos, designações funcionais ou nomes dados pelos criadores. Ex.: Blitzcrank, Sentinela, Aegis, Rune, Orianna, Galatea, Cassandra."
+        }
+      ],
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 2,
+          "label": "+2 em um atributo"
+        },
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um segundo atributo"
+        },
+        {
+          "type": "SIZE_CHOICE",
+          "options": [
+            "SMALL",
+            "MEDIUM"
+          ],
+          "label": "Tamanho: Pequeno ou Médio"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 2,
+          "value": "ORIGIN",
+          "label": "2 pontos de Herança de Origem"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 1,
+          "value": "REGION",
+          "label": "1 ponto de Herança de Região"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Construto Vivo",
+          "description": "Construtos não recuperam pontos de vida normalmente durante descansos. Precisam passar por 6 horas de reparos cuidadosos, realizados por si mesmos ou por outra pessoa.\n\n• Resistência a venenos e a dano venenoso.\n• Imunidade a doenças mundanas.\n• Não precisa comer, beber ou respirar.\n• Não precisa dormir, não sofre exaustão por falta de descanso e não sofre efeitos de magias de sono.\n• Recupera apenas metade dos pontos de vida de curas mágicas ou efeitos de cura. A magia Reparar Dano funciona normalmente.\n• Possui desvantagem em salvaguardas contra climas hostis, como frio ou deserto, caso não tenha equipamento adequado."
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Proteção Ajustável",
+          "description": "O corpo possui camadas defensivas que determinam sua Classe de Armadura (CA). Você não recebe benefícios por usar armaduras convencionais, mas pode somar normalmente a CA de um escudo.\n\nDurante um descanso longo, pode ajustar seu corpo para um modo de proteção. Cada modelo possui suas próprias limitações. Se possuir a característica de classe Defesa sem Armadura, você sempre terá acesso ao modo Nulo.\n\n• Nulo (sem requisito): +1 CA, RD 0.\n• Leve (sem requisito): CA 13 + mod. de Destreza, RD 0.\n• Médio (proficiência com armaduras médias): CA 16 + mod. de Destreza (máximo +2), RD 1.\n• Pesado (proficiência com armaduras pesadas; modelos Brutal ou Emissário): CA 19, RD 2.\n\nRD significa Redução de Dano."
+        }
+      ],
+      "lineages": [
+        {
+          "id": "brutal",
+          "name": "Brutal",
+          "description": "Construtos robustos, geralmente feitos de metal e projetados para funções que exigem força, como demolição, segurança e construção.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Ultrapassar os Limites",
+              "castingTime": "Ação",
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST",
+              "description": "Com uma ação, aumenta o deslocamento para 40 pés durante 3 turnos. Depois, fica superaquecido e tem o deslocamento reduzido para 15 pés durante 2 turnos. Usos por descanso longo: metade do bônus de Proficiência."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Resistente",
+              "label": "Resistente: escolha o tipo de dano",
+              "options": [
+                "Ácido",
+                "Elétrico",
+                "Energético",
+                "Ígneo",
+                "Gélido",
+                "Necrótico",
+                "Psíquico",
+                "Radiante"
+              ],
+              "description": "Resistência ao tipo de dano escolhido na criação (ácido, elétrico, energético, ígneo, gélido, necrótico, psíquico ou radiante)."
+            }
+          ]
+        },
+        {
+          "id": "emissario",
+          "name": "Emissário",
+          "description": "Construtos feitos de materiais variados, semelhantes aos humanos em forma e tamanho, frequentemente projetados para transportar mensagens por longas distâncias.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Geolocalização",
+              "castingTime": "Ação",
+              "range": "60 pés",
+              "usesFormula": "PROFICIENCY",
+              "recharge": "LONG_REST",
+              "description": "Com uma ação, recebe Sentido Sísmico de 60 pés até o final do próximo turno e vantagem em testes para perceber ilusões durante esse período. Usos por descanso longo: bônus de Proficiência. Também possui vantagem em salvaguardas contra climas hostis e ignora terrenos difíceis de lama, gelo ou areia."
+            },
+            {
+              "type": "PROFICIENCY_CHOICE",
+              "count": 1,
+              "label": "Funcional: proficiência em uma perícia, ofício ou arma marcial"
+            }
+          ]
+        },
+        {
+          "id": "ligeiro",
+          "name": "Ligeiro",
+          "description": "Construtos leves e delicados, feitos de ligas metálicas leves ou madeira resistente, projetados para precisão manual, agilidade e duelos.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Energia Cinética",
+              "castingTime": "Ação bônus",
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST",
+              "description": "Ao usar a ação Disparada, não provoca ataques de oportunidade. Como ação bônus, pode energizar um ataque desarmado ou com arma corpo a corpo de metal, causando dano adicional de 1 para cada 5 pés percorridos durante a Disparada. Usos por descanso longo: metade do bônus de Proficiência."
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Duelista",
+              "castingTime": "Reação",
+              "description": "Quando uma criatura acerta você com um ataque corpo a corpo enquanto empunha uma arma de acuidade com a qual é proficiente, pode usar sua reação para fazer um ataque com vantagem contra ela."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "classes": [
+    {
+      "id": "ARCANIST",
+      "name": "Arcanista",
+      "description": "EXEMPLO (estrutura de 5e). Substituir pelo que o Arcanista do Runarcana ganha.",
+      "example": true,
+      "hitDie": 6,
+      "startingGold": 40,
+      "grants": [
+        {
+          "type": "SAVING_THROW",
+          "attribute": "INTELLIGENCE"
+        },
+        {
+          "type": "SAVING_THROW",
+          "attribute": "WISDOM"
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 2,
+          "label": "Escolha 2 perícias de Arcanista",
+          "options": [
+            "ARCANA",
+            "HISTORY",
+            "INSIGHT",
+            "INVESTIGATION",
+            "MEDICINE",
+            "RELIGION",
+            "TECHNOLOGY"
+          ]
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "SPELL",
+          "spellLevel": 0,
+          "name": "Raio Arcano",
+          "range": "36 m",
+          "castingTime": "1 ação",
+          "damage": "1d10",
+          "description": "EXEMPLO: um truque de dano à distância."
+        }
+      ],
+      "levels": [
+        {
+          "level": 2,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Recuperação Arcana",
+              "description": "EXEMPLO: ganho do 2º nível (usado na subida de nível, que vem depois)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FIGHTER",
+      "name": "Lutador",
+      "description": "EXEMPLO (estrutura de 5e). Substituir pelo que o Lutador do Runarcana ganha.",
+      "example": true,
+      "hitDie": 10,
+      "startingGold": 60,
+      "grants": [
+        {
+          "type": "SAVING_THROW",
+          "attribute": "STRENGTH"
+        },
+        {
+          "type": "SAVING_THROW",
+          "attribute": "CONSTITUTION"
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 2,
+          "label": "Escolha 2 perícias de Lutador",
+          "options": [
+            "ACROBATICS",
+            "ATHLETICS",
+            "INTIMIDATION",
+            "PERCEPTION",
+            "SURVIVAL"
+          ]
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Estilo de Luta",
+          "description": "EXEMPLO: +2 de dano com armas de uma mão."
+        }
+      ],
+      "levels": []
+    }
+  ],
+  "backgrounds": [
+    {
+      "id": "estudioso",
+      "name": "Estudioso",
+      "description": "EXEMPLO: passou a juventude entre livros e bibliotecas.",
+      "example": true,
+      "startingGold": 10,
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "ARCANA"
+        },
+        {
+          "type": "SKILL",
+          "skill": "INVESTIGATION"
+        }
+      ]
+    },
+    {
+      "id": "soldado",
+      "name": "Soldado",
+      "description": "EXEMPLO: serviu num exército de Runeterra.",
+      "example": true,
+      "startingGold": 15,
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "ATHLETICS"
+        },
+        {
+          "type": "SKILL",
+          "skill": "INTIMIDATION"
+        }
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "id": "BILGEWATER",
+      "name": "Águas de Sentina",
+      "languages": []
+    },
+    {
+      "id": "BANDLE_CITY",
+      "name": "Cidade de Bandle",
+      "languages": []
+    },
+    {
+      "id": "DEMACIA",
+      "name": "Demacia",
+      "languages": []
+    },
+    {
+      "id": "FRELJORD",
+      "name": "Freljord",
+      "languages": []
+    },
+    {
+      "id": "SHADOW_ISLES",
+      "name": "Ilhas das Sombras",
+      "languages": []
+    },
+    {
+      "id": "IONIA",
+      "name": "Ionia",
+      "languages": []
+    },
+    {
+      "id": "IXTAL",
+      "name": "Ixtal",
+      "languages": []
+    },
+    {
+      "id": "NOXUS",
+      "name": "Noxus",
+      "languages": []
+    },
+    {
+      "id": "NAZUMAH",
+      "name": "Nazumah",
+      "languages": []
+    },
+    {
+      "id": "PILTOVER",
+      "name": "Piltover",
+      "languages": []
+    },
+    {
+      "id": "SHURIMA",
+      "name": "Shurima",
+      "languages": []
+    },
+    {
+      "id": "TARGON",
+      "name": "Targon",
+      "languages": []
+    },
+    {
+      "id": "VOID",
+      "name": "O Vazio",
+      "languages": []
+    },
+    {
+      "id": "ZAUN",
+      "name": "Zaun",
+      "languages": []
+    }
+  ]
+}
