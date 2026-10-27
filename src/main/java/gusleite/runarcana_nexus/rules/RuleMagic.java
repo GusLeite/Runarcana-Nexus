@@ -19,8 +19,21 @@ public record RuleMagic(
         List<Mystery> mysteries,
         List<DamageEffect> damageEffects,
         // Lido do arquivo, mas fora do GET /creation/catalog (são ~560 magias): a lista sai em GET /creation/spells.
-        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) List<Spell> spells
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) List<Spell> spells,
+        // Lista de Rituais (não confundir com magias de descritor Ritual, que estão em spells com ritual = true).
+        List<Ritual> rituals,
+        // Tabelas de consulta do capítulo: Conjuração Ritual, Trespassando, Rituais, Magia Púrpura, Magia Descontrolada
+        // Yordle, Essência e Golem. Cada linha tem uma célula por coluna.
+        List<Table> tables
 ) {
+    public List<Ritual> ritualsOrEmpty() {
+        return rituals == null ? List.of() : rituals;
+    }
+
+    public List<Table> tablesOrEmpty() {
+        return tables == null ? List.of() : tables;
+    }
+
     public List<Element> elementsOrEmpty() {
         return elements == null ? List.of() : elements;
     }
@@ -39,6 +52,23 @@ public record RuleMagic(
     public record Mystery(String id, String name, String source, String element, String description, List<String> optionalAccess) {}
 
     public record DamageEffect(String damage, String effect) {}
+
+    // Um ritual da Lista de Rituais. level 1 a 6 (CD, sucessos, custo e tempo vêm da tabela "rituais");
+    // skills: ARCANA, NATURE ou RELIGION; subclasses: Ritos do Acólito exigidos (prerequisite é o texto do livro);
+    // backlashAt: com esse número de sucessos ou menos, além de falhar, acontece o rebote (backlash).
+    public record Ritual(String id, String name, Integer level, List<String> skills, String prerequisite, List<String> subclasses,
+                         Integer backlashAt, String backlash, String language, String duration, String components,
+                         String description) {
+        public List<String> subclassesOrEmpty() {
+            return subclasses == null ? List.of() : subclasses;
+        }
+    }
+
+    public record Table(String id, String name, String description, List<String> columns, List<List<String>> rows) {
+        public List<List<String>> rowsOrEmpty() {
+            return rows == null ? List.of() : rows;
+        }
+    }
 
     // Uma magia da lista. mysteries: ids dos Mistérios que a trazem ("qualquer" elemento: "elemental-geral"); vazio nas
     // magias "Especiais" (as do 20º nível dos Glifos), que dizem no texto quem as tem.

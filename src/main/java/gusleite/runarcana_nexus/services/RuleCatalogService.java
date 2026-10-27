@@ -150,7 +150,7 @@ public class RuleCatalogService {
         return list.stream().filter(o -> o.id().equalsIgnoreCase(id)).findFirst();
     }
 
-    private static <T> T load(Resource resource, String location, Class<T> type) {
+    static <T> T load(Resource resource, String location, Class<T> type) {
         // Estrito: chave escrita errada no JSON vira erro, em vez de ser ignorada em silêncio.
         JsonMapper mapper = JsonMapper.builder().enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).build();
         try (InputStream in = resource.getInputStream()) {
@@ -316,6 +316,25 @@ public class RuleCatalogService {
                     .forEach(x -> p.add("magia " + s.id() + ": classe inexistente \"" + x + "\""));
             s.originsOrEmpty().stream().filter(x -> !originIds.contains(x))
                     .forEach(x -> p.add("magia " + s.id() + ": origem ou linhagem inexistente \"" + x + "\""));
+        });
+        Set<String> subclassIds = new HashSet<>();
+        (c.classes() == null ? List.<RuleClass>of() : c.classes()).forEach(k -> k.subclassesOrEmpty().forEach(s -> subclassIds.add(s.id())));
+        Set<String> ritualSkills = Set.of("ARCANA", "NATURE", "RELIGION");
+        Set<String> rituals = new HashSet<>();
+        m.ritualsOrEmpty().forEach(r -> {
+            if (blank(r.id()) || blank(r.name())) p.add("ritual: cada ritual precisa de id e name");
+            else if (!rituals.add(r.id())) p.add("ritual " + r.id() + ": id repetido");
+            if (r.level() == null || r.level() < 1 || r.level() > 6) p.add("ritual " + r.id() + ": level deve ir de 1 a 6");
+            if (r.skills() == null || r.skills().isEmpty() || !ritualSkills.containsAll(r.skills())) p.add("ritual " + r.id() + ": skills deve usar " + ritualSkills);
+            r.subclassesOrEmpty().stream().filter(x -> !subclassIds.contains(x))
+                    .forEach(x -> p.add("ritual " + r.id() + ": subclasse inexistente \"" + x + "\""));
+        });
+        Set<String> tables = new HashSet<>();
+        m.tablesOrEmpty().forEach(t -> {
+            if (blank(t.id()) || t.columns() == null || t.columns().isEmpty()) p.add("tabela de magia: precisa de id e columns");
+            else if (!tables.add(t.id())) p.add("tabela " + t.id() + ": id repetido");
+            else t.rowsOrEmpty().stream().filter(row -> row.size() != t.columns().size())
+                    .forEach(row -> p.add("tabela " + t.id() + ": linha com " + row.size() + " células, esperado " + t.columns().size()));
         });
     }
 

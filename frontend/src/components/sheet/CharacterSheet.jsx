@@ -9,6 +9,7 @@ import AbilitiesTab from './AbilitiesTab.jsx'
 import Inventory from './Inventory.jsx'
 import DocumentsTab from './DocumentsTab.jsx'
 import NotesTab from './NotesTab.jsx'
+import BookTab from './BookTab.jsx'
 import DiceRoll from './DiceRoll.jsx'
 import TabBar from './TabBar.jsx'
 import CreationWizard from '../creation/CreationWizard.jsx'
@@ -23,6 +24,7 @@ const TABS = [
   { id: 'inventory', label: 'INVENTÁRIO' },
   { id: 'documents', label: 'DOCUMENTOS' },
   { id: 'notes', label: 'ANOTAÇÕES' },
+  { id: 'book', label: 'LIVRO' },
 ]
 const MODE_SHORT = { adv: 'V', dis: 'D' }
 
@@ -295,6 +297,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
               {tab === 'documents' && (
                 <DocumentsTab documents={documents} selectedId={docId} onSelect={setDocId} onOpen={markRead} />
               )}
+              {tab === 'book' && <BookTab token={token} onError={fail} />}
               {tab === 'notes' && (
                 <NotesTab
                   notes={notes}

@@ -62,6 +62,21 @@ class MagicRulesTests {
     }
 
     @Test
+    void rituaisETabelasDoCapitulo() {
+        assertThat(magic.ritualsOrEmpty()).hasSize(18);
+        RuleMagic.Ritual agua = magic.ritualsOrEmpty().stream().filter(r -> r.id().equals("agua-benta")).findFirst().orElseThrow();
+        assertThat(agua.level()).isEqualTo(1);
+        assertThat(agua.skills()).containsExactly("RELIGION");
+        assertThat(agua.subclasses()).containsExactly("espiritual");
+        assertThat(agua.backlashAt()).isEqualTo(3);
+        assertThat(magic.tablesOrEmpty()).extracting(RuleMagic.Table::id)
+                .containsExactly("conjuracao-ritual", "trespassando", "rituais", "magia-purpura", "magia-descontrolada-yordle", "essencia", "golem");
+        RuleMagic.Table purpura = magic.tablesOrEmpty().stream().filter(t -> t.id().equals("magia-purpura")).findFirst().orElseThrow();
+        assertThat(purpura.rows().getFirst()).containsExactly("01", "Role novamente 2 vezes nesta tabela, ignorando este resultado se cair novamente.");
+        assertThat(purpura.rows().getLast().getFirst()).isEqualTo("00");
+    }
+
+    @Test
     void magiasDisponiveisPorMisterioClasseEOrigem() {
         // Mistério da Água até o 1º nível: só magias de Água (ou com Água entre os Mistérios).
         assertThat(MagicRules.availableSpells(magic, Set.of("agua"), null, Set.of(), 1))

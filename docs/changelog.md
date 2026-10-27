@@ -2,6 +2,13 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-26 — Rituais, tabelas, compêndio e a aba Livro (`feature/character-sheet`)
+- `magias.json`: os **18 rituais** da Lista de Rituais (perícias, Rito exigido, rebote, língua, componentes) e **7 tabelas** (Conjuração Ritual, Trespassando, Rituais, Magia Púrpura, Magia Descontrolada Yordle, Essência e Golem). Conferidos ao subir.
+- `rules/compendio.json` (`CompendiumService`): Familiares e Companheiros Animais, A Tecmaturgia e os 5 Aparatos, em seções e tabelas. Rotas `GET /compendium` e `GET /compendium/rituals`.
+- Front: aba **LIVRO** na ficha (`BookTab.jsx`) com busca: magias (filtro por nível), rituais, tabelas e o compêndio.
+- Com isso, todas as páginas da pasta `livro/` estão convertidas. As regras de consulta não são aplicadas na ficha (familiar, Ritualista, aparatos).
+- Testes: `rituaisETabelasDoCapitulo`, `compendioDeConsulta`. Conferido no sandbox (aba Livro: 558 magias, 7 tabelas, 8 páginas do compêndio).
+
 ## 2026-10-26 — Catálogo de itens e equipamento inicial (`feature/character-sheet`)
 - `rules/itens.json` com os **327 itens** do Capítulo 6 (armas simples, marciais, impróprias e de fogo, munições, armaduras, escudos, equipamento de aventureiro, focos, conjuntos de ofício, instrumentos, montarias, veículos, arreios e os 7 conjuntos de equipamento) e a riqueza inicial por classe. Conferido ao subir.
 - Concessões `EQUIPMENT` e `EQUIPMENT_CHOICE` (opções com `+`, `*quantidade` e `group:` com preço máximo) e o equipamento inicial das 9 classes. Opção de trocar tudo pela **riqueza inicial** (`startingEquipment: WEALTH`, rolada ao criar).

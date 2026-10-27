@@ -147,6 +147,9 @@ Capítulo 10, carregado e conferido ao subir (`runarcana.rules.magic`; os testes
   "mysteries": [ { "id": "hemomancia", "name", "source": "SPIRITUAL", "description", "optionalAccess": ["veneno", "metal"] },
                  { "id": "agua", "source": "ELEMENTAL", "element": "agua" } ],
   "damageEffects": [ { "damage": "Gélido", "effect": "..." } ],
+  "rituals": [ { "id", "name", "level": 1-6, "skills": ["ARCANA", "NATURE", "RELIGION"], "prerequisite": "Rito Espiritual",
+                 "subclasses": ["espiritual"], "backlashAt": 3, "backlash", "language", "duration", "components", "description" } ],
+  "tables": [ { "id": "magia-purpura", "name", "description", "columns": ["d100", "Efeito"], "rows": [["01", "..."]] } ],
   "spells": [ { "id", "name", "level": 0-9, "mysteries": ["agua"], "classes": ["ACOLYTE"], "origins": ["yordle", "fauhwoon"],
                 "castingTime", "range", "components", "material", "duration", "concentration", "ritual",
                 "description", "higherLevels" } ] }
@@ -177,6 +180,13 @@ Capítulo 6, carregado e conferido ao subir (`runarcana.rules.items`; testes: `r
 - **Concessões**: `EQUIPMENT` (`value`: a opção) e `EQUIPMENT_CHOICE` (`options`, `count`, `label`). Opção = partes separadas por `+`; parte = `id`, `id*quantidade` ou `group:grupo` (com `<=PO` de preço máximo e `*quantidade`); no máximo um grupo por opção, que vira uma opção por item. Ex.: Combatente `group:arma-marcial<=50+escudo-leve` ou `group:arma-marcial<=50*2`.
 - **Riqueza inicial**: o jogador pode trocar todo o equipamento pela riqueza da classe; os dados são rolados ao criar.
 - Aproximações: "duas armas simples/marciais" vira duas iguais; "cota de malha (se proficiente)" e "armadura leve (se proficiente)" não conferem a proficiência; as "30 munições da arma inicial" do Atirador viram um pacote de munição à escolha (o pacote do catálogo tem outra quantidade); o livro de preces do Acólito é o item Livro. Ficam fora do catálogo: modificações de armas de fogo, estilo de vida, comida e hospedagem e a armadura de montaria (o preço é um multiplicador). Escudo entra no inventário, mas ainda não soma na CA.
+
+- **Rituais** (18, do 1º ao 6º nível): perícias, pré-requisito (os Ritos do Acólito viram `subclasses`), rebote (`backlashAt` = sucessos ou menos para o rebote), língua, duração e componentes. CD, sucessos, custo, tempo e intervalo de jogada vêm da tabela `rituais`.
+- **Tabelas** (7): Conjuração Ritual e Trespassando (regra opcional), Rituais, Magia Púrpura e Magia Descontrolada Yordle (d100) e as duas de Transferindo Essências (Essência e Golem), cada uma com o resumo da regra em `description`.
+
+## Compêndio (`rules/compendio.json`)
+
+Páginas de consulta que não mudam a criação, extraídas da wiki na ordem do livro: **Familiares e Companheiros Animais** e **A Tecmaturgia** com os 5 **Aparatos** (Armamento Aprimorado, Disparadores, Servo, Projétil, Mecha). `{ "pages": [ { "id", "title", "chapter", "sections": [ { "title", "depth": 1-5, "text", "tables": [ { "name", "columns", "rows" } ] } ] } ] }`; a seção sem título é a introdução. Texto em parágrafos separados por linha em branco e itens de lista com "- ".
 
 ## Runas e Natureza Rúnica
 
@@ -261,4 +271,4 @@ Para cada item, basta mandar o texto do livro ou um resumo; eu converto para o J
 6. **Ofícios**: atributo base e conjunto de cada um (para os testes de ofício e os níveis).
 7. **Equipamento inicial**: feito (ver **Equipamento**). Falta o equipamento dos **passados** (os dois cadastrados são de exemplo).
 8. Idiomas: desligados a pedido; quando quiser, basta cadastrar os de cada região.
-9. **Páginas do livro em `livro/` ainda não convertidas**: Rituais (regras e a Lista de Rituais), Familiares e Companheiros Animais, as tabelas d100 de Magia Púrpura e Magia Descontrolada Yordle, Transferindo Essências e A Tecmaturgia (com os Aparatos).
+9. **Páginas do livro em `livro/`**: todas convertidas. Rituais, tabelas d100, Essências, Familiares e Tecmaturgia são **consulta** (aba LIVRO da ficha); nenhuma regra delas é aplicada automaticamente (ex.: Convocar Familiar não cria a ficha do familiar, Ritualista não é conferido, aparatos não entram como itens).

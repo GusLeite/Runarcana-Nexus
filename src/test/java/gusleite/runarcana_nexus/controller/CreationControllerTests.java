@@ -566,6 +566,20 @@ class CreationControllerTests {
     }
 
     @Test
+    void compendioDeConsulta() throws Exception {
+        mvc.perform(get("/compendium")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/compendium").header("Authorization", "Bearer " + login("gaudron")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pages[0].id").value("familiares"))
+                .andExpect(jsonPath("$.pages[?(@.id == 'aparato-mecha')].title").value("Mecha"));
+        // Rituais e tabelas do catálogo de magia (o de teste não tem nenhum).
+        mvc.perform(get("/compendium/rituals").header("Authorization", "Bearer " + login("gaudron")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rituals").isArray())
+                .andExpect(jsonPath("$.tables").isArray());
+    }
+
+    @Test
     void listaDeMagiasForaDoCatalogo() throws Exception {
         String token = login("gaudron");
         mvc.perform(get("/creation/spells")).andExpect(status().isUnauthorized());

@@ -465,3 +465,18 @@ input.note-title{padding:10px 12px;font-family:'Cinzel',Georgia,serif;font-size:
 
 /* Especialidade: losango duplo (proficiência em dobro) */
 .skill.expert .pip{background:var(--gold-hi);border-color:var(--gold-hi);box-shadow:0 0 6px rgba(240,199,94,.9),5px -5px 0 -2px var(--gold-hi)}
+/* Aba Livro (BookTab.jsx): busca, fatos da magia/ritual e tabelas do livro. */
+.book .inv-title{flex-wrap:wrap;gap:8px}
+.book-filters{display:flex;gap:8px;margin:0 0 10px}
+.book-search,.book-filters select{min-width:0;padding:8px 10px;background:#050b14;border:1px solid rgba(200,162,74,.4);color:var(--text);font:inherit;font-size:14px}
+.book-search{flex:1}
+.book-search:focus-visible,.book-filters select:focus-visible{outline:2px solid var(--teal);outline-offset:1px}
+.book-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px 16px;margin:0 0 14px;padding:10px 12px;border:1px solid var(--gold-soft);background:rgba(0,0,0,.25)}
+.book-facts dt{font-family:'Cinzel',Georgia,serif;font-size:11px;letter-spacing:.08em;color:var(--gold)}
+.book-facts dd{margin:2px 0 0}
+.book-section.d4,.book-section.d5{padding-left:12px;border-left:1px solid var(--gold-soft)}
+.book-table-wrap{overflow-x:auto;margin:8px 0 14px}
+.book-table{width:100%;border-collapse:collapse;font-size:14px}
+.book-table th{font-family:'Cinzel',Georgia,serif;font-size:12px;letter-spacing:.06em;color:var(--gold-hi);text-align:left;border-bottom:1px solid var(--gold-soft);padding:6px 8px}
+.book-table td{padding:6px 8px;border-bottom:1px solid rgba(200,162,74,.12);vertical-align:top}
+.book .doc-view{max-height:calc(100vh - 120px);overflow-y:auto}

@@ -11465,5 +11465,1015 @@
       "ritual": false,
       "description": "Até a magia acabar, você cria uma tempestade de neve e granizo em um raio de 500 pés ao seu redor. A área é de escuridão densa e, chamas expostas na área são extintas. Essa área possui temperaturas congelantes, caso as criaturas estejam em combate, no início de cada um de seus turnos criaturas nessa área devem realizar uma salvaguarda de Constituição CD 10, essa CD aumenta em 5 para cada falha que uma criatura possuir. Caso não estejam em combate, criaturas nessa área devem realizar essa salvaguarda a cada 1 hora. Em uma falha, a criatura recebe 3d6 de dano glacial e 1 nível de Exaustão, uma criatura não pode exceder 4 níveis de exaustão dessa maneira. Em um sucesso, a criatura recebe metade do dano.\n\nCriaturas que tenham vulnerabilidade a dano gélido ou glacial possuem desvantagem nessa salvaguarda.\n\nO solo na área é coberto por gelo escorregadio, tornando-o terreno difícil. Quando uma criatura entrar na área da magia pela primeira vez num turno ou começar seu turno nela, ela deve realizar uma salvaguarda de Destreza. Em uma falha, a criatura estará Caída.\n\nSe uma criatura estiver se concentrando na área da magia, a criatura deve realizar uma salvaguarda de Constituição contra sua CD para magias, ou perderá a concentração.\n\nAliados nessa área podem ver normalmente através da magia e possuem vantagem em suas salvaguardas.\n\nCaso você conjure essa magia na mesma área todos os dias pelos próximos 7 dias, os efeitos dessa magia se tornam permanentes na área."
     }
+  ],
+  "rituals": [
+    {
+      "id": "agua-benta",
+      "name": "Água Benta",
+      "level": 1,
+      "skills": [
+        "RELIGION"
+      ],
+      "prerequisite": "Rito Espiritual",
+      "subclasses": [
+        "espiritual"
+      ],
+      "backlashAt": 3,
+      "backlash": "O sal é dissolvido na água e ambos precisam ser preparados novamente",
+      "duration": "1 hora",
+      "components": "Recipiente com água de uma fonte natural e sal, que são consumidos pelo ritual, e um símbolo sagrado ligado à fé do Ritualista",
+      "description": "Através deste Ritual, é possível que um Acólito utilize da fé para abençoar uma porção de água e torná-la um perigo para ínferos e mortos vivos.\n\nEsse Ritual é executado através de orações e meditação, com um incenso ou velas queimando ao redor do ritualista e um símbolo sagrado em suas mãos. Em caso de sucesso, a mistura de água e sal se torna Água Benta. Para cada hora de ritual é possível produzir quatro frascos de Água Benta."
+    },
+    {
+      "id": "amuleto-de-mercurio",
+      "name": "Amuleto de Mercúrio",
+      "level": 1,
+      "skills": [
+        "RELIGION"
+      ],
+      "prerequisite": "Rito das Estrelas",
+      "subclasses": [
+        "estrelas"
+      ],
+      "backlashAt": 3,
+      "backlash": "O mercúrio dissolve o cristal, fazendo com que ambos os materiais sejam perdidosa",
+      "language": "Celestial",
+      "components": "Um cristal valendo pelo menos 10 PO e mercúrio, ambos são consumidos pelo ritual, e um símbolo sagrado ligado à fé do Ritualista",
+      "description": "O ritual do Amuleto de Mercúrio constrói um pequeno pingente de cristal com mercúrio líquido dentro., capaz de proteger seu usuário de condições debilitantes.\n\nEsse ritual é executado sob a luz das estrelas à noite, em um altar é colocado o cristal e o mercúrio que, através de orações e de incenso queimado, são unificados, formando um pingente pequeno que se rompe quando o usuário do mesmo é alvo de alguma condição debilitante, anulando-a instantaneamente. Após o cristal se romper, o usuário não pode utilizar outro amuleto desses por uma semana."
+    },
+    {
+      "id": "aqua-regia",
+      "name": "Aqua Regia",
+      "level": 1,
+      "skills": [
+        "RELIGION"
+      ],
+      "prerequisite": "Rito das Marés",
+      "subclasses": [
+        "mares"
+      ],
+      "backlashAt": 3,
+      "backlash": "A água do mar é evaporada juntamente com o pó da pedra da lua",
+      "components": "Recipiente com água do mar, que é consumidos pelo ritual, uma pedra da lua pulverizada e um símbolo sagrado ligado à fé do Ritualista",
+      "description": "Através deste Ritual, é possível que um Acólito utilize da fé para alterar as propriedades de uma porção de água, tornando-a um ácido perigoso apenas para vastinatas.\n\nEsse Ritual é executado através de orações e meditação à luz da lua, com um incenso ou velas queimando ao redor do ritualista e um símbolo sagrado em suas mãos. Em caso de sucesso, a mistura de água, sal e pedra da lua se torna Aqua Regia. Para cada hora de ritual é possível produzir quatro frascos de Aqua Regia.\n\nCom uma ação, você pode espalhar o conteúdo deste frasco em uma criatura dentro de 5 pés do seu alcance ou jogar o frasco a até 20 pés, quebrando-o no impacto. Em ambos os casos, faça um ataque à distância contra a criatura alvejada, tratando a Aqua Regia como uma arma improvisada. Se o alvo for um vastinata, este sofrerá 2d4 de dano ácido, ignorando qualquer nível de resistência do alvo, caso possua."
+    },
+    {
+      "id": "contato-mistico",
+      "name": "Contato Místico",
+      "level": 1,
+      "skills": [
+        "ARCANA",
+        "NATURE",
+        "RELIGION"
+      ],
+      "backlashAt": 3,
+      "backlash": "Uma entidade não favorável se manifesta, podendo causar mal ao ritualista",
+      "components": "Ritual, componente ressonante com a entidade, ambos são consumidos pelo ritual",
+      "description": "Através do Ritual do Contato Místico, é possível que um ritualista entre em contato com uma entidade espiritual, celestial, ínfera ou mística, em busca de um pacto com essa entidade poderosa para servir como uma força atuante em prol dela no mundo físico.\n\nEsse Ritual é executado em um círculo mágico, com um incenso queimando em um triângulo desenhado logo à frente do ritualista. Em caso de sucesso, a entidade contactada se manifesta na fumaça do incenso, esse sucesso garante o contato com a Entidade, mas não garante o pacto que deve ser tratado com a entidade.\nAs Runessências de Místico da Ninhada e Místico de Pacto podem ser obtidas através desse ritual. Quando isso acontece, a essência Rúnica de uma criatura pode ser modificada, com a sua primeira runa se tornando a Runa do Pacto em questão. Caso o Ritual seja feito com criaturas com acesso a mais Runas, elas podem ser modificadas a critério da entidade contactada (controlada pelo mestre)."
+    },
+    {
+      "id": "cristalizar-mana",
+      "name": "Cristalizar Mana",
+      "level": 1,
+      "skills": [
+        "ARCANA"
+      ],
+      "backlashAt": 3,
+      "backlash": "O cristal explode causando 2d4 de dano energético a criatura a até 20 pés. Salvaguarda de Destreza CD 15 reduz pela metade o dano.",
+      "language": "Ioniano antigo",
+      "components": "Ritual e Cristal, ambos são consumidos pelo ritual",
+      "description": "O Ritual Cristalizar Mana permite transformar um cristal simples em um Cristal de Mana absorvendo a mana do ambiente.\n\nO Ritual é executado em um altar com o cristal dentro de um círculo mágico com velas ao seu redor e incensos sendo queimados. Caso bem sucedido, ao término do Ritual, um Cristal Comum se transforma em um Cristal de Mana Comum de nível 1, conseguindo armazenar 2 pontos de Mana no mesmo por até 2 dias."
+    },
+    {
+      "id": "fruto-d-ouro",
+      "name": "Fruto D’Ouro",
+      "level": 1,
+      "skills": [
+        "RELIGION"
+      ],
+      "prerequisite": "Rito da Natureza",
+      "subclasses": [
+        "natureza"
+      ],
+      "backlashAt": 4,
+      "backlash": "As frutas apodrecem instantaneamente",
+      "language": "Silvestre",
+      "components": "Um cesto de vime novo que o ritual consome, até 5 frutas frescas e maduras, 10 PO em ouro em pó por fruto que o ritual consome",
+      "description": "Através desse ritual, é possível encantar até 5 frutas com propriedades mágicas curadoras capazes de alimentar praticamente qualquer criatura faminta, restaurando suas forças e afastando a fome.\n\nO Ritual do fruto D’Ouro é executado em um berço de folhas de árvores frutíferas, através de orações, enquanto cada fruto é pincelado pelo ouro em pó, que é absorvido pela fruta. Ao término do ritual, as frutas se tornam douradas como o ouro e duram por até 1 semana. Caso não sejam consumidas durante esse tempo, se transformam em pó de ouro totalizando 5 PO.\n\nCada fruto, ao ser comido restaura 1d4 pontos de vida, remove todos pontos de exaustão causados por ausência de comida e provê sustento para um dia. Após comer um fruto, uma criatura não pode ser alvo do efeito do fruto novamente por 1 semana."
+    },
+    {
+      "id": "manifestar-forja-viva",
+      "name": "Manifestar Forja Viva",
+      "level": 1,
+      "skills": [
+        "RELIGION"
+      ],
+      "prerequisite": "Rito da Forja",
+      "subclasses": [
+        "forja"
+      ],
+      "backlashAt": 3,
+      "backlash": "O metal enferruja e se desfaz, sendo perdido no processo",
+      "language": "Freljordiano Antigo",
+      "components": "Metal (podendo ser moedas) com valor coletivo igual ao valor do item",
+      "description": "Através deste Ritual, um Acólito da Forja cria um item não mágico que precisa incluir algum metal: uma arma simples ou marcial, uma armadura, 10 peças de munição, um conjunto de ferramentas ou outro objeto metálico, não podendo ter um valor base maior do que 100 PO.\n\nEste Ritual é executado através de preces feitas pelo Ritualista em uma forja ou próximo a uma fornalha, com a luz e calor da mesma sobre o material base durante o processo. A criação é completada ao final do ritual, aglutinando-se em um espaço desocupado à escolha do Ritualista em uma superfície a 5 pés dele. O ritual pode criar uma duplicata de um item não mágico que contém metal, como uma chave, se o Ritualista possuir o item original durante o ritual."
+    },
+    {
+      "id": "purificacao-de-ar",
+      "name": "Purificação de Ar",
+      "level": 1,
+      "skills": [
+        "RELIGION"
+      ],
+      "prerequisite": "Rito da Tempestade",
+      "subclasses": [
+        "tempestade"
+      ],
+      "backlashAt": 3,
+      "backlash": "todos os participantes recebem 2d4 de dano venenoso",
+      "language": "Shurimane Antigo",
+      "components": "Incensos aromáticos, que o ritual consome, e símbolo sagrado ligado à fé do Ritualista",
+      "description": "Através deste Ritual, é possível que um Acólito utilize sua conexão com o ar e o clima para purificar o oxigênio de uma área.\n\nEsse Ritual é executado através de orações feitas pelo Ritualista em um local específico enquanto queima o incenso. Ao final do ritual, o ar é purificado em uma área com raio de até 100 pés ao redor do incensário, dissipando venenos de inalação no ambiente e dando vantagem a salvaguardas para resistir aos efeitos de tais venenos para criaturas que estejam na área pelas próximas 24 horas. Adicionalmente, até 4 criaturas a até 30 pés do Ritualista pela duração do Ritual também recebem esse benefício mesmo que se retirem da área e tem resistência a dano venenoso pela duração do mesmo. Para cada pessoa afetada desta forma, o custo do Ritual aumenta em 15 PO.\n\nCaso este Ritual seja repetido diariamente durante um mês sem falhas em uma área fechada, o efeito se torna permanente naquela área."
+    },
+    {
+      "id": "terreno-humifero",
+      "name": "Terreno Humífero",
+      "level": 1,
+      "skills": [
+        "RELIGION"
+      ],
+      "prerequisite": "Rito da Natureza",
+      "subclasses": [
+        "natureza"
+      ],
+      "backlashAt": 4,
+      "backlash": "O solo se torna infértil a menos que algum efeito mágico o torne saudável novamente",
+      "language": "Silvestre",
+      "duration": "1 hora durante 4 dias",
+      "components": "Pelo menos 1 quilo de restos de frutas e/ou outros vegetais que são consumidos pelo Ritual",
+      "description": "Através deste Ritual, é possível que um Acólito utilize sua conexão com a natureza para abençoar uma porção de terra e acelerar o crescimento de plantas em um raio de 600 pés.\n\nEsse Ritual é executado através de preces feitas enquanto o Ritualista espalha os restos vegetais através do mesmo, empunhando seu símbolo sagrado. Em caso de sucesso, a terra da área adquire uma coloração escura e, pelo próximo mês, plantas têm sua velocidade de crescimento dobrada se plantadas na área e árvores frutíferas possuem 50% de chance de produzirem frutos a cada dia."
+    },
+    {
+      "id": "visao-desvelada",
+      "name": "Visão Desvelada",
+      "level": 1,
+      "skills": [
+        "RELIGION"
+      ],
+      "prerequisite": "Rito da Sepultura",
+      "subclasses": [
+        "sepultura"
+      ],
+      "backlashAt": 3,
+      "backlash": "A conexão com a alma é bloqueada, não podendo ser possível tentar realizar este Ritual com a mesma criatura novamente por 1 ano",
+      "language": "Ochnum",
+      "duration": "10 minutos",
+      "components": "Restos mortais de uma criatura e um símbolo sagrado ligado à fé do Ritualista",
+      "description": "Através deste Ritual, é possível que um Acólito utilize sua conexão com os mortos para contactar a alma de uma criatura morta.\nEsse Ritual é executado através de um ritual de 10 minutos com oração feitas pelo Ritualista, mantendo-se próximo aos restos da criatura durante o processo. Em um sucesso, a alma da criatura aparece flutuando acima dos restos mortais utilizados durante o ritual.\nEssa alma fica presente por até 5 minutos e pode se comunicar nos idiomas que a criatura possuía em vida. O Ritualista pode fazer até 2 perguntas para essa criatura, as respostas normalmente são breves, enigmáticas ou repetitivas e o corpo não está sob nenhuma compulsão que o obrigue a responder ou mesmo falar a verdade.\nEm um sucesso ou falha o Ritualista não pode convocar uma alma dessa maneira pelo próximo mês."
+    },
+    {
+      "id": "danca-elemental-das-armas",
+      "name": "Dança Elemental das Armas",
+      "level": 2,
+      "skills": [
+        "ARCANA",
+        "NATURE",
+        "RELIGION"
+      ],
+      "backlashAt": 5,
+      "backlash": "As armas envolvidas no ritual se desintegram caso não sejam mágicas",
+      "language": "Ioniano antigo",
+      "components": "20 PO/ hora + pedra elemental, ambos são consumidos pelo ritual",
+      "description": "O Ritual da Dança Elemental das Armas imbui até 10 armas com uma manifestação elemental poderosa que dura por 24 horas.\n\nO ritual é executado em um círculo de 10 pés de raio com a pedra elemental ao centro, enquanto os conjuradores permanecem em volta do ritual canalizando a magia através de mantras e meditação. A cada hora do ritual é necessário queimar incenso e aspergir as armas com os componentes. Ao término do ritual, caso o mesmo tenha sido bem sucedido, a pedra elemental emana energia característica do elemento, despedaçando-se em uma leve camada de pó que se dirige às armas do ritual, concedendo a elas a característica Fùria Elemental por 24 horas. Ao término do efeito do ritual essas armas não podem ser alvo de rituais por 7 dias.\n\nFúria Elemental: Uma arma imbuída com essa propriedade passa a causar dano adicional de 3d8 do tipo de elemental canalizado, em ataques. Em um acerto crítico elas causam o dobro do dano elemental."
+    },
+    {
+      "id": "nevoa-dos-lamentos",
+      "name": "Névoa dos Lamentos",
+      "level": 2,
+      "skills": [
+        "RELIGION"
+      ],
+      "prerequisite": "Rito da Sepultura",
+      "subclasses": [
+        "sepultura"
+      ],
+      "backlashAt": 6,
+      "backlash": "O Ritualista e criatura a até 10 pés dele durante o ritual recebem 6d6 de dano necrótico",
+      "language": "Ochnun",
+      "components": "Água limpa, pó de terra de cemitério Restos mortais de uma criatura e um símbolo sagrado ligado à fé do Ritualista",
+      "description": "Através deste Ritual, é possível que um Acólito crie um líquido capaz de liberar uma névoa que torna uma criatura vulnerável a ataques de mortos vivos.\n\nEsse Ritual é executado através da mistura do pó e restos com a água, acompanhado de orações no idioma dos mortos. Ao fim do Ritual, é gerado um glóbulo de névoa que pode ser colocado dentro de um frasco ou segurado e arremessado por um Acólito da Sepultura.\n\nCom uma ação, você pode arremessar um frasco ou glóbulo de névoa em um ponto que você possa ver a até 25 pés de você. Criaturas num cone de 15 pés iniciado no ponto escolhido devem realizar uma salvaguarda de Constituição. Em uma falha, uma criatura afetada sofre 6d6 + o modificador de Sabedoria do Ritualista com dano necrótico, tem seu deslocamento reduzido em 15 pés e ficam marcadas pelo próximo minuto. Além disso, a criatura atingida recebe a Marca da Sepultura.\n\nMarca da Sepultura. Durante 1 minuto você emana uma aura de 10 pés. Mortos Vivos que entrem nessa área são afetados pela condição Provocado por você."
+    },
+    {
+      "id": "alinhar-mana",
+      "name": "Alinhar Mana",
+      "level": 3,
+      "skills": [
+        "ARCANA",
+        "NATURE",
+        "RELIGION"
+      ],
+      "backlashAt": 10,
+      "backlash": "A Região cai em um nível por 12 horas",
+      "language": "Ioniano ou Shurimane ou Icathiano",
+      "components": "Um braseiro de bronze de 100 PO. Ritual, Ervas, Incensos, Cristais no total de 100 PO",
+      "description": "Esse Ritual permite alinhar a mana em uma determinada região, fazendo com que aumente em uma categoria (exceto em uma região de mana nula) através de um realinhamento de mana no local.\n\nUm círculo é traçado em volta de um braseiro que deve ser alimentado pelas 8 horas de duração do ritual enquanto cânticos são feitos. O braseiro queima ervas, incensos e até cristais, enquanto é possivel alinhar de forma mais harmônica a mana do local. Em um sucesso, um círculo de 5Km ao redor do ponto central tem sua Zona Mágica aumentada em uma categoria por até 48 horas enquanto o braseiro queimar 5 PO de ervas/ hora.\n\nAo término do ritual, a mana do local retorna para sua forma original. Caso o Ritual seja executado 5 vezes em menos de 15 dias, a região tem sua categoria de mana aumentada em 1 de forma permanente."
+    },
+    {
+      "id": "bencao-da-forja",
+      "name": "Bênção da Forja",
+      "level": 3,
+      "skills": [
+        "RELIGION"
+      ],
+      "prerequisite": "Rito da Forja",
+      "subclasses": [
+        "forja"
+      ],
+      "backlashAt": 13,
+      "backlash": "Os componentes se desintegram mas o item permanece intacto",
+      "language": "Freljordiano Antigo",
+      "duration": "8 horas",
+      "components": "Metal, incensos, velas uma pedra preciosa de 150 PO ressonante com o item, que são consumidos pelo Ritual",
+      "description": "Você pode despertar uma arma ou armadura mágicos, fazendo com que se torne uma versão aprimorada do que era anteriormente. Um item só pode possuir uma bênção e o máximo de itens que um Acólito pode manter abençoados é igual ao seu bônus de proficiência. Com uma ação bônus, o Acólito pode retirar a bênção de um item que tenha abençoado, mesmo que ele esteja distante, até mesmo em outro Reino de Existência.\n\nUm item despertado recebe benefícios adicionais e proporcionais ao nível do Acólito, à escolha do mestre. Dessa forma, uma espada +1 pode se tornar desde uma espada +2, até mesmo uma espada +3 causando dano ígneo adicional com outras propriedades. Enquanto uma armadura +1 pode também se tornar desde uma armadura +2 até uma armadura +3 que conceda resistência a dano ígneo ou mesmo imunidade a dano ígneo.\n\nUma criatura deve sintonizar com o item para poder utilizar todas as suas propriedades e enquanto o item estiver sob o efeito da bênção, ele assume um aspecto diferente do original, algo mais refinado ou aparentemente mais poderoso.\n\nEste Ritual é executado através de preces feitas pelo Ritualista em um círculo mágico com uma bigorna ao centro e o Acólito utilizando martelo e tenaz para infundir magia no item através de marteladas pela duração do ritual enquanto ervas, metais e pedras são lançadas, sendo consumidas no ritual e recebendo o poder mágico delas."
+    },
+    {
+      "id": "sementes-de-poder",
+      "name": "Sementes de Poder",
+      "level": 3,
+      "skills": [
+        "RELIGION"
+      ],
+      "prerequisite": "Rito da Natureza",
+      "subclasses": [
+        "natureza"
+      ],
+      "backlashAt": 10,
+      "backlash": "a semente é sobrecarregada de energia, causando dano 8d10 de dano esmagador ao Ritualista e a criaturas a até 10 pés de distância que falhem em uma salvaguarda de Destreza",
+      "language": "Silvestre",
+      "duration": "1 hora durante 2 a até 8 dias",
+      "components": "Uma semente, 20 PO em materiais que são consumidos pelo ritual e um símbolo sagrado ligado à fé do Ritualista",
+      "description": "Através deste Ritual, um Acólito utiliza sua conexão com as forças da Natureza para criar sementes encantadas capazes de realizar efeitos fantásticos. Um Acólito da Natureza pode manter um número máximo de sementes encantadas igual à metade do seu nível de Acólito e suas propriedades mágicas duram uma quantidade de dias igual à quantidade de dias gastos pelo Ritualista com o Ritual daquela semente.\n\nAo iniciar o Ritual, é preciso definir o efeito desejado para a semente:\n\n- Cura. Ao consumir essa semente com uma ação bônus, a criatura recupera 8d10 + o modificador de Sabedoria do Ritualista em pontos de vida, os pontos de vida excedentes são convertidos em pontos de vida temporários.\n\n- Explosão. Uma criatura pode utilizar sua ação bônus para lançar a semente aos pés de uma criatura a até 20 pés dela. A criatura atingida deve realizar uma salvaguarda de Força CD igual à CD de magias do Ritualista. Em uma falha, a criatura sofre 8d10 + o modificador de Sabedoria do Ritualista de dano esmagador.\n\n- Fortalecimento. Ao consumir essa semente com uma ação bônus, o corpo da criatura é fortalecido. Seus valores de Força, Destreza e Constituição aumentam em um valor igual a metade do bônus de proficiência do Ritualista até o final de seu próximo turno.\n\n- Raízes. Uma criatura pode utilizar uma ação bônus para lançar a semente aos pés de uma criatura que ela possa ver a até 60 pés dela. A criatura alvo deve realizar uma salvaguarda de Destreza CD igual a CD de magias do Ritualista. Em uma falha, raízes envolvem a criatura alvo, a deixando Contida. Essas raízes funcionam como algemas, porém, não podem ser abertas.\n\nAo término do Ritual, uma semente de poder é criada com o efeito selecionado."
+    },
+    {
+      "id": "sol-espiritual",
+      "name": "Sol Espiritual",
+      "level": 4,
+      "skills": [
+        "ARCANA",
+        "NATURE",
+        "RELIGION"
+      ],
+      "backlashAt": 20,
+      "backlash": "o cristal explode causando 8d4 de dano radiante em criaturas em um raio de 150 pés. Salvaguarda de Constituição CD 18 reduz pela metade o dano.",
+      "language": "Shurimane",
+      "duration": "6 horas durante 4 dias",
+      "components": "Ritual, Cristal azulado de 200 PO, ervas aromáticas",
+      "description": "O Ritual do Sol Espiritual cria um cristal frágil e fugaz que dura por 24 horas até perder seu poder. Esse cristal pode ser esmagado com as mãos, liberando uma esfera de energia espiritual azulada que flutua no céu emitindo uma luz forte azulada emitindo o efeito Sol Azul.\n\nUtilizando um círculo mágico, com um ritual que se inicia duas horas antes do sol estar em seu ponto máximo, os cânticos são feitos enquanto ervas aromáticas são queimadas em um braseiro por 6 horas. O ritual deve ser realizado durante 3 dias seguidos para que ao término produza o cristal do Sol Azul.\n\nSol Azul: Uma esfera imaterial emanando luz azulada começa a se formar, subindo em direção ao céu até alcançar 200 metros ou parar no teto, isso leva duas rodadas para acontecer. Quando a esfera alcança a altura máxima de 200 metros ela começa a a crescer até alcançar 20m de diâmetro e entrar em reação, se tornando tão brilhante quanto o sol, mas emanando luz azul por uma área de 1500 pés.\n\nCriaturas ínferas ou vastinatas que estejam sob essa luz recebem 3d6 de dano verdadeiro por turno, apenas cobertura completa de materiais sólidos com mais de 30cm impede o dano.. É possível redirecionar a luz com espelhos para alcançar criaturas que se escondam.\n\nO sol queima por 8 horas ininterruptas e criaturas que façam um descanso longo sob essa luz recebem o benefício de um descanso pleno."
+    },
+    {
+      "id": "area-do-renascimento",
+      "name": "Área do Renascimento",
+      "level": 5,
+      "skills": [
+        "ARCANA",
+        "NATURE",
+        "RELIGION"
+      ],
+      "backlashAt": 100,
+      "backlash": "Todos os componentes são consumidos e a criatura não pode executar esse ritual por 1 ano.",
+      "language": "Ioniano",
+      "components": "Ritual, urna de metal de 200 PO",
+      "description": "Algumas criaturas criam um vínculo extremamente forte com um local, seja para protegê-lo, seja por algum significado especial. Esse ritual poderoso faz com que uma criatura que tenha se vinculado ao local, caso morra nesse local, retorne à vida, através da força empenhada durante o ritual.\n\nO Ritual é executado durante 21 dias, por 8 horas. A cada hora de execução, são consumidos 10 PO em ervas e incensos, vinculando até 4 participantes do Ritual à Região. No centro do ritual a urna recebe um frasco contendo o sangue de cada um dos vinculado e em um sucesso, a área é definida com um raio de 200 Km centralizado na urna. Caso algo aconteça com a urna, o ritual pode ser quebrado e o ritualista vinculado sente isso de forma clara. Uma criatura vinculada que se afaste dessa área por mais de 10 dias, perde o vínculo.\n\nPelo próximo ano, o ritualista vinculado que morra nessa região, ressuscitará em até 7 dias (com base no nível de magia da região) caso tenha alguma parte de seu corpo ainda existente na região. A criatura se torna um Ressurgido Meio Azakana ou Meio Kanmei a critério do mestre, com base nas motivações do ritualista. Da primeira vez que o ritualista é ressuscitado, é feita a mudança de 1 Herança, representando o que foi perdido na ressurreição."
+    },
+    {
+      "id": "in-gloria-mori",
+      "name": "In Gloria Mori",
+      "level": 6,
+      "skills": [
+        "ARCANA"
+      ],
+      "backlashAt": 60,
+      "backlash": "A criatura volta à vida de forma enlouquecida.",
+      "language": "Noxiano antigo",
+      "components": "10.000 PO/ dia, Corpo, Sangue*",
+      "description": "In Gloria Mori é um ritual com fundamentação necromante e hemomante, feito para trazer de volta à vida uma criatura que tenha falecido há muito tempo. O Ritual requer que ao menos uma parte que tenha pertencido ao corpo da criatura que se deseja trazer de volta esteja presente. Adicionalmente, é necessário o peso da criatura em sangue caso a criatura tenha o corpo completo. Caso um cadáver seja apenas parcial, mais sangue é necessário. A cada dia de ritual os componentes são consumidos e uma parte do sangue é absorvida pelo corpo que é posicionado em um altar de pedra com diversos círculos necromânticos ao seu redor. Ao término do ritual, a fórmula se desfaz em uma fina poeira preta e uma violenta onda mágica se choca com o corpo quebrando o altar no processo e trazendo a criatura de volta à vida com dois pontos de loucura permanente. Ela possui as mesmas características que tinha em vida\n\nEsse ritual foi utilizado por LeBlanc, Swain e Vladimir para trazer de volta o colosso Sion. Foi utilizado um catalisador conhecido como “Forja das Almas” que concedeu 20 sucessos o Ritual e reduziu a ND em 2."
+    }
+  ],
+  "tables": [
+    {
+      "id": "conjuracao-ritual",
+      "name": "Conjuração Ritual",
+      "description": "Magias com o descritor Ritual conjuradas sem gastar Mana: tempo adicional da tabela e um teste de Arcanismo, Natureza ou Religião (Arcano, Xamã ou Acólito) contra a CD. Precisa de Conjuração e da característica Ritualista; não dá para conjurar em nível superior. Em uma falha, a magia não acontece e os componentes não são gastos. Não existem magias acima do 6º círculo que tenham o descritor Ritual, mas as regras para utilizá-las dessa forma estão dispostas aqui para que o mestre tenha liberdade de utilizá-las como achar mais adequado.",
+      "columns": [
+        "Nível de Magia",
+        "CD",
+        "Tempo adicional",
+        "Tempo de Cópia"
+      ],
+      "rows": [
+        [
+          "1",
+          "11",
+          "10 minutos",
+          "1 hora"
+        ],
+        [
+          "2",
+          "13",
+          "15 minutos",
+          "1 hora"
+        ],
+        [
+          "3",
+          "15",
+          "25 minutos",
+          "1 hora"
+        ],
+        [
+          "4",
+          "17",
+          "30 minutos",
+          "2 horas"
+        ],
+        [
+          "5",
+          "19",
+          "35 minutos",
+          "2 horas"
+        ],
+        [
+          "6",
+          "21",
+          "45 minutos",
+          "2 horas"
+        ],
+        [
+          "7",
+          "23",
+          "1 hora",
+          "3 horas"
+        ],
+        [
+          "8",
+          "25",
+          "2 horas",
+          "3 horas"
+        ],
+        [
+          "9",
+          "27",
+          "4 horas",
+          "5 horas"
+        ],
+        [
+          "10",
+          "29",
+          "8 horas",
+          "10 horas"
+        ]
+      ]
+    },
+    {
+      "id": "trespassando",
+      "name": "Trespassando Conjuração (regra opcional)",
+      "description": "Não conjuradores com a característica Ritualista conjuram magias de Ritual com duas cópias do ritual, os componentes, uma fonte de Mana (cristal) e o ouro da tabela em componentes. Um teste contra a CD; ao fim, exaustão = nível da magia − mod. de Constituição. Na falha, tudo é consumido, exaustão de metade do nível − mod. de Constituição e 24 horas sem repetir o ritual.",
+      "columns": [
+        "Nível de Magia",
+        "CD",
+        "Tempo adicional",
+        "PO/ Não Conjurador",
+        "Tempo de Cópia"
+      ],
+      "rows": [
+        [
+          "1",
+          "13",
+          "30 minutos",
+          "10 PO",
+          "1 hora"
+        ],
+        [
+          "2",
+          "15",
+          "1 hora",
+          "50 PO",
+          "1 hora"
+        ],
+        [
+          "3",
+          "17",
+          "2 horas",
+          "100 PO",
+          "1 hora"
+        ],
+        [
+          "4",
+          "19",
+          "3 horas",
+          "1.000 PO",
+          "2 horas"
+        ],
+        [
+          "5",
+          "21",
+          "6 horas",
+          "5.000 PO",
+          "2 horas"
+        ],
+        [
+          "6",
+          "23",
+          "8 horas",
+          "10.000 PO",
+          "2 horas"
+        ]
+      ]
+    },
+    {
+      "id": "rituais",
+      "name": "Rituais",
+      "description": "Teste contínuo (um a cada intervalo de Jogada) de todos os participantes contra a CD; sucessos somam à pilha, falhas tiram 1 (20 natural +2, falha crítica −2). Ao fim do Tempo, precisa ter os sucessos do nível. PO: custo base (metade para quem é Ritualista). Sem Ritualista, metade do mod. de atributo; Ritualista soma o mod.; conjuradores somam o nível máximo de magia; proficiência e especialidade somam. Oficiantes que um condutor aguenta: mod. de Carisma + proficiência (metade sem Ritualista; cada um a mais +1 na CD).",
+      "columns": [
+        "Nível",
+        "CD",
+        "Sucesso",
+        "PO",
+        "Tempo",
+        "Jogada",
+        "Cópia"
+      ],
+      "rows": [
+        [
+          "1",
+          "15",
+          "4",
+          "50 PO",
+          "1 hora",
+          "10 minutos",
+          "1 hora"
+        ],
+        [
+          "2",
+          "17",
+          "7",
+          "100 PO",
+          "2 horas",
+          "10 minutos",
+          "2 horas"
+        ],
+        [
+          "3",
+          "19",
+          "13",
+          "500 PO",
+          "8 horas",
+          "20 minutos",
+          "5 horas"
+        ],
+        [
+          "4",
+          "21",
+          "25",
+          "1.000 PO",
+          "24 horas",
+          "30 minutos",
+          "10 horas"
+        ],
+        [
+          "5",
+          "25",
+          "100",
+          "5.000 PO",
+          "168 horas",
+          "1 hora",
+          "24 horas"
+        ],
+        [
+          "6",
+          "29",
+          "200",
+          "10.000 PO",
+          "720 horas",
+          "2 horas",
+          "300 horas"
+        ]
+      ]
+    },
+    {
+      "id": "magia-purpura",
+      "name": "Magia Púrpura",
+      "description": "Role 1d100 quando um efeito de Magia Púrpura acontecer.",
+      "columns": [
+        "d100",
+        "Efeito"
+      ],
+      "rows": [
+        [
+          "01",
+          "Role novamente 2 vezes nesta tabela, ignorando este resultado se cair novamente."
+        ],
+        [
+          "02-03",
+          "Você conjura esfera elemental (fogo) como uma magia de 3º nível centrada em você."
+        ],
+        [
+          "04-05",
+          "1d4 ratos do cais controlados pelo Mestre aparecem em espaços desocupados a até 5 pés de você."
+        ],
+        [
+          "06-07",
+          "Sua roupa endurece, funcionando como uma armadura. Sua CA aumenta em +1 por 1 minuto. Caso não esteja usando roupas, role novamente nesta tabela."
+        ],
+        [
+          "08-09",
+          "Seu tamanho diminui em uma categoria juntamente com seu equipamento por 1 hora. Caso você seja Miúdo, role novamente nesta tabela."
+        ],
+        [
+          "10-11",
+          "A magia conjurada falha, tendo seu gasto de Mana e materiais consumidos normalmente."
+        ],
+        [
+          "12-13",
+          "Um feérico escolhido pelo Mestre aparece em um espaço desocupado a até 5 pés de você e se dispõe a te ajudar. Ele desaparece após 1 minuto."
+        ],
+        [
+          "14-15",
+          "Você conjura proteção contra morte em si mesmo, que dura por 1 minuto."
+        ],
+        [
+          "16-17",
+          "Você é rodeado por uma aura etérea e por uma música celestial por 1 minuto."
+        ],
+        [
+          "18-19",
+          "Você e todas as criaturas a até 60 pés ao seu redor se tornam imunes a todos os tipos de dano até o final do seu próximo turno."
+        ],
+        [
+          "20-21",
+          "Uma criatura invisível surge em um espaço desocupado a 5 pés de você e te atrapalha das piores maneiras possíveis, lhe dando -2 de penalidade em seus ataques e CD de magias por 1 minuto."
+        ],
+        [
+          "22-23",
+          "Você recupera 3d6 pontos de vida."
+        ],
+        [
+          "24-25",
+          "Você ganha 30 pés de deslocamento de natação, escalada ou voo por 1 minuto, à escolha do Mestre."
+        ],
+        [
+          "26-27",
+          "Por um minuto, todas as suas magias possuem metade do custo de Mana."
+        ],
+        [
+          "28-29",
+          "Um olho aparece em sua nuca por um minuto. Durante esse tempo, você tem vantagem em testes de Percepção que dependam da visão e não pode ser surpreendido."
+        ],
+        [
+          "30-31",
+          "Você conjura a magia sono como uma magia de 5º nível centrada em você."
+        ],
+        [
+          "32-33",
+          "Role na tabela Magia Descontrolada Yordle."
+        ],
+        [
+          "34-35",
+          "Role 1d10. Sua idade muda de acordo com o valor rolado, caso seja ímpar você envelhece (mínimo de 1 ano de idade), caso seja par você rejuvenesce."
+        ],
+        [
+          "36-37",
+          "Por um minuto, você deve gritar ao falar."
+        ],
+        [
+          "38-39",
+          "Todo o pelo do seu corpo cai, mas cresce de volta após 5d6 dias."
+        ],
+        [
+          "40-41",
+          "Todas as criaturas a até 30 pés de você ficam Enfeitiçadas por você por 1 minuto."
+        ],
+        [
+          "42-43",
+          "Sua pele, pelo ou carapaça adquire um tom vibrante de roxo. A magia remover maldição pode encerrar esse efeito."
+        ],
+        [
+          "44-45",
+          "Sua magia funciona normalmente, mas tem um efeito estranho e cômico, à escolha do Mestre, baseado na própria magia."
+        ],
+        [
+          "46-47",
+          "Você recebe uma ação extra neste turno."
+        ],
+        [
+          "48-49",
+          "Você recupera 1d6 pontos de Mana."
+        ],
+        [
+          "50",
+          "O Mestre escolhe um resultado nesta tabela."
+        ],
+        [
+          "51",
+          "Você pode escolher um dos resultados nesta tabela."
+        ],
+        [
+          "52-53",
+          "Todo líquido a até 500 pés de você se torna sólido por 1 minuto."
+        ],
+        [
+          "54-55",
+          "2d6 gorilas controlados pelo Mestre aparecem em espaços desocupados a até 60 pés de você."
+        ],
+        [
+          "56-57",
+          "A magia conjurada não consome Mana ou materiais. Além disso, você pode usar uma opção de Metamagia à sua escolha para essa magia."
+        ],
+        [
+          "58-59",
+          "Você brilha com luz plena num raio de 30 pés e penumbra por mais 30 pés por um minuto."
+        ],
+        [
+          "60-61",
+          "Um ínfero escolhido pelo Mestre aparece em um espaço desocupado a até 5 pés de você e utiliza todos os seus recursos para te atacar. Ele desaparece após 1 minuto."
+        ],
+        [
+          "62-63",
+          "Você conjura voo em uma criatura a até 60 pés de distância de você."
+        ],
+        [
+          "64-65",
+          "Seu tamanho aumenta em uma categoria por 1 hora."
+        ],
+        [
+          "66-67",
+          "Por um minuto, você pode conjurar a magia passo nebuloso sem gasto de Mana."
+        ],
+        [
+          "68-69",
+          "Você e todas as criaturas a até 60 pés ao seu redor se tornam vulneráveis a todos os tipos de dano até o final do seu próximo turno."
+        ],
+        [
+          "70-71",
+          "Uma criatura invisível surge em um espaço desocupado a 5 pés de você e te ajuda das melhores maneiras possíveis, lhe dando +2 de bônus em seus ataques e CD de magias por 1 minuto."
+        ],
+        [
+          "72-73",
+          "Você sofre 3d6 pontos de dano."
+        ],
+        [
+          "74-75",
+          "Você conjura um familiar feérico ou ínfero que ficará com você até seu próximo descanso curto ou longo. Caso você já possua um familiar, role novamente nesta tabela."
+        ],
+        [
+          "76-77",
+          "Por um minuto, todas as magias possuem o dobro do custo de Mana."
+        ],
+        [
+          "78-79",
+          "Até quatro criaturas, à sua escolha, que estejam a até 30 pés de você sofrem 3d6 de dano elétrico."
+        ],
+        [
+          "80-81",
+          "Role novamente nesta tabela e mais uma vez na tabela Magia Descontrolada Yordle."
+        ],
+        [
+          "82-83",
+          "Maximize o dano da sua próxima magia que cause dano, conjurada no próximo minuto."
+        ],
+        [
+          "84-85",
+          "Uma flor cresce em sua língua. Enquanto ela estiver ali, você não consegue falar. Essa flor desaparece após 1 minuto."
+        ],
+        [
+          "86-87",
+          "Uma barreira de energia surge ao seu redor por um minuto, aumentando sua CA em +2."
+        ],
+        [
+          "88-89",
+          "Você fica Amedrontado por todas as criaturas que estejam a até 30 pés de você pelo próximo minuto."
+        ],
+        [
+          "90-91",
+          "Por um minuto, você passa a grasnar como um ganso."
+        ],
+        [
+          "92-93",
+          "Role nesta tabela sempre que conjurar uma magia pelo próximo minuto, ignorando este resultado em jogadas subsequentes. Você pode escolher o alvo do efeito desde que possa vê-lo"
+        ],
+        [
+          "94-95",
+          "Você é teleportado para o Reino Espiritual até o final do seu próximo turno, retornando para o espaço que estava ou o local mais próximo caso esteja ocupado."
+        ],
+        [
+          "96-97",
+          "Todas as criaturas (incluindo você) a até 30 pés de você passam a ter desvantagem em seus ataques até o final de seu próximo turno."
+        ],
+        [
+          "98-99",
+          "Você recupera todos os seus pontos de Arcana."
+        ],
+        [
+          "00",
+          "Você ganha um “vale” para negar um efeito dessa tabela."
+        ]
+      ]
+    },
+    {
+      "id": "magia-descontrolada-yordle",
+      "name": "Magia Descontrolada Yordle",
+      "description": "Algumas formas de magia violam as próprias regras e reproduzem efeitos sem relação com a intenção inicial. Role 1d100 quando um efeito de Magia Descontrolada Yordle acontecer.",
+      "columns": [
+        "d100",
+        "Efeito"
+      ],
+      "rows": [
+        [
+          "01-02",
+          "Role novamente nessa tabela todos os turnos até o final do combate, ignorando esse resultado caso o receba novamente"
+        ],
+        [
+          "03-04",
+          "Você ouve tudo o que as árvores falam pelas próximas 1d4 semanas."
+        ],
+        [
+          "05-06",
+          "Você teleporta você e seus aliados para uma área a até 1 milha de onde vocês se encontram atualmente."
+        ],
+        [
+          "07-08",
+          "Um esquilo aparece em sua cabeça e ele começa a golpear ela com uma avelã por um minuto, É impossível retirá-lo. Receba 1 de dano e tenha desvantagem em jogadas de concentração. Ao fim do minuto, ele desaparece."
+        ],
+        [
+          "09-10",
+          "Role um d10. Sua idade muda em um valor igual ao resultado da rolagem. Se o valor for ímpar, você fica mais jovem (mínimo 1 ano). Se for par, você fica mais velho."
+        ],
+        [
+          "11-12",
+          "Você conjura uma fada."
+        ],
+        [
+          "13-14",
+          "Você fica inchado e parece uma bola, e ao invés de caminhar você rolará no chão. Isso dura por 1d4 turnos."
+        ],
+        [
+          "15-16",
+          "Uma tulipa brota em sua testa e ela fala coisas indevidas para você por 1 minuto, após esse tempo ela desaparece."
+        ],
+        [
+          "17-18",
+          "Quando você for falar pelo próximo minuto, só sairá borboletas de sua boca."
+        ],
+        [
+          "19-20",
+          "Você começa a girar sem parar por 1d4 turnos, e perde sua ação durante esses turnos."
+        ],
+        [
+          "21-22",
+          "Você fica com um gosto roxo na boca e fica tentando descrever ele pelo próximo minuto."
+        ],
+        [
+          "23-24",
+          "Todos os dedos de sua mão se transformam em cenouras e podem ser comidos normalmente. Eles reaparecem normalmente após 2 turnos. Você deixa cair qualquer coisa que esteja em suas mãos."
+        ],
+        [
+          "25-26",
+          "Você começa a flutuar por aí, substituindo seu deslocamento de caminhada por 1d6 turnos para 20 pés de deslocamento de voo."
+        ],
+        [
+          "27-28",
+          "Todo o pelo de seu corpo cai, mas volta a crescer em 1d4 dias."
+        ],
+        [
+          "29-30",
+          "Um bico de pássaro surge em sua cara, e pelas próximas 1d4 horas você não pode falar, apenas grasnar. A magia remover maldição pode acabar com esse efeito."
+        ],
+        [
+          "31-32",
+          "Você começa a rir histericamente por 1 minuto."
+        ],
+        [
+          "33-34",
+          "Você começa a cantar como uma acuâmina carmesim por 2d8 minutos."
+        ],
+        [
+          "35-36",
+          "Você conjura a magia invocar seres da floresta."
+        ],
+        [
+          "37-38",
+          "Você adquire um tom diferente. Você fica azul, caso já seja azul, você fica amarelo. A magia remover maldição pode acabar com esse efeito."
+        ],
+        [
+          "39-40",
+          "Um chapéu velho aparece em sua cabeça."
+        ],
+        [
+          "41-42",
+          "As pessoas que olham para você através de Glamour o vêem como um velho baixinho e carrancudo pelos próximos 5d6 dias. A magia remover maldição pode acabar com esse efeito."
+        ],
+        [
+          "43-44",
+          "Seus braços esticam três vezes o comprimento deles e você perde sua ação por 1 turno."
+        ],
+        [
+          "45-46",
+          "Uma garrafa vazia brota do chão na sua frente."
+        ],
+        [
+          "47-48",
+          "Rode 1d10, subtraia de 100 e use esse valor como rolagem para essa tabela"
+        ],
+        [
+          "49-50",
+          "Você roda novamente essa tabela e o efeito acontece com um de seus aliados aleatoriamente. Caso esteja sozinho, com você."
+        ],
+        [
+          "51-52",
+          "Você ganha um vale que permite a você negar um efeito dessa tabela."
+        ],
+        [
+          "53-54",
+          "Toda vez que você falar pelo próximo minuto, você estará gritando."
+        ],
+        [
+          "55-56",
+          "Sua voz fica oscilando entre muito grave e muito aguda e você não consegue parar de falar por 1 minuto."
+        ],
+        [
+          "57-58",
+          "Uma samambaia cresce de suas axilas causando coceira e um fedor terrível que afasta todos de você. Criaturas que se aproximem a até 10 pés de você devem fazer uma salvaguarda de Constituição, CD 18 ou ficam nauseados e começam a vomitar por 3 turnos. A salvaguarda pode ser refeita durante esses turnos. A samambaia dura 5 turnos."
+        ],
+        [
+          "59-60",
+          "Você olha diretamente para uma tulipa, isso faz com que você fique paranóico achando que está amaldiçoado pelas próximas 1d4 horas."
+        ],
+        [
+          "61-62",
+          "Você conjura a magia invocar elementais menores."
+        ],
+        [
+          "63-64",
+          "Você vomita um sapo e recebe 2 pontos de dano."
+        ],
+        [
+          "65-66",
+          "Role um d10. Sua altura muda em um valor igual a 3 cm x o resultado da rolagem. Se o valor for ímpar, você reduz. Se for par, você cresce."
+        ],
+        [
+          "67-68",
+          "Suas pernas esticam três vezes o comprimento delas e você recebe +10 de movimentação por 1d4 turnos."
+        ],
+        [
+          "69-70",
+          "Você é teletransportado de volta para Bandópolis até o fim de seu próximo turno."
+        ],
+        [
+          "71-72",
+          "Surgem 10d10 moedas de ouro caindo de seu nariz."
+        ],
+        [
+          "73-74",
+          "Você conjura metamorfose em si mesmo, caso falhe na salvaguarda você se transforma num poro até o fim da magia."
+        ],
+        [
+          "75-76",
+          "Você fica paranóico em relação às batatas pelos próximos 1d6 dias, achando que elas estão planejando algo."
+        ],
+        [
+          "77-78",
+          "Você compreende tudo o que o ambiente a sua volta estão dizendo pelo próximo dia, podendo ouvir o vento, a grama e as pedras."
+        ],
+        [
+          "79-80",
+          "Uma barba feita de penas cresce em você, ela dura até que você espirre."
+        ],
+        [
+          "81-82",
+          "Você encontra um mapa manchado de café."
+        ],
+        [
+          "83-84",
+          "Você rola essa tabela novamente 2 vezes, ignorando esse efeito caso o receba novamente."
+        ],
+        [
+          "85-86",
+          "Rode 1d10 e use esse valor como rolagem para essa tabela."
+        ],
+        [
+          "87-88",
+          "Você maximiza o dano de seu próximo ataque, seja ele físico ou mágico. Além disso, você conjura a mesma quantidade de pontos causados em rosas que se espalham em uma explosão após o golpe."
+        ],
+        [
+          "89-90",
+          "Você conjura a magia conjurar elemental."
+        ],
+        [
+          "91-92",
+          "Você ganha um vale para re-rolar nessa tabela. Quando você rolar um efeito que não goste, você pode escolher se manterá a primeira rolagem ou não."
+        ],
+        [
+          "93-94",
+          "Você ganha imunidade a todos os tipos de dano e você pode ver o invisível por 1d4+1 turnos ."
+        ],
+        [
+          "95-96",
+          "Você recupera todos os seus pontos de vida"
+        ],
+        [
+          "97-98",
+          "Você recupera todos os seus espaços de magia gastos."
+        ],
+        [
+          "99-00",
+          "Você recebe por 1d8 x 3 horas um Pulso Rúnico adicional a escolha do Mestre"
+        ]
+      ]
+    },
+    {
+      "id": "essencia",
+      "name": "Transferindo Essências",
+      "description": "Os Vesani armazenam a essência de criaturas que devoraram ou feitas com a tecnologia da Névoa Abençoada. A essência vai para uma Pedra Solar (o Gasto é a confecção dela) e a magia precisa ser conjurada no nível da tabela. Nível: nível máximo de personagem guardado por inteiro (os níveis a mais se perdem; criaturas: ND máximo = Nível − 4). Tempo: o máximo de conhecimento guardado sem a personalidade. A pedra serve a magias como ressurreição e à construção de Golems.",
+      "columns": [
+        "Nível",
+        "Tempo",
+        "Gasto",
+        "Magia"
+      ],
+      "rows": [
+        [
+          "1-5",
+          "1 dia",
+          "5.000 PO",
+          "5º"
+        ],
+        [
+          "5-10",
+          "1 mês",
+          "10.000 PO",
+          "6º"
+        ],
+        [
+          "10-15",
+          "1 ano",
+          "25.000 PO",
+          "7º"
+        ],
+        [
+          "15-20",
+          "10 anos",
+          "50.000 PO",
+          "8º"
+        ],
+        [
+          "20 +",
+          "100 anos",
+          "100.000 PO",
+          "9º"
+        ]
+      ]
+    },
+    {
+      "id": "golem",
+      "name": "Golem",
+      "description": "Confeccionar um Golem pede um laboratório, o tempo e o ouro da tabela; o nível em que a magia pode ser conjurada define o tipo. Com a essência de uma criatura ou personagem, as características finais são definidas pelo mestre.",
+      "columns": [
+        "Tipo",
+        "Tempo",
+        "Gasto",
+        "Magia"
+      ],
+      "rows": [
+        [
+          "Barro",
+          "15 dias",
+          "65.000 PO",
+          "5º"
+        ],
+        [
+          "Madeira",
+          "30 dias",
+          "50.000 PO",
+          "6º"
+        ],
+        [
+          "Ferro",
+          "60 dias",
+          "100.000 PO",
+          "7º"
+        ],
+        [
+          "Rocha",
+          "120 dias",
+          "80.000 PO",
+          "8º"
+        ],
+        [
+          "Cristal",
+          "20 dias",
+          "200.000 PO",
+          "9º"
+        ]
+      ]
+    }
   ]
 }
