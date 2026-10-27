@@ -66,6 +66,15 @@ public record Grant(
                 null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
+    // Uma magia do Capítulo 10 como habilidade SPELL da ficha (nível, tempo, alcance, duração e componentes).
+    public static Grant spell(RuleMagic.Spell s) {
+        String components = s.components() == null ? null : s.material() == null ? s.components() : s.components() + " (" + s.material() + ")";
+        String text = (s.description() == null ? "" : s.description()) + (s.higherLevels() == null ? "" : "\n\nEm níveis superiores. " + s.higherLevels());
+        return new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, s.name(), text, AbilityType.SPELL,
+                s.level(), null, null, null, null, null, s.castingTime(), s.range(), s.duration(), components, null, null, null, null,
+                null, null, null, null, null, null, null);
+    }
+
     // A mesma concessão com outro nome (habilidade com opção: "Resistente" → "Resistente (Ígneo)").
     public Grant withName(String newName) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, newName, description, abilityType,

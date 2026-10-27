@@ -8,6 +8,7 @@ import gusleite.runarcana_nexus.enums.HeritageCategory;
 import gusleite.runarcana_nexus.enums.SkillType;
 
 import java.util.List;
+import java.util.Map;
 
 // Ficha em construção calculada pelo back a partir das escolhas (a mesma conta da criação).
 // errors vazio = pode criar. source diz de onde veio cada coisa ("Origem: ...", "Classe: ...").
@@ -90,6 +91,12 @@ public record CreationPreview(
     // formula: dados da classe em PO ("5d4 x 10"), nulo sem classe; selected: o jogador trocou o equipamento por ela.
     public record StartingWealth(String formula, boolean selected) {}
 
+    // optionNames: nome para mostrar de cada opção, quando o id não basta (magias).
     public record ChoiceLine(String key, GrantType type, String label, int count, List<String> options,
-                             List<String> selected, String source, String note) {}
+                             List<String> selected, String source, String note, Map<String, String> optionNames) {
+        public ChoiceLine(String key, GrantType type, String label, int count, List<String> options,
+                          List<String> selected, String source, String note) {
+            this(key, type, label, count, options, selected, source, note, null);
+        }
+    }
 }

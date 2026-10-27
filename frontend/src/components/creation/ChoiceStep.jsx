@@ -4,6 +4,7 @@ import ResourceChoice from './ResourceChoice.jsx'
 // Escolhas que as opções pedem (ex.: "+1 em 1 atributo", "2 perícias de Arcanista").
 // A lista vem da prévia do back, já sem as perícias que o personagem ganhou de outro lugar.
 // Recursos de classe (Sutras, Iras, Técnicas...) usam cartões com o texto de cada opção.
+// Magias (SPELL_CHOICE) mostram o nome que vem da prévia (optionNames).
 // Equipamento inicial: o da classe (escolhas EQUIPMENT_CHOICE) ou, trocando, a riqueza inicial da classe (wealth).
 export default function ChoiceStep({ choices, picks, onChange, crafts, resources = [], items = [], wealth, onWealth }) {
   const wealthBox = wealth?.formula && (
@@ -65,7 +66,7 @@ export default function ChoiceStep({ choices, picks, onChange, crafts, resources
                     return (
                       <button key={id} type="button" className={'to-chip' + (on ? ' on' : '')} aria-pressed={on}
                         disabled={!on && full} onClick={() => toggle(id)}>
-                        {g.title && c.type !== 'EQUIPMENT_CHOICE' ? choiceOptionName(c.type, id, crafts).replace(/^[^:]+: /, '') : choiceOptionName(c.type, id, crafts, items)}
+                        {c.optionNames?.[id] ?? (g.title && c.type !== 'EQUIPMENT_CHOICE' ? choiceOptionName(c.type, id, crafts).replace(/^[^:]+: /, '') : choiceOptionName(c.type, id, crafts, items))}
                       </button>
                     )
                   })}

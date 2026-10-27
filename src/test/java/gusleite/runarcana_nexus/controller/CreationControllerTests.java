@@ -9,6 +9,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -563,6 +564,27 @@ class CreationControllerTests {
         preview(token, brute)
                 .andExpect(jsonPath("$.choices[?(@.label == 'Arma do Bruto')].options", hasItem(hasItem("t-machado"))))
                 .andExpect(jsonPath("$.choices[?(@.label == 'Arma do Bruto')].options", hasItem(hasItem("t-adaga*2"))));
+    }
+
+    @Test
+    void truquesDosMisteriosViramMagiasDaFicha() throws Exception {
+        String token = login("gaudron");
+        String brute = FULL.replace("\"classId\":\"ARCANIST\"", "\"classId\":\"BRUTE\"")
+                .replace(",\"class:ARCANIST:1\":[\"ARCANA\",\"INSIGHT\"]", "");
+        // O Mistério da Água do Bruto de teste libera o truque de Água (o de 1º nível não entra: é escolha de truque).
+        preview(token, brute)
+                .andExpect(jsonPath("$.choices[?(@.label == 'Truque do Bruto')].options", hasItem(List.of("t-raio"))))
+                .andExpect(jsonPath("$.choices[?(@.label == 'Truque do Bruto')].optionNames['t-raio']").value("Raio Teste"))
+                .andExpect(jsonPath("$.errors", hasItem("Faltam escolhas: Truque do Bruto.")));
+        String key = mvc.perform(post("/creation/preview").header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON).content(brute))
+                .andReturn().getResponse().getContentAsString();
+        Matcher m = Pattern.compile("\"key\":\"(class:BRUTE:\\d+)\",\"type\":\"SPELL_CHOICE\"").matcher(key);
+        assertThat(m.find()).isTrue();
+        preview(token, brute.replace("\"choices\":{", "\"choices\":{\"" + m.group(1) + "\":[\"t-raio\"],"))
+                .andExpect(jsonPath("$.features[?(@.name == 'Raio Teste')].type").value("SPELL"))
+                .andExpect(jsonPath("$.features[?(@.name == 'Raio Teste')].source").value("Classe: Bruto Teste"))
+                .andExpect(jsonPath("$.errors", not(hasItem("Faltam escolhas: Truque do Bruto."))));
     }
 
     @Test

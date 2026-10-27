@@ -55,6 +55,21 @@
       "concentration": false,
       "ritual": false,
       "description": "Truque de teste."
+    },
+    {
+      "id": "t-onda",
+      "name": "Onda Teste",
+      "level": 1,
+      "mysteries": [
+        "agua"
+      ],
+      "castingTime": "1 ação",
+      "range": "30 pés",
+      "components": "V",
+      "duration": "Instantânea",
+      "concentration": false,
+      "ritual": false,
+      "description": "Magia de 1º nível."
     }
   ]
 }

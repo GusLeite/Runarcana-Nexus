@@ -279,6 +279,9 @@ export function grantLabel(g, crafts = [], equipment = []) {
     case 'RESOURCE_CHOICE': return g.label ?? (g.value === 'VEL' ? 'Vel (opcional, até ' + g.amount + ' ◆)' : (RESOURCE_KINDS[g.value] ?? g.value) + ' à escolha')
     case 'EQUIPMENT': return 'Equipamento: ' + equipmentOptionName(g.value, equipment)
     case 'EQUIPMENT_CHOICE': return g.label ?? 'Equipamento à escolha'
+    case 'SPELL_CHOICE': return g.label ?? (g.spellLevel ? plural(g.count, 'magia', 'magias') + ' até o ' + g.spellLevel + 'º nível' : plural(g.count, 'truque', 'truques')) + ' à escolha'
+    case 'MYSTERY': return 'Mistério: ' + idName(g.value)
+    case 'SPELL': return 'Magia: ' + idName(g.value)
     default: return g.type
   }
 }
@@ -308,6 +311,12 @@ export function choiceOptionName(type, id, crafts = [], items = []) {
     }
     default: return id
   }
+}
+
+// "maos-magicas" → "Maos magicas" (id sem o catálogo de magias, só para os cartões).
+function idName(id = '') {
+  const text = id.replace(/-/g, ' ')
+  return text.charAt(0).toUpperCase() + text.slice(1)
 }
 
 // Opção de equipamento (rules/itens.json): "besta-leve+virotes-de-besta" → "Besta Leve + Virotes de besta (20)",

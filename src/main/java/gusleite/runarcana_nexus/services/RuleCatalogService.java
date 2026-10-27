@@ -220,6 +220,7 @@ public class RuleCatalogService {
         validateResources(c, p, crafts, classIds);
         if (c.magic() != null) validateMagic(c.magic(), p, c, classIds);
         validateEquipment(c, p, classIds);
+        validateSpellGrants(c, p);
         return p;
     }
 
@@ -268,6 +269,44 @@ public class RuleCatalogService {
             if (!options.isEmpty() && items == null) p.add(e.getKey() + ": equipamento sem catálogo de itens");
             else options.forEach(o -> EquipmentRules.problems(items, o).forEach(x -> p.add(e.getKey() + " (" + g.type() + "): " + x)));
         }
+    }
+
+    // De onde vêm as opções de SPELL_CHOICE.
+    static final Set<String> SPELL_SOURCES = Set.of("CLASS", "MYSTERIES", "CLASS_OR_MYSTERIES");
+
+    // MYSTERY, SPELL e FEATURE com value MYSTERY (as opções precisam ser nomes de Mistérios) em classes, subclasses,
+    // origens, linhagens, passados, recursos e na Natureza Rúnica.
+    private static void validateSpellGrants(RuleCatalog c, List<String> p) {
+        List<Map.Entry<String, Grant>> grants = new ArrayList<>();
+        for (RuleClass k : c.classes() == null ? List.<RuleClass>of() : c.classes()) {
+            k.grantsOrEmpty().forEach(g -> grants.add(Map.entry("classe " + k.id(), g)));
+            k.subclassesOrEmpty().forEach(s -> s.grantsOrEmpty().forEach(g -> grants.add(Map.entry("classe " + k.id() + ", subclasse " + s.id(), g))));
+        }
+        for (RuleOption o : c.origins() == null ? List.<RuleOption>of() : c.origins()) {
+            o.grantsOrEmpty().forEach(g -> grants.add(Map.entry("origem " + o.id(), g)));
+            o.lineagesOrEmpty().forEach(l -> l.grantsOrEmpty().forEach(g -> grants.add(Map.entry("origem " + o.id() + ", linhagem " + l.id(), g))));
+        }
+        for (RuleOption o : c.backgrounds() == null ? List.<RuleOption>of() : c.backgrounds()) o.grantsOrEmpty().forEach(g -> grants.add(Map.entry("passado " + o.id(), g)));
+        c.resourcesOrEmpty().forEach(r -> r.grantsOrEmpty().forEach(g -> grants.add(Map.entry("recurso " + r.id(), g))));
+        c.runicNatureOrEmpty().forEach(g -> grants.add(Map.entry("Natureza Rúnica", g)));
+        RuleMagic m = c.magic();
+        Set<String> mysteries = new HashSet<>(), names = new HashSet<>(), spells = new HashSet<>();
+        if (m != null) {
+            m.mysteriesOrEmpty().forEach(x -> { mysteries.add(x.id()); names.add(plain(x.name())); });
+            m.spellsOrEmpty().forEach(s -> spells.add(s.id()));
+        }
+        for (Map.Entry<String, Grant> e : grants) {
+            Grant g = e.getValue();
+            if (g.type() == GrantType.MYSTERY && !mysteries.contains(g.value())) p.add(e.getKey() + " (MYSTERY): Mistério inexistente \"" + g.value() + "\"");
+            if (g.type() == GrantType.SPELL && !spells.contains(g.value())) p.add(e.getKey() + " (SPELL): magia inexistente \"" + g.value() + "\"");
+            if (g.type() == GrantType.FEATURE && "MYSTERY".equals(g.value()) && g.options() != null) g.options().stream()
+                    .filter(o -> !names.contains(plain(o.replaceAll("\\s*\\(.*\\)$", "")).replace("infernal", "inferno")))
+                    .forEach(o -> p.add(e.getKey() + " (" + g.name() + "): opção \"" + o + "\" não é um Mistério"));
+        }
+    }
+
+    private static String plain(String s) {
+        return java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase().trim();
     }
 
     // Capítulo 10: tabela de Mana, elementos (e os caminhos de acesso), Mistérios e magias.
@@ -652,6 +691,15 @@ public class RuleCatalogService {
                     } else if (g.count() != null && g.count() < 1) {
                         p.add(at + " (RESOURCE_CHOICE): count deve ser 1 ou mais");
                     }
+                }
+                // Mistérios e magias citados são conferidos em validateSpellGrants (precisa do catálogo de magia).
+                case MYSTERY, SPELL -> {
+                    if (blank(g.value())) p.add(at + " (" + g.type() + "): falta value");
+                }
+                case SPELL_CHOICE -> {
+                    if (g.count() == null || g.count() < 1) p.add(at + " (SPELL_CHOICE): precisa de count");
+                    if (g.spellLevel() == null || g.spellLevel() < 0 || g.spellLevel() > 9) p.add(at + " (SPELL_CHOICE): spellLevel deve ir de 0 a 9");
+                    if (g.value() != null && !SPELL_SOURCES.contains(g.value())) p.add(at + " (SPELL_CHOICE): value deve ser um destes: " + SPELL_SOURCES);
                 }
                 // Os itens citados são conferidos em validateEquipment (precisa do catálogo de itens).
                 case EQUIPMENT -> {

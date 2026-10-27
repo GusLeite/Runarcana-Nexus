@@ -49,6 +49,7 @@ import gusleite.runarcana_nexus.rules.Grant;
 import gusleite.runarcana_nexus.rules.HeritageCondition;
 import gusleite.runarcana_nexus.rules.RuleCatalog;
 import gusleite.runarcana_nexus.rules.RuleItem;
+import gusleite.runarcana_nexus.rules.RuleMagic;
 import gusleite.runarcana_nexus.rules.RuleClass;
 import gusleite.runarcana_nexus.rules.RuleHeritage;
 import gusleite.runarcana_nexus.rules.RuleLineage;
@@ -283,6 +284,8 @@ public class CreationService {
                         }
                     }
                     case GOLD -> b.gold += g.amount();
+                    case MYSTERY -> b.mysteries.add(g.value());
+                    case SPELL -> b.fixedSpells.putIfAbsent(g.value(), s.label());
                     case EQUIPMENT -> {
                         if (!b.wealth) addEquipment(b, g.value(), s.label());
                     }
@@ -359,6 +362,8 @@ public class CreationService {
                             chosen = chosen.withUses(g.optionUses().get(selected.getFirst()));
                         }
                         if (!selected.isEmpty()) b.featureOptions.put(g.name(), selected);
+                        // Opções que são Mistérios ("Água (Elemental)"): viram Mistérios do personagem.
+                        if (MYSTERY.equals(g.value())) selected.forEach(o -> mysteryByName(o).ifPresent(b.mysteries::add));
                         b.features.add(new Sourced<>(chosen, s.label()));
                         b.choices.add(new ChoiceLine(key, g.type(), label, count, g.options(), selected, s.label(), null));
                     }
@@ -401,6 +406,8 @@ public class CreationService {
                         if (!selected.isEmpty()) b.size = CreatureSize.valueOf(selected.getFirst());
                         b.choices.add(new ChoiceLine(key, g.type(), label, 1, g.options(), selected, s.label(), null));
                     }
+                    // Decidida no fim (spellChoices), quando os Mistérios já são conhecidos.
+                    case SPELL_CHOICE -> b.spellChoices.add(new SpellChoice(key, g, s.label(), picked == null ? List.of() : picked));
                     case EQUIPMENT_CHOICE -> {
                         // Trocando pela riqueza inicial, as escolhas de equipamento somem.
                         if (b.wealth) break;
@@ -454,6 +461,7 @@ public class CreationService {
             if (chosen != null && chosen.contains(g.armor().featureOption())) b.armorRules.add(armorRule(g, null));
         }
         resourceChoices(b);
+        spellChoices(b);
 
         if (blank(r.characterName())) b.errors.add("Dê um nome ao personagem.");
         if (r.age() == null || r.age() < 1) b.errors.add("Informe a idade (1 ou mais).");
@@ -701,6 +709,75 @@ public class CreationService {
 
     static String resourceKindLabel(String kind) {
         return RESOURCE_KINDS.getOrDefault(kind, kind);
+    }
+
+    // ---------- Magias ----------
+
+    // Valor de FEATURE.value cujas opções são Mistérios.
+    static final String MYSTERY = "MYSTERY";
+
+    // "Água (Elemental)", "Infernal" → id do Mistério, pelo nome (sem acento nem maiúscula; Infernal = Inferno).
+    private Optional<String> mysteryByName(String option) {
+        RuleMagic magic = rules.catalog().magic();
+        if (magic == null) return Optional.empty();
+        String name = normalize(option.replaceAll("\\s*\\(.*\\)$", "")).replace("infernal", "inferno");
+        return magic.mysteriesOrEmpty().stream().filter(m -> normalize(m.name()).equals(name)).map(RuleMagic.Mystery::id).findFirst();
+    }
+
+    private static String normalize(String s) {
+        return java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase().trim();
+    }
+
+    // Magias conhecidas: as fixas (SPELL) e as escolhas (SPELL_CHOICE), com as opções da lista da classe e/ou dos Mistérios
+    // do personagem (o Elemental Geral vem com o primeiro Mistério Elemental). Uma magia escolhida não aparece de novo.
+    // Cada magia vira uma habilidade SPELL com a fonte da escolha.
+    private void spellChoices(Build b) {
+        RuleMagic magic = rules.catalog().magic();
+        if (magic == null) return;
+        Set<String> mysteries = new LinkedHashSet<>(b.mysteries);
+        boolean elemental = magic.mysteriesOrEmpty().stream().anyMatch(m -> "ELEMENTAL".equals(m.source()) && mysteries.contains(m.id()));
+        if (elemental) mysteries.add("elemental-geral");
+        b.mysteries.clear();
+        b.mysteries.addAll(mysteries);
+        Map<String, RuleMagic.Spell> byId = new LinkedHashMap<>();
+        magic.spellsOrEmpty().forEach(sp -> byId.put(sp.id(), sp));
+        Set<String> taken = new LinkedHashSet<>(b.fixedSpells.keySet());
+        b.fixedSpells.forEach((id, source) -> {
+            RuleMagic.Spell sp = byId.get(id);
+            if (sp != null) b.features.add(new Sourced<>(Grant.spell(sp), source));
+        });
+        for (SpellChoice c : b.spellChoices) {
+            Grant g = c.grant();
+            int level = g.spellLevel() == null ? 0 : g.spellLevel();
+            String from = g.value() == null ? "CLASS_OR_MYSTERIES" : g.value();
+            String classId = b.klass == null ? null : b.klass.id();
+            List<String> options = new ArrayList<>();
+            Map<String, String> names = new LinkedHashMap<>();
+            for (RuleMagic.Spell sp : magic.spellsOrEmpty()) {
+                if (sp.level() == null || (level == 0 ? sp.level() != 0 : sp.level() < 1 || sp.level() > level)) continue;
+                boolean fromClass = !"MYSTERIES".equals(from) && classId != null && sp.classesOrEmpty().contains(classId);
+                boolean fromMystery = !"CLASS".equals(from) && sp.mysteriesOrEmpty().stream().anyMatch(mysteries::contains);
+                if (!fromClass && !fromMystery) continue;
+                if (taken.contains(sp.id()) && !c.picked().contains(sp.id())) continue;
+                options.add(sp.id());
+                names.put(sp.id(), sp.name() + (sp.level() == 0 ? "" : " (" + sp.level() + "º)"));
+            }
+            int count = g.count() == null ? 1 : g.count();
+            String label = orLabel(g, level == 0 ? "Truques: escolha " + count : "Magias até o " + level + "º nível: escolha " + count);
+            String note = null;
+            List<String> selected;
+            if (options.isEmpty()) {
+                // Sem Mistério ainda (Arcanista) ou sem lista: avisa, sem bloquear com "faltam escolhas".
+                note = "MYSTERIES".equals(from) ? "Escolha um Mistério para ver as magias." : "Nenhuma magia disponível nesta lista.";
+                selected = List.of();
+                if (!c.picked().isEmpty()) b.errors.add("Opção inválida em \"" + label + "\".");
+            } else {
+                selected = choose(c.picked(), options, count, label, b.errors);
+            }
+            taken.addAll(selected);
+            selected.forEach(id -> b.features.add(new Sourced<>(Grant.spell(byId.get(id)), c.source())));
+            b.choices.add(new ChoiceLine(c.key(), g.type(), label, count, options, selected, c.source(), note, names));
+        }
     }
 
     // Itens de uma opção de equipamento ("besta-leve+virotes-de-besta") na lista do equipamento inicial.
@@ -1265,6 +1342,8 @@ public class CreationService {
 
     private record ResourceChoice(String key, Grant grant, String source, List<String> picked) {}
 
+    private record SpellChoice(String key, Grant grant, String source, List<String> picked) {}
+
     private record Sourced<T>(T value, String source) {}
 
     // Resultado do cálculo (rascunho da ficha).
@@ -1285,6 +1364,10 @@ public class CreationService {
         // Recursos de classe: as escolhas (para conferir no fim) e os ids já escolhidos.
         final List<ResourceChoice> resourceChoices = new ArrayList<>();
         final Set<String> resourceIds = new LinkedHashSet<>();
+        // Mistérios de magia (MYSTERY e opções de FEATURE com value MYSTERY), magias fixas (id → fonte) e escolhas de magia.
+        final Set<String> mysteries = new LinkedHashSet<>();
+        final Map<String, String> fixedSpells = new LinkedHashMap<>();
+        final List<SpellChoice> spellChoices = new ArrayList<>();
         // CAs que dependem de uma opção escolhida numa habilidade (ArmorFormula.feature).
         final List<Grant> optionArmor = new ArrayList<>();
         final Map<Attribute, String> saves = new LinkedHashMap<>();

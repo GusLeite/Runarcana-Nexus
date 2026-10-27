@@ -405,6 +405,17 @@
             "group:arma-marcial",
             "t-adaga*2"
           ]
+        },
+        {
+          "type": "MYSTERY",
+          "value": "agua"
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "count": 1,
+          "spellLevel": 0,
+          "value": "MYSTERIES",
+          "label": "Truque do Bruto"
         }
       ],
       "levels": []

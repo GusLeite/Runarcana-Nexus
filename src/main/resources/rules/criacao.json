@@ -2419,6 +2419,13 @@
         {
           "type": "EQUIPMENT",
           "value": "escudo-leve+livro"
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "count": 3,
+          "spellLevel": 0,
+          "value": "CLASS_OR_MYSTERIES",
+          "label": "Truques de Acólito: escolha 3"
         }
       ],
       "levels": [
@@ -2562,6 +2569,10 @@
               "usesFormula": "LEVEL_PLUS_ATTRIBUTE",
               "attribute": "WISDOM",
               "recharge": "LONG_REST"
+            },
+            {
+              "type": "MYSTERY",
+              "value": "adivinhacao"
             }
           ],
           "levels": [
@@ -2715,6 +2726,10 @@
               ],
               "usesFormula": "DOUBLE_PROFICIENCY",
               "recharge": "LONG_REST"
+            },
+            {
+              "type": "MYSTERY",
+              "value": "etermancia"
             }
           ],
           "levels": [
@@ -2874,6 +2889,10 @@
               "description": "Proficiência com armaduras pesadas e com os Ofícios de Cuteleiro e Armoreiro. Com um toque, você restaura uma arma ou armadura não mágica de metal cuja fórmula conheça (com a maior parte do material presente), ou soma seu nível de Ofício de Cuteleiro ou Armoreiro a rituais de Acólito da Forja. Você recebe o Mistério da Transmutação.",
               "usesFormula": "PROFICIENCY",
               "recharge": "LONG_REST"
+            },
+            {
+              "type": "MYSTERY",
+              "value": "transmutacao"
             }
           ],
           "levels": [
@@ -3048,6 +3067,10 @@
               "usesFormula": "ATTRIBUTE_MODIFIER",
               "attribute": "WISDOM",
               "recharge": "LONG_REST"
+            },
+            {
+              "type": "MYSTERY",
+              "value": "agua"
             }
           ],
           "levels": [
@@ -3222,6 +3245,10 @@
               "abilityType": "PASSIVE",
               "name": "Voz da Natureza",
               "description": "Proficiência em Natureza (ou especialidade); você conjura rituais usando Religião ou Natureza. Você interpreta os sinais da natureza (fuga de animais, vento, cheiros) para ter uma noção geral dos eventos da região, aprende o idioma Silvestre, e animais entendem você e você os entende (sem lhe dar amizade com feras). Você recebe o Mistério da Flora."
+            },
+            {
+              "type": "MYSTERY",
+              "value": "flora"
             }
           ],
           "levels": [
@@ -3372,6 +3399,14 @@
               "name": "Toque Sepulcral",
               "description": "Você conjura o truque toque necrótico como ação bônus, com metade do alcance e o dano uma categoria abaixo. Você recebe o Mistério da Necromancia.",
               "castingTime": "Ação bônus"
+            },
+            {
+              "type": "MYSTERY",
+              "value": "necromancia"
+            },
+            {
+              "type": "SPELL",
+              "value": "poupar-os-moribundos"
             }
           ],
           "levels": [
@@ -3538,6 +3573,10 @@
               "usesFormula": "ATTRIBUTE_MODIFIER",
               "attribute": "WISDOM",
               "recharge": "LONG_REST"
+            },
+            {
+              "type": "MYSTERY",
+              "value": "tempestade"
             }
           ],
           "levels": [
@@ -3768,7 +3807,8 @@
             "Oniromancia (Espiritual)",
             "Transmutação (Espiritual)",
             "Umbramancia (Espiritual)"
-          ]
+          ],
+          "value": "MYSTERY"
         },
         {
           "type": "FEATURE",
@@ -3829,7 +3869,8 @@
             "Oniromancia (Espiritual)",
             "Transmutação (Espiritual)",
             "Umbramancia (Espiritual)"
-          ]
+          ],
+          "value": "MYSTERY"
         },
         {
           "type": "EQUIPMENT_CHOICE",
@@ -3855,6 +3896,20 @@
             "conjunto-de-explorador-de-masmorras",
             "conjunto-de-aventureiro"
           ]
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "count": 3,
+          "spellLevel": 0,
+          "value": "MYSTERIES",
+          "label": "Truques do Arcanista: escolha 3 dos seus Mistérios"
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "count": 4,
+          "spellLevel": 1,
+          "value": "MYSTERIES",
+          "label": "Magias conhecidas do Arcanista: escolha 4 de 1º nível"
         }
       ],
       "levels": [
@@ -4169,6 +4224,10 @@
               "name": "Relíquia da Morte",
               "description": "Você confecciona uma Relíquia da Morte, um objeto pessoal capaz de capturar a alma dos mortos. Ela armazena as almas das criaturas que morrem a até 30 pés de você, até seu modificador de Inteligência por nível de Arcanista. Criaturas com a alma presa na Relíquia não podem ser ressuscitadas, a menos que restauração maior seja lançada sobre a Relíquia, liberando todas as almas.\n\nCom uma ação bônus, você consome até seu modificador de Inteligência em almas e recupera o dobro das almas consumidas em pontos de vida.\n\nVocê recebe o Mistério da Necromancia.\n\nA partir do 10º nível, com ao menos 50 almas, você pode passar 8 horas concentrado na Relíquia para consumi-las e torná-la imune a todos os tipos de dano (exceto danos verdadeiros e a magia desintegrar).",
               "castingTime": "Ação bônus"
+            },
+            {
+              "type": "MYSTERY",
+              "value": "necromancia"
             }
           ],
           "levels": [
@@ -4236,6 +4295,14 @@
               "abilityType": "PASSIVE",
               "name": "Efígie",
               "description": "Você aprende a manifestar fisicamente sua mana numa invocação especial, a Efígie, que carrega parte da sua alma e energia vital e tem empatia e devoção por você. Você recebe proficiência em Natureza (ou especialidade, se já tiver).\n\nVocê aprende a magia especial manifestar efígie (não conta para o máximo de magias conhecidas; no grimório, custa metade do tempo e valor). Veja a magia para os detalhes.\n\nVocê recebe o Mistério da Invocação."
+            },
+            {
+              "type": "MYSTERY",
+              "value": "invocacao"
+            },
+            {
+              "type": "SPELL",
+              "value": "manifestar-efigie"
             }
           ],
           "levels": [
@@ -4310,7 +4377,8 @@
                 "Vento"
               ],
               "usesFormula": "PROFICIENCY",
-              "recharge": "LONG_REST"
+              "recharge": "LONG_REST",
+              "value": "MYSTERY"
             }
           ],
           "levels": [
@@ -4412,6 +4480,10 @@
               "abilityType": "PASSIVE",
               "name": "Gema Escarlate",
               "description": "Com 8 horas de trabalho e um rubi de ao menos 25 PO, você cria uma Gema Escarlate (só uma por vez), com sua CA e metade dos seus pontos de vida, que serve como foco de conjuração (cristal) e recupera toda a vida num descanso pleno. Ela concede, conforme seu nível de Arcanista:\n\nNível 1. Num descanso pleno, armazena até seu nível de Arcanista em dados de vida (rolados e gastos normalmente); com uma ação bônus, você recupera os pontos de vida armazenados.\nNível 3. Ao conjurar Hemomancia, a Gema recupera pontos de vida iguais ao nível da magia.\nNível 5. Ao receber dano, reação para receber metade e transferir o resto à Gema.\nNível 7. Ação bônus: cause 1d6 de dano à Gema para receber 1 ponto de Arcana.\nNível 9. Cause 1d6 à Gema para armazenar uma magia de Hemomancia de 1º nível (+1d6 por nível acima); conjure-a como reação ao conjurar Hemomancia ou receber dano. Até seu mod. de Inteligência (mínimo 1) magias.\nNível 11. Ao falhar numa salvaguarda ou teste contra uma condição, negue a condição causando 3d6 de dano à Gema.\nNível 13. Ação: destrua e arremesse a Gema a até 60 pés; criaturas a 15 pés fazem salvaguarda de Destreza: o dobro da vida restante da Gema em dano necrótico, metade no sucesso.\nNível 15. Conjure Hemomancia através da Gema, a qualquer distância (ela recebe 1 de dano por nível da magia).\nNível 17. Ao reduzir uma criatura a 0 pontos de vida, você recupera metade do dano causado."
+            },
+            {
+              "type": "MYSTERY",
+              "value": "hemomancia"
             }
           ],
           "levels": [
@@ -4483,6 +4555,10 @@
                 "Labareda",
                 "Piromania"
               ]
+            },
+            {
+              "type": "MYSTERY",
+              "value": "fogo"
             }
           ],
           "levels": [
@@ -4546,7 +4622,12 @@
               "options": [
                 "Étermancia",
                 "Runomancia"
-              ]
+              ],
+              "value": "MYSTERY"
+            },
+            {
+              "type": "SPELL",
+              "value": "disparo-arcano"
             }
           ],
           "levels": [
@@ -4662,6 +4743,10 @@
                 "Tem um gosto meio roxo",
                 "ZZzZzZzz…zzz"
               ]
+            },
+            {
+              "type": "MYSTERY",
+              "value": "transmutacao"
             }
           ],
           "levels": [
@@ -4726,6 +4811,10 @@
               "abilityType": "PASSIVE",
               "name": "Voz da Rocha",
               "description": "Você recebe 5 pés de sentido sísmico por nível de Arcanista (se já tiver, +5 pés no 1º nível). Você recebe o Mistério Terra."
+            },
+            {
+              "type": "MYSTERY",
+              "value": "terra"
             }
           ],
           "levels": [
@@ -4874,6 +4963,10 @@
               "abilityType": "PASSIVE",
               "name": "Tempo Engarrafado",
               "description": "Você tem vantagem em iniciativa e não pode ser surpreso (se não estiver Inconsciente). Você recebe o Mistério da Cronomancia.\n\nAo conjurar magias de Cronomancia de 1º nível ou superior, você recebe 1 carga de Tempo Engarrafado (até seu nível de Arcanista; zeram no início de um descanso pleno). Uma por turno:\n1 carga – Rebobinar: alguém repete a iniciativa (aliado com vantagem, inimigo com desvantagem).\n2 cargas – Tente Outra Vez: repita uma salvaguarda falhada com vantagem.\n3 cargas – Acelerar: seus deslocamentos dobram até o fim do seu próximo turno.\n3 cargas – Desacelerar: uma criatura a 30 pés faz salvaguarda de Constituição ou tem deslocamentos pela metade.\n4 cargas – Dádiva do Tempo: vantagem em Destreza para você ou criatura a 15 pés (ou desvantagem num inimigo, com salvaguarda); mod. de Inteligência vezes por descanso pleno.\n5 cargas – Enfraquecer: aumenta em uma categoria o dano de Envenenado ou Sangrando de uma criatura a 30 pés (salvaguarda).\n5 cargas – Fortificar: encerra Envenenado ou Sangrando de uma criatura a 30 pés.\n9 cargas – Paralisia Temporal: uma criatura a 20 pés faz salvaguarda de Constituição ou fica Paralisada por 1 minuto.\n10 cargas – Marco de Tempo: marca seu lugar e pontos de vida; após 1 minuto (ou antes, com ação bônus ou reação), você volta ao ponto com aquela vida.\n15 cargas – Auxílio Cronal: Marco de Tempo num aliado.\n20 cargas – Reboot: reação ao fim de uma rodada para jogar um novo turno antes dela terminar."
+            },
+            {
+              "type": "MYSTERY",
+              "value": "cronomancia"
             }
           ],
           "levels": [
@@ -5473,6 +5566,13 @@
               "abilityType": "PASSIVE",
               "name": "Conjuração",
               "description": "Você conjura magias da lista de Atirador (Capítulo 10); Heranças, Aprimoramentos ou aprendizado podem dar outros Mistérios. Não pode usar listas de outra Classe para aprender ou trocar magias nesta Classe.\n\nTruques / magias conhecidas / nível máximo: 1º 2/–/– · 3º 2/3/1º · 4º 2/4 · 5º 3/4 · 7º 3/5 · 8º 3/6/2º · 10º 4/7 · 11º 4/8 · 13º 4/9/3º · 14º 4/10 · 16º 4/11 · 19º 4/12/4º · 20º 4/13. No 3º nível você aprende três magias de 1º nível. Ao subir de nível, pode trocar uma magia conhecida. Foco: sua Astra.\n\nMana: recupera seu mod. de Sabedoria num descanso longo e toda a Mana num descanso pleno.\n\nAtributo de conjuração: Sabedoria. CD = 8 + proficiência + mod. de Sabedoria; ataque de magia = proficiência + mod. de Sabedoria."
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 2,
+              "spellLevel": 0,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Truques de Atirador: escolha 2"
             }
           ],
           "levels": [
@@ -7436,6 +7536,13 @@
               "abilityType": "PASSIVE",
               "name": "Talhador de Runas",
               "description": "Você fala, lê e escreve Rúnico e marca suas magias na pele: 1 hora por cicatriz de truque ou de 1º nível, +1 hora por nível acima. Para conjurar, perca PV iguais ao nível da magia (1 para truques), que não podem ser curados magicamente; o entalhe substitui componentes verbais, somáticos e materiais sem custo. Características que pedem runa talhada custam metade do nível em que foram ganhas em PV. Em Fúria, você conjura truques a partir do 3º nível, 1º nível no 8º, 2º no 13º e 3º no 19º, sem concentração. Só regeneração (ou similar) remove todas as cicatrizes; desejo remove uma."
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 2,
+              "spellLevel": 0,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Truques de Bruto: escolha 2"
             }
           ],
           "levels": [
@@ -8098,6 +8205,13 @@
               "abilityType": "PASSIVE",
               "name": "Conjuração",
               "description": "Você conjura magias da lista de Caçador (Capítulo 10); Heranças, Aprimoramentos ou aprendizado podem dar outros Mistérios. Não pode usar listas de outra Classe para aprender ou trocar magias nesta Classe.\n\nTruques / magias conhecidas / nível máximo: 1º 2/–/– · 3º 2/3/1º · 4º 2/4 · 5º 3/4 · 7º 3/5 · 8º 3/6/2º · 10º 4/7 · 11º 4/8 · 13º 4/9/3º · 14º 4/10 · 16º 4/11 · 19º 4/12/4º · 20º 4/13. No 3º nível você aprende três magias de 1º nível. Ao subir de nível, pode trocar uma magia conhecida. Foco: seu arco.\n\nMana: recupera seu mod. de Sabedoria num descanso longo e toda a Mana num descanso pleno.\n\nAtributo de conjuração: Sabedoria. CD = 8 + proficiência + mod. de Sabedoria; ataque de magia = proficiência + mod. de Sabedoria."
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 2,
+              "spellLevel": 0,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Truques de Caçador: escolha 2"
             }
           ],
           "levels": [
@@ -9788,6 +9902,17 @@
               "abilityType": "PASSIVE",
               "name": "Conjuração do Espião",
               "description": "Você conjura magias da lista de Mercurial (Capítulo 10); Heranças, Aprimoramentos ou aprendizado podem dar outros Mistérios. Não pode usar listas de outra Classe nesta Classe.\n\nTruques: mãos mágicas e mais dois à sua escolha. Magias de 1º nível a partir do 3º nível (três).\nTruques / magias conhecidas / nível máximo: 1º 2/–/– · 3º 2/3/1º · 4º 2/4 · 5º 3/4 · 7º 3/5 · 8º 3/6/2º · 10º 4/7 · 11º 4/8 · 13º 4/9/3º · 14º 4/10 · 16º 4/11 · 19º 4/12/4º · 20º 4/13. Ao subir de nível, pode trocar uma magia conhecida.\n\nAtributo de conjuração: Inteligência. CD = 8 + proficiência + mod. de Inteligência; ataque de magia = proficiência + mod. de Inteligência.\n\nProficiência Adicional: Ofício de Falsificador e Ofício de Artista (Maquiador)."
+            },
+            {
+              "type": "SPELL",
+              "value": "maos-magicas"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 2,
+              "spellLevel": 0,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Truques de Mercurial: escolha 2 (além de mãos mágicas)"
             }
           ],
           "levels": [
@@ -10184,6 +10309,13 @@
             "conjunto-de-aventureiro",
             "conjunto-de-explorador-de-masmorras"
           ]
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "count": 2,
+          "spellLevel": 0,
+          "value": "CLASS_OR_MYSTERIES",
+          "label": "Truques do Xamã: escolha 2"
         }
       ],
       "levels": [

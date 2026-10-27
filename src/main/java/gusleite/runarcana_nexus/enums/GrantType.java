@@ -29,6 +29,11 @@ public enum GrantType {
     WEAPON_PROFICIENCY, // proficiência com armas: value = o nome ("Armas simples", "Rapieiras")
     EQUIPMENT,          // equipamento inicial fixo: value = opção de itens do rules/itens.json ("escudo-leve+livro", ver EquipmentRules)
     EQUIPMENT_CHOICE,   // equipamento inicial à escolha: options = opções de itens ("group:arma-simples" vira uma por item), count
+    MYSTERY,            // Mistério de magia fixo: value = id do Mistério (rules/magias.json). FEATURE com value MYSTERY: as opções
+                        // escolhidas são Mistérios pelo nome ("Água (Elemental)" → agua)
+    SPELL,              // magia conhecida fixa, que não conta nos limites: value = id da magia
+    SPELL_CHOICE,       // count magias à escolha: spellLevel 0 = truques, N = do 1º ao Nº nível; value = de onde vêm
+                        // (CLASS = lista da classe, MYSTERIES = Mistérios do personagem, CLASS_OR_MYSTERIES = as duas)
     RESOURCE_CHOICE     // recurso de classe do Capítulo 5 (rules/recursos.json): value = tipo (SUTRA, IRA, TECNICA...), count,
                         // options = grupos aceitos (vazio = todos); VEL é opcional e usa amount como os pontos (◆) disponíveis
 }

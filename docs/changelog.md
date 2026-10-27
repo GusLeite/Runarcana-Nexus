@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-26 — Truques e magias conhecidas na criação (`feature/character-sheet`)
+- Concessões `MYSTERY`, `SPELL` e `SPELL_CHOICE`, e FEATURE com `value: "MYSTERY"` (a opção escolhida vira Mistério). As escolhas de magia são montadas no fim da prévia com a lista da classe e os Mistérios do personagem; as magias viram habilidades `SPELL` da ficha.
+- Ligado ao 1º nível: Acólito (3 truques), Arcanista (3 truques e 4 magias de 1º nível dos Mistérios), Xamã (2 truques), Ravasz, Cicatrizes Rúnicas, Arqueiro Rúnico, Espião e Combatente Arcano (2 truques); Mistérios fixos dos Ritos e Glifos; magias fixas (Poupar os Moribundos, Disparo Arcano, Manifestar Efígie, Mãos Mágicas).
+- `ChoiceLine.optionNames`; front mostra o nome das magias e os rótulos das concessões novas nos cartões.
+- Testes: `truquesDosMisteriosViramMagiasDaFicha` e rótulos no front. Conferido no sandbox (Arcanista Zhonya com Água e Fogo: 6 truques e 7 magias de 1º nível; Acólito da Sepultura: 15 truques e Poupar os Moribundos).
+
 ## 2026-10-26 — Rituais, tabelas, compêndio e a aba Livro (`feature/character-sheet`)
 - `magias.json`: os **18 rituais** da Lista de Rituais (perícias, Rito exigido, rebote, língua, componentes) e **7 tabelas** (Conjuração Ritual, Trespassando, Rituais, Magia Púrpura, Magia Descontrolada Yordle, Essência e Golem). Conferidos ao subir.
 - `rules/compendio.json` (`CompendiumService`): Familiares e Companheiros Animais, A Tecmaturgia e os 5 Aparatos, em seções e tabelas. Rotas `GET /compendium` e `GET /compendium/rituals`.

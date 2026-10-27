@@ -3298,6 +3298,13 @@
             "11": 16
           },
           "recharge": "LONG_REST"
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "count": 2,
+          "spellLevel": 0,
+          "value": "CLASS",
+          "label": "Truques de Combatente: escolha 2"
         }
       ]
     },

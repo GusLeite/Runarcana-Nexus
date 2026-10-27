@@ -220,3 +220,12 @@ describe('equipamento inicial', () => {
     expect(grantLabel({ type: 'EQUIPMENT_CHOICE', label: 'Equipamento: conjunto' })).toBe('Equipamento: conjunto')
   })
 })
+
+describe('magias na criação', () => {
+  it('rótulos das concessões de magia', () => {
+    expect(grantLabel({ type: 'SPELL_CHOICE', count: 3, spellLevel: 0 })).toBe('3 truques à escolha')
+    expect(grantLabel({ type: 'SPELL_CHOICE', count: 4, spellLevel: 1, label: 'Magias conhecidas' })).toBe('Magias conhecidas')
+    expect(grantLabel({ type: 'MYSTERY', value: 'necromancia' })).toBe('Mistério: Necromancia')
+    expect(grantLabel({ type: 'SPELL', value: 'maos-magicas' })).toBe('Magia: Maos magicas')
+  })
+})

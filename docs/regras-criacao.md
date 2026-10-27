@@ -18,7 +18,7 @@ As regras do assistente de criação (o que cada origem, região, classe e passa
 | Recursos de classe (Capítulo 5) | **315** em `rules/recursos.json`: 34 Iras, 120 Sutras, 19 Vel, 45 Técnicas de Combate, 38 Invocações Espirituais, 15 Grandes Espíritos e 44 Aspectos Ferais (23 terrestres, 14 aquáticos, 7 alados) |
 | Runas (Capítulo 5) | **82** no `rules/recursos.json` (kind `RUNA`): 34 Runas e 48 Runessências (16 árvores). Natureza Rúnica (Pulso + Runa inicial) em `runicNature` do `criacao.json` |
 | Itens (Capítulo 6) | **327** em `rules/itens.json`: 113 armas (simples, marciais, impróprias e de fogo), 10 munições, 15 armaduras, 4 escudos, 85 itens de aventureiro, 12 focos e símbolos sagrados, 40 conjuntos de ofício, 12 instrumentos, 12 montarias, 6 veículos aquáticos, 11 arreios e veículos de tração e 7 conjuntos de equipamento. Equipamento inicial das 9 classes e riqueza inicial |
-| Magias (Capítulo 10) | **558** em `rules/magias.json`, com Mistérios e as listas de classe e de origem; ainda não escolhidas no assistente |
+| Magias (Capítulo 10) | **558** em `rules/magias.json`, com Mistérios e as listas de classe e de origem. Truques e magias conhecidas do 1º nível escolhidos no assistente |
 | Regiões | As 14 do enum |
 | Idiomas | **Desligados** por enquanto (o Humano não escolhe idioma; a estrutura `LANGUAGE`/`LANGUAGE_CHOICE` continua disponível) |
 | Ofícios | Os **22** (16 maiores, 6 menores), sem atributo base nem níveis ainda |
@@ -138,7 +138,7 @@ As Variantes do Humano levam o texto completo do capítulo "Heranças Variantes"
 
 ## Magia (`rules/magias.json`)
 
-Capítulo 10, carregado e conferido ao subir (`runarcana.rules.magic`; os testes do Spring usam `rules/magias-teste.json`). Tem a **lista de magias** completa (558), mas ainda não está ligada às classes: os Mistérios das classes continuam como opção de texto e o assistente não escolhe magias.
+Capítulo 10, carregado e conferido ao subir (`runarcana.rules.magic`; os testes do Spring usam `rules/magias-teste.json`). Tem a **lista de magias** completa (558), ligada às classes pelas concessões de magia (ver **Magias na criação**).
 
 ```
 { "manaCost": { "0": 0, "1": 2, "2": 3, "3": 5, "4": 6, "5": 7, "6": 9, "7": 12, "8": 16, "9": 21 },
@@ -160,6 +160,14 @@ Capítulo 10, carregado e conferido ao subir (`runarcana.rules.magic`; os testes
 - **Mana**: `MagicRules.manaCost(nível)`. O Ártico ainda está sem tipo de dano e componente (não estão na tabela do livro).
 - **Magias** (558: 52 truques, 74 de 1º, 82 de 2º, 69 de 3º, 51 de 4º, 51 de 5º, 51 de 6º, 40 de 7º, 38 de 8º e 50 de 9º; 44 rituais), extraídas da Lista de Magias da wiki. `mysteries` vem da classificação ("Elemental (água ou cristal) ou Espiritual (transmutação)" → `agua`, `cristal`, `transmutacao`). `classes` são as listas "Feitiços de …" (Acólito, Atirador, Bruto, Caçador, Combatente, Mercurial, Xamã; o Arcanista e o Bodisatva não têm lista própria) e `origins` as de origem/linhagem (Yordle, Fauhwoon, Ottrani). As 14 "Especiais" (as do 20º nível dos Glifos, Rajada Mística, Pulso de Statikk, Manifestar Efígie) não têm Mistério; o texto diz quem as recebe. `material` é o que vem entre parênteses no componente M.
 - **Magias disponíveis**: `MagicRules.availableSpells(magia, Mistérios, classe, origens, nível máximo)`, basta uma das três fontes. A lista sai em `GET /creation/spells` (fora do `/creation/catalog`).
+
+## Magias na criação
+
+- `MYSTERY` (`value`: id do Mistério): Mistérios fixos dos Ritos (Espiritual → Adivinhação, Estrelas → Étermancia, Forja → Transmutação, Marés → Água, Natureza → Flora, Sepultura → Necromancia, Tempestade → Tempestade) e dos Glifos (Cinzas, Efígie, Escarlate, Ígneo, Púrpura, Tecelã, Zhonya).
+- FEATURE com `value: "MYSTERY"`: as opções são nomes de Mistérios ("Água (Elemental)", "Infernal" = Inferno); a escolhida vira Mistério. Usado em Lista de Magias e Mistério do Despertar do Arcanista, Domar Elementos (Elementalista) e Truque Adicional (Magus).
+- `SPELL` (`value`: id da magia): magia conhecida que não conta nos limites (Poupar os Moribundos da Sepultura, Disparo Arcano do Magus, Manifestar Efígie, Mãos Mágicas do Espião).
+- `SPELL_CHOICE` (`count`, `spellLevel`: 0 = truques, N = do 1º ao Nº nível; `value`: `CLASS` = lista da classe, `MYSTERIES` = Mistérios do personagem, `CLASS_OR_MYSTERIES` = as duas; padrão). Quem tem algum Mistério Elemental também tem o Elemental Geral. Uma magia escolhida não aparece em outra escolha. Sem opções (Arcanista sem Mistério), a escolha mostra um aviso e não bloqueia.
+- Ligado: Acólito (3 truques), Arcanista (3 truques e 4 magias de 1º nível dos Mistérios), Xamã (2 truques), Ravasz, Cicatrizes Rúnicas, Arqueiro Rúnico e Espião (2 truques da lista da classe) e a Técnica Combatente Arcano (2 truques de Combatente).
 
 ## Equipamento (`rules/itens.json`)
 
@@ -265,7 +273,7 @@ Para cada item, basta mandar o texto do livro ou um resumo; eu converto para o J
 1. **Origens**: todas cadastradas, inclusive a **Variante Nebulon** completa. Confirmado pelo usuário: Chireano com pontos de Origem, Chicote de Espinhos soma Destreza, bando do Troll não obriga a região. Os traços do Meio-Dragão por nível usam `levels` (ver **Formato**). Pode usar o mesmo para outros ganhos por nível de origem (ex.: Mordida do Troll 1d8 no 6º), quando a subida de nível existir.
 2. **Métodos de atributos** que a mesa usa (compra de pontos com quantos pontos e qual tabela, arranjo padrão, rolagem) e limite máximo na criação.
 4. **Classes**: todas cadastradas, com os recursos do Capítulo 5. Ficam só no texto: o pré-requisito de truque conhecido (Rajada Etérea pede rajada mística), porque o assistente ainda não escolhe magias; escalas que não são número de usos, dado, CA, atributo ou deslocamento (visão no escuro e outros sentidos dos Aspectos, custo em PV da Adrenalina Rúnica, tipo de dano que muda no 10º nível).
-   **Magias**: a lista do Capítulo 10 já está no `magias.json`, mas o assistente ainda não escolhe magias. Os Mistérios são escolhidos como opção e a ficha mostra Mana e quantos truques/magias o personagem pode ter; as magias em si o mestre adiciona pelo painel. Próximo passo: escolha de truques/magias conhecidas por classe com `MagicRules.availableSpells`.
+   **Magias**: truques e magias conhecidas do 1º nível são escolhidos no assistente (ver **Magias na criação**). Falta: magias **preparadas** do Acólito e do Xamã (escolhidas a cada descanso longo; hoje o mestre adiciona pelo painel), as magias dos níveis seguintes (dependem da subida de nível), as listas de origem (Yordle, Fauhwoon, Ottrani) em concessões de origem, os Mistérios que dependem de opção no Vítreo (Charme, Oneiros, Pequeno Falsário, Vislumbre) e o "se já tiver Fogo, Magma ou Infernal" do Ígneo, a Herança Centelha Mágica e o pré-requisito "Truque - rajada mística" da Rajada Etérea (continua no texto).
    **Runas**: ficam só no texto as escolhas de dentro do Pulso (tipo de dano do Esmeralda/Rubi, Vida/Mana/Ki do Ametista) e da Runa (elemento, forma feral, patrono); a Variante Ignata (Fúria Imortal) não existe no `herancas.json`, então só a Constituição é conferida; o Ancestral Vastayês aceita a origem Vastaya ou uma Herança e não tem `requires`. Maestrias e as Runas do 8º/15º nível esperam a subida de nível.
 5. **Passados** (Capítulo 4): perícias, ouro e característica.
 6. **Ofícios**: atributo base e conjunto de cada um (para os testes de ofício e os níveis).
