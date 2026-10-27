@@ -7,9 +7,10 @@ import java.util.Map;
 
 // Recurso de classe do Capítulo 5 (rules/recursos.json), escolhido por uma concessão RESOURCE_CHOICE:
 // Ira (Bruto), Sutra e Vel (Bodisatva), Técnica de Combate (Combatente), Invocação e Grande Espírito (Xamã)
-// e Aspectos Ferais (Forma Selvagem do Metamorfo).
-// - kind: IRA, SUTRA, VEL, TECNICA, INVOCACAO, GRANDE_ESPIRITO, ASPECTO_TERRESTRE, ASPECTO_AQUATICO, ASPECTO_ALADO.
+// e Aspectos Ferais (Forma Selvagem do Metamorfo). Também as Runas e Runessências (kind RUNA), da Natureza Rúnica.
+// - kind: IRA, SUTRA, VEL, TECNICA, INVOCACAO, GRANDE_ESPIRITO, ASPECTO_TERRESTRE, ASPECTO_AQUATICO, ASPECTO_ALADO, RUNA.
 // - groups: lista a que pertence ("Bodisatva", "Shojin", "Escola Umbral"...); a escolha pode limitar por grupo.
+//   Runas: o Pulso ("Rubi"); Runessências também "Runessência" e a árvore ("Aquavitista").
 // - prerequisite: o texto do livro; requires: a parte que o assistente confere sozinho.
 // - cost: pontos de Vel (◆) que o Vel ocupa. ki: pontos de Ki que o Vel inativa (saem do total de Ki).
 // - grants: o que ele concede além da habilidade com a descrição.
@@ -25,7 +26,9 @@ public record RuleResource(
         Integer ki,
         String description,
         Requirements requires,
-        List<Grant> grants
+        List<Grant> grants,
+        // Usos da habilidade do recurso (Runas: metade do bônus de proficiência por descanso longo).
+        UsesRule uses
 ) {
     public List<String> groupsOrEmpty() {
         return groups == null ? List.of() : groups;

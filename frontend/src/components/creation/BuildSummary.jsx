@@ -80,6 +80,13 @@ export default function BuildSummary({ preview, catalog, draft }) {
             ))}
           </Section>
 
+          <Section title="Equipamento" empty={preview.startingWealth?.selected
+            ? 'Riqueza inicial: ' + preview.startingWealth.formula + ' PO, rolada ao criar' : 'Nenhum ainda'}>
+            {(preview.equipment ?? []).map((e, i) => (
+              <li key={i}>{e.name}{e.quantity > 1 && <span className="ft-extra"> ×{e.quantity}</span>}<em>{e.source}</em></li>
+            ))}
+          </Section>
+
           {preview.errors.length > 0 ? (
             <div className="build-todo">
               <b>Falta para criar</b>

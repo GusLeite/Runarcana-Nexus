@@ -27,6 +27,8 @@ public enum GrantType {
     SAVING_THROW_CHOICE, // proficiência em count resistências à escolha (options = atributos)
     ARMOR_PROFICIENCY,  // proficiência com armaduras: value LIGHT, MEDIUM, HEAVY ou SHIELD
     WEAPON_PROFICIENCY, // proficiência com armas: value = o nome ("Armas simples", "Rapieiras")
+    EQUIPMENT,          // equipamento inicial fixo: value = opção de itens do rules/itens.json ("escudo-leve+livro", ver EquipmentRules)
+    EQUIPMENT_CHOICE,   // equipamento inicial à escolha: options = opções de itens ("group:arma-simples" vira uma por item), count
     RESOURCE_CHOICE     // recurso de classe do Capítulo 5 (rules/recursos.json): value = tipo (SUTRA, IRA, TECNICA...), count,
                         // options = grupos aceitos (vazio = todos); VEL é opcional e usa amount como os pontos (◆) disponíveis
 }

@@ -251,6 +251,10 @@
           "spellLevel": 0,
           "name": "Raio",
           "damage": "1d10"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "t-couro+t-adaga*2+t-conjunto"
         }
       ],
       "levels": [
@@ -393,6 +397,14 @@
             "3": 3
           },
           "recharge": "LONG_REST"
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Arma do Bruto",
+          "options": [
+            "group:arma-marcial",
+            "t-adaga*2"
+          ]
         }
       ],
       "levels": []
@@ -427,6 +439,28 @@
     {
       "id": "NOXUS",
       "name": "Noxus"
+    }
+  ],
+  "runicNature": [
+    {
+      "type": "FEATURE",
+      "abilityType": "PASSIVE",
+      "name": "Pulso Rúnico",
+      "options": [
+        "Rubi",
+        "Safira"
+      ],
+      "diceByProficiency": {
+        "2": "1d4",
+        "3": "1d6"
+      },
+      "description": "Pulso de teste."
+    },
+    {
+      "type": "RESOURCE_CHOICE",
+      "value": "RUNA",
+      "count": 1,
+      "label": "Runa inicial"
     }
   ]
 }

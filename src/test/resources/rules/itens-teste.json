@@ -1,0 +1,66 @@
+{
+  "startingWealth": {
+    "ARCANIST": "4d4 x 10",
+    "BRUTE": "2d4 x 10"
+  },
+  "items": [
+    {
+      "id": "t-adaga",
+      "name": "Adaga Teste",
+      "kind": "WEAPON",
+      "groups": [
+        "arma-simples"
+      ],
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 0.5,
+      "damage": "1d4 p",
+      "critical": "x2",
+      "properties": "Acuidade, leve"
+    },
+    {
+      "id": "t-machado",
+      "name": "Machado Teste",
+      "kind": "WEAPON",
+      "groups": [
+        "arma-marcial"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "damage": "1d8 r",
+      "critical": "x2"
+    },
+    {
+      "id": "t-couro",
+      "name": "Couro Teste",
+      "kind": "ARMOR",
+      "groups": [
+        "armadura-leve"
+      ],
+      "armorWeight": "LIGHT",
+      "armorClass": 11,
+      "armorClassText": "11 + Modificador de Destreza",
+      "dexterity": "FULL"
+    },
+    {
+      "id": "t-tocha",
+      "name": "Tocha Teste",
+      "kind": "GEAR",
+      "description": "Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro."
+    },
+    {
+      "id": "t-conjunto",
+      "name": "Conjunto Teste",
+      "kind": "PACK",
+      "contents": [
+        {
+          "item": "t-tocha",
+          "quantity": 5
+        },
+        {
+          "name": "Caixa de esmolas"
+        }
+      ]
+    }
+  ]
+}

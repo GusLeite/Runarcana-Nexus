@@ -1,0 +1,4852 @@
+{
+  "startingWealth": {
+    "ACOLYTE": "5d4 x 10",
+    "ARCANIST": "4d4 x 10",
+    "MARKSMAN": "4d4 x 10",
+    "BODHISATTVA": "5d4",
+    "BRUTE": "2d4 x 10",
+    "HUNTER": "5d4 x 10",
+    "FIGHTER": "5d4 x 10",
+    "MERCURIAL": "4d4 x 10",
+    "SHAMAN": "2d4 x 10"
+  },
+  "items": [
+    {
+      "id": "adaga",
+      "name": "Adaga",
+      "kind": "WEAPON",
+      "category": "Simples Corpo a Corpo",
+      "groups": [
+        "arma-simples",
+        "arma-simples-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 0.5,
+      "damage": "1d4 p/ 1d4 r",
+      "critical": "p 19 x3",
+      "mastery": "Ágil",
+      "properties": "Acuidade, arremesso (20/60 pés), leve"
+    },
+    {
+      "id": "arpao",
+      "name": "Arpão",
+      "kind": "WEAPON",
+      "category": "Simples Corpo a Corpo",
+      "groups": [
+        "arma-simples",
+        "arma-simples-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "3 PP",
+      "priceCp": 30,
+      "weight": 0.5,
+      "damage": "1d6 p",
+      "critical": "x2",
+      "mastery": "Lentidão",
+      "properties": "Acuidade, arremesso (20/80 pés)"
+    },
+    {
+      "id": "azagaia",
+      "name": "Azagaia",
+      "kind": "WEAPON",
+      "category": "Simples Corpo a Corpo",
+      "groups": [
+        "arma-simples",
+        "arma-simples-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "5 PP",
+      "priceCp": 50,
+      "weight": 1,
+      "damage": "1d6 p",
+      "critical": "x2",
+      "mastery": "Lentidão",
+      "properties": "Arremesso (distância 30/120 pés)"
+    },
+    {
+      "id": "bastao",
+      "name": "Bastão",
+      "kind": "WEAPON",
+      "category": "Simples Corpo a Corpo",
+      "groups": [
+        "arma-simples",
+        "arma-simples-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "2 PP",
+      "priceCp": 20,
+      "weight": 2,
+      "damage": "1d6 c",
+      "critical": "20 x3",
+      "mastery": "Fender",
+      "properties": "Versátil (1d8 c)"
+    },
+    {
+      "id": "clava-grande",
+      "name": "Clava Grande",
+      "kind": "WEAPON",
+      "category": "Simples Corpo a Corpo",
+      "groups": [
+        "arma-simples",
+        "arma-simples-corpo-a-corpo"
+      ],
+      "price": "2 PP",
+      "priceCp": 20,
+      "weight": 5,
+      "damage": "1d8 c",
+      "critical": "x2",
+      "mastery": "Empurrar",
+      "properties": "Pesada, duas mãos"
+    },
+    {
+      "id": "foice",
+      "name": "Foice",
+      "kind": "WEAPON",
+      "category": "Simples Corpo a Corpo",
+      "groups": [
+        "arma-simples",
+        "arma-simples-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 1,
+      "damage": "1d4 r/ 1d4 p",
+      "critical": "r 19 x3",
+      "mastery": "Ágil",
+      "properties": "Leve"
+    },
+    {
+      "id": "lanca",
+      "name": "Lança",
+      "kind": "WEAPON",
+      "category": "Simples Corpo a Corpo",
+      "groups": [
+        "arma-simples",
+        "arma-simples-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 1.5,
+      "damage": "1d6 p",
+      "critical": "x2",
+      "mastery": "Tontear",
+      "properties": "Arremesso (20/60 pés), versátil (1d8 p)"
+    },
+    {
+      "id": "maca",
+      "name": "Maça",
+      "kind": "WEAPON",
+      "category": "Simples Corpo a Corpo",
+      "groups": [
+        "arma-simples",
+        "arma-simples-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 2,
+      "damage": "1d6 c",
+      "critical": "19 x3",
+      "mastery": "Tontear"
+    },
+    {
+      "id": "machadinha",
+      "name": "Machadinha",
+      "kind": "WEAPON",
+      "category": "Simples Corpo a Corpo",
+      "groups": [
+        "arma-simples",
+        "arma-simples-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 1,
+      "damage": "1d6 r",
+      "critical": "x2",
+      "mastery": "Aflição",
+      "properties": "Leve, arremesso (20/60 pés)"
+    },
+    {
+      "id": "martelo-leve",
+      "name": "Martelo Leve",
+      "kind": "WEAPON",
+      "category": "Simples Corpo a Corpo",
+      "groups": [
+        "arma-simples",
+        "arma-simples-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 1,
+      "damage": "1d6 c",
+      "critical": "x2",
+      "mastery": "Ágil",
+      "properties": "Leve, arremesso (20/60 pés)"
+    },
+    {
+      "id": "porrete",
+      "name": "Porrete",
+      "kind": "WEAPON",
+      "category": "Simples Corpo a Corpo",
+      "groups": [
+        "arma-simples",
+        "arma-simples-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "1 PP",
+      "priceCp": 10,
+      "weight": 1,
+      "damage": "1d4 c",
+      "critical": "x2",
+      "mastery": "Lentidão",
+      "properties": "Leve"
+    },
+    {
+      "id": "arco-curto",
+      "name": "Arco Curto",
+      "kind": "WEAPON",
+      "category": "Simples à Distância",
+      "groups": [
+        "arma-simples",
+        "arma-simples-distancia"
+      ],
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 1,
+      "damage": "1d6 p",
+      "critical": "x2",
+      "mastery": "Aflição",
+      "properties": "Munição (80/320 pés), duas mãos"
+    },
+    {
+      "id": "besta-leve",
+      "name": "Besta Leve",
+      "kind": "WEAPON",
+      "category": "Simples à Distância",
+      "groups": [
+        "arma-simples",
+        "arma-simples-distancia"
+      ],
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 2.5,
+      "damage": "1d8 p",
+      "critical": "x2",
+      "mastery": "Lentidão",
+      "properties": "Munição (80/320 pés), recarga, duas mãos"
+    },
+    {
+      "id": "dardo",
+      "name": "Dardo",
+      "kind": "WEAPON",
+      "category": "Simples à Distância",
+      "groups": [
+        "arma-simples",
+        "arma-simples-distancia"
+      ],
+      "price": "5 PC",
+      "priceCp": 5,
+      "weight": 0.1,
+      "damage": "1d4 p",
+      "critical": "x2",
+      "mastery": "Aflição",
+      "properties": "Acuidade, arremesso (20/60 pés)"
+    },
+    {
+      "id": "estilingue",
+      "name": "Estilingue",
+      "kind": "WEAPON",
+      "category": "Simples à Distância",
+      "groups": [
+        "arma-simples",
+        "arma-simples-distancia"
+      ],
+      "price": "5 PP",
+      "priceCp": 50,
+      "weight": 0.5,
+      "damage": "1d4 c",
+      "critical": "19 x2",
+      "mastery": "Lentidão",
+      "properties": "Duas mãos, munição (50/160 pés)"
+    },
+    {
+      "id": "funda",
+      "name": "Funda",
+      "kind": "WEAPON",
+      "category": "Simples à Distância",
+      "groups": [
+        "arma-simples",
+        "arma-simples-distancia"
+      ],
+      "price": "1 PP",
+      "priceCp": 10,
+      "damage": "1d4 c",
+      "critical": "x2",
+      "mastery": "Lentidão",
+      "properties": "Munição (30/120 pés)"
+    },
+    {
+      "id": "alabarda",
+      "name": "Alabarda",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "20 PO",
+      "priceCp": 2000,
+      "weight": 3,
+      "damage": "1d10 r/ 1d6 p",
+      "critical": "x2",
+      "mastery": "Fender",
+      "properties": "Duas mãos, extensão 1, pesada"
+    },
+    {
+      "id": "cimitarra",
+      "name": "Cimitarra",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 1.5,
+      "damage": "1d6 r/ 1d4 p",
+      "critical": "r 19 x3",
+      "mastery": "Ágil",
+      "properties": "Acuidade, leve"
+    },
+    {
+      "id": "chakram-pequeno",
+      "name": "Chakram Pequeno",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "3 PO",
+      "priceCp": 300,
+      "weight": 1,
+      "damage": "1d4 r",
+      "critical": "x2",
+      "mastery": "Tontear",
+      "properties": "Acuidade, arremesso (15/60 pés), leve, regional (Targon)"
+    },
+    {
+      "id": "chakram-medio",
+      "name": "Chakram Médio",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "6 PO",
+      "priceCp": 600,
+      "weight": 3.5,
+      "damage": "1d8 r",
+      "critical": "x2",
+      "mastery": "Aflição",
+      "properties": "Acuidade, arremesso (30/90 pés), regional (Shurima)"
+    },
+    {
+      "id": "chicote",
+      "name": "Chicote",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 1.5,
+      "damage": "1d4 r",
+      "critical": "20 x3",
+      "mastery": "Lentidão",
+      "properties": "Acuidade, captura, extensão 2"
+    },
+    {
+      "id": "espada-curta",
+      "name": "Espada Curta",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 1,
+      "damage": "1d6 p/ 1d4 r",
+      "critical": "p x3",
+      "mastery": "Aflição",
+      "properties": "Acuidade, leve"
+    },
+    {
+      "id": "espada-grande",
+      "name": "Espada Grande",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "50 PO",
+      "priceCp": 5000,
+      "weight": 3,
+      "damage": "2d6 r/ 1d8 p",
+      "critical": "x2",
+      "mastery": "Raspão",
+      "properties": "Duas mãos, pesada"
+    },
+    {
+      "id": "espada-longa",
+      "name": "Espada Longa",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "15 PO",
+      "priceCp": 1500,
+      "weight": 1.5,
+      "damage": "1d8 r/ 1d6 p",
+      "critical": "x2",
+      "mastery": "Tontear",
+      "properties": "Versátil (1d10 r/ 1d8 p)"
+    },
+    {
+      "id": "foice-de-guerra",
+      "name": "Foice de Guerra",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 2.5,
+      "damage": "2d4 r/ 1d8 p",
+      "critical": "x2",
+      "mastery": "Tontear",
+      "properties": "Duas mãos, extensão 1, pesada"
+    },
+    {
+      "id": "glaive",
+      "name": "Glaive",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "20 PO",
+      "priceCp": 2000,
+      "weight": 3,
+      "damage": "1d10 r/p",
+      "critical": "x2",
+      "mastery": "Raspão",
+      "properties": "Duas mãos, extensão 1, pesada"
+    },
+    {
+      "id": "katar",
+      "name": "Katar",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "15 PO",
+      "priceCp": 1500,
+      "weight": 1.5,
+      "damage": "1d6 p/ 1d6 r",
+      "critical": "p 19 x3",
+      "mastery": "Ágil/ Aflição",
+      "properties": "Acuidade, leve, regional (Ionia, Noxus, Shurima)"
+    },
+    {
+      "id": "khopesh",
+      "name": "Khopesh",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "20 PO",
+      "priceCp": 2000,
+      "weight": 2,
+      "damage": "1d8 r",
+      "critical": "x2",
+      "mastery": "Tontear",
+      "properties": "Acuidade, regional (Ionia, Targon, Shurima), versátil (1d10 r)"
+    },
+    {
+      "id": "lanca-de-montaria",
+      "name": "Lança de Montaria",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 3,
+      "damage": "1d12 p",
+      "critical": "x2",
+      "mastery": "Fender",
+      "properties": "Extensão 1, especial"
+    },
+    {
+      "id": "lanca-longa",
+      "name": "Lança Longa",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 4,
+      "damage": "1d10 p/ 1d6 r",
+      "critical": "x2",
+      "mastery": "Empurrar",
+      "properties": "Duas mãos, extensão 2, híbrida (1d6 cortante), pesada"
+    },
+    {
+      "id": "maca-estrela",
+      "name": "Maça Estrela",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "15 PO",
+      "priceCp": 1500,
+      "weight": 2,
+      "damage": "1d6 c + 1d4 p",
+      "critical": "19 x3",
+      "mastery": "Tontear"
+    },
+    {
+      "id": "machado-de-batalha",
+      "name": "Machado de Batalha",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 2,
+      "damage": "1d8 r",
+      "critical": "x2",
+      "mastery": "Raspão",
+      "properties": "Versátil (1d10 r)"
+    },
+    {
+      "id": "machado-grande",
+      "name": "Machado Grande",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "30 PO",
+      "priceCp": 3000,
+      "weight": 3.5,
+      "damage": "1d12 r",
+      "critical": "x2",
+      "mastery": "Fender",
+      "properties": "Pesada, duas mãos"
+    },
+    {
+      "id": "malho",
+      "name": "Malho",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 5,
+      "damage": "2d6 c",
+      "critical": "x2",
+      "mastery": "Tontear",
+      "properties": "Pesada, duas mãos"
+    },
+    {
+      "id": "mangual",
+      "name": "Mangual",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 1,
+      "damage": "1d4 p + 1d4 c",
+      "critical": "x2",
+      "mastery": "Tontear",
+      "properties": "Extensão"
+    },
+    {
+      "id": "manopla-de-guerra",
+      "name": "Manopla de Guerra",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 0.5,
+      "damage": "* especial",
+      "critical": "x2",
+      "mastery": "Ágil",
+      "properties": "Manopla, (*+1 de dano com golpes desarmados)"
+    },
+    {
+      "id": "martelo-de-guerra",
+      "name": "Martelo de Guerra",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "15 PO",
+      "priceCp": 1500,
+      "weight": 1,
+      "damage": "1d8 c",
+      "critical": "x2",
+      "mastery": "Empurrar",
+      "properties": "Versátil (1d10 c)"
+    },
+    {
+      "id": "picareta-de-guerra",
+      "name": "Picareta de Guerra",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 1,
+      "damage": "1d8 p/ 1d4 c",
+      "critical": "p 19 x3",
+      "mastery": "Tontear"
+    },
+    {
+      "id": "rapieira",
+      "name": "Rapieira",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 1,
+      "damage": "1d8 p/ 1d4 r",
+      "critical": "p 20 x3",
+      "mastery": "Aflição",
+      "properties": "Acuidade"
+    },
+    {
+      "id": "tridente",
+      "name": "Tridente",
+      "kind": "WEAPON",
+      "category": "Marciais Corpo a Corpo",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-corpo-a-corpo"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 1,
+      "damage": "1d6 p",
+      "critical": "20 x3",
+      "mastery": "Lentidão",
+      "properties": "Arremesso (20/60 pés), versátil (1d8 p)"
+    },
+    {
+      "id": "arco-longo",
+      "name": "Arco Longo",
+      "kind": "WEAPON",
+      "category": "Marciais à Distância",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-distancia"
+      ],
+      "price": "50 PO",
+      "priceCp": 5000,
+      "weight": 1,
+      "damage": "1d8 p",
+      "critical": "x2",
+      "mastery": "Lentidão",
+      "properties": "Duas mãos, munição (150/600 pés), pesada"
+    },
+    {
+      "id": "balestra-de-repeticao",
+      "name": "Balestra de Repetição",
+      "kind": "WEAPON",
+      "category": "Marciais à Distância",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-distancia"
+      ],
+      "price": "300 PO",
+      "priceCp": 30000,
+      "weight": 1.5,
+      "damage": "1d6 p",
+      "critical": "x2",
+      "mastery": "Aflição",
+      "properties": "Capacidade 5, leve, munição (80/400 pés), regional (Demacia)"
+    },
+    {
+      "id": "besta-de-mao",
+      "name": "Besta de Mão",
+      "kind": "WEAPON",
+      "category": "Marciais à Distância",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-distancia"
+      ],
+      "price": "75 PO",
+      "priceCp": 7500,
+      "weight": 1.5,
+      "damage": "1d6 p",
+      "critical": "x2",
+      "mastery": "Aflição",
+      "properties": "Leve, munição (30/120 pés), recarga"
+    },
+    {
+      "id": "besta-de-repeticao",
+      "name": "Besta de Repetição",
+      "kind": "WEAPON",
+      "category": "Marciais à Distância",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-distancia"
+      ],
+      "price": "150 PO",
+      "priceCp": 15000,
+      "weight": 1.5,
+      "damage": "1d6 p",
+      "critical": "x2",
+      "mastery": "Aflição",
+      "properties": "Capacidade 4, duas mãos, munição (60/300 pés), regional (Demacia, Piltover, Zaun)"
+    },
+    {
+      "id": "besta-de-repeticao-pesada",
+      "name": "Besta de Repetição Pesada",
+      "kind": "WEAPON",
+      "category": "Marciais à Distância",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-distancia"
+      ],
+      "price": "400 PO",
+      "priceCp": 40000,
+      "weight": 5,
+      "damage": "1d8 p",
+      "critical": "x2",
+      "mastery": "Lentidão",
+      "properties": "Capacidade 6, duas mãos, munição (60/300 pés), pesada,regional (Demacia, Piltover, Zaun)"
+    },
+    {
+      "id": "besta-pesada",
+      "name": "Besta Pesada",
+      "kind": "WEAPON",
+      "category": "Marciais à Distância",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-distancia"
+      ],
+      "price": "50 PO",
+      "priceCp": 5000,
+      "weight": 4.5,
+      "damage": "1d10 p",
+      "critical": "x2",
+      "mastery": "Lentidão",
+      "properties": "Duas mãos, munição (90/400 pés), pesada, recarga"
+    },
+    {
+      "id": "boleadeira",
+      "name": "Boleadeira",
+      "kind": "WEAPON",
+      "category": "Marciais à Distância",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-distancia"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 0.6,
+      "damage": "1d4 c",
+      "critical": "x2",
+      "mastery": "Lentidão",
+      "properties": "Arremesso (20/60 pés), captura, especial"
+    },
+    {
+      "id": "rede",
+      "name": "Rede",
+      "kind": "WEAPON",
+      "category": "Marciais à Distância",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-distancia"
+      ],
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 1.5,
+      "critical": "x2",
+      "properties": "Especial, arremesso ( 5/15 pés)"
+    },
+    {
+      "id": "zarabatana",
+      "name": "Zarabatana",
+      "kind": "WEAPON",
+      "category": "Marciais à Distância",
+      "groups": [
+        "arma-marcial",
+        "arma-marcial-distancia"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 0.5,
+      "damage": "1d2 p",
+      "critical": "x2",
+      "mastery": "Aflição",
+      "properties": "Munição (25/90 pés), recarga"
+    },
+    {
+      "id": "chakram-grande",
+      "name": "Chakram Grande",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas Corpo a Corpo",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-corpo-a-corpo"
+      ],
+      "price": "12 PO",
+      "priceCp": 1200,
+      "weight": 7,
+      "damage": "1d12 r",
+      "critical": "x2",
+      "mastery": "Raspão",
+      "properties": "Acuidade, duas mãos, extensão 1, imprópria -2, regional (Ixtal)"
+    },
+    {
+      "id": "cutelo-crescente",
+      "name": "Cutelo Crescente",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas Corpo a Corpo",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-corpo-a-corpo"
+      ],
+      "price": "60 PO",
+      "priceCp": 6000,
+      "weight": 2,
+      "damage": "2d6 r",
+      "critical": "19 x3",
+      "mastery": "Fender",
+      "properties": "Imprópria -2, regional (Shurima), versátil (3d6 r)"
+    },
+    {
+      "id": "dracocida",
+      "name": "Dracocida",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas Corpo a Corpo",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-corpo-a-corpo"
+      ],
+      "price": "150 PO",
+      "priceCp": 15000,
+      "weight": 4.5,
+      "damage": "1d10 p",
+      "critical": "x2",
+      "mastery": "Lentidão",
+      "properties": "Especial, duas mãos, extensão 1, imprópria -2, regional (Demacia)"
+    },
+    {
+      "id": "espada-javali",
+      "name": "Espada Javali",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas Corpo a Corpo",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-corpo-a-corpo"
+      ],
+      "price": "60 PO",
+      "priceCp": 6000,
+      "weight": 6,
+      "damage": "2d8 r",
+      "critical": "19 x3",
+      "mastery": "Fender",
+      "properties": "Imprópria -2, pesada, regional (Freljord), versátil (2d10 r)"
+    },
+    {
+      "id": "han-kote",
+      "name": "Han Kote",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas Corpo a Corpo",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 0.5,
+      "damage": "*especial",
+      "critical": "x2",
+      "mastery": "Ágil",
+      "properties": "Defensivo 1, imprópria -1, manopla, (*+1 de dano com golpes desarmados), regional (Ionia)"
+    },
+    {
+      "id": "idolo-do-deus-anciao",
+      "name": "Ídolo do Deus Ancião",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas Corpo a Corpo",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-corpo-a-corpo"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 5,
+      "damage": "1d8 c",
+      "critical": "19 x3",
+      "mastery": "Empurrar",
+      "properties": "Duas mãos, imprópria -1, pesado, regional (Águas de Sentina)"
+    },
+    {
+      "id": "katana",
+      "name": "Katana",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas Corpo a Corpo",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 1,
+      "damage": "1d8 r/ 1d4 p",
+      "critical": "19 x3",
+      "mastery": "Lentidão",
+      "properties": "Acuidade, imprópria -1, versátil (1d10 r/ 1d6 p), regional (Ionia)"
+    },
+    {
+      "id": "lamina-navori",
+      "name": "Lâmina Navori",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas Corpo a Corpo",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-corpo-a-corpo"
+      ],
+      "price": "15 PO",
+      "priceCp": 1500,
+      "weight": 1.5,
+      "damage": "1d6 r/p",
+      "critical": "x2",
+      "mastery": "Aflição",
+      "properties": "Arremesso (20/60 pés), leve, imprópria -3, regional (Ionia), especial"
+    },
+    {
+      "id": "leque-de-guerra",
+      "name": "Leque de Guerra",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas Corpo a Corpo",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-corpo-a-corpo"
+      ],
+      "price": "20 PO",
+      "priceCp": 2000,
+      "weight": 0.5,
+      "damage": "1d6 cortante",
+      "critical": "x3",
+      "mastery": "Ágil ou Raspão",
+      "properties": "Acuidade, desarme, imprópria -1, leve, regional (Ionia)"
+    },
+    {
+      "id": "nodachi",
+      "name": "Nodachi",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas Corpo a Corpo",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "75 PO",
+      "priceCp": 7500,
+      "weight": 3,
+      "damage": "2d6 r/ 1d6 p",
+      "critical": "19 x3",
+      "mastery": "Lentidão",
+      "properties": "Duas mãos, extensão 1 , Imprópria -2, pesada, regional (Ionia)"
+    },
+    {
+      "id": "ntofo",
+      "name": "Ntofo",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas Corpo a Corpo",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-corpo-a-corpo"
+      ],
+      "price": "30 PO",
+      "priceCp": 3000,
+      "weight": 3,
+      "damage": "2d4 c",
+      "critical": "19 x2",
+      "mastery": "Aflição",
+      "properties": "Defensivo 1, imprópria -2, pesada, regional (Nazumah)"
+    },
+    {
+      "id": "nunchaku",
+      "name": "Nunchaku",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas Corpo a Corpo",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 1,
+      "damage": "1d4 c",
+      "critical": "19 x3",
+      "mastery": "Ágil",
+      "properties": "Acuidade, imprópria -3, leve, proteção 1, versátil (1d6 c), regional (Ionia)"
+    },
+    {
+      "id": "sai",
+      "name": "Sai",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas Corpo a Corpo",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 0.5,
+      "damage": "1d4 p",
+      "critical": "19 x3",
+      "mastery": "Aflição",
+      "properties": "Acuidade, desarme, imprópria -1, leve"
+    },
+    {
+      "id": "tonfa",
+      "name": "Tonfa",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas Corpo a Corpo",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-corpo-a-corpo",
+        "arma-bodisatva"
+      ],
+      "price": "5 PP",
+      "priceCp": 50,
+      "weight": 0.5,
+      "damage": "1d4 c",
+      "critical": "19 x2",
+      "mastery": "Lentidão",
+      "properties": "Acuidade, defensivo 1, imprópria -1, leve, regional (Ionia, Nazumah)"
+    },
+    {
+      "id": "machado-giratorio",
+      "name": "Machado Giratório",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas à Distância",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-distancia"
+      ],
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 1,
+      "damage": "1d6 r",
+      "critical": "19 x3",
+      "mastery": "Raspão",
+      "properties": "Arremesso (20/60 pés), especial, imprópria -2, regional (Noxus)"
+    },
+    {
+      "id": "shuriken",
+      "name": "Shuriken",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas à Distância",
+      "groups": [
+        "arma-impropria",
+        "arma-impropria-distancia",
+        "arma-bodisatva"
+      ],
+      "price": "1 PP",
+      "priceCp": 10,
+      "weight": 0.2,
+      "damage": "1d4 p/1d2 r",
+      "critical": "x2",
+      "mastery": "Raspão",
+      "properties": "Imprópria -1, leve, arremesso (20/60 pés), regional (Ionia)"
+    },
+    {
+      "id": "adaga-com-corrente",
+      "name": "Adaga com Corrente",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas de Correntes",
+      "groups": [
+        "arma-impropria",
+        "arma-de-corrente",
+        "arma-bodisatva"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 1.5,
+      "damage": "1d4 p/ 1d4 c",
+      "critical": "19 x3",
+      "mastery": "Ágil/ Tontear",
+      "properties": "Acuidade, desarme, duas mãos, extensão 3, imprópria -2, leve, regional (Ionia)"
+    },
+    {
+      "id": "cao-dragao",
+      "name": "Cão-Dragão",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas de Correntes",
+      "groups": [
+        "arma-impropria",
+        "arma-de-corrente"
+      ],
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 2,
+      "damage": "1d8r / *",
+      "critical": "19 x3",
+      "mastery": "Fender",
+      "properties": "Captura, desarme, especial, extensão 3, imprópria -2, leve, manopla, regional (Noxus),"
+    },
+    {
+      "id": "corrente-espinhosa",
+      "name": "Corrente Espinhosa",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas de Correntes",
+      "groups": [
+        "arma-impropria",
+        "arma-de-corrente"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 2,
+      "damage": "1d6 p",
+      "critical": "x2",
+      "mastery": "Aflição",
+      "properties": "Acuidade, captura, desarme, duas mãos, extensão 3, imprópria -2, leve, regional (Noxus)"
+    },
+    {
+      "id": "foice-com-corrente",
+      "name": "Foice com Corrente",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas de Correntes",
+      "groups": [
+        "arma-impropria",
+        "arma-de-corrente",
+        "arma-bodisatva"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 2.5,
+      "damage": "1d6 r/ 1d4 c",
+      "critical": "x2",
+      "mastery": "Ágil/ Tontear",
+      "properties": "Acuidade, captura, desarme, duas mãos, extensão 3, imprópria -2, leve, regional (Ionia)"
+    },
+    {
+      "id": "laminas-do-caos",
+      "name": "Lâminas do Caos",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas de Correntes",
+      "groups": [
+        "arma-impropria",
+        "arma-de-corrente"
+      ],
+      "price": "20 PO",
+      "priceCp": 2000,
+      "weight": 2,
+      "damage": "1d6 p/ 1d6 r",
+      "critical": "19 x3",
+      "mastery": "Tontear",
+      "properties": "Acuidade, captura, desarme, extensão 3, imprópria -2, leve, regional (Noxus)"
+    },
+    {
+      "id": "manopla-com-corrente",
+      "name": "Manopla com Corrente",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas de Correntes",
+      "groups": [
+        "arma-impropria",
+        "arma-de-corrente"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 3,
+      "damage": "1d6 c/* especial",
+      "critical": "20 x3",
+      "mastery": "Tontear",
+      "properties": "Captura, desarme, especial, extensão 3, imprópria -2, leve, manopla, (*+1 de dano com golpes desarmados)"
+    },
+    {
+      "id": "martelo-meteoro",
+      "name": "Martelo Meteoro",
+      "kind": "WEAPON",
+      "category": "Impróprias · Armas de Correntes",
+      "groups": [
+        "arma-impropria",
+        "arma-de-corrente",
+        "arma-bodisatva"
+      ],
+      "price": "40 PO",
+      "priceCp": 4000,
+      "weight": 2,
+      "damage": "1d8 c",
+      "critical": "x2",
+      "mastery": "Empurrar",
+      "properties": "Acuidade, captura, desarme, duas mãos, extensão 3, imprópria -2, regional (Ionia)"
+    },
+    {
+      "id": "pistola",
+      "name": "Pistola",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Leves",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-1",
+        "arma-de-fogo-leves"
+      ],
+      "tier": 1,
+      "price": "75 PO",
+      "priceCp": 7500,
+      "weight": 1.5,
+      "damage": "1d6p",
+      "critical": "x2",
+      "mastery": "Aflição",
+      "misfire": "4",
+      "range": "45/150",
+      "properties": "Cap. 1, força 1, leve"
+    },
+    {
+      "id": "garrucha",
+      "name": "Garrucha",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Leves",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-2",
+        "arma-de-fogo-leves"
+      ],
+      "tier": 2,
+      "price": "100 PO",
+      "priceCp": 10000,
+      "weight": 2,
+      "damage": "1d8p",
+      "critical": "x2",
+      "mastery": "Aflição",
+      "misfire": "3",
+      "range": "60/250",
+      "properties": "Cap. 2, força 1, leve"
+    },
+    {
+      "id": "derringer",
+      "name": "Derringer",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Leves",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-2",
+        "arma-de-fogo-leves"
+      ],
+      "tier": 2,
+      "price": "250 PO",
+      "priceCp": 25000,
+      "weight": 0.5,
+      "damage": "1d6p",
+      "critical": "x4",
+      "mastery": "Ágil",
+      "misfire": "1",
+      "range": "20/50",
+      "properties": "Capacidade 2, leve, especial"
+    },
+    {
+      "id": "revolver",
+      "name": "Revolver",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Leves",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-3",
+        "arma-de-fogo-leves"
+      ],
+      "tier": 3,
+      "price": "250 PO",
+      "priceCp": 25000,
+      "weight": 2,
+      "damage": "1d8p",
+      "critical": "19 x3",
+      "mastery": "Aflição",
+      "misfire": "3",
+      "range": "60/250",
+      "properties": "Cap. 5, força 1, leve"
+    },
+    {
+      "id": "pistola-semi-automatica",
+      "name": "Pistola Semi-Automática",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Leves",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-4",
+        "arma-de-fogo-leves"
+      ],
+      "tier": 4,
+      "price": "500 PO",
+      "priceCp": 50000,
+      "weight": 2,
+      "damage": "1d10p",
+      "critical": "19 x3",
+      "mastery": "Aflição",
+      "misfire": "3",
+      "range": "100/300",
+      "properties": "Cap. 10, força 1, leve, rajada 5"
+    },
+    {
+      "id": "pistola-automatica",
+      "name": "Pistola Automática",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Leves",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-5",
+        "arma-de-fogo-leves"
+      ],
+      "tier": 5,
+      "price": "1500 PO",
+      "priceCp": 150000,
+      "weight": 2,
+      "damage": "1d10p",
+      "critical": "19 x3",
+      "mastery": "Aflição",
+      "misfire": "2",
+      "range": "100/300",
+      "properties": "Cap. 10, força 1, leve, estável, rajada 5"
+    },
+    {
+      "id": "pistola-rapinante",
+      "name": "Pistola Rapinante",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Leves",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-6",
+        "arma-de-fogo-leves"
+      ],
+      "tier": 6,
+      "price": "3000 PO",
+      "priceCp": 300000,
+      "weight": 2,
+      "damage": "1d12p",
+      "critical": "19 x3",
+      "mastery": "Aflição+Lentidão",
+      "misfire": "1",
+      "range": "150/640",
+      "properties": "Cap. 15, força 1, leve, estável, rajada 10"
+    },
+    {
+      "id": "carabina",
+      "name": "Carabina",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Médias",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-1",
+        "arma-de-fogo-medias"
+      ],
+      "tier": 1,
+      "price": "125 PO",
+      "priceCp": 12500,
+      "weight": 3.5,
+      "damage": "1d8p",
+      "critical": "x2",
+      "mastery": "Raspão",
+      "misfire": "4",
+      "range": "30",
+      "properties": "Cap. 1, duas mãos, dispersão, força 1"
+    },
+    {
+      "id": "espingarda",
+      "name": "Espingarda",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Médias",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-2",
+        "arma-de-fogo-medias"
+      ],
+      "tier": 2,
+      "price": "250 PO",
+      "priceCp": 25000,
+      "weight": 3.5,
+      "damage": "1d10p",
+      "critical": "x2",
+      "mastery": "Raspão",
+      "misfire": "3",
+      "range": "30",
+      "properties": "Cap. 2, duas mãos, dispersão, força 1"
+    },
+    {
+      "id": "escopeta",
+      "name": "Escopeta",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Médias",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-3",
+        "arma-de-fogo-medias"
+      ],
+      "tier": 3,
+      "price": "500 PO",
+      "priceCp": 50000,
+      "weight": 3.5,
+      "damage": "2d6p",
+      "critical": "x2",
+      "mastery": "Raspão",
+      "misfire": "3",
+      "range": "30",
+      "properties": "Cap. 2, duas mãos, dispersão, força 1"
+    },
+    {
+      "id": "carabina-de-tambor",
+      "name": "Carabina de Tambor",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Médias",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-4",
+        "arma-de-fogo-medias"
+      ],
+      "tier": 4,
+      "price": "1500 PO",
+      "priceCp": 150000,
+      "weight": 4,
+      "damage": "2d6p",
+      "critical": "x2",
+      "mastery": "Raspão",
+      "misfire": "3",
+      "range": "30",
+      "properties": "Cap. 10, duas mãos, dispersão, força 1, rajada 2"
+    },
+    {
+      "id": "espingarda-automatica",
+      "name": "Espingarda Automática",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Médias",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-5",
+        "arma-de-fogo-medias"
+      ],
+      "tier": 5,
+      "price": "3500 PO",
+      "priceCp": 350000,
+      "weight": 4,
+      "damage": "2d8p",
+      "critical": "x2",
+      "mastery": "Raspão",
+      "misfire": "2",
+      "range": "30",
+      "properties": "Cap. 8, duas mãos, dispersão, força 1, rajada 2"
+    },
+    {
+      "id": "escopeta-krug",
+      "name": "Escopeta Krug",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Médias",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-6",
+        "arma-de-fogo-medias"
+      ],
+      "tier": 6,
+      "price": "5000 PO",
+      "priceCp": 500000,
+      "weight": 4,
+      "damage": "2d8p",
+      "critical": "19 x3",
+      "mastery": "Raspão+Empurrar",
+      "misfire": "2",
+      "range": "45",
+      "properties": "Cap. 10, duas mãos, dispersão, força 1, rajada 4"
+    },
+    {
+      "id": "arcabuz",
+      "name": "Arcabuz",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Longas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-1",
+        "arma-de-fogo-longas"
+      ],
+      "tier": 1,
+      "price": "125 PO",
+      "priceCp": 12500,
+      "weight": 3.5,
+      "damage": "1d12p",
+      "critical": "x2",
+      "mastery": "Aflição",
+      "misfire": "3",
+      "range": "150/640",
+      "properties": "Cap. 1, duas mãos, força 1"
+    },
+    {
+      "id": "mosquete",
+      "name": "Mosquete",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Longas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-2",
+        "arma-de-fogo-longas"
+      ],
+      "tier": 2,
+      "price": "300 PO",
+      "priceCp": 30000,
+      "weight": 3.5,
+      "damage": "3d4p",
+      "critical": "19 x3",
+      "mastery": "Aflição",
+      "misfire": "3",
+      "range": "150/640",
+      "properties": "Cap. 4, duas mãos, força 1"
+    },
+    {
+      "id": "rifle",
+      "name": "Rifle",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Longas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-3",
+        "arma-de-fogo-longas"
+      ],
+      "tier": 3,
+      "price": "750 PO",
+      "priceCp": 75000,
+      "weight": 3.5,
+      "damage": "4d4p",
+      "critical": "19 x3",
+      "mastery": "Aflição",
+      "misfire": "2",
+      "range": "200/800",
+      "properties": "Cap. 4, duas mãos, força 1, rajada 2"
+    },
+    {
+      "id": "fuzil",
+      "name": "Fuzil",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Longas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-4",
+        "arma-de-fogo-longas"
+      ],
+      "tier": 4,
+      "price": "2000 PO",
+      "priceCp": 200000,
+      "weight": 3.5,
+      "damage": "2d10",
+      "critical": "19 x3",
+      "mastery": "Aflição",
+      "misfire": "2",
+      "range": "200/800",
+      "properties": "Cap. 15, duas mãos, força 1, rajada 5"
+    },
+    {
+      "id": "rifle-de-precisao",
+      "name": "Rifle de Precisão",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Longas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-5",
+        "arma-de-fogo-longas"
+      ],
+      "tier": 5,
+      "price": "5000 PO",
+      "priceCp": 500000,
+      "weight": 3.5,
+      "damage": "2d12",
+      "critical": "18 x4",
+      "mastery": "Aflição",
+      "misfire": "1",
+      "range": "500/1000",
+      "properties": "Cap. 4, duas mãos, força 1"
+    },
+    {
+      "id": "fuzil-anciao",
+      "name": "Fuzil Ancião",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Longas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-6",
+        "arma-de-fogo-longas"
+      ],
+      "tier": 6,
+      "price": "10000 PO",
+      "priceCp": 1000000,
+      "weight": 3.5,
+      "damage": "2d12",
+      "critical": "18 x4",
+      "mastery": "Aflição+Tontear",
+      "misfire": "1",
+      "range": "500/1000",
+      "properties": "Cap. 15, duas mãos, força 1, rajada 10"
+    },
+    {
+      "id": "canhao-de-mao",
+      "name": "Canhão de Mão",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Canhões",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-1",
+        "arma-de-fogo-canhoes"
+      ],
+      "tier": 1,
+      "price": "125 PO",
+      "priceCp": 12500,
+      "weight": 6,
+      "damage": "1d8c",
+      "critical": "x2",
+      "mastery": "Empurrar",
+      "misfire": "2",
+      "range": "60/250",
+      "properties": "Cap. 1, duas mãos, explosivo 5, força 1"
+    },
+    {
+      "id": "canhao-medio",
+      "name": "Canhão Médio",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Canhões",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-2",
+        "arma-de-fogo-canhoes"
+      ],
+      "tier": 2,
+      "price": "350 PO",
+      "priceCp": 35000,
+      "weight": 8,
+      "damage": "1d10c",
+      "critical": "x2",
+      "mastery": "Empurrar",
+      "misfire": "2",
+      "range": "80/340",
+      "properties": "Cap. 2, duas mãos, explosivo 10, força 2"
+    },
+    {
+      "id": "lanca-granadas-simples",
+      "name": "Lança-granadas Simples",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Canhões",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-2",
+        "arma-de-fogo-canhoes"
+      ],
+      "tier": 2,
+      "price": "300 PO",
+      "priceCp": 30000,
+      "weight": 4,
+      "damage": "1d8c",
+      "critical": "x2",
+      "mastery": "Raspão",
+      "misfire": "1",
+      "range": "60/250",
+      "properties": "Cap. 2, duas mãos, explosivo 5, força 1"
+    },
+    {
+      "id": "canhao-pesado",
+      "name": "Canhão Pesado",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Canhões",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-3",
+        "arma-de-fogo-canhoes"
+      ],
+      "tier": 3,
+      "price": "750 PO",
+      "priceCp": 75000,
+      "weight": 12,
+      "damage": "2d8c",
+      "critical": "x2",
+      "mastery": "Empurrar",
+      "misfire": "2",
+      "range": "150/640",
+      "properties": "Cap. 2, duas mãos, explosivo 15, força 3"
+    },
+    {
+      "id": "lanca-granadas-medio",
+      "name": "Lança-granadas Médio",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Canhões",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-3",
+        "arma-de-fogo-canhoes"
+      ],
+      "tier": 3,
+      "price": "750 PO",
+      "priceCp": 75000,
+      "weight": 5,
+      "damage": "1d10c",
+      "critical": "x2",
+      "mastery": "Raspão",
+      "misfire": "1",
+      "range": "80/340",
+      "properties": "Cap. 2, duas mãos, explosivo 10, força 2"
+    },
+    {
+      "id": "canhao-enorme",
+      "name": "Canhão Enorme",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Canhões",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-4",
+        "arma-de-fogo-canhoes"
+      ],
+      "tier": 4,
+      "price": "1500 PO",
+      "priceCp": 150000,
+      "weight": 20,
+      "damage": "3d10c",
+      "critical": "x2",
+      "mastery": "Empurrar",
+      "misfire": "2",
+      "range": "300/900",
+      "properties": "Cap. 2, duas mãos, explosivo 20, força 4"
+    },
+    {
+      "id": "lanca-granadas-pesado",
+      "name": "Lança-granadas Pesado",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Canhões",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-4",
+        "arma-de-fogo-canhoes"
+      ],
+      "tier": 4,
+      "price": "1500 PO",
+      "priceCp": 150000,
+      "weight": 6,
+      "damage": "2d8c",
+      "critical": "x2",
+      "mastery": "Raspão",
+      "misfire": "1",
+      "range": "150/640",
+      "properties": "Cap. 4, duas mãos, explosivo 15, força 2"
+    },
+    {
+      "id": "bazuca-grompe",
+      "name": "Bazuca Grompe",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Canhões",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-5",
+        "arma-de-fogo-canhoes"
+      ],
+      "tier": 5,
+      "price": "5000 PO",
+      "priceCp": 500000,
+      "weight": 12,
+      "damage": "3d12c",
+      "critical": "x2",
+      "mastery": "Raspão",
+      "misfire": "1",
+      "range": "300/900",
+      "properties": "Cap. 2, duas mãos, explosivo 20, força 2"
+    },
+    {
+      "id": "bombarda-nashor",
+      "name": "Bombarda Nashor",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Canhões",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-6",
+        "arma-de-fogo-canhoes"
+      ],
+      "tier": 6,
+      "price": "15000 PO",
+      "priceCp": 1500000,
+      "weight": 50,
+      "damage": "3d12 x2*",
+      "critical": "19 x3",
+      "mastery": "Empurrar+Raspão",
+      "misfire": "0",
+      "range": "500/1000",
+      "properties": "Cap. 4, duas mãos, explosivo 30, força 6"
+    },
+    {
+      "id": "lanca-chamas-unitario",
+      "name": "Lança-Chamas Unitário",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Lança-Chamas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-1",
+        "arma-de-fogo-lanca-chamas"
+      ],
+      "tier": 1,
+      "price": "150 PO",
+      "priceCp": 15000,
+      "weight": 9,
+      "damage": "1d6 ígneo",
+      "critical": "20 x2",
+      "mastery": "Raspão",
+      "misfire": "4",
+      "range": "C 10 - L20",
+      "properties": "Carga 2, duas mãos, especial, força 3"
+    },
+    {
+      "id": "lanca-chamas-simples",
+      "name": "Lança-Chamas Simples",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Lança-Chamas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-2",
+        "arma-de-fogo-lanca-chamas"
+      ],
+      "tier": 2,
+      "price": "350 PO",
+      "priceCp": 35000,
+      "weight": 14,
+      "damage": "1d8 ígneo",
+      "critical": "20 x2",
+      "mastery": "Raspão",
+      "misfire": "3",
+      "range": "C10 - L 30",
+      "properties": "Carga 10, duas mãos, especial, força 2"
+    },
+    {
+      "id": "lanca-chamas-portatil",
+      "name": "Lança-Chamas Portátil",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Lança-Chamas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-2",
+        "arma-de-fogo-lanca-chamas"
+      ],
+      "tier": 2,
+      "price": "350 PO",
+      "priceCp": 35000,
+      "weight": 1.5,
+      "damage": "1d6 ígneo",
+      "critical": "20 x2",
+      "mastery": "Raspão",
+      "misfire": "3",
+      "range": "C 10 - L20",
+      "properties": "Carga 4, especial, força 1, leve"
+    },
+    {
+      "id": "lanca-chamas-reforcado",
+      "name": "Lança-Chamas Reforçado",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Lança-Chamas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-3",
+        "arma-de-fogo-lanca-chamas"
+      ],
+      "tier": 3,
+      "price": "500 PO",
+      "priceCp": 50000,
+      "weight": 14,
+      "damage": "1d8 ígneo",
+      "critical": "20 x2",
+      "mastery": "Raspão",
+      "misfire": "3",
+      "range": "C 15 - L 45",
+      "properties": "Carga 12, duas mãos, especial, força 2"
+    },
+    {
+      "id": "lanca-chamas-compacto",
+      "name": "Lança-Chamas Compacto",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Lança-Chamas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-4",
+        "arma-de-fogo-lanca-chamas"
+      ],
+      "tier": 4,
+      "price": "750 PO",
+      "priceCp": 75000,
+      "weight": 4,
+      "damage": "1d8 ígneo",
+      "critical": "20 x2",
+      "mastery": "Raspão",
+      "misfire": "3",
+      "range": "C15 - L 45",
+      "properties": "Carga 4, duas mãos, especial"
+    },
+    {
+      "id": "lanca-chamas-mecanico",
+      "name": "Lança-Chamas Mecânico",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Lança-Chamas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-4",
+        "arma-de-fogo-lanca-chamas"
+      ],
+      "tier": 4,
+      "price": "1000 PO",
+      "priceCp": 100000,
+      "weight": 14,
+      "damage": "1d10 ígeno",
+      "critical": "20 x2",
+      "mastery": "Raspão",
+      "misfire": "3",
+      "range": "C 20 - L 60",
+      "properties": "Carga 14, duas mãos, especial, força 2"
+    },
+    {
+      "id": "lanca-chamas-automatico",
+      "name": "Lança-Chamas Automático",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Lança-Chamas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-5",
+        "arma-de-fogo-lanca-chamas"
+      ],
+      "tier": 5,
+      "price": "2000 PO",
+      "priceCp": 200000,
+      "weight": 10,
+      "damage": "2d6 ígneo",
+      "critical": "20 x2",
+      "mastery": "Raspão",
+      "misfire": "2",
+      "range": "C 20 - L 60",
+      "properties": "Carga 16, duas mãos, especial, força 1, rajada 2"
+    },
+    {
+      "id": "lanca-chamas-cospe-fogo",
+      "name": "Lança-Chamas Cospe-fogo",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Lança-Chamas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-6",
+        "arma-de-fogo-lanca-chamas"
+      ],
+      "tier": 6,
+      "price": "5000 PO",
+      "priceCp": 500000,
+      "weight": 10,
+      "damage": "2d8 ígneo",
+      "critical": "19 x3",
+      "mastery": "Raspão",
+      "misfire": "2",
+      "range": "C 30 - L 90",
+      "properties": "Carga 20, duas mãos, especial, estável, força 1, rajada 4"
+    },
+    {
+      "id": "pistola-faca",
+      "name": "Pistola Faca",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Baionetas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-1",
+        "arma-de-fogo-baionetas"
+      ],
+      "tier": 1,
+      "price": "95 PO",
+      "priceCp": 9500,
+      "damage": "1d6p/r",
+      "critical": "x2",
+      "mastery": "Aflição/Ágil",
+      "misfire": "4",
+      "range": "60/250",
+      "properties": "Acuidade, baioneta, cap. 1, força 1, imprópria -2, leve"
+    },
+    {
+      "id": "arcabuz-espada",
+      "name": "Arcabuz Espada",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Baionetas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-1",
+        "arma-de-fogo-baionetas"
+      ],
+      "tier": 1,
+      "price": "175 PO",
+      "priceCp": 17500,
+      "weight": 4,
+      "damage": "1d12p/ 1d10r",
+      "critical": "x2",
+      "mastery": "Aflição/Tontear",
+      "misfire": "3",
+      "range": "150/640",
+      "properties": "Baioneta, cap. 1, duas mãos, força 1, imprópria -2"
+    },
+    {
+      "id": "canhao-machado",
+      "name": "Canhão Machado",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Baionetas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-1",
+        "arma-de-fogo-baionetas"
+      ],
+      "tier": 1,
+      "price": "175 PO",
+      "priceCp": 17500,
+      "weight": 9,
+      "damage": "1d8c/ 1d12 r",
+      "critical": "x2",
+      "mastery": "Empurrar/Raspão",
+      "misfire": "3",
+      "range": "60/250",
+      "properties": "Baioneta, cap. 1, duas mãos, explosivo 5, força 1, imprópria -2, pesada"
+    },
+    {
+      "id": "lanca-de-fogo",
+      "name": "Lança de Fogo",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Baionetas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-1",
+        "arma-de-fogo-baionetas"
+      ],
+      "tier": 1,
+      "price": "250 PO",
+      "priceCp": 25000,
+      "weight": 10,
+      "damage": "1d6 p / ígneo",
+      "critical": "20 x2",
+      "mastery": "Tontear/Raspão",
+      "misfire": "4",
+      "range": "C10 - L15",
+      "properties": "Baioneta, carga 1, duas mãos, especial, força 3, versátil (1d8 p)"
+    },
+    {
+      "id": "revolver-laminar",
+      "name": "Revólver Laminar",
+      "kind": "WEAPON",
+      "category": "Armas de Fogo · Baionetas",
+      "groups": [
+        "arma-de-fogo",
+        "arma-de-fogo-tier-2",
+        "arma-de-fogo-baionetas"
+      ],
+      "tier": 2,
+      "price": "350 PO",
+      "priceCp": 35000,
+      "weight": 3,
+      "damage": "1d8p/r",
+      "critical": "19 x3",
+      "mastery": "Aflição/Tontear",
+      "misfire": "3",
+      "range": "60/250",
+      "properties": "Baioneta, cap. 5, força 1, leve, imprópria -2, versátil (1d10)"
+    },
+    {
+      "id": "municao-de-canhao",
+      "name": "Munição de Canhão",
+      "kind": "AMMUNITION",
+      "category": "Munição de Arma de Fogo",
+      "groups": [
+        "municao-de-fogo"
+      ],
+      "quantity": 20,
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 10
+    },
+    {
+      "id": "municao-leve",
+      "name": "Munição Leve",
+      "kind": "AMMUNITION",
+      "category": "Munição de Arma de Fogo",
+      "groups": [
+        "municao-de-fogo"
+      ],
+      "quantity": 100,
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 1.5
+    },
+    {
+      "id": "municao-longa",
+      "name": "Munição Longa",
+      "kind": "AMMUNITION",
+      "category": "Munição de Arma de Fogo",
+      "groups": [
+        "municao-de-fogo"
+      ],
+      "quantity": 20,
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 0.5
+    },
+    {
+      "id": "municao-media",
+      "name": "Munição Média",
+      "kind": "AMMUNITION",
+      "category": "Munição de Arma de Fogo",
+      "groups": [
+        "municao-de-fogo"
+      ],
+      "quantity": 25,
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 1
+    },
+    {
+      "id": "tanque-simples",
+      "name": "Tanque Simples",
+      "kind": "AMMUNITION",
+      "category": "Munição de Arma de Fogo",
+      "groups": [
+        "municao-de-fogo"
+      ],
+      "quantity": 5,
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 10
+    },
+    {
+      "id": "tanque-compacto",
+      "name": "Tanque Compacto",
+      "kind": "AMMUNITION",
+      "category": "Munição de Arma de Fogo",
+      "groups": [
+        "municao-de-fogo"
+      ],
+      "quantity": 10,
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 10
+    },
+    {
+      "id": "armadura-acolchoada",
+      "name": "Armadura Acolchoada",
+      "kind": "ARMOR",
+      "category": "Armaduras Leves",
+      "groups": [
+        "armadura-leve"
+      ],
+      "armorWeight": "LIGHT",
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 4,
+      "armorClass": 11,
+      "armorClassText": "11 + Modificador de Destreza",
+      "dexterity": "FULL",
+      "stealthDisadvantage": true,
+      "description": "A armadura acolchoada consiste em camadas de panos acolchoados e batidos."
+    },
+    {
+      "id": "armadura-couro",
+      "name": "Armadura Couro",
+      "kind": "ARMOR",
+      "category": "Armaduras Leves",
+      "groups": [
+        "armadura-leve"
+      ],
+      "armorWeight": "LIGHT",
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 5,
+      "armorClass": 11,
+      "armorClassText": "11 + Modificador de Destreza",
+      "dexterity": "FULL",
+      "description": "O peitoral e as ombreiras da armadura de couro são feitos de couro que foi endurecido após ser fervido em óleo. O resto da armadura é feita de materiais mais macios e mais flexíveis."
+    },
+    {
+      "id": "armadura-couro-batido",
+      "name": "Armadura Couro Batido",
+      "kind": "ARMOR",
+      "category": "Armaduras Leves",
+      "groups": [
+        "armadura-leve"
+      ],
+      "armorWeight": "LIGHT",
+      "price": "45 PO",
+      "priceCp": 4500,
+      "weight": 6.5,
+      "armorClass": 12,
+      "armorClassText": "12 + Modificador de Destreza",
+      "dexterity": "FULL",
+      "description": "Feita de couro resistente, mas flexível, a armadura de couro batido é reforçada com rebites ou cravos"
+    },
+    {
+      "id": "armadura-gibao-de-peles",
+      "name": "Armadura Gibão de Peles",
+      "kind": "ARMOR",
+      "category": "Armaduras Médias",
+      "groups": [
+        "armadura-media"
+      ],
+      "armorWeight": "MEDIUM",
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 6,
+      "armorClass": 12,
+      "armorClassText": "12 + Modificador de Destreza (máx +2)",
+      "dexterity": "MAX_2",
+      "damageReduction": "1",
+      "exception": "Ácido",
+      "description": "Um gibão de peles é um armadura bruta consistindo de peles grossas. É comumente usada por tribos bárbaras, humanoides malignos e outros povos que não têm acesso às ferramentas e materiais necessários para criar uma armadura melhor."
+    },
+    {
+      "id": "armadura-camisao-de-malha",
+      "name": "Armadura Camisão de Malha",
+      "kind": "ARMOR",
+      "category": "Armaduras Médias",
+      "groups": [
+        "armadura-media"
+      ],
+      "armorWeight": "MEDIUM",
+      "price": "30 PO",
+      "priceCp": 3000,
+      "weight": 10,
+      "armorClass": 13,
+      "armorClassText": "13 + Modificador de Destreza (máx +2)",
+      "dexterity": "MAX_2",
+      "damageReduction": "1",
+      "exception": "Elétrico",
+      "description": "Feito de anéis de metal intercalados, um camisão de cota de malha é usado entre as camadas de roupa. Essa armadura oferece proteção modesta para a parte superior do corpo de quem a usa e permite que o som dos anéis de metal, friccionados uns contra os outros, sejam amortecidos pelas camadas exteriores."
+    },
+    {
+      "id": "armadura-lorica-de-escamas",
+      "name": "Armadura Lórica de Escamas",
+      "kind": "ARMOR",
+      "category": "Armaduras Médias",
+      "groups": [
+        "armadura-media"
+      ],
+      "armorWeight": "MEDIUM",
+      "price": "50 PO",
+      "priceCp": 5000,
+      "weight": 22.5,
+      "armorClass": 14,
+      "armorClassText": "14 + Modificador de Destreza (máx +2)",
+      "dexterity": "MAX_2",
+      "damageReduction": "1",
+      "stealthDisadvantage": true,
+      "exception": "Elétrico",
+      "description": "Essa armadura consiste em um casaco e calças (e talvez uma saia separada) de couro coberto com peças sobrepostas de metal, assim como as escamas de peixe. O conjunto inclui manoplas."
+    },
+    {
+      "id": "armadura-couraca-peitoral",
+      "name": "Armadura Couraça Peitoral",
+      "kind": "ARMOR",
+      "category": "Armaduras Médias",
+      "groups": [
+        "armadura-media"
+      ],
+      "armorWeight": "MEDIUM",
+      "price": "400 PO",
+      "priceCp": 40000,
+      "weight": 10,
+      "armorClass": 14,
+      "armorClassText": "14 + Modificador de Defesa (máx +2)",
+      "dexterity": "MAX_2",
+      "defenseModifier": true,
+      "damageReduction": "1",
+      "exception": "Elétrico",
+      "description": "Esta armadura é constituída por pedaço de metal usado com couro flexível em seu interior. Embora ele deixe as pernas e braços do usuário relativamente desprotegidos, essa armadura fornece boa proteção para seus órgãos vitais, deixando quem a usa relativamente sem restrições."
+    },
+    {
+      "id": "armadura-placas-parcial",
+      "name": "Armadura Placas Parcial",
+      "kind": "ARMOR",
+      "category": "Armaduras Médias",
+      "groups": [
+        "armadura-media"
+      ],
+      "armorWeight": "MEDIUM",
+      "price": "750 PO",
+      "priceCp": 75000,
+      "weight": 20,
+      "armorClass": 15,
+      "armorClassText": "15 + Modificador de Defesa (máx +2)",
+      "dexterity": "MAX_2",
+      "defenseModifier": true,
+      "damageReduction": "1",
+      "stealthDisadvantage": true,
+      "exception": "Elétrico",
+      "description": "Essa armadura é composta de placas de metal moldadas que cobrem a maior parte do corpo. Ela não inclui proteção para as pernas além de caneleiras fixadas com tiras de couro."
+    },
+    {
+      "id": "armadura-cota-de-aneis",
+      "name": "Armadura Cota de Anéis",
+      "kind": "ARMOR",
+      "category": "Armaduras Pesadas",
+      "groups": [
+        "armadura-pesada"
+      ],
+      "armorWeight": "HEAVY",
+      "price": "30 PO",
+      "priceCp": 3000,
+      "weight": 20,
+      "armorClass": 15,
+      "armorClassText": "15",
+      "dexterity": "NONE",
+      "damageReduction": "1",
+      "stealthDisadvantage": true,
+      "exception": "Elétrico",
+      "description": "Esta armadura é feita de couro com pesados anéis presos a ela. Os anéis ajudam a reforçar a armadura contra golpes de espadas e machados. A cota de anéis é inferior à cota de malha e geralmente é vestida apenas por aqueles que não podem pagar por uma armadura melhor."
+    },
+    {
+      "id": "armadura-cota-de-malha",
+      "name": "Armadura Cota de Malha",
+      "kind": "ARMOR",
+      "category": "Armaduras Pesadas",
+      "groups": [
+        "armadura-pesada"
+      ],
+      "armorWeight": "HEAVY",
+      "price": "75 PO",
+      "priceCp": 7500,
+      "weight": 27.5,
+      "armorClass": 16,
+      "armorClassText": "16",
+      "dexterity": "NONE",
+      "damageReduction": "2",
+      "strength": 13,
+      "stealthDisadvantage": true,
+      "exception": "Elétrico",
+      "description": "Feita de anéis de metal entrelaçados, a cota de malha inclui uma camada de tecido acolchoado usada por baixo da malha de metal para evitar atrito e amortecer o impacto dos golpes. O conjunto inclui manoplas."
+    },
+    {
+      "id": "armadura-cota-de-talas",
+      "name": "Armadura Cota de Talas",
+      "kind": "ARMOR",
+      "category": "Armaduras Pesadas",
+      "groups": [
+        "armadura-pesada"
+      ],
+      "armorWeight": "HEAVY",
+      "price": "200 PO",
+      "priceCp": 20000,
+      "weight": 30,
+      "armorClass": 17,
+      "armorClassText": "17",
+      "dexterity": "NONE",
+      "damageReduction": "2",
+      "strength": 15,
+      "stealthDisadvantage": true,
+      "description": "Essa armadura é feita de tiras verticais de metal, rebitadas a um suporte de couro, usadas sobre um preenchimento de pano. Cotas de malha flexíveis protegem as articulações."
+    },
+    {
+      "id": "armadura-placas",
+      "name": "Armadura Placas",
+      "kind": "ARMOR",
+      "category": "Armaduras Pesadas",
+      "groups": [
+        "armadura-pesada"
+      ],
+      "armorWeight": "HEAVY",
+      "price": "1500 PO",
+      "priceCp": 150000,
+      "weight": 32.5,
+      "armorClass": 18,
+      "armorClassText": "18",
+      "dexterity": "NONE",
+      "damageReduction": "3",
+      "strength": 15,
+      "stealthDisadvantage": true,
+      "description": "A armadura de placas consiste em placas de metal moldadas para cobrir todo o corpo. Inclui luvas, botas de couro pesadas, um capacete com viseira e espessas camadas de enchimento por baixo da armadura. Fivelas e tiras de couro distribuem o peso ao longo do corpo."
+    },
+    {
+      "id": "armadura-couraca-de-aco-runico",
+      "name": "Couraça de Aço Rúnico",
+      "kind": "ARMOR",
+      "category": "Armaduras Especiais",
+      "groups": [
+        "armadura-especial"
+      ],
+      "armorWeight": "MEDIUM",
+      "weight": 10,
+      "armorClass": 14,
+      "armorClassText": "14 + Modificador de Destreza (máx +2)",
+      "dexterity": "MAX_2",
+      "damageReduction": "2/5 mágico"
+    },
+    {
+      "id": "armadura-segunda-pele-vastinata",
+      "name": "Segunda Pele Vastinata",
+      "kind": "ARMOR",
+      "category": "Armaduras Especiais",
+      "groups": [
+        "armadura-especial"
+      ],
+      "armorWeight": "MEDIUM",
+      "weight": 0.25,
+      "armorClass": 14,
+      "armorClassText": "14 + Modificador de Destreza (máx +2)",
+      "dexterity": "MAX_2",
+      "damageReduction": "1/4 mágico",
+      "exception": "Ácido"
+    },
+    {
+      "id": "armadura-peitoral-vastinata",
+      "name": "Peitoral Vastinata",
+      "kind": "ARMOR",
+      "category": "Armaduras Especiais",
+      "groups": [
+        "armadura-especial"
+      ],
+      "armorWeight": "MEDIUM",
+      "weight": 2,
+      "armorClass": 16,
+      "armorClassText": "16 + Modificador de Destreza (máx +2)",
+      "dexterity": "MAX_2",
+      "damageReduction": "2/5 mágico",
+      "exception": "Ácido"
+    },
+    {
+      "id": "broquel",
+      "name": "Broquel",
+      "kind": "SHIELD",
+      "category": "Escudos",
+      "groups": [
+        "escudo"
+      ],
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 1,
+      "armorClassText": "Especial",
+      "description": "Esse pequeno escudo pode ser preso ao seu antebraço, deixando sua mão livre para empunhar um objeto e manejar uma arma, ao ser alvo de um ataque você pode utilizar sua reação para aumentar sua CA em +1 até o início de seu próximo turno."
+    },
+    {
+      "id": "escudo-leve",
+      "name": "Escudo Leve",
+      "kind": "SHIELD",
+      "category": "Escudos",
+      "groups": [
+        "escudo"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 3,
+      "armorClass": 1,
+      "armorClassText": "1",
+      "description": "Esse escudo de madeira é amarrado no antebraço, deixando a mão livre. O usuário pode carregar um objeto na mão do escudo, mas não manusear uma arma."
+    },
+    {
+      "id": "escudo-pesado",
+      "name": "Escudo Pesado",
+      "kind": "SHIELD",
+      "category": "Escudos",
+      "groups": [
+        "escudo"
+      ],
+      "price": "15 PO",
+      "priceCp": 1500,
+      "weight": 7,
+      "armorClass": 2,
+      "armorClassText": "2",
+      "strength": 13,
+      "description": "Esse escudo de aço é preso ao antebraço e também deve ser empunhado com firmeza, impedindo o usuário de usar aquela mão. Enquanto utilizando esse escudo você diminui 5 pés de seu deslocamento."
+    },
+    {
+      "id": "escudo-de-torre",
+      "name": "Escudo de Torre",
+      "kind": "SHIELD",
+      "category": "Escudos",
+      "groups": [
+        "escudo"
+      ],
+      "price": "50 PO",
+      "priceCp": 5000,
+      "weight": 15,
+      "armorClass": 2,
+      "armorClassText": "+2, Especial",
+      "strength": 13,
+      "stealthDisadvantage": true,
+      "description": "Muito alto e largo, este escudo é capaz de cobrir quase todo o corpo do usuário. Um escudo de torre não pode ser usado enquanto estiver montado. Ao usar esse escudo, criaturas a 5 pés atrás dele recebem bônus de meia cobertura, incluindo você, porém você não recebe vantagem em testes de Destreza. Enquanto utilizando esse escudo você diminui 5 pés de seu deslocamento, seus testes e salvaguardas de Destreza, passivos ou não, recebem desvantagem."
+    },
+    {
+      "id": "abaco",
+      "name": "Ábaco",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 1
+    },
+    {
+      "id": "acido",
+      "name": "Ácido (frasco)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 0.5,
+      "description": "Com uma ação, você pode espalhar o conteúdo deste frasco em uma criatura dentro de 5 pés do seu alcance ou jogar o frasco a até 20 pés, quebrando-o no impacto. Em ambos os casos, faça um ataque à distância contra uma criatura ou objeto, tratando o ácido como uma arma improvisada. Com um acerto, o alvo sofre 2d6 de dano ácido."
+    },
+    {
+      "id": "agua-benta",
+      "name": "Água benta (frasco)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 0.5,
+      "description": "Com uma ação, você pode espalhar o conteúdo deste frasco em uma criatura dentro de 5 pés do seu alcance ou jogar o frasco a até 20 pés, quebrando-o no impacto. Em ambos os casos, faça um ataque à distância contra a criatura alvejada, tratando a água benta como uma arma improvisada. Se o alvo for um ínfero ou morto-vivo, este sofrerá 2d6 de dano radiante."
+    },
+    {
+      "id": "algemas",
+      "name": "Algemas",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 3,
+      "description": "Estas contenções de metal podem prender uma criatura Pequena ou Média. Escapar de algemas requer um teste bem-sucedido de Destreza CD 20. Quebrá-las requer um teste bem-sucedido de Força CD 20. Cada conjunto de algemas vem com uma chave. Sem a chave, uma criatura proficiente com ferramentas de chaveiro pode abrir a fechadura das algemas com um teste bem-sucedido de Destreza CD 15. Algemas têm 15 pontos de vida."
+    },
+    {
+      "id": "algibeira",
+      "name": "Algibeira",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PP",
+      "priceCp": 50,
+      "weight": 0.5,
+      "description": "Uma algibeira de tecido ou de couro pode conter até 20 balas de funda ou 50 agulhas de zarabatana, entre outras coisas. Uma algibeira compartimentada para guardar componentes de magia é chamada bolsa de componentes (descrita posteriormente nesta seção)."
+    },
+    {
+      "id": "aljava",
+      "name": "Aljava",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 0.5,
+      "description": "Uma aljava pode conter até 20 flechas."
+    },
+    {
+      "id": "ampulheta",
+      "name": "Ampulheta",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 0.5
+    },
+    {
+      "id": "anel-de-sinete",
+      "name": "Anel de sinete",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PO",
+      "priceCp": 500
+    },
+    {
+      "id": "antitoxina",
+      "name": "Antitoxina (frasco)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "25 PO",
+      "priceCp": 2500,
+      "description": "Uma criatura que bebe o líquido deste este frasco ganha vantagem nas salvaguardas contra veneno durante 1 hora. Isso não confere nenhum benefício para mortos-vivos ou construtos."
+    },
+    {
+      "id": "apito-sinalizador",
+      "name": "Apito sinalizador",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PC",
+      "priceCp": 5
+    },
+    {
+      "id": "aqua-regia",
+      "name": "Aqua Regia",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 0.5,
+      "description": "Com uma ação, você pode espalhar o conteúdo deste frasco em uma criatura dentro de 5 pés do seu alcance ou jogar o frasco a até 20 pés, quebrando-o no impacto. Em ambos os casos, faça um ataque à distância contra a criatura alvejada, tratando a Aqua Regia como uma arma improvisada. Se o alvo for um vastinata, este sofrerá 2d4 de dano ácido, ignorando qualquer nível de resistência do alvo, caso possua."
+    },
+    {
+      "id": "ariete-portatil",
+      "name": "Aríete portátil",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "4 PO",
+      "priceCp": 400,
+      "weight": 16,
+      "description": "Você pode usar um aríete portátil para quebrar portas. Ao fazer isso, você ganha +4 de bônus no teste de Força. Outro personagem pode ajudar você a usar o aríete, dando-lhe vantagem neste teste."
+    },
+    {
+      "id": "armadilha-de-caca",
+      "name": "Armadilha de caça",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 12,
+      "description": "Quando você usa sua ação para prepará-la, essa armadilha forma um anel com dentes de aço que se fecham quando uma criatura pisa em uma placa de pressão no seu centro. A armadilha é presa por uma corrente pesada à um objeto imóvel, como uma árvore ou um piquete encravado no chão. A criatura que pisar na placa deve ser bem-sucedida em uma salvaguarda de Destreza CD 13 ou sofrerá 1d4 pontos de dano perfurante e parará de se mover. Daí em diante, até que a criatura se liberte da armadilha, seu movimento é limitado pelo comprimento da corrente (normalmente 3 pés de comprimento). Uma criatura pode usar sua ação para fazer um teste de Força CD 10, libertando-se ou libertando outra criatura no seu alcance em caso de sucesso. Cada falha no teste causa 1 ponto de dano perfurante para a criatura aprisionada."
+    },
+    {
+      "id": "arpeu",
+      "name": "Arpéu",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 2
+    },
+    {
+      "id": "balanca-de-mercador",
+      "name": "Balança de mercador",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 1.5,
+      "description": "Uma balança de mercador inclui um pequena balança, pratos e um sortimento adequado de pesos de até 1 quilo. Com ela, você pode medir o peso exato de pequenos objetos, como metais preciosos brutos ou bens de troca, de forma a ajudar a determinar seu valor."
+    },
+    {
+      "id": "balde",
+      "name": "Balde",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PC",
+      "priceCp": 5,
+      "weight": 1
+    },
+    {
+      "id": "barril",
+      "name": "Barril",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 30
+    },
+    {
+      "id": "bau",
+      "name": "Baú",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 12
+    },
+    {
+      "id": "bolsa-de-componentes",
+      "name": "Bolsa de componentes",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 1
+    },
+    {
+      "id": "caixa-para-fogo",
+      "name": "Caixa para fogo",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PP",
+      "priceCp": 50,
+      "weight": 0.5,
+      "description": "Este pequeno recipiente contém sílica, pederneira e uma acendalha (geralmente um pano seco embebido em óleo) usados para atear fogo. Usar isto para acender uma tocha - ou qualquer coisa exposta com combustível abundante - requer uma ação. Acender qualquer outro tipo de fogo leva 1 minuto."
+    },
+    {
+      "id": "caneta-tinteiro",
+      "name": "Caneta tinteiro",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PC",
+      "priceCp": 2
+    },
+    {
+      "id": "cantil",
+      "name": "Cantil (capacidade 2 l - 2,5 kg cheio)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PP",
+      "priceCp": 20,
+      "weight": 0.5
+    },
+    {
+      "id": "cera-de-lacre",
+      "name": "Cera de lacre",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PP",
+      "priceCp": 50
+    },
+    {
+      "id": "cesta",
+      "name": "Cesta",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "4 PP",
+      "priceCp": 40,
+      "weight": 1
+    },
+    {
+      "id": "cobertor",
+      "name": "Cobertor",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PP",
+      "priceCp": 50,
+      "weight": 1.5
+    },
+    {
+      "id": "corda-de-canhamo",
+      "name": "Corda de cânhamo (50 pés)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 5
+    },
+    {
+      "id": "corda-de-seda",
+      "name": "Corda de seda (50 pés)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 2.5
+    },
+    {
+      "id": "corrente",
+      "name": "Corrente (10 pés)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 5,
+      "description": "Uma corrente tem 10 pontos de vida. Ela pode ser rompida com um teste bem-sucedido de Força CD 20."
+    },
+    {
+      "id": "equipamento-de-pesca",
+      "name": "Equipamento de pesca",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 2,
+      "description": "Este conjunto inclui uma haste de madeira, linha de seda, boias de cortiça, anzóis de aço, chumbadas, iscas de veludo e redes estreitas."
+    },
+    {
+      "id": "escada",
+      "name": "Escada (10 pés)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PP",
+      "priceCp": 10,
+      "weight": 12
+    },
+    {
+      "id": "esferas-de-metal",
+      "name": "Esferas de metal (saco com 1.000)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 1,
+      "description": "Com uma ação, você pode espalhar estas minúsculas bolas de metal da bolsa que as contém para cobrir uma área plana e quadrada que tenha 10 pés de lado. Uma criatura que se mova através da área coberta deve ser bem-sucedida em uma salvaguarda de Destreza CD 10 ou ficará caída. Uma criatura se movendo através da área com metade de seu deslocamento não precisa fazer a salvaguarda."
+    },
+    {
+      "id": "espelho-de-aco",
+      "name": "Espelho de aço",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 0.25
+    },
+    {
+      "id": "estacas-de-ferro",
+      "name": "Estacas de ferro (10)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 2.5
+    },
+    {
+      "id": "estojo-de-capsulas",
+      "name": "Estojo de Cápsulas",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "20 PO",
+      "priceCp": 2000,
+      "weight": 2
+    },
+    {
+      "id": "kit-medico",
+      "name": "Kit Médico",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 1.5,
+      "description": "Este kit é uma bolsa de couro contendo ataduras, pomadas e talas. O kit tem dez utilizações. Com uma ação, você pode gastar um uso do kit para estabilizar uma criatura com 0 pontos de vida, sem a necessidade de fazer um teste de Medicina."
+    },
+    {
+      "id": "estojo-de-escalada",
+      "name": "Estojo de escalada",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 6,
+      "description": "Um estojo de escalada inclui pitões especiais, biqueiras para botas, luvas e um cinto de segurança. Você pode usar o estojo de escalada com uma ação para ancorar-se; quando o fizer, você não pode cair mais de 25 pés a partir do ponto onde ancorou-se, e você não pode subir mais de 25 pés de distância a partir deste ponto sem desfazer a âncora."
+    },
+    {
+      "id": "estojo-de-mapa-ou-pergaminho",
+      "name": "Estojo de mapa ou pergaminho",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 0.5,
+      "description": "Este estojo de couro cilíndrico pode conter até dez folhas enroladas de papel ou até cinco folhas enroladas de pergaminho."
+    },
+    {
+      "id": "estojo-de-refeicao",
+      "name": "Estojo de refeição",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PP",
+      "priceCp": 20,
+      "weight": 0.5,
+      "description": "Esta caixa de lata contém uma caneca e talheres simples. A caixa e a tampa se encaixam, e um lado pode ser usado como uma panela para cozinhar e o outro como um prato ou uma tigela rasa."
+    },
+    {
+      "id": "estojo-de-virotes-de-besta",
+      "name": "Estojo de virotes de besta",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 0.5,
+      "description": "Este estojo de madeira pode conter até vinte virotes de besta."
+    },
+    {
+      "id": "estrepes",
+      "name": "Estrepes (saco com 20)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 1,
+      "description": "Com uma ação, você espalha um saco de estrepes para cobrir uma área quadrada de 5 pés de lado. Qualquer criatura que entre na área deve ser bem-sucedida em uma salvaguarda de Destreza CD 15 ou terminará seu movimento nesta vez e sofrerá 1 ponto de dano perfurante. Sofrer este dano reduz o deslocamento da criatura em 10 pés até que ela recupere pelo menos 1 ponto de vida. Uma criatura se movendo através da área com metade do deslocamento não faz a salvaguarda."
+    },
+    {
+      "id": "fechadura-cadeado",
+      "name": "Fechadura/ cadeado",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 0.5,
+      "description": "Uma chave é fornecida com a fechadura/ cadeado. Sem a chave, uma criatura com ferramentas de chaveiro pode abrir essa fechadura com um teste bem-sucedido de Destreza CD 15. O Mestre pode decidir que fechadura melhores estão disponíveis por preços mais altos."
+    },
+    {
+      "id": "foco-arcano-bastao",
+      "name": "Foco Arcano (Bastão)",
+      "kind": "FOCUS",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "foco-arcano"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 1,
+      "description": "Um foco arcano é um item especial – um orbe, um cristal, um bastão, um cajado especialmente construído, uma varinha - como um pedaço de madeira ou algum item semelhante – destinados a canalizar o poder de magias arcanas. Pode também ser um ramo de visco ou azevinho, uma varinha ou cetro feito de teixo ou de outra madeira especial, um cajado retirado inteiramente de uma árvore viva ou um objeto totêmico com penas, peles, ossos e dentes de animais sagrados incorporados a ele."
+    },
+    {
+      "id": "foco-arcano-cajado",
+      "name": "Foco Arcano (Cajado)",
+      "kind": "FOCUS",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "foco-arcano"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 2,
+      "description": "Um foco arcano é um item especial – um orbe, um cristal, um bastão, um cajado especialmente construído, uma varinha - como um pedaço de madeira ou algum item semelhante – destinados a canalizar o poder de magias arcanas. Pode também ser um ramo de visco ou azevinho, uma varinha ou cetro feito de teixo ou de outra madeira especial, um cajado retirado inteiramente de uma árvore viva ou um objeto totêmico com penas, peles, ossos e dentes de animais sagrados incorporados a ele."
+    },
+    {
+      "id": "foco-arcano-cristal",
+      "name": "Foco Arcano (Cristal)",
+      "kind": "FOCUS",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "foco-arcano"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 0.5,
+      "description": "Um foco arcano é um item especial – um orbe, um cristal, um bastão, um cajado especialmente construído, uma varinha - como um pedaço de madeira ou algum item semelhante – destinados a canalizar o poder de magias arcanas. Pode também ser um ramo de visco ou azevinho, uma varinha ou cetro feito de teixo ou de outra madeira especial, um cajado retirado inteiramente de uma árvore viva ou um objeto totêmico com penas, peles, ossos e dentes de animais sagrados incorporados a ele."
+    },
+    {
+      "id": "foco-arcano-orbe",
+      "name": "Foco Arcano (Orbe)",
+      "kind": "FOCUS",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "foco-arcano"
+      ],
+      "price": "20 PO",
+      "priceCp": 2000,
+      "weight": 1.5,
+      "description": "Um foco arcano é um item especial – um orbe, um cristal, um bastão, um cajado especialmente construído, uma varinha - como um pedaço de madeira ou algum item semelhante – destinados a canalizar o poder de magias arcanas. Pode também ser um ramo de visco ou azevinho, uma varinha ou cetro feito de teixo ou de outra madeira especial, um cajado retirado inteiramente de uma árvore viva ou um objeto totêmico com penas, peles, ossos e dentes de animais sagrados incorporados a ele."
+    },
+    {
+      "id": "foco-arcano-varinha",
+      "name": "Foco Arcano (Varinha)",
+      "kind": "FOCUS",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "foco-arcano"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 0.5,
+      "description": "Um foco arcano é um item especial – um orbe, um cristal, um bastão, um cajado especialmente construído, uma varinha - como um pedaço de madeira ou algum item semelhante – destinados a canalizar o poder de magias arcanas. Pode também ser um ramo de visco ou azevinho, uma varinha ou cetro feito de teixo ou de outra madeira especial, um cajado retirado inteiramente de uma árvore viva ou um objeto totêmico com penas, peles, ossos e dentes de animais sagrados incorporados a ele."
+    },
+    {
+      "id": "foco-arcano-bastao-de-madeira",
+      "name": "Foco Arcano (Bastão de madeira)",
+      "kind": "FOCUS",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "foco-arcano"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 2,
+      "description": "Um foco arcano é um item especial – um orbe, um cristal, um bastão, um cajado especialmente construído, uma varinha - como um pedaço de madeira ou algum item semelhante – destinados a canalizar o poder de magias arcanas. Pode também ser um ramo de visco ou azevinho, uma varinha ou cetro feito de teixo ou de outra madeira especial, um cajado retirado inteiramente de uma árvore viva ou um objeto totêmico com penas, peles, ossos e dentes de animais sagrados incorporados a ele."
+    },
+    {
+      "id": "foco-arcano-ramo-de-visco",
+      "name": "Foco Arcano (Ramo de visco)",
+      "kind": "FOCUS",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "foco-arcano"
+      ],
+      "price": "1 PO",
+      "priceCp": 100,
+      "description": "Um foco arcano é um item especial – um orbe, um cristal, um bastão, um cajado especialmente construído, uma varinha - como um pedaço de madeira ou algum item semelhante – destinados a canalizar o poder de magias arcanas. Pode também ser um ramo de visco ou azevinho, uma varinha ou cetro feito de teixo ou de outra madeira especial, um cajado retirado inteiramente de uma árvore viva ou um objeto totêmico com penas, peles, ossos e dentes de animais sagrados incorporados a ele."
+    },
+    {
+      "id": "foco-arcano-totem",
+      "name": "Foco Arcano (Totem)",
+      "kind": "FOCUS",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "foco-arcano"
+      ],
+      "price": "1 PO",
+      "priceCp": 100,
+      "description": "Um foco arcano é um item especial – um orbe, um cristal, um bastão, um cajado especialmente construído, uma varinha - como um pedaço de madeira ou algum item semelhante – destinados a canalizar o poder de magias arcanas. Pode também ser um ramo de visco ou azevinho, uma varinha ou cetro feito de teixo ou de outra madeira especial, um cajado retirado inteiramente de uma árvore viva ou um objeto totêmico com penas, peles, ossos e dentes de animais sagrados incorporados a ele."
+    },
+    {
+      "id": "foco-arcano-varinha-de-teixo",
+      "name": "Foco Arcano (Varinha de teixo)",
+      "kind": "FOCUS",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "foco-arcano"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 0.5,
+      "description": "Um foco arcano é um item especial – um orbe, um cristal, um bastão, um cajado especialmente construído, uma varinha - como um pedaço de madeira ou algum item semelhante – destinados a canalizar o poder de magias arcanas. Pode também ser um ramo de visco ou azevinho, uma varinha ou cetro feito de teixo ou de outra madeira especial, um cajado retirado inteiramente de uma árvore viva ou um objeto totêmico com penas, peles, ossos e dentes de animais sagrados incorporados a ele."
+    },
+    {
+      "id": "frasco-de-vidro",
+      "name": "Frasco de vidro",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PO",
+      "priceCp": 100
+    },
+    {
+      "id": "frasco-ou-caneca",
+      "name": "Frasco ou caneca",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PC",
+      "priceCp": 2,
+      "weight": 0.5
+    },
+    {
+      "id": "garrafa-de-vidro",
+      "name": "Garrafa de vidro",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 2.5
+    },
+    {
+      "id": "giz",
+      "name": "Giz (1 pedaço)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PC",
+      "priceCp": 1
+    },
+    {
+      "id": "jarro-ou-anfora",
+      "name": "Jarro ou ânfora",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PC",
+      "priceCp": 2,
+      "weight": 2
+    },
+    {
+      "id": "lanterna",
+      "name": "Lanterna",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PP",
+      "priceCp": 50,
+      "weight": 0.5,
+      "description": "Uma lanterna lança luz plena em uma área de 15 pés de raio e penumbra por mais 30 pés. Uma vez acesa, ela queima por 6 horas em um frasco (0,5 litro) de óleo."
+    },
+    {
+      "id": "lanterna-coberta",
+      "name": "Lanterna coberta",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 1,
+      "description": "Uma lanterna coberta lança luz plena em uma área de 30 pés de raio e penumbra por mais 30 pés. Uma vez acesa, ela queima por 6 horas em um frasco (0,5 litro) de óleo. Com uma ação, você pode baixar a capa da lanterna, reduzindo a luz para penumbra em uma área de 5 pés de raio."
+    },
+    {
+      "id": "lanterna-foca-facho",
+      "name": "Lanterna Foca-facho",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 1,
+      "description": "Uma lanterna focada lança luz plena em um cone de 60 pés e penumbra por mais 60 pés. Uma vez acesa, ela queima por 6 horas em um frasco (0,5 litro) de óleo."
+    },
+    {
+      "id": "livro",
+      "name": "Livro",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 2.5,
+      "description": "Um livro pode conter poesia, relatos históricos, informações referentes a um determinado campo de conhecimento, diagramas e notas sobre engenhocas dos gnomos, ou apenas sobre quaisquer outras coisas que possam ser representadas usando texto ou imagens. Um livro que contém feitiços, é um livro de magias (descrito mais adiante nesta seção)."
+    },
+    {
+      "id": "livro-de-magia-grimorio",
+      "name": "Livro de magia/Grimório",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "50 PO",
+      "priceCp": 5000,
+      "weight": 1.5
+    },
+    {
+      "id": "luneta",
+      "name": "Luneta",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1000 PO",
+      "priceCp": 100000,
+      "weight": 0.5,
+      "description": "Objetos vistos através de uma luneta são ampliados até duas vezes o seu tamanho."
+    },
+    {
+      "id": "lupa",
+      "name": "Lupa",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "100 PO",
+      "priceCp": 10000,
+      "description": "Esta lente permite um olhar mais próximo sobre pequenos objetos. Ela também é útil como um substituto para a pederneira e isqueiro ao atear fogo. Acender um fogo com uma lupa requer uma luz brilhante como a luz do sol para fazer foco, um material inflamável para queimar e cerca de 5 minutos para o fogo pegar. Uma lupa concede vantagem em qualquer teste de Atributo feito para avaliar ou inspecionar um item que seja pequeno ou altamente detalhado."
+    },
+    {
+      "id": "marreta",
+      "name": "Marreta",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 5
+    },
+    {
+      "id": "martelo",
+      "name": "Martelo",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 1.5
+    },
+    {
+      "id": "mochila",
+      "name": "Mochila",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "20 PO",
+      "priceCp": 2000,
+      "weight": 2.5
+    },
+    {
+      "id": "balas-de-funda",
+      "name": "Balas de funda (20)",
+      "kind": "AMMUNITION",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "municao"
+      ],
+      "quantity": 20,
+      "price": "4 PC",
+      "priceCp": 4,
+      "weight": 0.75
+    },
+    {
+      "id": "dardos-de-zarabatana",
+      "name": "Dardos de zarabatana (50)",
+      "kind": "AMMUNITION",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "municao"
+      ],
+      "quantity": 50,
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 0.5
+    },
+    {
+      "id": "flechas",
+      "name": "Flechas (20)",
+      "kind": "AMMUNITION",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "municao"
+      ],
+      "quantity": 20,
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 0.5
+    },
+    {
+      "id": "virotes-de-besta",
+      "name": "Virotes de besta (20)",
+      "kind": "AMMUNITION",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "municao"
+      ],
+      "quantity": 20,
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 0.5
+    },
+    {
+      "id": "oleo",
+      "name": "Óleo (frasco)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PP",
+      "priceCp": 10,
+      "weight": 0.5,
+      "description": "Óleo geralmente vem em um frasco de argila que contém 0,5 litro. Com uma ação, você pode espalhar o conteúdo deste frasco em uma criatura dentro de 5 pés do seu alcance ou arremessar o frasco a até 20 pés, quebrando-o com o impacto. Faça um ataque à distância contra uma criatura ou objeto, tratando o óleo como uma arma improvisada. Em um acerto, o alvo está coberto de óleo. Se o alvo sofrer qualquer dano ígneo antes do óleo secar (após 1 minuto), ele sofre 5 pontos de dano ígneo por causa do óleo fervente. Você também pode derramar um frasco de óleo no chão para cobrir uma área de 5 pés quadrados, desde que a superfície seja nivelada. Se incendiar, o óleo queima durante 2 rodadas e causa 5 pontos de dano ígneo à qualquer criatura que entre na área ou termine sua vez nela. Uma criatura pode sofrer este dano em apenas uma ocasião durante sua vez."
+    },
+    {
+      "id": "pa",
+      "name": "Pá",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 2.5
+    },
+    {
+      "id": "panela-de-ferro",
+      "name": "Panela de ferro",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 5
+    },
+    {
+      "id": "papel",
+      "name": "Papel (1 folha)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PP",
+      "priceCp": 20
+    },
+    {
+      "id": "pe-de-cabra",
+      "name": "Pé-de-cabra",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 2.5,
+      "description": "Usar um pé-de-cabra concede vantagem para testes de Força onde a alavancagem do pé-de-cabra possa ser aplicada."
+    },
+    {
+      "id": "pedra-de-amolar",
+      "name": "Pedra de amolar",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PC",
+      "priceCp": 1,
+      "weight": 0.5
+    },
+    {
+      "id": "perfume",
+      "name": "Perfume (frasco)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PO",
+      "priceCp": 500
+    },
+    {
+      "id": "pergaminho",
+      "name": "Pergaminho (1 folha)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PP",
+      "priceCp": 10
+    },
+    {
+      "id": "picareta-de-mineiro",
+      "name": "Picareta de mineiro",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 5
+    },
+    {
+      "id": "pirofluido",
+      "name": "Pirofluido",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "50 PO",
+      "priceCp": 5000,
+      "weight": 0.5,
+      "description": "Este fluido pegajoso e adesivo inflama quando exposto ao ar. Com uma ação, você pode jogar este frasco a até 20 pés, quebrando-o no impacto. Faça um ataque à distância contra uma criatura ou objeto, tratando o pirofluido como uma arma improvisada. Em um acerto, o alvo sofre 1d4 de dano ígneo e fica Chamuscado recebendo o mesmo dano por turno."
+    },
+    {
+      "id": "pitao",
+      "name": "Pítão",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PC",
+      "priceCp": 5,
+      "weight": 0.125
+    },
+    {
+      "id": "pocao-de-cura",
+      "name": "Poção de cura",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "50 PO",
+      "priceCp": 5000,
+      "weight": 0.25,
+      "description": "Um personagem que beba o fluido mágico vermelho deste frasco recupera 2d4+2 pontos de vida. Beber ou administrar uma poção requer uma ação."
+    },
+    {
+      "id": "racoes",
+      "name": "Rações (1 dia)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PC",
+      "priceCp": 5,
+      "weight": 1,
+      "description": "Rações consistem em alimentos secos adequados para viagens longas, incluindo charque, frutas secas, biscoito seco e nozes."
+    },
+    {
+      "id": "roldana-polia",
+      "name": "Roldana/ Polia",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PC",
+      "priceCp": 1,
+      "weight": 2.5
+    },
+    {
+      "id": "roupas-comuns",
+      "name": "Roupas (comuns)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PP",
+      "priceCp": 50,
+      "weight": 1.5
+    },
+    {
+      "id": "roupas-fantasia",
+      "name": "Roupas (fantasia)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 2
+    },
+    {
+      "id": "roupas-finas",
+      "name": "Roupas (finas)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "15 PO",
+      "priceCp": 1500,
+      "weight": 3
+    },
+    {
+      "id": "roupas-viagem",
+      "name": "Roupas (viagem)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 2
+    },
+    {
+      "id": "sabao",
+      "name": "Sabão",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PO",
+      "priceCp": 200
+    },
+    {
+      "id": "saca",
+      "name": "Saca",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 0.25
+    },
+    {
+      "id": "saco-de-dormir",
+      "name": "Saco de dormir",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 3.5
+    },
+    {
+      "id": "simbolo-sagrado-amuleto",
+      "name": "Símbolo Sagrado (Amuleto)",
+      "kind": "FOCUS",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "simbolo-sagrado"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 0.5,
+      "description": "Um símbolo sagrado é uma representação de um deus ou panteão. Ele pode ser um amuleto representando um símbolo de uma divindade, o mesmo símbolo cuidadosamente gravado ou entalhado como um emblema em um escudo ou uma pequena caixa contendo um fragmento de uma relíquia sagrada. Um acólito pode usar um símbolo sagrado como foco de conjuração. Para usar o símbolo desta forma, o conjurador deve segurá-lo na mão, usá-lo de forma visível ou portá-lo em um escudo."
+    },
+    {
+      "id": "simbolo-sagrado-emblema",
+      "name": "Símbolo Sagrado (Emblema)",
+      "kind": "FOCUS",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "simbolo-sagrado"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "description": "Um símbolo sagrado é uma representação de um deus ou panteão. Ele pode ser um amuleto representando um símbolo de uma divindade, o mesmo símbolo cuidadosamente gravado ou entalhado como um emblema em um escudo ou uma pequena caixa contendo um fragmento de uma relíquia sagrada. Um acólito pode usar um símbolo sagrado como foco de conjuração. Para usar o símbolo desta forma, o conjurador deve segurá-lo na mão, usá-lo de forma visível ou portá-lo em um escudo."
+    },
+    {
+      "id": "simbolo-sagrado-relicario",
+      "name": "Símbolo Sagrado (Relicário)",
+      "kind": "FOCUS",
+      "category": "Equipamento de Aventureiro",
+      "groups": [
+        "simbolo-sagrado"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 1,
+      "description": "Um símbolo sagrado é uma representação de um deus ou panteão. Ele pode ser um amuleto representando um símbolo de uma divindade, o mesmo símbolo cuidadosamente gravado ou entalhado como um emblema em um escudo ou uma pequena caixa contendo um fragmento de uma relíquia sagrada. Um acólito pode usar um símbolo sagrado como foco de conjuração. Para usar o símbolo desta forma, o conjurador deve segurá-lo na mão, usá-lo de forma visível ou portá-lo em um escudo."
+    },
+    {
+      "id": "sino",
+      "name": "Sino",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PO",
+      "priceCp": 100
+    },
+    {
+      "id": "tenda",
+      "name": "Tenda (para duas pessoas)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 10,
+      "description": "Um abrigo de lona simples e portátil, em uma tenda podem dormir duas pessoas."
+    },
+    {
+      "id": "tinta",
+      "name": "Tinta (frasco com 30 ml)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "10 PO",
+      "priceCp": 1000
+    },
+    {
+      "id": "tocha",
+      "name": "Tocha",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PC",
+      "priceCp": 1,
+      "weight": 0.5,
+      "description": "Uma tocha queima durante 1 hora, fornecendo luz plena em um raio de 20 pés e penumbra por mais 20 pés. Se você fizer um ataque corpo a corpo com uma tocha acesa e acertar, ela causa 1 ponto de dano ígneo."
+    },
+    {
+      "id": "tunica",
+      "name": "Túnica",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 2
+    },
+    {
+      "id": "vara",
+      "name": "Vara (10 pés)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "5 PC",
+      "priceCp": 5,
+      "weight": 3.5
+    },
+    {
+      "id": "vela",
+      "name": "Vela",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "1 PC",
+      "priceCp": 1,
+      "description": "Durante 1 hora, uma vela lança luz plena em um raio de 5 pés e penumbra para mais 5 pés."
+    },
+    {
+      "id": "veneno-basico",
+      "name": "Veneno básico (frasco)",
+      "kind": "GEAR",
+      "category": "Equipamento de Aventureiro",
+      "price": "100 PO",
+      "priceCp": 10000,
+      "description": "Você pode usar o veneno deste frasco para revestir uma arma cortante ou perfurante ou até três peças de munição. Aplicar o veneno requer uma ação. Uma criatura atingida por uma arma ou munição envenenada deve fazer uma salvaguarda de Constituição CD 10 ou sofrerá 1d4 de dano venenoso. Uma vez aplicado, o veneno mantém seu efeito durante 1 minuto antes de secar."
+    },
+    {
+      "id": "conjunto-de-alquimista",
+      "name": "Conjunto de Alquimista",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "50 PO",
+      "priceCp": 5000,
+      "weight": 4
+    },
+    {
+      "id": "conjunto-de-apotecario",
+      "name": "Conjunto de Apotecário",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 1.5
+    },
+    {
+      "id": "conjunto-de-armeiro",
+      "name": "Conjunto de Armeiro",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "50 PO",
+      "priceCp": 5000,
+      "weight": 5
+    },
+    {
+      "id": "conjunto-de-armoreiro",
+      "name": "Conjunto de Armoreiro",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "20 PO",
+      "priceCp": 2000,
+      "weight": 4
+    },
+    {
+      "id": "conjunto-de-arqueirista",
+      "name": "Conjunto de Arqueirista",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 2.5
+    },
+    {
+      "id": "conjunto-de-chaveiro",
+      "name": "Conjunto de Chaveiro",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 0.5
+    },
+    {
+      "id": "conjunto-de-cozinheiro",
+      "name": "Conjunto de Cozinheiro",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 4
+    },
+    {
+      "id": "conjunto-de-cuteleiro",
+      "name": "Conjunto de Cuteleiro",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "20 PO",
+      "priceCp": 2000,
+      "weight": 4
+    },
+    {
+      "id": "conjunto-de-encantador",
+      "name": "Conjunto de Encantador",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "50 PO",
+      "priceCp": 5000,
+      "weight": 5
+    },
+    {
+      "id": "conjunto-de-encarrocador",
+      "name": "Conjunto de Encarroçador",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 5
+    },
+    {
+      "id": "conjunto-de-fermentador",
+      "name": "Conjunto de Fermentador",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "15 PO",
+      "priceCp": 1500,
+      "weight": 5
+    },
+    {
+      "id": "conjunto-de-joalheiro",
+      "name": "Conjunto de Joalheiro",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "50 PO",
+      "priceCp": 5000,
+      "weight": 2.5
+    },
+    {
+      "id": "conjunto-de-modista",
+      "name": "Conjunto de Modista",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 2.5
+    },
+    {
+      "id": "conjunto-de-pedreiro",
+      "name": "Conjunto de Pedreiro",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 4
+    },
+    {
+      "id": "conjunto-de-tecmaturgo",
+      "name": "Conjunto de Tecmaturgo",
+      "kind": "TOOLS",
+      "category": "Conjuntos de Ofícios Maiores",
+      "groups": [
+        "conjunto-de-oficio"
+      ],
+      "price": "50 PO",
+      "priceCp": 5000,
+      "weight": 5
+    },
+    {
+      "id": "conjunto-de-carpinteiro",
+      "name": "»Conjunto de Carpinteiro",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-artesanato"
+      ],
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 4
+    },
+    {
+      "id": "conjunto-de-escultor",
+      "name": "»Conjunto de Escultor",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-artesanato"
+      ],
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 2.5
+    },
+    {
+      "id": "conjunto-de-instrumentador-musical",
+      "name": "»Conjunto de Instrumentador Musical",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-artesanato"
+      ],
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 2.5
+    },
+    {
+      "id": "conjunto-de-oleiro",
+      "name": "»Conjunto de Oleiro",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-artesanato"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 1.5
+    },
+    {
+      "id": "conjunto-de-vidreiro",
+      "name": "»Conjunto de Vidreiro",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-artesanato"
+      ],
+      "price": "30 PO",
+      "priceCp": 3000,
+      "weight": 25
+    },
+    {
+      "id": "conjunto-de-maquiador",
+      "name": "»Conjunto de Maquiador",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-artista"
+      ],
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 1.5
+    },
+    {
+      "id": "conjunto-de-pintor",
+      "name": "»Conjunto de Pintor",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-artista"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 2.5
+    },
+    {
+      "id": "conjunto-de-musico",
+      "name": "»Conjunto de Músico",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-artista"
+      ],
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 1
+    },
+    {
+      "id": "conjunto-de-tatuador",
+      "name": "»Conjunto de Tatuador",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-artista"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 2.5
+    },
+    {
+      "id": "conjunto-de-escriba",
+      "name": "»Conjunto de Escriba",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-artista"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 2.5
+    },
+    {
+      "id": "conjunto-de-biologista",
+      "name": "»Conjunto de Biologista",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-coletor"
+      ],
+      "price": "15 PO",
+      "priceCp": 1500,
+      "weight": 2.5
+    },
+    {
+      "id": "conjunto-de-curtidor",
+      "name": "»Conjunto de Curtidor",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-coletor"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 2.5
+    },
+    {
+      "id": "conjunto-de-lenhador",
+      "name": "»Conjunto de Lenhador",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-coletor"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 5
+    },
+    {
+      "id": "conjunto-de-minerador",
+      "name": "»Conjunto de Minerador",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-coletor"
+      ],
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 5
+    },
+    {
+      "id": "conjunto-de-cartografo",
+      "name": "»Conjunto de Cartógrafo",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-guia"
+      ],
+      "price": "15 PO",
+      "priceCp": 1500,
+      "weight": 3
+    },
+    {
+      "id": "conjunto-de-navegador",
+      "name": "»Conjunto de Navegador",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-guia"
+      ],
+      "price": "15 PO",
+      "priceCp": 1500
+    },
+    {
+      "id": "conjunto-de-piloto",
+      "name": "»Conjunto de Piloto",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-guia"
+      ],
+      "price": "15 PO",
+      "priceCp": 1500,
+      "weight": 3
+    },
+    {
+      "id": "conjunto-de-falsificador-de-itens-magicos",
+      "name": "»Conjunto de Falsificador de Itens Mágicos",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-falsificador"
+      ],
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 5
+    },
+    {
+      "id": "conjunto-de-falsificador-de-arte",
+      "name": "»Conjunto de Falsificador de Arte",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-falsificador"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 2.5
+    },
+    {
+      "id": "conjunto-de-falsificador-de-joias",
+      "name": "»Conjunto de Falsificador de Joias",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-falsificador"
+      ],
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 2.5
+    },
+    {
+      "id": "conjunto-de-falsificador-de-livros",
+      "name": "»Conjunto de Falsificador de Livros",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-falsificador"
+      ],
+      "price": "15 PO",
+      "priceCp": 1500,
+      "weight": 5
+    },
+    {
+      "id": "conjunto-de-falsificador-de-quimicos",
+      "name": "»Conjunto de Falsificador de Químicos",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-falsificador"
+      ],
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 5
+    },
+    {
+      "id": "contapedras",
+      "name": "»Contapedras",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-jogador"
+      ],
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 0.5
+    },
+    {
+      "id": "baralho",
+      "name": "»Baralho",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-jogador"
+      ],
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 0.5
+    },
+    {
+      "id": "xadrez",
+      "name": "»Xadrez",
+      "kind": "TOOLS",
+      "category": "Conjunto de Ofícios Menores",
+      "groups": [
+        "conjunto-de-oficio",
+        "conjunto-de-jogador"
+      ],
+      "price": "1 PO",
+      "priceCp": 100,
+      "weight": 0.5
+    },
+    {
+      "id": "alaude",
+      "name": "Alaúde",
+      "kind": "INSTRUMENT",
+      "category": "Instrumentos Musicais",
+      "groups": [
+        "instrumento-musical"
+      ],
+      "price": "35 PO",
+      "priceCp": 3500,
+      "weight": 1
+    },
+    {
+      "id": "flauta",
+      "name": "Flauta",
+      "kind": "INSTRUMENT",
+      "category": "Instrumentos Musicais",
+      "groups": [
+        "instrumento-musical"
+      ],
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 0.5
+    },
+    {
+      "id": "flauta-de-pan",
+      "name": "Flauta de Pan",
+      "kind": "INSTRUMENT",
+      "category": "Instrumentos Musicais",
+      "groups": [
+        "instrumento-musical"
+      ],
+      "price": "12 PO",
+      "priceCp": 1200,
+      "weight": 1
+    },
+    {
+      "id": "gaita-de-foles",
+      "name": "Gaita de Foles",
+      "kind": "INSTRUMENT",
+      "category": "Instrumentos Musicais",
+      "groups": [
+        "instrumento-musical"
+      ],
+      "price": "30 PO",
+      "priceCp": 3000,
+      "weight": 3
+    },
+    {
+      "id": "guitarra-eletrica-zaun",
+      "name": "Guitarra Elétrica (Zaun)",
+      "kind": "INSTRUMENT",
+      "category": "Instrumentos Musicais",
+      "groups": [
+        "instrumento-musical"
+      ],
+      "price": "120 PO",
+      "priceCp": 12000,
+      "weight": 4
+    },
+    {
+      "id": "lira",
+      "name": "Lira",
+      "kind": "INSTRUMENT",
+      "category": "Instrumentos Musicais",
+      "groups": [
+        "instrumento-musical"
+      ],
+      "price": "30 PO",
+      "priceCp": 3000,
+      "weight": 1
+    },
+    {
+      "id": "oboe",
+      "name": "Oboé",
+      "kind": "INSTRUMENT",
+      "category": "Instrumentos Musicais",
+      "groups": [
+        "instrumento-musical"
+      ],
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 0.5
+    },
+    {
+      "id": "tambor",
+      "name": "Tambor",
+      "kind": "INSTRUMENT",
+      "category": "Instrumentos Musicais",
+      "groups": [
+        "instrumento-musical"
+      ],
+      "price": "6 PO",
+      "priceCp": 600,
+      "weight": 1.5
+    },
+    {
+      "id": "trombeta",
+      "name": "Trombeta",
+      "kind": "INSTRUMENT",
+      "category": "Instrumentos Musicais",
+      "groups": [
+        "instrumento-musical"
+      ],
+      "price": "3 PO",
+      "priceCp": 300,
+      "weight": 1
+    },
+    {
+      "id": "violao",
+      "name": "Violão",
+      "kind": "INSTRUMENT",
+      "category": "Instrumentos Musicais",
+      "groups": [
+        "instrumento-musical"
+      ],
+      "price": "45 PO",
+      "priceCp": 4500,
+      "weight": 3
+    },
+    {
+      "id": "violino",
+      "name": "Violino",
+      "kind": "INSTRUMENT",
+      "category": "Instrumentos Musicais",
+      "groups": [
+        "instrumento-musical"
+      ],
+      "price": "30 PO",
+      "priceCp": 3000,
+      "weight": 0.5
+    },
+    {
+      "id": "xilofone",
+      "name": "Xilofone",
+      "kind": "INSTRUMENT",
+      "category": "Instrumentos Musicais",
+      "groups": [
+        "instrumento-musical"
+      ],
+      "price": "25 PO",
+      "priceCp": 2500,
+      "weight": 5
+    },
+    {
+      "id": "burro-ou-mula",
+      "name": "Burro ou mula",
+      "kind": "MOUNT",
+      "category": "Montarias e Outros Animais",
+      "groups": [
+        "montaria"
+      ],
+      "price": "8 PO",
+      "priceCp": 800,
+      "speed": "40 pés",
+      "capacity": "Até 210 kg"
+    },
+    {
+      "id": "camelo",
+      "name": "Camelo",
+      "kind": "MOUNT",
+      "category": "Montarias e Outros Animais",
+      "groups": [
+        "montaria"
+      ],
+      "price": "50 PO",
+      "priceCp": 5000,
+      "speed": "50 pés",
+      "capacity": "Até 210 kg"
+    },
+    {
+      "id": "cavalo-de-carga",
+      "name": "Cavalo de carga",
+      "kind": "MOUNT",
+      "category": "Montarias e Outros Animais",
+      "groups": [
+        "montaria"
+      ],
+      "price": "50 PO",
+      "priceCp": 5000,
+      "speed": "40 pés",
+      "capacity": "Até 240 kg"
+    },
+    {
+      "id": "cavalo-de-guerra",
+      "name": "Cavalo de guerra",
+      "kind": "MOUNT",
+      "category": "Montarias e Outros Animais",
+      "groups": [
+        "montaria"
+      ],
+      "price": "400 PO",
+      "priceCp": 40000,
+      "speed": "60 pés",
+      "capacity": "Até 255 kg"
+    },
+    {
+      "id": "cavalo-de-montaria",
+      "name": "Cavalo de montaria",
+      "kind": "MOUNT",
+      "category": "Montarias e Outros Animais",
+      "groups": [
+        "montaria"
+      ],
+      "price": "75 PO",
+      "priceCp": 7500,
+      "speed": "60 pés",
+      "capacity": "Até 225 kg"
+    },
+    {
+      "id": "cavalo-selvagem",
+      "name": "Cavalo Selvagem",
+      "kind": "MOUNT",
+      "category": "Montarias e Outros Animais",
+      "groups": [
+        "montaria"
+      ],
+      "speed": "60 pés",
+      "capacity": "Até 225 kg"
+    },
+    {
+      "id": "cavalo-demaciano",
+      "name": "Cavalo Demaciano",
+      "kind": "MOUNT",
+      "category": "Montarias e Outros Animais",
+      "groups": [
+        "montaria"
+      ],
+      "price": "500 PO",
+      "priceCp": 50000,
+      "speed": "60 pés",
+      "capacity": "Até 255 kg"
+    },
+    {
+      "id": "cavalo-do-mar",
+      "name": "Cavalo do Mar",
+      "kind": "MOUNT",
+      "category": "Montarias e Outros Animais",
+      "groups": [
+        "montaria"
+      ],
+      "price": "450 PO",
+      "priceCp": 45000,
+      "speed": "60 pés",
+      "capacity": "Até 255 kg"
+    },
+    {
+      "id": "elefante",
+      "name": "Elefante",
+      "kind": "MOUNT",
+      "category": "Montarias e Outros Animais",
+      "groups": [
+        "montaria"
+      ],
+      "price": "300 PO",
+      "priceCp": 30000,
+      "speed": "40 pés",
+      "capacity": "Até 480 kg"
+    },
+    {
+      "id": "elefante-de-guerra",
+      "name": "Elefante de Guerra",
+      "kind": "MOUNT",
+      "category": "Montarias e Outros Animais",
+      "groups": [
+        "montaria"
+      ],
+      "price": "600 PO",
+      "priceCp": 60000,
+      "speed": "50 pés",
+      "capacity": "Até 600 kg"
+    },
+    {
+      "id": "elkin",
+      "name": "Elkin",
+      "kind": "MOUNT",
+      "category": "Montarias e Outros Animais",
+      "groups": [
+        "montaria"
+      ],
+      "price": "100 PO",
+      "priceCp": 10000,
+      "speed": "70 pés",
+      "capacity": "Até 180 kg"
+    },
+    {
+      "id": "presafera",
+      "name": "Presafera",
+      "kind": "MOUNT",
+      "category": "Montarias e Outros Animais",
+      "groups": [
+        "montaria"
+      ],
+      "price": "1000 PO",
+      "priceCp": 100000,
+      "speed": "60 pés",
+      "capacity": "Até 540 kg"
+    },
+    {
+      "id": "barco-a-remo",
+      "name": "Barco a remo",
+      "kind": "VEHICLE",
+      "category": "Veículos Aquáticos",
+      "groups": [
+        "veiculo-aquatico"
+      ],
+      "price": "50 PO",
+      "priceCp": 5000,
+      "speed": "2,4 km/h"
+    },
+    {
+      "id": "barco-de-quilha",
+      "name": "Barco de quilha",
+      "kind": "VEHICLE",
+      "category": "Veículos Aquáticos",
+      "groups": [
+        "veiculo-aquatico"
+      ],
+      "price": "3000 PO",
+      "priceCp": 300000,
+      "speed": "1,6 km/h"
+    },
+    {
+      "id": "dracar",
+      "name": "Dracar",
+      "kind": "VEHICLE",
+      "category": "Veículos Aquáticos",
+      "groups": [
+        "veiculo-aquatico"
+      ],
+      "price": "10000 PO",
+      "priceCp": 1000000,
+      "speed": "4,8 km/h"
+    },
+    {
+      "id": "galera",
+      "name": "Galera",
+      "kind": "VEHICLE",
+      "category": "Veículos Aquáticos",
+      "groups": [
+        "veiculo-aquatico"
+      ],
+      "price": "30000 PO",
+      "priceCp": 3000000,
+      "speed": "6,5 km/h"
+    },
+    {
+      "id": "navio-de-guerra",
+      "name": "Navio de guerra",
+      "kind": "VEHICLE",
+      "category": "Veículos Aquáticos",
+      "groups": [
+        "veiculo-aquatico"
+      ],
+      "price": "25000 PO",
+      "priceCp": 2500000,
+      "speed": "4 km/h"
+    },
+    {
+      "id": "veleiro",
+      "name": "Veleiro",
+      "kind": "VEHICLE",
+      "category": "Veículos Aquáticos",
+      "groups": [
+        "veiculo-aquatico"
+      ],
+      "price": "10000 PO",
+      "priceCp": 1000000,
+      "speed": "3,2 km/h"
+    },
+    {
+      "id": "alforjes",
+      "name": "Alforjes",
+      "kind": "TACK",
+      "category": "Arreios, Arneses e Veículos de Tração",
+      "price": "4 PO",
+      "priceCp": 400,
+      "weight": 4
+    },
+    {
+      "id": "biga",
+      "name": "Biga",
+      "kind": "TACK",
+      "category": "Arreios, Arneses e Veículos de Tração",
+      "price": "250 PO",
+      "priceCp": 25000,
+      "weight": 50
+    },
+    {
+      "id": "carroca",
+      "name": "Carroça",
+      "kind": "TACK",
+      "category": "Arreios, Arneses e Veículos de Tração",
+      "price": "15 PO",
+      "priceCp": 1500,
+      "weight": 100
+    },
+    {
+      "id": "carruagem",
+      "name": "Carruagem",
+      "kind": "TACK",
+      "category": "Arreios, Arneses e Veículos de Tração",
+      "price": "100 PO",
+      "priceCp": 10000,
+      "weight": 300
+    },
+    {
+      "id": "redea-e-freio",
+      "name": "Rédea e freio",
+      "kind": "TACK",
+      "category": "Arreios, Arneses e Veículos de Tração",
+      "price": "2 PO",
+      "priceCp": 200,
+      "weight": 0.5
+    },
+    {
+      "id": "sela-compacta",
+      "name": "Sela (Compacta)",
+      "kind": "TACK",
+      "category": "Arreios, Arneses e Veículos de Tração",
+      "price": "5 PO",
+      "priceCp": 500,
+      "weight": 7.5
+    },
+    {
+      "id": "sela-exotica",
+      "name": "Sela (Exótica)",
+      "kind": "TACK",
+      "category": "Arreios, Arneses e Veículos de Tração",
+      "price": "60 PO",
+      "priceCp": 6000,
+      "weight": 20
+    },
+    {
+      "id": "sela-militar",
+      "name": "Sela (Militar)",
+      "kind": "TACK",
+      "category": "Arreios, Arneses e Veículos de Tração",
+      "price": "20 PO",
+      "priceCp": 2000,
+      "weight": 20
+    },
+    {
+      "id": "sela-viagem",
+      "name": "Sela (Viagem)",
+      "kind": "TACK",
+      "category": "Arreios, Arneses e Veículos de Tração",
+      "price": "10 PO",
+      "priceCp": 1000,
+      "weight": 12
+    },
+    {
+      "id": "treno",
+      "name": "Trenó",
+      "kind": "TACK",
+      "category": "Arreios, Arneses e Veículos de Tração",
+      "price": "20 PO",
+      "priceCp": 2000,
+      "weight": 150
+    },
+    {
+      "id": "vagao",
+      "name": "Vagão",
+      "kind": "TACK",
+      "category": "Arreios, Arneses e Veículos de Tração",
+      "price": "35 PO",
+      "priceCp": 3500,
+      "weight": 200
+    },
+    {
+      "id": "conjunto-de-artista",
+      "name": "Conjunto de Artista",
+      "kind": "PACK",
+      "category": "Conjuntos de Equipamento",
+      "groups": [
+        "conjunto-de-equipamento"
+      ],
+      "price": "40 PO",
+      "priceCp": 4000,
+      "contents": [
+        {
+          "item": "mochila",
+          "quantity": 1
+        },
+        {
+          "item": "saco-de-dormir",
+          "quantity": 1
+        },
+        {
+          "item": "roupas-fantasia",
+          "quantity": 2
+        },
+        {
+          "item": "vela",
+          "quantity": 5
+        },
+        {
+          "item": "racoes",
+          "quantity": 5
+        },
+        {
+          "item": "cantil",
+          "quantity": 1
+        },
+        {
+          "name": "Estojo de maquiagem",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "conjunto-de-assaltante",
+      "name": "Conjunto de Assaltante",
+      "kind": "PACK",
+      "category": "Conjuntos de Equipamento",
+      "groups": [
+        "conjunto-de-equipamento"
+      ],
+      "price": "16 PO",
+      "priceCp": 1600,
+      "contents": [
+        {
+          "item": "mochila",
+          "quantity": 1
+        },
+        {
+          "item": "esferas-de-metal",
+          "quantity": 1
+        },
+        {
+          "name": "Fio (3 pés)",
+          "quantity": 1
+        },
+        {
+          "item": "sino",
+          "quantity": 1
+        },
+        {
+          "item": "vela",
+          "quantity": 5
+        },
+        {
+          "item": "pe-de-cabra",
+          "quantity": 1
+        },
+        {
+          "item": "martelo",
+          "quantity": 1
+        },
+        {
+          "item": "pitao",
+          "quantity": 10
+        },
+        {
+          "item": "lanterna-coberta",
+          "quantity": 1
+        },
+        {
+          "item": "oleo",
+          "quantity": 2
+        },
+        {
+          "item": "racoes",
+          "quantity": 5
+        },
+        {
+          "item": "caixa-para-fogo",
+          "quantity": 1
+        },
+        {
+          "item": "cantil",
+          "quantity": 1
+        },
+        {
+          "item": "corda-de-canhamo",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "conjunto-de-aventureiro",
+      "name": "Conjunto de Aventureiro",
+      "kind": "PACK",
+      "category": "Conjuntos de Equipamento",
+      "groups": [
+        "conjunto-de-equipamento"
+      ],
+      "price": "10 PO",
+      "priceCp": 1000,
+      "contents": [
+        {
+          "item": "mochila",
+          "quantity": 1
+        },
+        {
+          "item": "saco-de-dormir",
+          "quantity": 1
+        },
+        {
+          "item": "estojo-de-refeicao",
+          "quantity": 1
+        },
+        {
+          "item": "caixa-para-fogo",
+          "quantity": 1
+        },
+        {
+          "item": "tocha",
+          "quantity": 10
+        },
+        {
+          "item": "racoes",
+          "quantity": 10
+        },
+        {
+          "item": "cantil",
+          "quantity": 1
+        },
+        {
+          "item": "corda-de-canhamo",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "conjunto-de-diplomata",
+      "name": "Conjunto de Diplomata",
+      "kind": "PACK",
+      "category": "Conjuntos de Equipamento",
+      "groups": [
+        "conjunto-de-equipamento"
+      ],
+      "price": "39 PO",
+      "priceCp": 3900,
+      "contents": [
+        {
+          "item": "bau",
+          "quantity": 1
+        },
+        {
+          "item": "estojo-de-mapa-ou-pergaminho",
+          "quantity": 2
+        },
+        {
+          "item": "roupas-finas",
+          "quantity": 1
+        },
+        {
+          "item": "tinta",
+          "quantity": 1
+        },
+        {
+          "item": "caneta-tinteiro",
+          "quantity": 1
+        },
+        {
+          "item": "lanterna",
+          "quantity": 1
+        },
+        {
+          "item": "oleo",
+          "quantity": 2
+        },
+        {
+          "item": "papel",
+          "quantity": 5
+        },
+        {
+          "item": "perfume",
+          "quantity": 1
+        },
+        {
+          "item": "cera-de-lacre",
+          "quantity": 1
+        },
+        {
+          "item": "sabao",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "conjunto-de-erudito",
+      "name": "Conjunto de Erudito",
+      "kind": "PACK",
+      "category": "Conjuntos de Equipamento",
+      "groups": [
+        "conjunto-de-equipamento"
+      ],
+      "price": "40 PO",
+      "priceCp": 4000,
+      "contents": [
+        {
+          "item": "mochila",
+          "quantity": 1
+        },
+        {
+          "name": "Livro de história",
+          "quantity": 1
+        },
+        {
+          "item": "tinta",
+          "quantity": 1
+        },
+        {
+          "item": "caneta-tinteiro",
+          "quantity": 1
+        },
+        {
+          "item": "pergaminho",
+          "quantity": 10
+        },
+        {
+          "name": "Pequeno saco de areia",
+          "quantity": 1
+        },
+        {
+          "name": "Pequena faca",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "conjunto-de-explorador-de-masmorras",
+      "name": "Conjunto de Explorador de Masmorras",
+      "kind": "PACK",
+      "category": "Conjuntos de Equipamento",
+      "groups": [
+        "conjunto-de-equipamento"
+      ],
+      "price": "12 PO",
+      "priceCp": 1200,
+      "contents": [
+        {
+          "item": "mochila",
+          "quantity": 1
+        },
+        {
+          "item": "pe-de-cabra",
+          "quantity": 1
+        },
+        {
+          "item": "martelo",
+          "quantity": 1
+        },
+        {
+          "item": "pitao",
+          "quantity": 10
+        },
+        {
+          "item": "tocha",
+          "quantity": 10
+        },
+        {
+          "item": "caixa-para-fogo",
+          "quantity": 1
+        },
+        {
+          "item": "racoes",
+          "quantity": 10
+        },
+        {
+          "item": "cantil",
+          "quantity": 1
+        },
+        {
+          "item": "corda-de-canhamo",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "conjunto-de-sacerdote",
+      "name": "Conjunto de Sacerdote",
+      "kind": "PACK",
+      "category": "Conjuntos de Equipamento",
+      "groups": [
+        "conjunto-de-equipamento"
+      ],
+      "price": "19 PO",
+      "priceCp": 1900,
+      "contents": [
+        {
+          "item": "mochila",
+          "quantity": 1
+        },
+        {
+          "item": "cobertor",
+          "quantity": 1
+        },
+        {
+          "item": "vela",
+          "quantity": 10
+        },
+        {
+          "item": "caixa-para-fogo",
+          "quantity": 1
+        },
+        {
+          "name": "Caixa de esmolas",
+          "quantity": 1
+        },
+        {
+          "name": "Bloco de incenso",
+          "quantity": 2
+        },
+        {
+          "name": "Incensário",
+          "quantity": 1
+        },
+        {
+          "name": "Vestimentas",
+          "quantity": 1
+        },
+        {
+          "item": "racoes",
+          "quantity": 2
+        },
+        {
+          "item": "cantil",
+          "quantity": 1
+        }
+      ]
+    }
+  ]
+}

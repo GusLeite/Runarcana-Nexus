@@ -2,6 +2,25 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-26 — Catálogo de itens e equipamento inicial (`feature/character-sheet`)
+- `rules/itens.json` com os **327 itens** do Capítulo 6 (armas simples, marciais, impróprias e de fogo, munições, armaduras, escudos, equipamento de aventureiro, focos, conjuntos de ofício, instrumentos, montarias, veículos, arreios e os 7 conjuntos de equipamento) e a riqueza inicial por classe. Conferido ao subir.
+- Concessões `EQUIPMENT` e `EQUIPMENT_CHOICE` (opções com `+`, `*quantidade` e `group:` com preço máximo) e o equipamento inicial das 9 classes. Opção de trocar tudo pela **riqueza inicial** (`startingEquipment: WEALTH`, rolada ao criar).
+- Na criação, o equipamento entra no **inventário** (`StartingEquipmentService`): armas e armaduras viram `Weapon`/`Armor` (a armadura já aparece como opção de defesa), conjuntos entram abertos. `Item.catalogId` novo; `item_description` e `effect` com 4000 caracteres (no PostgreSQL existente precisa de `ALTER TABLE`, ver backend.md).
+- Front: troca equipamento/riqueza na etapa Escolhas, nomes dos itens nas opções (agrupadas por categoria) e o equipamento na ficha em construção.
+- Testes: `equipamentoInicialVaiParaOInventario`, `riquezaInicialNoLugarDoEquipamento`, `EquipmentRulesTests` e helpers do front. Conferido no sandbox (Combatente: cota de malha CA 16 como defesa, alabarda, escudo leve, besta e o conjunto de aventureiro aberto no inventário).
+
+## 2026-10-26 — Lista de magias e Natureza Rúnica (`feature/character-sheet`)
+- `rules/magias.json`: as **558 magias** do Capítulo 10 (extraídas da Lista de Magias da wiki, a partir das páginas em `livro/`), com nível, Mistérios, listas de classe (`classes`) e de origem/linhagem (`origins`: Yordle, Fauhwoon, Ottrani), tempo, alcance, componentes/material, duração, concentração, ritual, texto e Em Níveis Superiores. Conferidas ao subir (Mistério, classe e origem existentes).
+- `GET /creation/spells` devolve a lista; ela fica fora do `/creation/catalog` (`WRITE_ONLY`). `MagicRules.availableSpells` filtra por Mistério, classe e origem até um nível.
+- **Runas**: 34 Runas e 48 Runessências no `recursos.json` (`kind: RUNA`, grupo = Pulso, `requires` de nível/Herança/atributo/Runa anterior), com usos de metade da proficiência (`RuleResource.uses`). **Natureza Rúnica** na criação (`runicNature` no `criacao.json`): escolha do Pulso Rúnico (Esmeralda, Rubi, Diamante, Ametista, Safira) e da Runa inicial.
+- Testes: `naturezaRunicaComPulsoERuna`, `listaDeMagiasForaDoCatalogo`, `listaDeMagiasCompleta` e `magiasDisponiveisPorMisterioClasseEOrigem`. Conferido no sandbox (Yordle Acólito: Pulso Safira e Runa Cegar com 1 uso; 21 Runas liberadas no 1º nível, 61 bloqueadas por pré-requisito).
+- Ainda não convertidas: Equipamento, Rituais, Familiares, tabelas de Magia Púrpura/Yordle, Transferindo Essências e Tecmaturgia.
+
+## 2026-10-26 — Base do Capítulo 10: Mana, elementos e Mistérios (`feature/character-sheet`)
+- `rules/magias.json`: tabela de Mana por nível de magia (0 a 21), 18 elementos com tipo de dano, componente e os caminhos de acesso, 33 Mistérios (Celestiais, Elementais e Espirituais, com a regra opcional de acesso) e os efeitos por tipo de dano. Lista de magias ainda vazia.
+- `RuleMagic` no catálogo, conferido ao subir; `MagicRules` com o custo de Mana e o cálculo de elementos acessíveis.
+- Testes: `MagicRulesTests` (com o arquivo real).
+
 ## 2026-10-26 — Pendências dos recursos de classe (`feature/character-sheet`)
 - Escalas por nível: `Grant.valueByLevel` (amount do `AC_BONUS`/`ATTRIBUTE` e pés do `SPEED`), usado na Casca Grossa (+1 → +5) e nos deslocamentos dos Aspectos Ferais; a Arma Natural ganhou o ataque com dado 1d4 → 1d12.
 - Ki inativado: os Vel com "N pontos de Ki" (`ki`) só aparecem com Ki suficiente e descontam os pontos da habilidade Ki.

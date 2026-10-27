@@ -16,6 +16,9 @@ As regras do assistente de criação (o que cada origem, região, classe e passa
 | Origens | **Humano**, **Minotauro** (Aelus, Alnuk, Auroque), **Construto** (Brutal, Emissário, Ligeiro), **Antroplantæ** (Arbóreo, Floral), **Chireano** (Nocti, Fulgor), **Meio-Dragão** (Glacial, Infernal, Montanha, Nuvens, Oceano), **Troll** (da Areia, do Gelo, da Selva), **Vastaya** (Oovi-Kat, Marai, Shimon, Fauhwoon, Ottrani, Kiilash, Lhotlan, Vesani) e **Yordle** (Aquáticos, Feérico, Felpudo) e **Runinata** (monta a origem com traços, ver **Traços da Runinata**). Nebulon é um tipo de Construto, não uma origem: é a Herança **Variante Nebulon** |
 | Traços | **50** traços (Menores, Maiores e Superiores) e **19** desvantagens em `rules/tracos.json`, com os três modos (Controlado, Moderado, Forte) |
 | Recursos de classe (Capítulo 5) | **315** em `rules/recursos.json`: 34 Iras, 120 Sutras, 19 Vel, 45 Técnicas de Combate, 38 Invocações Espirituais, 15 Grandes Espíritos e 44 Aspectos Ferais (23 terrestres, 14 aquáticos, 7 alados) |
+| Runas (Capítulo 5) | **82** no `rules/recursos.json` (kind `RUNA`): 34 Runas e 48 Runessências (16 árvores). Natureza Rúnica (Pulso + Runa inicial) em `runicNature` do `criacao.json` |
+| Itens (Capítulo 6) | **327** em `rules/itens.json`: 113 armas (simples, marciais, impróprias e de fogo), 10 munições, 15 armaduras, 4 escudos, 85 itens de aventureiro, 12 focos e símbolos sagrados, 40 conjuntos de ofício, 12 instrumentos, 12 montarias, 6 veículos aquáticos, 11 arreios e veículos de tração e 7 conjuntos de equipamento. Equipamento inicial das 9 classes e riqueza inicial |
+| Magias (Capítulo 10) | **558** em `rules/magias.json`, com Mistérios e as listas de classe e de origem; ainda não escolhidas no assistente |
 | Regiões | As 14 do enum |
 | Idiomas | **Desligados** por enquanto (o Humano não escolhe idioma; a estrutura `LANGUAGE`/`LANGUAGE_CHOICE` continua disponível) |
 | Ofícios | Os **22** (16 maiores, 6 menores), sem atributo base nem níveis ainda |
@@ -133,6 +136,57 @@ Como os pontos funcionam no assistente:
 
 As Variantes do Humano levam o texto completo do capítulo "Heranças Variantes": Anfíbio, Colosso, Progressão Tecnológica e Ressurgido podem ser escolhidas 2 vezes; Meio-Vastaya, Progressão Tecnológica e Ressurgido pedem a opção. A Glacinata usa o texto da Natividade Elemental.
 
+## Magia (`rules/magias.json`)
+
+Capítulo 10, carregado e conferido ao subir (`runarcana.rules.magic`; os testes do Spring usam `rules/magias-teste.json`). Tem a **lista de magias** completa (558), mas ainda não está ligada às classes: os Mistérios das classes continuam como opção de texto e o assistente não escolhe magias.
+
+```
+{ "manaCost": { "0": 0, "1": 2, "2": 3, "3": 5, "4": 6, "5": 7, "6": 9, "7": 12, "8": 16, "9": 21 },
+  "elements": [ { "id": "veneno", "name", "tier": "TRANSITION", "damage": "Venenoso", "material": "Jade", "description",
+                  "access": [ ["agua", "fogo"], ["agua", "sombrio"] ] } ],   // caminhos alternativos; cada um exige tudo
+  "mysteries": [ { "id": "hemomancia", "name", "source": "SPIRITUAL", "description", "optionalAccess": ["veneno", "metal"] },
+                 { "id": "agua", "source": "ELEMENTAL", "element": "agua" } ],
+  "damageEffects": [ { "damage": "Gélido", "effect": "..." } ],
+  "spells": [ { "id", "name", "level": 0-9, "mysteries": ["agua"], "classes": ["ACOLYTE"], "origins": ["yordle", "fauhwoon"],
+                "castingTime", "range", "components", "material", "duration", "concentration", "ritual",
+                "description", "higherLevels" } ] }
+```
+
+- **Elementos** (18): primários (Água, Fogo, Terra, Vento: acesso livre), secundários (Flora, Gelo, Magma, Tempestade: um dos dois primários ligados), de transição (Deserto, Inferno, Som, Veneno: o primário + o oposto, ou o primário + Sombrio), primordiais (Luz: Herança Manifestação Primordial ou os quatro primários; Sombrio: a Herança ou dois primários opostos) e terciários (Cristal, Metal, Nevasca, Ártico: os dois secundários). Exigência de Herança no caminho: `"heritage:<id>"`. O acesso é calculado pelos elementos **manifestos** (`MagicRules.accessibleElements`).
+- **Mistérios** (33): 4 Celestiais, 19 Elementais (um por elemento + Elemental Geral) e 10 Espirituais. `optionalAccess` é a regra opcional "Acesso aos Elementos": quem tem algum Mistério Elemental ganha acesso aos elementos ligados aos seus Mistérios Espirituais.
+- **Mana**: `MagicRules.manaCost(nível)`. O Ártico ainda está sem tipo de dano e componente (não estão na tabela do livro).
+- **Magias** (558: 52 truques, 74 de 1º, 82 de 2º, 69 de 3º, 51 de 4º, 51 de 5º, 51 de 6º, 40 de 7º, 38 de 8º e 50 de 9º; 44 rituais), extraídas da Lista de Magias da wiki. `mysteries` vem da classificação ("Elemental (água ou cristal) ou Espiritual (transmutação)" → `agua`, `cristal`, `transmutacao`). `classes` são as listas "Feitiços de …" (Acólito, Atirador, Bruto, Caçador, Combatente, Mercurial, Xamã; o Arcanista e o Bodisatva não têm lista própria) e `origins` as de origem/linhagem (Yordle, Fauhwoon, Ottrani). As 14 "Especiais" (as do 20º nível dos Glifos, Rajada Mística, Pulso de Statikk, Manifestar Efígie) não têm Mistério; o texto diz quem as recebe. `material` é o que vem entre parênteses no componente M.
+- **Magias disponíveis**: `MagicRules.availableSpells(magia, Mistérios, classe, origens, nível máximo)`, basta uma das três fontes. A lista sai em `GET /creation/spells` (fora do `/creation/catalog`).
+
+## Equipamento (`rules/itens.json`)
+
+Capítulo 6, carregado e conferido ao subir (`runarcana.rules.items`; testes: `rules/itens-teste.json`). Gerado a partir das tabelas da wiki (Armas, Armaduras e Escudos, Equipamento de Aventureiro, Montarias e Estilo de Vida, Equipamento e Riqueza).
+
+```
+{ "startingWealth": { "ACOLYTE": "5d4 x 10", "BODHISATTVA": "5d4", ... },          // em PO
+  "items": [ { "id": "espada-longa", "name", "kind": "WEAPON", "category": "Marciais Corpo a Corpo",
+               "groups": ["arma-marcial", "arma-marcial-corpo-a-corpo"], "price": "15 PO", "priceCp": 1500, "weight": 1.5,
+               "damage": "1d8 r/ 1d6 p", "critical": "x2", "mastery": "Tontear", "properties": "Versátil (1d10 r/ 1d8 p)" },
+             { "id": "armadura-placas", "kind": "ARMOR", "armorWeight": "HEAVY", "armorClass": 18, "dexterity": "NONE",
+               "damageReduction": "3", "strength": 15, "stealthDisadvantage": true },
+             { "id": "conjunto-de-sacerdote", "kind": "PACK", "contents": [ { "item": "mochila", "quantity": 1 }, { "name": "Caixa de esmolas" } ] } ] }
+```
+
+- **kind**: `WEAPON`, `ARMOR`, `SHIELD`, `AMMUNITION`, `GEAR`, `FOCUS`, `TOOLS`, `INSTRUMENT`, `MOUNT`, `VEHICLE`, `TACK`, `PACK`. Armas de fogo têm também `tier`, `misfire` (Erro) e `range`; montarias e veículos, `speed` e `capacity`.
+- **groups** usados nas escolhas: `arma-simples`, `arma-simples-corpo-a-corpo`, `arma-simples-distancia`, `arma-marcial` (com as mesmas divisões), `arma-impropria`, `arma-de-corrente`, `arma-bodisatva` (a lista do Bodisatva + as simples corpo a corpo sem duas mãos nem pesada), `arma-de-fogo`, `arma-de-fogo-tier-1` a `6`, `municao-de-fogo`, `armadura-leve`/`media`/`pesada`/`especial`, `escudo`, `foco-arcano`, `simbolo-sagrado`, `conjunto-de-oficio`, `instrumento-musical`, `montaria`, `conjunto-de-equipamento`.
+- **Concessões**: `EQUIPMENT` (`value`: a opção) e `EQUIPMENT_CHOICE` (`options`, `count`, `label`). Opção = partes separadas por `+`; parte = `id`, `id*quantidade` ou `group:grupo` (com `<=PO` de preço máximo e `*quantidade`); no máximo um grupo por opção, que vira uma opção por item. Ex.: Combatente `group:arma-marcial<=50+escudo-leve` ou `group:arma-marcial<=50*2`.
+- **Riqueza inicial**: o jogador pode trocar todo o equipamento pela riqueza da classe; os dados são rolados ao criar.
+- Aproximações: "duas armas simples/marciais" vira duas iguais; "cota de malha (se proficiente)" e "armadura leve (se proficiente)" não conferem a proficiência; as "30 munições da arma inicial" do Atirador viram um pacote de munição à escolha (o pacote do catálogo tem outra quantidade); o livro de preces do Acólito é o item Livro. Ficam fora do catálogo: modificações de armas de fogo, estilo de vida, comida e hospedagem e a armadura de montaria (o preço é um multiplicador). Escudo entra no inventário, mas ainda não soma na CA.
+
+## Runas e Natureza Rúnica
+
+Na criação todo personagem escolhe a **Natureza Rúnica**: um **Pulso Rúnico** e uma **Runa** inicial. As concessões ficam em `runicNature` no `criacao.json` (fonte "Natureza Rúnica" no assistente, chaves `runic-nature:0` e `runic-nature:1`):
+
+- `FEATURE` "Pulso Rúnico" com as opções Esmeralda, Rubi, Diamante, Ametista e Safira (a habilidade vira "Pulso Rúnico (Rubi)"), com o Dado de Pulso por proficiência e o texto dos cinco pulsos, da CD/ataque de Runas e da progressão (Maestrias no 3º, 5º, 10º, 12º, 17º e 19º; nova Runa no 8º e no 15º).
+- `RESOURCE_CHOICE` de `RUNA`, sem filtro de grupo: qualquer Runa pode ser escolhida (a Sinergia só vale com o Pulso dela, e está no texto).
+
+As Runas ficam no `recursos.json` com `kind: RUNA` e o campo `uses` (metade do bônus de proficiência por descanso longo). `groups`: o Pulso ("Rubi"; "Esmeralda" e "Diamante" no Escudo) e, nas Runessências, também "Runessência" e a árvore ("Aquavitista"). A descrição traz Pulso, Sinergia, Uso, o texto e as duas Maestrias. `requires.level` 8/15 bloqueia no 1º nível. Runessências: pré-requisito "Runessência (com o aval do mestre)", `requires` com Herança, atributo e a Runa anterior da árvore (`resources`). As opções internas (Patrono Ínfero/Feérico do Pacto Místico, os três Reatores do Núcleo Reator) estão no texto da Runa de origem.
+
 ## Recursos de classe (`rules/recursos.json`)
 
 Iras (Bruto), Sutras e Vel (Bodisatva e Combatente Monástico), Técnicas de Combate (Combatente), Invocações Espirituais e Grandes Espíritos (Xamã) e Aspectos Ferais (Forma Selvagem do Metamorfo). Arquivo à parte (`runarcana.rules.resources`; testes: `rules/recursos-teste.json`), conferido ao subir.
@@ -200,9 +254,11 @@ Para cada item, basta mandar o texto do livro ou um resumo; eu converto para o J
 
 1. **Origens**: todas cadastradas, inclusive a **Variante Nebulon** completa. Confirmado pelo usuário: Chireano com pontos de Origem, Chicote de Espinhos soma Destreza, bando do Troll não obriga a região. Os traços do Meio-Dragão por nível usam `levels` (ver **Formato**). Pode usar o mesmo para outros ganhos por nível de origem (ex.: Mordida do Troll 1d8 no 6º), quando a subida de nível existir.
 2. **Métodos de atributos** que a mesa usa (compra de pontos com quantos pontos e qual tabela, arranjo padrão, rolagem) e limite máximo na criação.
-4. **Classes**: todas cadastradas, com os recursos do Capítulo 5. Ficam só no texto: o pré-requisito de truque conhecido (Rajada Etérea pede rajada mística), porque ainda não há catálogo de magias; escalas que não são número de usos, dado, CA, atributo ou deslocamento (visão no escuro e outros sentidos dos Aspectos, custo em PV da Adrenalina Rúnica, tipo de dano que muda no 10º nível).
-   **Magias**: não há catálogo de magias (Capítulo 10). Os Mistérios são escolhidos como opção e a ficha mostra Mana e quantos truques/magias o personagem pode ter; as magias em si o mestre adiciona pelo painel.
+4. **Classes**: todas cadastradas, com os recursos do Capítulo 5. Ficam só no texto: o pré-requisito de truque conhecido (Rajada Etérea pede rajada mística), porque o assistente ainda não escolhe magias; escalas que não são número de usos, dado, CA, atributo ou deslocamento (visão no escuro e outros sentidos dos Aspectos, custo em PV da Adrenalina Rúnica, tipo de dano que muda no 10º nível).
+   **Magias**: a lista do Capítulo 10 já está no `magias.json`, mas o assistente ainda não escolhe magias. Os Mistérios são escolhidos como opção e a ficha mostra Mana e quantos truques/magias o personagem pode ter; as magias em si o mestre adiciona pelo painel. Próximo passo: escolha de truques/magias conhecidas por classe com `MagicRules.availableSpells`.
+   **Runas**: ficam só no texto as escolhas de dentro do Pulso (tipo de dano do Esmeralda/Rubi, Vida/Mana/Ki do Ametista) e da Runa (elemento, forma feral, patrono); a Variante Ignata (Fúria Imortal) não existe no `herancas.json`, então só a Constituição é conferida; o Ancestral Vastayês aceita a origem Vastaya ou uma Herança e não tem `requires`. Maestrias e as Runas do 8º/15º nível esperam a subida de nível.
 5. **Passados** (Capítulo 4): perícias, ouro e característica.
 6. **Ofícios**: atributo base e conjunto de cada um (para os testes de ofício e os níveis).
-7. **Equipamento inicial**: decidido criar um **catálogo de itens** (armas, armaduras, conjuntos) para as escolhas entrarem no inventário. Falta mandar as tabelas de itens do livro; até lá, o equipamento de cada classe está só na descrição dela.
+7. **Equipamento inicial**: feito (ver **Equipamento**). Falta o equipamento dos **passados** (os dois cadastrados são de exemplo).
 8. Idiomas: desligados a pedido; quando quiser, basta cadastrar os de cada região.
+9. **Páginas do livro em `livro/` ainda não convertidas**: Rituais (regras e a Lista de Rituais), Familiares e Companheiros Animais, as tabelas d100 de Magia Púrpura e Magia Descontrolada Yordle, Transferindo Essências e A Tecmaturgia (com os Aparatos).

@@ -1,0 +1,60 @@
+{
+  "manaCost": {
+    "0": 0,
+    "1": 2,
+    "2": 3
+  },
+  "elements": [
+    {
+      "id": "agua",
+      "name": "Água",
+      "tier": "PRIMARY",
+      "damage": "Perfurante",
+      "material": "Aquamarine",
+      "description": "Primário."
+    },
+    {
+      "id": "gelo",
+      "name": "Gelo",
+      "tier": "SECONDARY",
+      "damage": "Gélido",
+      "material": "Lápis-Lazúli",
+      "description": "Secundário.",
+      "access": [
+        [
+          "agua"
+        ]
+      ]
+    }
+  ],
+  "mysteries": [
+    {
+      "id": "agua",
+      "name": "Água",
+      "source": "ELEMENTAL",
+      "element": "agua",
+      "description": "Mistério da Água."
+    }
+  ],
+  "damageEffects": [],
+  "spells": [
+    {
+      "id": "t-raio",
+      "name": "Raio Teste",
+      "level": 0,
+      "mysteries": [
+        "agua"
+      ],
+      "classes": [
+        "ARCANIST"
+      ],
+      "castingTime": "1 ação",
+      "range": "60 pés",
+      "components": "V, S",
+      "duration": "Instantânea",
+      "concentration": false,
+      "ritual": false,
+      "description": "Truque de teste."
+    }
+  ]
+}

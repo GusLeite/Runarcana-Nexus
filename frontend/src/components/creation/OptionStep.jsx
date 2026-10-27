@@ -2,7 +2,7 @@ import { formatFeet, grantLabel } from '../../data/rules.js'
 
 // Cartões para escolher origem, região, classe ou passado, cada um com os detalhes do livro
 // (ex.: Idade, Tamanho) e a lista do que concede.
-export default function OptionStep({ kind, title, hint, items, selected, onPick, crafts }) {
+export default function OptionStep({ kind, title, hint, items, selected, onPick, crafts, equipment = [] }) {
   if (!items?.length) {
     return <p className="muted-note">Nenhuma opção cadastrada ainda nas regras de criação.</p>
   }
@@ -42,7 +42,7 @@ export default function OptionStep({ kind, title, hint, items, selected, onPick,
               {grants.length > 0 && (
                 <span className="grants">
                   {grants.map((g, i) => (
-                    <span key={i} className={'grant g-' + g.type.toLowerCase()} title={g.description ?? undefined}>{grantLabel(g, crafts)}</span>
+                    <span key={i} className={'grant g-' + g.type.toLowerCase()} title={g.description ?? undefined}>{grantLabel(g, crafts, equipment)}</span>
                   ))}
                 </span>
               )}
@@ -54,7 +54,7 @@ export default function OptionStep({ kind, title, hint, items, selected, onPick,
                   <span className="option-level-title">Ao subir de nível</span>
                   {[...item.levels].sort((a, b) => a.level - b.level).map(l => (
                     <span key={l.level} className="option-level">
-                      <b>{l.level}º nível.</b> {(l.grants ?? []).map(g => grantLabel(g, crafts)).join(' · ')}
+                      <b>{l.level}º nível.</b> {(l.grants ?? []).map(g => grantLabel(g, crafts, equipment)).join(' · ')}
                     </span>
                   ))}
                 </span>

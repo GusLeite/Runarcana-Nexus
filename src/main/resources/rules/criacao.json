@@ -2375,6 +2375,50 @@
           "abilityType": "PASSIVE",
           "name": "Ritualista",
           "description": "Você conjura como ritual qualquer magia de Acólito que conheça e esteja preparada, se tiver o descritor Ritual, e usa Sabedoria como atributo da perícia Religião."
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: maça ou martelo leve",
+          "options": [
+            "maca",
+            "martelo-leve"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: armadura (cota de malha só se proficiente)",
+          "options": [
+            "armadura-lorica-de-escamas",
+            "armadura-couro",
+            "armadura-cota-de-malha"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: besta leve e 20 virotes ou uma arma simples",
+          "options": [
+            "besta-leve+virotes-de-besta",
+            "group:arma-simples"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: conjunto",
+          "options": [
+            "conjunto-de-sacerdote",
+            "conjunto-de-aventureiro"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: símbolo sagrado",
+          "options": [
+            "group:simbolo-sagrado"
+          ]
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "escudo-leve+livro"
         }
       ],
       "levels": [
@@ -3786,6 +3830,31 @@
             "Transmutação (Espiritual)",
             "Umbramancia (Espiritual)"
           ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: besta leve e estojo com 20 virotes ou uma arma simples",
+          "options": [
+            "besta-leve+estojo-de-virotes-de-besta+virotes-de-besta",
+            "group:arma-simples"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: bolsa de componentes, foco arcano ou grimório",
+          "options": [
+            "bolsa-de-componentes",
+            "group:foco-arcano",
+            "livro-de-magia-grimorio"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: conjunto",
+          "options": [
+            "conjunto-de-explorador-de-masmorras",
+            "conjunto-de-aventureiro"
+          ]
         }
       ],
       "levels": [
@@ -4923,6 +4992,40 @@
           "abilityType": "PASSIVE",
           "name": "Maestria de Armas",
           "description": "Você usa a propriedade Maestria de 2 armas proficientes à sua escolha entre armas simples e armas de fogo proficientes. Num descanso pleno, pode trocar uma maestria por outra arma."
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: arma de fogo de Tier 1",
+          "options": [
+            "group:arma-de-fogo-tier-1"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: armadura de couro ou uma arma simples corpo a corpo",
+          "options": [
+            "armadura-couro",
+            "group:arma-simples-corpo-a-corpo"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: conjunto",
+          "options": [
+            "conjunto-de-explorador-de-masmorras",
+            "conjunto-de-aventureiro"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: munição da arma inicial (o livro dá 30 munições)",
+          "options": [
+            "group:municao-de-fogo"
+          ]
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "conjunto-de-armeiro"
         }
       ],
       "levels": [
@@ -5837,6 +5940,35 @@
           "abilityType": "PASSIVE",
           "name": "Maestria de Armas",
           "description": "Você usa a propriedade Maestria de 2 armas proficientes à sua escolha entre armas simples e armas Bodisatva proficientes. Num descanso pleno, pode trocar uma maestria por outra arma."
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: espada curta, uma arma simples ou lâmina navori",
+          "options": [
+            "espada-curta",
+            "group:arma-simples",
+            "lamina-navori"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: arma Bodisatva",
+          "options": [
+            "group:arma-bodisatva"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: conjunto",
+          "options": [
+            "conjunto-de-explorador-de-masmorras",
+            "conjunto-de-aventureiro",
+            "conjunto-de-sacerdote"
+          ]
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "shuriken*10"
         }
       ],
       "levels": [
@@ -7004,6 +7136,26 @@
           "abilityType": "PASSIVE",
           "name": "Maestria de Armas",
           "description": "Você usa a propriedade Maestria de 1 + metade do bônus de proficiência armas proficientes à sua escolha entre armas simples e marciais corpo a corpo proficientes. Num descanso pleno, pode trocar uma maestria por outra arma."
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: machado grande ou uma arma marcial corpo a corpo",
+          "options": [
+            "machado-grande",
+            "group:arma-marcial-corpo-a-corpo"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: duas machadinhas ou uma arma simples",
+          "options": [
+            "machadinha*2",
+            "group:arma-simples"
+          ]
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "conjunto-de-aventureiro+azagaia*4"
         }
       ],
       "levels": [
@@ -7566,6 +7718,34 @@
           "abilityType": "PASSIVE",
           "name": "Maestria de Armas",
           "description": "Você usa a propriedade Maestria de 1 + metade do bônus de proficiência armas proficientes à sua escolha entre armas simples e marciais corpo a corpo proficientes. Num descanso pleno, pode trocar uma maestria por outra arma."
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: armadura",
+          "options": [
+            "armadura-lorica-de-escamas",
+            "armadura-couro"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: duas espadas curtas ou duas armas simples corpo a corpo",
+          "options": [
+            "espada-curta*2",
+            "group:arma-simples-corpo-a-corpo*2"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: conjunto",
+          "options": [
+            "conjunto-de-aventureiro",
+            "conjunto-de-explorador-de-masmorras"
+          ]
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "arco-longo+aljava+flechas"
         }
       ],
       "levels": [
@@ -8365,6 +8545,38 @@
           "abilityType": "PASSIVE",
           "name": "Maestria de Armas",
           "description": "Você usa a propriedade Maestria de 1 + seu bônus de proficiência armas proficientes à sua escolha entre armas simples e marciais proficientes. Num descanso pleno, pode trocar uma maestria por outra arma."
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: cota de malha ou armadura de couro, arco longo e 20 flechas",
+          "options": [
+            "armadura-cota-de-malha",
+            "armadura-couro+arco-longo+flechas"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: arma marcial de até 50 PO e escudo leve, ou duas armas marciais de até 50 PO",
+          "options": [
+            "group:arma-marcial<=50+escudo-leve",
+            "group:arma-marcial<=50*2"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: besta leve e 20 virotes ou duas machadinhas",
+          "options": [
+            "besta-leve+virotes-de-besta",
+            "machadinha*2"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: conjunto",
+          "options": [
+            "conjunto-de-aventureiro",
+            "conjunto-de-explorador-de-masmorras"
+          ]
         }
       ],
       "levels": [
@@ -8970,6 +9182,35 @@
           "abilityType": "PASSIVE",
           "name": "Maestria de Armas",
           "description": "Você usa a propriedade Maestria de 2 armas proficientes à sua escolha entre armas simples, bestas de mão, espadas longas, rapieiras, espadas curtas e marciais com a propriedade Leve. Num descanso pleno, pode trocar uma maestria por outra arma."
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: rapieira ou espada curta",
+          "options": [
+            "rapieira",
+            "espada-curta"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: arco curto e aljava com 20 flechas ou espada curta",
+          "options": [
+            "arco-curto+aljava+flechas",
+            "espada-curta"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: conjunto",
+          "options": [
+            "conjunto-de-assaltante",
+            "conjunto-de-explorador-de-masmorras",
+            "conjunto-de-aventureiro"
+          ]
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "armadura-couro+adaga*2+conjunto-de-chaveiro"
         }
       ],
       "levels": [
@@ -9918,6 +10159,31 @@
           "value": "GRANDE_ESPIRITO",
           "count": 1,
           "label": "Totem: Grande Espírito"
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: arma simples, bolsa de componentes ou armadura leve (se proficiente)",
+          "options": [
+            "group:arma-simples",
+            "bolsa-de-componentes",
+            "group:armadura-leve"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: arma simples ou arco curto e aljava com 20 flechas",
+          "options": [
+            "group:arma-simples",
+            "arco-curto+aljava+flechas"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: conjunto",
+          "options": [
+            "conjunto-de-aventureiro",
+            "conjunto-de-explorador-de-masmorras"
+          ]
         }
       ],
       "levels": [
@@ -10771,6 +11037,35 @@
       "id": "ZAUN",
       "name": "Zaun",
       "languages": []
+    }
+  ],
+  "runicNature": [
+    {
+      "type": "FEATURE",
+      "abilityType": "PASSIVE",
+      "name": "Pulso Rúnico",
+      "label": "Pulso Rúnico (Natureza Rúnica)",
+      "options": [
+        "Esmeralda",
+        "Rubi",
+        "Diamante",
+        "Ametista",
+        "Safira"
+      ],
+      "diceByProficiency": {
+        "2": "1d4",
+        "3": "1d6",
+        "4": "2d4",
+        "5": "2d6",
+        "6": "3d4"
+      },
+      "description": "A sintonia natural com as Runas Globais. Após um descanso longo, role o Dado de Pulso (pelo bônus de proficiência: 2 = 1d4, 3 = 1d6, 4 = 2d4, 5 = 2d6, 6 = 3d4; o Dado Base é d4, d6, d8, d10, d12); o resultado vale até o próximo descanso longo.\n\nEsmeralda (Sentinela, redução de dano): escolha um dano físico e um elemental; o resultado reduz o dano desses tipos. Novo dano elemental no 9º e no 17º nível; a partir do 11º vale também contra dano mágico.\nRubi (Conquistador, amplificação de dano): escolha um tipo de dano; uma vez por turno, some o resultado ao dano desse tipo (o crítico multiplica). A partir do 11º vale também para dano mágico.\nDiamante (Protetor, amplificação de cura): some o resultado às curas que fizer em outros ou, uma vez por turno, a uma cura que receber. Não vale para PV temporários.\nAmetista (Vampírico, recuperação): escolha Vida, Mana ou Ki. Ao abater um alvo de ND até 3 abaixo do seu nível (que você feriu desde a última rodada), recupera: Vida = Dado de Pulso + proficiência; Mana = Dado de Pulso + metade da proficiência; Ki = metade do Dado de Pulso + metade da proficiência (Mana e Ki: no máximo o que o ataque gastou).\nSafira (Crepuscular, versatilidade): o resultado vira pontos de Pulso; gaste para somar a uma rolagem sua, ou com a reação reduzir a de um inimigo ou somar à de um aliado; cada ponto também aumenta ou reduz um dano em um valor igual ao bônus de proficiência. Não transforma 19 em 20 natural.\n\nCD das Runas = 8 + proficiência + metade do nível de personagem (mínimo 1); ataque de Runas = proficiência + metade do nível de personagem. Runas usam o nível de personagem, não o de classe, e não são afetadas por críticos (salvo se disserem).\nProgressão: Maestria no 3º, 5º, 10º, 12º, 17º e 19º nível; nova Runa no 8º e no 15º."
+    },
+    {
+      "type": "RESOURCE_CHOICE",
+      "value": "RUNA",
+      "count": 1,
+      "label": "Runa inicial (Natureza Rúnica)"
     }
   ]
 }

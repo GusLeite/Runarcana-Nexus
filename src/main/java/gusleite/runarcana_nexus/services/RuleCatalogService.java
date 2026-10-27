@@ -15,6 +15,9 @@ import gusleite.runarcana_nexus.rules.RuleCatalog;
 import gusleite.runarcana_nexus.rules.RuleClass;
 import gusleite.runarcana_nexus.rules.RuleHeritage;
 import gusleite.runarcana_nexus.rules.RuleLineage;
+import gusleite.runarcana_nexus.rules.RuleItem;
+import gusleite.runarcana_nexus.rules.RuleItems;
+import gusleite.runarcana_nexus.rules.RuleMagic;
 import gusleite.runarcana_nexus.rules.RuleLevel;
 import gusleite.runarcana_nexus.rules.RuleOption;
 import gusleite.runarcana_nexus.rules.RuleResource;
@@ -57,7 +60,7 @@ public class RuleCatalogService {
     private static final Set<String> CRAFT_KINDS = Set.of("MAJOR", "MINOR");
     // Tipos de recurso de classe (rules/recursos.json e value da concessão RESOURCE_CHOICE).
     static final Set<String> RESOURCE_KINDS = Set.of("IRA", "SUTRA", "VEL", "TECNICA", "INVOCACAO", "GRANDE_ESPIRITO",
-            "ASPECTO_TERRESTRE", "ASPECTO_AQUATICO", "ASPECTO_ALADO");
+            "ASPECTO_TERRESTRE", "ASPECTO_AQUATICO", "ASPECTO_ALADO", "RUNA");
 
     private final RuleCatalog catalog;
 
@@ -65,16 +68,21 @@ public class RuleCatalogService {
                               @Value("${runarcana.rules.catalog:classpath:rules/criacao.json}") String location,
                               @Value("${runarcana.rules.heritages:classpath:rules/herancas.json}") String heritagesLocation,
                               @Value("${runarcana.rules.traits:classpath:rules/tracos.json}") String traitsLocation,
-                              @Value("${runarcana.rules.resources:classpath:rules/recursos.json}") String resourcesLocation) {
+                              @Value("${runarcana.rules.resources:classpath:rules/recursos.json}") String resourcesLocation,
+                              @Value("${runarcana.rules.magic:classpath:rules/magias.json}") String magicLocation,
+                              @Value("${runarcana.rules.items:classpath:rules/itens.json}") String itemsLocation) {
         RuleCatalog base = load(resources.getResource(location), location, RuleCatalog.class);
         HeritageFile heritages = load(resources.getResource(heritagesLocation), heritagesLocation, HeritageFile.class);
         RuleTraits traits = load(resources.getResource(traitsLocation), traitsLocation, RuleTraits.class);
         ResourceFile classResources = load(resources.getResource(resourcesLocation), resourcesLocation, ResourceFile.class);
-        this.catalog = base.withHeritages(heritages.heritages()).withTraits(traits).withResources(classResources.resources());
+        RuleMagic magic = load(resources.getResource(magicLocation), magicLocation, RuleMagic.class);
+        RuleItems items = load(resources.getResource(itemsLocation), itemsLocation, RuleItems.class);
+        this.catalog = base.withHeritages(heritages.heritages()).withTraits(traits).withResources(classResources.resources())
+                .withMagic(magic).withEquipment(items);
         List<String> problems = validate(catalog);
         if (!problems.isEmpty()) {
             throw new IllegalStateException("Regras de criação inválidas em " + location + " / " + heritagesLocation
-                    + " / " + traitsLocation + " / " + resourcesLocation + ":\n - " + String.join("\n - ", problems));
+                    + " / " + traitsLocation + " / " + resourcesLocation + " / " + magicLocation + " / " + itemsLocation + ":\n - " + String.join("\n - ", problems));
         }
     }
 
@@ -208,8 +216,107 @@ public class RuleCatalogService {
             p.add("traços: há origem com usesTraits, mas o tracos.json não tem budgets");
         }
         if (c.traits() != null) validateTraits(c.traits(), p, crafts);
+        validateGrants("Natureza Rúnica", c.runicNatureOrEmpty(), p, crafts);
         validateResources(c, p, crafts, classIds);
+        if (c.magic() != null) validateMagic(c.magic(), p, c, classIds);
+        validateEquipment(c, p, classIds);
         return p;
+    }
+
+    // Capítulo 6: itens (tipo, id único, conteúdo dos conjuntos), riqueza inicial e as opções das concessões
+    // EQUIPMENT/EQUIPMENT_CHOICE de origens, classes, subclasses e passados.
+    static final Set<String> ITEM_KINDS = Set.of("WEAPON", "ARMOR", "SHIELD", "AMMUNITION", "GEAR", "FOCUS", "TOOLS",
+            "INSTRUMENT", "MOUNT", "VEHICLE", "TACK", "PACK");
+    private static final Set<String> DEXTERITY_RULES = Set.of("FULL", "MAX_2", "NONE");
+
+    private static void validateEquipment(RuleCatalog c, List<String> p, Set<String> classIds) {
+        RuleItems items = c.equipment();
+        Set<String> ids = new HashSet<>();
+        if (items != null) {
+            for (RuleItem i : items.itemsOrEmpty()) {
+                String where = "item " + i.id();
+                if (blank(i.id()) || blank(i.name())) p.add("itens: cada item precisa de id e name");
+                else if (!ids.add(i.id())) p.add(where + ": id repetido");
+                if (i.kind() == null || !ITEM_KINDS.contains(i.kind())) p.add(where + ": kind deve ser um destes: " + ITEM_KINDS);
+                if (i.armorWeight() != null && !ARMOR_TYPES.contains(i.armorWeight())) p.add(where + ": armorWeight deve ser LIGHT, MEDIUM ou HEAVY");
+                if (i.dexterity() != null && !DEXTERITY_RULES.contains(i.dexterity())) p.add(where + ": dexterity deve ser um destes: " + DEXTERITY_RULES);
+                if ("ARMOR".equals(i.kind()) && (i.armorClass() == null || i.armorWeight() == null)) p.add(where + ": armadura precisa de armorClass e armorWeight");
+                if ("PACK".equals(i.kind()) && i.contentsOrEmpty().isEmpty()) p.add(where + ": conjunto sem contents");
+            }
+            for (RuleItem i : items.itemsOrEmpty()) {
+                for (RuleItem.Content x : i.contentsOrEmpty()) {
+                    if (x.item() == null && blank(x.name())) p.add("item " + i.id() + ": cada conteúdo precisa de item ou name");
+                    else if (x.item() != null && !ids.contains(x.item())) p.add("item " + i.id() + ": conteúdo com item inexistente \"" + x.item() + "\"");
+                }
+            }
+            if (items.startingWealth() != null) items.startingWealth().forEach((k, v) -> {
+                if (!classIds.contains(k)) p.add("itens: riqueza inicial de classe desconhecida \"" + k + "\"");
+                if (!EquipmentRules.validWealth(v)) p.add("itens: riqueza inicial de " + k + " deve ser como \"5d4 x 10\"");
+            });
+        }
+        List<Map.Entry<String, Grant>> grants = new ArrayList<>();
+        for (RuleOption o : c.origins() == null ? List.<RuleOption>of() : c.origins()) o.grantsOrEmpty().forEach(g -> grants.add(Map.entry("origem " + o.id(), g)));
+        for (RuleOption o : c.backgrounds() == null ? List.<RuleOption>of() : c.backgrounds()) o.grantsOrEmpty().forEach(g -> grants.add(Map.entry("passado " + o.id(), g)));
+        for (RuleClass k : c.classes() == null ? List.<RuleClass>of() : c.classes()) {
+            k.grantsOrEmpty().forEach(g -> grants.add(Map.entry("classe " + k.id(), g)));
+            k.subclassesOrEmpty().forEach(s -> s.grantsOrEmpty().forEach(g -> grants.add(Map.entry("classe " + k.id() + ", subclasse " + s.id(), g))));
+        }
+        for (Map.Entry<String, Grant> e : grants) {
+            Grant g = e.getValue();
+            List<String> options = g.type() == GrantType.EQUIPMENT && g.value() != null ? List.of(g.value())
+                    : g.type() == GrantType.EQUIPMENT_CHOICE && g.options() != null ? g.options() : List.of();
+            if (!options.isEmpty() && items == null) p.add(e.getKey() + ": equipamento sem catálogo de itens");
+            else options.forEach(o -> EquipmentRules.problems(items, o).forEach(x -> p.add(e.getKey() + " (" + g.type() + "): " + x)));
+        }
+    }
+
+    // Capítulo 10: tabela de Mana, elementos (e os caminhos de acesso), Mistérios e magias.
+    private static void validateMagic(RuleMagic m, List<String> p, RuleCatalog c, Set<String> classIds) {
+        if (m.manaCost() == null) p.add("magia: falta manaCost");
+        else m.manaCost().forEach((lv, n) -> {
+            if (!lv.matches("[0-9]")) p.add("magia: manaCost usa o nível da magia (0 a 9) como chave");
+            if (n == null || n < 0) p.add("magia: manaCost precisa de valores 0 ou mais");
+        });
+        Set<String> tiers = Set.of("PRIMARY", "SECONDARY", "TRANSITION", "PRIMORDIAL", "TERTIARY");
+        Set<String> elements = new HashSet<>();
+        m.elementsOrEmpty().forEach(e -> {
+            if (blank(e.id()) || blank(e.name())) p.add("magia: cada elemento precisa de id e name");
+            else if (!elements.add(e.id())) p.add("elemento " + e.id() + ": id repetido");
+            if (e.tier() == null || !tiers.contains(e.tier())) p.add("elemento " + e.id() + ": tier deve ser um destes: " + tiers);
+        });
+        Set<String> heritageIds = new HashSet<>();
+        c.heritagesOrEmpty().forEach(h -> heritageIds.add(String.valueOf(h.id())));
+        m.elementsOrEmpty().forEach(e -> (e.access() == null ? List.<List<String>>of() : e.access()).forEach(path -> path.forEach(t -> {
+            boolean ok = t.startsWith(MagicRules.HERITAGE) ? heritageIds.contains(t.substring(MagicRules.HERITAGE.length())) : elements.contains(t);
+            if (!ok) p.add("elemento " + e.id() + ": access cita \"" + t + "\" inexistente");
+        })));
+        Set<String> sources = Set.of("CELESTIAL", "ELEMENTAL", "SPIRITUAL");
+        Set<String> mysteries = new HashSet<>();
+        m.mysteriesOrEmpty().forEach(x -> {
+            if (blank(x.id()) || blank(x.name())) p.add("magia: cada Mistério precisa de id e name");
+            else if (!mysteries.add(x.id())) p.add("Mistério " + x.id() + ": id repetido");
+            if (x.source() == null || !sources.contains(x.source())) p.add("Mistério " + x.id() + ": source deve ser um destes: " + sources);
+            if (x.element() != null && !elements.contains(x.element())) p.add("Mistério " + x.id() + ": elemento inexistente \"" + x.element() + "\"");
+            if (x.optionalAccess() != null) x.optionalAccess().stream().filter(e -> !elements.contains(e))
+                    .forEach(e -> p.add("Mistério " + x.id() + ": optionalAccess cita elemento inexistente \"" + e + "\""));
+        });
+        Set<String> originIds = new HashSet<>();
+        (c.origins() == null ? List.<RuleOption>of() : c.origins()).forEach(o -> {
+            originIds.add(o.id());
+            o.lineagesOrEmpty().forEach(l -> originIds.add(l.id()));
+        });
+        Set<String> spells = new HashSet<>();
+        m.spellsOrEmpty().forEach(s -> {
+            if (blank(s.id()) || blank(s.name())) p.add("magia: cada magia precisa de id e name");
+            else if (!spells.add(s.id())) p.add("magia " + s.id() + ": id repetido");
+            if (s.level() == null || s.level() < 0 || s.level() > 9) p.add("magia " + s.id() + ": level deve ir de 0 a 9");
+            s.mysteriesOrEmpty().stream().filter(x -> !mysteries.contains(x))
+                    .forEach(x -> p.add("magia " + s.id() + ": Mistério inexistente \"" + x + "\""));
+            s.classesOrEmpty().stream().filter(x -> !classIds.contains(x))
+                    .forEach(x -> p.add("magia " + s.id() + ": classe inexistente \"" + x + "\""));
+            s.originsOrEmpty().stream().filter(x -> !originIds.contains(x))
+                    .forEach(x -> p.add("magia " + s.id() + ": origem ou linhagem inexistente \"" + x + "\""));
+        });
     }
 
     // Recursos de classe e as escolhas que apontam para eles (tipo e grupos existentes).
@@ -264,6 +371,7 @@ public class RuleCatalogService {
             }
         }
         c.resourcesOrEmpty().forEach(r -> r.grantsOrEmpty().forEach(g -> choices.add(Map.entry("recurso " + r.id(), g))));
+        c.runicNatureOrEmpty().forEach(g -> choices.add(Map.entry("Natureza Rúnica", g)));
         for (Map.Entry<String, Grant> e : choices) {
             Grant g = e.getValue();
             if (g.type() != GrantType.RESOURCE_CHOICE || g.value() == null) continue;
@@ -525,6 +633,14 @@ public class RuleCatalogService {
                     } else if (g.count() != null && g.count() < 1) {
                         p.add(at + " (RESOURCE_CHOICE): count deve ser 1 ou mais");
                     }
+                }
+                // Os itens citados são conferidos em validateEquipment (precisa do catálogo de itens).
+                case EQUIPMENT -> {
+                    if (blank(g.value())) p.add(at + " (EQUIPMENT): falta value (os itens)");
+                }
+                case EQUIPMENT_CHOICE -> {
+                    if (g.options() == null || g.options().isEmpty()) p.add(at + " (EQUIPMENT_CHOICE): falta options");
+                    if (g.count() != null && g.count() < 1) p.add(at + " (EQUIPMENT_CHOICE): count deve ser 1 ou mais");
                 }
             }
         }

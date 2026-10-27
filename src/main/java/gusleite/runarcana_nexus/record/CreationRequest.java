@@ -31,8 +31,15 @@ public record CreationRequest(
         // traços e desvantagens escolhidos. Repetir o id = escolher de novo.
         String traitBudget,
         List<TraitPick> traits,
-        List<TraitPick> drawbacks
+        List<TraitPick> drawbacks,
+        // Equipamento inicial: EQUIPMENT (padrão: o da classe e do passado) ou WEALTH (troca tudo pela riqueza inicial
+        // da classe, rolada ao criar).
+        String startingEquipment
 ) {
+    public boolean startingWealth() {
+        return "WEALTH".equals(startingEquipment);
+    }
+
     // option: a sub-escolha da Herança (ex.: a tribo do Meio-Vastaya), quando ela tem options.
     public record HeritagePick(String id, String option) {}
 

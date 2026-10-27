@@ -5108,6 +5108,1508 @@
         "Forma Selvagem"
       ],
       "description": "Características: Garras Ágeis, Visão Apurada e Garras (cortante). Atributos: +2 Força, +1 Destreza.\n\nGarras Ágeis. Após um ataque com garra, outro ataque com garra como ação bônus.\nVisão Apurada. Vantagem em Percepção pela visão.\n\nNa Forma Selvagem, os atributos da forma usam o maior entre o seu atributo + bônus do Aspecto e a sua Sabedoria + bônus do Aspecto."
+    },
+    {
+      "id": "runa-armamento-aprimorado",
+      "kind": "RUNA",
+      "name": "Armamento Aprimorado",
+      "groups": [
+        "Rubi"
+      ],
+      "prerequisite": "Nível 8",
+      "description": "Pulso: Rubi\nSinergia: Você recebe resistência ao elemento ativado pela duração e seu bônus de Proficiência é adicionado ao dano.\nUso: Metade da Proficiência\n\nUma maior conexão com a emanação elemental das Runas pode ser canalizada para fortalecer seus ataques.\nAo escolher essa Runa, você deve escolher um dos elementos a que você tenha acesso da tabela Elementos e Tipos de Dano presente no Capítulo 10 (caso você possua a Runa: Ataque Elemental, você pode utilizar os elementos escolhidos em ambas as runas ao ativá-las, declarando o elemento utilizado previamente). Ao ativar essa runa, você reveste uma arma corpo a corpo com energia elemental por 2 rodadas, pela duração essa arma em suas mãos recebe metade do seu bônus de proficiência como bônus em jogadas de acerto e metade do seu bônus de proficiência em dado Base de Pulso como dano elemental do tipo escolhido.\n\nEfeito Elemental. Ataques bem sucedidos causam um efeito adicional baseado no tipo de dano, conforme a tabela de Efeitos para Magias por Tipo de Dano presente no Capítulo 10.\n\nMaestria:\n- Duração: +1 rodada por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 8
+      }
+    },
+    {
+      "id": "runa-ataque-elemental",
+      "kind": "RUNA",
+      "name": "Ataque Elemental",
+      "groups": [
+        "Rubi"
+      ],
+      "description": "Pulso: Rubi\nSinergia: Adicione Proficiência ao dano e metade da Proficiência ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nAs runas globais lhe concederam uma capacidade de controlar um elemento e canalizá-lo através de seu corpo, aumentando o poder de seus ataques.\nAo escolher essa Runa, você deve escolher um dos elementos simples da tabela Elementos e Tipos de Dano presente no Capítulo 10. Ao ativar essa runa, seu próximo ataque causa seu dado de Pulso como dano adicional do tipo baseado no elemento escolhido. Adicionalmente, você recebe resistência a danos do tipo do elemento escolhido até o início de seu próximo turno.\n\nMaestria:\n- Dano: +1 na Categoria de dado de dano por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-atropelar",
+      "kind": "RUNA",
+      "name": "Atropelar",
+      "groups": [
+        "Esmeralda"
+      ],
+      "description": "Pulso: Esmeralda\nSinergia: Adicione Proficiência ao dano e metade da Proficiência ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nAs runas que fortalecem o seu corpo fazem com que seus inimigos se arrependam de entrar em seu caminho.\n\nAo se mover pelo menos metade de seu deslocamento em linha reta, você pode ativar essa runa para que seu próximo ataque seja fortalecido. Até o início de seu próximo turno, seu próximo ataque corpo a corpo causa seu dado de Pulso como dano adicional e, caso o ataque seja contra uma criatura de até uma categoria de tamanho acima que a sua, você faz com que ela deva realizar uma salvaguarda de Força. Em uma falha, a criatura fica Caída. Além disso, você pode se mover através do espaço ocupado por essa criatura nesse turno.\n\nMaestria:\n- Dano: +1 na Categoria de dado de dano por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-aura-elemental",
+      "kind": "RUNA",
+      "name": "Aura Elemental",
+      "groups": [
+        "Rubi"
+      ],
+      "prerequisite": "Nível 8",
+      "description": "Pulso: Rubi\nSinergia: Bônus de Proficiência adicionado ao dano\nUso: Metade da Proficiência\n\nSua potência Rúnica reverbera de forma potente com os elementos, se expandindo de forma destruidora.\nAo escolher essa Runa, você deve escolher um dos elementos a que você tenha acesso da tabela Elementos e Tipos de Dano presente no Capítulo 10 (caso você possua a Runa: Ataque Elemental, você pode utilizar os elementos escolhidos em ambas as runas ao ativá-las, declarando o elemento utilizado previamente).\nAo ativar essa runa você rodeia-se em por uma aura do elemento escolhido, emanando a força elemental do mesmo. Você cria uma área do elemento escolhido de 5 pés ao seu redor que acompanha você e dura pelas próximas 2 rodadas. Criaturas que você definir, que estejam nessa área, devem realizar uma salvaguarda de Constituição. Em uma falha, uma criatura afetada recebe seu dado de Pulso em dano do elemento escolhido, em um sucesso, apenas metade desse dano. Pela duração da runa, você recebe seu bônus de proficiência como RD ao dano do elemento escolhido.\n\nProteção Elemental. Você recebe metade do seu bônus de proficiência como RD ao elemento escolhido.\n\nMaestria:\n- Duração: +1 rodada por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 8
+      }
+    },
+    {
+      "id": "runa-barreira-runica",
+      "kind": "RUNA",
+      "name": "Barreira Rúnica",
+      "groups": [
+        "Esmeralda"
+      ],
+      "description": "Pulso: Esmeralda\nSinergia: Adicione o dobro de Proficiência aos pontos de vida e metade da Proficiência ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nSua essência rúnica é exteriorizada criando proteção adicional.\n\nAo ser alvo de um ataque, você pode usar sua reação para ativar um escudo temporariamente. Ao fazer isso, você recebe seu dado de Pulso como pontos de vida temporários. Esses pontos de vida temporários duram até serem removidos ou após 1 minuto, enquanto esses pontos de vida temporários estiverem ativos, você recebe resistência a danos simples.\n\nMaestria:\n- Vida: +1 na Categoria de dado de vida temporária por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-bencao-do-anciao-carmesim",
+      "kind": "RUNA",
+      "name": "Bênção do Ancião Carmesim",
+      "groups": [
+        "Rubi"
+      ],
+      "prerequisite": "Nível 15",
+      "description": "Pulso: Rubi\nSinergia: A cada 5 pontos de dano necrótico que você causa, você recupera 1 ponto de vida.\nUso: Metade da Proficiência\n\nReza a lenda que um homem velho com barba avermelhada costumava aparecer por todos os cantos, trazendo caos e destruição.\nAo ativar essa runa com uma ação bônus, você fortalece seus ataques até o final de seu próximo turno. Pela duração, seus ataques corpo a corpo feitos com uma arma marcial causam seu dado de Pulso como dano necrótico adicional. Adicionalmente, você recebe uma quantidade de pontos de vida temporários igual à quantidade de dano necrótico causado em um único turno. Esses pontos de vida temporários duram por 1 minuto ou até serem consumidos.\n\nForça Vital. A cada 5 pontos de dano necrótico que você recebe, você ganha 1 ponto de vida temporário que pode se acumular com pontos de vida temporários dessa runa e adquiridos através dessa característica. Os pontos de vida temporários adquiridos com Força Vital duram até o próximo descanso longo ou até serem consumidos.\n\nMaestria:\n- Duração: +1 rodada por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 15
+      }
+    },
+    {
+      "id": "runa-bencao-do-vigia",
+      "kind": "RUNA",
+      "name": "Bênção do Vigia",
+      "groups": [
+        "Esmeralda"
+      ],
+      "prerequisite": "Nível 8",
+      "description": "Pulso: Esmeralda\nSinergia: Você recebe seu nível de personagem como pontos de vida máximos.\nUso: Metade da Proficiência\n\nUtilizar sua potência rúnica para proteger seus aliados é algo que você aprendeu a fazer como ninguém.\nAo ativar essa Runa, você toca um aliado que esteja ao seu alcance, por 2 rodadas você recebe RD/ dano verdadeiro igual ao seu bônus de Proficiência e todo dano causado a esse aliado (exceto dano verdadeiro) é transferido diretamente a você, você recebe apenas metade desse dano como dano verdadeiro ao invés do dano integral ser causado a esse aliado.\n\nVigor do Vigia. Você recebe seu nível de personagem como pontos de vida máximos.\n\nMaestria:\n- RD: +1 de RD por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 8
+      }
+    },
+    {
+      "id": "runa-bencao-estelar",
+      "kind": "RUNA",
+      "name": "Bênção Estelar",
+      "groups": [
+        "Diamante"
+      ],
+      "prerequisite": "Nível 8",
+      "description": "Pulso: Diamante\nSinergia: Seu excedente de cura se transforma em pontos de vida temporários até o próximo descanso longo.\nUso: Metade da Proficiência\n\nVocê aprendeu a canalizar suas potências Rúnicas para restaurar e fortalecer o corpo de seus aliados.\nAo ativar essa Runa, escolha até 5 criaturas à sua escolha que você possa ver em um raio de 10 pés de você, elas recuperam seu dado de Pulso vezes metade do seu bônus de Proficiência em pontos de vida. Adicionalmente, cada criatura pode remover uma quantidade de pontos de Exaustão igual a metade do bônus de Proficiência de cada um. Uma criatura não pode ser alvo mais de uma vez.\n\nBrilho Estelar. Sempre que você usar um efeito de Runa, Habilidade de Classe ou Magia, que cure um alvo que não seja você, você recebe seu dado de Pulso em Pontos de Vida temporários com duração de um número de rodadas igual ao seu bônus de Proficiência ou até serem consumidos (o que acontecer primeiro).\n\nMaestria:\n- Alvo: Para cada maestria, um alvo pode ser alvo mais de uma vez.\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 8
+      }
+    },
+    {
+      "id": "runa-cegar",
+      "kind": "RUNA",
+      "name": "Cegar",
+      "groups": [
+        "Safira"
+      ],
+      "description": "Pulso: Safira\nSinergia: Adicione o bônus de Proficiência ao dano e metade da Proficiência ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nAo realizar um ataque de acerto a distância com arma ou magia, você pode utilizar essa runa para causar Cegueira ao inimigo atingido.\n\nEsse inimigo deve realizar uma salvaguarda de constituição, se falhar ele ficará Cego até o final de seu próximo turno e receberá seu dado de Pulso em dano psíquico.\n\nMaestria:\n- Dano: +1 na Categoria de dado de dano por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-cura",
+      "kind": "RUNA",
+      "name": "Cura",
+      "groups": [
+        "Diamante"
+      ],
+      "description": "Pulso: Diamante\nSinergia: Excedente se transforma em pontos de vida temporários até o descanso longo e metade da Proficiência é adicionada ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nAs runas que você possui emanam uma energia curativa que pode ser direcionada para curar um alvo ou intensificar algum outro efeito de cura.\n\nVocê pode tocar uma criatura para curá-la. Ao tocar uma criatura, ou ao utilizar uma magia de cura, você pode ativar essa runa para adicionar seu dado de Pulso aos pontos de vida recuperados pela criatura.\n\nMaestria:\n- Dano: +1 na Categoria de dado de cura por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-desidratacao",
+      "kind": "RUNA",
+      "name": "Desidratação",
+      "groups": [
+        "Safira"
+      ],
+      "prerequisite": "Nível 8",
+      "description": "Pulso: Safira\nSinergia: Adicione metade do seu bônus de proficiência a salvaguardas contra efeitos que causem Exaustão.\nUso: Metade da Proficiência\n\nEnfraquecer profundamente um inimigo é algo fácil para você.\nAo realizar um ataque, você pode ativar essa runa para forçar o alvo a realizar uma salvaguarda de Constituição. Em uma falha, a criatura recebe 1d4 pontos de Exaustão, em um sucesso ela não recebe nenhuma penalidade. Uma criatura que já tenha sido afetada por essa Runa, ao ser novamente alvo da mesma recebe apenas 1 ponto de exaustão.\n\nControle Corporal. Ao concluir um descanso longo e remover pontos de exaustão, você remove 1d4 pontos de exaustão adicionais.\n\nMaestria:\n- CD: +2 na CD por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 8
+      }
+    },
+    {
+      "id": "runa-disparo-energizado",
+      "kind": "RUNA",
+      "name": "Disparo Energizado",
+      "groups": [
+        "Safira"
+      ],
+      "description": "Pulso: Safira\nSinergia: Adicione o bônus de Proficiência ao dano e metade da Proficiência ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nVocê aprende a externalizar a energia rúnica presente em seu corpo para fortalecer os seus disparos.\nAo ativar essa runa, seu próximo ataque à distância causa seu dado de Pulso em dano adicional.\n\nMaestria:\n- Dano: +1 na Categoria de dado de dano por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-disparos-vorazes",
+      "kind": "RUNA",
+      "name": "Disparos Vorazes",
+      "groups": [
+        "Safira"
+      ],
+      "prerequisite": "Nível 8",
+      "description": "Pulso: Safira\nSinergia: Adicione seu bônus de proficiência ao dano da explosão elemental e o alcance da explosão aumenta em 5 pés\nUso: Metade da Proficiência\n\nVocê sabe como imbuir suas armas com o poder elemental concedido pelas runas.\nAo escolher essa Runa, você deve escolher um dos elementos a que você tenha acesso da tabela Elementos e Tipos de Dano presente no Capítulo 10, caso você possua a Runa: Ataque Elemental, você pode utilizar os elementos escolhidos em ambas as runas ao ativá-las, declarando o elemento utilizado previamente.\nAo ativar essa Runa, seus ataques à distância são fortalecidos por energia elemental, por 2 rodadas, seus ataques com armas à distância ou com magia (contra apenas um alvo) recebem metade do seu bônus de proficiência como bônus em jogadas de acerto e seu dado base de Pulso como dano elemental do tipo escolhido.\n\nExplosão Elemental. Quando um ataque fortalecido é bem sucedido, criaturas à sua escolha a até 5 pés do alvo devem fazer uma salvaguarda de Destreza, em uma falha recebem metade desse dano, em um sucesso não recebem dano algum.\n\nMaestria:\n- Duração: +1 rodada por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 8
+      }
+    },
+    {
+      "id": "runa-elegia",
+      "kind": "RUNA",
+      "name": "Elegia",
+      "groups": [
+        "Ametista"
+      ],
+      "prerequisite": "Nível 15",
+      "description": "Pulso: Ametista\nSinergia: Você recebe resistência a dano necrótico\nUso: Metade da Proficiência\n\nA sinfonia silente da morte encontrou em você um apreciador e propagador.\nUsando sua reação ao acertar um alvo com um ataque com arma à distância ou com um ataque com magia à distância, você pode imbuir o mesmo com imensa energia necrótica. Ao atingir uma criatura com esse ataque uma área nebulosa de 10 pés centrada no seu alvo é criada, criaturas que estiverem dentro dessa área, ou começarem seus turnos dentro dela, deverão realizar uma salvaguarda de Constituição, se falharem irão receber seu dado de Pulso em dano necrótico e 1 ponto de exaustão. Essa névoa têm uma duração de 3 rodadas e se afasta 10 pés numa direção à sua escolha no começo de cada um dos seus turnos. Um vento forte é capaz de dissipar essa área.\n\nForça Necrótica. Você pode remover 1 ponto de vida do seu máximo de pontos de vida e 1 ponto de vida atual (não pode ser mitigado) e adicionar 1d4 de dano necrótico a qualquer magia de ataque à distância ou ataque com arma à distância. Esse efeito pode ser declarado após saber que o ataque acertou, mas antes de jogar o dano causado. Pontos de vida removidos dessa forma só podem ser recuperados após um descanso pleno ou a magia restauração maior.\n\nMaestria:\n- Duração: +1 rodada por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 15
+      }
+    },
+    {
+      "id": "runa-encorajar",
+      "kind": "RUNA",
+      "name": "Encorajar",
+      "groups": [
+        "Diamante"
+      ],
+      "description": "Pulso: Diamante\nSinergia: Adicione metade da Proficiência à rolagem e ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nAs runas globais ressoam com seu espírito, dando à sua voz um poder que motiva seus aliados.\nAo realizar uma ação de Ajuda, você pode ativar esta Runa, concedendo ao Aliado em questão palavras de motivação, permitindo que some seu dado base de pulso à rolagem na qual o auxiliou.\n\nMaestria:\n- Efeito: +1 à rolagem por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-energizar-ataque",
+      "kind": "RUNA",
+      "name": "Energizar Ataque",
+      "groups": [
+        "Rubi"
+      ],
+      "description": "Pulso: Rubi\nSinergia: Metade da proficiência em turnos adicionais e ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nVocê invoca a energia que flui através de você para fortalecer seus ataques.\n\nAo ativar essa runa, seus ataques corpo a corpo causam dano adicional igual ao seu dado de Pulso até o início de seu próximo turno.\n\nMaestria:\n- Dano: +1 na Categoria de dado de dano por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-enlace-virente",
+      "kind": "RUNA",
+      "name": "Enlace Virente",
+      "groups": [
+        "Diamante"
+      ],
+      "prerequisite": "Nível 8",
+      "description": "Pulso: Diamante\nSinergia: Seus ataques contra criaturas contidas por essa runa causam seu dado base de Pulso como dano adicional.\nUso: Metade da Proficiência\n\nA natureza pode ser uma grande aliada e você sabe como tirar proveito disso.\nUtilizando uma ação bônus, você cria vinhas saídas do chão em uma linha de 30 pés de comprimento por 10 pés de largura iniciada em você. Criaturas nessa linha devem realizar uma salvaguarda de Destreza. Em uma falha, uma criatura ficará Contida por 3 rodadas, podendo fazer uma salvaguarda de Força no final de cada um de seus turnos para encerrar esse efeito em um sucesso. Criaturas que tenham sido atingidas pelo enlace fazem ataques contra você com desvantagem por 3 rodadas após terem sido soltas.\n\nPercepção Vegetal. Você é capaz de saber quais tipos de vegetais (mas não criaturas), árvores, raízes, frutos, etc, estão em um raio de 600 pés de você. Caso você não conheça esses vegetais, você consegue ter uma noção se são venenosos ou se podem ser usados para nutrição.\n\nMaestria:\n- Duração: +1 rodada por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 8
+      }
+    },
+    {
+      "id": "runa-escudo",
+      "kind": "RUNA",
+      "name": "Escudo",
+      "groups": [
+        "Esmeralda",
+        "Diamante"
+      ],
+      "description": "Pulso: Esmeralda ou Diamante\nSinergia: Adicione metade do seu bônus de Proficiência à duração e ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nVocê aprende a invocar a energia rúnica para que ela funcione como um escudo que protege seu corpo e sua mente.\nAo ser alvo de um ataque ou caso realize uma salvaguarda para evitar receber dano, você pode usar sua reação para receber um bônus igual a metade do seu bônus de Proficiência em sua CA ou na salvaguarda para resistir ao dano, você também recebe 10 pés de deslocamento e resistência ao tipo de dano do ataque ou efeito recebido (exceto dano verdadeiro). Esses bônus duram por um número de rodadas igual ao seu bônus de Proficiência, caso ele já esteja ativo, o bônus em sua CA ou salvaguarda não é aumentado.\n\nMaestria:\n- RD: Você recebe 2 de RD/verdadeiro pela duração\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-forca-adamantina",
+      "kind": "RUNA",
+      "name": "Força Adamantina",
+      "groups": [
+        "Diamante"
+      ],
+      "prerequisite": "Nível 15",
+      "description": "Pulso: Diamante\nSinergia: Você recupera 1 ponto de mana a cada 4 horas, esse valor é modificado pelo nível de Mana da região.\nUso: Metade da Proficiência\n\nUtilizar esse poder rúnico aproxima você da base estrutural da magia, fazendo com que a mana flua de forma poderosa.\nConsumindo um uso dessa Runa, não estando sob qualquer outro poder rúnico, você perde seu deslocamento completo por 2 rodadas. Durante esse tempo todas magias lançadas por você são lançadas como um nível acima sem consumir pontos de mana adicionais, a CD de suas magias é aumentada em metade do seu bônus de proficiência, o dano ou cura de suas magias é aumentado em uma categoria e você recebe seu bônus de proficiência como RD/ dano verdadeiro. Ao término da runa, você recebe 2 pontos de exaustão.\n\nBênção da Mana. Você adiciona seu nível de personagem ao seus pontos de mana máximos.\n\nMaestria:\n- Duração: +1 rodada por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 15
+      }
+    },
+    {
+      "id": "runa-folego-de-guerra",
+      "kind": "RUNA",
+      "name": "Fôlego de Guerra",
+      "groups": [
+        "Esmeralda"
+      ],
+      "prerequisite": "Nível 15",
+      "description": "Pulso: Esmeralda\nSinergia: Adicione seu nível de personagem aos seus pontos de vida máximos\nUso: Metade da Proficiência\n\nSua resistência ultrapassa o sobrenatural quando você utiliza esse poder rúnico.\nCom um uso dessa ruma, pelo próximo minuto, você aumenta seus pontos de vida máximos e atuais em duas vezes o seu dado de Pulso, desde que não esteja Incapacitado, recebe +4 em sua CA e RD 5/ dano verdadeiro (esse bônus não é cumulativo) e pode fazer um ataque adicional em sua ação de ataque. Adicionalmente, você remove 1d4 pontos de Exaustão que você possua. Além disso, caso você possua a Runa Bênção do Vigia, você pode conceder esses bônus para um aliado no alcance de seu toque ao invés de você mesmo.\n\nVigor Incomparável. Você recebe metade de seu bônus de proficiência como RD/ dano verdadeiro\nMaestria:\n\n- Duração: +1 rodada por maestria\n\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 15
+      }
+    },
+    {
+      "id": "runa-incitar",
+      "kind": "RUNA",
+      "name": "Incitar",
+      "groups": [
+        "Esmeralda"
+      ],
+      "description": "Pulso: Esmeralda\nSinergia: Adicione metade da Proficiência à duração e ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nAs runas que afetam seu corpo o tornam capaz de incitar inimigos a vê-lo como seu alvo, ignorando seus aliados.\nUtilizando uma ação, você emite um pulso de energia rúnica em um raio de 10 pés ao seu redor, inimigos na área devem realizar uma salvaguarda de Carisma. Em uma falha, a criatura fica Provocada por você por um número de rodadas igual ao seu bônus de proficiência, podendo repetir a salvaguarda no início de cada turno.\n\nMaestria:\n- Resistência: +1 de RD/verdadeiro para ataques provenientes de alvos Provocados por esse efeito\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-lanca-luminar",
+      "kind": "RUNA",
+      "name": "Lança Luminar",
+      "groups": [
+        "Rubi"
+      ],
+      "prerequisite": "Nível 15",
+      "description": "Pulso: Rubi\nSinergia: Adicione seu bônus de proficiência ao dano\nUso: Metade da Proficiência\n\nA luz é caprichosa enquanto elemento, usar essa Runa tem o seu preço.\nCom um uso dessa runa, você pode utilizar um ataque com arma à distância para disparar essa runa. Caso o ataque seja bem sucedido, a criatura recebe três vezes seu dado de Pulso em dano radiante e deve fazer uma salvaguarda de Constituição. Em uma falha a criatura recebe a condição Cega e você recebe 1d8 de dano verdadeiro. A Cegueira tem duração permanente, podendo ser revertida com o uso da magia regeneração.\n\nDefesa Luminar. Você faz jogadas com vantagem contra efeitos que causem Cegueira.\n\nMaestria:\n- CD: +2 na CD por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 15
+      }
+    },
+    {
+      "id": "runa-particula-de-medo",
+      "kind": "RUNA",
+      "name": "Partícula de Medo",
+      "groups": [
+        "Ametista"
+      ],
+      "description": "Pulso: Ametista\nSinergia: Adicione o bônus de Proficiência ao dano e metade à CD e ao Dado de Pulso\nUso: Metade da Proficiência\n\nVocê é capaz de usar sua energia rúnica para criar temor em um alvo.\n\nUtilizando uma ação bônus, você pode direcionar essa onda contra um alvo que possa ver você e que esteja até 5 vezes seu bônus de Proficiência pés de você. O alvo deve realizar uma salvaguarda de Sabedoria, caso falhe, o alvo fica Amedrontado por você durante um número de rodadas igual ao seu bônus de Proficiência e recebe seu dado de Pulso em dano psíquico. Um alvo afetado pode repetir a salvaguarda no início de cada um de seus turnos.\n\nMaestria:\n- Dano: +1 na Categoria de dado de dano por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-pesadelo-vivo",
+      "kind": "RUNA",
+      "name": "Pesadelo Vivo",
+      "groups": [
+        "Ametista"
+      ],
+      "prerequisite": "Nível 15",
+      "description": "Pulso: Ametista\nSinergia: Adicione seu bônus de proficiência ao dano de seus ataques e magias feito contra criaturas que estejam amedrontadas.\nUso: Metade da Proficiência\n\nVocê pode desfigurar sua própria face refletindo os pesadelos de seus alvos.\nAo utilizar essa runa, uma criatura à sua escolha, e até 40 pés que possa ver seu rosto deve ser bem-sucedida em uma salvaguarda de Sabedoria ou é afetada por um dos efeitos abaixo a sua escolha. A cada turno enquanto durar o efeito, você pode escolher outra criatura, mas não uma que já tenha sido bem-sucedida na salvaguarda. Essa runa possui uma duração de 2 rodadas.\n\n- Adormecer: O alvo cai inconsciente. Ele acorda se sofrer qualquer dano ou se outra criatura usar sua ação para sacudir o adormecido até acordá-lo.\n\n- Apavorar: O alvo está amedrontado. Em cada um dos turnos dele, o alvo amedrontado deve realizar a ação de Disparada e se mover para longe de você pela rota segura mais curta disponível, a não ser que não haja lugar para se mover. Se o alvo se mover para um local a, pelo menos, 60 pés de distância de você onde ela não possa mais te ver, esse efeito termina.\n\nEssência de Medo. Você faz jogadas com vantagem contra efeitos que causem a condição Amendrontado.\n\nMaestria:\n- Duração: +1 rodada por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 15
+      }
+    },
+    {
+      "id": "runa-peconha-da-terra",
+      "kind": "RUNA",
+      "name": "Peçonha da Terra",
+      "groups": [
+        "Ametista"
+      ],
+      "prerequisite": "Nível 8",
+      "description": "Pulso: Ametista\nSinergia: Venenos utilizados por você são considerados de 1 nível acima do nível do mesmo.\nUso: Metade da Proficiência\n\nVocê invoca o veneno presente na terra, corromper criaturas que passem por ele.\nAo realizar um ataque à distância, você pode ativar essa runa para que o ataque crie uma explosão gerando uma área venenosa em um raio de 5 pés ao redor do alvo atingido pelo ataque. Essa área cresce 5 pés de raio a cada rodada. A área dura 2 rodadas.\nCriaturas nessa área, que iniciem seus turnos dentro dela ou entrem nela pela primeira vez em seus turnos, devem realizar uma salvaguarda de Constituição. Em uma falha, recebem seu dado de Pulso em dano Venenoso como Veneno de Nível igual ao seu bônus de Proficiência e ficam Intoxicadas, podendo repetir a salvaguarda no início de cada um dos turnos delas para encerrar esse efeito em um sucesso.\n\nPeçonha. Seus ataques e magias que causam dano venenoso tem sua categoria de dano aumentada em 1\nMaestria:\n\n- Duração: +1 rodada por maestria\n\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 8
+      }
+    },
+    {
+      "id": "runa-relampago-perfurante",
+      "kind": "RUNA",
+      "name": "Relâmpago Perfurante",
+      "groups": [
+        "Ametista"
+      ],
+      "prerequisite": "Nível 8",
+      "description": "Pulso: Ametista\nSinergia: Seus ataques com Armas de Haste ganham 5 pés de alcance adicional\nUso: Metade da Proficiência\n\nSeus ataques são perfurantes como um raio, atravessando a área do combate de forma poderosa.\nAo realizar um ataque corpo a corpo que cause dano perfurante, você pode ativar essa runa para projetar energia elétrica em uma linha iniciada em você com 15 pés de comprimento por 1 pé de largura, caso sua arma possua a propriedade Extensão, o comprimento se torna 25 pés. Inimigos nessa linha devem realizar uma salvaguarda de Destreza. Em uma falha, uma criatura afetada sofre seu dado de Pulso em dano elétrico e fica Incapacitada até o final de seu próximo turno.\n\nLonginus. Seus ataques com armas de haste bem sucedidos podem acertar um alvo adicional atrás do alvo original caso o mesmo esteja dentro da área de ataque, você utiliza a mesma jogada de ataque para definir esse acerto.\n\nMaestria:\n- Alcance: +5 pés de alcance no uso da runa por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 8
+      }
+    },
+    {
+      "id": "runa-restauracao-estelar",
+      "kind": "RUNA",
+      "name": "Restauração Estelar",
+      "groups": [
+        "Diamante"
+      ],
+      "prerequisite": "Nível 15",
+      "description": "Pulso: Diamante\nSinergia: Adicione o dobro do bônus de proficiência à cura desta runa\nUso: Metade da Proficiência\n\nVocê possui um poder remanescente dentro de você vindo da antiga deusa da cura\nAo ativar essa runa, você invoca um surto de energia curativa em um alvo que possa ver a até 120 pés de você, esse alvo recupera o dobro de seu dado de Pulso em Pontos de vida, 1d4 pontos de Exaustão e pode remover uma condição debilitante. Por uma duração de 2 rodadas ele pode fazer um ataque adicional em sua ação de ataque e recebe, no começo de cada um de seus turnos, metade do seu bônus de proficiência em dado base de Pulso como pontos de vida temporários.\n\nAura da Vida. Você emite uma aura que protege você e seus aliados. Aliados que estejam a até 15 pés de você recebem seu bônus de Proficiência em Redução a Dano Necrótico.\n\nMaestria:\n- Duração: +1 rodada por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 15
+      }
+    },
+    {
+      "id": "runa-ribombar-lancinante",
+      "kind": "RUNA",
+      "name": "Ribombar Lancinante",
+      "groups": [
+        "Esmeralda"
+      ],
+      "prerequisite": "Nível 8",
+      "description": "Pulso: Esmeralda\nSinergia: Seus ataques com Armas Simples e Marciais que causem dano contundente (exceto manoplas) tem seu dano aumentado em 1 categoria\nUso: Metade da Proficiência\n\nSeus ataques possuem a força de um trovão, desestabilizando seus inimigos.\nAo realizar um ataque corpo a corpo que cause dano contundente, você pode ativar essa runa para projetar uma força esmagadora em um cone de 10 pés iniciado em você. Inimigos nessa linha devem realizar uma salvaguarda de Constituição. Em uma falha, uma criatura afetada sofre seu dado de Pulso como dano trovejante e fica Atordoada até o final de seu próximo turno.\n\nEsmagar. Seus ataques com Armas Simples e Marciais que causem dano contundente (exceto manoplas) podem acertar um alvo adjacente ao alvo original, você utiliza a mesma jogada de ataque para definir esse acerto.\n\nMaestria:\n- CD: +2 na CD por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 8
+      }
+    },
+    {
+      "id": "runa-roubar-vida",
+      "kind": "RUNA",
+      "name": "Roubar Vida",
+      "groups": [
+        "Ametista"
+      ],
+      "description": "Pulso: Ametista\nSinergia: Adicione o bônus de Proficiência ao dano e metade à cura e ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nVocê sabe como roubar a energia vital de uma criatura para si.\n\nAo realizar um ataque corpo a corpo, você pode ativar essa runa para causar seu dado de Pulso em dano necrótico adicional. Caso atinja, você recupera metade do dano causado pelo Dado de Pulso em pontos de vida.\n\nMaestria:\n- Dano: +1 na Categoria de dado de dano por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-sangrar",
+      "kind": "RUNA",
+      "name": "Sangrar",
+      "groups": [
+        "Rubi"
+      ],
+      "description": "Pulso: Rubi\nSinergia: Adicione o bônus de Proficiência ao dano e metade ao Sangramento e ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nAo realizar um ataque corpo a corpo com arma ou magia, você pode utilizar essa runa para causar Sangramento ao inimigo atingido.\nO inimigo deve realizar uma salvaguarda de Constituição. Em uma falha, a criatura recebe seu dado base de pulso em dano necrótico e metade desse valor em Sangramento.\n\nMaestria:\n- Potência: +1 ponto de Sangramento por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-selo-da-lua-minguante",
+      "kind": "RUNA",
+      "name": "Selo da Lua Minguante",
+      "groups": [
+        "Safira"
+      ],
+      "prerequisite": "Nível 15",
+      "description": "Pulso: Safira\nSinergia: Seu multiplicador de crítico é aumentado em 1 contra um alvo sob o efeito dessa Runa\nUso: Metade da Proficiência\n\nA lua minguante possui a capacidade de selar o poder de uma criatura, essa Runa é uma manifestação desse poder.\nUtilizando uma ação bônus, você pode tocar uma criatura no seu alcance para selar o poder da mesma. O alvo deve realizar uma salvaguarda de Constituição, em uma falha, todo dano causado por esse alvo é reduzido pela metade, você e seus aliados possuem vantagem em jogadas de ataque contra ele e o deslocamento do alvo é reduzido em 20 pés. Esse efeito dura por 2 rodadas ou até a magia restauração maior ser usada para remover o Selo. O alvo afetado pode repetir a salvaguarda no final de cada um dos turnos dele para encerrar esse efeito.\n\nSegredo Lunar. Você recebe metade do seu bônus de proficiência como uso de outras Runas exceto essa.\n\nMaestria:\n- Duração: +1 rodada por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 15
+      }
+    },
+    {
+      "id": "runa-temerario",
+      "kind": "RUNA",
+      "name": "Temerário",
+      "groups": [
+        "Esmeralda"
+      ],
+      "prerequisite": "Nível 15",
+      "description": "Pulso: Esmeralda\nSinergia: Adicione metade de seu bônus de proficiência ao dano de seus ataques pela duração da Runa\nUso: Metade da Proficiência\n\nSua confiança em sua resistência é excepcional trazendo uma maior ousadia em combate, isso sendo refletido em seu poder rúnico.\nCom uma ação bônus e um uso dessa runa, seu corpo começa a emitir um leve brilho dourado, emitindo penumbra por 5 pés. Até o início de seu próximo turno você recebe 10 pés de deslocamento adicional, possui imunidade a todos os tipos de dano (exceto danos verdadeiros) e adiciona metade seu bônus de proficiência ao dano de seus ataques. Ao final da duração, você recebe 1 ponto de Exaustão.\n\nEssência Livre. Você faz jogadas com vantagem contra efeitos que afetem seu deslocamento.\n\nMaestria:\n- Dano: metade do seu bônus de proficiência ao dano por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 15
+      }
+    },
+    {
+      "id": "runa-trunfo-do-crepusculo",
+      "kind": "RUNA",
+      "name": "Trunfo do Crepúsculo",
+      "groups": [
+        "Safira"
+      ],
+      "prerequisite": "Nível 15",
+      "description": "Pulso: Safira\nSinergia: Adicione o dobro do seu bônus de proficiência ao dano\nUso: Metade da Proficiência\n\nUm poder que parece emanar do próprio Aspecto do Crepúsculo.\nCom um uso dessa runa e uma ação bônus, você pode criar uma aura num raio de 15 pés ao seu redor que dura pelas próximas 3 rodadas. Escolha até 3 aliados no alcance. Ao estarem dentro dessa área ou iniciar seu turno nela, você e seus aliados escolhidos recebem um bônus em seus ataques e recebem Invisibilidade até o início de seu próximo turno. Uma criatura afetada por essa aura pode escolher um de seus ataques para que cause seu dado de Pulso como dano rúnico adicional, ela pode fazer isso antes ou depois da jogada de ataque, mas antes de saber se atingiu ou não. Caso uma criatura realize um ataque enquanto Invisível, ele perderá essa Condição até o início do seu próximo turno. Essa aura se move junto com você.\n\nVer Invisível. Você é capaz de enxergar criaturas invisíveis a até 60 pés de você, mas não criaturas no mundo espíritual.\n\nMaestria:\n- Duração: +1 rodada por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "level": 15
+      }
+    },
+    {
+      "id": "runa-vulnerabilizar-a-elemento",
+      "kind": "RUNA",
+      "name": "Vulnerabilizar a Elemento",
+      "groups": [
+        "Diamante"
+      ],
+      "description": "Pulso: Diamante\nSinergia: Adicione metade da Proficiência à Exposição e ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nAs runas globais lhe concederam uma capacidade de controlar um elemento e tornar um alvo mais suscetível a esse elemento.\nAo escolher essa Runa, você deve escolher um dos elementos simples da tabela Elementos e Tipos de Dano presente no Capítulo 10. Ao ativar essa runa utilizando uma ação, você escolhe uma criatura a uma distância de até 5 vezes seu bônus de proficiência em pés de você. A criatura deve fazer uma salvaguarda de Constituição. Em uma falha, a criatura recebe seu bônus de proficiência em Exposição a danos do tipo do elemento escolhido até o final do seu próximo turno.\n\nMaestria:\n- Alcance: +5 pés de alcance por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-tecnica-do-aquavitista",
+      "kind": "RUNA",
+      "name": "Técnica do Aquavitista",
+      "groups": [
+        "Safira",
+        "Runessência",
+        "Aquavitista"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Herança Essência Etílica e Constituição 13 ou maior",
+      "description": "O aquavitista não apenas gosta de bebidas alcoólicas, ele aprendeu a utilizá-las como parte de sua essência rúnica, potencializando seus ataques e suas resistências.\n\nPulso: Safira\nSinergia: Adicione metade do bônus de Proficiência ao Dado de Pulso\nUso: Metade do Bônus de Proficiência\n\nVocê aprende o estilo de luta do bêbado, para utilizá-lo, você deve estar sempre com uma garrafa ou recipiente contendo bebida alcoólica em mãos, ou sob efeito de um gole. Gole : Um gole passa a ter duração de 2 rodadas e enquanto sob efeito de um gole, seus ataques desarmados recebem dano adicional de 1d4. Resistência Ébria . Você se torna capaz de executar a loucura da bebedeira. Ao executar a loucura da bebedeira, você consome um uso dessa Runa e um gole de sua bebida, em adição aos efeitos de um gole, até o começo de seu próximo turno, você recebe resistência a todos os danos físicos simples.\n\nSabor do Momento\nd8 | Efeito\n1 | Nada acontece e você consome um uso dessa Runa\n2 | Adicione metade do bônus de Proficiência em suas jogadas de ataque corpo a corpo pela duração do gole\n3 | A margem de crítico de seus ataques corpo a corpo diminui em 1 e o multiplicador de crítico aumenta em 1 pela duração do gole\n4 | Ganha 2x seu Dado de Pulso em pontos de vida temporários pela duração do gole\n5 | Adicione metade do bônus de Proficiência em sua CA pela duração do gole\n6 | Você pode fazer um ataque adicional em sua ação de ataque pela duração do gole\n7 | Escolha um efeito entre 1 a 6\n8 | Escolha um efeito entre 1 a 6 sem consumir um uso dessa runa\n\nMaestria:\n- Ampliação : Escolha entre elementais simples e espirituais, adicionando essa resistência à sua Resistência Ébria\n- Duração : +1 turno de duração de Resistência Ébria por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "attributes": {
+          "CONSTITUTION": 13
+        },
+        "heritages": [
+          "essencia-etilica"
+        ]
+      }
+    },
+    {
+      "id": "runa-sabor-do-momento",
+      "kind": "RUNA",
+      "name": "Sabor do Momento",
+      "groups": [
+        "Safira",
+        "Runessência",
+        "Aquavitista"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Técnica do Aquavitista e Constituição 15 ou maior",
+      "description": "Pulso: Safira\nSinergia: Adicione o bônus de Proficiência ao dano do Bafo\nUso: Metade do Bônus de Proficiência\n\nCada bebida tem sua característica, um espírito próprio, sua experimentação constante fez com que você saiba recuperar as sensações de outras bebedeiras, reavivando sua energia vital.\n\nGole. Um gole passa a ter duração de 3 rodadas e o dano causado pela Herança - Essência Etílica passa a ser seu bônus de Proficiência e enquanto sob efeito de um gole, seus ataques desarmados recebem dano adicional de 2d4 ao invés de 1d4.\n\nAo consumir um uso dessa Runa você pode escolher entre:\n\n- Sabor do Momento. Ao dar um gole, você pode ativar o sabor do momento, jogue 1d8, você recebe o efeito respectivo da tabela Sabor do do Momento, esse efeito dura pela duração do gole. Ao dar um novo gole, caso você esteja sob o efeito de Sabor do Momento, você pode decidir rolar novamente o d8 ou manter o efeito anterior. Caso você receba pela segunda vez o mesmo efeito, você deve rolar novamente na tabela, pois eles não são cumulativos.\n\n- Bafo de Dragão. Ao escolher essa Runa, escolha entre ácido, gélido, ígneo ou venenoso. Com uma ação, após um gole, você pode soprar um cone de 20 pés desse elemento. Cada criatura na área deve fazer uma salvaguarda de Destreza contra sua CD de Runas. Um alvo sofre seu bônus de Proficiência em Dados Base de Pulso em dano elemental do tipo escolhido em uma falha, ou metade do dano em um sucesso.\n\nMaestria:\n- Uso: +1 uso dessa Runa por maestria\n- Refazer: Você pode refazer a jogada 1 vez caso não goste do efeito ou do dano causado pelo Bafo. Você deve ficar com o novo resultado",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "attributes": {
+          "CONSTITUTION": 15
+        },
+        "resources": [
+          "runa-tecnica-do-aquavitista"
+        ]
+      }
+    },
+    {
+      "id": "runa-baxian",
+      "kind": "RUNA",
+      "name": "Baxian",
+      "groups": [
+        "Safira",
+        "Runessência",
+        "Aquavitista"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Sabor do Momento e Constituição 17 ou maior",
+      "description": "Pulso: Safira\nSinergia: Você recebe metade do seu bônus de Proficiência como uso de Runas que podem ser usadas para as outras Runas dessa Runessência\nUso: Metade do Bônus de Proficiência\n\nProvavelmente um espírito antigo ou uma divindade, também adepta da bebedeira, se encantou por você, fazendo com que seu corpo reaja de maneira sobrenatural ao tomar um gole.\n\nGole. Seus ataques desarmados recebem dano adicional de 3d4 ao invés de 2d4.\n\nSoprando. Ao executar a habilidade Bafo de Dragão, sua CD aumenta em 2, e o alcance aumenta para 30 pés.\n\nAo consumir um uso dessa Runa você pode escolher entre:\n\n- Desvio. Sob efeito de um gole, você pode, com uma reação, quando uma criatura hostil errar um ataque corpo a corpo contra você, consumir um uso dessa runa e fazer com que esse ataque atinja outra criatura que você possa ver e que esteja a até 5 pés de você, desde que não seja o próprio atacante.\n\n- Golpe Torto. Ao executar a ação de Ataque, caso você esteja sob efeito de um gole, você pode consumir um uso dessa runa para fazer até três ataques desarmados adicionais, cada um deve ser contra um alvo diferente e caso você erre, você perde os próximos ataques.\n\nMaestria:\n- Uso: +1 uso dessa Runa por maestria\n- Aprimorar: Você adiciona seu dano de ataque desarmado ao Desvio e pode fazer um ataque adicional com Golpe Torto",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "attributes": {
+          "CONSTITUTION": 17
+        },
+        "resources": [
+          "runa-sabor-do-momento"
+        ]
+      }
+    },
+    {
+      "id": "runa-ancestral-vastayes",
+      "kind": "RUNA",
+      "name": "Ancestral Vastayês",
+      "groups": [
+        "Esmeralda",
+        "Runessência",
+        "Despertar Vastaya"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Origem Vastaya ou uma das Heranças: Linhagem Vastaya ou Sangue Vastaya",
+      "description": "Essa Runessência envolve um aprendizado sobre a sua herança Vastaya, permitindo a você que alcance um melhor controle de sua ancestralidade Vastayashai’rei, aumentando sua conexão com o Reino Espiritual e o Sho’ma que habita todas as coisas.\n\nPulso: Esmeralda\nSinergia: Adicione metade do bônus de Proficiência ao Dado de Pulso\nUso: Utilizando uma ação bônus você é capaz de se transformar ou sair da forma da fera escolhida. Caso esteja em combate, você pode se manter nessa forma animal por até 20 rodadas. Em combate, ao entrar na forma animal, você consome 1 rodada de transformação, ao término de seus turnos subsequentes, caso você ainda esteja transformado, você consome mais 1 rodada. Fora de combate, a cada 3 minutos transformado, você consome 1 rodada de transformação (totalizando 1 hora com 20 turnos), ao esgotar seus turnos de transformação você reverte para a sua forma original.\n\nAo escolher essa Runa você deve escolher uma Forma Feral entre Forma Terrestre, Aquática ou Alada e um Aspecto Feral dessa Forma. Caso o Aspecto Feral possua algum sentido especial como percepção às cegas, sentido sísmico, visão no escuro ou vantagem em algum teste de Percepção relacionado à algum sentido, você recebe essas características como se fossem naturais à você. Uma vez escolhida uma fera e um aspecto você não poderá alterá-la.\n\nQuando você se transforma, você recebe 10 + metade do seu nível de personagem em pontos de vida temporários que duram por 2 rodadas ou até serem consumidos. as seguintes regras se aplicam:\n\n- Você mantém sua personalidade, valores de Inteligência, Sabedoria e Carisma, todas as suas proficiências em perícias e salvaguardas, além de receber as proficiências da criatura.\n\n- Quando você se transforma, você mantém os seus pontos de vida e dados de vida. Caso caia a 0 pontos de vida você terá de fazer salvaguarda contra a morte como normalmente faria, morrer em forma de fera significa morte de seu personagem.\n\n- Você não pode conjurar feitiços e sua capacidade de fala ou de realizar qualquer ação que requeira mãos são limitadas pelas capacidades da forma da fera que você assumiu. No entanto, transformar-se não interrompe sua concentração em um feitiço que você já tenha conjurado, nem previne você de realizar ações que são parte da conjuração, como convocar relâmpagos que você já tenha conjurado.\n\n- Você mantém os benefícios de todas as características de Classe, Origem ou outras fontes, e pode usá-las caso a nova forma seja fisicamente capaz de fazê-lo. No entanto, você não pode usar qualquer dos seus sentidos especiais, como visão no escuro, a não ser que a sua nova forma também tenha esse sentido.\n\n- Você pode escolher se o seu equipamento cai no chão aos seus pés, é assimilado a sua nova forma ou é usado por ela. Equipamentos vestidos e carregados funcionam normalmente, mas o Mestre decide qual equipamento é viável para a nova forma vestir ou usar, baseado na forma e tamanho da criatura. O seu equipamento não muda de forma ou tamanho para se adaptar à nova forma e, qualquer equipamento que a nova forma não possa vestir deve, ou cair no chão ou se fundir a ela. Equipamentos fundidos não terão efeito até você deixar a forma\n\nMaestria:\n- Duração: +10 rodadas por maestria\n- Proteção: Ao assumir a forma feral, você recebe duas vezes seu valor de Pulso como Pontos de Vida temporários"
+    },
+    {
+      "id": "runa-olhos-do-cacador",
+      "kind": "RUNA",
+      "name": "Olhos do Caçador",
+      "groups": [
+        "Esmeralda",
+        "Runessência",
+        "Despertar Vastaya"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Ancestral Vastayês",
+      "description": "Pulso: Esmeralda\nSinergia: Adicione seu valor de Pulso ao número de Rodadas\nUso: Metade do Bônus de Proficiência\n\nVocê melhorou a conexão que você possui com seu ancestral vastayês, lhe garantindo 30 pés de visão no escuro (ou aumentando em 30 pés caso já tenha) e as características Controle de Forma e Marcar Presa.\n\nControle de Forma: Enquanto estiver fora de combate, sua forma animal da Runa Ancestral Vastayês não gasta nenhum turno de transformação.\n\nMarcar Presa: Consumindo um uso dessa Runa, ao atingir um inimigo você pode marcá-lo com Marcar Presa. Durante um número de Rodadas igual ao dobro do seu bônus de Proficiência, você sabe exatamente a posição de uma criatura marcada e, adicionalmente, ataques feitos contra uma criatura marcada causam seu Dado de Pulso em dano energético adicional. Caso o alvo esteja invisível, você continuará vendo ele normalmente até o fim da duração da marca. Se a criatura cair a 0 pontos de vida antes do fim da duração, esse efeito é encerrado. Você pode encerrar esse efeito a qualquer momento.\n\nMaestria:\n- Duração: Marcar Presa causa 1 dado de Base a mais por maestria\n- Visão: +10 pés de visão no escuro por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-ancestral-vastayes"
+        ]
+      }
+    },
+    {
+      "id": "runa-ascensao-vastaya",
+      "kind": "RUNA",
+      "name": "Ascensão Vastaya",
+      "groups": [
+        "Esmeralda",
+        "Runessência",
+        "Despertar Vastaya"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Olhos do Caçador",
+      "description": "Pulso: Esmeralda\nSinergia: Adicione seu bônus de Proficiência ao dano causado pelos seus ataques em sua forma Feral ou Híbrida.\nUso: Metade do seu Bônus de Proficiência\n\nSua conexão com seu ancestral atinge seu ápice, você se torna capaz de assumir uma forma Híbrida.\n\nConsumindo um uso dessa Runa, você pode alterar sua forma durante um minuto e receber os traços de sua fera de forma híbrida.\n\nSua forma Feral recebe as seguintes mudanças:\n\n- Aumento de Atributo. Os benefícios concedidos pelo Aspecto são dobrados.\n\n- _Ataque Extra _*. Você pode fazer um ataques adicional em sua ação de ataque\n\n- Mãos funcionais. Você pode segurar armas e escudos normalmente.Conjuração. Você pode conjurar feitiços em formas híbridas exceto feitiços que consumam componente material.\n\nMaestria:\n- Uso: +2 Usos da Forma Híbrida por maestria\n- Duração: +10 rodadas por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-olhos-do-cacador"
+        ]
+      }
+    },
+    {
+      "id": "runa-mipes",
+      "kind": "RUNA",
+      "name": "Mipes",
+      "groups": [
+        "Diamante",
+        "Runessência",
+        "Equilíbrio Cósmico"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Herança - Musicista Prodígio",
+      "description": "A Runessência do Equilíbrio Cósmico é uma manifestação da entidade celestial conhecida como Bardo que nutre em seus portadores a necessidade de proteger artefatos poderosos e conhecimentos perdidos por Runeterra.\n\nPulso: Diamante\nSinergia: Adicione metade do bônus de Proficiência ao Dado de Pulso\nUso: Metade do seu Bônus de Proficiência\n\nOs Mipes são pequenos espíritos que se relacionam com uma entidade cósmica conhecida como “o Bardo”, essas pequenas entidades possuem poderes imensos, elas são atraídas por melodias e bom humor, são invisíveis e imunes a qualquer efeito que os revele, podendo escolher a quem são visíveis.\n\nDurante um descanso longo ou pleno, você pode fazer uma pequena performance com seu instrumento musical para que uma quantidade de Mipes igual ao seu bônus de proficiência, passem a segui-lo até o próximo descanso longo ou pleno. A comunicação dos Mipes é feita por notas sonoras que passam a uma criatura uma impressão latente, algo como um sentimento, não uma comunicação clara. Normalmente, os Mipes apenas se comunicam com quem eles seguem.\n\nMesmo invisíveis, os Mipes influenciam aquele a quem seguem, cada Mipe dá a você +1 em testes de Carisma.\n\nMipes\nProf. | Efeito\n2 | O deslocamento do alvo diminui em 10 pés por um número de rodadas igual a metade do seu bônus de Proficiência, caso falhe em uma salvaguarda de Destreza com CD igual a CD de suas Runas.\n3 | Um alvo atingido por Fulgor Espiritual faz seu próximo ataque com desvantagem.\n4 | O alvo deve realizar uma salvaguarda de Constituição CD igual a CD de suas Runas. Em uma falha, o alvo fica Atordoado até o final do seu próximo turno.\n5 | O alvo recebe 1 ponto de exaustão\n6 | O ataque explode em um cone de 15 pés a partir do alvo. Criaturas nessa área devem realizar uma salvaguarda de Destreza CD igual a CD de suas Runas, em uma falha recebem seu dado de Pulso em dano energético.\n\n- Favor do Mipe: Enquanto ciente da presença de um Mipe, você pode consumir um uso dessa Runa e a presença de um Mipe, para que ele realize uma ação que o auxilie, novamente, a critério do Mestre, desde uma coisa simples como mover uma folha até mesmo algo que desafie as leis da realidade, independente da ação, ela é sempre benéfica, mesmo que não pareça assim a princípio.\n\n- Fulgor Espiritual: Consumindo um uso dessa Runa, você pode pedir a um Mipe que use sua energia em um ataque, aumentando o dano do ataque com arma ou feitiço de alvo único em uma escala acima do seu Dado de Pulso causando um efeito adicional baseado no seu bônus de Proficiência conforme a tabela Mipes. Ao realizar esse auxílio, o Mipe desaparece.\n\nMaestria:\n- Uso: +1 mipe por maestria\n- Força: +1 na CD por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "heritages": [
+          "musicista-prodigio"
+        ]
+      }
+    },
+    {
+      "id": "runa-prisao-cosmica",
+      "kind": "RUNA",
+      "name": "Prisão Cósmica",
+      "groups": [
+        "Diamante",
+        "Runessência",
+        "Equilíbrio Cósmico"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Mipe",
+      "description": "Pulso: Diamante\nSinergia: Metade do seu Bônus de Proficiência em Mipes\nUso: Metade do seu Bônus de Proficiência\n\nVocê pode conjurar uma faixa de energia cósmica a partir de suas mãos.\n\nConsumindo um uso dessa Runa e utilizando uma ação, você conjura uma linha de energia de 15 pés de comprimento por 5 pés de largura, que para na primeira criatura que atingir. A criatura atingida deve realizar uma salvaguarda de Destreza CD igual a sua CD de Runas. Em uma falha, a criatura sofre um grau acima de seu Dado de Pulso em dano energético e seu deslocamento é reduzido pela metade até o final do seu próximo turno, adicionalmente, a linha de energia continua por mais 15 pés a partir da criatura atingida, parando na primeira criatura ou objeto.\n\nCaso a continuação dessa linha atinja um objeto de tamanho Médio ou maior, a primeira criatura atingida deve realizar uma salvaguarda de Constituição CD igual a sua CD de Runas, ficando Atordoada por um número de rodadas igual ao dobro de seu bônus de Proficiência, podendo repetir a salvaguarda no início de cada um de seus turnos para encerrar essa condição. Caso a continuação dessa linha atinja uma outra criatura, tanto a primeira criatura atingida quanto a segunda devem realizar uma salvaguarda de Constituição CD igual a sua CD de Runas. Em uma falha, ambos sofrem o dano e o atordoamento.\n\nMaestria:\n- Dano: +1 na Categoria de dado de dano por maestria e o dano passa a ser lunar\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-mipes"
+        ]
+      }
+    },
+    {
+      "id": "runa-desativar-magia",
+      "kind": "RUNA",
+      "name": "Desativar Magia",
+      "groups": [
+        "Diamante",
+        "Runessência",
+        "Equilíbrio Cósmico"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Prisão Cósmica",
+      "description": "Pulso: Diamante\nSinergia: Você recebe metade do seu bônus de Proficiência como uso de Runas que podem ser usadas para as outras Runas dessa Runessência\nUso: Metade do seu Bônus de Proficiência\n\nVocê sabe como controlar a mana de outras coisas e seres, podendo desativá-los temporariamente.\n\nConsumindo um uso dessa Runa e uma ação, você é capaz de desativar a magia de um objeto mágico ou de um ser vivo que você possa ver por um número de rodadas igual ao dobro do seu bônus de Proficiência, anulando também o efeito de itens sencientes ou amaldiçoados em seus usuários. Caso você esteja tentando anular um item senciente ou criatura, o alvo deve realizar uma salvaguarda de Carisma cuja CD é igual a 12 + seu bônus de proficiência + seu modificador de Carisma, em um sucesso o alvo se torna imune a esse efeito pelas próximas 24 horas.\n\nMaestria:\n- Uso: +1 Uso da Runa por maestria\n- Força: +1 na CD das runas dessa Runessência por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-prisao-cosmica"
+        ]
+      }
+    },
+    {
+      "id": "runa-amanhecer",
+      "kind": "RUNA",
+      "name": "Amanhecer",
+      "groups": [
+        "Rubi",
+        "Runessência",
+        "Essência Dourada"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Herança - Bênção Dourada",
+      "description": "A Runessência da Essência Dourada é uma manifestação da entidade celestial conhecida como Irmã Dourada. Ela é encontrada apenas em Targon entre os Solari, mas existem rumores de que alguns Shurimanes apresentam características similares.\n\nPulso: Rubi\nSinergia: Adicione metade do bônus de Proficiência ao Dado de Pulso\nUso: Metade do seu Bônus de Proficiência\n\nVocê aprende a invocar uma emanação de luz solar através de seus golpes.\n\nUma vez por turno, ao atingir um ataque em uma criatura com uma arma corpo a corpo, você pode consumir um uso dessa runa e desferir a força do amanhecer. A criatura deve fazer uma salvaguarda de destreza, com a CD de suas Runas, em uma falha, recebe uma categoria acima de seu dado de Pulso como dano radiante. Em um sucesso recebe apenas metade desse dano.\n\nMaestria:\n- Dano: +1 na Categoria de dado de dano por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "heritages": [
+          "bencao-dourada"
+        ]
+      }
+    },
+    {
+      "id": "runa-eclipse",
+      "kind": "RUNA",
+      "name": "Eclipse",
+      "groups": [
+        "Rubi",
+        "Runessência",
+        "Essência Dourada"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Amanhecer",
+      "description": "Pulso: Rubi\nSinergia: Uma criatura que falhe na salvaguarda de Amanhecer tem desvantagem em atacar você até o início de seu próximo turno\nUso: Especial\n\nSeu corpo é capaz de canalizar a energia Solar, passando a armazenar um número de cargas solares igual a metade do seu bônus de Proficiência, cada carga é carregada após você ficar 6 horas diretamente exposto à luz do sol.\n\nConsumindo uma carga, você pode usar sua ação para ficar envolto por uma luz dourada, emitindo luz plena num raio de 15 pés e penumbra por mais 15 pés. No final do seu próximo turno, essa energia explode em um raio de 30 pés ao seu redor. Cada criatura hostil nessa área no momento da explosão deve realizar uma salvaguarda de Constituição CD igual a CD de suas runas. Em uma falha, a criatura sofre o dobro de seu dado de Pulso em dano solar e tem seu deslocamento reduzido pela metade até o final de seu próximo turno.\nQualquer área de escuridão conjurada como um feitiço de 5º nível ou inferior nessa área é dissipada.\n\nMaestria:\n- CD: +2 na CD da salvaguarda\n- Uso: +1 uso por maestria",
+      "requires": {
+        "resources": [
+          "runa-amanhecer"
+        ]
+      }
+    },
+    {
+      "id": "runa-coroa-solar",
+      "kind": "RUNA",
+      "name": "Coroa Solar",
+      "groups": [
+        "Rubi",
+        "Runessência",
+        "Essência Dourada"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Eclipse",
+      "description": "Pulso: Rubi\nSinergia: Você recebe metade do seu bônus de Proficiência como uso de Runas que podem ser usadas para as outras Runas dessa Runessência e o dano causado pelas Runas dessa Runessência se torna Solar\nUso: Metade do seu Bônus de Proficiência\n\nVocê traz o resplendor do sol em todo seu poder curativo e destrutivo na forma de uma coroa.\n\nConsumindo um uso dessa Runa, você pode utilizar sua ação para conjurar uma coroa de pura luz em sua cabeça, emitindo uma aura de luz plena por 30 pés e penumbra por mais 30 pés por um número de rodadas igual ao seu bônus de Proficiência. Caso você fique Incapacitado, essa aura é encerrada prematuramente. A cada turno que estejam na área de luz plena, criaturas hostis devem fazer uma salvaguarda de Constituição CD igual à CD de suas Runas. Em uma falha, essas criaturas recebem seu dado de Pulso em dano solar e tem desvantagem em salvaguardas contra feitiços e efeitos que causem dano radiante ou ígneo, simples ou mágico. Em um sucesso, recebem apenas metade do dano. Mortos-vivos e Ínferos fazem essa salvaguarda com desvantagem.\n\nAdicionalmente, pela duração, no início de cada um de seus turnos você e aliados banhados pela luz plena recebem metade do seu dado de Pulso em pontos de vida temporários por 1 minuto ou até serem consumidos.\n\nMaestria:\n- Uso: +1 Uso da Runa por maestria\n- Força: +2 na CD por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-eclipse"
+        ]
+      }
+    },
+    {
+      "id": "runa-prata-lunar",
+      "kind": "RUNA",
+      "name": "Prata Lunar",
+      "groups": [
+        "Ametista",
+        "Runessência",
+        "Essência Prateada"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Herança - Bênção Prateada",
+      "description": "A Runessência da Essência Prateada é uma manifestação da entidade celestial conhecida como Irmã Prateada. Ela é encontrada apenas em Targon entre os Lunari.\n\nPulso: Ametista\nSinergia: Adicione metade do bônus de Proficiência ao Dado de Pulso\nUso: Metade do seu Bônus de Proficiência\n\nA bênção prateada é canalizada em seus ataques, cobrindo-os com um brilho de prata lunar.\n\nUma vez por turno, você pode direcionar a bênção para um de seus ataques (exceto armas de fogo) ou feitiços. Você deve declarar que a bênção foi usada antes de saber se o ataque ou feitiço foi bem sucedido. Um ataque abençoado causa seu dado Base de Pulso em dano adicional e marca o alvo com uma marca de Plenilúnio pelo próximo minuto. Essa bênção não consome um uso dessa runa.\n\nAo atacar uma criatura marcada, você pode gastar um uso dessa Runa e detonar a marca de Plenilúnio, a criatura deve fazer uma salvaguarda de Constituição com CD igual à sua CD de Runas, em uma falha ela recebe seu bônus de proficiência em Dado Base de Pulso como dano radiante. Não há limites para criaturas marcadas por vez, porém ao detonar uma marca em uma criatura todas as outras perdem suas marcas. Caso você atinja mais de uma criatura marcada em um único ataque causando dano lunar, você escolhe apenas uma criatura para que a marca dela seja detonada.\n\nMaestria:\n- Uso: +1 uso por maestria\n- Força: +2 na CD por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "heritages": [
+          "bencao-prateada"
+        ]
+      }
+    },
+    {
+      "id": "runa-zenite",
+      "kind": "RUNA",
+      "name": "Zênite",
+      "groups": [
+        "Ametista",
+        "Runessência",
+        "Essência Prateada"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Prata Lunar",
+      "description": "Pulso: Ametista\nSinergia: Metade do seu Bônus de Proficiência em usos de Prata Lunar\nUso: Metade do seu Bônus de Proficiência\n\nVocê se torna a encarnação viva da lua vingativa, avançando contra um inimigo.\n\nConsumindo um uso dessa Runa e sua ação bônus, você pode se mover para ficar adjacente à uma criatura a até 20 pés de você sem utilizar sua ação de movimentação e sem sofrer ataques de oportunidade. Ao se mover dessa maneira seu próximo ataque detona automaticamente uma marca de Plenilúnio que já esteja sob a criatura. Caso a criatura esteja com uma Marca e falhe na salvaguarda da detonação, você pode se mover novamente em 20 pés em direção a outra criatura na mesma ação bônus.\n\nMaestria:\n- Alcance: +10 pés de alcance por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-prata-lunar"
+        ]
+      }
+    },
+    {
+      "id": "runa-cascata-livida",
+      "kind": "RUNA",
+      "name": "Cascata Lívida",
+      "groups": [
+        "Ametista",
+        "Runessência",
+        "Essência Prateada"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Zênite",
+      "description": "Pulso: Ametista\nSinergia: Você recebe metade do seu bônus de Proficiência como uso de Runas que podem ser usadas para as outras Runas dessa Runessência e o dano causado pelas Runas dessa Runessência se torna Lunar\nUso: Metade do seu Bônus de Proficiência\n\nUm dos segredos da irmã prateada é sobre como transformar até mesmo uma defesa em um ataque e um ataque em uma defesa.\n\nConsumindo um uso dessa Runa e uma ação bônus, você cria três esferas orbitantes a 5 pés de você que detonam ao entrar em contato com uma criatura hostil. Estas esferas o rodeiam ocupando um espaço ao seu redor, apenas uma esfera pode ocupar um espaço por vez, cada esfera possui 50 cm de diâmetro e no início de cada um de seus turnos elas se movem 5 pés ao seu redor no sentido anti-horário, elas possuem a duração de 1 minuto e se movem junto com você.\n\nCada criatura hostil que entrar em contato com uma esfera deve realizar uma salvaguarda de Constituição, em uma falha a esfera explode e a criatura sofre seu dado de Pulso em dano lunar. Uma criatura só pode ser atingida por uma esfera por turno. Cada esfera que explodir lhe concede pontos de vida temporários igual ao dano causado, pontos de vida temporários recebidos dessa maneira podem se acumular. Caso as três esferas explodam, você recebe resistência a dano mágico até o início de seu próximo turno. Você pode desativar essa característica prematuramente (não requer ação) e você não pode utilizar essa característica novamente caso você tenha ao menos uma esfera ativa. Caso a esfera exploda em uma criatura que tenha uma marca de Plenilúnio, a marca é detonada\n\nMaestria:\n- Uso: +1 Uso da Runa por maestria\n- Força: +1 na CD das runas dessa Runessência por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-zenite"
+        ]
+      }
+    },
+    {
+      "id": "runa-ataques-furiosos",
+      "kind": "RUNA",
+      "name": "Ataques Furiosos",
+      "groups": [
+        "Rubi",
+        "Runessência",
+        "Fúria Imortal"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Variante Ignata, Constituição 15",
+      "description": "Aqueles abençoados por Ildhaurg, o Deus Javali, possuem a essência flamígera em seu interior, uma essência capaz de curar ferimentos e dizem até que pode prover a maldição da Imortalidade.\n\nPulso: Rubi\nSinergia: Adicione Proficiência ao dano e metade da Proficiência ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nAo entrar em combate, você recebe 1 ponto de raiva para cada ataque corpo a corpo bem-sucedido até o máximo de 10 pontos de raiva. Esta raiva fortalece seus ataques corpo a corpo, aumentando seu dano em metade dos pontos de Raiva (mínimo de 1) que você possua. Ao alcançar 10 pontos de raiva, seu próximo ataque corpo a corpo tem sua margem e multiplicador de crítico aumentado em 1 e você perde todos pontos de Raiva.\n\nUtilizando uma ação bônus e um uso dessa runa, você pode obter 5 pontos de Raiva e, até o início de seu próximo turno, seus ataques corpo a corpo tem seu dano aumentado em uma categoria e você recebe RD 1/dano verdadeiro.\n\nMaestria:\n- Duração: +1 rodada por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "attributes": {
+          "CONSTITUTION": 15
+        }
+      }
+    },
+    {
+      "id": "runa-essencia-imortal",
+      "kind": "RUNA",
+      "name": "Essência Imortal",
+      "groups": [
+        "Rubi",
+        "Runessência",
+        "Fúria Imortal"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Ataques Furiosos, Constituição 17",
+      "description": "Pulso: Rubi\nSinergia: Adicione metade do bônus do Proficiência à RD de Ataques Furiosos\nUso: Metade da Proficiência\n\nEnquanto você está em combate, você recupera 1 ponto de vida no início de cada um de seus turnos desde que você não esteja Incapacitado ou Inconsciente. Utilizando uma ação bônus e um uso dessa runa, você recupera seu dado de Pulso em pontos de vida no início de cada um de seus turnos durante as próximas 2 rodadas.\n\nMaestria:\n- Duração: +1 rodada de duração por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "attributes": {
+          "CONSTITUTION": 17
+        },
+        "resources": [
+          "runa-ataques-furiosos"
+        ]
+      }
+    },
+    {
+      "id": "runa-explosao-da-furia",
+      "kind": "RUNA",
+      "name": "Explosão da Fúria",
+      "groups": [
+        "Rubi",
+        "Runessência",
+        "Fúria Imortal"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Essência Imortal, Constituição 19",
+      "description": "Pulso: Rubi\nSinergia: Você recupera 2 pontos de vida com Essência Imortal\nUso: Metade da Proficiência\n\nUsando uma ação bônus e um uso dessa runa, você faz com que seu corpo emita um leve brilho avermelhado até o início de seu próximo turno. Pela duração, você se torna imune a todos os tipos de dano (exceto danos verdadeiros), recebe 10 pés de deslocamento adicional e seus ataques têm margem e multiplicador de crítico aumentada em 1. Ao término da duração, você recebe 1 ponto de Exaustão.\n\nMaestria:\n- Duração: +1 rodada de duração por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "attributes": {
+          "CONSTITUTION": 19
+        },
+        "resources": [
+          "runa-essencia-imortal"
+        ]
+      }
+    },
+    {
+      "id": "runa-bencao-de-statikk",
+      "kind": "RUNA",
+      "name": "Benção de Statikk",
+      "groups": [
+        "Safira",
+        "Runessência",
+        "Herdeiro de Statikk"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre)",
+      "description": "Statikk foi um grande Arcanista Ixtali, com seu espírito tendo se transformado em energia pura e hoje correndo pelas veias de seus escolhidos. Herdeiro de Statikk é uma Runessência única, existindo apenas uma pessoa viva com a mesma por vez. Quando essa pessoa morre, a Runessência vaga aleatoriamente até encontrar um novo alvo.\nCaso o portador original retorne à vida, o mestre deve rolar um d6, caso caia 1 ou 2, um novo herdeiro já foi encontrado e você deve escolher runas regulares para substituir o Herdeiro de Statikk.\n\nPulso: Safira\nSinergia: Adicione Proficiência ao dano e metade da Proficiência ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nUsando uma ação bônus e um uso dessa runa, você recebe seu bônus de proficiência em cargas elétricas. Utilizando uma carga elétrica, você pode fazer um ataque com Runa à distância contra um alvo a até 15 pés de você. Em um acerto, o alvo sofre seu dado de pulso em dano elétrico.\n\nUsando uma ação e um uso dessa runa, você conjura um raio em uma linha de 20 pés a partir de você. Criaturas nessa linha devem realizar uma salvaguarda de Constituição. Em uma falha, uma criatura receberá 1d6 de dano elétrico e ficará Atordoada até o final de seu próximo turno.\n\nMaestria:\n- Carga: +1 carga por uso por maestria\n- Distância: +10 pés por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-forca-de-statikk",
+      "kind": "RUNA",
+      "name": "Força de Statikk",
+      "groups": [
+        "Safira",
+        "Runessência",
+        "Herdeiro de Statikk"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Benção de Statikk",
+      "description": "Pulso: Safira\nSinergia: Metade da Proficiência em usos de Benção de Statikk\nUso: Metade da Proficiência\n\nVocê recebe resistência a dano Elétrico e caso role 1 ou 2 em um dado de dano elétrico ou plásmico, você pode refazer a rolagem desse dado e ficar com o novo valor.\n\nUsando uma ação e um uso dessa runa, você pode conjurar a feitiço Corrente de Relâmpagos como um feitiço de 6º nível sem gastar pontos de mana.\n\nMaestria:\n- Potência: +1 nível na conjuração de corrente de relâmpagos por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-bencao-de-statikk"
+        ]
+      }
+    },
+    {
+      "id": "runa-furia-de-statikk",
+      "kind": "RUNA",
+      "name": "Fúria de Statikk",
+      "groups": [
+        "Safira",
+        "Runessência",
+        "Herdeiro de Statikk"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Força de Statikk",
+      "description": "Pulso: Safira\nSinergia: Metade da Proficiência em usos de Força de Statikk\nUso: Metade da Proficiência\n\nO dano causado por Benção de Statikk se torna plásmico e você recebe resistência a dano Plásmico. Adicionalmente, você não pode ser atingido por feitiços de 3º nível ou inferior que causem dano elétrico, simples ou mágico. Além disso, sempre que for alvo do feitiço Velocidade, você poderá se mover e realizar ações normalmente ao final do feitiço.\n\nUsando uma ação e um uso dessa runa, você pode conjurar o feitiço Velocidade em você mesmo sem gastar pontos de mana. Enquanto estiver sob o efeito desse feitiço, você recebe absorção a dano Plásmico, desde que não sejam originadas de você, e pode ser atingido normalmente por feitiços de 3º nível ou inferior que causem dano Elétrico.\n\nMaestria:\n- Concentração: Metade do bônus de Proficiência no teste de concentração por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-forca-de-statikk"
+        ]
+      }
+    },
+    {
+      "id": "runa-lanca-gelida",
+      "kind": "RUNA",
+      "name": "Lança Gélida",
+      "groups": [
+        "Safira",
+        "Runessência",
+        "Místico Gélido"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre)",
+      "description": "O Místico Gélido se conecta aos mistérios do gelo que nunca derrete, o Gelo Verdadeiro, através de um aprendizado sobre as propriedades desse material considerado divino em algumas tribos de Freljord. Uma das mais geniais Místicas Gélidas é Lissandra, a rainha dos Præglacius, talvez a segunda maior autoridade nesse assunto, ficando atrás apenas da semideusa Anivia.\n\nPulso: Safira\nSinergia: Adicione Proficiência ao dano e metade da Proficiência ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nUsando uma ação bônus e um uso dessa runa, você atira uma lança de gelo sombrio em uma linha de 15 pés que atinge a primeira criatura, essa criatura deve realizar uma salvaguarda de Destreza, caso falhe ela recebe seu dado de Pulso em dano gélido e seu deslocamento diminui em 20 pés até o fim do próximo turno. Em um sucesso, ela recebe apenas metade do dano. Em uma falha, ao atingir uma criatura o projétil se despedaça e criaturas num cone de 10 pés atrás da primeira criatura atingida deverão realizar uma salvaguarda de destreza, se falharem receberão metade do dano causado e sua movimentação cairá em 10 pés.\n\nMaestria:\n- Dano: +1 na escala de dano por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-garras-de-gelo",
+      "kind": "RUNA",
+      "name": "Garras de Gelo",
+      "groups": [
+        "Safira",
+        "Runessência",
+        "Místico Gélido"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Lança Gélida",
+      "description": "Pulso: Safira\nSinergia: Metade da Proficiência em usos de Lança Gélida e dano se torna mágico\nUso: Metade da Proficiência\n\nUsando uma ação bônus e um uso dessa runa, você conjurar garras feitas de gelo que avançam em uma linha de 30 pés iniciada em você, criaturas nessa linha devem realizar uma salvaguarda de Destreza, em uma falha, recebem seu bônus de proficiência em dados Base de Pulso como dano gélido e seu deslocamento cairá em 20 pés. Adicionalmente, a qualquer momento até o começo de seu próximo turno, caso você esteja capaz de se movimentar, você pode utilizar uma ação livre para reativar essa Runa para se transportar a qualquer ponto da linha sem custo no seu deslocamento, você só pode fazer isso uma vez por uso dessa runa.\n\nMaestria:\n- Alcance: +10 pés de alcance por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-lanca-gelida"
+        ]
+      }
+    },
+    {
+      "id": "runa-precursor-do-gelo-sombrio",
+      "kind": "RUNA",
+      "name": "Precursor do Gelo Sombrio",
+      "groups": [
+        "Safira",
+        "Runessência",
+        "Místico Gélido"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Garras de Gelo",
+      "description": "Pulso: Safira\nSinergia: O dano de Garras de Gelo se torna mágico\nUso: Metade da Proficiência\n\nAlcançar essa potência dessa Runessência muda sua natureza de forma efetiva, você passa a aparentar ser feito de Gelo Sombrio e a sua presença por si já retira o calor dos seus arredores. Sua pele se torna azulada permanentemente, além disso, pelo seu corpo podem ser vistos veios de cor roxa ou preta. Você ganha imunidade a dano gélido e a dano ígneo, e resistência a dano glacial. Adicionalmente, todos os seus ataques, sejam eles corpo a corpo, a distância ou com feitiços, causam 2d6 dano glacial adicional.\n\nPrisão Gélida: Usando uma ação bônus e um uso dessa runa, você pode congelar uma criatura a até 30 pés de você. Essa criatura deve realizar uma salvaguarda de Constituição, se falhar, ficará presa em um prisão de Gelo Sombrio, ficando Incapacitada e recebendo o dobro de seu dado de Pulso em dano glacial por 2 turnos no início de cada turno, podendo repetir a salvaguarda no início de cada turno, além disso uma área congelada é criada a até 15 pés da criatura presa. Criaturas inimigas que estejam ou comecem seu turno nessa área, devem realizar uma salvaguarda de Constituição ou receberão seu dado de Pulso em dano glacial e seu deslocamento diminui em 20 pés.\n\nAlternativamente, você pode optar por congelar a si mesmo, causando o mesmo dano na área congelada a sua volta e se curando em metade desse valor por turno. Durante esses turnos, você não pode executar nenhuma ação mas não pode se tornar alvo de nenhum ataque.\n\nMaestria:\n- CD: +2 na CD por maestria\n- Duração: +2 turnos por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-garras-de-gelo"
+        ]
+      }
+    },
+    {
+      "id": "runa-nascimento-da-ninhada",
+      "kind": "RUNA",
+      "name": "Nascimento da Ninhada",
+      "groups": [
+        "Ametista",
+        "Runessência",
+        "Místico da Ninhada"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre)",
+      "description": "O Místico da Ninhada desenvolve sua runessência em contato com uma entidade de Ninhada, essas entidades se conectam a criaturas com esse tipo de organização, como cobras, aranhas entre outros. Para desenvolver essa essência é necessário um contato com um Patrono Místico, sob instrução do mesmo é possível se tornar um canal de poder dessa entidade.\nInicialmente existem duas Ninhadas ao qual você pode ligar sua essência rúnica, a da Aranha e a da Cobra, elas são bem similares com algumas pequenas diferenças quanto a acesso a determinadas invocações místicas.\n\nPulso: Ametista\nSinergia: Adicione Proficiência ao dano e metade da Proficiência ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nO contato com a entidade quando estabelecido se torna uma conexão entre você e a entidade, uma conexão que crescerá conforme seu poder se ampliar, aumentando ainda mais a capacidade da entidade em agir no plano físico. Seu corpo se torna um conduíte para essa entidade, modificando sua aparência e possibilitando que você se transforme temporariamente em uma forma animalesca baseada nas crias de sua Ninhada.\n\nUtilizando uma ação e um uso dessa Runa, você pode assumir sua forma da Ninhada por 1 minuto ou conjurar uma cria da ninhada que dura 1 minuto, até ser esconjurada ou ser morta.\n\nAranha: Você ganha duas patas de aranha que saem de suas costas e elas podem se retrair ocultando-se, você pode usá-las como armas naturais, elas causam 1d4 + seu modificador de Destreza de dano perfurante. Elas não podem ser usadas para segurar nada. Além disso, você recebe dois pares de pseudo-olhos em sua testa e abaixo de seus olhos, ou seus olhos se tornam vermelhos. Em sua forma de Aranha, você pode se transformar em uma aranha gigante pela duração utilizando a Forma Feral Terrestre com o aspecto da Aranha. Adicionalmente você possui permanentemente imunidade à condição Amedrontado.\n\nCobra: Você ganha 15 pés de visão às cegas e seus olhos se tornam fendidos, além de ter a esclera de uma cor visivelmente não humana. Em sua forma de Cobra, você pode se transformar em uma cobra venenosa gigante pela duração utilizando a Forma Feral Terrestre com o aspecto da Cobra. Adicionalmente você possui permanentemente imunidade a dano venenoso.\n\nMaestria:\n- Uso: +1 uso por maestria\n- Duração: +1 minuto de duração por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-essencia-da-ninhada",
+      "kind": "RUNA",
+      "name": "Essência da Ninhada",
+      "groups": [
+        "Ametista",
+        "Runessência",
+        "Místico da Ninhada"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Nascimento da Ninhada",
+      "description": "Pulso: Ametista\nSinergia: Metade da Proficiência em usos de Nascimento da Ninhada\nUso: Metade da Proficiência\n\nSua conexão com a fonte mística é ampliada, dando a você sentidos sobrenaturais que se manifestam de maneira diferente de acordo com cada fonte mística. Além disso, você ganha acesso a uma habilidade relacionada a essa fonte.\n\nAranha: Ganha sentido sísmico com 30 pés de alcance e pode utilizar Casulo.\n\nCasulo: Utilizando uma ação bônus e um uso dessa runa, você pode disparar um casulo de teia de aranha em uma linha de até 30 pés que explode em contato com o primeiro alvo, ele deve fazer uma salvaguarda de Destreza, em uma falha, ele recebe a condição Agarrado por até 2 turnos, no segundo turno ele pode fazer uma nova salvaguarda de Força com a mesma CD, caso passe, deixa de estar agarrado.\n\nCobra: Você ganha mais 15 pés de visão às cegas e pode utilizar Veneno.\n\nVeneno: Utilizando uma ação bônus e um uso dessa runa, você pode cuspir uma linha de veneno em uma linha de 30 pés atingindo o primeiro alvo que deve fazer uma salvaguarda de Constituição, caso falhe, ele recebe o dobro de seu dado de Pulso em dano venenoso e fica Envenenado recebendo seu dado base de Pulso em dano venenoso por turno. Em caso de sucesso o alvo recebe apenas metade do dano. No começo do turno seguinte da duração, o alvo pode fazer novamente a salvaguarda, caso passe recebe apenas metade do dano e deixa de estar Envenenado.\n\nMaestria:\n- Uso: +1 uso por maestria\n- CD: +2 na CD por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-nascimento-da-ninhada"
+        ]
+      }
+    },
+    {
+      "id": "runa-lider-da-ninhada",
+      "kind": "RUNA",
+      "name": "Líder da Ninhada",
+      "groups": [
+        "Ametista",
+        "Runessência",
+        "Místico da Ninhada"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Essência da Ninhada",
+      "description": "Pulso: Ametista\nSinergia: Metade da Proficiência em usos de Essência da Ninhada\nUso: Metade da Proficiência\n\nSua conexão com a fonte mística da Ninhada é elevada a um patamar onde o limite entre indivíduo e a Ninhada se confundem. Sua forma física é permanentemente alterada para uma forma híbrida não humana que amplia todos os benefícios anteriores recebidos em outras potências dessa Runessência. Quando você possuir acesso a essa runa, você recebe +2 em seu valor de Constituição até o máximo de 22 e proficiência em Intimidação, caso já a tenha, se torna especialidade. Suas mãos se tornam Garras, com as quais você tem proficiência e elas causam seu dado de base de Pulso em de dano cortante + seu modificador de Força ou Destreza.\n\nAranha: Utilizando uma ação e um uso dessa runa, você pode inverter a gravidade dentro de um cilindro de 15 pés de raio e 100 pés de altura a até 60 pés de você durante 2 turnos. Todas as criaturas e objetos que não estejam presos de alguma forma nessa área caem para cima e alcançam o topo da área. Criaturas nessa área devem realizar uma salvaguarda de Destreza para se segurar em algo para evitar isso, adicionalmente se falharem recebem a condição Atordoada por conta da pressão gravitacional criada.\n\nSe algum objeto sólido (como um teto) for encontrado durante essa queda, objetos e criaturas caindo atingem ele, exatamente como fariam durante uma queda normal. Se um objeto ou criatura alcançar o topo da área sem atingir nada, ele permanecerá lá, oscilando ligeiramente, pela duração. No final da duração, objetos e criaturas afetadas caem de volta para baixo. Ao usar essa runa, você recebe 1 ponto de exaustão.\n\nCobra: Utilizando uma ação e um uso dessa runa, você pode criar uma nuvem venenosa de 15 pés de raio a até 60 pés de você durante 2 turnos. A nuvem se espalha, ultrapassando frestas e muros, e gera escuridão densa. No começo de cada turno a nuvem se move 10 pés em uma direção a sua escolha. Todas as criaturas dentro da nuvem quando ela é criada, ou quando uma criatura começar seu turno dentro dela ou atravessarem ela em seus turnos, devem realizar uma salvaguarda de Constituição, em uma falha, recebem o dobro de seu dado de Pulso em de dano venenoso, ficam Intoxicadas e Envenenadas por até 2 turnos recebendo metade do seu bônus de Proficiência em dado Base de Pulso de dano Venenoso. Em caso de sucesso o alvo recebe apenas metade do dano. No começo do turno seguinte da duração, o alvo pode fazer novamente a salvaguarda, caso passe recebe apenas metade do dano e encerra essas condições. Ao usar essa runa, você recebe 1 ponto de exaustão.\n\nMaestria:\n- CD: +2 na CD por maestria\n- Duração: +2 turnos de duração por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-essencia-da-ninhada"
+        ]
+      }
+    },
+    {
+      "id": "runa-pacto-mistico",
+      "kind": "RUNA",
+      "name": "Pacto Místico",
+      "groups": [
+        "Runessência",
+        "Místico de Pacto"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre)",
+      "description": "A Runessência do Místico de Pacto conecta você a uma poderosa entidade espiritual, celestial ou mística que não pode atuar diretamente no mundo físico. Essa essência atrela seus poderes rúnicos a essa criatura, vinculando o desenvolvimento da sua essência rúnica a essa essência mística.\nEssa conexão espiritual causa efeitos físicos, com isso, seus olhos deixam de ser normais, tendo um aspecto ligado ao seu patrono. Essa característica não é chamativa, sendo necessário prestar atenção para percebê-la, mas sempre que você usa alguma habilidade ligada a essa Runessência, seus olhos brilham em uma cor sobrenatural.\nExistem diversos tipos de Pactos, desde pactos com entidades ínferas como Azakanas e Akanas, quanto com entidades espirituais como os Kanmei ou mesmo entidades Feéricas. Cada pacto possui suas próprias características, mesmo dois pactos feitos com a mesma entidade podem ser extremamente diferentes.\n\nPulso: Conforme Patrono\nSinergia: Adicione Proficiência ao dano e metade da Proficiência ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nEssa runa só está acessível a alguém que tenha recebido o contato com uma entidade extraplanar.\n\nFamiliar de Pacto\nNível de Personagem | Nível do Familiar\n1 | 1\n3 | 2\n5 | 3\n7 | 4\n9 | 5\n11 | 6\n13 | 7\n15 | 8\n17 | 9\n\nFamiliar: Ao escolher essa Runessência, você recebe um Familiar do Pacto, esse familiar conecta você aos poderes do seu patrono. Caso seu familiar morra, ele é enviado de volta para o reino de seu Patrono e você recebe um ponto de exaustão permanente até seu familiar ficar totalmente recuperado. O familiar precisa de 8 horas para restaurar suas energias e criar um novo corpo físico para retornar ao Reino Físico, durante o tempo em que seu familiar se recupera você recebe uma penalidade em todas as suas runas dessa runessência\n\nSeu familiar segue as regras de familiares do Capítulo 10 - Magia: Familiares e Companheiros Animais, ele assume uma forma física à sua escolha conforme a tabela de Elo familiar com aparência que se assemelhe a uma manifestação de seu patrono.\n\nVocê pode convocar esse familiar uma vez por descanso longo, sem custo de mana ou componentes no nível máximo de conjuração de acordo com a tabela de Familiar de Pacto. O nível de conjuração do Familiar define os aprimoramentos que ele recebe conforme descrito na tabela Aprimoramentos familiares.\n\nEnquanto seu familiar estiver vivo você possui seus sentidos compartilhados com ele, sendo necessário utilizar uma ação bônus para ver e sentir o que ele vê e sente, caso você receba dano é necessário realizar uma salvaguarda CD 10 para manter os sentidos compartilhados.\n\nEnquanto seu familiar estiver vivo, você recebe os benefícios de seu pacto\n\nArma Familiar: Seu familiar pode conjurar até duas armas a sua escolha ou apenas uma arma caso possua as características versátil, pesada ou duas mãos, o valor total dessa arma não pode ultrapassar 150 PO e ela se torna uma invocação. Alternativamente, você pode optar por imbuir seu próprio corpo com essa característica, permitindo que seus ataques desarmados se tornem sua Arma Familiar. Você também pode utilizar uma arma já existente como uma Arma Familiar. Armas com munição, continuam requerendo munição, mas o dano causado por esses projéteis recebe todos os bônus da Arma Familiar.\n\nArmas invocadas possuem um aspecto ligado ao seu patrono, possuindo uma aparência única, e devem ser armas com as quais você tenha proficiência. Apenas você é capaz de usar essa arma, em outras mãos elas são usadas com desvantagem independente do treinamento de quem as empunhe. Seu familiar só pode manter uma invocação por vez, é necessário que seu familiar descanse 8 horas para conjurar uma nova. Se o seu familiar morrer, essas invocações desaparecem.\n\nSua Arma familiar causa dano igual ao de uma arma comum com seu dado base de Pulso como dano adicional definido pelo seu pacto.\n\nRaio Místico: Seu pacto permite a você manifestar um Raio Místico. Utilizando uma ação bônus e um uso dessa runa, você pode conjurar um raio de energia ligada a seu pacto em uma linha de 20 pés que atinge o primeiro inimigo, uma criatura atingida deve realizar uma salvaguarda de Destreza, em uma falha ela recebe seu dado de Pulso em dano desse mesmo tipo.\n\nMaestria:\n- Dano: +1 na escala de dano do raio por maestria\n- Uso: +1 uso do raio por maestria\n\nPatrono Ínfero (Pulso Ametista)\nÍnferos existem talvez antes mesmo da criação do universo, essências ligadas ao medo, a agonia, ao vício, aos segredos e até mesmo aos pesadelos. Essas essências muitas vezes tem uma mentalidade incompatível com os seres humanos, não sendo possível sequer se comunicar, no entanto existem diversos tipos de demônios e todos tem interesses no mundo dos homens. Vez ou outra, eles se aliam a mortais, ou até mesmo podem escravizá-los sob sua vontade para que se tornem os representantes de sua vontade em Runeterra. Essas são apenas algumas formas de como nascem os pactos ínferos.\nRaio Místico: Dano Sombrio\nVocê recebe 60 pés de visão no escuro",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-mao-da-corrupcao",
+      "kind": "RUNA",
+      "name": "Mão da Corrupção",
+      "groups": [
+        "Ametista",
+        "Runessência",
+        "Místico de Pacto"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Pacto Místico - Ínfero",
+      "description": "Pulso: Ametista\nSinergia: Metade do seu bônus de Proficiência em usos de Raio Místico\nUso: Metade do seu Bônus de Proficiência\n\nVocê pode disparar um feixe de energia sombria que prende alvos atingidos. Utilizando uma ação bônus e um uso dessa runa, você pode conjurar um feixe de energia sombria em uma linha de 20 pés, criaturas nessa linha devem realizar uma salvaguarda de Destreza, se falharem ficarão Contidos por 2 rodadas e receberão o dobro de seu Dado de Pulso em dano sombrio. Criaturas que falharem na salvaguarda podem refazê-la no começo de cada um de seus turnos. Adicionalmente, você pode a qualquer momento pela duração dessa runa, reativá-la uma vez para puxar as criaturas atingidas por 10 pés na sua direção, essas criaturas devem fazer uma salvaguarda de Força.\n\nVisão Demoníaca. Utilizando dois usos de Raio Místico e uma ação, você pode conjurar uma esfera de energia sombria na forma de um olho demoníaco, recebendo visão de uma área de 10 pés de raio a uma distância a até 60 pés de você, atravessando paredes, muros ou qualquer objeto sólido. Criaturas dentro dessa área devem realizar uma salvaguarda de Destreza, se falharem receberão o seu de Dado de Pulso em dano sombrio e ficarão com uma Marca Ínfera. Criaturas ou objetos invisíveis que falharem na salvaguarda serão reveladas, perdendo sua invisibilidade. Caso uma criatura marcada use invisibilidade, você ainda consegue vê-la.\n\nMarca Ínfera: Durante um número de minutos igual ao seu bônus de Proficiência, você sabe exatamente a posição de uma criatura marcada. Adicionalmente, ataques que você faça contra uma criatura marcada causam seu dado base de Pulso em dano sombrio adicional. Se a criatura cair a 0 pontos de vida antes do fim da duração, esse efeito é encerrado. Você pode encerrar esse efeito a qualquer momento. O feitiço Restauração Menor remove a marca Ínfera.\n\nMaestria:\n- Dano: +1 na escala de dano do feixe por maestria\n- Uso: +1 uso do feixe por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-pacto-mistico"
+        ]
+      }
+    },
+    {
+      "id": "runa-ascensao-infera",
+      "kind": "RUNA",
+      "name": "Ascensão Ínfera",
+      "groups": [
+        "Ametista",
+        "Runessência",
+        "Místico de Pacto"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Mão da Corrupção",
+      "description": "Pulso: Ametista\nSinergia: Seu Raio Místico se torna uma área de cone de 20 pés ao invés de uma linha de 20 pés.\nUso: Metade do seu Bônus de Proficiência\n\nA essência do místico ínfero é um caminho onde a força de um demônio é emprestada a um receptáculo através de um pacto sombrio. A Ascensão Ínfera é a coroação desse pacto, no qual você se torna o hospedeiro desse ínfero, não tendo mais seus poderes vinculados ao familiar. Você ainda pode utilizá-lo normalmente, mas caso ele morra, você mantém seus poderes ligados a essa essência normalmente, o mesmo vale para Arma Familiar.\n\nTransvocação: Utilizando uma ação e um uso dessa Runa, você pode assumir uma forma híbrida relacionada com o ínfero com o qual você fez seu pacto, por exemplo, se o ínfero que você se aliou possui cauda e chifres, você também os terá ou se ele possuir asas e uma aparência deformada, você também as terá.\n\nEntrar nessa forma demoníaca, causará o dobro do seu dado de Pulso em dano sombrio em um círculo de 15 pés de raio centrado em você durante 2 rodadas quando a forma for ativada em criaturas que estejam dentro da área, entrem ou tentem atravessá-la. O dano causado é convertido em Pontos Sombrios, inimigos nessa área deverão realizar uma salvaguarda de Constituição, em um sucesso recebem apenas metade do dano.\n\nDurante a transvocação, todo dano sombrio causado por seus ataques é convertido em Pontos Sombrios, ao fim da duração, essa forma explode e causa metade dos Pontos Sombrios acumulados como dano sombrio em um círculo de 15 pés centrado em você e seus Pontos Sombrios são zerados. Inimigos nessa área deverão realizar uma salvaguarda de Constituição, em um sucesso recebem apenas metade do dano.\n\nReceber a condição Incapacitado executa prematuramente a explosão.\n\nMaestria:\n- Potência: O alcance da Transvocação aumenta em 5 pés e a CD em 1\n- Duração: +2 rodadas de duração da Transvocação por melhoria\n\nPatrono Feérico (Pulso Safira)\nO pacto com um ser feérico é baseado na empatia que ele possui em relação à você, lhe concedendo parte de seus poderes. Um familiar feérico nada mais é do que uma forma reduzida e fraca de seu patrono, ao conversar com seu familiar você estará conversando diretamente com o seu patrono.\nRaio Místico: Dano Radiante\nVocê recebe proficiência em uma das seguintes perícias: Arcanismo, História, Lidar com Animais, Natureza ou Sobrevivência.",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-mao-da-corrupcao"
+        ]
+      }
+    },
+    {
+      "id": "runa-escudo-das-fadas",
+      "kind": "RUNA",
+      "name": "Escudo das Fadas",
+      "groups": [
+        "Safira",
+        "Runessência",
+        "Místico de Pacto"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Pacto Místico - Feérico",
+      "description": "Pulso: Safira\nSinergia: Metade do seu bônus de Proficiência em usos de Raio Místico\nUso: Metade do seu Bônus de Proficiência\n\nVocê pode utilizar sua ação bônus e um uso dessa runa para conceder a você ou um aliado a até 20 pés de você um escudo luminoso por 2 rodadas. Esse escudo concede o dobro de seu dado de Pulso em pontos de vida temporários, metade do seu bônus de Proficiência vezes 5 em pés de deslocamento adicional e imunidade a dano necrótico pela duração.\n\nPolimorfia. Utilizando dois usos de Raio Místico e uma ação, você pode conjurar a feitiço Metamorfose sem gastar pontos de mana,com duração de 5 rodadas ao invés de 1 hora. A CD para esse feitiço é igual à sua CD de Runas.\n\nArmamento Feérico. Quando você dispara um Raio Místico, você pode disparar um novo disparo na mesma rodada sem gastar um uso do mesmo. Adicionalmente, seu Raio Místico passa a poder ser disparado tanto por uma ação bônus quanto como um ataque em sua ação de ataque.\n\nMaestria:\n- Potência: Adicione metade do bônus de Proficiência ao escudo por maestria\n- Duração: +1 rodada de duração do escudo por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-pacto-mistico"
+        ]
+      }
+    },
+    {
+      "id": "runa-ascensao-feerica",
+      "kind": "RUNA",
+      "name": "Ascensão Feérica",
+      "groups": [
+        "Safira",
+        "Runessência",
+        "Místico de Pacto"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Escudo das Fadas",
+      "description": "Pulso: Safira\nSinergia: Seu Escudo das Fadas afeta um alvo adicional\nUso: Metade do seu Bônus de Proficiência\n\nA essência do místico feérico é um caminho onde a força de um poderoso ser feérico lhe é emprestada pela empatia, a Ascensão Feérica é o auge dessa amizade, no qual você se torna um com sua fonte feérica, não tendo mais seus poderes vinculados ao seu familiar. Você ainda pode conjurá-lo normalmente, mas caso ele morra, você mantém seus poderes ligados a essa essência normalmente, o mesmo vale para sua Arma Familiar.\n\nUnião: Ao atingir esse ápice, sua aparência muda para algo com traços feéricos. Você recebe RD 2/ dano sombrio e asas coloridas (de acordo com a personalidade de seu patrono), recebendo assim um deslocamento de voo de 30 pés. Adicionalmente, seus olhos passam a ter uma tonalidade dourada, lhe dando 60 pés de Visão Verdadeira.\n\nTransvocação: Utilizando uma ação e um uso dessa Runa, você passa a emitir uma forte luz espiritual, assumindo uma forma feérica ainda mais expressiva.\n\nEntrar nessa forma feérica, causará o seu dado de Pulso em dano radiante em um círculo de 15 pés de raio centrado em você durante 2 rodadas quando a forma for ativada em criaturas que estejam dentro da área, entrem ou tentem atravessá-la. O dano causado é convertido em Pontos Luminosos, inimigos nessa área deverão realizar uma salvaguarda de Constituição, em um sucesso recebem apenas metade do dano.\n\nDurante a transvocação, todo dano radiante causado por seus ataques é convertido em Pontos Luminosos, ao fim da duração, essa forma explode e causa metade dos Pontos Luminosos acumulados como dano radiante em um círculo de 15 pés centrado em você e seus Pontos Luminosos podem ser distribuídos entre aliados na área curando-os em 1 ponto de vida para cada ponto Luminoso com o restante dos Pontos Luminosos desaparecendo ao fim da rodada. Inimigos nessa área deverão realizar uma salvaguarda de Constituição, em um sucesso recebem apenas metade do dano.\n\nMaestria:\n- Potência: O alcance da Transvocação aumenta em 5 pés e a CD em 1\n- Duração: +2 rodadas de duração da Transvocação por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-escudo-das-fadas"
+        ]
+      }
+    },
+    {
+      "id": "runa-predar-azakana",
+      "kind": "RUNA",
+      "name": "Predar Azakana",
+      "groups": [
+        "Ametista",
+        "Runessência",
+        "Perseguidor de Azakanas"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre)",
+      "description": "Os Azakanas existem por toda Runeterra, criaturas espirituais que predam os vivos se alimentando de seus sentimentos negativos, enredando-os em uma continuidade infinita de recorrência dos mesmos erros em busca de manter sua fonte de alimento. Os Perseguidores de Azakanas se dedicam de corpo e alma à caça dessas criaturas, um processo que altera até mesmo sua essência.\n\nPulso: Ametista\nSinergia: Adicione Proficiência ao dano e metade da Proficiência ao resultado do Dado de Pulso\nUso: Metade da Proficiência\n\nAo combater Azakanas, você se torna mais feroz e focado. Você recebe +1 em qualquer jogada que envolva um Azakana (Ínfero), sejam jogadas de acerto, de dano ou mesmo em CDs. Além disso, a categoria de dados de dano de seu ataque sobe em 1 para ataques feitos contra Azakanas.\n\nDesferir Mácula: Utilizando uma ação e um uso dessa runa, você desfere um ataque com uma arma corpo a corpo em uma linha de 15 pés iniciada em você, esse ataque é permeado de energia. Caso atinja um alvo, ele recebe o dano da arma e seu dado de Pulso em dano energético adicional.\n\nMaestria:\n- Uso: +1 uso por maestria\n- Dano: +1 na categoria do dano de Desferir Mácula por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-selar-azakana",
+      "kind": "RUNA",
+      "name": "Selar Azakana",
+      "groups": [
+        "Ametista",
+        "Runessência",
+        "Perseguidor de Azakanas"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Predar Azakana",
+      "description": "Pulso: Ametista\nSinergia: Metade da Proficiência em usos de Predar Azakana\nUso: Metade da Proficiência\n\nVocê aprendeu o suficiente no combate a Azakanas para saber que eles jamais morrem completamente, apenas evanescem para surgirem após predar emoções negativas suficientes para retomarem sua forma. Mas ao mesmo tempo, você sabe como interromper esse ciclo, capturando um Azakana que tenha sido derrotado e aprisionando-o em uma forma física, um Talismã Azakana.\n\nPara que você possa selar um Azakana, você deve saber o nome dele e isso é aprendido por você naturalmente conforme os pontos de vida do Azakana são reduzidos. Ao restar apenas 1/10 dos pontos de vida do Azakana, seus ataques críticos podem selá-lo automaticamente. Para cada ataque que tenha sucesso, o Azakana deve fazer uma salvaguarda de Sabedoria, caso falhe, será capturado.\n\nInfluência Espiritual. Você pode optar que seus ataques com armas corpo a corpo ou à distância passem a causar dano energético contra Azakanas, isso deve ser declarado antes do ataque acertar.\n\nDesatar da Alma: Utilizando uma ação bônus e um uso dessa runa, você pode separar seu espírito de seu corpo, criando uma cópia espectral de você e dos equipamentos que esteja vestindo. Ao fazer isso seu corpo fica parado no local de onde você se separou. Pelo próximo minuto você pode se mover livremente e realizar ações normalmente, ao final desse minuto você retorna para seu corpo. Todo o dano causado enquanto você estiver nessa forma é tratado como dano energético, e, ao retornar para seu corpo, metade do dano causado nesse tempo é repetido nas criaturas atingidas. Você pode utilizar uma ação bônus ou uma reação quando for alvo de um ataque para retornar prematuramente ao seu corpo. Caso você morra nessa forma você será caçado pelo Lobo e o dano causado não será repetido.\n\nMaestria:\n- Uso: +1 uso da runa por maestria\n- Proteção: +1 RD/verdadeiro enquanto em Desatar Alma",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-predar-azakana"
+        ]
+      }
+    },
+    {
+      "id": "runa-dominio-azakana",
+      "kind": "RUNA",
+      "name": "Domínio Azakana",
+      "groups": [
+        "Ametista",
+        "Runessência",
+        "Perseguidor de Azakanas"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Selar Azakana",
+      "description": "Pulso: Ametista\nSinergia: Você pode usar Influência Espiritual em criaturas que não sejam Azakanas\nUso: Metade da Proficiência\n\nVocê é capaz de utilizar um Azakana selado para receber um acréscimo de poder temporário enquanto sua forma se assemelha ao do Azakana em questão. Utilizando uma ação bônus e um uso dessa runa, você pode imbuir seus ataques com seu dado base de Pulso em dano adicional do tipo de um Talismã Azakana que você possua por um número de rodadas igual ao seu bônus de proficiência.\n\nAscensão Azakana. Utilizando uma ação bônus, você pode absorver um Talismã Azakana que você possua, destruindo o talismã no processo. Ao fazer isso, por um número de rodadas igual ao seu bônus de Proficiência você recebe os seguintes benefícios:\n\n- Seus valores de Força e Destreza aumentam em +2, até o máximo de 22.\n\n- Você recebe RD 2/radiante\n\n- Seus ataques com armas corpo a corpo e à distância recebem seu dado de Pulso em dano adicional do tipo definido pelo Azakana conforme a tabela Tipo de Azakana.\n\n- Utilizando uma ação bônus e um uso dessa runa, você pode utilizar um poder (feitiço, runa, habilidade) do Azakana\n\n- Você recupera metade do modificador de Constituiçao do Azakana em d6 pontos de vida a cada rodada pela duração. Pontos de vida em excesso são transformados em pontos de vida temporários que acumulam entre si, com duração igual ao dobro dessa ação ou até serem esgotados\n\nAzakanas\nTipo de Azakana | Tipo de Dano\nAuto Dúvida | Psíquico\nCiúme Mesquinho | Letífero\nRaiva Fulminante | Incinerante\nObsessão Transformada em Malícia | Vibracional\nMedo de Ser Esquecido | Glacial\nTristeza Implacável | Sombrio\nMedo da Mudança | Rúnico\n\nMaestria:\n- Duração: Metade da proficiência em rodadas adicionais por maestria\n- Uso: +1 uso da runa por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-selar-azakana"
+        ]
+      }
+    },
+    {
+      "id": "runa-nucleo-reator",
+      "kind": "RUNA",
+      "name": "Núcleo Reator",
+      "groups": [
+        "Runessência",
+        "Reutilizador de Energia"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Possuir pontos de Energia",
+      "description": "Em um mundo onde muitos usam Mana ou Ki, alguns indivíduos se especializam em um outro tipo de recurso para seus feitos, com sua maioria sendo tecmatúrgos. Apesar disso, nem mesmo os maiores inventores realmente se aprofundam no entendimento da Energia como aqueles que possuem esta Runessência.\n\nPulso: Conforme Reator\nSinergia: Adicione proficiência ao máximo de Energia e metade da Proficiência ao resultado do Dado de Pulso\nUso: Metade do Bônus de proficiência\n\nA fonte de Energia dentro de você permite que você utilize efeitos ao seu redor para recarregá-la bem como descarregá-la de maneira única.\n\nFerramentas Energizadas. Você pode utilizar 1 ponto de Energia para aumentar a eficiência de uma ferramenta ou conjunto de Ofício por até 1 hora. Ao fazer isso, a próxima jogada ligada ao Ofício feita com a ferramenta soma seu dado base de pulso ao resultado. Uma ferramenta não pode receber esse efeito mais de uma vez por descanso longo.\n\nReator. Você possui um tipo único de ressonância com a energia conhecido como Reator. Cada Reator possibilita a você uma reação única que, quando utilizada (ao custo de um uso dessa Runa), recupera metade do seu bônus de proficiência em pontos de Energia.\n\nDescarga de Reator. Com uma ação bônus em um uso dessa Runa, você pode consumir uma quantidade de pontos de Energia à sua escolha, transformando-os em Cargas de Reator. Você pode, como parte de uma ação de ataque, consumir uma Carga de Reator para aumentar o acerto e dano do ataque em metade do seu bônus de proficiência. Cargas não utilizadas são perdidas durante um descanso longo.\n\nMaestria:\n- Cargas: Soma metade do seu bônus de proficiência à quantidade de Cargas de Reator geradas ao utilizar a Runa\n- Usos: +1 uso por maestria\n\nReator Auxiliar (Pulso Diamante)\nAo receber cura de qualquer fonte, você pode utilizar uma reação para ativar seu reator, recebendo seu Dado Base de Pulso em pontos de vida temporários que duram por até 1 minuto.",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "runa-auxilio-aumentado",
+      "kind": "RUNA",
+      "name": "Auxílio Aumentado",
+      "groups": [
+        "Diamante",
+        "Runessência",
+        "Reutilizador de Energia"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Núcleo Reator - Auxiliar",
+      "description": "Pulso: Diamante\nSinergia: Metade do seu bônus de proficiência em usos da reação de seu Reator.\nUso: Metade do Bônus de Proficiência\n\nVocê se torna capaz de utilizar pontos de Energia para aumentar a cura gerada por você, podendo gastá-los com uma reação ao utilizar um feitiço ou efeito de cura, aumentando a quantidade de pontos de vida recuperados alvo em um valor igual ao total de pontos de Energia consumidos.\n\nAura Auxiliar. Com uma ação e um uso dessa Runa, você envolve seu corpo ou um aliado que possa tocar em uma energia curativa proveniente de seu Reator. Por uma quantidade de rodadas igual ao seu bônus de proficiência, você ou o aliado tocado recebe Regeneração igual ao seu bônus de proficiência no início de cada turno (esse valor não é aumentado para aliados por seu pulso diamante).\n\nMaestria:\n- Eficiência: +1 de Regeneração em Aura Auxiliar\n- Usos: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-nucleo-reator"
+        ]
+      }
+    },
+    {
+      "id": "runa-auxilio-aperfeicoado",
+      "kind": "RUNA",
+      "name": "Auxílio Aperfeiçoado",
+      "groups": [
+        "Diamante",
+        "Runessência",
+        "Reutilizador de Energia"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Auxílio Aumentado",
+      "description": "Pulso: Diamante\nSinergia: Metade do seu bônus de proficiência em usos da reação de seu Reator.\nUso: Metade do Bônus de proficiência\n\nAo utilizar a reação de seu Núcleo Reator, você recupera metade do seu bônus de proficiência em pontos de via.\n\nPulso de Auxílio. Com uma ação e um uso desta Runa, você emite uma onda energética em um raio de 15 pés ao seu redor. Aliados na área recebem metade do seu bônus de proficiência como bônus em jogadas de ataque e dano. Caso um inimigo nessa área seja alvo de sua Aura Auxiliar, qualquer cura excedente que receba pela duração de transforma em pontos de vida temporários, esses pontos de vida temporais se acumulam entre si e duram até o efeito do Pulso de Auxílio ser encerrado.\n\nMaestria:\n- Reforço: Um aliado que receba pontos de vida temporários através dessa runa têm +1 de CA enquanto durar o efeito.\n- Usos: +1 uso por maestria\n\nReator Defensivo (Pulso Esmeralda)\nAo ser alvo de um ataque, você pode utilizar uma reação para ativar seu reator, reduzindo o dano recebido em um valor igual ao seu Dado Base de Pulso.",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-auxilio-aumentado"
+        ]
+      }
+    },
+    {
+      "id": "runa-defesa-aumentada",
+      "kind": "RUNA",
+      "name": "Defesa Aumentada",
+      "groups": [
+        "Esmeralda",
+        "Runessência",
+        "Reutilizador de Energia"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Núcleo Reator - Defensivo",
+      "description": "Pulso: Esmeralda\nSinergia: Metade do seu bônus de proficiência em usos da reação de seu Reator.\nUso: Metade do Bônus de Proficiência\n\nVocê se torna capaz de utilizar pontos de Energia para diminuir o dano de ataques recebidos, podendo gastá-los com uma reação ao ser alvo de um ataque e reduzindo o dano em questão em um valor igual ao total de pontos de Energia consumidos (esse efeito se aplica antes de outros efeitos que reduzem dano, como RD ou resistência).\n\nAura Protetora. Com uma ação e um uso dessa Runa, você envolve seu corpo em uma energia defensora proveniente de seu Reator. Por uma quantidade de rodadas igual ao seu bônus de proficiência, inimigos que realizam ataques corpo a corpo contra você devem fazer uma salvaguarda de Constituição, em uma falha, recebem seu dado base de pulso em dano energético. Em um sucesso, não recebem dano.\n\nMaestria:\n- Eficiência: +1 na CD de Aura Protetora\n- Usos: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-nucleo-reator"
+        ]
+      }
+    },
+    {
+      "id": "runa-defesa-aperfeicoada",
+      "kind": "RUNA",
+      "name": "Defesa Aperfeiçoada",
+      "groups": [
+        "Esmeralda",
+        "Runessência",
+        "Reutilizador de Energia"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Defesa Aumentada",
+      "description": "Pulso: Esmeralda\nSinergia: Metade do seu bônus de proficiência em usos da reação de seu Reator\nUso: Metade do Bônus de proficiência\n\nAo utilizar a reação de seu Núcleo Reator, o próximo ataque do alvo feito contra você tem desvantagem.\n\nPulso de Defesa. Com uma ação bônus e um uso desta Runa, você emite uma onda energética em um raio de 30 pés ao seu redor. Inimigos na área devem fazer uma salvaguarda de Carisma, em uma falha, ficarão Provocados por você até o final do seu próximo turno. Caso um inimigo provocado por esta Runa receba dano de sua Aura Protetora, ele também recebe seu bônus de proficiência em Exposição contra um tipo de dano físico à sua escolha (escolhido ao ativar a Runa) até o efeito de Aura do Defensor ser encerrado.\n\nMaestria:\n- Oportunismo: Você pode escolher um tipo de dano adicional ao ativar a Runa.\n- Usos: +1 uso por maestria\n\nReator Ofensivo (Pulso Rubi)\nAo acertar um ataque contra um inimigo (porém antes de saber o dano), você pode utilizar uma reação para ativar seu reator, causando seu dado de pulso em dano energético adicional.",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-defesa-aumentada"
+        ]
+      }
+    },
+    {
+      "id": "runa-ofensiva-aumentada",
+      "kind": "RUNA",
+      "name": "Ofensiva Aumentada",
+      "groups": [
+        "Rubi",
+        "Runessência",
+        "Reutilizador de Energia"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Núcleo Reator - Ofensivo",
+      "description": "Pulso: Rubi\nSinergia: Metade do seu bônus de proficiência em usos da reação de seu Reator\nUso: Metade do Bônus de Proficiência\n\nVocê se torna capaz de utilizar pontos de Energia para aumentar o dano de um ataque feito por você que cause dano elétrico ou energético, podendo gastá-los com uma reação ao causar dano desse tipo, aumentando o dano em um valor igual ao total de pontos de Energia consumidos.\n\nAura Ofensiva. Com uma ação e um uso dessa Runa, você envolve seu corpo ou uma arma que esteja utilizando em uma energia curativa proveniente de seu Reator. Por uma quantidade de rodadas igual ao seu bônus de proficiência, seus ataques desarmados ou com a arma envolvida causam seu bônus de proficiência como dano energético adicional.\n\nMaestria:\n- Poder: +1 de dano por maestria\n- Usos: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-nucleo-reator"
+        ]
+      }
+    },
+    {
+      "id": "runa-ofensiva-aperfeicoada",
+      "kind": "RUNA",
+      "name": "Ofensiva Aperfeiçoada",
+      "groups": [
+        "Rubi",
+        "Runessência",
+        "Reutilizador de Energia"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Ofensiva Aumentada",
+      "description": "Pulso: Rubi\nSinergia: Metade do seu bônus de proficiência em usos da reação de seu Reator\nUso: Metade do Bônus de proficiência\n\nAo utilizar a reação de seu Núcleo Reator, o dano extra causado se torna Rúnico.\n\nPulso Ofensivo. Com uma ação e um uso desta Runa, você emite uma onda energética em um raio de 15 pés ao seu redor que dura uma quantidade de rodadas igual ao seu bônus de proficiência. Inimigos que entrem ou iniciem seu turno na área devem realizar uma salvaguarda de Destreza, em um falha, recebem uma quantidade de seus dados base de Pulso igual ao seu bônus de proficiência. Enquanto a aura está ativada, todo dano causado por efeitos provenientes dessa Runessência se torna mágico.\n\nMaestria:\n- Potência: Você soma metade do seu bônus de proficiência ao dano de seus ataques enquanto o Pulso está ativo.\n- Usos: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-ofensiva-aumentada"
+        ]
+      }
+    },
+    {
+      "id": "runa-pulso-antimagia",
+      "kind": "RUNA",
+      "name": "Pulso Antimagia",
+      "groups": [
+        "Safira",
+        "Runessência",
+        "Trapaceiro"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Herança - Caçador de Magos ou Herança - Hiperatividade Rúnica",
+      "description": "A Runessência do Trapaceiro é uma manifestação única que quebra as regras da magia. Ela possui ligação com o Celestial conhecido como Trapaceiro e é extremamente incomum. Normalmente, as pessoas que a manifestam são pessoas hábeis e escorregadias, que adotam a mudança e a quebra do status quo como uma necessidade para o dinamismo do universo.\n\nPulso: Safira\nSinergia: Adicione metade do bônus de Proficiência ao Dado de Pulso\nUso: Metade do seu Bônus de Proficiência\n\nVocê é capaz de anular magia, podendo cancelar um feitiço de alvo único direcionada a você.\n\nAo ser alvo de um feitiço, você pode usar sua reação e consumir um uso dessa Runa para forçar o alvo que conjurou o feitiço a realizar uma salvaguarda com o Atributo de Conjuração dele, caso falhe, o recurso é consumido mas o feitiço não é conjurado.\n\nMaestria:\n- Uso: +1 Uso da Runa por maestria\n- Força: +2 na CD por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "heritages": [
+          "cacador-de-magos",
+          "hiperatividade-runica"
+        ]
+      }
+    },
+    {
+      "id": "runa-roubo-de-feitico",
+      "kind": "RUNA",
+      "name": "Roubo de Feitiço",
+      "groups": [
+        "Safira",
+        "Runessência",
+        "Trapaceiro"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Pulso Antimagia",
+      "description": "Pulso: Safira\nSinergia: A CD da salvaguarda de Pulso antimagia aumenta em 2\nUso: Metade do seu Bônus de Proficiência\n\nVocê pode desviar a habilidade mágica do seu atacante e usá-la para si mesmo.\n\nUtilizando uma ação bônus, você pode consumir um uso dessa Runa para tentar roubar um feitiço de um alvo a até 5 pés de você, ao tocar um alvo, ele deve fazer uma Salvaguarda do Atributo de Conjuração contra a sua CD de Runas. Caso o alvo falhe e possua um feitiço, o mestre deverá preparar então uma lista de feitiços possíveis de serem roubadas com um total de feitiços igual a 2 a menos que o máximo de seu dado base de Pulso. Você deve jogar esse dado e caso tire 1, você não consome o uso dessa runa, mas também não consegue roubar um feitiço, caso o resultado seja o valor máximo desse dado, você pode escolher o feitiço entre todos os feitiços enumerados. Caso o alvo não tenha feitiço, você não consome um uso dessa Runa ao fazer isso.\n\nQuando você rouba um feitiço de um alvo, você rouba também a quantidade de mana necessária para conjurar ese feitiço. O atributo de conjuração desse feitiço é Carisma e o nível máximo de feitiço que você pode roubar e conjurar dessa forma é igual ao seu bônus de Proficiência.\n\nO alvo dessa característica perde a capacidade de conjurar esse feitiço por 1 hora. Pela duração, você pode conjurar esse feitiço com uma ação igual à necessária para conjurar o feitiço. Uma vez que o feitiço for conjurada ou ao final da duração, o alvo recupera a capacidade de conjurar o feitiço.\nEx.: No 8º nível você pode tentar roubar feitiços de 1º, 2º e 3º nível. Ao tocar um Arcanista, ele faz a salvaguarda e falha, o mestre escolhe quatro feitiços de até 3º nível que esse arcanista possua (2 a menos que o dado base de Pulso, d6). Você joga 1d6 e resulta em 4, o feitiço de número 4 desta lista é esfera elemental. Pela próxima hora você se torna capaz de conjurar esse feitiço uma vez e durante esse tempo o Arcanista não é capaz de conjurá-la.\n\nMaestria:\n- Nível: +1 no nível máximo do feitiço por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-pulso-antimagia"
+        ]
+      }
+    },
+    {
+      "id": "runa-absorver-feitico",
+      "kind": "RUNA",
+      "name": "Absorver Feitiço",
+      "groups": [
+        "Safira",
+        "Runessência",
+        "Trapaceiro"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Roubo de Feitiço",
+      "description": "Pulso: Safira\nSinergia: Você recebe metade do seu bônus de Proficiência como uso de Runas que podem ser usadas para as outras Runas dessa Runessência\nUso: Metade do seu Bônus de Proficiência\n\nVocê pode utilizar sua reação quando você for alvo de um feitiço ou estiver na área de efeito de uma para absorver o feitiço assim como o Pulso Antimagia. Ao fazer isso, você nega todos os efeitos do feitiço e, caso seja um feitiço cfeitiçoom nível que você possa conjurar com a Runa Roubo de Feitiço, você pode conjurá-la seguindo as mesmas regras de um feitiço roubada pela característica de Roubo de Feitiços.\n\nMaestria:\n- Uso: +1 Uso da Runa por maestria\n- Força: +2 na CD por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-roubo-de-feitico"
+        ]
+      }
+    },
+    {
+      "id": "runa-mergulho-fantasma",
+      "kind": "RUNA",
+      "name": "Mergulho Fantasma",
+      "groups": [
+        "Ametista",
+        "Runessência",
+        "Elusividade Fantasmagórica"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Herança - Variante Ressurgido",
+      "description": "Alguns indivíduos que trilham o caminho entre a vida e a morte se tornam capazes de utilizar sua natureza não natural para transpassar a divisa entre o mundo físico e o Reino Material, possibilitando feitos igualmente elusivos e destrutivos.\n\nPulso: Ametista\nSinergia: Seu deslocamento adicional enquanto invisível aumenta em 5 vezes metade de seu bônus de proficiência em pés e adiciona metade da Proficiência ao resultado do Dado de Pulso\nUso: Metade do Bônus de proficiência\n\nUtilizando uma ação bônus e um uso dessa Runa, você fica Invisível por uma quantidade de turnos igual ao seu bônus de proficiência. Enquanto Invisível dessa maneira, você recebe deslocamento adicional igual a 5 vezes seu bônus de proficiência em pés. Atacar ou receber dano pela duração, encerra essa condição prematuramente.\nCaso ataque um alvo enquanto Invisível por meio desta runa, você causa seu dado base de pulso como dano Necrótico adicional no ataque.\n\nMaestria:\n- Letalidade: Um ataque realizado enquanto Invisível ignora metade do seu bônus de proficiência em RD do alvo\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "heritages": [
+          "variante-ressurgido"
+        ]
+      }
+    },
+    {
+      "id": "runa-ressaca-espectral",
+      "kind": "RUNA",
+      "name": "Ressaca Espectral",
+      "groups": [
+        "Ametista",
+        "Runessência",
+        "Elusividade Fantasmagórica"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Mergulho Fantasma",
+      "description": "Pulso: Ametista\nSinergia: Metade do seu bônus de proficiência em usos de Mergulho Fantasma\nUso: Metade do Bônus de proficiência\n\nSua movimentação deixa resquícios de seu espírito para trás, podendo atormentar a mente de uma criatura, a deixando incapaz de se mover.\n\nUtilizando uma ação e um uso dessa Runa, você pode se mover para um ponto desocupado que você possa ver a até 20 pés de você. Criaturas numa linha formada a partir do ponto inicial que você partiu até o local em que você se moveu devem realizar uma salvaguarda de Constituição. Em uma falha, uma criatura afetada sofrerá seu Dado de Pulso em dano necrótico e ficará Atordoada até o final de seu próximo turno.\n\nMaestria:\n- Permanência: +1 turno de Atordoamento por maestria. Uma criatura atordoada pode repetir a salvaguarda no final de cada turno, encerrando o efeito em um sucesso\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-mergulho-fantasma"
+        ]
+      }
+    },
+    {
+      "id": "runa-morte-das-profundezas",
+      "kind": "RUNA",
+      "name": "Morte das Profundezas",
+      "groups": [
+        "Ametista",
+        "Runessência",
+        "Elusividade Fantasmagórica"
+      ],
+      "prerequisite": "Runessência (com o aval do mestre); Runa - Ressaca Espectral",
+      "description": "Pulso: Ametista\nSinergia: Uma criatura atingida por Morte das Profundezas fica Enfraquecida até o final de seu próximo turno\nUso: Metade do Bônus de proficiência\n\nA morte foi trazida para você e você irá trazê-la para todos os seus inimigos.\n\nUtilizando uma ação e um uso dessa Runa, você escolhe um ponto que você possa ver a até 60 pés de você. Criaturas num raio de 10 pés desse ponto devem realizar uma salvaguarda de Constituição. Em uma falha, uma criatura afetada sofre seu Dado de Pulso em dano necrótico ou metade disso em um sucesso. Além disso, caso uma criatura na área seja reduzida a 0 pontos de vida, você passa a ocupar o local que ela estava e poderá atacar uma nova área com essa Runa sem gastar um uso da mesma.\n\n|}\n\nMaestria:\n- Força: +1 na CD por maestria\n- Uso: +1 uso por maestria",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "requires": {
+        "resources": [
+          "runa-ressaca-espectral"
+        ]
+      }
     }
   ]
 }

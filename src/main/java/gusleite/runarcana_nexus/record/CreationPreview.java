@@ -42,6 +42,9 @@ public record CreationPreview(
         TraitBudgetStatus traitBudget,
         List<TraitLine> traits,
         List<TraitStatus> traitOptions,
+        // Equipamento inicial (itens do catálogo, com os conjuntos ainda fechados) e a riqueza inicial da classe.
+        List<EquipmentLine> equipment,
+        StartingWealth startingWealth,
         List<String> errors,
         boolean complete
 ) {
@@ -81,6 +84,12 @@ public record CreationPreview(
 
     // Escolha pendente ou feita: key é o que o front devolve em CreationRequest.choices.
     // note explica uma escolha sem opções (ex.: lista de ofícios ainda não cadastrada); ela não bloqueia a criação.
+    // item: id no rules/itens.json; source: de onde veio ("Classe: Acólito").
+    public record EquipmentLine(String item, String name, int quantity, String source) {}
+
+    // formula: dados da classe em PO ("5d4 x 10"), nulo sem classe; selected: o jogador trocou o equipamento por ela.
+    public record StartingWealth(String formula, boolean selected) {}
+
     public record ChoiceLine(String key, GrantType type, String label, int count, List<String> options,
                              List<String> selected, String source, String note) {}
 }

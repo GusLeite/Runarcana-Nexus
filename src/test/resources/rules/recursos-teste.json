@@ -139,6 +139,32 @@
           "Armas exóticas"
         ]
       }
+    },
+    {
+      "id": "t-runa-rubi",
+      "kind": "RUNA",
+      "name": "Runa Teste",
+      "groups": [
+        "Rubi"
+      ],
+      "description": "Runa de teste.",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
+    },
+    {
+      "id": "t-runa-nivel8",
+      "kind": "RUNA",
+      "name": "Runa Alta",
+      "groups": [
+        "Rubi"
+      ],
+      "prerequisite": "Nível 8",
+      "description": "Runa de nível 8.",
+      "requires": {
+        "level": 8
+      }
     }
   ]
 }

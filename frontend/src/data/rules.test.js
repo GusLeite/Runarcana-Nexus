@@ -209,3 +209,14 @@ describe('ganho de recurso de classe', () => {
     expect(grantLabel({ type: 'RESOURCE_CHOICE', value: 'SUTRA', label: 'Sutra Shojin' })).toBe('Sutra Shojin')
   })
 })
+
+describe('equipamento inicial', () => {
+  const items = [{ id: 'besta-leve', name: 'Besta Leve', category: 'Simples à Distância' }, { id: 'virotes-de-besta', name: 'Virotes de besta (20)' },
+    { id: 'machadinha', name: 'Machadinha', category: 'Simples Corpo a Corpo' }]
+  it('mostra o nome dos itens da opção', () => {
+    expect(choiceOptionName('EQUIPMENT_CHOICE', 'besta-leve+virotes-de-besta', [], items)).toBe('Besta Leve + Virotes de besta (20)')
+    expect(choiceOptionName('EQUIPMENT_CHOICE', 'machadinha*2', [], items)).toBe('Machadinha ×2')
+    expect(grantLabel({ type: 'EQUIPMENT', value: 'machadinha*2' }, [], items)).toBe('Equipamento: Machadinha ×2')
+    expect(grantLabel({ type: 'EQUIPMENT_CHOICE', label: 'Equipamento: conjunto' })).toBe('Equipamento: conjunto')
+  })
+})

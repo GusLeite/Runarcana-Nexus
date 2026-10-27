@@ -52,7 +52,7 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
         setDraft({
           originId: null, lineageId: null, classId: null, subclassId: null, backgroundId: null, regionId: null,
           attributeMethod: method, baseAttributes: startingAttributes(method, methods), choices: {}, heritages: [],
-          traitBudget: null, traits: [], drawbacks: [],
+          traitBudget: null, traits: [], drawbacks: [], startingEquipment: 'EQUIPMENT',
           characterName: '', playerName: defaultPlayer ?? '', age: '', height: '', alignment: null,
         })
       })
@@ -162,7 +162,7 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
           )}
           {current === 'class' && (
             <>
-              <OptionStep kind="class" title="Escolha a classe" items={catalog.classes} crafts={catalog.crafts} selected={draft.classId}
+              <OptionStep kind="class" title="Escolha a classe" items={catalog.classes} crafts={catalog.crafts} equipment={catalog.equipment?.items} selected={draft.classId}
                 onPick={id => setDraft(d => (d.classId === id ? d : { ...d, classId: id, subclassId: null }))} />
               {subclasses.length > 0 && (
                 <div className="lineage-step" key={draft.classId}>
@@ -190,6 +190,8 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
           )}
           {current === 'choices' && (
             <ChoiceStep choices={preview?.choices ?? []} picks={draft.choices} crafts={catalog.crafts ?? []} resources={catalog.resources ?? []}
+              items={catalog.equipment?.items ?? []} wealth={preview?.startingWealth}
+              onWealth={on => set('startingEquipment', on ? 'WEALTH' : 'EQUIPMENT')}
               onChange={(key, list) => setDraft(d => ({ ...d, choices: { ...d.choices, [key]: list } }))} />
           )}
           {current === 'heritages' && (

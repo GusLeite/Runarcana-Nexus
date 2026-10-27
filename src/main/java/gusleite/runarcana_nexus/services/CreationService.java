@@ -23,6 +23,7 @@ import gusleite.runarcana_nexus.record.CharacterResponse;
 import gusleite.runarcana_nexus.record.CreationPreview;
 import gusleite.runarcana_nexus.record.CreationPreview.AttributeLine;
 import gusleite.runarcana_nexus.record.CreationPreview.ChoiceLine;
+import gusleite.runarcana_nexus.record.CreationPreview.EquipmentLine;
 import gusleite.runarcana_nexus.record.CreationPreview.FeatureLine;
 import gusleite.runarcana_nexus.record.CreationPreview.HeritageLine;
 import gusleite.runarcana_nexus.record.CreationPreview.HeritagePool;
@@ -30,6 +31,7 @@ import gusleite.runarcana_nexus.record.CreationPreview.HeritageStatus;
 import gusleite.runarcana_nexus.record.CreationPreview.PointBuyStatus;
 import gusleite.runarcana_nexus.record.CreationPreview.SaveLine;
 import gusleite.runarcana_nexus.record.CreationPreview.SkillLine;
+import gusleite.runarcana_nexus.record.CreationPreview.StartingWealth;
 import gusleite.runarcana_nexus.record.CreationPreview.TraitBudgetStatus;
 import gusleite.runarcana_nexus.record.CreationPreview.TraitLine;
 import gusleite.runarcana_nexus.record.CreationPreview.TraitStatus;
@@ -46,6 +48,7 @@ import gusleite.runarcana_nexus.rules.AttributeMethods;
 import gusleite.runarcana_nexus.rules.Grant;
 import gusleite.runarcana_nexus.rules.HeritageCondition;
 import gusleite.runarcana_nexus.rules.RuleCatalog;
+import gusleite.runarcana_nexus.rules.RuleItem;
 import gusleite.runarcana_nexus.rules.RuleClass;
 import gusleite.runarcana_nexus.rules.RuleHeritage;
 import gusleite.runarcana_nexus.rules.RuleLineage;
@@ -58,6 +61,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -71,6 +75,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 import java.util.regex.Matcher;
+import java.util.random.RandomGenerator;
 import java.util.regex.Pattern;
 
 // Criação de personagem pelo assistente. evaluate() aplica as concessões do catálogo às escolhas
@@ -79,6 +84,7 @@ import java.util.regex.Pattern;
 public class CreationService {
 
     private static final JsonMapper JSON = JsonMapper.builder().build();
+    private static final RandomGenerator RANDOM = new SecureRandom();
     // Bônus de proficiência no 1º nível (a ficha nasce no nível 1).
     private static final int LEVEL_ONE_PROFICIENCY = 2;
     // Nível do personagem na criação (tabelas usesByLevel, diceByLevel e valueByLevel).
@@ -93,10 +99,12 @@ public class CreationService {
     private final BackGroundRepository backgrounds;
     private final CharacterAbilityRepository abilities;
     private final TableSettingsService settings;
+    private final StartingEquipmentService startingEquipment;
 
     public CreationService(RuleCatalogService rules, CharacterService characterService, CharacterRepository characters,
                            CharacterClassRepository classes, BackGroundRepository backgrounds,
-                           CharacterAbilityRepository abilities, TableSettingsService settings) {
+                           CharacterAbilityRepository abilities, TableSettingsService settings,
+                           StartingEquipmentService startingEquipment) {
         this.rules = rules;
         this.characterService = characterService;
         this.characters = characters;
@@ -104,6 +112,7 @@ public class CreationService {
         this.backgrounds = backgrounds;
         this.abilities = abilities;
         this.settings = settings;
+        this.startingEquipment = startingEquipment;
     }
 
     public CreationPreview preview(CreationRequest request) {
@@ -166,7 +175,8 @@ public class CreationService {
         // Os pontos da criação são gastos no assistente; a ficha guarda o que sobrou (normalmente 0).
         c.setHeritagePoints(b.heritagePoints - b.heritagesSpent());
         b.heritages.forEach(h -> c.getHeritages().add(displayName(h)));
-        c.setGold(b.gold);
+        // Riqueza inicial: os dados da classe são rolados agora, no lugar do equipamento.
+        c.setGold(b.gold + (b.wealth ? EquipmentRules.rollWealth(b.wealthFormula, RANDOM) : 0));
         c.setInspiration(0);
         c.getSavingThrows().addAll(b.saves.keySet());
         c.setBuild(JSON.writeValueAsString(request));
@@ -183,6 +193,7 @@ public class CreationService {
         for (Sourced<Grant> f : b.features) {
             abilities.save(abilityFrom(c, f.value(), LEVEL_ONE_PROFICIENCY));
         }
+        startingEquipment.give(c, b.equipment);
         return CharacterResponse.of(c);
     }
 
@@ -192,6 +203,7 @@ public class CreationService {
         RuleCatalog catalog = rules.catalog();
         Build b = new Build();
         b.roundUp = rules.roundsUp();
+        b.wealth = r.startingWealth();
         Map<String, List<String>> picks = r.choices() == null ? Map.of() : r.choices();
 
         b.origin = pick(r.originId(), rules::origin, "Escolha uma origem.", "Origem desconhecida.", b.errors);
@@ -229,6 +241,7 @@ public class CreationService {
         if (b.klass != null) sources.add(new Source("class:" + b.klass.id(), "Classe: " + b.klass.name(), b.klass.grantsOrEmpty()));
         if (b.subclass != null) sources.add(new Source("subclass:" + b.subclass.id(), subclassLabel(b.klass) + ": " + b.subclass.name(), b.subclass.grantsOrEmpty()));
         if (b.background != null) sources.add(new Source("background:" + b.background.id(), "Passado: " + b.background.name(), b.background.grantsOrEmpty()));
+        if (!catalog.runicNatureOrEmpty().isEmpty()) sources.add(new Source("runic-nature", "Natureza Rúnica", catalog.runicNatureOrEmpty()));
 
         resourceSources(sources, picks, b);
         baseAttributes(r, catalog.attributeMethods(), b);
@@ -270,6 +283,9 @@ public class CreationService {
                         }
                     }
                     case GOLD -> b.gold += g.amount();
+                    case EQUIPMENT -> {
+                        if (!b.wealth) addEquipment(b, g.value(), s.label());
+                    }
                     case SIZE -> {
                         b.size = CreatureSize.valueOf(g.value());
                         b.sizeFixed = true;
@@ -385,6 +401,16 @@ public class CreationService {
                         if (!selected.isEmpty()) b.size = CreatureSize.valueOf(selected.getFirst());
                         b.choices.add(new ChoiceLine(key, g.type(), label, 1, g.options(), selected, s.label(), null));
                     }
+                    case EQUIPMENT_CHOICE -> {
+                        // Trocando pela riqueza inicial, as escolhas de equipamento somem.
+                        if (b.wealth) break;
+                        int count = g.count() == null ? 1 : g.count();
+                        List<String> options = EquipmentRules.expand(catalog.equipment(), g.options());
+                        String label = orLabel(g, "Equipamento: escolha " + (count == 1 ? "um" : count));
+                        List<String> selected = choose(picked, options, count, label, b.errors);
+                        selected.forEach(o -> addEquipment(b, o, s.label()));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, count, options, selected, s.label(), null));
+                    }
                     case CRAFT_CHOICE -> {
                         List<String> options = (g.options() == null || g.options().isEmpty() ? allCrafts : g.options()).stream()
                                 .filter(o -> !b.crafts.contains(o)).toList();
@@ -415,6 +441,10 @@ public class CreationService {
 
         if (b.origin != null) b.baseSpeed = b.origin.speed() != null ? b.origin.speed()
                 : catalog.baseSpeed() != null ? catalog.baseSpeed() : DEFAULT_SPEED_FEET;
+        if (b.klass != null && catalog.equipment() != null && catalog.equipment().startingWealth() != null) {
+            b.wealthFormula = catalog.equipment().startingWealth().get(b.klass.id());
+        }
+        if (b.wealth && b.wealthFormula == null && b.klass != null) b.errors.add("A classe não tem riqueza inicial cadastrada.");
         if (b.klass != null && b.klass.startingGold() != null) b.gold += b.klass.startingGold();
         if (b.background != null && b.background.startingGold() != null) b.gold += b.background.startingGold();
         if (b.origin != null && b.origin.startingGold() != null) b.gold += b.origin.startingGold();
@@ -667,10 +697,18 @@ public class CreationService {
     private static final Map<String, String> RESOURCE_KINDS = Map.of(
             "IRA", "Ira", "SUTRA", "Sutra", "VEL", "Vel", "TECNICA", "Técnica de Combate", "INVOCACAO", "Invocação",
             "GRANDE_ESPIRITO", "Grande Espírito", "ASPECTO_TERRESTRE", "Aspecto Terrestre",
-            "ASPECTO_AQUATICO", "Aspecto Aquático", "ASPECTO_ALADO", "Aspecto Alado");
+            "ASPECTO_AQUATICO", "Aspecto Aquático", "ASPECTO_ALADO", "Aspecto Alado", "RUNA", "Runa");
 
     static String resourceKindLabel(String kind) {
         return RESOURCE_KINDS.getOrDefault(kind, kind);
+    }
+
+    // Itens de uma opção de equipamento ("besta-leve+virotes-de-besta") na lista do equipamento inicial.
+    private void addEquipment(Build b, String option, String source) {
+        for (EquipmentRules.Entry e : EquipmentRules.parse(option)) {
+            String name = EquipmentRules.item(rules.catalog().equipment(), e.item()).map(RuleItem::name).orElse(e.item());
+            b.equipment.add(new EquipmentLine(e.item(), name, e.quantity(), source));
+        }
     }
 
     // Os recursos escolhidos (RESOURCE_CHOICE) viram fontes como as outras, antes das passadas: as concessões
@@ -706,9 +744,10 @@ public class CreationService {
         if (res.cost() != null) text.append("Vel: ").append("◆".repeat(res.cost())).append('\n');
         if (!text.isEmpty()) text.append('\n');
         text.append(res.description() == null ? "" : res.description());
-        AbilityType type = res.execution() != null ? AbilityType.ABILITY : AbilityType.PASSIVE;
+        AbilityType type = res.execution() != null || res.uses() != null ? AbilityType.ABILITY : AbilityType.PASSIVE;
         List<Grant> grants = new ArrayList<>();
-        grants.add(Grant.feature(type, res.name(), text.toString()));
+        Grant feature = Grant.feature(type, res.name(), text.toString());
+        grants.add(res.uses() == null ? feature : feature.withUses(res.uses()));
         grants.addAll(res.grantsOrEmpty());
         return grants;
     }
@@ -1285,6 +1324,10 @@ public class CreationService {
         // CAs alternativas e bônus de CA (viram Character.armorRules).
         final List<ArmorRule> armorRules = new ArrayList<>();
         int gold;
+        // Equipamento inicial (EQUIPMENT/EQUIPMENT_CHOICE) ou, com wealth, a riqueza inicial da classe no lugar dele.
+        final List<EquipmentLine> equipment = new ArrayList<>();
+        boolean wealth;
+        String wealthFormula;
 
         // Atributo sem valor base conta como 10 só para a prévia (a criação exige os seis).
         int total(Attribute a) {
@@ -1352,7 +1395,8 @@ public class CreationService {
                             .map(e -> new HeritagePool(e.getKey(), e.getValue(), spent.getOrDefault(e.getKey(), 0)))
                             .toList(),
                     List.copyOf(heritages), List.copyOf(heritageOptions), traitBudget, List.copyOf(traitLines),
-                    List.copyOf(traitOptions), List.copyOf(errors), errors.isEmpty());
+                    List.copyOf(traitOptions), List.copyOf(equipment), new StartingWealth(wealthFormula, wealth),
+                    List.copyOf(errors), errors.isEmpty());
         }
     }
 }

@@ -248,8 +248,8 @@ const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many)
 const HP_FORMULAS = { HALF_PROFICIENCY: '+½ do bônus de proficiência em', PROFICIENCY: '+bônus de proficiência em' }
 
 // Texto curto de uma concessão do catálogo (rules/criacao.json), para os cartões do assistente.
-// crafts: lista de ofícios do catálogo, para mostrar o nome no lugar do id.
-export function grantLabel(g, crafts = []) {
+// crafts: lista de ofícios do catálogo, para mostrar o nome no lugar do id; equipment: itens do rules/itens.json.
+export function grantLabel(g, crafts = [], equipment = []) {
   switch (g.type) {
     case 'ATTRIBUTE': return signed(g.amount) + ' ' + attrName(g.attribute)
     case 'ATTRIBUTE_CHOICE': return g.label ?? signed(g.amount) + ' em ' + plural(g.count, 'atributo', 'atributos') + ' à escolha'
@@ -277,13 +277,16 @@ export function grantLabel(g, crafts = []) {
       + (g.armor?.unarmoredOnly ? ' sem armadura' : '')
     case 'HERITAGE_POINTS': return g.label ?? signed(g.amount) + (Math.abs(g.amount) === 1 ? ' ponto de ' : ' pontos de ') + HERITAGE_SCOPES[g.value ?? 'ANY']
     case 'RESOURCE_CHOICE': return g.label ?? (g.value === 'VEL' ? 'Vel (opcional, até ' + g.amount + ' ◆)' : (RESOURCE_KINDS[g.value] ?? g.value) + ' à escolha')
+    case 'EQUIPMENT': return 'Equipamento: ' + equipmentOptionName(g.value, equipment)
+    case 'EQUIPMENT_CHOICE': return g.label ?? 'Equipamento à escolha'
     default: return g.type
   }
 }
 
 // Nome em PT de uma opção de escolha (atributo, perícia, tamanho, ofício ou idioma).
-export function choiceOptionName(type, id, crafts = []) {
+export function choiceOptionName(type, id, crafts = [], items = []) {
   switch (type) {
+    case 'EQUIPMENT_CHOICE': return equipmentOptionName(id, items)
     case 'ATTRIBUTE_CHOICE':
     case 'ARMOR_CLASS': return attrName(id)
     case 'SKILL_CHOICE': return SKILL_NAMES[id] ?? id
@@ -307,10 +310,26 @@ export function choiceOptionName(type, id, crafts = []) {
   }
 }
 
+// Opção de equipamento (rules/itens.json): "besta-leve+virotes-de-besta" → "Besta Leve + Virotes de besta (20)",
+// "machadinha*2" → "Machadinha ×2".
+export function equipmentOptionName(option, items = []) {
+  return option.split('+').map(part => {
+    const [id, qty] = part.split('*')
+    const name = items.find(i => i.id === id)?.name ?? id
+    return Number(qty) > 1 ? name + ' ×' + qty : name
+  }).join(' + ')
+}
+
+// Categoria do catálogo do primeiro item da opção (agrupa as escolhas longas de equipamento).
+export function equipmentCategory(option, items = []) {
+  const id = option.split('+')[0].split('*')[0]
+  return items.find(i => i.id === id)?.category ?? null
+}
+
 // Tipos de recurso de classe do Capítulo 5 (rules/recursos.json).
 export const RESOURCE_KINDS = {
   IRA: 'Ira', SUTRA: 'Sutra', VEL: 'Vel', TECNICA: 'Técnica de Combate', INVOCACAO: 'Invocação', GRANDE_ESPIRITO: 'Grande Espírito',
-  ASPECTO_TERRESTRE: 'Aspecto Terrestre', ASPECTO_AQUATICO: 'Aspecto Aquático', ASPECTO_ALADO: 'Aspecto Alado',
+  ASPECTO_TERRESTRE: 'Aspecto Terrestre', ASPECTO_AQUATICO: 'Aspecto Aquático', ASPECTO_ALADO: 'Aspecto Alado', RUNA: 'Runa',
 }
 
 // Pontos de Vel (◆) que um recurso ocupa; sem custo, 1.

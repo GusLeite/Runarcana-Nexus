@@ -4,6 +4,7 @@ import gusleite.runarcana_nexus.record.CharacterResponse;
 import gusleite.runarcana_nexus.record.CreationPreview;
 import gusleite.runarcana_nexus.record.CreationRequest;
 import gusleite.runarcana_nexus.rules.RuleCatalog;
+import gusleite.runarcana_nexus.rules.RuleMagic;
 import gusleite.runarcana_nexus.services.AuthService;
 import gusleite.runarcana_nexus.services.CreationService;
 import gusleite.runarcana_nexus.services.RuleCatalogService;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 // Assistente de criação de personagem: catálogo de regras, prévia da ficha e criação.
 @RestController
@@ -36,6 +39,15 @@ public class CreationController {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
         auth.authenticate(authorization);
         return ResponseEntity.ok(rules.catalog());
+    }
+
+    // Lista de magias do Capítulo 10 (fica fora do /catalog por ser grande).
+    @GetMapping("/spells")
+    public ResponseEntity<List<RuleMagic.Spell>> spells(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        auth.authenticate(authorization);
+        RuleMagic magic = rules.catalog().magic();
+        return ResponseEntity.ok(magic == null ? List.of() : magic.spellsOrEmpty());
     }
 
     // Configurações da mesa que valem na criação (ex.: modo de traços da Runinata travado pelo mestre).

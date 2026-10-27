@@ -35,7 +35,10 @@ class CreationControllerTests {
     private static final String CHOICES = "\"choices\":{\"origin:teste-origem:1\":[\"DEXTERITY\"],"
             + "\"origin:teste-origem:5\":[\"SMALL\"],\"origin:teste-origem:6\":[\"ferraria\"],"
             + "\"origin:teste-origem:7\":[\"Targoniano\"],\"origin:teste-origem:10\":[\"STRENGTH\"],"
+            + "\"runic-nature:0\":[\"Rubi\"],\"runic-nature:1\":[\"t-runa-rubi\"],"
             + "\"class:ARCANIST:1\":[\"ARCANA\",\"INSIGHT\"]}";
+    // Natureza Rúnica (runicNature do criacao-teste.json): Pulso Rubi e a Runa de teste.
+    private static final String RUNIC = "\"runic-nature:0\":[\"Rubi\"],\"runic-nature:1\":[\"t-runa-rubi\"],";
     // 2 pontos de Herança de Região (ver herancas-teste.json): uma Geral e uma de Targon.
     private static final String HERITAGES = "\"heritages\":[{\"id\":\"teste-geral\"},{\"id\":\"teste-targon\"}]";
     private static final String FULL = "{\"characterName\":\"Nyx\",\"age\":20,\"height\":1.7,\"regionId\":\"TARGON\","
@@ -72,7 +75,7 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.skills.length()").value(5))
                 .andExpect(jsonPath("$.savingThrows[0].attribute").value("INTELLIGENCE"))
                 // 4 da origem e da classe + as 2 Heranças
-                .andExpect(jsonPath("$.features.length()").value(6))
+                .andExpect(jsonPath("$.features.length()").value(8))
                 // 1d6 + proficiência (2) + Força 9 (−1)
                 .andExpect(jsonPath("$.features[?(@.name == 'Chifres')].dice").value("1d6+1"))
                 .andExpect(jsonPath("$.features[?(@.name == 'Targon Teste')].type").value("HERITAGE"))
@@ -132,7 +135,7 @@ class CreationControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.character.characterName").value("Nyx"))
                 .andExpect(jsonPath("$.character.background").value("Estudioso"))
-                .andExpect(jsonPath("$.abilities.length()").value(6))
+                .andExpect(jsonPath("$.abilities.length()").value(8))
                 .andExpect(jsonPath("$.abilities[?(@.name == 'Chifres')].damage").value("1d6+1"))
                 .andExpect(jsonPath("$.abilities[?(@.name == 'Geral Teste')].type").value("HERITAGE"))
                 .andExpect(jsonPath("$.character.heritages", hasItem("Targon Teste")))
@@ -197,7 +200,7 @@ class CreationControllerTests {
         String token = login("gaudron");
         String tribal = "{\"characterName\":\"Ali\",\"age\":30,\"height\":2.0,\"regionId\":\"TARGON\",\"originId\":\"teste-tribal\","
                 + "\"classId\":\"ARCANIST\",\"backgroundId\":\"estudioso\"," + ATTRS
-                + ",\"choices\":{\"class:ARCANIST:1\":[\"ARCANA\",\"INSIGHT\"],\"lineage:sol:1\":[\"Gélido\"],"
+                + ",\"choices\":{" + RUNIC + "\"class:ARCANIST:1\":[\"ARCANA\",\"INSIGHT\"],\"lineage:sol:1\":[\"Gélido\"],"
                 + "\"lineage:sol:2\":[\"CRAFT:alquimia\"]},\"heritages\":[{\"id\":\"teste-sol\"}]";
 
         preview(token, tribal + "}")
@@ -241,7 +244,7 @@ class CreationControllerTests {
         String token = login("gaudron");
         // Modo Teste: 1 traço menor e 1 maior. Sem Passado (só com o traço que libera).
         String base = "{\"characterName\":\"Rúnio\",\"age\":5,\"height\":1.2,\"regionId\":\"TARGON\",\"originId\":\"teste-runinata\","
-                + "\"classId\":\"ARCANIST\"," + ATTRS + ",\"choices\":{\"origin:teste-runinata:0\":[\"INTELLIGENCE\"],"
+                + "\"classId\":\"ARCANIST\"," + ATTRS + ",\"choices\":{" + RUNIC + "\"origin:teste-runinata:0\":[\"INTELLIGENCE\"],"
                 + "\"origin:teste-runinata:1\":[\"SMALL\"],\"class:ARCANIST:1\":[\"ARCANA\",\"INSIGHT\"],\"trait:t-garras:0:0\":[\"Cortante\"]}";
 
         preview(token, base + "}")
@@ -385,7 +388,7 @@ class CreationControllerTests {
         // A classe dá Arcanismo e Intuição. Técnico: Arcanismo, e como já tem, vira especialidade.
         // Especialista: especialidade à escolha entre as que já tem (Intuição).
         String body = "{\"characterName\":\"Sábio\",\"age\":5,\"height\":1.2,\"regionId\":\"TARGON\",\"originId\":\"teste-runinata\","
-                + "\"classId\":\"ARCANIST\"," + ATTRS + ",\"choices\":{\"origin:teste-runinata:0\":[\"INTELLIGENCE\"],"
+                + "\"classId\":\"ARCANIST\"," + ATTRS + ",\"choices\":{" + RUNIC + "\"origin:teste-runinata:0\":[\"INTELLIGENCE\"],"
                 + "\"origin:teste-runinata:1\":[\"SMALL\"],\"class:ARCANIST:1\":[\"ARCANA\",\"INSIGHT\"],\"trait:t-garras:0:0\":[\"Cortante\"],"
                 + "\"trait:t-especialista:0:0\":[\"INSIGHT\"]},\"traitBudget\":\"TESTE\","
                 + "\"traits\":[{\"id\":\"t-garras\"},{\"id\":\"t-tecnico\"},{\"id\":\"t-especialista\"}],"
@@ -414,7 +417,7 @@ class CreationControllerTests {
         String token = login("gaudron");
         // Casca: CA 10 + DES (14 → +2) + CON (14 → +2), e Couro +1 só sem armadura.
         String body = "{\"characterName\":\"Casco\",\"age\":5,\"height\":1.2,\"regionId\":\"TARGON\",\"originId\":\"teste-runinata\","
-                + "\"classId\":\"ARCANIST\"," + ATTRS + ",\"choices\":{\"origin:teste-runinata:0\":[\"INTELLIGENCE\"],"
+                + "\"classId\":\"ARCANIST\"," + ATTRS + ",\"choices\":{" + RUNIC + "\"origin:teste-runinata:0\":[\"INTELLIGENCE\"],"
                 + "\"origin:teste-runinata:1\":[\"SMALL\"],\"class:ARCANIST:1\":[\"ARCANA\",\"INSIGHT\"],\"trait:t-casca:0:0\":[\"CONSTITUTION\"]},"
                 + "\"traitBudget\":\"TESTE\",\"traits\":[{\"id\":\"t-escalador\"},{\"id\":\"t-casca\"}]}";
 
@@ -495,6 +498,82 @@ class CreationControllerTests {
         preview(token, brute)
                 .andExpect(jsonPath("$.choices[?(@.key == 'class:BRUTE:2')].options", not(hasItem(hasItem("t-tecnica-exotica")))))
                 .andExpect(jsonPath("$.choices[?(@.key == 'class:BRUTE:2')].note").value("1 opção ainda bloqueada por pré-requisito."));
+    }
+
+    @Test
+    void naturezaRunicaComPulsoERuna() throws Exception {
+        String token = login("gaudron");
+        // Pulso escolhido vira o nome da habilidade, com o Dado de Pulso; a Runa tem metade da proficiência em usos.
+        preview(token, FULL)
+                .andExpect(jsonPath("$.features[?(@.name == 'Pulso Rúnico (Rubi)')].source").value("Natureza Rúnica"))
+                .andExpect(jsonPath("$.features[?(@.name == 'Runa Teste')].source").value("Runa: Runa Teste"))
+                .andExpect(jsonPath("$.features[?(@.name == 'Runa Teste')].uses").value(1))
+                // a Runa de nível 8 fica bloqueada no 1º nível
+                .andExpect(jsonPath("$.choices[?(@.key == 'runic-nature:1')].options", not(hasItem(hasItem("t-runa-nivel8")))))
+                .andExpect(jsonPath("$.choices[?(@.key == 'runic-nature:1')].note").value("1 opção ainda bloqueada por pré-requisito."));
+
+        String none = FULL.replace(RUNIC, "");
+        preview(token, none)
+                .andExpect(jsonPath("$.errors", hasItem("Faltam escolhas: Runa inicial.")));
+    }
+
+    @Test
+    void equipamentoInicialVaiParaOInventario() throws Exception {
+        String token = login("gaudron");
+        // Prévia: os itens da classe (o conjunto ainda fechado) e a riqueza inicial que daria para trocar.
+        preview(token, FULL)
+                .andExpect(jsonPath("$.equipment[?(@.item == 't-adaga')].quantity").value(2))
+                .andExpect(jsonPath("$.equipment[?(@.item == 't-conjunto')].source").value("Classe: Arcanista"))
+                .andExpect(jsonPath("$.startingWealth.formula").value("4d4 x 10"))
+                .andExpect(jsonPath("$.startingWealth.selected").value(false));
+
+        mvc.perform(post("/creation").header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON).content(FULL)).andExpect(status().isCreated());
+        // O conjunto entra aberto; a armadura vira opção de defesa (11 + Des 2 = 13).
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
+                .andExpect(jsonPath("$.inventory[?(@.name == 'Adaga Teste')].quantity").value(2))
+                .andExpect(jsonPath("$.inventory[?(@.name == 'Adaga Teste')].kind").value("WEAPON"))
+                .andExpect(jsonPath("$.inventory[?(@.name == 'Adaga Teste')].damage").value("1d4"))
+                .andExpect(jsonPath("$.inventory[?(@.name == 'Tocha Teste')].quantity").value(5))
+                .andExpect(jsonPath("$.inventory[?(@.name == 'Caixa de esmolas')].quantity").value(1))
+                .andExpect(jsonPath("$.inventory[?(@.name == 'Couro Teste')].armorClass").value(11))
+                .andExpect(jsonPath("$.armorClass.options[?(@.label == 'Couro Teste')].value").value(13));
+    }
+
+    @Test
+    void riquezaInicialNoLugarDoEquipamento() throws Exception {
+        String token = login("gaudron");
+        String wealth = FULL.replace("\"backgroundId\"", "\"startingEquipment\":\"WEALTH\",\"backgroundId\"");
+        preview(token, wealth)
+                .andExpect(jsonPath("$.equipment.length()").value(0))
+                .andExpect(jsonPath("$.startingWealth.selected").value(true));
+        mvc.perform(post("/creation").header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON).content(wealth)).andExpect(status().isCreated());
+        String me = mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
+                .andExpect(jsonPath("$.inventory.length()").value(0))
+                .andReturn().getResponse().getContentAsString();
+        // 4d4 x 10 PO somados ao ouro do passado de teste.
+        Matcher gold = Pattern.compile("\"gold\":(\\d+)").matcher(me);
+        assertThat(gold.find()).isTrue();
+        assertThat(Integer.parseInt(gold.group(1))).isBetween(40, 160 + 50);
+
+        // Escolha de equipamento com grupo: vira uma opção por arma do grupo.
+        String brute = FULL.replace("\"classId\":\"ARCANIST\"", "\"classId\":\"BRUTE\"")
+                .replace(",\"class:ARCANIST:1\":[\"ARCANA\",\"INSIGHT\"]", "");
+        preview(token, brute)
+                .andExpect(jsonPath("$.choices[?(@.label == 'Arma do Bruto')].options", hasItem(hasItem("t-machado"))))
+                .andExpect(jsonPath("$.choices[?(@.label == 'Arma do Bruto')].options", hasItem(hasItem("t-adaga*2"))));
+    }
+
+    @Test
+    void listaDeMagiasForaDoCatalogo() throws Exception {
+        String token = login("gaudron");
+        mvc.perform(get("/creation/spells")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/creation/spells").header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value("t-raio"));
+        mvc.perform(get("/creation/catalog").header("Authorization", "Bearer " + token))
+                .andExpect(jsonPath("$.magic.spells").doesNotExist());
     }
 
     private ResultActions preview(String token, String body) throws Exception {
