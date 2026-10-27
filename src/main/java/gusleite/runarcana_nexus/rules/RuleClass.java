@@ -16,8 +16,22 @@ public record RuleClass(
         List<Grant> grants,
         List<RuleLevel> levels,
         String subclassLabel,
-        List<RuleLineage> subclasses
+        List<RuleLineage> subclasses,
+        // Multiclasse (Capítulo 5): pré-requisito de atributos para entrar ou sair da classe e as proficiências que
+        // ela dá quando não é a primeira classe.
+        Multiclass multiclass
 ) {
+    // attributes: todos os mínimos; anyAttributes: basta um ("Força 13 ou Destreza 13"); anotherAttribute: além dos
+    // mínimos, mais um atributo qualquer com esse valor (Arcanista: "Inteligência 13 e outro atributo 13").
+    // grants: só as proficiências da tabela Proficiências de Multiclasse.
+    public record Multiclass(String prerequisite, java.util.Map<gusleite.runarcana_nexus.enums.Attribute, Integer> attributes,
+                             java.util.Map<gusleite.runarcana_nexus.enums.Attribute, Integer> anyAttributes,
+                             Integer anotherAttribute, List<Grant> grants) {
+        public List<Grant> grantsOrEmpty() {
+            return grants == null ? List.of() : grants;
+        }
+    }
+
     public List<Grant> grantsOrEmpty() {
         return grants == null ? List.of() : grants;
     }

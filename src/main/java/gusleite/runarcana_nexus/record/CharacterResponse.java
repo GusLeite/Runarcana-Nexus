@@ -55,8 +55,14 @@ public record CharacterResponse(
         String subclass,
         List<String> armorProficiencies,
         List<String> weaponProficiencies,
-        List<String> craftExpertise
+        List<String> craftExpertise,
+        // Níveis em cada classe (multiclasse); vazio nas fichas antigas. canLevelUp: a ficha tem as escolhas guardadas
+        // (criada pelo assistente) e ainda não está no 20º nível.
+        List<ClassLevelResponse> classLevels,
+        boolean canLevelUp
 ) {
+    public record ClassLevelResponse(String classId, String name, int level, String subclass) {}
+
     public static CharacterResponse of(Character character) {
         return new CharacterResponse(
                 character.getId(),
@@ -103,7 +109,10 @@ public record CharacterResponse(
                 // Na ordem LIGHT, MEDIUM, HEAVY, SHIELD; armas em ordem alfabética.
                 character.getArmorProficiencies().stream().sorted(java.util.Comparator.comparingInt(List.of("LIGHT", "MEDIUM", "HEAVY", "SHIELD")::indexOf)).toList(),
                 character.getWeaponProficiencies().stream().sorted().toList(),
-                List.copyOf(character.getCraftExpertise())
+                List.copyOf(character.getCraftExpertise()),
+                character.getClassLevels().stream()
+                        .map(l -> new ClassLevelResponse(l.getClassId(), l.getClassName(), l.getLevel(), l.getSubclass())).toList(),
+                character.getBuild() != null && character.getLevel() < 20
         );
     }
 }

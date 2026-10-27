@@ -17,7 +17,7 @@ class MagicRulesTests {
     @BeforeAll
     static void load() {
         magic = new RuleCatalogService(new DefaultResourceLoader(), "classpath:rules/criacao.json", "classpath:rules/herancas.json",
-                "classpath:rules/tracos.json", "classpath:rules/recursos.json", "classpath:rules/magias.json", "classpath:rules/itens.json").catalog().magic();
+                "classpath:rules/tracos.json", "classpath:rules/recursos.json", "classpath:rules/magias.json", "classpath:rules/itens.json", "classpath:rules/aprimoramentos.json").catalog().magic();
     }
 
     private static Set<String> access(Set<String> manifested, Set<String> heritages) {

@@ -58,7 +58,7 @@ class RuleCatalogValidationTests {
         RuleOption origin = new RuleOption("elfo", "Elfo", null, null, null, null, null, null,
                 List.of(grant(GrantType.ATTRIBUTE, null), grant(GrantType.CRAFT, "pintura"), grant(GrantType.SIZE, "ENORME")), List.of(lineage), null,
                 List.of(new RuleLevel(1, List.of())));
-        RuleClass klass = new RuleClass("MAGO", "Mago", null, null, null, null, List.of(), List.of(), null, null);
+        RuleClass klass = new RuleClass("MAGO", "Mago", null, null, null, null, List.of(), List.of(), null, null, null);
         RuleCatalog catalog = new RuleCatalog(new AttributeMethods(null, List.of(15, 14, 13, 12, 10, 8), null), 30.0, "MEIO",
                 List.of(), List.of(origin), List.of(klass), List.of(), List.of(), List.of(), null, null, null, null, null);
 
@@ -102,7 +102,7 @@ class RuleCatalogValidationTests {
         // Garante que o criacao.json, o herancas.json, o tracos.json, o recursos.json, o magias.json e o itens.json versionados continuam válidos a cada mudança.
         assertThatCode(() -> new RuleCatalogService(new DefaultResourceLoader(), "classpath:rules/criacao.json",
                 "classpath:rules/herancas.json", "classpath:rules/tracos.json", "classpath:rules/recursos.json",
-                "classpath:rules/magias.json", "classpath:rules/itens.json"))
+                "classpath:rules/magias.json", "classpath:rules/itens.json", "classpath:rules/aprimoramentos.json"))
                 .doesNotThrowAnyException();
     }
 }

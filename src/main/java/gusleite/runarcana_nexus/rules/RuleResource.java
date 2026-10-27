@@ -28,8 +28,14 @@ public record RuleResource(
         Requirements requires,
         List<Grant> grants,
         // Usos da habilidade do recurso (Runas: metade do bônus de proficiência por descanso longo).
-        UsesRule uses
+        UsesRule uses,
+        // Pode ser escolhido de novo em outra escolha (Aprimoramentos "Mais Inimigos", o aumento de atributo).
+        Boolean repeatable
 ) {
+    public boolean repeats() {
+        return Boolean.TRUE.equals(repeatable);
+    }
+
     public List<String> groupsOrEmpty() {
         return groups == null ? List.of() : groups;
     }
@@ -47,6 +53,8 @@ public record RuleResource(
     // skills e resources (outros recursos já escolhidos): todos. feature + featureOptions: opção escolhida numa
     // habilidade ("Escola" → "Escola Umbral"). weapons: proficiência com uma dessas armas ("Armas simples",
     // "Armas marciais": "uma arma de haste"); armor: todas essas proficiências de armadura (SHIELD).
+    // level: nível do personagem; classLevel: nível mínimo em uma das classes de classes ("Caçador 8"). origins e
+    // lineages: basta uma.
     public record Requirements(
             Integer level,
             Map<Attribute, Integer> attributes,
@@ -60,6 +68,9 @@ public record RuleResource(
             String feature,
             List<String> featureOptions,
             List<String> weapons,
-            List<String> armor
+            List<String> armor,
+            Integer classLevel,
+            List<String> origins,
+            List<String> lineages
     ) {}
 }

@@ -50,4 +50,8 @@ public class CharacterAbility {
     // Imagem do ícone: data URL (o front já manda reduzida para 128x128) ou link http(s). Nulo = inicial do nome.
     @Column(length = 300000)
     private String icon;
+
+    // De onde veio pelo assistente ("Classe: Bruto", "Aprimoramento: Atleta"); nulo = cadastrada pelo mestre.
+    // A subida de nível refaz as que têm fonte e não mexe nas do mestre.
+    private String source;
 }

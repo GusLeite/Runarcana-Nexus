@@ -3,7 +3,7 @@ import {
   addHeritage, carryCapacity, choiceOptionName, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
   addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
-  resourceCost, togglePick,
+  resourceCost, togglePick, levelChoices, keepChoices, rollDie,
 } from './rules.js'
 
 describe('modificadores', () => {
@@ -227,5 +227,36 @@ describe('magias na criação', () => {
     expect(grantLabel({ type: 'SPELL_CHOICE', count: 4, spellLevel: 1, label: 'Magias conhecidas' })).toBe('Magias conhecidas')
     expect(grantLabel({ type: 'MYSTERY', value: 'necromancia' })).toBe('Mistério: Necromancia')
     expect(grantLabel({ type: 'SPELL', value: 'maos-magicas' })).toBe('Magia: Maos magicas')
+  })
+})
+
+describe('subida de nível', () => {
+  const choices = [
+    { key: 'class:ARCANIST:1' },
+    { key: 'level:4:class:ARCANIST:0' },
+    { key: 'resource:aumento-atributo-2@level:4:class:ARCANIST:0:1' },
+    { key: 'level:14:class:FIGHTER:0' },
+  ]
+
+  it('separa as escolhas do nível, com as internas dos recursos', () => {
+    expect(levelChoices(choices, 4).map(c => c.key)).toEqual([
+      'level:4:class:ARCANIST:0', 'resource:aumento-atributo-2@level:4:class:ARCANIST:0:1'])
+    expect(levelChoices(choices, 1)).toEqual([])
+  })
+
+  it('põe a escolha interna logo depois da que a criou', () => {
+    const shuffled = [choices[2], { key: 'level:4:class:ARCANIST:1' }, choices[1]]
+    expect(levelChoices(shuffled, 4).map(c => c.key)).toEqual([
+      'level:4:class:ARCANIST:1', 'level:4:class:ARCANIST:0', 'resource:aumento-atributo-2@level:4:class:ARCANIST:0:1'])
+  })
+
+  it('tira as escolhas que sumiram da prévia', () => {
+    expect(keepChoices({ 'level:4:class:ARCANIST:0': ['x'], 'level:4:class:BRUTE:0': ['y'] }, choices))
+      .toEqual({ 'level:4:class:ARCANIST:0': ['x'] })
+  })
+
+  it('rola o dado de vida entre 1 e o lado', () => {
+    expect(rollDie(8, () => 0)).toBe(1)
+    expect(rollDie(8, () => 0.999)).toBe(8)
   })
 })

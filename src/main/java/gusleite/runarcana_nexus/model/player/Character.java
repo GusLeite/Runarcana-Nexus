@@ -153,9 +153,15 @@ public class Character {
     @Column(name = "attribute")
     private Set<Attribute> savingThrows = new HashSet<>();
 
-    // Escolhas feitas na criação (JSON do CreationRequest), para a subida de nível reaproveitar.
-    @Column(length = 20000)
+    // Escolhas feitas na criação e nos níveis ganhos (JSON do CreationRequest), para a subida de nível reaproveitar.
+    @Column(length = 100000)
     private String build;
+
+    // Níveis em cada classe, na ordem em que entraram (a primeira é a da criação). Vazio nas fichas antigas.
+    @ElementCollection
+    @CollectionTable(name = "character_class_levels", joinColumns = @JoinColumn(name = "character_id"))
+    @OrderColumn(name = "position")
+    private List<ClassLevel> classLevels = new ArrayList<>();
 
 
     private int getModifier(int attribute){

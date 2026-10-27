@@ -46,6 +46,10 @@ public record CreationPreview(
         // Equipamento inicial (itens do catálogo, com os conjuntos ainda fechados) e a riqueza inicial da classe.
         List<EquipmentLine> equipment,
         StartingWealth startingWealth,
+        // Nível do personagem, bônus de proficiência e os níveis em cada classe (a primeira é a da criação).
+        int level,
+        int proficiencyBonus,
+        List<ClassLevelLine> classLevels,
         List<String> errors,
         boolean complete
 ) {
@@ -85,6 +89,9 @@ public record CreationPreview(
 
     // Escolha pendente ou feita: key é o que o front devolve em CreationRequest.choices.
     // note explica uma escolha sem opções (ex.: lista de ofícios ainda não cadastrada); ela não bloqueia a criação.
+    // hitDie: lado do dado de vida; subclass: nome da subclasse daquela classe (ou null).
+    public record ClassLevelLine(String classId, String name, int level, int hitDie, String subclass) {}
+
     // item: id no rules/itens.json; source: de onde veio ("Classe: Acólito").
     public record EquipmentLine(String item, String name, int quantity, String source) {}
 

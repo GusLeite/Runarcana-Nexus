@@ -21,7 +21,7 @@ class EquipmentRulesTests {
     @BeforeAll
     static void load() {
         catalog = new RuleCatalogService(new DefaultResourceLoader(), "classpath:rules/criacao.json", "classpath:rules/herancas.json",
-                "classpath:rules/tracos.json", "classpath:rules/recursos.json", "classpath:rules/magias.json", "classpath:rules/itens.json").catalog();
+                "classpath:rules/tracos.json", "classpath:rules/recursos.json", "classpath:rules/magias.json", "classpath:rules/itens.json", "classpath:rules/aprimoramentos.json").catalog();
         items = catalog.equipment();
     }
 

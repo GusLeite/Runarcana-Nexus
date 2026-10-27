@@ -434,3 +434,26 @@ function defaultRandom() {
   }
   return Math.random()
 }
+
+// ---------- Subida de nível ----------
+
+// Níveis do personagem que dão 1 ponto de Herança.
+export const HERITAGE_LEVELS = [5, 9, 13, 17]
+
+// As escolhas da prévia que são do nível N: as chaves "level:N:..." e as escolhas internas dos recursos escolhidos
+// nele ("resource:<id>@level:N:...:<índice>"), cada interna logo depois da escolha que a criou.
+export function levelChoices(choices, level) {
+  const mark = 'level:' + level + ':'
+  const mine = (choices ?? []).filter(c => c.key.startsWith(mark) || c.key.includes('@' + mark))
+  const parentOf = c => (c.key.includes('@') ? c.key.slice(c.key.indexOf('@') + 1).replace(/:\d+$/, '') : null)
+  const out = []
+  const place = parent => mine.filter(c => parentOf(c) === parent.key).forEach(c => { out.push(c); place(c) })
+  mine.filter(c => !parentOf(c) || !mine.some(p => p.key === parentOf(c))).forEach(c => { out.push(c); place(c) })
+  return out
+}
+
+// Só as escolhas que ainda existem na prévia (trocar a classe do nível apaga as da classe anterior).
+export function keepChoices(picks, choices) {
+  const keys = new Set((choices ?? []).map(c => c.key))
+  return Object.fromEntries(Object.entries(picks).filter(([k]) => keys.has(k)))
+}

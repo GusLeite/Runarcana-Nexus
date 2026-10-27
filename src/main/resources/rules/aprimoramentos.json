@@ -1,0 +1,1929 @@
+{
+  "resources": [
+    {
+      "id": "aumento-atributo-2",
+      "kind": "APRIMORAMENTO",
+      "name": "Aumento de Atributo (+2)",
+      "groups": [
+        "Aumento de Atributo"
+      ],
+      "repeatable": true,
+      "description": "Aumente um valor de atributo, à sua escolha, em 2. Você não pode elevar um valor de atributo acima de 20 com essa característica.",
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 2,
+          "label": "+2 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aumento-atributo-1-1",
+      "kind": "APRIMORAMENTO",
+      "name": "Aumento de Atributo (+1 e +1)",
+      "groups": [
+        "Aumento de Atributo"
+      ],
+      "repeatable": true,
+      "description": "Aumente dois valores de atributo, à sua escolha, em 1. Você não pode elevar um valor de atributo acima de 20 com essa característica.",
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 2,
+          "amount": 1,
+          "label": "+1 em dois atributos"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-adaptacao-tecnologica",
+      "kind": "APRIMORAMENTO",
+      "name": "Adaptação Tecnológica",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Construto ou Variante Progressão Tecnológica",
+      "repeatable": true,
+      "description": "Ao escolher esse aprimoramento, você deve conhecer ou ser um Inventor especializado em Tecnologia e em Medicina, além de possuir acesso aos materiais necessários para realizar as adaptações em seu corpo, ambos definidos pelo Mestre com base no Ofício de Inventor. O valor em dinheiro é coberto pela aquisição do Aprimoramento.\n\nPara receber os benefícios desse aprimoramento, você deve passar pelo menos 8 horas de trabalho aplicando as adaptações tecnológicas em questão, o Mestre deve aumentar esse período dependendo das circunstâncias e das suas escolhas. Após esse período de trabalho você recebe os seguintes benefícios:\n\n- Aumente o valor de Força, Destreza ou Constituição em +1, até o máximo de 20.\n- Escolha entre Estável ou Instável:Estável. Você deve escolher uma Vantagem Tecnológica da Variante Tecnológica;\n- Instável. Você deve escolher duas Vantagens Tecnológicas e uma Desvantagem Tecnológica da Variante Tecnológica\n\nVocê pode escolher esse aprimoramento mais de uma vez, caso você possua 5 ou mais Vantagens Tecnológicas, você recebe os traços de Limiar Tecnológico ligados à sua fonte de energia.",
+      "requires": {
+        "origins": [
+          "construto"
+        ]
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "STRENGTH",
+            "DEXTERITY",
+            "CONSTITUTION"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-adepto-espiritual",
+      "kind": "APRIMORAMENTO",
+      "name": "Adepto Espiritual",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Possuir uma Liturgia, Sabedoria 17 ou maior",
+      "description": "Através de suas experiências lidando com as forças espirituais você conseguiu acessar alguns poderes de outro Rito, você recebe os seguintes benefícios:\n\n- Seu valor de Sabedoria aumenta em +1, até o máximo de 20.\n- Você pode escolher uma Liturgia de outro Rito que não seja o seu. Você se torna capaz de usá-lo como um de suas Liturgias.\n- Você recebe um uso adicional de suas Liturgia por descanso curto ou longo.",
+      "requires": {
+        "attributes": {
+          "WISDOM": 17
+        }
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "WISDOM",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-adepto-shugenja",
+      "kind": "APRIMORAMENTO",
+      "name": "Adepto Shugenja",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Aprimoramento - Iniciado Shugenja, Bodisatva 8",
+      "description": "Você domina as emanações espirituais mágicas em conformidade com sua plenitude . Você recebe os seguintes benefícios:\n\n- Seu valor de Sabedoria aumenta em +1, até o máximo de 20.\n- Escolha duas magias de 1ª nível de mistérios Espirituais ou de Mistérios ou elementos a que você tem acesso. Você é capaz de conjurá-los usando seu nível de Bodisatva como nível de Conjurador e seu atributo de conjuração para essas magias é Sabedoria. Essas magias custam 1 ponto de ki para serem conjuradas.\n- Escolha duas magias de 2ª nível de mistérios Espirituais ou de Mistérios ou elementos a que você tem acesso. Você é capaz de conjurá-los usando seu nível de Bodisatva como nível de Conjurador e seu atributo de conjuração para essas magias é Sabedoria. Essas magias custam 2 pontos de ki para serem conjuradas.",
+      "requires": {
+        "resources": [
+          "aprimoramento-iniciado-shugenja"
+        ],
+        "classes": [
+          "BODHISATTVA"
+        ],
+        "classLevel": 8
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "WISDOM",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-afortunado",
+      "kind": "APRIMORAMENTO",
+      "name": "Afortunado",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você parece ser abençoado com uma sorte sobrenatural que parece agir nos momentos mais oportunos.\n\nVocê tem 2 + metade do seu bônus de proficiência em Pontos de Sorte. Ao realizar uma jogada de ataque, teste de atributo ou salvaguarda você pode gastar um ponto de sorte para rolar um d20 adicional. Esse gasto pode ser feito depois de rolar o dado inicial mas não após saber o resultado da jogada. Ao fazer essa jogada adicional, você escolhe qual dado irá usar para essa jogada.\n\nQuando você for alvo de um ataque, você pode gastar um ponto de sorte para jogar um d20 e escolher se o ataque feito contra você irá usar o dado original ou o rolado por você; Pontos de sorte gastos por criaturas diferentes para influenciar uma jogada se anulam mutuamente e nenhum dado adicional é rolado. Toda vez que você gastar um ponto de sorte e rolar um d20, caso caia um 1, você deve rolar 1d100 e receber um efeito da tabela de Magia Descontrolada Yordle.\n\nPontos de Sorte são recuperados após terminar um descanso longo."
+    },
+    {
+      "id": "aprimoramento-aliancas-espirituais",
+      "kind": "APRIMORAMENTO",
+      "name": "Alianças Espirituais",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Xamã",
+      "description": "Você nutre suas relações com os espíritos de forma a ser protegido e favorecido por eles. Você pode aprender uma nova postura com seu aliado espiritual ou mesmo ter contato com um novo aliado espiritual. Você ganha os seguintes benefícios:\n\n- Escolha uma nova Postura. Essa postura recebe o aprimoramento de seu chamado no nível 6. Caso você escolha esse aprimoramento após o nível 6, a postura já recebe esse aprimoramento.\n- Você recebe metade do seu bônus de Proficiência em pontos de Ki e recupera esse mesmo valor durante um descanso longo em adição ao valor que já recupera normalmente",
+      "requires": {
+        "classes": [
+          "SHAMAN"
+        ]
+      }
+    },
+    {
+      "id": "aprimoramento-alternancia-continua",
+      "kind": "APRIMORAMENTO",
+      "name": "Alternância Contínua",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Combatente 8",
+      "description": "Você consegue cadenciar seu ritmo de batalha alternando entre estilos de luta e ampliando seu poder ofensivo. Você recebe os seguintes benefícios:\n\n- Seu valor de Destreza ou Força aumenta em +1, até o máximo de 20.\n- Quando você alterna entre Estilos de Luta, você recebe uma quantidade de pontos de vida temporários igual ao seu bônus de proficiência.\n- Quando você causa dano com um ataque crítico você pode realizar um ataque adicional com a mesma arma contra o mesmo alvo. Esse efeito pode acontecer apenas uma vez por rodada.",
+      "requires": {
+        "classes": [
+          "FIGHTER"
+        ],
+        "classLevel": 8
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "DEXTERITY",
+            "STRENGTH"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-anatomista-perito",
+      "kind": "APRIMORAMENTO",
+      "name": "Anatomista Perito",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Sabedoria 15 ou maior, proficiência em Medicina",
+      "description": "Através do seus estudos de determinadas criaturas, você aprendeu sobre sua fisiologia e anatomia, sabendo como derrotá-los de maneira mais efetiva. Ao escolher esse aprimoramento, escolha dois tipos de criaturas entre: celestiais, construtos, dragões, elementais, espíritos, feéricos, feras, humanóides, ínferos, mortos-vivos, plantas, vastinatas, você recebe os seguintes benefícios\n\n- Seu valor de Destreza aumenta em +1, até o máximo de 20.\n- Seus ataques contra os tipos de criatura escolhidas tem sua margem de crítico reduzida em 1.\n- Sempre que você realizar um acerto crítico contra as criaturas escolhidas, você adiciona seu modificador de Sabedoria ao dano causado\n- Você subtrai seu bônus de proficiência da RD dessas criaturas",
+      "requires": {
+        "attributes": {
+          "WISDOM": 15
+        },
+        "skills": [
+          "MEDICINE"
+        ]
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "DEXTERITY",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-arcanista-iniciante",
+      "kind": "APRIMORAMENTO",
+      "name": "Arcanista Iniciante",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Escolha entre: Acólito, Combatente Arcano, Xamã. Você aprende dois truques da lista de magias da classe escolhida. Além disso, escolha uma magia de 1º nível da mesma lista. Você aprende essa magia e pode conjurá-la uma vez com o menor nível possível sem gastar pontos de mana antes de realizar um descanso longo. Essa restrição aplica-se apenas à magia adquirida através desse Aprimoramento.\n\nA classe que você escolheu também determina a habilidade de conjuração dessas magias: Inteligência para Combatente Arcano e Sabedoria para Acólito ou Xamã."
+    },
+    {
+      "id": "aprimoramento-arcano-vital",
+      "kind": "APRIMORAMENTO",
+      "name": "Arcano Vital",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Capacidade de conjurar ao menos uma magia",
+      "description": "Pontos de Vida:\n\nNível da Magia | Custo em Vida\n1 | 4\n2 | 6\n3 | 10\n4 | 12\n5 | 14\n6 | 18\n7 | 22\n\nSeu organismo é capaz de converter sua energia vital em energia mágica, recebendo os seguintes benefícios:\n\n- Seu valor de Constituição aumenta em +1, até o máximo de 20.\n- Ao conjurar uma magia de até nível 7, você pode optar por utilizar pontos de vida ao invés de pontos de mana, esses pontos de vida são retirados de seus pontos de vida máximos e são recuperados apenas ao término de um descanso longo.",
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "CONSTITUTION",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-arcanun",
+      "kind": "APRIMORAMENTO",
+      "name": "Arcanun",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "habilidade de conjuração, nível 4",
+      "description": "Através de seus estudos, você conseguiu penetrar nos segredos de um mistério mágico. Você recebe os seguintes benefícios:\n\n- Aumente o valor de um atributo em 1, até o máximo de 20.\n- Você recebe um Mistério que você tenha acesso.",
+      "requires": {
+        "level": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um atributo à escolha"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-arpoeiro",
+      "kind": "APRIMORAMENTO",
+      "name": "Arpoeiro",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Sentinense",
+      "description": "A caçada aos monstros marinhos de sentina não são para qualquer um, porém, você sabe como garantir seu sustento ao fim do dia. Você recebe os seguintes benefícios:\n\n- Seu valor de Destreza aumenta em +1, até o máximo de 20;\n- Desde que você possua uma corda, você pode prendê-la ao seu Arpão utilizando uma ação, o que possibilita que você sempre possa puxá-lo de volta para si. Adicionalmente, quando você realizar um ataque à distância com seu Arpão, caso atinja um alvo de até uma categoria acima que você, você pode usar uma ação bônus para puxar o alvo até 20 pés em sua direção, o alvo deve realizar uma salvaguarda de Atletismo contra sua jogada de Atletismo, sendo puxado em uma falha.",
+      "requires": {
+        "regions": [
+          "BILGEWATER"
+        ]
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "DEXTERITY",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-arqueiro",
+      "kind": "APRIMORAMENTO",
+      "name": "Arqueiro",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Graças a sua prática extensiva com arcos, você ganha os seguintes benefícios:\n\n- Estar a 5 pés de uma criatura hostil não impõe desvantagem nas suas jogadas de ataque à distância com arco.\n- Uma vez por turno você pode usar uma ação de ataque para atirar com duas flechas no arco, a segunda flecha rola o acerto com desvantagem.\n- Seus ataques com arco e flecha ignoram metade da RD de seus alvos dentro de seu alcance curto"
+    },
+    {
+      "id": "aprimoramento-ars-veneficius",
+      "kind": "APRIMORAMENTO",
+      "name": "Ars Veneficius",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Constituição 17 ou maior",
+      "description": "Você treinou seu organismo a resistir aos mais diferentes tipos de venenos. recebendo os seguintes benefícios:\n\n- Seu valor de Constituição aumenta em +1, até o máximo de 20.\n- Você recebe resistência a dano venenoso.\n- Você tem vantagens em salvaguardas para resistir às condições Envenenado e Intoxicado.",
+      "requires": {
+        "attributes": {
+          "CONSTITUTION": 17
+        }
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "CONSTITUTION",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-artesao-vitriolico",
+      "kind": "APRIMORAMENTO",
+      "name": "Artesão Vitriólico",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você aprendeu a aumentar a toxidez de um veneno para fortificá-lo, fazendo com que as doses que você prepare se tornem letais. Você ganha os seguintes benefícios:\n\n- Todo dano venenoso que você causa ignora um nível de resistência.\n- Você pode usar sua ação bônus para aplicar veneno a uma arma ou peça de munição.\n- Você recebe o Ofício de Apotecário. Com uma hora de trabalho usando um Conjunto de Apotecário e 50 PO de material, você pode modificar a composição de uma dose de veneno, fazendo com que ele fique mais potente. O veneno modificado aumenta a CD da salvaguarda e categoria de dados de dano em 1. Além disso, caso uma criatura falhe na salvaguarda para resistir ao veneno, ela fica Envenenada, sofrendo 1d4 de dano venenoso por turno. Caso a dose de veneno original já deixe a criatura Envenenada, o veneno modificado não aplica a condição novamente.",
+      "grants": [
+        {
+          "type": "CRAFT",
+          "value": "apotecario"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-assassino-experiente",
+      "kind": "APRIMORAMENTO",
+      "name": "Assassino Experiente",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Mercurial Assassino, nível 4 ou maior",
+      "description": "Sua experiência em seu trabalho lhe concedeu a capacidade de aumentar seu leque de possibilidades de assassinato. Você recebe os seguintes benefícios:\n\n- Seu valor de Destreza ou Inteligência aumentam em +1, até o máximo de 20;\n- Escolha duas armas simples ou marciais que não tenham as propriedades Extensão, Impróprio, Pesado ou Versátil. Essas duas armas são consideradas armas assassinas para você;\n- Você tem vantagem em jogadas de ataque contra criaturas que ainda não agiram em combate. Adicionalmente, sempre que você realizar um acerto contra um criatura que esteja surpresa, o acerto é considerado um crítico;\n- Seus ataques furtivos ignoram metade da RD de seus alvos",
+      "requires": {
+        "subclasses": [
+          "assassino"
+        ],
+        "level": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "DEXTERITY",
+            "INTELLIGENCE"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-assinatura-aprimorada",
+      "kind": "APRIMORAMENTO",
+      "name": "Assinatura Aprimorada",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Arcanista, nível 4",
+      "description": "A sua conjuração se beneficia imensamente de sua assinatura arcana, fazendo com que você modifique as suas propriedades. Você possui os seguintes benefícios:\n\n- Aumente o seu valor de Inteligência ou do seu Atributo de Assinatura Arcana em 1, até o máximo de 20.\n- Você recebe um Mistério que você tenha acesso.\n- Você pode alterar as tramas das magias conjuradas por você. Com o gasto de 3 pontos de arcana e o gasto de mana equivalente ao de uma magia de um nível acima do lançado, você pode mudar o mistério de uma magia por outro que você tenha acesso.",
+      "requires": {
+        "classes": [
+          "ARCANIST"
+        ],
+        "classLevel": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um atributo à escolha"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-atacante-brutal",
+      "kind": "APRIMORAMENTO",
+      "name": "Atacante Brutal",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você possui um estilo de combate violento e brutal, focando acima de tudo em potencializar o efeito dos seus ataques contra seus inimigos. Você adquire os seguintes benefícios:\n\n- Uma vez por turno, você pode adicionar seu bônus de proficiência a uma rolagem de dano causado por você.\n- Ao obter 1 na rolagem do dado de dano de um ataque corpo a corpo, você pode jogar novamente o dado de dano, ficando com o novo resultado."
+    },
+    {
+      "id": "aprimoramento-atento",
+      "kind": "APRIMORAMENTO",
+      "name": "Atento",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você é uma pessoa observadora e atenta e recebe os seguintes benefícios:\n\n- Ao rolar a iniciativa, você adiciona +5 ao resultado rolado.\n- Enquanto estiver consciente, você não sofrerá os efeitos de uma rodada surpresa.\n- Criaturas escondidas não possuem vantagem ao te atacar.\n- Você recebe +1 de bônus de percepção passiva."
+    },
+    {
+      "id": "aprimoramento-atirador-de-elite",
+      "kind": "APRIMORAMENTO",
+      "name": "Atirador de Elite",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você dominou o uso de armas à distância e pode realizar tiros que seriam impossíveis para outros. Você ganha os seguintes benefícios:\n\n- Atacar um alvo além da distância normal não impõe desvantagem nas suas jogadas de ataque com armas à distância.\n- Seus ataques com armas à distância ignoram meia cobertura e três-quartos de cobertura.\n- Antes de realizar um ataque com uma arma à distância na qual você seja proficiente, você pode escolher sofrer –2 de penalidade na jogada de ataque. Se o ataque atingir, você adiciona 1 dado de dano da arma no ataque."
+    },
+    {
+      "id": "aprimoramento-atleta",
+      "kind": "APRIMORAMENTO",
+      "name": "Atleta",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você passou por árduo treinamento físico para ganhar os seguintes benefícios:\n\n- Aumente seu valor de Força ou Destreza em 1, até o máximo de 20.\n- Quando você estiver caído, se levantar requer apenas 5 Pés do seu deslocamento.\n- Você pode escalar sem custar movimento adicional\n- Você pode realizar um salto em distância ou em altura correndo se movendo apenas 5 pés, ao invés de 10 pés.\n- Você ganha mais 5 pés de deslocamento.",
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "STRENGTH",
+            "DEXTERITY"
+          ],
+          "label": "+1 em um atributo"
+        },
+        {
+          "type": "SPEED",
+          "feet": 5
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-ate-o-fim",
+      "kind": "APRIMORAMENTO",
+      "name": "Até o Fim",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Aprimoramento - Ódio Profundo, Caçador 8",
+      "description": "Tempo livre não existe. Você passa cada momento que pode estudando e pensando como eliminar essas criaturas. Você recebe os seguintes benefícios:\n\n- Seu valor de um Atributo à sua escolha aumenta em +1, até o máximo de 20\n- Seus ataques contra seu Foco de Caça tem sua margem e multiplicador de crítico aumentada em 1.\n- Ao realizar um acerto crítico contra seu Foco de Caça, o dano extra causado por sua característica de Inimigo Favorito é dobrado.",
+      "requires": {
+        "resources": [
+          "aprimoramento-odio-profundo"
+        ],
+        "classes": [
+          "HUNTER"
+        ],
+        "classLevel": 8
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um atributo à escolha"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-auras-de-melodia",
+      "kind": "APRIMORAMENTO",
+      "name": "Auras de Melodia",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Herança - Acordes de Poder, 8º nível",
+      "description": "Você aprimorou suas Melodias, fazendo com que ao tocá-las você crie uma aura temporária que traz efeitos adicionais para aliados próximos à você. Você recebe os seguintes benefícios:\n\n- Seu valor de Carisma aumenta em +1, até o máximo de 20;\n- Ao utilizar uma fórmula Musical, você pode gastar 1 ponto de mana adicional para que a melodia cause um efeito adicional:Aura do Valor. Quando você utiliza a Melodia Hino do Valor, ela conjura uma aura de 15 pés ao seu redor. Aliados dentro dessa aura possuem seu dano aumentado até o fim de seu próximo turno, causando seu dado base de Pulso em dano energético adicional.\n- Aura da Perseverança. Quando você utiliza a Melodia Ária da Perseverança, ela conjura uma aura de 15 pés ao seu redor. Aliados dentro dessa aura recebem pontos de vida temporários igual ao seu nível de Personagem.\n- Aura da Celeridade. Quando você utiliza a Melodia Canção da Celeridade, ela conjura uma aura de 15 pés ao seu redor. Aliados dentro dessa aura recebem 15 pés de movimento adicional até o fim de seu próximo turno.",
+      "requires": {
+        "heritages": [
+          "acordes-de-poder"
+        ],
+        "level": 8
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "CHARISMA",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-balestreiro",
+      "kind": "APRIMORAMENTO",
+      "name": "Balestreiro",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Graças a sua prática extensiva com bestas, você ganha os seguintes benefícios:\n\n- Você ignora a qualidade de recarga de bestas nas quais você é proficiente.\n- Estar a 5 pés de uma criatura hostil não impõe desvantagem nas suas jogadas de ataque à distância com bestas.\n- Quando você usa a ação de Ataque e ataca com uma arma de uma mão, você pode usar sua ação bônus para atacar com uma besta de mão carregada que você esteja empunhando.\n- Seus ataques com bestas ignoram metade da RD de seus alvos dentro de seu alcance curto"
+    },
+    {
+      "id": "aprimoramento-blindado",
+      "kind": "APRIMORAMENTO",
+      "name": "Blindado",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Proficiência com armaduras médias",
+      "description": "Você treinou por anos para que ninguém pudesse te atingir em batalha, ganhando os seguintes benefícios:\n\n- Aumente seu valor de Força em 1, até o máximo de 20.\n- Você ganha proficiência com armadura pesada.",
+      "requires": {
+        "armor": [
+          "MEDIUM"
+        ]
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "STRENGTH",
+          "amount": 1
+        },
+        {
+          "type": "ARMOR_PROFICIENCY",
+          "value": "HEAVY"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-briguento",
+      "kind": "APRIMORAMENTO",
+      "name": "Briguento",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Acostumado a brigas de bar usando qualquer coisa como armas, e na falta delas, os punhos, você ganha os seguintes benefícios:\n\n- Aumente o valor de Força ou Constituição em 1, até o máximo de 20.\n- Seus ataques desarmados causam 1d4 a mais de dano.\n- Quando você atinge uma criatura com um ataque desarmado ou com uma arma improvisada, no seu turno, você pode usar uma ação bônus para tentar agarrar o alvo.",
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "STRENGTH",
+            "CONSTITUTION"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-caminho-da-ceifa",
+      "kind": "APRIMORAMENTO",
+      "name": "Caminho da Ceifa",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Herança - Segredo da Pólvora, Atirador 4",
+      "description": "Os especialistas na morte parecem possuir um talento natural em enviar seus alvos para o outro lado. Você recebe os seguintes benefícios:\n\n- Seu valor de um Atributo aumenta em +1, até o máximo de 20.\n- Seus ataques críticos causam seu bônus de proficiência em d4 de dano necrótico adicional.\n- Metade do dano causado por seus ataques críticos é subtraído do máximo dos pontos de vida de um alvo, não podendo ser recuperados exceto após um descanso longo ou o uso da magia restauração menor.",
+      "requires": {
+        "heritages": [
+          "segredos-da-polvora"
+        ],
+        "classes": [
+          "MARKSMAN"
+        ],
+        "classLevel": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um atributo à escolha"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-canalizador-nato",
+      "kind": "APRIMORAMENTO",
+      "name": "Canalizador Nato",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Xamã nível 8",
+      "description": "Você consegue manter sua mente muito mais focada durante a canalização. Você ganha os seguintes benefícios:\n\n- Você reduz o gasto de Ki para a Canalização Espiritual em 1.\n- A primeira salvaguarda para forçar uma canalização é feita com vantagem. Isso pode acontecer apenas uma vez por descanso pleno.\n- Quando você falha na canalização de um Grande Espírito, você ignora o efeito de Falha. Isso pode acontecer apenas uma vez por descanso pleno (se acumula com a Herança - Fluência Espiritual).",
+      "requires": {
+        "classes": [
+          "SHAMAN"
+        ],
+        "classLevel": 8
+      }
+    },
+    {
+      "id": "aprimoramento-canalizacao-eficiente",
+      "kind": "APRIMORAMENTO",
+      "name": "Canalização Eficiente",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Herança - Canalizador Versátil, Acólito 4",
+      "description": "Sua habilidade em canalizar suas liturgias se torna tão natural que você é capaz de utilizá-la junto à conjuração de uma magia. Você recebe os seguintes benefícios:\n\n- Seu valor de Sabedoria aumenta em +1, até o máximo de 20\n- Você se torna capaz de utilizar uma liturgia ao mesmo tempo em que lança uma magia, utilizando a mesma ação para ambos.",
+      "requires": {
+        "heritages": [
+          "canalizador-versatil"
+        ],
+        "classes": [
+          "ACOLYTE"
+        ],
+        "classLevel": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "WISDOM",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-canalizacao-potente",
+      "kind": "APRIMORAMENTO",
+      "name": "Canalização Potente",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Aprimoramento - Canalização Eficiente, Acólito 8",
+      "description": "Quando você canaliza suas liturgias, sua potência espiritual se exalta causando efeitos adicionais. Você recebe os seguintes benefícios:\n\n- Seu valor de Sabedoria ou Inteligência aumenta em +1, até o máximo de 20\n- Ao utilizar uma liturgia você emana um pulso de energia espiritual. Aliados na área de um círculo de 5 pés vezes seu bônus de proficiência ao seu redor, recuperam pontos de vida em um valor igual a metade do seu bônus de proficiência em d6 e inimigos nessa área devem fazer uma salvaguarda de Carisma CD igual ao CD de suas magias, ou recebem metade do seu bônus de proficiência em d4 de dano energético.",
+      "requires": {
+        "resources": [
+          "aprimoramento-canalizacao-eficiente"
+        ],
+        "classes": [
+          "ACOLYTE"
+        ],
+        "classLevel": 8
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "WISDOM",
+            "INTELLIGENCE"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-cirurgiao-de-combate",
+      "kind": "APRIMORAMENTO",
+      "name": "Cirurgião de Combate",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você é um cirurgião capacitado, permitindo que você trate de ferimentos rapidamente, trazendo seus aliados de volta à luta. Você adquire os seguintes benefícios:\n\n- Quando você usar um Kit Médico para estabilizar uma criatura morrendo, a criatura recupera 1 ponto de vida, ao invés disso.\n- Com uma ação, você pode gastar um uso do Kit Médico para tratar de uma criatura e restaurar 1d6 + 4 pontos de vida mais uma quantidade de pontos de vida adicionais igual ao número total de dados de vida da criatura. A criatura não pode recuperar pontos de vida através desse Aprimoramento novamente até ter terminado um descanso curto ou longo."
+    },
+    {
+      "id": "aprimoramento-conjurador-belico",
+      "kind": "APRIMORAMENTO",
+      "name": "Conjurador Bélico",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Habilidade de conjuração",
+      "description": "Você é experiente em conjurar magias no meio do combate, aprendendo técnicas que lhe concedem os seguintes benefícios:\n\n- Você tem vantagem em salvaguardas de Constituição para manter sua concentração em uma magia quando você sofrer dano.\n- Você pode realizar os componentes somáticos de uma magia mesmo quando está com armas ou um escudo em uma ou ambas as mãos.\n- Você pode usar sua reação para conjurar uma magia na criatura, ao invés de realizar o ataque de oportunidade. A magia deve ter um tempo de conjuração de 1 ação e deve ter apenas uma criatura como alvo.\n- Seus ataques com magia ignoram metade da RD de seus alvos"
+    },
+    {
+      "id": "aprimoramento-conjurador-eficiente",
+      "kind": "APRIMORAMENTO",
+      "name": "Conjurador Eficiente",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Aprimoramento - Conjurador Volátil, Xamã 8",
+      "description": "Apelando às entidades espirituais, você se torna capaz de se adaptar ao imprevisto. Você recebe os seguintes benefícios:\n\n- Seu valor de Sabedoria ou Constituição aumenta em +1, até o máximo de 22\n- Os pontos de Ki adicionais oferecidos pela Herança “Conjurador Volátil” são dobrados.\n- Você pode conjurar uma magia da lista de Xamã que não esteja entre suas magias preparadas ao custo de pontos de Ki adicionais iguais à metade do nível da magia arredondado para cima. Você pode utilizar esta habilidade um número de vezes igual ao seu bônus de proficiência por descanso pleno.",
+      "requires": {
+        "resources": [
+          "aprimoramento-conjurador-volatil"
+        ],
+        "classes": [
+          "SHAMAN"
+        ],
+        "classLevel": 8
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "WISDOM",
+            "CONSTITUTION"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-conjurador-volatil",
+      "kind": "APRIMORAMENTO",
+      "name": "Conjurador Volátil",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Herança - Conjurador Natural, Xamã 4",
+      "description": "Entender mais a fundo como funciona a magia permite que você consiga manipulá-la com maior versatilidade. Você recebe os seguintes benefícios:\n\n- Seu valor de Sabedoria ou Constituição aumenta em +1, até o máximo de 20\n- Você passa a ser capaz de trocar a magia escolhida pela herança Conjurador Natural durante um Descanso Pleno, mantendo as limitações da mesma,\n- Ao conjurar a magia escolhida utilizando pontos de Ki, você pode conjurá-la como uma magia de 1 nível acima sem custo adicional.",
+      "requires": {
+        "heritages": [
+          "conjurador-natural"
+        ],
+        "classes": [
+          "SHAMAN"
+        ],
+        "classLevel": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "WISDOM",
+            "CONSTITUTION"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-controlador-de-elementos",
+      "kind": "APRIMORAMENTO",
+      "name": "Controlador de Elementos",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Habilidade de conjurar pelo menos uma magia",
+      "repeatable": true,
+      "description": "Seu controle elemental se aflora em um elemento. Você domina os aspectos de um elemento, tendo um maior controle e poder em magias que utilizem desse elemento. Ao selecionar esse Aprimoramento, escolha entre um dos tipos de dano elemental a seguir: ácido, elétrico, gélido, ígneo, trovejante ou venenoso.\n\n- Magias do elemento escolhido, ao serem conjuradas, ignoram a resistência e em caso de imunidade, causam dano reduzido pela metade ao invés de não causarem dano. Adicionalmente, dados de dano que caiam como 1 são tratados como 2.\n- Esse Aprimoramento pode ser escolhido diversas vezes, cada vez com um dano elemental diferente."
+    },
+    {
+      "id": "aprimoramento-desbravador-do-ki",
+      "kind": "APRIMORAMENTO",
+      "name": "Desbravador do Ki",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Aprimoramento - Retentor de Ki, Bodisatva 8",
+      "description": "Sua experimentação com o Ki permitiu que você entendesse segredos de outras doutrinas. Você recebe os seguintes benefícios:\n\n- Seu valor em um atributo aumenta em +1, até o máximo de 20.\n- Você pode escolher dois Sutras entre Sutras gerais, de bodisatva, de sua doutrina ou de outras doutrinas, ignorando o pré-requisito de doutrina dos mesmos mas atendendo aos demais pré-requisitos.",
+      "requires": {
+        "resources": [
+          "aprimoramento-retentor-de-ki"
+        ],
+        "classes": [
+          "BODHISATTVA"
+        ],
+        "classLevel": 8
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um atributo à escolha"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-dramatizador",
+      "kind": "APRIMORAMENTO",
+      "name": "Dramatizador",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Perito em mimica e dramaturgia, você recebe os seguintes benefícios:\n\n- Aumente seu valor de Carisma em 1, até o máximo de 20.\n- Você tem vantagem em testes de Atuação e Enganação quando você estiver tentando se passar por uma pessoa diferente.\n- Você pode imitar a articulação de outra pessoa ou os sons feitos por outras criaturas. Você deve ter ouvido a pessoa falando ou ouvido a criatura fazendo o som por, pelo menos, 1 minuto. Um sucesso num teste de Intuição resistido pelo seu teste de Enganação permite que um ouvinte determine que o efeito é falso.",
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "CHARISMA",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-duelista-defensivo",
+      "kind": "APRIMORAMENTO",
+      "name": "Duelista Defensivo",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Destreza 13 ou maior",
+      "description": "Você desenvolveu um estilo de luta que permite utilizar sua precisão com uma arma de forma defensiva. Você adquire os seguintes benefícios:\n\n- Quando você estiver empunhando uma arma de acuidade com a qual você seja proficiente e outra criatura atingir você com um ataque corpo a corpo, você pode usar sua reação para adicionar seu bônus de proficiência a sua CA para esse ataque, potencialmente fazendo o ataque errar.",
+      "requires": {
+        "attributes": {
+          "DEXTERITY": 13
+        }
+      }
+    },
+    {
+      "id": "aprimoramento-empunhadura-dupla",
+      "kind": "APRIMORAMENTO",
+      "name": "Empunhadura Dupla",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Seu treinamento árduo fez você dominar o combate com duas armas, ganhando os seguintes benefícios:\n\n- Enquanto estiver empunhando uma arma corpo a corpo em cada mão, você ganha +1 de bônus de CA.\n- Você recebe um grau em Combate com Duas Armas\n- Ao realizar um ataque de oportunidade, você pode rolar um segundo ataque com sua outra mão com desvantagem."
+    },
+    {
+      "id": "aprimoramento-empunhadura-primata",
+      "kind": "APRIMORAMENTO",
+      "name": "Empunhadura Primata",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Força 15",
+      "repeatable": true,
+      "description": "A força de sua mão é muito bem desenvolvida, fazendo com que você consiga portar armas maiores do que as feitas para você, você recebe os seguintes benefícios.\n\n- Aumente seu valor de Força em 1, até o máximo de 20.\n- Escolha uma arma corpo a corpo de uma mão com a qual você tem proficiência. Você pode usar com sua mão hábil uma arma corpo a corpo de uma categoria maior que a sua. Ao invés de receber -5 em jogadas de ataque e ter desvantagem nessas rolagens, você recebe apenas -2 e não tem mais desvantagem. O dano de sua arma sobe de acordo com a tabela Tamanho da Criatura.\n\nVocê pode manejar uma arma leve de categoria maior como uma arma leve, ou uma arma de duas mãos como sendo de uma mão. Você não pode usar uma arma de categoria de tamanho maior com sua mão inábil, e você não pode usar este aprimoramento junto a Empunhadura Dupla. Este aprimoramento pode ser escolhido diversas vezes, cada vez com uma arma diferente.",
+      "requires": {
+        "attributes": {
+          "STRENGTH": 15
+        }
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "STRENGTH",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-encouracado",
+      "kind": "APRIMORAMENTO",
+      "name": "Encouraçado",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Proficiência com armaduras leves",
+      "description": "Você treinou por alguns meses para que você pudesse ter maior resistência em combate, ganhando os seguintes benefícios:\n\n- Aumente seu valor de Força em 1, até o máximo de 20.\n- Você ganha proficiência com armaduras médias e escudos.",
+      "requires": {
+        "armor": [
+          "LIGHT"
+        ]
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "STRENGTH",
+          "amount": 1
+        },
+        {
+          "type": "ARMOR_PROFICIENCY",
+          "value": "MEDIUM"
+        },
+        {
+          "type": "ARMOR_PROFICIENCY",
+          "value": "SHIELD"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-erudito-arcano",
+      "kind": "APRIMORAMENTO",
+      "name": "Erudito Arcano",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Herança - Acólito Arcanista, Acólito 4",
+      "description": "Sua manipulação de energia arcana e espiritual acontecem de forma similar, dando a você maior especialidade em lançar magias. Você recebe os seguintes benefícios:\n\n- Seu valor de Sabedoria ou Inteligência aumenta em +1, até o máximo de 20\n- Você pode escolher um Foco de Conjuração Aprimorado do Arcanista para usar como Foco de Conjuração. Você recebe os benefícios desse Foco de Conjuração Aprimorado",
+      "requires": {
+        "heritages": [
+          "acolito-arcanista"
+        ],
+        "classes": [
+          "ACOLYTE"
+        ],
+        "classLevel": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "WISDOM",
+            "INTELLIGENCE"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-escudeiro",
+      "kind": "APRIMORAMENTO",
+      "name": "Escudeiro",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você sabe como utilizar escudos tanto para se defender quanto para atacar. Você ganha os seguintes benefícios enquanto estiver empunhando um escudo:\n\n- Ao realizar um ataque corpo a corpo contra uma criatura você pode tentar usar seu escudo para derrubá-la com uma ação bônus, a criatura deve fazer uma salvaguarda de Força contra um teste seu de Força.\n- Enquanto você estiver consciente e não esteja incapacitado, você pode adicionar o bônus de CA do seu escudo para salvaguardas de Destreza e Força.\n- Você ganha proficiência com escudos",
+      "grants": [
+        {
+          "type": "ARMOR_PROFICIENCY",
+          "value": "SHIELD"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-especialista-em-armadura-media",
+      "kind": "APRIMORAMENTO",
+      "name": "Especialista em Armadura Média",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Proficiência com armaduras médias",
+      "description": "Você está acostumado a utilizar armaduras médias, o que lhe deu algumas vantagens:\n\n- Você não tem desvantagem em testes de Furtividade enquanto estiver utilizando uma armadura média.\n- Quando você estiver vestindo uma armadura média, você não possui limitador no modificador de Destreza.\n- Você adiciona +1 à Redução de Dano de sua armadura média.",
+      "requires": {
+        "armor": [
+          "MEDIUM"
+        ]
+      }
+    },
+    {
+      "id": "aprimoramento-especialista-em-armadura-pesada",
+      "kind": "APRIMORAMENTO",
+      "name": "Especialista em Armadura Pesada",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Proficiência com armaduras pesadas",
+      "description": "Você se torna quase imbatível… enquanto estiver de armadura. Você ganha os seguintes benefícios:\n\n- Aumente seu valor de Força em 1, até o máximo de 20.\n- Quando você estiver vestindo uma armadura pesada, você reduz em 3 em todo dano físico recebido.\n- Você adiciona +1 à Redução de Dano de sua armadura pesada.",
+      "requires": {
+        "armor": [
+          "HEAVY"
+        ]
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "STRENGTH",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-especialista-em-escudos",
+      "kind": "APRIMORAMENTO",
+      "name": "Especialista em Escudos",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Proficiência com Escudos",
+      "description": "Seu treinamento constante com armas e escudos lhe concedeu uma maior manobrabilidade em combate. Você recebe as seguintes características:\n\n- Você passa a poder vestir ou remover um escudo utilizando uma ação bônus.\n- Quando o escudo estiver vestido, você pode atacar normalmente com uma arma que possua as propriedades extensão e duas mãos, caso você esteja utilizando um escudo pesado ou de torre, você se torna incapaz de receber vantagem em seu ataque, exceto se por magia ou runas, caso possua o estilo de luta Phalanx, essa incapacidade deixa de se aplicar às armas de haste.",
+      "requires": {
+        "armor": [
+          "SHIELD"
+        ]
+      }
+    },
+    {
+      "id": "aprimoramento-espiritualista-versatil",
+      "kind": "APRIMORAMENTO",
+      "name": "Espiritualista Versátil",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Xamã 4",
+      "description": "Suas relações com o mundo espiritual são boas e permitem que você consiga receber ensinamentos com mais facilidade. Você recebe os seguintes benefícios:\n\n- Seu valor de Sabedoria ou Constituição aumenta em +1, até o máximo de 20\n- Você pode trocar uma invocação por outra de mesmo nível e que você preencha os pré-requisitos durante um descanso pleno",
+      "requires": {
+        "classes": [
+          "SHAMAN"
+        ],
+        "classLevel": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "WISDOM",
+            "CONSTITUTION"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-estudioso-das-armas",
+      "kind": "APRIMORAMENTO",
+      "name": "Estudioso das Armas",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você treinou sua habilidade com diversos tipos de armas, você ganha os seguintes benefícios:\n\n- Aumente o valor de Força ou Destreza em 1, até o máximo de 20.\n- Você ganha proficiência com quatro armas corpo a corpo ou à distância simples ou marciais, à sua escolha.",
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "STRENGTH",
+            "DEXTERITY"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-explorador-nato",
+      "kind": "APRIMORAMENTO",
+      "name": "Explorador Nato",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você tem uma facilidade natural para encontrar passagens, tesouros e armadilhas escondidas. Você possui os seguintes benefícios:\n\n- Você tem vantagens em testes de Percepção e Investigação para encontrar passagens escondidas ou armadilhas, adicionalmente você possui vantagem em salvaguardas de Destreza para evitar uma armadilha.\n- Armadilhas causam metade do dano em você.\n- Enquanto você viaja, pode procurar por armadilhas preparadas em seu caminho sem diminuir o ritmo."
+    },
+    {
+      "id": "aprimoramento-explosao-de-adrenalina",
+      "kind": "APRIMORAMENTO",
+      "name": "Explosão de Adrenalina",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Força ou Destreza 17 ou maior",
+      "description": "Você aprendeu a controlar seu metabolismo conseguindo extrair o máximo de seu corpo, forçando-o a limites muito além dos seus limites naturais, você recebe os seguintes benefícios:\n\n- Seu valor de Força ou Destreza aumenta em +1, até o máximo de 20.\n- Utilizando uma ação livre em seu turno, você pode executar uma explosão de adrenalina. Até o início de seu próximo turno, seu valor de Força ou Destreza se torna 25. Você pode fazer isso uma vez por descanso longo. Você pode realizar explosões de adrenalina adicionais recebendo 1 nível de exaustão por uso além do 1º.",
+      "requires": {
+        "anyAttributes": {
+          "STRENGTH": 17,
+          "DEXTERITY": 17
+        }
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "STRENGTH",
+            "DEXTERITY"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-feridas-abertas",
+      "kind": "APRIMORAMENTO",
+      "name": "Feridas Abertas",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Aprimoramento - Oportunista",
+      "description": "Sua especialidade em utilizar as situações a seu favor se estende de forma considerável. Você recebe os seguintes benefícios:\n\n- Seu valor de Inteligência aumenta em +1, até o máximo de 20.\n- Uma criatura que tenha recebido um ataque furtivo seu, passa a receber dano adicional igual ao seu bônus de proficiência até o fim do combate em todos ataques feitos por você. Esse efeito não se acumula.",
+      "requires": {
+        "resources": [
+          "aprimoramento-oportunista"
+        ]
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "INTELLIGENCE",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-foco-alternativo",
+      "kind": "APRIMORAMENTO",
+      "name": "Foco Alternativo",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Arcanista 4",
+      "description": "Você é capaz de criar uma rápida sintonia com mais de um foco de conjuração, podendo alternar rapidamente entre eles. Você recebe os seguintes benefícios:\n\n- Seu valor de Inteligência ou Constituição aumenta em +1, até o máximo de 20\n- Você pode mudar seu foco de conjuração ativo com uma ação bônus. Você pode utilizar essa característica um número de vezes igual metade do seu bônus de proficiência por descanso longo (ao usar Cristais dessa forma, você recupera apenas metade dos pontos de mana que recuperaria normalmente)",
+      "requires": {
+        "classes": [
+          "ARCANIST"
+        ],
+        "classLevel": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "INTELLIGENCE",
+            "CONSTITUTION"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-forma-draconica-aprimorada",
+      "kind": "APRIMORAMENTO",
+      "name": "Forma Dracônica Aprimorada",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Meio-dragão, nível 16",
+      "description": "Sua conexão com sua essência se intensificou ao máximo, sendo quase impossível diferenciar sua forma dracônica de um dragão verdadeiro. Você recebe os seguintes benefícios:\n\n- O valor do atributo de sua forma dracônica aumenta em +1, até o máximo de 20.\n- Enquanto estiver em sua forma dracônica, você recebe alguns benefícios adicionais:Seu deslocamento de vôo aumenta em 30 pés;\n- Seu tamanho aumenta em 2 categorias ao invés de 1 (até o máximo de Imenso);\n- Sua arma de sopro causa 2 dados de dano adicional ao invés de 1;\n- Ao entrar em sua forma dracônica, seus atributos de Força, Destreza e Constituição aumentam em um valor igual à metade do seu bônus de proficiência. O atributo de sua forma dracônica passa ser aumentado em um valor igual ao seu bônus de proficiência ao invés de metade.",
+      "requires": {
+        "origins": [
+          "meio-dragao"
+        ],
+        "level": 16
+      }
+    },
+    {
+      "id": "aprimoramento-furia-elevada",
+      "kind": "APRIMORAMENTO",
+      "name": "Fúria Elevada",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Bruto",
+      "description": "A fúria corre em seu sangue de uma forma sobrenatural, conseguindo ser canalizada de forma mais eficiente, você recebe os seguintes benefícios:\n\n- Seu valor de Constituição aumenta em +1, até o máximo de 20.\n- Ao finalizar um descanso curto, você recupera uma quantidade de usos de fúria igual a metade do seu modificador de Constituição.\n- Ao final de seu turno, caso você não tenha atacado uma criatura hostil, sua Fúria não é encerrada prematuramente.",
+      "requires": {
+        "classes": [
+          "BRUTE"
+        ]
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "CONSTITUTION",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-grao-conjurador",
+      "kind": "APRIMORAMENTO",
+      "name": "Grão-Conjurador",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Habilidade de conjurar pelo menos uma magia",
+      "description": "Você aprendeu técnicas de conjuração com certos tipos de magia, ganhando os seguintes benefícios:\n\n- Magias e truques que requerem acerto, tem o alcance dobrado.\n- Suas magia que requer acerto ignoram meia cobertura ou três-quartos de cobertura.\n- Você aprende um truque que requer uma jogada de ataque. Escolha o truque da lista de magias de Acólito ou Combatente Arcano. Seu atributo de conjuração para esse truque depende da lista de magia a qual você escolheu o truque: Inteligência para Combatente Arcano e Sabedoria para Acólito."
+    },
+    {
+      "id": "aprimoramento-habil",
+      "kind": "APRIMORAMENTO",
+      "name": "Hábil",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "repeatable": true,
+      "description": "Esse Aprimoramento pode ser escolhido mais de uma vez, a cada vez que você o recebe, você pode escolher 3 entre os itens abaixo:\n\n- Receber proficiência com uma Perícia\n- Receber proficiência com um Ofício\n- Aumentar o nível de um Ofício Maior (respeitando os limites do mesmo)\n- Aprender fórmulas de um Ofício Maior\n- Receber uma nova Disciplina de um Ofício Menor"
+    },
+    {
+      "id": "aprimoramento-imobilizador",
+      "kind": "APRIMORAMENTO",
+      "name": "Imobilizador",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Força 13 ou maior",
+      "description": "Você desenvolveu as habilidades necessárias para se manter em um agarrão corpo a corpo. Você ganha os seguintes benefícios:\n\n- Você tem vantagem nas jogadas de ataque contra uma criatura que já está agarrada.\n- Você pode usar sua ação para tentar imobilizar uma criatura agarrada por você. Para fazer isso, faça outro teste de agarrar. Se for bem-sucedido, você e a criatura ficam contidos até o agarrão terminar.",
+      "requires": {
+        "attributes": {
+          "STRENGTH": 13
+        }
+      }
+    },
+    {
+      "id": "aprimoramento-incapacitador",
+      "kind": "APRIMORAMENTO",
+      "name": "Incapacitador",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Herança - Ataques Debilitantes, Mercurial 4",
+      "description": "Seu ataque de oportunidade é extremamente perigoso por debilitar uma criatura e expor suas fraquezas. Você recebe os seguintes benefícios:\n\n- Seu valor Destreza aumenta em +1, até o máximo de 20.\n- Quando uma criatura é alvo de seu ataque furtivo, ela deve fazer uma Salvaguarda de Constituição CD 8 + seu bônus de proficiência + seu modificador de Inteligência. Em uma falha, por um número de turnos igual ao seu bônus de proficiência, qualquer ataque não mágico feito por essa criatura tem seu dano reduzido em um valor igual ao seu bônus de proficiência. Pela mesma duração, qualquer ataque que a criatura receba de qualquer alvo, recebe metade do seu bônus de proficiência como dano adicional. A criatura pode fazer uma nova jogada de salvaguarda no início de seu turno para remover a condição.",
+      "requires": {
+        "heritages": [
+          "ataques-debilitantes"
+        ],
+        "classes": [
+          "MERCURIAL"
+        ],
+        "classLevel": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "DEXTERITY",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-iniciado-shugenja",
+      "kind": "APRIMORAMENTO",
+      "name": "Iniciado Shugenja",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Herança - Neófito Shugenja, Bodisatva 4",
+      "description": "Suas emanações espirituais mágica se tornam mais fortes. Você recebe os seguintes benefícios:\n\n- Seu valor de Sabedoria aumenta em +1, até o máximo de 20.\n- Escolha dois truques de mistérios Espirituais ou de Mistérios ou elementos a que você tem acesso. Você é capaz de conjurá-los usando seu nível de Bodisatva como nível de Conjurador e seu atributo de conjuração para esses truques é Sabedoria.\n- Escolha duas magias de 1ª nível de mistérios Espirituais ou de Mistérios ou elementos a que você tem acesso. Você é capaz de conjurá-los usando seu nível de Bodisatva como nível de Conjurador e seu atributo de conjuração para essas magias é Sabedoria. Essas magias custam 1 ponto de ki para serem conjuradas.",
+      "requires": {
+        "classes": [
+          "BODHISATTVA"
+        ],
+        "classLevel": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "WISDOM",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-interprete",
+      "kind": "APRIMORAMENTO",
+      "name": "Intérprete",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você possui um amplo conhecimento em diversos idiomas e códigos, ganhando os seguintes benefícios:\n\n- Aumente seu valor de Inteligência em 1, até o máximo de 20.\n- Você aprende três idiomas, à sua escolha.\n- Você é capaz de criar códigos e cifras complexas. Criaturas que tentem decifrar esses códigos devem ser bem-sucedidas numa salvaguarda de Inteligência (CD igual ao seu valor de Inteligência + seu bônus de proficiência) ou usar uma magia para decifrá-lo.",
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "INTELLIGENCE",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-investida-incontrolavel",
+      "kind": "APRIMORAMENTO",
+      "name": "Investida Incontrolável",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Sua agilidade em combate o permite potencializar sua capacidade ofensiva, semelhante a uma ferramenta de cerco. Você adquire os seguintes benefícios:\n\n- Após realizar a ação de Disparada, você pode realizar um ataque corpo a corpo ou derrubar uma criatura com uma ação bônus.\n- Se você percorrer pelo menos 10 pés em uma linha reta, você pode escolher receber +5 de bônus para acertar um ataque corpo a corpo ou ter vantagem para derrubar uma criatura."
+    },
+    {
+      "id": "aprimoramento-invocador-intenso",
+      "kind": "APRIMORAMENTO",
+      "name": "Invocador Intenso",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Xamã 8",
+      "description": "Seu espírito responde ao calor da batalha com grande intensidade, alinhando-o momentaneamente com o mundo espiritual. Você recebe os seguintes benefícios:\n\n- Seu valor de Sabedoria ou Constituição aumenta em +1, até o máximo de 22\n- Ao entrar em combate, sua primeira Invocação tem um custo em pontos de Ki reduzido em 1, podendo ser reduzido a 0 dessa forma.\n- Ao gastar pontos de Ki com uma invocação, você recebe resistência a um tipo de dano espiritual por um número de rodadas igual ao seu bônus de proficiência.",
+      "requires": {
+        "classes": [
+          "SHAMAN"
+        ],
+        "classLevel": 8
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "WISDOM",
+            "CONSTITUTION"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-invocadora-das-laminas",
+      "kind": "APRIMORAMENTO",
+      "name": "Invocadora das Lâminas",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Herança - Controle de Plumagadas",
+      "description": "Você aprende a controlar melhor a magia de suas plumadagas, sabendo como utilizar sua magia espiritual inata para prender seus inimigos. Você recebe os seguintes benefícios:\n\n- Seu valor de Sabedoria aumenta em +1, até o máximo de 20.\n- Quando utilizar o Retorno das Lâminas, caso uma criatura seja atingida por duas ou mais plumadagas, ela deve realizar uma salvaguarda de Constituição CD 8 + seu bônus de proficiência + seu modificador de Sabedoria. Em uma falha, a criatura estará Contida até o final de seu próximo turno.",
+      "requires": {
+        "heritages": [
+          "controle-de-plumadagas"
+        ]
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "WISDOM",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-maestria",
+      "kind": "APRIMORAMENTO",
+      "name": "Maestria",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Ofício 5, nível 18",
+      "repeatable": true,
+      "description": "Esse Aprimoramento pode ser escolhido mais de uma vez, a cada vez que você escolhe esse Aprimoramento, você pode escolher 1 Ofício Maior.\n\n- Você recebe o 6º nível nesse Ofício\n- Você aprende um número de fórmulas de 6º nível desse ofício igual ao seu modificador de Inteligência (mínimo de 1)\n- Você aprende um número de fórmulas igual a metade do seu modificador de Inteligência (mínimo de 1) de cada nível do 1º ao 5º desse Ofício.\n- Você recebe Especialidade com esse Ofício.",
+      "requires": {
+        "level": 18
+      }
+    },
+    {
+      "id": "aprimoramento-magia-abencoada",
+      "kind": "APRIMORAMENTO",
+      "name": "Magia Abençoada",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Aprimoramento - Erudito Arcano, Acólito 8",
+      "description": "Suas magias refletem o credo de seu rito, por esse motivo, você é capaz de ampliar as capacidades das magias lançadas através de uma síntese arcana. Você recebe os seguintes benefícios:\n\n- Seu valor de Sabedoria aumenta em +1, até o máximo de 20\n- Uma vez por descanso longo, você é capaz de utilizar uma Metamagia do Arcanista (à sua escolha), em uma de suas magias de Acólito, sem o gasto de pontos de Arcana. Você pode gastar um uso de Liturgia para ter um uso adicional dessa característica.",
+      "requires": {
+        "resources": [
+          "aprimoramento-erudito-arcano"
+        ],
+        "classes": [
+          "ACOLYTE"
+        ],
+        "classLevel": 8
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "WISDOM",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-mais-inimigos",
+      "kind": "APRIMORAMENTO",
+      "name": "Mais Inimigos",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Caçador 4",
+      "repeatable": true,
+      "description": "A vida tem sua forma de fazer as coisas, você também tem a sua. Nessa interação entre você e a vida, você fez mais alguns inimigos. Você recebe os seguintes benefícios:\n\n- Seu valor de um Atributo à sua escolha aumenta em +1, até o máximo de 20\n- Escolha um inimigo favorito adicional.\n\nEste aprimoramento pode ser escolhido mais de uma vez.",
+      "requires": {
+        "classes": [
+          "HUNTER"
+        ],
+        "classLevel": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um atributo à escolha"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-mente-fortalecida",
+      "kind": "APRIMORAMENTO",
+      "name": "Mente Fortalecida",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Constituição 15 ou maior",
+      "description": "Embora não seja mais resistente aos danos que as outras pessoas, seu treinamento criou em você uma tolerância maior, você recebe os seguintes benefícios:\n\n- Seu valor de Constituição aumenta em +1, até o máximo de 20.\n- Ao falhar em uma salvaguarda para manter sua Concentração em uma magia, você pode repeti-la novamente ficando com o novo resultado.\n- Ao falhar em um teste ou salvaguarda contra uma magia do Mistério da Ilusão, você pode repetir a jogada e ficar com o novo valor.\n- Você recebe vantagem em salvaguarda contra qualquer tipo de controle mental.",
+      "requires": {
+        "attributes": {
+          "CONSTITUTION": 15
+        }
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "CONSTITUTION",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-mente-unica",
+      "kind": "APRIMORAMENTO",
+      "name": "Mente Única",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Sua mente é singular, fazendo com que seu modo de pensar seja bem diferente dos seus pares. Você ganha os seguintes benefícios:\n\n- Aumente o valor de um dos seguintes atributos em +1, até o máximo de 20: Sabedoria, Inteligência ou Carisma.\n- Você possui proficiência em salvaguardas com o atributo escolhido.",
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "WISDOM",
+            "INTELLIGENCE",
+            "CHARISMA"
+          ],
+          "label": "+1 em um atributo"
+        },
+        {
+          "type": "SAVING_THROW_CHOICE",
+          "count": 1,
+          "options": [
+            "WISDOM",
+            "INTELLIGENCE",
+            "CHARISMA"
+          ],
+          "label": "Salvaguarda do atributo escolhido"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-mestre-do-combate",
+      "kind": "APRIMORAMENTO",
+      "name": "Mestre do Combate",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Proficiência com uma arma marcial",
+      "repeatable": true,
+      "description": "Seu treinamento marcial é contínuo e sempre busca se adaptar às suas tendências. Como resultado, você aprende uma opção de Estilo de Luta à sua escolha da classe Combatente. Você não pode escolher o mesmo Estilo mais de uma vez. Além disso, quando você adquire um nível que receba um Aprimoramento, você pode escolher um Estilo de Luta que você conheça e substituí-lo por outro que você ainda não possua. Esse Aprimoramento pode ser escolhido mais de uma vez."
+    },
+    {
+      "id": "aprimoramento-maos-de-ferro",
+      "kind": "APRIMORAMENTO",
+      "name": "Mãos de Ferro",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Força 15",
+      "description": "Você se torna proficiente com manoplas de guerra e elas passam a contar como armas Bodisatva. Além disso, você causa 1 ponto de dano adicional com ela, subindo para +2 o total.",
+      "requires": {
+        "attributes": {
+          "STRENGTH": 15
+        }
+      },
+      "grants": [
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Manoplas de guerra"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-naturalidade-complexa",
+      "kind": "APRIMORAMENTO",
+      "name": "Naturalidade Complexa",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Herança - Princípio Elemental, Arcanista 4",
+      "description": "Seu costume em lidar com seu princípio elemental garante a você maior facilidade e benefícios. Você recebe os seguintes benefícios:\n\n- Seu valor de Inteligência ou Constituição aumenta em +1, até o máximo de 20\n- Você recebe metade de seu nível de personagem em pontos de Mana que podem ser usados para conjurar apenas magias do Mistério (ou Elemento) definido em Princípio Elemental. Esses pontos são recuperados durante um descanso longo.\n- Quando você utiliza uma metamagia com uma magia do mistério definido pelo Princípio Elemental, caso a magia seja bem sucedida, você recupera metade dos pontos de mana gastos para conjurá-la",
+      "requires": {
+        "heritages": [
+          "principio-elemental"
+        ],
+        "classes": [
+          "ARCANIST"
+        ],
+        "classLevel": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "INTELLIGENCE",
+            "CONSTITUTION"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-nulificador",
+      "kind": "APRIMORAMENTO",
+      "name": "Nulificador",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Aprimoramento - Incapacitador, Mercurial 8",
+      "description": "Você eleva seu poder de incapacitação de alvos a um nível de mestria. Você recebe os seguintes benefícios:\n\n- Seu valor de Destreza aumenta em +1, até o máximo de 20.\n- Quando você usa sua característica de Incapacitador, a CD aumenta em 2 e passa a afetar quaisquer fontes de dano do alvo.",
+      "requires": {
+        "resources": [
+          "aprimoramento-incapacitador"
+        ],
+        "classes": [
+          "MERCURIAL"
+        ],
+        "classLevel": 8
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "DEXTERITY",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-olho-da-morte",
+      "kind": "APRIMORAMENTO",
+      "name": "Olho da Morte",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Proficiência com uma arma à distância, Destreza 17 ou maior",
+      "description": "Seu treinamento com armas de ataque à distância chegou em um patamar sobrenatural, você recebe os seguintes benefícios:\n\n- Aumente seu valor de Destreza em 1, até o máximo de 20.\n- Escolha uma arma à distância com a qual você tenha proficiência. Ao fazer um ataque com essa arma você pode escolher receber -2 na jogada de acerto e diminuir sua margem de crítico em 1 com essa arma. Você pode repetir essa habilidade até 3 vezes em um único ataque.",
+      "requires": {
+        "attributes": {
+          "DEXTERITY": 17
+        }
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "DEXTERITY",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-oportunista",
+      "kind": "APRIMORAMENTO",
+      "name": "Oportunista",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Herança - Instinto Assassino, Mercurial 4",
+      "description": "Sua habilidade com o ataque furtivo continua evoluindo mesmo quando você se dedica a outros estudos e práticas. Você recebe os seguintes benefícios:\n\n- Seu valor de Inteligência aumenta em +1, até o máximo de 20.\n- Seu dado de dano de ataque furtivo passa a ser baseado em seu nível de personagem e não em seu nível de Mercurial.",
+      "requires": {
+        "heritages": [
+          "instinto-assassino"
+        ],
+        "classes": [
+          "MERCURIAL"
+        ],
+        "classLevel": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "INTELLIGENCE",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-perito-em-armas-de-arremesso",
+      "kind": "APRIMORAMENTO",
+      "name": "Perito em Armas de Arremesso",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você dominou a arte de arremessar armas, sacando rapidamente e golpeando com precisão. Você ganha os seguintes benefícios:\n\n- Estar a 5 pés de uma criatura hostil ou atacar um alvo além da distância normal não impõe desvantagem nas suas jogadas de ataque à distância com armas de arremesso.\n- Você pode sacar uma arma que tenha a propriedade arremesso como parte de sua ação de Ataque.\n- Armas arremessadas por você tem sua categoria de dano aumentada em 1."
+    },
+    {
+      "id": "aprimoramento-perito-em-armas-de-corrente",
+      "kind": "APRIMORAMENTO",
+      "name": "Perito em Armas de Corrente",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Proficiência com pelo menos uma arma de corrente",
+      "description": "Você domina armas de corrente, como a foice de corrente, o martelo meteoro, entre outras. Você é considerado proficiente com essas armas e ganha os seguintes benefícios ao utilizar qualquer uma delas:\n\n- Enquanto sua arma de corrente tiver a propriedade de alcance, ao utilizar a ação de Desarmar, você utiliza as regras de desarme com arma à distância.\n- Quando você ataca um alvo com a condição Agarrado por uma extremidade de sua arma de corrente, com a extremidade oposta da arma ou com outra arma leve que esteja empunhando, você faz o ataque com vantagem.\n- Enquanto sua arma de corrente tiver a propriedade de alcance, um alvo que você atacar com ela não ganha benefícios de meia ou três quartos de cobertura."
+    },
+    {
+      "id": "aprimoramento-perito-em-armas-de-fogo",
+      "kind": "APRIMORAMENTO",
+      "name": "Perito em Armas de Fogo",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Proficiência com uma categoria de arma de fogo",
+      "description": "Graças a sua prática extensiva com armas de fogo, você ganha os seguintes benefícios:\n\n- Você recebe o Ofício de Armeiro\n- Você é capaz de reparar uma arma de fogo pela metade do tempo e valor necessário.\n- Estar a 5 pés de uma criatura hostil não impõe desvantagem nas suas jogadas de ataque à distância com armas de fogo.\n- Quando você usar a ação de Ataque com uma arma de fogo leve, você pode usar sua ação bônus para atacar com outra arma de fogo leve carregada que você esteja empunhando.\n- Seus ataques com armas de fogo ignoram metade da RD de seus alvos dentro de seu alcance máximo",
+      "grants": [
+        {
+          "type": "CRAFT",
+          "value": "armeiro"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-perito-em-armas-de-haste",
+      "kind": "APRIMORAMENTO",
+      "name": "Perito em Armas de Haste",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você é um inimigo poderoso enquanto usa armas de haste. Você ganha os seguintes benefícios:\n\n- Quando você realiza a ação de Ataque e ataca com uma glaive, alabarda, bastão, lança, lança longa ou tridente, você pode usar uma ação bônus para realizar um ataque corpo a corpo com a outra extremidade da arma. Esse ataque usa o mesmo modificador de atributo do ataque primário. O dado de dano da arma para esse ataque é um d6 e o ataque causa dano contundente.\n- Enquanto você estiver empunhando uma glaive, alabarda, bastão, lança, lança longa ou tridente, as outras criaturas provocam um ataque de oportunidade a você quando entrarem no seu alcance."
+    },
+    {
+      "id": "aprimoramento-perito-em-armas-grandes",
+      "kind": "APRIMORAMENTO",
+      "name": "Perito em Armas Grandes",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você aprendeu a controlar o peso e balanço de sua arma a seu favor. Você ganha os seguintes benefícios:\n\n- Ao acertar um ataque crítico com uma arma corpo a corpo pesada, ou reduzir os pontos de vida de uma criatura a 0, você pode realizar um ataque corpo a corpo com sua arma pesada com uma ação bônus.\n- Antes de você realizar um ataque corpo a corpo com uma arma pesada com a qual você tenha proficiência, você pode optar por sofrer –2 de penalidade em sua jogada de ataque. Se este ataque atingir o alvo, você adiciona 1 dado de dano da arma ao seu dano + seu bônus de proficiência."
+    },
+    {
+      "id": "aprimoramento-perito-em-escopeta",
+      "kind": "APRIMORAMENTO",
+      "name": "Perito em Escopeta",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Proficiência com armas de fogo médias, Destreza 17 ou maior",
+      "description": "Através do seu treinamento com a escopeta, você alcançou uma habilidade quase que sobrenatural, você recebe os seguintes benefícios:\n\n- Aumente seu valor de Destreza em 1, até o máximo de 20.\n- Você recebe +1 em suas jogadas de ataque com armas de fogo médias.\n- Ao atacar objetos inanimados seu dano sobe em duas categorias.\n- Uma vez por turno, ao realizar um ataque com uma arma de fogo média, você pode fazer com que o alvo de seu ataque realize uma salvaguarda de Força CD 8 + seu bônus de proficiência + seu modificador de Destreza. Em uma falha, o alvo ficará Caído. Você pode fazer isso um número de vezes igual ao seu bônus de proficiência por descanso longo.",
+      "requires": {
+        "attributes": {
+          "DEXTERITY": 17
+        }
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "DEXTERITY",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-perspicaz",
+      "kind": "APRIMORAMENTO",
+      "name": "Perspicaz",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você possui uma grande percepção de seus arredores e das pessoas que estão neles. Você ganha os seguintes benefícios:\n\n- Aumente seu valor de Sabedoria em 1, até o máximo de 20.\n- Você pode ler os lábios de uma criatura que você possa ver. Caso ela esteja falando em um idioma que você compreenda, você pode interpretar suas palavras.\n- Você possui um bônus de +5 em sua percepção passiva.",
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "WISDOM",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-plenitude-de-combate",
+      "kind": "APRIMORAMENTO",
+      "name": "Plenitude de Combate",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Seja servindo o exército ou treinando com algum professor, você aprendeu algumas técnicas de combate. Você ganha os seguintes benefícios:\n\n- Você ganha +1 em Força ou Destreza, à sua escolha, até o limite de 20.\n- Escolha uma entre as Técnicas de Combate da classe Combatente que você atenda os pré-requisitos. Caso a técnica usada obrigue o alvo a realizar uma salvaguarda, a CD será igual a 8 + seu bônus de proficiência + seu modificador de Força ou Destreza (à sua escolha).",
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "STRENGTH",
+            "DEXTERITY"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-praticante-dedicado",
+      "kind": "APRIMORAMENTO",
+      "name": "Praticante Dedicado",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "repeatable": true,
+      "description": "Esse Aprimoramento pode ser escolhido mais de uma vez. Dedicar-se ao Ofício fortalece o corpo e a mente. Você se desenvolve mais em um Ofício, ou aprende um novo. Você recebe os seguintes benefícios:\n\n- Seu valor de um Atributo à sua escolha aumenta em +1, até o máximo de 20.\n- Você recebe proficiência em um Ofício á sua escolha, ou um nível em um Ofício que já possua\n- Você recebe 5 fórmulas adicionais para algum Ofício que já possua",
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um atributo à escolha"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-principio-arquimago",
+      "kind": "APRIMORAMENTO",
+      "name": "Princípio Arquimago",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Arcanista 8",
+      "repeatable": true,
+      "description": "Mais do que conhecer muitas magias, você busca formas de conhecer profundamente a magia em si e como extrair o máximo de cada uma de suas muitas magias. Esse aprimoramento pode ser escolhido mais de uma vez. Você recebe os seguintes benefícios:\n\n- Você recebe 2 pontos de Arcana\n- Você pode escolher uma metamagia adicional\n- Quando você usa qualquer quantidade de pontos de Arcana, você pode rolar 1d4 e recuperar o valor em pontos de mana.",
+      "requires": {
+        "classes": [
+          "ARCANIST"
+        ],
+        "classLevel": 8
+      }
+    },
+    {
+      "id": "aprimoramento-resistente",
+      "kind": "APRIMORAMENTO",
+      "name": "Resistente",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você ganha os seguintes benefícios:\n\n- Aumente o valor de um dos seguintes atributos em +1, até o máximo de 20: Força, Destreza ou Constituição.\n- Você possui proficiência em salvaguardas com o atributo escolhido.",
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "STRENGTH",
+            "DEXTERITY",
+            "CONSTITUTION"
+          ],
+          "label": "+1 em um atributo"
+        },
+        {
+          "type": "SAVING_THROW_CHOICE",
+          "count": 1,
+          "options": [
+            "STRENGTH",
+            "DEXTERITY",
+            "CONSTITUTION"
+          ],
+          "label": "Salvaguarda do atributo escolhido"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-retentor-de-ki",
+      "kind": "APRIMORAMENTO",
+      "name": "Retentor de Ki",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Herança - Fluidez de Ki, Bodisatva 4",
+      "description": "Você compreende de forma natural os princípios da circulação de Ki. Você recebe os seguintes benefícios:\n\n- Seu valor de um Atributo aumenta em +1, até o máximo de 20.\n- Ao reduzir os pontos de vida de um alvo a 0 utilizando alguma habilidade ou Sutra que utilize Ki, você recebe metade do gasto (mínimo de 1) utilizado nessa habilidade ou Sutra.\n- Você pode escolher um Sutra adicional no 4º e no 8º nível de Bodisatva.",
+      "requires": {
+        "classes": [
+          "BODHISATTVA"
+        ],
+        "classLevel": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um atributo à escolha"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-revestido",
+      "kind": "APRIMORAMENTO",
+      "name": "Revestido",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você treinou por algum tempo para que armaduras não atrapalhem seus movimentos, ganhando os seguintes benefícios:\n\n- Aumente seu valor de Força em 1, até o máximo de 20.\n- Você recebe proficiência com armadura leves.",
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "STRENGTH",
+          "amount": 1
+        },
+        {
+          "type": "ARMOR_PROFICIENCY",
+          "value": "LIGHT"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-robusto",
+      "kind": "APRIMORAMENTO",
+      "name": "Robusto",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você ganha metade do seu dado de vida em seu máximo de pontos de vida no 1º nível, sempre que sua vida aumentar ao subir de nível, caso você tire menos que 1 + metade do dado de vida, você pode jogar o dado novamente e escolher o maior número entre os dois."
+    },
+    {
+      "id": "aprimoramento-sagaz",
+      "kind": "APRIMORAMENTO",
+      "name": "Sagaz",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Destreza 13 ou maior",
+      "description": "Você é particularmente hábil em esgueirar pelas sombras. Você ganha os seguintes benefícios:\n\n- Ao tentar se esconder de alguma criatura, estando levemente obscurecido, você tem vantagem em seu teste de Furtividade.\n- Errar um ataque a distância feito enquanto escondido, não revelará sua localização para o alvo.\n- Você não recebe desvantagem em testes de Percepção relacionados à visão quando em penumbra.",
+      "requires": {
+        "attributes": {
+          "DEXTERITY": 13
+        }
+      }
+    },
+    {
+      "id": "aprimoramento-sangramento-de-alma",
+      "kind": "APRIMORAMENTO",
+      "name": "Sangramento de Alma",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Aprimoramento - Caminho da Ceifa, Atirador 8",
+      "description": "Você parece ser abençoado pelos ceifadores. Você recebe os seguintes benefícios:\n\n- Seu valor em um atributo aumenta em +1, até o máximo de 20\n- A margem de seus ataques críticos com armas de fogo é reduzida em 1\n- Seus ataques críticos causam 1d4 de dano disruptivo adicional com 1 ponto desse dano funcionando como Sangramento que só pode ser cancelado caso o atirador que o causou morra ou o alvo receba um tratamento com um Kit Médico.",
+      "requires": {
+        "resources": [
+          "aprimoramento-caminho-da-ceifa"
+        ],
+        "classes": [
+          "MARKSMAN"
+        ],
+        "classLevel": 8
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um atributo à escolha"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-selvageria-desmedida",
+      "kind": "APRIMORAMENTO",
+      "name": "Selvageria Desmedida",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Bruto 8",
+      "description": "Sua fúria é ainda mais perigosa quando seus limites são quebrados. Você recebe os seguintes benefícios:\n\n- Seu valor de Força ou Constituição aumenta em +1, até o máximo de 20\n- Um número de vezes igual a metade do seu bônus de proficiência por descanso longo, ao entrar em Fúria, você pode fazer com que seu dado de dano de Fúria seja dobrado pela duração da mesma.",
+      "requires": {
+        "classes": [
+          "BRUTE"
+        ],
+        "classLevel": 8
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "STRENGTH",
+            "CONSTITUTION"
+          ],
+          "label": "+1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-senso-do-navegador",
+      "kind": "APRIMORAMENTO",
+      "name": "Senso do Navegador",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você possui uma memória como a de nenhum outro. Você ganha os seguintes benefícios:\n\n- Aumente seu valor de Inteligência em 1, até o máximo de 20.\n- Você sempre sabe a posição de todos os pontos cardeais.\n- Você sabe a quantidade de tempo exata para o nascer ou pôr do sol, independente da época do ano.\n- Você sabe dizer exatamente qualquer coisa que tenha visto ou ouvido no último mês.",
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "INTELLIGENCE",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-tempestade-de-plumas",
+      "kind": "APRIMORAMENTO",
+      "name": "Tempestade de Plumas",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Vastaya Lhotlan, nível 12",
+      "description": "Você aprendeu a controlar todas suas plumas com uma precisão inigualável. Você recebe os seguintes benefícios:\n\n- Seu valor de Destreza aumenta em +1, até o máximo de 20.\n- Utilizando uma ação, ou uma reação ao ser alvo de um ataque, você salta no ar fazendo com que o ataque seja feito com desvantagem e dispara todas as plumadagas que você possui em um cone de 25 pés a partir de você. Todos os alvos nessa área devem realizar uma salvaguarda de Destreza CD 8 + seu bônus de proficiência + seu modificador de Destreza. Em uma falha, um alvo afetado sofre o dano de todas as suas plumadagas disparadas e tem seu deslocamento reduzido em 15 pés até o final de seu próximo turno.",
+      "requires": {
+        "lineages": [
+          "lhotlan"
+        ],
+        "level": 12
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "DEXTERITY",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-versatilidade-arcana",
+      "kind": "APRIMORAMENTO",
+      "name": "Versatilidade Arcana",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Aprimoramento - Foco Alternativo Arcanista 8",
+      "description": "Você aprendeu como manipular suas capacidades arcanas naturais com ainda mais facilidade. Você recebe os seguintes benefícios:\n\n- Você pode utilizar 2 focos arcanos aprimorados ao mesmo tempo, ou receber dois benefícios de um mesmo foco arcano aprimorado mixto. Ex. Uma espada em chamas concede a você os benefícios de foco aprimorado de Armas Cortantes e Elemento.",
+      "requires": {
+        "resources": [
+          "aprimoramento-foco-alternativo"
+        ],
+        "classes": [
+          "ARCANIST"
+        ],
+        "classLevel": 8
+      }
+    },
+    {
+      "id": "aprimoramento-vigilante",
+      "kind": "APRIMORAMENTO",
+      "name": "Vigilante",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você domina técnicas para obter vantagens em combate, ganhando os seguintes benefícios:\n\n- Ao atingir uma criatura com um ataque de oportunidade, o deslocamento da criatura se torna 0 pelo resto do turno.\n- Criaturas que saírem do seu alcance, mesmo usando a ação de Desengajar, provocam ataques de oportunidade.\n- Quando uma criatura que esteja a 5 pés de você realizar um ataque que não tenha você como alvo, você pode utilizar sua reação para realizar um ataque corpo a corpo na criatura atacante."
+    },
+    {
+      "id": "aprimoramento-agil",
+      "kind": "APRIMORAMENTO",
+      "name": "Ágil",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "description": "Você possui uma mobilidade além do comum. Você ganha os seguintes benefícios:\n- Seu deslocamento aumenta em 10 pés.\n- Correr em terreno difícil não lhe custa movimentação extra\n- Ao realizar um ataque corpo a corpo contra um alvo, independente se atingir ou não, você não provoca ataques de oportunidade desse alvo até o final de seu turno.",
+      "grants": [
+        {
+          "type": "SPEED",
+          "feet": 10
+        }
+      ]
+    },
+    {
+      "id": "aprimoramento-odio-profundo",
+      "kind": "APRIMORAMENTO",
+      "name": "Ódio Profundo",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Herança - Isso é Pessoal, Caçador 4",
+      "description": "Não apenas é pessoal, mas também se tornou uma questão de honra, vida e morte. Ou você, ou ele (eles). Você recebe os seguintes benefícios:\n\n- Seu valor de um Atributo à sua escolha aumenta em +1, até o máximo de 20\n- Você recebe Redução de Dano igual a metade do seu bônus de proficiência contra qualquer ataque causado por seu Foco de Caça\n- Quando acerta um ataque em seu Foco de Caça, você pode fazer um novo ataque na mesma ação. Isso acontece apenas uma vez por rodada.",
+      "requires": {
+        "heritages": [
+          "isso-e-pessoal"
+        ],
+        "classes": [
+          "HUNTER"
+        ],
+        "classLevel": 4
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um atributo à escolha"
+        }
+      ]
+    }
+  ]
+}

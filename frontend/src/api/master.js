@@ -29,3 +29,10 @@ export const fetchTableSettings = token => request('/creation/settings', { token
 export const updateTableSettings = (token, settings) => request('/creation/settings', { method: 'PUT', token, body: settings })
 
 export { fetchCatalog } from './creation.js'
+
+// Subida de nível: levels = [{ classId, subclassId, hpRoll, choices, heritages }] (os níveis novos).
+export const previewLevelUp = (token, characterId, levels) =>
+  request('/character/' + characterId + '/level-up/preview', { method: 'POST', token, body: { levels } })
+
+export const applyLevelUp = (token, characterId, levels) =>
+  request('/character/' + characterId + '/level-up', { method: 'POST', token, body: { levels } })

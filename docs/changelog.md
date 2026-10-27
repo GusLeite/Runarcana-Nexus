@@ -2,6 +2,15 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-27 — Subida de nível, multiclasse e Aprimoramentos (`feature/character-sheet`)
+- **Subida de nível pelo mestre**: `POST /character/{id}/level-up/preview` e `POST /character/{id}/level-up`. Os níveis ficam no `build`; o cálculo refaz o personagem no nível novo (proficiência, usos/dados/valores pelo nível da classe, PV com o dado rolado, ponto de Herança no 5º, 9º, 13º e 17º, atributos até 20). Aplicar soma a diferença de PV no PV atual e mantém usos gastos e as habilidades cadastradas pelo mestre (`CharacterAbility.source`). `Character.classLevels` e `CharacterResponse.canLevelUp`.
+- **Multiclasse**: pré-requisitos e proficiências de multiclasse das 9 classes (`multiclass` no `criacao.json`, da página Multiclasse da wiki); a classe nova entra sem as proficiências iniciais.
+- **Aprimoramentos**: `rules/aprimoramentos.json` com os 96 da wiki (texto completo) e os dois aumentos de atributo; o Aprimoramento das classes (47 níveis) virou escolha `RESOURCE_CHOICE` `APRIMORAMENTO`. Pré-requisitos novos em recursos: `classLevel`, `origins`, `lineages`; `repeatable`.
+- **Magias por nível**: as tabelas de truques e magias conhecidas (Arcanista, Xamã, Ravasz, Cicatrizes Rúnicas, Arqueiro Rúnico, Espião; truques do Acólito) viraram `SPELL_CHOICE` nos níveis, com o nível máximo de magia de cada nível.
+- Front: aba **FICHAS** no painel do mestre (`MasterSheets.jsx`).
+- Testes: `LevelUpControllerTests` e helpers do front. Conferido no sandbox (Rudo Combatente do 1º ao 4º nível: PV 11 → 30, Aumento de Atributo +2 em Força, Técnica Apreender, Surto de Ação; prévia de multiclasse com Bruto).
+- PostgreSQL existente: `ALTER TABLE "character" ALTER COLUMN build TYPE varchar(100000);` (ver backend.md).
+
 ## 2026-10-26 — Os 22 passados do Capítulo 4 (`feature/character-sheet`)
 - `criacao.json`: os **22 passados** reais no lugar dos dois de exemplo, com texto e tabelas do livro, perícias (fixas e à escolha), ofícios, proficiências, equipamento (`EQUIPMENT`/`EQUIPMENT_CHOICE`), ouro e a Característica como passiva.
 - `itens.json`: 32 itens citados só nos passados (grupo `item-de-passado`).

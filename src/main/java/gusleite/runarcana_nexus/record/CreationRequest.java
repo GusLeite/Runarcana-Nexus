@@ -34,8 +34,30 @@ public record CreationRequest(
         List<TraitPick> drawbacks,
         // Equipamento inicial: EQUIPMENT (padrão: o da classe e do passado) ou WEALTH (troca tudo pela riqueza inicial
         // da classe, rolada ao criar).
-        String startingEquipment
+        String startingEquipment,
+        // Níveis ganhos depois do 1º, em ordem (o primeiro é o 2º nível do personagem). Montados pelo mestre na subida
+        // de nível e guardados no build da ficha.
+        List<LevelPick> levels
 ) {
+    // Um nível ganho: em qual classe (multiclasse: outra classe), a subclasse quando é o 1º nível de uma classe nova,
+    // o dado de vida rolado (no app ou na mesa), as escolhas daquele nível (chaves "level:N:...") e as Heranças
+    // compradas com o ponto do nível (5º, 9º, 13º e 17º).
+    public record LevelPick(String classId, String subclassId, Integer hpRoll, Map<String, List<String>> choices,
+                            List<HeritagePick> heritages) {}
+
+    public List<LevelPick> levelsOrEmpty() {
+        return levels == null ? List.of() : levels;
+    }
+
+    // O mesmo pedido com mais um nível.
+    public CreationRequest withLevel(LevelPick pick) {
+        List<LevelPick> next = new java.util.ArrayList<>(levelsOrEmpty());
+        next.add(pick);
+        return new CreationRequest(characterName, playerName, age, height, alignment, regionId, originId, lineageId, classId,
+                subclassId, backgroundId, attributeMethod, baseAttributes, choices, heritages, traitBudget, traits, drawbacks,
+                startingEquipment, List.copyOf(next));
+    }
+
     public boolean startingWealth() {
         return "WEALTH".equals(startingEquipment);
     }

@@ -25,6 +25,7 @@ Responsivo: abaixo de 760px os painéis empilham na vertical e a lore some. Com 
   - **Documentos** (`MasterDocuments.jsx`): título, tipo (chips coloridos por tipo), destinatários ("Todos os jogadores" ou um ou mais, vindos de `GET /documents/recipients`; nomes de `CHARACTERS`), texto com a mesma formatação da leitura, link de imagem. "Escrever / Prévia": a prévia usa o `DocumentView` da ficha, então é exatamente o que o jogador vê. O botão diz para quem vai ("ENVIAR PARA RUDO"). À direita, os enviados com destinatários e "Apagar" com confirmação.
   - **Habilidades** (`MasterAbilities.jsx`): escolhe o personagem (cartões com a arte de `CHARACTERS` quando o nome bate), formulário (**ícone**, nome, tipo, círculo e escola/componentes só para magia, tempo, alcance, duração, dano validado com `parseDice`, usos — vazio = livre — e recarga, descrição), **prévia ao vivo** com o `AbilityDetail` da ficha e a lista do personagem com "Apagar". Depois de adicionar, o formulário limpa mas mantém o tipo e o círculo.
   - **Ícone** (`IconPicker.jsx`): "Enviar imagem" (ou arrastar e soltar no quadrado), "colar um link" ou "Remover". O arquivo (PNG/JPG/WebP/GIF até 8 MB) passa por `utils/iconImage.js` (`fileToIcon`): recorte quadrado central e redução para **128×128 WebP** num canvas, antes de ir para o back. GIF animado vira imagem parada. Na lista do personagem, clicar no ícone (`IconSwap`) troca a imagem de uma habilidade já cadastrada e o "×" tira (`PATCH .../icon`).
+  - **Fichas** (`MasterSheets.jsx`): subida de nível. Escolhe o personagem (cartões com as classes e o nível) e monta o próximo nível: a classe (uma das que ele já tem, "Combatente 3 → 4", ou uma nova para multiclasse, com o pré-requisito no nome, e a subclasse dela), o **dado de vida** ("Rolar 1dX" ou digitar o que saiu na mesa), as escolhas do nível (o `ChoiceStep` e o `ResourceChoice` do assistente: Aprimoramento em cartões, aumento de atributo, Técnicas, magias...) e, nos níveis 5, 9, 13 e 17, as Heranças (`HeritageStep`). À direita, "O que muda": nível, PV máximo (e o ganho, que também entra no PV atual), proficiência, classes, atributos alterados, habilidades novas e o que falta; o botão aplica. Ficha sem `build` (criada sem o assistente) mostra o aviso. A prévia vem de `POST /character/{id}/level-up/preview` 220 ms depois de cada mudança. Helpers `levelChoices` (escolhas do nível, cada interna logo depois da que a criou), `keepChoices` e `HERITAGE_LEVELS` em `rules.js`.
   - **Regras da mesa** (`MasterRules.jsx`): modo de traços da Runinata em cartões ("O jogador escolhe", Controlado, Moderado, Forte); clicar salva na hora (`PUT /creation/settings`) com aviso. Travado, a etapa Traços do jogador mostra só esse modo, desativado, com "O mestre definiu o modo da mesa".
 - API em `api/master.js`; estilos em `styles/master.css` (usa também `sheet.css`).
 
@@ -110,7 +111,7 @@ frontend/
     │   └── sheet/             ficha pós-login: CharacterSheet (abas e estado), SheetHero, OverviewTab, AttributeGrid,
     │                          SkillList, AbilitiesTab, AbilityIcon, Inventory, DocumentsTab, NotesTab, DiceRoll,
     │                          TabBar (abas com sublinhado deslizante), Num (número que conta), icons
-    │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities
+    │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities, MasterSheets, MasterRules
     ├── hooks/usePanelSprings.js  animação por mola (requestAnimationFrame)
     ├── hooks/useCountUp.js (+ .test.js)  número que conta até o valor; prefersReducedMotion
     ├── utils/motion.js        replay (reinicia animação de classe) e afterLeave (espera a saída)
@@ -120,7 +121,7 @@ frontend/
     ├── styles/sheet.css       visual da ficha
     ├── styles/master.css      botão, portal e painel do mestre
     ├── styles/motion.css      animações de polimento (importado por último no main.jsx)
-    ├── api/master.js          rotas do mestre (personagens, habilidades, documentos, destinatários)
+    ├── api/master.js          rotas do mestre (personagens, habilidades, documentos, destinatários, subida de nível)
     ├── validation.js (+ .test.js)
     └── assets/characters/     rudo.jpg/.mp4, gaudron.jpg/.mp4
 ```
@@ -177,7 +178,7 @@ A tela foi prototipada num `index.html` único (React via CDN, imagens e vídeo 
 - Vídeos pesados (cerca de 8,5 MB e 7,2 MB) estão versionados no Git; vale comprimir ou passar para Git LFS/CDN.
 - Ainda não há roteamento (react-router): as abas da ficha são estado local e não mudam a URL (recarregar volta para "FICHA").
 - PV atual, ouro, inspiração e inventário ainda não podem ser alterados pela tela (o back-end não tem essas rotas); dos dados do jogo, só os usos de habilidade e as anotações são editáveis.
-- O painel do mestre ainda não edita habilidades/documentos já criados (só cria e apaga), não mostra quem leu cada documento e não gerencia fichas (criar personagem, PV, ouro, itens).
+- O painel do mestre ainda não edita habilidades/documentos já criados (só cria e apaga), não mostra quem leu cada documento e não edita fichas além da subida de nível (PV atual, ouro, itens).
 - Documentos e anotações só atualizam ao abrir a ficha (não há aviso em tempo real quando o mestre envia algo).
 - Os itens usam ícones SVG genéricos por tipo; falta arte por item.
 - O histórico de rolagens não é compartilhado com o mestre nem salvo.

@@ -2466,10 +2466,17 @@
           "level": 4,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 4º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 0,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Truques de Acólito: +1"
             }
           ]
         },
@@ -2477,10 +2484,10 @@
           "level": 8,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 8º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -2493,6 +2500,13 @@
               "name": "Intervenção Quintessencial",
               "description": "Com uma ação, descreva o que busca e role percentual: com resultado até seu nível de Acólito, a entidade intervém (o Mestre escolhe como; o efeito de uma magia de Acólito ou de Rito serve). Se intervir, você não usa de novo por 7 dias; senão, após um descanso pleno. No 20º nível, funciona automaticamente.",
               "castingTime": "Ação"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 0,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Truques de Acólito: +1"
             }
           ]
         },
@@ -2500,10 +2514,10 @@
           "level": 12,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 12º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -2511,10 +2525,10 @@
           "level": 16,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 16º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -2522,10 +2536,10 @@
           "level": 19,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 19º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         }
@@ -3699,7 +3713,27 @@
             }
           ]
         }
-      ]
+      ],
+      "multiclass": {
+        "prerequisite": "Sabedoria 13",
+        "attributes": {
+          "WISDOM": 13
+        },
+        "grants": [
+          {
+            "type": "ARMOR_PROFICIENCY",
+            "value": "LIGHT"
+          },
+          {
+            "type": "ARMOR_PROFICIENCY",
+            "value": "MEDIUM"
+          },
+          {
+            "type": "ARMOR_PROFICIENCY",
+            "value": "SHIELD"
+          }
+        ]
+      }
     },
     {
       "id": "ARCANIST",
@@ -3957,6 +3991,13 @@
                 "Sabedoria",
                 "Carisma"
               ]
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 1,
+              "value": "MYSTERIES",
+              "label": "Magias de Arcanista: +1 (até o 1º nível)"
             }
           ]
         },
@@ -3981,6 +4022,13 @@
                 "Magia Potencializada",
                 "Magia Sutil"
               ]
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 2,
+              "value": "MYSTERIES",
+              "label": "Magias de Arcanista: +1 (até o 2º nível)"
             }
           ]
         },
@@ -3988,10 +4036,48 @@
           "level": 4,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 4º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 0,
+              "value": "MYSTERIES",
+              "label": "Truques de Arcanista: +1"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 2,
+              "value": "MYSTERIES",
+              "label": "Magias de Arcanista: +1 (até o 2º nível)"
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 3,
+              "value": "MYSTERIES",
+              "label": "Magias de Arcanista: +1 (até o 3º nível)"
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 3,
+              "value": "MYSTERIES",
+              "label": "Magias de Arcanista: +1 (até o 3º nível)"
             }
           ]
         },
@@ -4034,6 +4120,13 @@
               "abilityType": "PASSIVE",
               "name": "Magia de Assinatura",
               "description": "No 7º nível (e de novo no 17º), escolha um truque de assinatura: você pode conjurá-lo como ação bônus gastando 1 ponto de Mana. Escolha também uma magia de 1º nível e uma de 2º nível e um benefício para elas: usar uma Metamagia sem gastar Arcana (escolhendo de novo, duas Metamagias, a segunda com custo normal), ou conjurá-las um nível acima sem custo adicional de Mana (escolhendo de novo, dois níveis acima). No 17º você pode escolher as mesmas magias para um benefício adicional."
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 4,
+              "value": "MYSTERIES",
+              "label": "Magias de Arcanista: +1 (até o 4º nível)"
             }
           ]
         },
@@ -4041,10 +4134,29 @@
           "level": 8,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 8º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 4,
+              "value": "MYSTERIES",
+              "label": "Magias de Arcanista: +1 (até o 4º nível)"
+            }
+          ]
+        },
+        {
+          "level": 9,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 5,
+              "value": "MYSTERIES",
+              "label": "Magias de Arcanista: +1 (até o 5º nível)"
             }
           ]
         },
@@ -4068,6 +4180,13 @@
                 "Magia Potencializada",
                 "Magia Sutil"
               ]
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 0,
+              "value": "MYSTERIES",
+              "label": "Truques de Arcanista: +1"
             }
           ]
         },
@@ -4079,6 +4198,13 @@
               "abilityType": "PASSIVE",
               "name": "Sobrecarga Arcana",
               "description": "Ao gastar Mana numa magia de 4º nível ou superior, você ganha 1 ponto de Sobrecarga. Com uma ação, gaste pontos de Sobrecarga iguais ao dobro do custo de Mana do nível da magia para conjurar uma magia sua de até 7º nível sem Mana (sem redução de custo nem benefícios de Classe). Pontos não usados se perdem num descanso pleno."
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 6,
+              "value": "MYSTERIES",
+              "label": "Magias de Arcanista: +1 (até o 6º nível)"
             }
           ]
         },
@@ -4117,10 +4243,34 @@
               ]
             },
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 12º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
+            }
+          ]
+        },
+        {
+          "level": 13,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 7,
+              "value": "MYSTERIES",
+              "label": "Magias de Arcanista: +1 (até o 7º nível)"
+            }
+          ]
+        },
+        {
+          "level": 15,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 8,
+              "value": "MYSTERIES",
+              "label": "Magias de Arcanista: +1 (até o 8º nível)"
             }
           ]
         },
@@ -4128,10 +4278,10 @@
           "level": 16,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 16º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -4174,6 +4324,13 @@
               "abilityType": "PASSIVE",
               "name": "Força Arcana",
               "description": "Ao usar uma Metamagia, você pode gastar 1 ponto de Arcana adicional (por Metamagia) para conjurar a magia um nível acima por ponto gasto."
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 9,
+              "value": "MYSTERIES",
+              "label": "Magias de Arcanista: +1 (até o 9º nível)"
             }
           ]
         },
@@ -4204,10 +4361,17 @@
           "level": 19,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 19º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 2,
+              "spellLevel": 9,
+              "value": "MYSTERIES",
+              "label": "Magias de Arcanista: +2 (até o 9º nível)"
             }
           ]
         }
@@ -5020,7 +5184,14 @@
             }
           ]
         }
-      ]
+      ],
+      "multiclass": {
+        "prerequisite": "Inteligência 13 e outro atributo 13",
+        "attributes": {
+          "INTELLIGENCE": 13
+        },
+        "anotherAttribute": 13
+      }
     },
     {
       "id": "MARKSMAN",
@@ -5167,10 +5338,10 @@
           "level": 4,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 4º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -5206,10 +5377,10 @@
           "level": 8,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 8º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -5262,10 +5433,10 @@
           "level": 12,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 12º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -5296,10 +5467,10 @@
           "level": 16,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 16º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -5321,10 +5492,10 @@
           "level": 19,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 19º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "FEATURE",
@@ -5611,6 +5782,37 @@
                   "abilityType": "PASSIVE",
                   "name": "Encantar Munição",
                   "description": "Conjure uma magia de dano numa munição em vez de executá-la; ela dura 48 horas e só funciona disparada da sua Astra. Num acerto, o alvo sofre o dano da arma e o efeito da magia (salvaguarda com desvantagem; áreas centradas no alvo). Limites: 2 com truques (3º), +2 de 1º nível (8º), +2 de 2º (13º), +1 de 3º (19º)."
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 3,
+                  "spellLevel": 1,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Atirador: +3 (até o 1º nível)"
+                }
+              ]
+            },
+            {
+              "level": 4,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 1,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Atirador: +1 (até o 1º nível)"
+                }
+              ]
+            },
+            {
+              "level": 5,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 0,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Truques de Atirador: +1"
                 }
               ]
             },
@@ -5626,6 +5828,30 @@
               ]
             },
             {
+              "level": 7,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 1,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Atirador: +1 (até o 1º nível)"
+                }
+              ]
+            },
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 2,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Atirador: +1 (até o 2º nível)"
+                }
+              ]
+            },
+            {
               "level": 10,
               "grants": [
                 {
@@ -5633,6 +5859,32 @@
                   "abilityType": "PASSIVE",
                   "name": "Controle Etéreo",
                   "description": "Conjura identificar, invisibilidade, ver o invisível e visão no escuro com 1 Bravura em vez de Mana."
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 0,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Truques de Atirador: +1"
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 2,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Atirador: +1 (até o 2º nível)"
+                }
+              ]
+            },
+            {
+              "level": 11,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 2,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Atirador: +1 (até o 2º nível)"
                 }
               ]
             },
@@ -5644,6 +5896,37 @@
                   "abilityType": "PASSIVE",
                   "name": "Gatilho Rúnico",
                   "description": "Escolha uma magia de 1º nível que conheça: você a conjura como ação bônus."
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 3,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Atirador: +1 (até o 3º nível)"
+                }
+              ]
+            },
+            {
+              "level": 14,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 3,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Atirador: +1 (até o 3º nível)"
+                }
+              ]
+            },
+            {
+              "level": 16,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 3,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Atirador: +1 (até o 3º nível)"
                 }
               ]
             },
@@ -5662,6 +5945,18 @@
               ]
             },
             {
+              "level": 19,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 4,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Atirador: +1 (até o 4º nível)"
+                }
+              ]
+            },
+            {
               "level": 20,
               "grants": [
                 {
@@ -5669,6 +5964,13 @@
                   "abilityType": "PASSIVE",
                   "name": "Mestre da Infusão",
                   "description": "Um glifo de uma magia de dano de 2º nível na Astra: ao atacar com ela, 1 Bravura para conjurá-la sem Mana. Troca o glifo uma vez por descanso longo (1 hora)."
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 4,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Atirador: +1 (até o 4º nível)"
                 }
               ]
             }
@@ -5874,7 +6176,24 @@
             }
           ]
         }
-      ]
+      ],
+      "multiclass": {
+        "prerequisite": "Destreza 13 e Sabedoria 13",
+        "attributes": {
+          "DEXTERITY": 13,
+          "WISDOM": 13
+        },
+        "grants": [
+          {
+            "type": "ARMOR_PROFICIENCY",
+            "value": "LIGHT"
+          },
+          {
+            "type": "WEAPON_PROFICIENCY",
+            "value": "Armas de fogo"
+          }
+        ]
+      }
     },
     {
       "id": "BODHISATTVA",
@@ -6134,10 +6453,10 @@
           "level": 4,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 4º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "FEATURE",
@@ -6243,10 +6562,10 @@
           "level": 8,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 8º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "RESOURCE_CHOICE",
@@ -6329,10 +6648,10 @@
           "level": 12,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 12º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "RESOURCE_CHOICE",
@@ -6415,10 +6734,10 @@
           "level": 16,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 16º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "RESOURCE_CHOICE",
@@ -6484,10 +6803,10 @@
           "level": 19,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 19º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "RESOURCE_CHOICE",
@@ -7142,7 +7461,24 @@
             }
           ]
         }
-      ]
+      ],
+      "multiclass": {
+        "prerequisite": "Destreza 13 e Sabedoria 13",
+        "attributes": {
+          "DEXTERITY": 13,
+          "WISDOM": 13
+        },
+        "grants": [
+          {
+            "type": "WEAPON_PROFICIENCY",
+            "value": "Armas simples"
+          },
+          {
+            "type": "WEAPON_PROFICIENCY",
+            "value": "Espadas curtas"
+          }
+        ]
+      }
     },
     {
       "id": "BRUTE",
@@ -7300,10 +7636,10 @@
           "level": 4,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 4º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -7339,10 +7675,10 @@
           "level": 8,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 8º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "RESOURCE_CHOICE",
@@ -7367,10 +7703,10 @@
           "level": 12,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 12º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "RESOURCE_CHOICE",
@@ -7401,10 +7737,10 @@
           "level": 16,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 16º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -7434,10 +7770,10 @@
           "level": 19,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 19º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         }
@@ -7575,6 +7911,37 @@
                     "20": 30
                   },
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 3,
+                  "spellLevel": 1,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Bruto: +3 (até o 1º nível)"
+                }
+              ]
+            },
+            {
+              "level": 4,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 1,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Bruto: +1 (até o 1º nível)"
+                }
+              ]
+            },
+            {
+              "level": 5,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 0,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Truques de Bruto: +1"
                 }
               ]
             },
@@ -7590,6 +7957,30 @@
               ]
             },
             {
+              "level": 7,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 1,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Bruto: +1 (até o 1º nível)"
+                }
+              ]
+            },
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 2,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Bruto: +1 (até o 2º nível)"
+                }
+              ]
+            },
+            {
               "level": 10,
               "grants": [
                 {
@@ -7597,6 +7988,44 @@
                   "abilityType": "PASSIVE",
                   "name": "Resiliência Rúnica",
                   "description": "Num crítico com magia de ataque ou ao abater com magia, ganha metade do nível de Bruto + Constituição em PV temporários acumuláveis. Uma vez por descanso pleno (duas no 15º, três no 20º), salvaguarda de Constituição CD 12 + nível da magia para negá-la e curar o dobro do nível dela."
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 0,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Truques de Bruto: +1"
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 2,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Bruto: +1 (até o 2º nível)"
+                }
+              ]
+            },
+            {
+              "level": 11,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 2,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Bruto: +1 (até o 2º nível)"
+                }
+              ]
+            },
+            {
+              "level": 13,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 3,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Bruto: +1 (até o 3º nível)"
                 }
               ]
             },
@@ -7613,6 +8042,25 @@
                   "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
                   "attribute": "CONSTITUTION",
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 3,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Bruto: +1 (até o 3º nível)"
+                }
+              ]
+            },
+            {
+              "level": 16,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 3,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Bruto: +1 (até o 3º nível)"
                 }
               ]
             },
@@ -7633,6 +8081,18 @@
               ]
             },
             {
+              "level": 19,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 4,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Bruto: +1 (até o 4º nível)"
+                }
+              ]
+            },
+            {
               "level": 20,
               "grants": [
                 {
@@ -7640,6 +8100,13 @@
                   "abilityType": "PASSIVE",
                   "name": "Volatilidade Rúnica",
                   "description": "Ao atingir corpo a corpo, reação para conjurar uma magia (dano maximizado). Suas magias de área não te afetam. Constituição +4 (máximo 24)."
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 4,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Bruto: +1 (até o 4º nível)"
                 }
               ]
             }
@@ -7737,7 +8204,27 @@
             }
           ]
         }
-      ]
+      ],
+      "multiclass": {
+        "prerequisite": "Força 13",
+        "attributes": {
+          "STRENGTH": 13
+        },
+        "grants": [
+          {
+            "type": "ARMOR_PROFICIENCY",
+            "value": "SHIELD"
+          },
+          {
+            "type": "WEAPON_PROFICIENCY",
+            "value": "Armas simples"
+          },
+          {
+            "type": "WEAPON_PROFICIENCY",
+            "value": "Armas marciais"
+          }
+        ]
+      }
     },
     {
       "id": "HUNTER",
@@ -7896,10 +8383,10 @@
           "level": 4,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 4º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -7933,10 +8420,10 @@
           "level": 8,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 8º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "FEATURE",
@@ -7961,10 +8448,10 @@
           "level": 12,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 12º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -8015,10 +8502,10 @@
           "level": 16,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 16º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "FEATURE",
@@ -8051,10 +8538,10 @@
           "level": 19,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 19º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "FEATURE",
@@ -8288,6 +8775,25 @@
                     "18": 10
                   },
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 3,
+                  "spellLevel": 1,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Caçador: +3 (até o 1º nível)"
+                }
+              ]
+            },
+            {
+              "level": 4,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 1,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Caçador: +1 (até o 1º nível)"
                 }
               ]
             },
@@ -8299,6 +8805,13 @@
                   "abilityType": "PASSIVE",
                   "name": "Aceleração Rúnica",
                   "description": "Ao usar um Disparo Rúnico, faça um ataque adicional na mesma ação de Ataque."
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 0,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Truques de Caçador: +1"
                 }
               ]
             },
@@ -8310,6 +8823,25 @@
                   "abilityType": "PASSIVE",
                   "name": "Adepto Rúnico",
                   "description": "Ataque Extra (três ataques no 13º). Resistência a dano psíquico."
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 1,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Caçador: +1 (até o 1º nível)"
+                }
+              ]
+            },
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 2,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Caçador: +1 (até o 2º nível)"
                 }
               ]
             },
@@ -8325,6 +8857,25 @@
               ]
             },
             {
+              "level": 10,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 0,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Truques de Caçador: +1"
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 2,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Caçador: +1 (até o 2º nível)"
+                }
+              ]
+            },
+            {
               "level": 11,
               "grants": [
                 {
@@ -8334,6 +8885,13 @@
                   "description": "Ação bônus, 1 minuto, um efeito por vez: Atirador Rúnico (vantagem e +1d8 rúnico; só de novo após um descanso pleno), Escudo Rúnico (+2 de CA) ou Visão Arcana (enxerga na penumbra e escuridão, vantagem em salvaguardas de Destreza).",
                   "castingTime": "Ação bônus",
                   "duration": "1 minuto"
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 2,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Caçador: +1 (até o 2º nível)"
                 }
               ]
             },
@@ -8345,6 +8903,25 @@
                   "abilityType": "PASSIVE",
                   "name": "Égide Rúnica",
                   "description": "Uma vez por descanso longo ou pleno, reação para refazer uma salvaguarda falhada contra magia. Ao rolar iniciativa sem usos de Disparo Rúnico, recupera um."
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 3,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Caçador: +1 (até o 3º nível)"
+                }
+              ]
+            },
+            {
+              "level": 14,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 3,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Caçador: +1 (até o 3º nível)"
                 }
               ]
             },
@@ -8360,6 +8937,18 @@
               ]
             },
             {
+              "level": 16,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 3,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Caçador: +1 (até o 3º nível)"
+                }
+              ]
+            },
+            {
               "level": 17,
               "grants": [
                 {
@@ -8371,6 +8960,18 @@
               ]
             },
             {
+              "level": 19,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 4,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Caçador: +1 (até o 4º nível)"
+                }
+              ]
+            },
+            {
               "level": 20,
               "grants": [
                 {
@@ -8378,6 +8979,13 @@
                   "abilityType": "PASSIVE",
                   "name": "Flecha da Morte",
                   "description": "Em 8 horas, você confecciona uma Flecha da Morte (uma por vez, 48 horas): o alvo faz salvaguarda de Constituição CD 6 + proficiência + Sabedoria ou morre. A Sabedoria conta em dobro na CD dos Disparos Rúnicos e o Arco Rúnico causa metade do nível de Caçador em dano rúnico adicional."
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 4,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Caçador: +1 (até o 4º nível)"
                 }
               ]
             }
@@ -8533,7 +9141,51 @@
             }
           ]
         }
-      ]
+      ],
+      "multiclass": {
+        "prerequisite": "Destreza 13 e Sabedoria 13",
+        "attributes": {
+          "DEXTERITY": 13,
+          "WISDOM": 13
+        },
+        "grants": [
+          {
+            "type": "ARMOR_PROFICIENCY",
+            "value": "LIGHT"
+          },
+          {
+            "type": "ARMOR_PROFICIENCY",
+            "value": "MEDIUM"
+          },
+          {
+            "type": "ARMOR_PROFICIENCY",
+            "value": "SHIELD"
+          },
+          {
+            "type": "WEAPON_PROFICIENCY",
+            "value": "Armas simples"
+          },
+          {
+            "type": "WEAPON_PROFICIENCY",
+            "value": "Armas marciais"
+          },
+          {
+            "type": "SKILL_CHOICE",
+            "count": 1,
+            "options": [
+              "ATHLETICS",
+              "STEALTH",
+              "INSIGHT",
+              "INVESTIGATION",
+              "ANIMAL_HANDLING",
+              "NATURE",
+              "PERCEPTION",
+              "SURVIVAL"
+            ],
+            "label": "Multiclasse: uma perícia da classe"
+          }
+        ]
+      }
     },
     {
       "id": "FIGHTER",
@@ -8715,10 +9367,10 @@
           "level": 4,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 4º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "RESOURCE_CHOICE",
@@ -8754,10 +9406,10 @@
           "level": 8,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 8º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -8788,10 +9440,10 @@
           "level": 12,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 12º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "RESOURCE_CHOICE",
@@ -8805,10 +9457,10 @@
           "level": 14,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 14º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -8816,10 +9468,10 @@
           "level": 16,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 16º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "RESOURCE_CHOICE",
@@ -8833,10 +9485,10 @@
           "level": 19,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 19º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         }
@@ -9198,7 +9850,36 @@
             }
           ]
         }
-      ]
+      ],
+      "multiclass": {
+        "prerequisite": "Força 13 ou Destreza 13",
+        "anyAttributes": {
+          "STRENGTH": 13,
+          "DEXTERITY": 13
+        },
+        "grants": [
+          {
+            "type": "ARMOR_PROFICIENCY",
+            "value": "LIGHT"
+          },
+          {
+            "type": "ARMOR_PROFICIENCY",
+            "value": "MEDIUM"
+          },
+          {
+            "type": "ARMOR_PROFICIENCY",
+            "value": "SHIELD"
+          },
+          {
+            "type": "WEAPON_PROFICIENCY",
+            "value": "Armas simples"
+          },
+          {
+            "type": "WEAPON_PROFICIENCY",
+            "value": "Armas marciais"
+          }
+        ]
+      }
     },
     {
       "id": "MERCURIAL",
@@ -9354,10 +10035,10 @@
           "level": 4,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 4º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -9387,10 +10068,10 @@
           "level": 8,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 8º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -9398,10 +10079,10 @@
           "level": 10,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 10º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -9409,10 +10090,10 @@
           "level": 12,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 12º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -9446,10 +10127,10 @@
           "level": 16,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 16º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -9471,10 +10152,10 @@
           "level": 19,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 19º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         }
@@ -9956,6 +10637,25 @@
                   "abilityType": "PASSIVE",
                   "name": "Inspecionar Debilidades",
                   "description": "Você recebe proficiência em Investigação (ou especialidade). Observando um alvo por 1 minuto, faça um teste de Investigação (CD do Mestre) para obter uma informação à sua escolha (sem saber se é verdadeira): Classe de Armadura, Dimensões, Imunidade a Dano, Imunidade a Condição, Peso, Pontos de Vida, Resistência a Dano, Sentidos, Tipo e Subtipo ou Vulnerabilidade a Dano; o Mestre pode dar vantagem em salvaguardas contra esse alvo. Contra objetos, vantagem no teste. Numa rotina, você descobre turnos de guarda e envolvidos, com vantagem em testes de Carisma relacionados. +1 informação no 10º nível e outra no 16º."
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 3,
+                  "spellLevel": 1,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Mercurial: +3 (até o 1º nível)"
+                }
+              ]
+            },
+            {
+              "level": 4,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 1,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Mercurial: +1 (até o 1º nível)"
                 }
               ]
             },
@@ -9967,6 +10667,13 @@
                   "abilityType": "PASSIVE",
                   "name": "Duplipensar",
                   "description": "Vantagem em Enganação; alvos de Inspecionar Debilidades têm desvantagem na Intuição para perceber suas mentiras. Contra magias ou perícias que extraiam informação à força, some seu mod. de Inteligência às salvaguardas, e num sucesso você pode inserir uma informação falsa. Vantagem para detectar mentiras e se infiltrar em pensamentos."
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 0,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Truques de Mercurial: +1"
                 }
               ]
             },
@@ -9981,6 +10688,25 @@
                   "castingTime": "Ação bônus",
                   "usesFormula": "HALF_PROFICIENCY",
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 1,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Mercurial: +1 (até o 1º nível)"
+                }
+              ]
+            },
+            {
+              "level": 8,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 2,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Mercurial: +1 (até o 2º nível)"
                 }
               ]
             },
@@ -10002,6 +10728,25 @@
               ]
             },
             {
+              "level": 10,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 0,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Truques de Mercurial: +1"
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 2,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Mercurial: +1 (até o 2º nível)"
+                }
+              ]
+            },
+            {
               "level": 11,
               "grants": [
                 {
@@ -10012,6 +10757,13 @@
                   "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
                   "attribute": "INTELLIGENCE",
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 2,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Mercurial: +1 (até o 2º nível)"
                 }
               ]
             },
@@ -10023,6 +10775,37 @@
                   "abilityType": "PASSIVE",
                   "name": "Mentira Convincente",
                   "description": "Enganar afeta alvos adicionais iguais a metade do seu mod. de Inteligência (mínimo 1) com um só uso; você sabe quem resistiu e pode tentar de novo por 3 Mana. Alvos de Inspecionar Debilidades fazem a salvaguarda com desvantagem. Quem tentar desfazer a memória com remover maldição ou restauração maior faz um teste contra CD 10 + proficiência + seu mod. de Inteligência; na falha, a memória fica e ele não sabe."
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 3,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Mercurial: +1 (até o 3º nível)"
+                }
+              ]
+            },
+            {
+              "level": 14,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 3,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Mercurial: +1 (até o 3º nível)"
+                }
+              ]
+            },
+            {
+              "level": 16,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 3,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Mercurial: +1 (até o 3º nível)"
                 }
               ]
             },
@@ -10038,6 +10821,18 @@
               ]
             },
             {
+              "level": 19,
+              "grants": [
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 4,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Mercurial: +1 (até o 4º nível)"
+                }
+              ]
+            },
+            {
               "level": 20,
               "grants": [
                 {
@@ -10045,6 +10840,13 @@
                   "abilityType": "PASSIVE",
                   "name": "Imbuir Sombra",
                   "description": "Seu Ataque Furtivo funciona com magias de ataque e, num crítico, causa o dano de Ataque Furtivo como dano sombrio adicional. Ou seus ataques com arma ou magia podem causar dano sombrio. Ao Desengajar, você fica com os efeitos de invisibilidade até o fim do seu próximo turno."
+                },
+                {
+                  "type": "SPELL_CHOICE",
+                  "count": 1,
+                  "spellLevel": 4,
+                  "value": "CLASS_OR_MYSTERIES",
+                  "label": "Magias de Mercurial: +1 (até o 4º nível)"
                 }
               ]
             }
@@ -10186,7 +10988,41 @@
             }
           ]
         }
-      ]
+      ],
+      "multiclass": {
+        "prerequisite": "Destreza 13",
+        "attributes": {
+          "DEXTERITY": 13
+        },
+        "grants": [
+          {
+            "type": "ARMOR_PROFICIENCY",
+            "value": "LIGHT"
+          },
+          {
+            "type": "SKILL_CHOICE",
+            "count": 1,
+            "options": [
+              "ACROBATICS",
+              "ATHLETICS",
+              "PERFORMANCE",
+              "DECEPTION",
+              "STEALTH",
+              "INTIMIDATION",
+              "INSIGHT",
+              "INVESTIGATION",
+              "PERCEPTION",
+              "PERSUASION",
+              "SLEIGHT_OF_HAND"
+            ],
+            "label": "Multiclasse: uma perícia da classe"
+          },
+          {
+            "type": "CRAFT",
+            "value": "chaveiro"
+          }
+        ]
+      }
     },
     {
       "id": "SHAMAN",
@@ -10349,6 +11185,32 @@
               "value": "INVOCACAO",
               "count": 1,
               "label": "Invocação Espiritual (2º nível)"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 3,
+              "spellLevel": 1,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Magias de Xamã: +3 (até o 1º nível)"
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 0,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Truques de Xamã: +1"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 1,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Magias de Xamã: +1 (até o 1º nível)"
             }
           ]
         },
@@ -10356,10 +11218,10 @@
           "level": 4,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 4º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             },
             {
               "type": "FEATURE",
@@ -10367,6 +11229,13 @@
               "name": "Barreira Etérea",
               "description": "Ao ser alvo de feitiço, ataque ou área com dano espiritual, reação e 1 Ki para ficar imune a danos espirituais até o fim da rodada.",
               "castingTime": "Reação"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 1,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Magias de Xamã: +1 (até o 1º nível)"
             }
           ]
         },
@@ -10378,6 +11247,13 @@
               "value": "INVOCACAO",
               "count": 1,
               "label": "Invocação Espiritual (5º nível)"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 2,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Magias de Xamã: +1 (até o 2º nível)"
             }
           ]
         },
@@ -10391,6 +11267,20 @@
               "description": "Ação: canalize um Grande Espírito com que tenha conexão por até 1 hora, convencendo-o (teste de Carisma) ou forçando (9 Ki e ação bônus, com a salvaguarda da tabela Dificuldade dos Grandes Espíritos; custo mínimo 2). Com o totem, ignora componentes materiais não consumidos de feitiços, invocações e sutras.",
               "castingTime": "Ação",
               "duration": "1 hora"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 0,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Truques de Xamã: +1"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 2,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Magias de Xamã: +1 (até o 2º nível)"
             }
           ]
         },
@@ -10398,10 +11288,17 @@
           "level": 8,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 8º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 2,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Magias de Xamã: +1 (até o 2º nível)"
             }
           ]
         },
@@ -10413,6 +11310,25 @@
               "value": "INVOCACAO",
               "count": 1,
               "label": "Invocação Espiritual (9º nível)"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 3,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Magias de Xamã: +1 (até o 3º nível)"
+            }
+          ]
+        },
+        {
+          "level": 11,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 3,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Magias de Xamã: +1 (até o 3º nível)"
             }
           ]
         },
@@ -10420,10 +11336,10 @@
           "level": 12,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 12º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -10439,6 +11355,20 @@
               "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
               "attribute": "WISDOM",
               "recharge": "LONG_REST"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 0,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Truques de Xamã: +1"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 4,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Magias de Xamã: +1 (até o 4º nível)"
             }
           ]
         },
@@ -10450,6 +11380,13 @@
               "value": "INVOCACAO",
               "count": 1,
               "label": "Invocação Espiritual (14º nível)"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 4,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Magias de Xamã: +1 (até o 4º nível)"
             }
           ]
         },
@@ -10457,10 +11394,41 @@
           "level": 16,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 16º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 4,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Magias de Xamã: +1 (até o 4º nível)"
+            }
+          ]
+        },
+        {
+          "level": 17,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 5,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Magias de Xamã: +1 (até o 5º nível)"
+            }
+          ]
+        },
+        {
+          "level": 18,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 5,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Magias de Xamã: +1 (até o 5º nível)"
             }
           ]
         },
@@ -10468,10 +11436,10 @@
           "level": 19,
           "grants": [
             {
-              "type": "FEATURE",
-              "abilityType": "PASSIVE",
-              "name": "Aprimoramento",
-              "description": "No 19º nível, você pode aumentar um valor de atributo, à sua escolha, em 2 ou aumentar dois valores de atributo em 1. Como padrão, você não pode elevar um valor de atributo acima de 20 com essa característica. Alternativamente, você pode escolher um dos Aprimoramentos Gerais do Capítulo 5: Personalização - Aprimoramentos."
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
             }
           ]
         },
@@ -10483,6 +11451,13 @@
               "value": "INVOCACAO",
               "count": 1,
               "label": "Invocação Espiritual (20º nível)"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 5,
+              "value": "CLASS_OR_MYSTERIES",
+              "label": "Magias de Xamã: +1 (até o 5º nível)"
             }
           ]
         }
@@ -11060,7 +12035,38 @@
             }
           ]
         }
-      ]
+      ],
+      "multiclass": {
+        "prerequisite": "Constituição 13 e Sabedoria 13",
+        "attributes": {
+          "CONSTITUTION": 13,
+          "WISDOM": 13
+        },
+        "grants": [
+          {
+            "type": "WEAPON_PROFICIENCY",
+            "value": "Armas simples"
+          },
+          {
+            "type": "SKILL_CHOICE",
+            "count": 1,
+            "options": [
+              "ACROBATICS",
+              "ATHLETICS",
+              "STEALTH",
+              "INTIMIDATION",
+              "INSIGHT",
+              "MEDICINE",
+              "NATURE",
+              "PERCEPTION",
+              "PERSUASION",
+              "RELIGION",
+              "SURVIVAL"
+            ],
+            "label": "Multiclasse: uma perícia da classe"
+          }
+        ]
+      }
     }
   ],
   "backgrounds": [

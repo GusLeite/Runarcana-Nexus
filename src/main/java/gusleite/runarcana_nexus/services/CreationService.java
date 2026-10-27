@@ -18,11 +18,13 @@ import gusleite.runarcana_nexus.model.player.Background;
 import gusleite.runarcana_nexus.model.player.Character;
 import gusleite.runarcana_nexus.model.player.CharacterAbility;
 import gusleite.runarcana_nexus.model.player.CharacterSkill;
+import gusleite.runarcana_nexus.model.player.ClassLevel;
 import gusleite.runarcana_nexus.model.roles.CharacterClass;
 import gusleite.runarcana_nexus.record.CharacterResponse;
 import gusleite.runarcana_nexus.record.CreationPreview;
 import gusleite.runarcana_nexus.record.CreationPreview.AttributeLine;
 import gusleite.runarcana_nexus.record.CreationPreview.ChoiceLine;
+import gusleite.runarcana_nexus.record.CreationPreview.ClassLevelLine;
 import gusleite.runarcana_nexus.record.CreationPreview.EquipmentLine;
 import gusleite.runarcana_nexus.record.CreationPreview.FeatureLine;
 import gusleite.runarcana_nexus.record.CreationPreview.HeritageLine;
@@ -36,6 +38,9 @@ import gusleite.runarcana_nexus.record.CreationPreview.TraitBudgetStatus;
 import gusleite.runarcana_nexus.record.CreationPreview.TraitLine;
 import gusleite.runarcana_nexus.record.CreationPreview.TraitStatus;
 import gusleite.runarcana_nexus.record.CreationRequest;
+import gusleite.runarcana_nexus.record.CreationRequest.LevelPick;
+import gusleite.runarcana_nexus.record.LevelUpPreview;
+import gusleite.runarcana_nexus.record.LevelUpRequest;
 import gusleite.runarcana_nexus.record.SpeedLine;
 import gusleite.runarcana_nexus.record.CreationRequest.HeritagePick;
 import gusleite.runarcana_nexus.record.CreationRequest.TraitPick;
@@ -189,13 +194,185 @@ public class CreationService {
             s.setExpertise(b.expertise.contains(skill));
             c.getSkills().add(s);
         }
+        c.getClassLevels().addAll(classLevelsOf(b));
         characters.save(c);
 
         for (Sourced<Grant> f : b.features) {
-            abilities.save(abilityFrom(c, f.value(), LEVEL_ONE_PROFICIENCY));
+            CharacterAbility a = abilityFrom(c, f.value(), b.proficiency(), b.scale(f.source()));
+            a.setSource(f.source());
+            abilities.save(a);
         }
         startingEquipment.give(c, b.equipment);
         return CharacterResponse.of(c);
+    }
+
+    // ---------- Subida de nível (rota do mestre) ----------
+
+    // A ficha recalculada com os níveis novos, sem salvar.
+    public LevelUpPreview levelUpPreview(Long characterId, LevelUpRequest request) {
+        Character c = leveled(characterId);
+        CreationRequest base = buildOf(c);
+        Build before = evaluate(base);
+        Build after = evaluate(withLevels(base, request));
+        Map<String, Integer> had = new LinkedHashMap<>();
+        before.features.forEach(f -> had.merge(f.value().name() + "|" + f.source(), 1, Integer::sum));
+        List<FeatureLine> lines = after.toPreview().features();
+        List<FeatureLine> fresh = new ArrayList<>();
+        for (FeatureLine f : lines) {
+            String k = f.name() + "|" + f.source();
+            if (had.getOrDefault(k, 0) > 0) had.merge(k, -1, Integer::sum);
+            else fresh.add(f);
+        }
+        List<String> changes = new ArrayList<>();
+        for (Attribute a : Attribute.values()) {
+            int now = attributeOf(c, a);
+            if (after.total(a) != now) changes.add(ATTRIBUTE_ABBREVIATIONS.get(a) + " " + now + " → " + after.total(a));
+        }
+        int newMax = after.klass == null ? c.getMaxHp() : after.maxHp();
+        return new LevelUpPreview(after.toPreview(), c.getLevel(), after.level, c.getMaxHp(), newMax, newMax - c.getMaxHp(),
+                List.copyOf(changes), List.copyOf(fresh));
+    }
+
+    // Aplica os níveis novos: refaz atributos, PV (a diferença também no PV atual), perícias, proficiências e as
+    // habilidades do assistente. Não mexe em ouro, inventário, inspiração, defesa escolhida nem nas habilidades
+    // que o mestre cadastrou à mão; os usos gastos continuam gastos.
+    @Transactional
+    public CharacterResponse levelUp(Long characterId, LevelUpRequest request) {
+        Character c = leveled(characterId);
+        CreationRequest next = withLevels(buildOf(c), request);
+        Build b = evaluate(next);
+        if (!b.errors.isEmpty()) {
+            throw ApiException.badRequest(b.errors.getFirst());
+        }
+        int oldMax = c.getMaxHp();
+        int newMax = b.maxHp();
+        c.setLevel(b.level);
+        c.setMaxHp(newMax);
+        c.setCurrentHp(Math.max(0, Math.min(newMax, c.getCurrentHp() + newMax - oldMax)));
+        c.setStr(b.total(Attribute.STRENGTH));
+        c.setDex(b.total(Attribute.DEXTERITY));
+        c.setCon(b.total(Attribute.CONSTITUTION));
+        c.setIntel(b.total(Attribute.INTELLIGENCE));
+        c.setWis(b.total(Attribute.WISDOM));
+        c.setCha(b.total(Attribute.CHARISMA));
+        c.setSubclass(b.subclass == null ? null : b.subclass.name());
+        c.setSpeed(b.speed());
+        c.getOtherSpeeds().clear();
+        c.getOtherSpeeds().putAll(b.otherSpeedsTotal());
+        c.getArmorRules().clear();
+        c.getArmorRules().addAll(b.armorRules);
+        c.setSize(b.size);
+        replace(c.getArmorProficiencies(), b.armorProficiencies);
+        replace(c.getWeaponProficiencies(), b.weaponProficiencies);
+        replace(c.getLanguages(), b.languages);
+        Map<String, String> craftNames = new LinkedHashMap<>();
+        rules.catalog().craftsOrEmpty().forEach(k -> craftNames.put(k.id(), k.name()));
+        replace(c.getCrafts(), b.crafts.stream().map(id -> craftNames.getOrDefault(id, id)).toList());
+        replace(c.getCraftExpertise(), b.craftExpertise.stream().map(id -> craftNames.getOrDefault(id, id)).toList());
+        c.setHeritagePoints(b.heritagePoints - b.heritagesSpent());
+        replace(c.getHeritages(), b.heritages.stream().map(CreationService::displayName).toList());
+        replace(c.getSavingThrows(), b.saves.keySet());
+        // Perícias: as linhas que já existem são atualizadas (sem apagar), as novas entram.
+        for (CharacterSkill s : c.getSkills()) {
+            s.setProficient(b.skills.containsKey(s.getSkillType()));
+            s.setExpertise(b.expertise.contains(s.getSkillType()));
+        }
+        for (SkillType skill : b.skills.keySet()) {
+            if (c.getSkills().stream().anyMatch(s -> s.getSkillType() == skill)) continue;
+            CharacterSkill s = new CharacterSkill();
+            s.setCharacter(c);
+            s.setSkillType(skill);
+            s.setProficient(true);
+            s.setExpertise(b.expertise.contains(skill));
+            c.getSkills().add(s);
+        }
+        c.getClassLevels().clear();
+        c.getClassLevels().addAll(classLevelsOf(b));
+        c.setBuild(JSON.writeValueAsString(next));
+        characters.save(c);
+        syncAbilities(c, b);
+        return CharacterResponse.of(c);
+    }
+
+    private static final Map<Attribute, String> ATTRIBUTE_ABBREVIATIONS = Map.of(Attribute.STRENGTH, "FOR",
+            Attribute.DEXTERITY, "DES", Attribute.CONSTITUTION, "CON", Attribute.INTELLIGENCE, "INT", Attribute.WISDOM, "SAB",
+            Attribute.CHARISMA, "CAR");
+
+    private Character leveled(Long characterId) {
+        return characters.findById(characterId).orElseThrow(() -> ApiException.notFound("Personagem não encontrado."));
+    }
+
+    // As escolhas guardadas na criação (e nos níveis anteriores).
+    private CreationRequest buildOf(Character c) {
+        if (c.getBuild() == null) {
+            throw ApiException.badRequest("Esta ficha não foi criada pelo assistente: a subida de nível precisa das escolhas da criação.");
+        }
+        return JSON.readValue(c.getBuild(), CreationRequest.class);
+    }
+
+    private static CreationRequest withLevels(CreationRequest base, LevelUpRequest request) {
+        if (request == null || request.levelsOrEmpty().isEmpty()) throw ApiException.badRequest("Informe o nível novo.");
+        if (1 + base.levelsOrEmpty().size() + request.levelsOrEmpty().size() > MAX_LEVEL) {
+            throw ApiException.badRequest("O nível máximo é o " + MAX_LEVEL + "º.");
+        }
+        CreationRequest next = base;
+        for (LevelPick pick : request.levelsOrEmpty()) next = next.withLevel(pick);
+        return next;
+    }
+
+    private static int attributeOf(Character c, Attribute a) {
+        return switch (a) {
+            case STRENGTH -> c.getStr();
+            case DEXTERITY -> c.getDex();
+            case CONSTITUTION -> c.getCon();
+            case INTELLIGENCE -> c.getIntel();
+            case WISDOM -> c.getWis();
+            case CHARISMA -> c.getCha();
+        };
+    }
+
+    private static <T> void replace(java.util.Collection<T> target, java.util.Collection<T> values) {
+        target.clear();
+        target.addAll(values);
+    }
+
+    private static List<ClassLevel> classLevelsOf(Build b) {
+        return b.classLevelLines().stream().map(l -> new ClassLevel(l.classId(), l.name(), l.level(), l.subclass())).toList();
+    }
+
+    // Habilidades do assistente refeitas no nível novo. Cada uma acha a antiga pelo nome (a de mesma fonte primeiro;
+    // fichas de antes desta mudança não têm fonte) e é atualizada no lugar, mantendo ícone e usos gastos. As antigas
+    // com fonte que não existem mais saem; as sem fonte que sobraram são do mestre e ficam.
+    private void syncAbilities(Character c, Build b) {
+        List<CharacterAbility> existing = new ArrayList<>(abilities.findByCharacterOrderByIdAsc(c));
+        for (Sourced<Grant> f : b.features) {
+            CharacterAbility fresh = abilityFrom(c, f.value(), b.proficiency(), b.scale(f.source()));
+            CharacterAbility old = existing.stream().filter(a -> a.getName().equals(fresh.getName()) && f.source().equals(a.getSource()))
+                    .findFirst()
+                    .orElseGet(() -> existing.stream().filter(a -> a.getName().equals(fresh.getName()) && a.getSource() == null)
+                            .findFirst().orElse(null));
+            if (old == null) {
+                fresh.setSource(f.source());
+                abilities.save(fresh);
+                continue;
+            }
+            existing.remove(old);
+            Integer spent = old.getMaxUses() == null || old.getUsesLeft() == null ? null : old.getMaxUses() - old.getUsesLeft();
+            old.setType(fresh.getType());
+            old.setSpellLevel(fresh.getSpellLevel());
+            old.setCastingTime(fresh.getCastingTime());
+            old.setAbilityRange(fresh.getAbilityRange());
+            old.setDuration(fresh.getDuration());
+            old.setComponents(fresh.getComponents());
+            old.setDamage(fresh.getDamage());
+            old.setDescription(fresh.getDescription());
+            old.setRecharge(fresh.getRecharge());
+            old.setMaxUses(fresh.getMaxUses());
+            old.setUsesLeft(fresh.getMaxUses() == null ? null : Math.max(0, fresh.getMaxUses() - (spent == null ? 0 : spent)));
+            old.setSource(f.source());
+            abilities.save(old);
+        }
+        existing.stream().filter(a -> a.getSource() != null).forEach(abilities::delete);
     }
 
     // ---------- cálculo ----------
@@ -206,6 +383,7 @@ public class CreationService {
         b.roundUp = rules.roundsUp();
         b.wealth = r.startingWealth();
         Map<String, List<String>> picks = r.choices() == null ? Map.of() : r.choices();
+        b.level = 1 + r.levelsOrEmpty().size();
 
         b.origin = pick(r.originId(), rules::origin, "Escolha uma origem.", "Origem desconhecida.", b.errors);
         if (b.origin != null && !b.origin.lineagesOrEmpty().isEmpty()) {
@@ -243,6 +421,16 @@ public class CreationService {
         if (b.subclass != null) sources.add(new Source("subclass:" + b.subclass.id(), subclassLabel(b.klass) + ": " + b.subclass.name(), b.subclass.grantsOrEmpty()));
         if (b.background != null) sources.add(new Source("background:" + b.background.id(), "Passado: " + b.background.name(), b.background.grantsOrEmpty()));
         if (!catalog.runicNatureOrEmpty().isEmpty()) sources.add(new Source("runic-nature", "Natureza Rúnica", catalog.runicNatureOrEmpty()));
+        if (b.klass != null) {
+            b.classLevels.put(b.klass.id(), 1);
+            b.classById.put(b.klass.id(), b.klass);
+            if (b.subclass != null) b.subclassByClass.put(b.klass.id(), b.subclass);
+            b.sourceClass.put("Classe: " + b.klass.name(), b.klass.id());
+            if (b.subclass != null) b.sourceClass.put(subclassLabel(b.klass) + ": " + b.subclass.name(), b.klass.id());
+        }
+        Map<String, List<String>> allPicks = new LinkedHashMap<>(picks);
+        levelSources(r, b, sources, allPicks);
+        picks = allPicks;
 
         resourceSources(sources, picks, b);
         baseAttributes(r, catalog.attributeMethods(), b);
@@ -251,7 +439,7 @@ public class CreationService {
         for (Source s : sources) {
             for (Grant g : s.grants()) {
                 switch (g.type()) {
-                    case ATTRIBUTE -> b.bonus.merge(g.attribute(), valueAt(g, g.amount(), CREATION_LEVEL), Integer::sum);
+                    case ATTRIBUTE -> b.bonus.merge(g.attribute(), valueAt(g, g.amount(), b.scale(s.label())), Integer::sum);
                     case SKILL -> {
                         // "Caso já tenha, especialidade": decide no fim, depois de todas as perícias.
                         if (Boolean.TRUE.equals(g.expertise())) b.deferred.add(new Deferred(null, g, s.label()));
@@ -269,8 +457,8 @@ public class CreationService {
                         // value: tipo de deslocamento (sem value = caminhada; ALL = todos os que o personagem tiver).
                         // usesFormula PROFICIENCY: feet × bônus de proficiência (Brisa de Impulso: 5 pés × bônus).
                         // valueByLevel: pés pelo nível (Aspecto Feral: Natação 30 → 35 no 6º...); o aumento "se já tiver" cresce junto.
-                        double base = valueAt(g, g.feet() == null ? null : g.feet().intValue(), CREATION_LEVEL);
-                        double feet = g.usesFormula() == UsesFormula.PROFICIENCY ? base * LEVEL_ONE_PROFICIENCY : base;
+                        double base = valueAt(g, g.feet() == null ? null : g.feet().intValue(), b.scale(s.label()));
+                        double feet = g.usesFormula() == UsesFormula.PROFICIENCY ? base * b.proficiency() : base;
                         String mode = g.value() == null ? "WALK" : g.value();
                         switch (mode) {
                             case "WALK" -> b.speedBonus += feet;
@@ -300,7 +488,7 @@ public class CreationService {
                         if (g.armor() != null && g.armor().feature() != null) b.optionArmor.add(g);
                         else if (!g.hasOptions()) b.armorRules.add(armorRule(g, null));
                     }
-                    case AC_BONUS -> b.armorRules.add(armorBonus(g));
+                    case AC_BONUS -> b.armorRules.add(armorBonus(g, b.scale(s.label())));
                     case HERITAGE_POINTS -> {
                         b.heritagePoints += g.amount();
                         b.pools.merge(g.value() == null ? "ANY" : g.value(), g.amount(), Integer::sum);
@@ -468,6 +656,7 @@ public class CreationService {
         }
         resourceChoices(b);
         spellChoices(b);
+        multiclassChecks(b);
 
         if (blank(r.characterName())) b.errors.add("Dê um nome ao personagem.");
         if (r.age() == null || r.age() < 1) b.errors.add("Informe a idade (1 ou mais).");
@@ -551,11 +740,15 @@ public class CreationService {
 
     // Bônus de CA (AC_BONUS): amount e/ou o bônus de proficiência (usesFormula PROFICIENCY).
     static ArmorRule armorBonus(Grant g) {
+        return armorBonus(g, CREATION_LEVEL);
+    }
+
+    static ArmorRule armorBonus(Grant g, int level) {
         ArmorFormula f = g.armor();
         ArmorRule r = new ArmorRule();
         r.setName(g.name() != null ? g.name() : g.label() != null ? g.label() : "Bônus de CA");
         r.setBonus(true);
-        r.setAmount(valueAt(g, g.amount(), CREATION_LEVEL));
+        r.setAmount(valueAt(g, g.amount(), level));
         r.setProficiency(g.usesFormula() == UsesFormula.PROFICIENCY || (f != null && Boolean.TRUE.equals(f.proficiency())));
         r.setUnarmoredOnly(f != null && Boolean.TRUE.equals(f.unarmoredOnly()));
         r.setBlocksArmor(f != null && Boolean.TRUE.equals(f.blocksArmor()));
@@ -708,13 +901,133 @@ public class CreationService {
 
     // ---------- Recursos de classe (Capítulo 5) ----------
 
-    private static final Map<String, String> RESOURCE_KINDS = Map.of(
-            "IRA", "Ira", "SUTRA", "Sutra", "VEL", "Vel", "TECNICA", "Técnica de Combate", "INVOCACAO", "Invocação",
-            "GRANDE_ESPIRITO", "Grande Espírito", "ASPECTO_TERRESTRE", "Aspecto Terrestre",
-            "ASPECTO_AQUATICO", "Aspecto Aquático", "ASPECTO_ALADO", "Aspecto Alado", "RUNA", "Runa");
+    private static final Map<String, String> RESOURCE_KINDS = Map.ofEntries(
+            Map.entry("IRA", "Ira"), Map.entry("SUTRA", "Sutra"), Map.entry("VEL", "Vel"), Map.entry("TECNICA", "Técnica de Combate"),
+            Map.entry("INVOCACAO", "Invocação"), Map.entry("GRANDE_ESPIRITO", "Grande Espírito"),
+            Map.entry("ASPECTO_TERRESTRE", "Aspecto Terrestre"), Map.entry("ASPECTO_AQUATICO", "Aspecto Aquático"),
+            Map.entry("ASPECTO_ALADO", "Aspecto Alado"), Map.entry("RUNA", "Runa"), Map.entry("APRIMORAMENTO", "Aprimoramento"));
 
     static String resourceKindLabel(String kind) {
         return RESOURCE_KINDS.getOrDefault(kind, kind);
+    }
+
+    // ---------- Subida de nível ----------
+
+    // Níveis do personagem acima do 20º não existem.
+    static final int MAX_LEVEL = 20;
+    // Níveis do personagem que dão 1 ponto de Herança (de Origem ou Geral).
+    static final Set<Integer> HERITAGE_LEVELS = Set.of(5, 9, 13, 17);
+    // O que a classe NÃO dá quando entra por multiclasse (proficiências, perícias, salvaguardas, equipamento e ouro).
+    private static final Set<GrantType> NOT_ON_MULTICLASS = Set.of(GrantType.SAVING_THROW, GrantType.SAVING_THROW_CHOICE,
+            GrantType.SKILL, GrantType.SKILL_CHOICE, GrantType.ARMOR_PROFICIENCY, GrantType.WEAPON_PROFICIENCY, GrantType.CRAFT,
+            GrantType.CRAFT_CHOICE, GrantType.EQUIPMENT, GrantType.EQUIPMENT_CHOICE, GrantType.GOLD, GrantType.LANGUAGE,
+            GrantType.LANGUAGE_CHOICE);
+
+    // Cada nível ganho vira fontes "level:N:...": os ganhos daquele nível da classe e da subclasse (ou, numa classe
+    // nova, o 1º nível dela sem as proficiências iniciais + as de multiclasse), os ganhos da origem e da linhagem no
+    // nível do personagem e o ponto de Herança dos níveis 5, 9, 13 e 17. As escolhas do nível entram nos picks.
+    private void levelSources(CreationRequest r, Build b, List<Source> sources, Map<String, List<String>> picks) {
+        List<LevelPick> levels = r.levelsOrEmpty();
+        if (levels.isEmpty()) return;
+        if (b.klass == null) return;
+        if (1 + levels.size() > MAX_LEVEL) b.errors.add("O nível máximo é o " + MAX_LEVEL + "º.");
+        for (int i = 0; i < levels.size(); i++) {
+            LevelPick lp = levels.get(i);
+            int charLevel = i + 2;
+            String prefix = "level:" + charLevel + ":";
+            if (lp == null) {
+                b.errors.add("Falta o " + charLevel + "º nível.");
+                continue;
+            }
+            if (lp.choices() != null) lp.choices().forEach(picks::put);
+            RuleClass k = blank(lp.classId()) ? b.klass : rules.characterClass(lp.classId()).orElse(null);
+            if (k == null) {
+                b.errors.add(charLevel + "º nível: classe desconhecida.");
+                continue;
+            }
+            int n = b.classLevels.merge(k.id(), 1, Integer::sum);
+            b.classById.put(k.id(), k);
+            String classLabel = "Classe: " + k.name() + " (" + n + "º nível)";
+            b.sourceClass.put(classLabel, k.id());
+            if (n == 1) {
+                // Classe nova (multiclasse): 1º nível sem o que é só de quem começa nela, mais as proficiências da tabela.
+                b.multiclassed.add(k);
+                List<Grant> grants = new ArrayList<>(k.grantsOrEmpty().stream().filter(g -> !NOT_ON_MULTICLASS.contains(g.type())).toList());
+                if (k.multiclass() != null) grants.addAll(k.multiclass().grantsOrEmpty());
+                sources.add(new Source(prefix + "class:" + k.id(), classLabel, grants));
+                if (!k.subclassesOrEmpty().isEmpty()) {
+                    RuleLineage sub = k.subclassesOrEmpty().stream().filter(x -> x.id().equalsIgnoreCase(String.valueOf(lp.subclassId()))).findFirst().orElse(null);
+                    if (sub == null) {
+                        b.errors.add(charLevel + "º nível: escolha " + subclassLabel(k) + " de " + k.name() + ".");
+                    } else {
+                        b.subclassByClass.put(k.id(), sub);
+                        String subLabel = subclassLabel(k) + ": " + sub.name();
+                        b.sourceClass.put(subLabel, k.id());
+                        sources.add(new Source(prefix + "subclass:" + sub.id(), subLabel,
+                                sub.grantsOrEmpty().stream().filter(g -> !NOT_ON_MULTICLASS.contains(g.type())).toList()));
+                    }
+                }
+            } else {
+                k.levelsOrEmpty().stream().filter(l -> l.level() != null && l.level() == n).findFirst()
+                        .ifPresent(l -> sources.add(new Source(prefix + "class:" + k.id(), classLabel, l.grants() == null ? List.of() : l.grants())));
+                RuleLineage sub = b.subclassByClass.get(k.id());
+                if (sub != null) {
+                    String subLabel = subclassLabel(k) + ": " + sub.name() + " (" + n + "º nível)";
+                    b.sourceClass.put(subLabel, k.id());
+                    sub.levelsOrEmpty().stream().filter(l -> l.level() != null && l.level() == n).findFirst()
+                            .ifPresent(l -> sources.add(new Source(prefix + "subclass:" + sub.id(), subLabel, l.grants() == null ? List.of() : l.grants())));
+                }
+            }
+            if (b.origin != null) b.origin.levelsOrEmpty().stream().filter(l -> l.level() != null && l.level() == charLevel).findFirst()
+                    .ifPresent(l -> sources.add(new Source(prefix + "origin:" + b.origin.id(), "Origem: " + b.origin.name() + " (" + charLevel + "º nível)",
+                            l.grants() == null ? List.of() : l.grants())));
+            if (b.lineage != null) b.lineage.levelsOrEmpty().stream().filter(l -> l.level() != null && l.level() == charLevel).findFirst()
+                    .ifPresent(l -> sources.add(new Source(prefix + "lineage:" + b.lineage.id(), "Linhagem: " + b.lineage.name() + " (" + charLevel + "º nível)",
+                            l.grants() == null ? List.of() : l.grants())));
+            if (HERITAGE_LEVELS.contains(charLevel)) {
+                sources.add(new Source(prefix + "heritage", "Herança do " + charLevel + "º nível",
+                        List.of(new Grant(GrantType.HERITAGE_POINTS, null, 1, null, null, null, "ORIGIN", null, null, null, null,
+                                null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+                                null, null, null, null, null, null, null))));
+            }
+            // Dado de vida: rolado no app ou na mesa; vale de 1 até o lado do dado da classe do nível.
+            int die = k.hitDie() == null ? 0 : k.hitDie();
+            if (lp.hpRoll() == null || lp.hpRoll() < 1 || lp.hpRoll() > die) {
+                b.errors.add(charLevel + "º nível: informe o dado de vida (1d" + die + ").");
+                b.hpRolls.add(0);
+            } else {
+                b.hpRolls.add(lp.hpRoll());
+            }
+        }
+    }
+
+    // Multiclasse: o pré-requisito vale para cada classe nova e para as que o personagem já tinha (com os atributos
+    // finais). Nenhum atributo passa de 20.
+    private void multiclassChecks(Build b) {
+        if (!b.multiclassed.isEmpty()) {
+            for (RuleClass k : b.classById.values()) {
+                String reason = multiclassBlock(k, b);
+                if (reason != null) b.errors.add("Multiclasse com " + k.name() + ": " + reason + ".");
+            }
+        }
+        for (Attribute a : Attribute.values()) {
+            if (b.total(a) > 20) b.errors.add(a.name() + " passa de 20.");
+        }
+    }
+
+    static String multiclassBlock(RuleClass k, Build b) {
+        RuleClass.Multiclass m = k.multiclass();
+        if (m == null) return null;
+        String reason = "pré-requisito " + (m.prerequisite() == null ? "não atendido" : m.prerequisite());
+        if (m.attributes() != null && m.attributes().entrySet().stream().anyMatch(e -> b.total(e.getKey()) < e.getValue())) return reason;
+        if (m.anyAttributes() != null && !m.anyAttributes().isEmpty()
+                && m.anyAttributes().entrySet().stream().noneMatch(e -> b.total(e.getKey()) >= e.getValue())) return reason;
+        if (m.anotherAttribute() != null) {
+            Set<Attribute> used = m.attributes() == null ? Set.of() : m.attributes().keySet();
+            boolean other = Arrays.stream(Attribute.values()).anyMatch(a -> !used.contains(a) && b.total(a) >= m.anotherAttribute());
+            if (!other) return reason;
+        }
+        return null;
     }
 
     // ---------- Magias ----------
@@ -756,7 +1069,8 @@ public class CreationService {
             Grant g = c.grant();
             int level = g.spellLevel() == null ? 0 : g.spellLevel();
             String from = g.value() == null ? "CLASS_OR_MYSTERIES" : g.value();
-            String classId = b.klass == null ? null : b.klass.id();
+            // Lista da classe de onde vem a escolha (multiclasse: a da outra classe).
+            String classId = b.sourceClass.getOrDefault(c.source(), b.klass == null ? null : b.klass.id());
             List<String> options = new ArrayList<>();
             Map<String, String> names = new LinkedHashMap<>();
             for (RuleMagic.Spell sp : magic.spellsOrEmpty()) {
@@ -811,8 +1125,12 @@ public class CreationService {
                     Optional<RuleResource> found = rules.resource(id);
                     if (found.isEmpty() || !found.get().kind().equals(g.value())) continue;
                     RuleResource res = found.get();
-                    if (!b.resourceIds.add(res.id())) continue;
-                    sources.add(new Source("resource:" + res.id(), resourceKindLabel(res.kind()) + ": " + res.name(), resourceGrants(res)));
+                    // Repetível (o aumento de atributo de cada Aprimoramento): uma fonte por escolha, com a chave dela.
+                    // Escolhido num nível ganho: a chave também leva o nível, para as escolhas internas serem
+                    // "level:N:..." como as outras daquele nível.
+                    boolean keyed = res.repeats() || key.startsWith("level:") || key.contains("@level:");
+                    if (!b.resourceIds.add(res.id()) && !res.repeats()) continue;
+                    sources.add(new Source("resource:" + res.id() + (keyed ? "@" + key : ""), resourceKindLabel(res.kind()) + ": " + res.name(), resourceGrants(res)));
                 }
             }
         }
@@ -848,8 +1166,8 @@ public class CreationService {
             int locked = 0;
             for (RuleResource r : pool) {
                 boolean mine = c.picked().contains(r.id());
-                // Escolhido em outra escolha: não aparece de novo.
-                if (!mine && b.resourceIds.contains(r.id())) continue;
+                // Escolhido em outra escolha: não aparece de novo (a não ser que possa repetir).
+                if (!mine && !r.repeats() && b.resourceIds.contains(r.id())) continue;
                 String reason = resourceBlock(r, b, mine);
                 if (reason == null) options.add(r.id());
                 else locked++;
@@ -887,7 +1205,7 @@ public class CreationService {
 
     // Pontos de Ki do personagem na criação (0 sem a habilidade Ki).
     private static int kiTotal(Build b) {
-        return kiFeature(b).map(f -> usesFor(f.value(), LEVEL_ONE_PROFICIENCY, CREATION_LEVEL, b.roundUp, b::modifier))
+        return kiFeature(b).map(f -> usesFor(f.value(), b.proficiency(), b.scale(f.source()), b.roundUp, b::modifier))
                 .map(n -> n == null ? 0 : n).orElse(0);
     }
 
@@ -924,17 +1242,29 @@ public class CreationService {
         if (r.ki() != null && r.ki() > kiTotal(b)) return pre;
         RuleResource.Requirements q = r.requires();
         if (q == null) return null;
-        if (q.level() != null && q.level() > 1) return "a partir do " + q.level() + "º nível";
+        if (q.level() != null && q.level() > b.level) return "a partir do " + q.level() + "º nível";
         // Sem contar o que o próprio recurso dá (Potência do Búfalo: +2 de Força não paga a Força 15 dele).
         ToIntFunction<Attribute> value = a -> b.total(a) - (mine ? r.grantsOrEmpty().stream()
                 .filter(x -> x.type() == GrantType.ATTRIBUTE && x.attribute() == a).mapToInt(x -> x.amount() == null ? 0 : x.amount()).sum() : 0);
         if (q.attributes() != null && q.attributes().entrySet().stream().anyMatch(e -> value.applyAsInt(e.getKey()) < e.getValue())) return pre;
         if (q.anyAttributes() != null && !q.anyAttributes().isEmpty()
                 && q.anyAttributes().entrySet().stream().noneMatch(e -> value.applyAsInt(e.getKey()) >= e.getValue())) return pre;
-        if (q.classes() != null && !q.classes().isEmpty()
-                && (b.klass == null || q.classes().stream().noneMatch(x -> x.equalsIgnoreCase(b.klass.id())))) return pre;
-        if (q.subclasses() != null && !q.subclasses().isEmpty()
+        // Classe (e nível nela, "Caçador 8"): qualquer uma das classes do personagem; subclasse de qualquer classe.
+        if (q.classes() != null && !q.classes().isEmpty()) {
+            int need = q.classLevel() == null ? 1 : q.classLevel();
+            boolean has = b.classLevels.isEmpty()
+                    ? b.klass != null && need <= 1 && q.classes().stream().anyMatch(x -> x.equalsIgnoreCase(b.klass.id()))
+                    : b.classLevels.entrySet().stream().anyMatch(e -> e.getValue() >= need
+                            && q.classes().stream().anyMatch(x -> x.equalsIgnoreCase(e.getKey())));
+            if (!has) return pre;
+        }
+        if (q.subclasses() != null && !q.subclasses().isEmpty() && b.subclassByClass.values().stream()
+                .noneMatch(s -> q.subclasses().stream().anyMatch(x -> x.equalsIgnoreCase(s.id())))
                 && (b.subclass == null || q.subclasses().stream().noneMatch(x -> x.equalsIgnoreCase(b.subclass.id())))) return pre;
+        if (q.origins() != null && !q.origins().isEmpty()
+                && (b.origin == null || q.origins().stream().noneMatch(x -> x.equalsIgnoreCase(b.origin.id())))) return pre;
+        if (q.lineages() != null && !q.lineages().isEmpty()
+                && (b.lineage == null || q.lineages().stream().noneMatch(x -> x.equalsIgnoreCase(b.lineage.id())))) return pre;
         if (q.regions() != null && !q.regions().isEmpty()
                 && (b.region == null || q.regions().stream().noneMatch(x -> x.equalsIgnoreCase(b.region.id())))) return pre;
         if (q.skills() != null && q.skills().stream().anyMatch(x -> !b.skills.containsKey(SkillType.valueOf(x)))) return pre;
@@ -960,7 +1290,19 @@ public class CreationService {
         Map<String, Integer> times = new LinkedHashMap<>();
         Map<String, String> options = new LinkedHashMap<>();
         Map<String, RuleHeritage> byId = new LinkedHashMap<>();
-        for (HeritagePick pick : r.heritages() == null ? List.<HeritagePick>of() : r.heritages()) {
+        List<HeritagePick> all = new ArrayList<>(r.heritages() == null ? List.<HeritagePick>of() : r.heritages());
+        for (LevelPick lp : r.levelsOrEmpty()) {
+            for (HeritagePick pick : lp.heritages() == null ? List.<HeritagePick>of() : lp.heritages()) {
+                if (pick == null) continue;
+                rules.heritage(pick.id()).ifPresent(h -> {
+                    if (h.category() == HeritageCategory.REGION || Boolean.TRUE.equals(h.initial())) {
+                        b.errors.add("Herança " + h.name() + ": só na criação do personagem.");
+                    }
+                });
+                all.add(pick);
+            }
+        }
+        for (HeritagePick pick : all) {
             if (pick == null) continue;
             Optional<RuleHeritage> found = rules.heritage(pick.id());
             if (found.isEmpty()) {
@@ -1255,7 +1597,11 @@ public class CreationService {
 
     // Dado com os bônus de damageBonus já somados: "1d6" + proficiência (2) + Força (+3) = "1d6+5".
     static String damageFor(Grant g, int proficiency, boolean roundUp, ToIntFunction<Attribute> modifier) {
-        String dice = diceFor(g, proficiency);
+        return damageFor(g, proficiency, CREATION_LEVEL, roundUp, modifier);
+    }
+
+    static String damageFor(Grant g, int proficiency, int level, boolean roundUp, ToIntFunction<Attribute> modifier) {
+        String dice = diceFor(g, proficiency, level);
         if (dice == null || g.damageBonus() == null || g.damageBonus().isEmpty()) return dice;
         Matcher m = DICE_WITH_BONUS.matcher(dice);
         if (!m.matches()) return dice;
@@ -1289,9 +1635,13 @@ public class CreationService {
     }
 
     static String diceFor(Grant g, int proficiency) {
-        // Dado pelo nível (Ataque Furtivo 1d6 → 10d6); na criação, o 1º nível.
+        return diceFor(g, proficiency, CREATION_LEVEL);
+    }
+
+    static String diceFor(Grant g, int proficiency, int level) {
+        // Dado pelo nível (Ataque Furtivo 1d6 → 10d6).
         if (g.diceByLevel() != null && !g.diceByLevel().isEmpty()) {
-            String d = byLevel(g.diceByLevel(), 1);
+            String d = byLevel(g.diceByLevel(), level);
             return d == null ? null : d.replace(" ", "");
         }
         if (g.diceByProficiency() == null || g.diceByProficiency().isEmpty()) {
@@ -1315,9 +1665,9 @@ public class CreationService {
         });
     }
 
-    private CharacterAbility abilityFrom(Character c, Grant g, int proficiency) {
+    CharacterAbility abilityFrom(Character c, Grant g, int proficiency, int level) {
         AbilityType type = g.abilityType() == null ? AbilityType.PASSIVE : g.abilityType();
-        Integer uses = usesFor(g, proficiency, rules.roundsUp(), c::getModifier);
+        Integer uses = usesFor(g, proficiency, level, rules.roundsUp(), c::getModifier);
         CharacterAbility a = new CharacterAbility();
         a.setCharacter(c);
         a.setName(g.name());
@@ -1327,7 +1677,7 @@ public class CreationService {
         a.setAbilityRange(g.range());
         a.setDuration(g.duration());
         a.setComponents(g.components());
-        a.setDamage(damageFor(g, proficiency, rules.roundsUp(), c::getModifier));
+        a.setDamage(damageFor(g, proficiency, level, rules.roundsUp(), c::getModifier));
         a.setDescription(g.description());
         a.setMaxUses(uses);
         a.setUsesLeft(uses);
@@ -1413,6 +1763,16 @@ public class CreationService {
         // CAs alternativas e bônus de CA (viram Character.armorRules).
         final List<ArmorRule> armorRules = new ArrayList<>();
         int gold;
+        // Nível do personagem, níveis por classe (na ordem em que entraram), classes e subclasses, de que classe é cada
+        // fonte (pelo rótulo) e os dados de vida rolados do 2º nível em diante.
+        int level = 1;
+        final Map<String, Integer> classLevels = new LinkedHashMap<>();
+        final Map<String, RuleClass> classById = new LinkedHashMap<>();
+        final Map<String, RuleLineage> subclassByClass = new LinkedHashMap<>();
+        final Map<String, String> sourceClass = new LinkedHashMap<>();
+        final List<Integer> hpRolls = new ArrayList<>();
+        // Classes que entraram por multiclasse (conferir o pré-requisito no fim, com os atributos prontos).
+        final List<RuleClass> multiclassed = new ArrayList<>();
         // Equipamento inicial (EQUIPMENT/EQUIPMENT_CHOICE) ou, com wealth, a riqueza inicial da classe no lugar dele.
         final List<EquipmentLine> equipment = new ArrayList<>();
         boolean wealth;
@@ -1428,8 +1788,36 @@ public class CreationService {
         }
 
         int maxHp() {
-            int bonus = hpGrants.stream().mapToInt(g -> hpBonusFor(g, LEVEL_ONE_PROFICIENCY, roundUp, this::modifier)).sum();
-            return klass == null ? 0 : Math.max(1, klass.hitDie() + modifier(Attribute.CONSTITUTION) + bonus);
+            if (klass == null) return 0;
+            int con = modifier(Attribute.CONSTITUTION);
+            // HP_BONUS com perLevel soma em cada nível (Pacto Carmesim); sem, uma vez só.
+            int bonus = hpGrants.stream().mapToInt(g -> hpBonusFor(g, proficiency(), roundUp, this::modifier)
+                    * (Boolean.TRUE.equals(g.perLevel()) ? level : 1)).sum();
+            int hp = Math.max(1, klass.hitDie() + con);
+            for (int roll : hpRolls) hp += Math.max(1, roll + con);
+            return hp + bonus;
+        }
+
+        // Bônus de proficiência pelo nível do personagem (2 no 1º, 3 no 5º, 4 no 9º, 5 no 13º, 6 no 17º).
+        int proficiency() {
+            return 2 + (level - 1) / 4;
+        }
+
+        // Nível que vale para as tabelas de uma fonte: o da classe (fontes de classe e subclasse) ou o do personagem.
+        int scale(String sourceLabel) {
+            String classId = sourceClass.get(sourceLabel);
+            return classId == null ? level : classLevels.getOrDefault(classId, level);
+        }
+
+        List<ClassLevelLine> classLevelLines() {
+            List<ClassLevelLine> out = new ArrayList<>();
+            classLevels.forEach((id, n) -> {
+                RuleClass k = classById.get(id);
+                RuleLineage sub = subclassByClass.get(id);
+                out.add(new ClassLevelLine(id, k == null ? id : k.name(), n, k == null || k.hitDie() == null ? 0 : k.hitDie(),
+                        sub == null ? null : sub.name()));
+            });
+            return out;
         }
 
         double speed() {
@@ -1470,13 +1858,13 @@ public class CreationService {
             List<FeatureLine> featureLines = features.stream()
                     .map(f -> new FeatureLine(f.value().name(), f.value().description(),
                             f.value().abilityType() == null ? AbilityType.PASSIVE : f.value().abilityType(),
-                            damageFor(f.value(), LEVEL_ONE_PROFICIENCY, roundUp, this::modifier), usesFor(f.value(), LEVEL_ONE_PROFICIENCY, roundUp, this::modifier),
+                            damageFor(f.value(), proficiency(), scale(f.source()), roundUp, this::modifier), usesFor(f.value(), proficiency(), scale(f.source()), roundUp, this::modifier),
                             f.source()))
                     .toList();
             return new CreationPreview(attrs, pointBuy, skillLines, saveLines, featureLines, List.copyOf(choices),
                     maxHp(), klass == null ? 0 : klass.hitDie(), speed(),
                     origin == null ? List.of() : SpeedLine.of(speed(), otherSpeedsTotal()),
-                    origin == null ? null : ArmorClassCalculator.calculate(this::modifier, LEVEL_ONE_PROFICIENCY, armorRules, armorProficiencies, List.of(), null),
+                    origin == null ? null : ArmorClassCalculator.calculate(this::modifier, proficiency(), armorRules, armorProficiencies, List.of(), null),
                     gold, size, List.copyOf(languages),
                     List.copyOf(crafts), List.copyOf(craftExpertise), List.copyOf(armorProficiencies), List.copyOf(weaponProficiencies),
                     heritagePoints,
@@ -1485,6 +1873,7 @@ public class CreationService {
                             .toList(),
                     List.copyOf(heritages), List.copyOf(heritageOptions), traitBudget, List.copyOf(traitLines),
                     List.copyOf(traitOptions), List.copyOf(equipment), new StartingWealth(wealthFormula, wealth),
+                    level, proficiency(), classLevelLines(),
                     List.copyOf(errors), errors.isEmpty());
         }
     }

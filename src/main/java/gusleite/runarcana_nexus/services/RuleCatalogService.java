@@ -60,7 +60,7 @@ public class RuleCatalogService {
     private static final Set<String> CRAFT_KINDS = Set.of("MAJOR", "MINOR");
     // Tipos de recurso de classe (rules/recursos.json e value da concessão RESOURCE_CHOICE).
     static final Set<String> RESOURCE_KINDS = Set.of("IRA", "SUTRA", "VEL", "TECNICA", "INVOCACAO", "GRANDE_ESPIRITO",
-            "ASPECTO_TERRESTRE", "ASPECTO_AQUATICO", "ASPECTO_ALADO", "RUNA");
+            "ASPECTO_TERRESTRE", "ASPECTO_AQUATICO", "ASPECTO_ALADO", "RUNA", "APRIMORAMENTO");
 
     private final RuleCatalog catalog;
 
@@ -70,19 +70,25 @@ public class RuleCatalogService {
                               @Value("${runarcana.rules.traits:classpath:rules/tracos.json}") String traitsLocation,
                               @Value("${runarcana.rules.resources:classpath:rules/recursos.json}") String resourcesLocation,
                               @Value("${runarcana.rules.magic:classpath:rules/magias.json}") String magicLocation,
-                              @Value("${runarcana.rules.items:classpath:rules/itens.json}") String itemsLocation) {
+                              @Value("${runarcana.rules.items:classpath:rules/itens.json}") String itemsLocation,
+                              @Value("${runarcana.rules.feats:classpath:rules/aprimoramentos.json}") String featsLocation) {
         RuleCatalog base = load(resources.getResource(location), location, RuleCatalog.class);
         HeritageFile heritages = load(resources.getResource(heritagesLocation), heritagesLocation, HeritageFile.class);
         RuleTraits traits = load(resources.getResource(traitsLocation), traitsLocation, RuleTraits.class);
         ResourceFile classResources = load(resources.getResource(resourcesLocation), resourcesLocation, ResourceFile.class);
         RuleMagic magic = load(resources.getResource(magicLocation), magicLocation, RuleMagic.class);
         RuleItems items = load(resources.getResource(itemsLocation), itemsLocation, RuleItems.class);
-        this.catalog = base.withHeritages(heritages.heritages()).withTraits(traits).withResources(classResources.resources())
+        // Aprimoramentos (Capítulo 5, Personalização): recursos kind APRIMORAMENTO num arquivo à parte.
+        ResourceFile feats = load(resources.getResource(featsLocation), featsLocation, ResourceFile.class);
+        List<RuleResource> allResources = new ArrayList<>(classResources.resources() == null ? List.of() : classResources.resources());
+        if (feats.resources() != null) allResources.addAll(feats.resources());
+        this.catalog = base.withHeritages(heritages.heritages()).withTraits(traits).withResources(allResources)
                 .withMagic(magic).withEquipment(items);
         List<String> problems = validate(catalog);
         if (!problems.isEmpty()) {
             throw new IllegalStateException("Regras de criação inválidas em " + location + " / " + heritagesLocation
-                    + " / " + traitsLocation + " / " + resourcesLocation + " / " + magicLocation + " / " + itemsLocation + ":\n - " + String.join("\n - ", problems));
+                    + " / " + traitsLocation + " / " + resourcesLocation + " / " + magicLocation + " / " + itemsLocation
+                    + " / " + featsLocation + ":\n - " + String.join("\n - ", problems));
         }
     }
 
@@ -197,6 +203,14 @@ public class RuleCatalogService {
             if (k.hitDie() == null || k.hitDie() < 2) p.add(where + ": hitDie deve ser o lado do dado de vida (ex.: 8)");
             validateGrants(where, k.grantsOrEmpty(), p, crafts);
             validateLevels(where, k.levelsOrEmpty(), p, crafts);
+            if (k.multiclass() != null) {
+                RuleClass.Multiclass m = k.multiclass();
+                if (m.attributes() != null && m.attributes().values().stream().anyMatch(v -> v == null || v < 1 || v > 30))
+                    p.add(where + ", multiclasse: valor de atributo inválido");
+                if (m.anyAttributes() != null && m.anyAttributes().values().stream().anyMatch(v -> v == null || v < 1 || v > 30))
+                    p.add(where + ", multiclasse: valor de atributo inválido");
+                validateGrants(where + ", multiclasse", m.grantsOrEmpty(), p, crafts);
+            }
             Set<String> subIds = new HashSet<>();
             for (RuleLineage sub : k.subclassesOrEmpty()) {
                 String at = where + ", subclasse " + sub.id();
@@ -387,6 +401,12 @@ public class RuleCatalogService {
         for (RuleClass k : c.classes() == null ? List.<RuleClass>of() : c.classes()) {
             k.subclassesOrEmpty().forEach(s -> subclassIds.add(String.valueOf(s.id()).toLowerCase()));
         }
+        Set<String> originIds = new HashSet<>();
+        Set<String> lineageIds = new HashSet<>();
+        for (RuleOption o : c.origins() == null ? List.<RuleOption>of() : c.origins()) {
+            originIds.add(String.valueOf(o.id()).toLowerCase());
+            o.lineagesOrEmpty().forEach(l -> lineageIds.add(String.valueOf(l.id()).toLowerCase()));
+        }
         Set<String> seen = new HashSet<>();
         for (RuleResource r : c.resourcesOrEmpty()) {
             String where = "recurso " + r.id();
@@ -413,6 +433,12 @@ public class RuleCatalogService {
                         .forEach(x -> p.add(where + ": armadura desconhecida \"" + x + "\""));
                 if (q.resources() != null) q.resources().stream().filter(x -> !ids.contains(x.toLowerCase()))
                         .forEach(x -> p.add(where + ": recurso inexistente \"" + x + "\""));
+                if (q.classLevel() != null && (q.classLevel() < 1 || q.classLevel() > 20 || q.classes() == null || q.classes().isEmpty()))
+                    p.add(where + ": requires.classLevel vai de 1 a 20 e precisa de classes");
+                if (q.origins() != null) q.origins().stream().filter(x -> !originIds.contains(x.toLowerCase()))
+                        .forEach(x -> p.add(where + ": origem desconhecida \"" + x + "\""));
+                if (q.lineages() != null) q.lineages().stream().filter(x -> !lineageIds.contains(x.toLowerCase()))
+                        .forEach(x -> p.add(where + ": linhagem desconhecida \"" + x + "\""));
             }
             validateGrants(where, r.grantsOrEmpty(), p, crafts);
         }
