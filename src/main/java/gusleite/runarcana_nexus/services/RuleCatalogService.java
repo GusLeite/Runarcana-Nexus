@@ -627,7 +627,12 @@ public class RuleCatalogService {
                 case FEATURE -> validateFeature(at, g, p);
                 case PROFICIENCY_CHOICE -> {
                     if (g.count() == null || g.count() < 1) p.add(at + " (PROFICIENCY_CHOICE): precisa de count");
-                    checkOptions(at, g.options(), Set.of("SKILL", "CRAFT", "MARTIAL_WEAPON"), p);
+                    // Além dos tipos, opções literais: "ARMOR:LIGHT" (LIGHT/MEDIUM/HEAVY/SHIELD) e "WEAPON:<nome da arma>".
+                    if (g.options() != null) g.options().stream()
+                            .filter(o -> !Set.of("SKILL", "CRAFT", "MARTIAL_WEAPON").contains(o))
+                            .filter(o -> !(o.startsWith("ARMOR:") && ARMOR_TYPES.contains(o.substring(6))))
+                            .filter(o -> !(o.startsWith("WEAPON:") && o.length() > 7))
+                            .forEach(o -> p.add(at + " (PROFICIENCY_CHOICE): opção desconhecida \"" + o + "\""));
                 }
                 case HP_BONUS -> {
                     boolean formula = g.usesFormula() != null && g.usesFormula() != UsesFormula.FIXED;

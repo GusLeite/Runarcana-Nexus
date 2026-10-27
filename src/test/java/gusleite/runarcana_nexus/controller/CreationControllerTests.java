@@ -553,10 +553,10 @@ class CreationControllerTests {
         String me = mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
                 .andExpect(jsonPath("$.inventory.length()").value(0))
                 .andReturn().getResponse().getContentAsString();
-        // 4d4 x 10 PO somados ao ouro do passado de teste.
+        // Só os 4d4 x 10 PO: o ouro da classe e do passado faz parte do equipamento trocado.
         Matcher gold = Pattern.compile("\"gold\":(\\d+)").matcher(me);
         assertThat(gold.find()).isTrue();
-        assertThat(Integer.parseInt(gold.group(1))).isBetween(40, 160 + 50);
+        assertThat(Integer.parseInt(gold.group(1))).isBetween(40, 160);
 
         // Escolha de equipamento com grupo: vira uma opção por arma do grupo.
         String brute = FULL.replace("\"classId\":\"ARCANIST\"", "\"classId\":\"BRUTE\"")
@@ -585,6 +585,19 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.features[?(@.name == 'Raio Teste')].type").value("SPELL"))
                 .andExpect(jsonPath("$.features[?(@.name == 'Raio Teste')].source").value("Classe: Bruto Teste"))
                 .andExpect(jsonPath("$.errors", not(hasItem("Faltam escolhas: Truque do Bruto."))));
+    }
+
+    @Test
+    void proficienciaDeArmaduraOuArmaAEscolha() throws Exception {
+        String token = login("gaudron");
+        // Passado de teste "exilado-teste": PROFICIENCY_CHOICE com ARMOR:LIGHT / ARMOR:MEDIUM e WEAPON:Armas de fogo leves.
+        String exile = FULL.replace("\"backgroundId\":\"estudioso\"", "\"backgroundId\":\"exilado-teste\"");
+        preview(token, exile)
+                .andExpect(jsonPath("$.choices[?(@.key == 'background:exilado-teste:0')].options",
+                        hasItem(List.of("ARMOR:LIGHT", "ARMOR:MEDIUM", "WEAPON:Armas de fogo leves"))));
+        preview(token, exile.replace("\"choices\":{", "\"choices\":{\"background:exilado-teste:0\":[\"ARMOR:MEDIUM\",\"WEAPON:Armas de fogo leves\"],"))
+                .andExpect(jsonPath("$.armorProficiencies", hasItem("MEDIUM")))
+                .andExpect(jsonPath("$.weaponProficiencies", hasItem("Armas de fogo leves")));
     }
 
     @Test

@@ -27,7 +27,9 @@ class EquipmentRulesTests {
 
     @Test
     void catalogoComAsTabelasDoLivro() {
-        assertThat(items.itemsOrEmpty()).hasSize(327);
+        // 327 das tabelas do Capítulo 6 + 32 itens citados só nos Passados.
+        assertThat(items.itemsOrEmpty()).hasSize(359);
+        assertThat(items.itemsOrEmpty().stream().filter(i -> i.groupsOrEmpty().contains("item-de-passado"))).hasSize(32);
         RuleItem placas = EquipmentRules.item(items, "armadura-placas").orElseThrow();
         assertThat(placas.armorClass()).isEqualTo(18);
         assertThat(placas.armorWeight()).isEqualTo("HEAVY");
@@ -38,6 +40,15 @@ class EquipmentRulesTests {
         assertThat(espada.groupsOrEmpty()).contains("arma-marcial", "arma-marcial-corpo-a-corpo");
         assertThat(EquipmentRules.item(items, "katana").orElseThrow().groupsOrEmpty()).contains("arma-bodisatva");
         assertThat(items.startingWealth()).containsEntry("BODHISATTVA", "5d4");
+    }
+
+    @Test
+    void passadosDoCapitulo4() {
+        assertThat(catalog.backgrounds()).hasSize(22).noneMatch(b -> Boolean.TRUE.equals(b.example()));
+        var soldado = catalog.backgrounds().stream().filter(b -> b.id().equals("soldado")).findFirst().orElseThrow();
+        assertThat(soldado.startingGold()).isEqualTo(10);
+        assertThat(soldado.grantsOrEmpty().getFirst().name()).isEqualTo("Irmãos de Armas");
+        assertThat(soldado.grantsOrEmpty()).anyMatch(g -> "simbolo-da-unidade+azagaia*5+vestimentas-oficiais+algibeira".equals(g.value()));
     }
 
     @Test

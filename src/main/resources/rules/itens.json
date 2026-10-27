@@ -4847,6 +4847,304 @@
           "quantity": 1
         }
       ]
+    },
+    {
+      "id": "conjunto-de-dados",
+      "name": "Conjunto de dados",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ],
+      "description": "Jogo de dados (Conjunto de Jogador)."
+    },
+    {
+      "id": "cartao-de-negocios",
+      "name": "Cartão de negócios",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "pergaminho-de-linhagem",
+      "name": "Pergaminho de linhagem",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "presente-de-admirador",
+      "name": "Presente de um admirador",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ],
+      "description": "Carta de amor, mecha de cabelo ou uma bijuteria."
+    },
+    {
+      "id": "garrafas-coloridas",
+      "name": "Dez garrafas tampadas com líquidos coloridos",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ],
+      "description": "Ferramenta de trapaça."
+    },
+    {
+      "id": "dados-viciados",
+      "name": "Conjunto de dados viciados",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ],
+      "description": "Ferramenta de trapaça."
+    },
+    {
+      "id": "cartas-marcadas",
+      "name": "Baralho de cartas marcadas",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ],
+      "description": "Ferramenta de trapaça."
+    },
+    {
+      "id": "sinete-de-duque-imaginario",
+      "name": "Anel de sinete de um duque imaginário",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ],
+      "description": "Ferramenta de trapaça."
+    },
+    {
+      "id": "ferramentas-de-auto-reparo",
+      "name": "Ferramentas para auto-reparo",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ],
+      "description": "Peças sobressalentes, martelo, pregos, parafusos etc."
+    },
+    {
+      "id": "roupas-escuras-com-capuz",
+      "name": "Roupas escuras comuns com capuz",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "pena",
+      "name": "Pena",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "faca-pequena",
+      "name": "Faca pequena",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "lembrete-de-casa",
+      "name": "Lembrete de casa",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ],
+      "description": "Um desenho, uma folha, um anel…"
+    },
+    {
+      "id": "trofeu-de-animal",
+      "name": "Troféu de um animal que você matou",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "livros-de-engenharia",
+      "name": "Livros sobre engenharia (1d4)",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "invencao-pequena",
+      "name": "Invenção minúscula ou pequena",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ],
+      "description": "Feita por você."
+    },
+    {
+      "id": "mapa-da-regiao",
+      "name": "Mapa da região em que atuou",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "amuleto-da-sorte",
+      "name": "Amuleto da sorte",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ],
+      "description": "Um pé de coelho ou uma pequena pedra com um furo no centro."
+    },
+    {
+      "id": "prova-do-primeiro-contrato",
+      "name": "Prova do primeiro contrato que você completou",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "mapa-da-cidade",
+      "name": "Mapa da cidade em que você cresceu",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "rato-de-estimacao",
+      "name": "Rato de estimação",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "objeto-dos-pais",
+      "name": "Pequeno objeto para lembrar dos seus pais",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "diario",
+      "name": "Diário",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "roupas-de-pirata",
+      "name": "Roupas de pirata",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "conta-de-oracoes",
+      "name": "Conta de orações",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "livro-de-preces",
+      "name": "Livro de preces",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "vareta-de-incenso",
+      "name": "Vareta de incenso",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "vestimentas-cerimoniais",
+      "name": "Vestimentas cerimoniais",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "simbolo-da-unidade",
+      "name": "Símbolo da sua unidade",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "vestimentas-oficiais",
+      "name": "Vestimentas oficiais",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "estojo-de-notas",
+      "name": "Estojo de pergaminho cheio de notas dos seus estudos e orações",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
+    },
+    {
+      "id": "cobertor-de-inverno",
+      "name": "Cobertor de inverno",
+      "kind": "GEAR",
+      "category": "Itens de Passado",
+      "groups": [
+        "item-de-passado"
+      ]
     }
   ]
 }

@@ -377,11 +377,16 @@ public class CreationService {
                             allCrafts.stream().filter(k -> !b.crafts.contains(k)).forEach(k -> options.add("CRAFT:" + k));
                         }
                         if (kinds.contains("MARTIAL_WEAPON")) options.add("MARTIAL_WEAPON");
+                        // Proficiências literais: "ARMOR:LIGHT" (armadura) e "WEAPON:Armas de fogo leves" (arma pelo nome).
+                        kinds.stream().filter(k -> k.startsWith("ARMOR:") && !b.armorProficiencies.contains(k.substring(6))).forEach(options::add);
+                        kinds.stream().filter(k -> k.startsWith("WEAPON:") && !b.weaponProficiencies.contains(k.substring(7))).forEach(options::add);
                         String label = orLabel(g, "Escolha " + g.count() + " proficiência(s)");
                         List<String> selected = choose(picked, options, g.count(), label, b.errors);
                         for (String o : selected) {
                             if (o.startsWith("SKILL:")) b.skills.put(SkillType.valueOf(o.substring(6)), s.label());
                             else if (o.startsWith("CRAFT:")) b.crafts.add(o.substring(6));
+                            else if (o.startsWith("ARMOR:")) b.armorProficiencies.add(o.substring(6));
+                            else if (o.startsWith("WEAPON:")) b.weaponProficiencies.add(o.substring(7));
                             else {
                                 b.weaponProficiencies.add("Uma arma marcial à escolha");
                                 b.features.add(new Sourced<>(Grant.feature(AbilityType.PASSIVE, "Proficiência em arma marcial",
@@ -452,8 +457,9 @@ public class CreationService {
             b.wealthFormula = catalog.equipment().startingWealth().get(b.klass.id());
         }
         if (b.wealth && b.wealthFormula == null && b.klass != null) b.errors.add("A classe não tem riqueza inicial cadastrada.");
-        if (b.klass != null && b.klass.startingGold() != null) b.gold += b.klass.startingGold();
-        if (b.background != null && b.background.startingGold() != null) b.gold += b.background.startingGold();
+        // O ouro da classe e do passado faz parte do equipamento ("algibeira contendo 10 PO"): com a riqueza inicial, não vem.
+        if (!b.wealth && b.klass != null && b.klass.startingGold() != null) b.gold += b.klass.startingGold();
+        if (!b.wealth && b.background != null && b.background.startingGold() != null) b.gold += b.background.startingGold();
         if (b.origin != null && b.origin.startingGold() != null) b.gold += b.origin.startingGold();
 
         for (Grant g : b.optionArmor) {

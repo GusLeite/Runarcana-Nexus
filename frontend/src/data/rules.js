@@ -302,11 +302,13 @@ export function choiceOptionName(type, id, crafts = [], items = []) {
     }
     case 'SIZE_CHOICE': return SIZE_NAMES[id] ?? id
     case 'CRAFT_CHOICE': return crafts.find(k => k.id === id)?.name ?? id
-    // "SKILL:ARCANA", "CRAFT:alquimista" ou "MARTIAL_WEAPON"
+    // "SKILL:ARCANA", "CRAFT:alquimista", "ARMOR:LIGHT", "WEAPON:Armas de fogo leves" ou "MARTIAL_WEAPON"
     case 'PROFICIENCY_CHOICE': {
       const [kind, value] = id.split(':')
       if (kind === 'SKILL') return 'Perícia: ' + (SKILL_NAMES[value] ?? value)
       if (kind === 'CRAFT') return 'Ofício: ' + (crafts.find(k => k.id === value)?.name ?? value)
+      if (kind === 'ARMOR') return 'Armadura: ' + (ARMOR_NAMES[value] ?? value)
+      if (kind === 'WEAPON') return 'Arma: ' + id.slice(7)
       return 'Arma marcial'
     }
     default: return id

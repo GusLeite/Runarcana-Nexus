@@ -11065,29 +11065,436 @@
   ],
   "backgrounds": [
     {
-      "id": "estudioso",
-      "name": "Estudioso",
-      "description": "EXEMPLO: passou a juventude entre livros e bibliotecas.",
-      "example": true,
-      "startingGold": 10,
+      "id": "andarilho",
+      "name": "Andarilho",
+      "description": "O silêncio de estar longe da sociedade, a brisa e a calma entre a natureza. A vida de um Andarilho se passa por entre contemplações e meditações, podendo ter vagado por diversas vilas, cidades ou até mesmo continentes. Conhecendo e aprendendo sobre novas culturas e costumes, um andarilho é uma alma inquieta que não encontra um lugar para se fixar. O que motiva essa situação pode ter várias origens, desde uma profunda contemplação de si próprio, passando pela contemplação do mundo, mas podendo ser também um sobrevivente de guerra entre muitas outras opções.\n\nCaso você não tenha uma história em mente, você pode utilizar a tabela abaixo para sortear um motivo para sua Reclusão\n\nOrigem de Afastamento:\n1 — Eu estava em busca de esclarecimento espiritual.\n2 — Eu estava participando da vida comunal de acordo com os ditames de uma ordem religiosa.\n3 — Eu me afastei da sociedade após um evento que mudou minha vida.\n4 — Eu precisava de um lugar tranquilo para trabalhar minha arte, literatura, música ou manifesto.\n5 — Eu precisava comungar com a natureza, longe da civilização.\n6 — Eu estava em busca de uma pessoa, lugar ou relíquia de grande significância espiritual\n\nPerícias: Natureza e Sobrevivência\nOfício: Apotecário\nIdiomas: Um idioma comum à sua escolha\nEquipamento: Um estojo de pergaminho cheio de notas dos seus estudos e orações, um cobertor de inverno, um conjunto de roupas comuns, um conjunto de Apotecário e 5 PO",
+      "startingGold": 5,
       "grants": [
         {
-          "type": "SKILL",
-          "skill": "ARCANA"
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Conhecimento do Vento",
+          "description": "Devido à sua natureza inquieta, você já ouviu um pouco de tudo, sabe de diversos rumores que correm por Runeterra. Uma vez por descanso longo, quando você precisa se recordar de uma informação você pode rolar o teste com vantagem. Porém se você tirar um dado menor do que 10 você não saberá dizer se a memória recordada se trata de um rumor ou um fato."
         },
         {
           "type": "SKILL",
-          "skill": "INVESTIGATION"
+          "skill": "NATURE"
+        },
+        {
+          "type": "SKILL",
+          "skill": "SURVIVAL"
+        },
+        {
+          "type": "CRAFT",
+          "value": "apotecario"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "estojo-de-notas+cobertor-de-inverno+roupas-comuns+conjunto-de-apotecario"
         }
       ]
     },
     {
-      "id": "soldado",
-      "name": "Soldado",
-      "description": "EXEMPLO: serviu num exército de Runeterra.",
-      "example": true,
+      "id": "apostador",
+      "name": "Apostador",
+      "description": "O tamborilar de dados rolando sobre uma mesa de madeira, o ruído suave do baralho de cartas, os pings e tinidos de peças de ouro batendo na mesa: Esses sons são como uma sinfonia angelical para você. Ganhar ou perder, você é atraído para o jogo como uma abelha para flores. Você é do tipo que constantemente blefa, ou o tipo que não sabe o que é uma poker face? Você gasta suas noites arrecadando grandes somas de ouro? Ou você mal arrasta seus ganhos? E o mais importante, qual é o seu jogo preferido? Dados, cartas, corridas de carruagem? Ou você é do tipo que tenta de tudo para ganhar ouro? Não importa a sua preferência, o fato permanece o mesmo; você é um apostador e veio jogar.\n\nPerícias: Enganação e Persuasão\nOfício: Jogador de dois tipos de Jogos\nEquipamento: conjunto de dados, jogo de baralho, um conjunto de roupas finas e uma algibeira contendo 5 PO",
+      "startingGold": 5,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Vamos Tornar as Coisas Interessantes",
+          "description": "Você pode convencer qualquer pessoa a colocar algo que não esteja disposto a compartilhar (propriedade ou informação) em um jogo de azar. Seu Mestre pode decidir que eles só concordarão com um jogo de sua escolha, e eles só podem concordar se sentirem que as chances estão fortemente a seu favor."
+        },
+        {
+          "type": "SKILL",
+          "skill": "DECEPTION"
+        },
+        {
+          "type": "SKILL",
+          "skill": "PERSUASION"
+        },
+        {
+          "type": "CRAFT",
+          "value": "jogador"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "conjunto-de-dados+baralho+roupas-finas+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "aristocrata",
+      "name": "Aristocrata",
+      "description": "Você foi criado entre a nobreza ou aprendeu a etiqueta e comportamento apropriados, permitindo que se apresente como um nobre e jogue com influências e políticas. Não importando sua opinião ou atitude, você é reconhecido na sua região devido a sua descendência. As pessoas tendem a pensar o melhor ou o pior de você por causa de sua família, podendo lhe odiar pelo feito de um membro de sua casa, ou lhe admirar por ser parente de um herói de guerra.\n\nPerícias: História e Persuasão\nOfício: Jogador de um tipo de Jogo\nIdiomas: Um idioma comum à sua escolha\nEquipamento: Um conjunto de trajes finos, um anel de sinete, um pergaminho de linhagem e uma algibeira contendo 25 PO",
+      "startingGold": 25,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Faro Real",
+          "description": "Devido à sua origem você sabe dizer quando tentam lhe bajular ou quando estão mentindo para você. Sempre que realizar um teste de Intuição para perceber uma mentira, você o faz com vantagem. Além disso você possui vantagem em testes de História para recordar conhecimentos de uma família Nobre da sua região."
+        },
+        {
+          "type": "SKILL",
+          "skill": "HISTORY"
+        },
+        {
+          "type": "SKILL",
+          "skill": "PERSUASION"
+        },
+        {
+          "type": "CRAFT",
+          "value": "jogador"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "roupas-finas+anel-de-sinete+pergaminho-de-linhagem+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "artesao",
+      "name": "Artesão",
+      "description": "O calor da forja, o orgulho dos detalhes bem trabalhados de uma joia, inúmeros livros com conhecimento imensurável em prateleiras, todas essas são visões e sensações que podem existir na vida de um artesão, podendo ir desde um cartógrafo à um cervejeiro, de escriba a um ferreiro. As profissões que envolvem um artesão são dezenas, das menos valorizadas as mais comuns. Um artesão costuma ter paixão pela sua especialidade, produzindo seus produtos com amor e dedicação, mas muitas vezes as fazem simplesmente pela fama, glória e é claro… dinheiro.\n\nCaso você não tenha uma especialidade em mente, você pode utilizar a tabela Especialidade de Artesão para sortear uma.\n\nEspecialidade de Artesão:\n1 — Alquimista ou boticário\n11 — Coureiro, peleiro ou curtidor\n2 — Armeiro, chaveiro ou ferramenteiro\n12 — Pedreiro ou marceneiro\n3 — Cervejeiro, destilador ou vinicultor\n13 — Pintor, desenhista, projetista\n4 — Calígrafo, escriba ou escrivão\n14 — Oleiro ou telheiro\n5 — Carpinteiro ou construtor\n15 — Armador ou veleiro\n6 — Cartógrafo, agrimensor ou desenhista\n16 — Ferreiro ou forjador\n7 — Remendeiro ou sapateiro\n17 — Funileiro, latoeiro ou soldador\n8 — Cozinheiro ou padeiro\n18 — Carruageiro ou fabricante de rodas\n9 — Vidraceiro ou escultor\n19 — Tecelão ou tintureiro\n10 — Joalheiro ou lapidário\n20 — Entalhador, tanoeiro ou construtor de arcos\n\nPerícias: Intuição e Persuasão\nOfício: Um Ofício Maior à sua escolha\nIdiomas: Um idioma comum à sua escolha\nEquipamento: Um conjunto de Ofício (à sua escolha), um cartão de negócios, um conjunto de roupas de viajante e uma algibeira com 15 PO",
       "startingGold": 15,
       "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Contatos de Negócio",
+          "description": "Como uma pessoa ativa nos negócios locais você adquiriu uma certa fama da qualidade de seus produtos e até mesmo a empatia de algumas figuras importantes da sociedade. Quando você for vender seus trabalhos para alguém na região em que você é conhecido, você pode receber o dobro de dinheiro dessas vendas. Alternativamente você pode pedir abrigo e alimento à parceiros de negócio com os quais você possui uma boa relação, caso seu mestre permita, você pode ter um desses contatos em uma região que não seja a sua."
+        },
+        {
+          "type": "SKILL",
+          "skill": "INSIGHT"
+        },
+        {
+          "type": "SKILL",
+          "skill": "PERSUASION"
+        },
+        {
+          "type": "CRAFT_CHOICE",
+          "count": 1,
+          "options": [
+            "alquimista",
+            "apotecario",
+            "armadilheiro",
+            "armeiro",
+            "armoreiro",
+            "arqueirista",
+            "chaveiro",
+            "cozinheiro",
+            "cuteleiro",
+            "encantador",
+            "encarrocador",
+            "fermentador",
+            "joalheiro",
+            "modista",
+            "pedreiro",
+            "tecmaturgo"
+          ],
+          "label": "Ofício Maior do Artesão"
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: conjunto de Ofício à escolha",
+          "options": [
+            "group:conjunto-de-oficio"
+          ]
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "cartao-de-negocios+roupas-viagem+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "artista",
+      "name": "Artista",
+      "description": "As moedas enchem bolsos, o vinho sacia a sede e a comida forra o estômago… mas a arte alimenta a alma. Artistas existem por toda Runeterra sob as mais diversas bandeiras e patrocínios, especialmente em regiões com cofres mais cheios e patrocinadores mais generosos. Qual é a sua arte? Qual é o seu tema? Por qual motivo você seguiu essa vida? Qual a sua relação com outros artistas?\n\nUm bom artista é versátil, apimentando cada atuação com uma variedade de rotinas diferentes. Escolha de uma a três rotinas, ou role na tabela abaixo, para definir suas especialidades artísticas.\n\nÁrea de Atuação:\n1 — Acrobata\n6 — Narrador\n2 — Ator\n7 — Poeta\n3 — Cantor\n8 — Instrumentista\n4 — Dançarino\n9 — Escritor\n5 — Engolidor de fogo\n10 — Pintor\n\nPerícias: Acrobacia e Atuação\nOfício: Artista em uma disciplina à sua escolha\nEquipamento: Um instrumento musical (à sua escolha), um presente de um admirador (carta de amor, mecha de cabelo ou uma bijuteria), uma fantasia e uma algibeira contendo 15 PO",
+      "startingGold": 15,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Língua de Prata",
+          "description": "Seu carisma e controle do público lhe garantem maior facilidade de agradar uma platéia e convencer donos de comércios locais e alguns nobres, que seria vantajoso para eles de deixar você se apresentar no local. Você possui um bônus de +5 em todos os testes de Atuação. Adicionalmente se você fizer uma apresentação que agrade o dono do local, ele pode lhe oferecer estadia e uma refeição."
+        },
+        {
+          "type": "SKILL",
+          "skill": "ACROBATICS"
+        },
+        {
+          "type": "SKILL",
+          "skill": "PERFORMANCE"
+        },
+        {
+          "type": "CRAFT",
+          "value": "artista"
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: instrumento musical",
+          "options": [
+            "group:instrumento-musical"
+          ]
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "presente-de-admirador+roupas-fantasia+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "charlatao",
+      "name": "Charlatão",
+      "description": "Talvez você o faça por ter talento nisso e não ter vontade de ter um emprego normal, talvez você faça por achar que o mundo é injusto e sua habilidade é um equalizador social, ou talvez você faça por realmente não se importar com as pessoas. O fato é, você possui um charme inegável além de experiência para persuadir e enganar. Sabendo como convencer um cidadão a comprar óleo comum como se fosse algum remédio milagroso, ou então se infiltrando entre os mais poderosos da cidade para descobrir seus segredos para poder chantageá-los depois.\n\nPerícias: Enganação e Prestidigitação\nOfício: Artista: Maquiador e Falsificador\nEquipamento: Um conjunto de roupas finas, um estojo de maquiagem, ferramentas de trapaça à sua escolha (dez garrafas tampadas preenchidas com líquidos coloridos, um conjunto de dados viciados, um baralho de cartas marcadas ou um anel de sinete de um duque imaginário), e uma algibeira contendo 15 PO",
+      "startingGold": 15,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Trapaceiro",
+          "description": "Você sabe ler a origem das pessoas como a palma de sua mão, sabendo dizer de onde vieram, a condição financeira e até mesmo se está passando por necessidades só de olhar para suas expressões faciais e maneiras de se vestir. Você possui vantagem em testes de Enganação e Intuição contra uma pessoa desde que tenha passado pelo menos 1 minuto a observando e, além disso, você pode substituir testes de Persuasão por testes de Enganação."
+        },
+        {
+          "type": "SKILL",
+          "skill": "DECEPTION"
+        },
+        {
+          "type": "SKILL",
+          "skill": "SLEIGHT_OF_HAND"
+        },
+        {
+          "type": "CRAFT",
+          "value": "artista"
+        },
+        {
+          "type": "CRAFT",
+          "value": "falsificador"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "roupas-finas+conjunto-de-maquiador+algibeira"
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: ferramentas de trapaça",
+          "options": [
+            "garrafas-coloridas",
+            "dados-viciados",
+            "cartas-marcadas",
+            "sinete-de-duque-imaginario"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "criacao",
+      "name": "Criação",
+      "description": "Ao contrário dos outros seres vivos e conscientes, você não nasceu, mas foi criado através de algum processo, para algum propósito ou graças a algum evento. Talvez você seja um construto feito com a finalidade de auxiliar um inventor, talvez você tenha sido um animal que adquiriu consciência e traços antropomórficos ou você pode muito bem ser uma rocha que ganhou consciência quando acertada por um raio mágico. Graças a essa condição única, você possui traços diferentes das outras criaturas vivas existentes.\n\nNormalmente, Criações possuem uma peculiaridade ao serem criadas, caso você não tenha uma ideia de uma, você pode utilizar a tabela Peculiaridades da Criação para sortear uma.\n\nPeculiaridades da Criação:\n1 — Você possui uma marca do laboratório que você foi criado ou algo relacionado ao processo que fez com que você existisse\n2 — Você não sabe distinguir emoções, pode até entender algumas, mas tem dificuldade em assimilar as suas muitas nuances\n3 — Você é aterrorizados pelas memórias de uma guerra ou de um processo natural muito violento, não conseguindo tirar memórias de violência de sua mente\n4 — Você sente raiva muito facilmente, de qualquer coisa, suas emoções são sempre fora de controle e talvez um pouco exageradas\n5 — Metal é forte, a carne é fraca. É o estado natural da evolução, o que é fraco deve perecer. Unam-se à gloriosa evolução\n6 — Você não sabe mentir, ou talvez saiba, mas muito mal. Ou talvez até saiba mentir bem, mas não se sente bem fazendo isso.\n\nPerícias: Duas perícias à sua escolha, normalmente ligado ao seu criador\nOfício: Um ofício à sua escolha, normalmente ligado ao seu criador\nIdiomas: Um idioma comum à sua escolha, normalmente ligado ao seu criador\nEquipamento: Um conjunto de roupas comuns dadas pelo seu criador, um conjunto de ferramentas para auto-reparo (peças sobressalentes, martelo, pregos, parafusos, etc.) uma algibeira contendo 1 PO",
+      "startingGold": 1,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Cria",
+          "description": "Você é algo fora da curva, podendo ser um produto da ciência e uma afronta à natureza, ou mesmo um produto da natureza e uma afronta à ciência, como tal, certos seres percebem sua existência não natural. Graças a isso, sua mente acaba não cedendo da mesma forma que a de muitos, você possui vantagem em testes para resistir à Intimidação, seja por não entender as ameaças ou por não se importar com elas."
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 2,
+          "label": "Perícias da Criação: escolha 2 (ligadas ao seu criador)"
+        },
+        {
+          "type": "CRAFT_CHOICE",
+          "count": 1,
+          "label": "Ofício da Criação (ligado ao seu criador)"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "roupas-comuns+ferramentas-de-auto-reparo+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "criminoso",
+      "name": "Criminoso",
+      "description": "Seu passado criminoso pode te assombrar ou lhe satisfazer até os dias atuais. Você teve de encontrar uma maneira de sobreviver nesse mundo cruel para aqueles que não nascem privilegiados. Um bando criminoso lhe deu a chance de se provar para se tornar um deles, ou então lhe ofereceram uma quantidade absurda de dinheiro em troca de um serviço sujo, independente do que tenha acontecido você pegou gosto pela coisa e continuou por muitos anos na vida de crime.\n\nEspecialidade Criminal:\n1 — Assassino em série\n5 — Chantagista\n2 — Assassino de aluguel\n6 — Mula de carga\n3 — Assaltante\n7 — Contrabandista\n4 — Batedor\n8 — Fraudador\n\nPerícias: Enganação e Furtividade\nOfício: Jogador de um tipo de estojo de jogo, Chaveiro\nEquipamento: Um pé de cabra, um conjunto de roupas escuras comuns com capuz e uma algibeira contendo 15 PO",
+      "startingGold": 15,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "À Margem",
+          "description": "Você frequentemente recebe um contato de sua antiga vida, lhe trazendo novas oportunidades ou até mesmo informações sobre os acontecimentos locais. Se você ainda possuir boas relações com seus antigos contratantes, você pode possuir contatos nas cidades em que eles possuam “negócios”, lhe dando informações quando preciso, ou até mesmo um leve contrabando de armas ou venenos."
+        },
+        {
+          "type": "SKILL",
+          "skill": "DECEPTION"
+        },
+        {
+          "type": "SKILL",
+          "skill": "STEALTH"
+        },
+        {
+          "type": "CRAFT",
+          "value": "jogador"
+        },
+        {
+          "type": "CRAFT",
+          "value": "chaveiro"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "pe-de-cabra+roupas-escuras-com-capuz+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "desconhecido",
+      "name": "Desconhecido",
+      "description": "Seu passado é desconhecido para você porque sofreu algum trauma que lhe causou amnésia. Você acordou um dia, sem saber quem é ou como chegou aqui. Sua origem e família são um mistério para você. Você não tem certeza se tem aliados ou inimigos do seu passado. Se você tem habilidades além dos detalhes de treinamento da sua classe, você se esforça para evocá-las.\n\nQuem cuidou de você enquanto você se recuperou? Suas habilidades de classe foram ensinadas a você depois do seu trauma ou você está lentamente lembrando-as do seu passado? Você tem flashbacks ou sonhos insinuando sua provação?\n\nQuando você acordou como um amnésico, descobriu uma coisa sobre si mesmo que poderia fornecer uma pista sobre o que aconteceu com você. Role um d6 na tabela Pistas do Passado.\n\nPistas do Passado:\n1 — Uma tatuagem — Você tem uma tatuagem incomum em seu braço, representando um edifício estranho, parte de um mapa ou símbolos gnósticos\n2 — Um ferimento curioso — Existe uma cicatriz longa em seu rosto e cabeça, recém-curada.\n3 — Algo escondido em você — Havia uma chave costurada sob a pele da sua barriga\n4 — Um pedaço de joia personalizado — Agarrado em sua mão estava um medalhão, em que há um retrato de uma jovem senhora ou senhor.\n5 — Uma punição — Seu dedo mindinho foi cortado e está faltando.\n6 — Você foi encontrado em um lugar inusitado — Você acordou na costa da praia, levado pela praia\n\nPerícias e Idiomas: Especial. Sempre que você tentar usar uma perícia, ofício ou tentar compreender uma linguagem com a qual você não é proficiente, role um d20. Em um 20 natural, você recordou um de seus talentos pré-traumáticos e obteve essa proficiência; caso contrário, você deve terminar um descanso longo antes de poder verificar novamente a mesma proficiência. Depois de ter recuperado 5 proficiências, você não fará mais essa verificação.\nEquipamento: Apenas uma muda de roupas que você está vestindo e 1 PO na sua bota.",
+      "startingGold": 1,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Memória Gradual",
+          "description": "Cada vez que você encontrar um novo PNJ ou visitar um novo local, uma vez por nível de personagem, poderá decidir se sentir familiar. Este lugar ou pessoa está de alguma forma relacionado com a sua vida que levou ao trauma que causou a sua amnésia. Isso não divulgará muita informação, mas fornecerá mais alguma pista. Você deve trabalhar com seu DM para adequar esse novo elemento ao seu passado, com o objetivo de fornecer uma divulgação completa até o meio do terceiro nível.\n\nNível 1–4: O PNJ, por acaso, reconhece você, mas não o conhece. Eles se lembram de você fazendo algum ato, como falar com uma figura misteriosa (e escutar algumas palavras), comprar um item de uma loja ou estar envolvido em uma briga.\n\nLocais podem ser lugares que você visitou apenas uma vez ou que foram passados em seu caminho para outro lugar.\n\nNível 5–8: O PNJ conhece você apenas por um nome de guerra e um pouco sobre o que aconteceu com você, mas é evasivo em lhe dar informações. Se forçados a falar, eles dão apenas uma pista antes que as circunstâncias terminem com o interrogatório (ele simplesmente escapa, ou está em uma posição de poder, ou uma tempestade violenta balança o barco). Locais podem ser tavernas ou masmorras que você frequentou.\n\nNível 9-12: O PNJ esteve diretamente envolvido com seu trauma e conhece sua verdadeira identidade. Algum conflito deve ser resolvido antes que seu relacionamento com você seja completamente entendido: Isso pode ser um encontro de combate ou um pedido feito por ele.\n\nUm local pode ser sua casa de família, seu local de trabalho, seu esconderijo secreto ou algum outro lugar muito pessoal para você, que revele sua identidade por meio de uma investigação.\n\nEsse recurso pode arrastar você para o envolvimento com sociedades secretas, nobreza, exércitos malignos, templos ocultos e outras intrigas. Uma vez que você tenha total lembrança sobre sua vida e seu trauma, um desses elementos da história pode ser usado para criar um novo recurso de plano de fundo para substituir a Memória Gradual."
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "roupas-comuns"
+        }
+      ]
+    },
+    {
+      "id": "estudioso",
+      "name": "Estudioso",
+      "description": "Você possui o conhecimento acumulado de diversas mentes geniais de gerações anteriores, leu diversos livros e testou diversas teorias. Você pode ter sido um dos estudiosos de antigas tradições, de criaturas místicas ou de novas teorias. Lendo nos livros sobre tantos lugares maravilhosos e criaturas fantásticas, sua curiosidade finalmente falou mais alto, o levando a uma vida de aventuras.\n\nEspecialidade Estudada:\n1 — Acadêmico\n5 — Bibliotecário\n2 — Aprendiz\n6 — Alquimista\n3 — Astrônomo\n7 — Escriba\n4 — Professor\n8 — Pesquisador\n\nPerícias: Arcanismo ou Tecnologia, História\nIdiomas: Dois idiomas comuns à sua escolha\nEquipamento: Um vidro de tinta preta, uma pena, uma faca pequena, um conjunto de roupas comuns e uma algibeira contendo 10 PO",
+      "startingGold": 10,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Traça de Livro",
+          "description": "Por ter passado tantos anos estudando, você sabe exatamente onde encontrar uma informação que você deseja, seja ela entre acadêmicos locais, bibliotecas ou até mesmo nobres e comerciantes ricos. Adicionalmente, você possui vantagem em qualquer teste para recordar um reconhecimento prévio. Converse com seu mestre para saber se seria possível você ter estudado sobre alguma área de conhecimento em específico."
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "ARCANA",
+            "TECHNOLOGY"
+          ],
+          "label": "Perícia do Estudioso: Arcanismo ou Tecnologia"
+        },
+        {
+          "type": "SKILL",
+          "skill": "HISTORY"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "tinta+pena+faca-pequena+roupas-comuns+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "exilado",
+      "name": "Exilado",
+      "description": "Você foi expulso de sua casa e pode nunca mais voltar. Onde você estava antes de ser exilado? O que você fez para merecer o exílio? Você foi falsamente acusado e, em caso afirmativo, por quê? Quais são as condições do seu retorno, se houver algum? Você está exilado ou ainda está dividido? Você ainda tem contatos com sua antiga vida, ou você foi completamente cortado? Você carrega algo com você para lembrar e se sim, para lembrar o que? Sua casa? Seu crime? Vingança?\n\nOrigem do Exílio:\n1 — Família nobre\n2 — Monastério no topo da montanha\n3 — Tribo nômade\n4 — Pequena cidade\n5 — Unidade militar\n6 — Uma guilda\n\nProficiência com Armadura: Escolha uma entre: Armaduras leves ou médias\nPerícias: Sobrevivência e História\nOfício: Artesanato em uma disciplina à sua escolha\nIdiomas: Um idioma comum à sua escolha\nEquipamento: Uma arma de até 25 PO (tipicamente algo da sua cultura nativa), roupas de viajantes, um cobertor de inverno, um lembrete de casa (um desenho, uma folha, um anel…) e uma algibeira contendo 5 PO",
+      "startingGold": 5,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Ecos do Passado",
+          "description": "Você pode ter sido forçado a deixar sua vida anterior, mas ela não o deixou. Você tem conhecimento sobre as maneiras como as pessoas tratam umas às outras e, portanto, foram dotadas de habilidades que giram em torno de uma natureza de raciocínio rápido. Escolha duas entre Enganação, Intimidação, Intuição e Persuasão. Uma vez por descanso longo, você pode ganhar vantagem em um teste de atributo para uma das perícias que você escolheu."
+        },
+        {
+          "type": "PROFICIENCY_CHOICE",
+          "count": 1,
+          "options": [
+            "ARMOR:LIGHT",
+            "ARMOR:MEDIUM"
+          ],
+          "label": "Armadura do Exilado: leves ou médias"
+        },
+        {
+          "type": "SKILL",
+          "skill": "SURVIVAL"
+        },
+        {
+          "type": "SKILL",
+          "skill": "HISTORY"
+        },
+        {
+          "type": "CRAFT",
+          "value": "artesanato"
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: uma arma de até 25 PO (da sua cultura)",
+          "options": [
+            "group:arma-simples<=25",
+            "group:arma-marcial<=25"
+          ]
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "roupas-viagem+cobertor-de-inverno+lembrete-de-casa+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "forasteiro",
+      "name": "Forasteiro",
+      "description": "A vida longe da civilização, o ambiente florestal ou ambientes inóspitos são os locais ideias para você e sua tribo ou clã. Você passou a vida longe de grandes cidades e impérios, crescendo acostumado a caçar a própria comida e à vida nômade. Você se acostumou a viajar por diversos tipos de terrenos e acredita que viu todo tipo de criatura, não temendo a vida selvagem.\n\nPerícias: Atletismo, Sobrevivência\nOfício: Armadilheiro e Artista: Músico de um instrumento musical à sua escolha\nIdiomas: Um idioma comum à sua escolha\nEquipamento: Uma armadilha de caça, um troféu de um animal que você matou, um conjunto de roupas de viajante e uma algibeira contendo 10 PO",
+      "startingGold": 10,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Sobrevivente",
+          "description": "Devido ao seu conhecimento geográfico, você tem facilidade de reconhecer todas as regiões por onde passou, lembrando de locais de assentamentos, florestas e onde encontrar algum tipo específico de criatura. Adicionalmente, você possui vantagem em testes de Sobrevivência para procurar alimento e entender o terreno local."
+        },
+        {
+          "type": "SKILL",
+          "skill": "ATHLETICS"
+        },
+        {
+          "type": "SKILL",
+          "skill": "SURVIVAL"
+        },
+        {
+          "type": "CRAFT",
+          "value": "armadilheiro"
+        },
+        {
+          "type": "CRAFT",
+          "value": "artista"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "armadilha-de-caca+trofeu-de-animal+roupas-viagem+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "gladiador",
+      "name": "Gladiador",
+      "description": "Você é um gladiador do coliseu; Você foi capturado, escravizado e forçado a competir em lutas de morte. Seu estilo de luta fez de você um gladiador de sucesso ou pelo menos foi bom o suficiente para mantê-lo vivo. O coliseu está em seu sangue agora, os eventos que aconteceram, as memórias que você repete em seus sonhos e suas experiências se tornaram você. Seja por escolha ou não, embora você seja livre; você nunca escapará da arena.\n\nNem todos os gladiadores são iguais. Alguns lutam com punhos enquanto outros com armas ou magia. Que habilidades mantiveram você vivo?\n\nTipos de Arena:\n1 — Clube de luta. Você esmagou os crânios das pessoas com suas próprias mãos. (Você não fala sobre o Clube da Luta.)\n2 — Magia. Pelo seu conhecimento do arcano, você viu a morte de muitos conjuradores\n3 — Lutador da morte. Você lutou com armas em uma arena lotada que cheirava a morte e medo.\n4 — Coliseu. Você lutou contra adversários em testes de força e honra, mas não há honra em ser forçado a tirar uma vida.\n5 — Domador. Você matou muitas bestas sozinho ou com uma equipe e ainda pode ouvir seus gritos.\n6 — Duelista. Os duelos cara-a-cara eram sua especialidade, o homem e a fera caíram diante de você enquanto os tiranos observavam.\n\nPerícias: Atletismo e Intimidação\nProficiência com Armadura: Armaduras leves e médias\nIdiomas: Um idioma comum à sua escolha\nEquipamento: Um traje, um conjunto de roupas comuns, um estojo de maquiagem e uma algibeira contendo 15 PO",
+      "startingGold": 15,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Contatos",
+          "description": "Quando em uma cidade, você pode encontrar um local para lutar por dinheiro e reputação."
+        },
         {
           "type": "SKILL",
           "skill": "ATHLETICS"
@@ -11095,6 +11502,405 @@
         {
           "type": "SKILL",
           "skill": "INTIMIDATION"
+        },
+        {
+          "type": "ARMOR_PROFICIENCY",
+          "value": "LIGHT"
+        },
+        {
+          "type": "ARMOR_PROFICIENCY",
+          "value": "MEDIUM"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "roupas-fantasia+roupas-comuns+conjunto-de-maquiador+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "heroi-local",
+      "name": "Herói Local",
+      "description": "Você fez um ato heróico para a população do local em que você nasceu, cresceu ou passou. Devido às suas humildes origens, você se tornou um tipo de lenda local, sendo aplaudido e “venerado” por todos aqueles que o conhecem. Você pode escolher ou rolar na tabela abaixo para definir melhor os detalhes desse evento.\n\nEvento Heróico:\n1 — Eu me opus contra servos de um tirano.\n6 — Recrutado para o exército de um nobre, eu me superei na liderança e fui condecorado por heroísmo.\n2 — Eu salvei pessoas durante um desastre natural.\n7 — Eu roubei de um mercador maligno para ajudar os pobres.\n3 — Eu enfrentei sozinho uma criatura que aterrorizava a população\n8 — Eu liderei uma pequena tropa na batalha contra um exército.\n4 — Eu invadi a casa de um tirano e roubei armas para entregar à população.\n9 — Um lorde rescindiu um decreto que desfavorecia a população após eu protestar contra ele.\n5 — Um ser místico ou feérico, deu-me uma bênção ou revelou minha origem secreta.\n10 — Eu treinei os camponeses para usar as ferramentas de campo como armas para enfrentar as tropas de um tirano.\n\nPerícias: Lidar com Animais e Sobrevivência\nOfício: Artesanato em uma disciplina à sua escolha, Guia (Piloto)\nEquipamento: Um conjunto de Ofício à sua escolha, uma pá, um pote de ferro, um conjunto de roupas comuns e uma algibeira contendo 10 PO",
+      "startingGold": 10,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Clamor Popular",
+          "description": "Desde que as pessoas conheçam a sua história, existe a chance de elas oferecerem à você e seus aliados comida e abrigo por um ou mais dias, desde que não as coloque em nenhuma situação de risco. Adicionalmente, o povo que conhece você tem uma tendência lhe contar de rumores relacionados aos poderosos locais."
+        },
+        {
+          "type": "SKILL",
+          "skill": "ANIMAL_HANDLING"
+        },
+        {
+          "type": "SKILL",
+          "skill": "SURVIVAL"
+        },
+        {
+          "type": "CRAFT",
+          "value": "artesanato"
+        },
+        {
+          "type": "CRAFT",
+          "value": "guia"
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: conjunto de Ofício à escolha",
+          "options": [
+            "group:conjunto-de-oficio"
+          ]
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "pa+panela-de-ferro+roupas-comuns+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "inventor",
+      "name": "Inventor",
+      "description": "Você é (ou era) um inventor, um colaborador da ciência. Você foi inspirado por um grande inventor ainda jovem e quer ser como ele. Então, de onde você veio? Qual é a sua especialização?\n\nComo Inventor você às vezes se inspira em diferentes fontes para suas criações ou invenções, as idéias chegam até você depois de ler uma linha de escritura antiga?\n\nEspecialização de Invenção:\n1 — Bugigangas\n2 — Artesanato\n3 — Tecnomagia\n4 — Arquitetura\n5 — Funileiro\n6 — Aeronáutica\n\nPerícias: Tecnologia e um dos seguintes: Arcanismo, Medicina, Natureza ou Percepção\nOfício: Quaisquer dois tipos de ofícios maiores\nIdiomas: Dois idiomas comuns à sua escolha\nEquipamentos: Um conjunto de roupas comuns, um conjunto de um Ofício com o qual você é proficiente, 1d4 livros sobre engenharia e uma minúscula ou pequena invenção feita por você e uma algibeira contendo 15 PO",
+      "startingGold": 15,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Uma Vez Estudante, Sempre Estudante",
+          "description": "Você pode sempre encontrar abrigo ou santuário limitado dentro de um local de aprendizado, como uma faculdade ou academia, desde que você esteja em boas relações com o grupo que administra a escola, enquanto lá você é capaz de obter conhecimentos básicos de certos tópicos, contanto que você contribua para a escola de alguma forma construtiva."
+        },
+        {
+          "type": "SKILL",
+          "skill": "TECHNOLOGY"
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "ARCANA",
+            "MEDICINE",
+            "NATURE",
+            "PERCEPTION"
+          ],
+          "label": "Perícia do Inventor: Arcanismo, Medicina, Natureza ou Percepção"
+        },
+        {
+          "type": "CRAFT_CHOICE",
+          "count": 2,
+          "options": [
+            "alquimista",
+            "apotecario",
+            "armadilheiro",
+            "armeiro",
+            "armoreiro",
+            "arqueirista",
+            "chaveiro",
+            "cozinheiro",
+            "cuteleiro",
+            "encantador",
+            "encarrocador",
+            "fermentador",
+            "joalheiro",
+            "modista",
+            "pedreiro",
+            "tecmaturgo"
+          ],
+          "label": "Ofícios Maiores do Inventor: escolha 2"
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: conjunto de um Ofício em que é proficiente",
+          "options": [
+            "group:conjunto-de-oficio"
+          ]
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "roupas-comuns+livros-de-engenharia+invencao-pequena+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "investigador",
+      "name": "Investigador",
+      "description": "Talvez você tenha uma mente peculiar, capaz de notar padrões e fazer inferências certeiras. Talvez você seja apenas um grande paranóico que acumulou muita informação aparentemente inútil e consegue fazer pontes brilhantes entre elas, como o tempo que demora para uma panela esfriar ou quão rápido um homem realiza suas necessidades básicas. Investigadores coletam, conectam e aferem informações, construindo acontecimentos ou descobrindo o que tentaram esconder.\n\nCaso você não saiba em que área você atua, você pode utilizar a tabela abaixo para sortear uma.\n\nÁrea de Especialização:\n1 — Criptografia\n6 — Campana\n2 — Varredura\n7 — Segurança de Locais\n3 — Localização de Pessoas\n8 — Informações Confidenciais\n4 — Infiltração\n9 — Contra-Espionagem\n5 — Equipamentos de Espionagem\n10 — Homicídios\n\nPerícias: Investigação e escolha uma entre: Enganação, Intuição, Percepção, Persuasão ou Sobrevivência\nIdiomas: Um idioma comum à sua escolha\nEquipamento: Uma algema, um conjunto de roupas finas, uma lupa, um mapa da região em que atuou e uma algibeira contendo 15 PO",
+      "startingGold": 15,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Faro Aguçado",
+          "description": "Você possui vantagem para perceber se uma criatura está mentindo para você e em testes para encontrar pistas sobre algo ou alguém que você esteja procurando. Além disso, você possui vantagem em teste de Percepção para saber se está sendo seguido."
+        },
+        {
+          "type": "SKILL",
+          "skill": "INVESTIGATION"
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "DECEPTION",
+            "INSIGHT",
+            "PERCEPTION",
+            "PERSUASION",
+            "SURVIVAL"
+          ],
+          "label": "Perícia do Investigador: escolha 1"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "algemas+roupas-finas+lupa+mapa-da-regiao+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "marujo",
+      "name": "Marujo",
+      "description": "Runeterra é um mundo com mais de 12 mares, as rotas mercantes existem a tempo suficiente para que ninguém lembre como era antes delas. Embora barcos sejam extremamente importantes, raros barcos podem se locomover sozinhos. Marujos são habituados ao mar e vivem sua vida em um porto de cada vez. Como você se tornou marujo? Que tipo de embarcação você tripula? Quais são seus objetivos no ar e em terra? Existe algum porto onde você não possa atracar? Qual é a sua relação com o capitão e o resto da tripulação?\n\nPerícias: Atletismo e Percepção\nOfício: Escolha um entre Guia (Navegador) e Guia (Piloto)\nEquipamento: Uma malagueta (porrete), 45 pés de corda de seda, um amuleto da sorte como um pé de coelho ou uma pequena pedra com um furo no centro, um conjunto de trajes comuns e uma algibeira contendo 10 PO",
+      "startingGold": 10,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Brisa Amiga",
+          "description": "Você conhece a tripulação de um ou mais navios e possui uma boa relação com eles, sempre que eles estiverem na mesma cidade portuária que você, você pode arranjar uma passagem gratuita para você e seus companheiros, desde que vocês paguem a passagem com serviços à bordo. Adicionalmente você possui vantagem em testes de Atletismos relacionados à natação."
+        },
+        {
+          "type": "SKILL",
+          "skill": "ATHLETICS"
+        },
+        {
+          "type": "SKILL",
+          "skill": "PERCEPTION"
+        },
+        {
+          "type": "CRAFT",
+          "value": "guia"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "porrete+corda-de-seda+amuleto-da-sorte+roupas-comuns+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "mercenario",
+      "name": "Mercenário",
+      "description": "Como mercenário, seus serviços eram para contratar para qualquer pessoa que pudesse pagar por eles. O que te levou a ser um soldado da fortuna? Foi para escapar da pobreza? Foi a emoção da batalha? Ou foi simplesmente que a luta era tudo o que você sabia crescer? Quem era sua empresa mercenária ou você trabalha sozinho? O que fez você desistir ou ainda está contratado? Você fez algum aliado ou inimigo pelo caminho? Em que guerras ou batalhas estavam envolvidas? Quais foram as consequências? Aliados perdidos? Acusações de crime de guerra?\n\nPerícias: Intimidação e Percepção\nOfício: Jogador de um tipo de jogo, Guia (Piloto)\nEquipamento: Uma prova do primeiro contrato que você completou, um conjunto de roupas comuns, um conjunto de jogos à sua escolha, uma algibeira contendo 10 PO",
+      "startingGold": 10,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Lâmina Contratada",
+          "description": "Você é um soldado da fortuna, um lutador que vende seus serviços para o maior lance. Você percorre vilas e cidades em busca de um lugar onde seu conjunto exclusivo de talentos seja útil; seja para um lorde caçando um grupo de bandidos, ou um capitão cansado da infestação de barbatâminas em seu convés, você sempre pode encontrar algum trabalho se procurar com bastante atenção. O trabalho em si não deve importar muito para uma pessoa como você, pelo menos é nisso que os outros acreditam. Portanto, outros empregos menos admiráveis e evitados às vezes chegam ao seu colo, dando a você a escolha e o problema de descobrir uma maneira de se comprometer entre sua ética e seu trabalho."
+        },
+        {
+          "type": "SKILL",
+          "skill": "INTIMIDATION"
+        },
+        {
+          "type": "SKILL",
+          "skill": "PERCEPTION"
+        },
+        {
+          "type": "CRAFT",
+          "value": "jogador"
+        },
+        {
+          "type": "CRAFT",
+          "value": "guia"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "prova-do-primeiro-contrato+roupas-comuns+algibeira"
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: um conjunto de jogos",
+          "options": [
+            "baralho",
+            "xadrez",
+            "contapedras",
+            "conjunto-de-dados"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "orfao",
+      "name": "Órfão",
+      "description": "Se você conheceu seus pais ou não, não é a questão. A questão aqui é, como você sobreviveu crescendo sem eles? Você teve que batalhar e se manter nas ruas, teve de pelejar dia a dia para sobreviver, talvez sozinho ou talvez com amigos. Quem é você? O que aconteceu com os seus pais? Com quem você cresceu e como você fez para não se tornar apenas uma estatística? Quais são suas aspirações e suas ligações com as ruas em que cresceu?\n\nPerícias: Furtividade e Prestidigitação\nOfício: Artista: Maquiador, Chaveiro\nEquipamento: Uma faca pequena, um mapa da cidade em que você cresceu, um rato de estimação, um pequeno objeto para lembrar dos seus pais, um conjunto de roupas comuns e uma algibeira contendo 10 PO",
+      "startingGold": 10,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Astúcia",
+          "description": "Você conhece os segredos das ruas de onde você cresceu, todas as passagens escondidas e locais secretos. Você possui vantagem em Furtividade e Percepção no local em que você cresceu. Você e seus aliados possuem o dobro de movimentação na região de onde você cresceu, desde que você esteja guiando e o grupo não esteja engajado em combate. Adicionalmente, você possui vantagem em qualquer teste feito para pechinchar um item mundano."
+        },
+        {
+          "type": "SKILL",
+          "skill": "STEALTH"
+        },
+        {
+          "type": "SKILL",
+          "skill": "SLEIGHT_OF_HAND"
+        },
+        {
+          "type": "CRAFT",
+          "value": "artista"
+        },
+        {
+          "type": "CRAFT",
+          "value": "chaveiro"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "faca-pequena+mapa-da-cidade+rato-de-estimacao+objeto-dos-pais+roupas-comuns+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "pirata",
+      "name": "Pirata",
+      "description": "Piratas percorrem os mares em grupos desorganizados, levando tesouros de praticamente quem puderem. O que o levou à pirataria? Você foi voluntário para este trabalho ou foi forçado quando seu navio foi invadido? Você era o capitão do navio ou apenas mais um da tripulação? Você deixou seu navio para sempre ou ainda está conectado a esse mundo? Se você foi embora, por quê?\n\nTipo de Pirata:\n1 — Capitão\n2 — Primeiro imediato\n3 — Canhoneiro\n4 — Incursor destemido\n5 — Saqueador assustador\n6 — Garoto de cabine\n\nPerícias: Escolha duas entre: Acrobacia, Lidar com Animais ou Intimidação\nProficiência com Armas: Cimitarra, Rapieira e escolhe entre: Armas de Fogo leves, médias, longas ou canhões\nEquipamento: Uma cimitarra ou rapieira, um arcabuz ou uma pistola, munição da arma escolhida (20), diário, roupas de pirata e uma algibeira contendo 10 PO\nEquipamento Opcional: Perna de pau, gancho, tapa-olho, cachimbo e tabaco (com pederneira e ferro para acender), palha, flauta, papagaio (talvez como familiar)",
+      "startingGold": 10,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Ahoy, Parceiro!",
+          "description": "Você passou anos em mar aberto e, portanto, sabe como dirigir e operar um navio. Você também conhece várias cidades portuárias em todo o mundo e, por experiência, aprendeu quais costumes são aceitáveis nas cidades portuárias que você conhece. Para você é mais fácil comprar um navio do que para outras pessoas, e você tem uma vantagem em qualquer teste feito para pechinchar para comprar um navio digno do mar. Quando estiver em uma cidade portuária amigável com a qual você tem boas relações, pode encontrar refúgio com certas pessoas; eles o esconderão se for seguro, mas não arriscarão suas vidas por você."
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 2,
+          "options": [
+            "ACROBATICS",
+            "ANIMAL_HANDLING",
+            "INTIMIDATION"
+          ],
+          "label": "Perícias do Pirata: escolha 2"
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Cimitarras"
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Rapieiras"
+        },
+        {
+          "type": "PROFICIENCY_CHOICE",
+          "count": 1,
+          "options": [
+            "WEAPON:Armas de fogo leves",
+            "WEAPON:Armas de fogo médias",
+            "WEAPON:Armas de fogo longas",
+            "WEAPON:Canhões"
+          ],
+          "label": "Armas de fogo do Pirata: escolha uma categoria"
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: cimitarra ou rapieira",
+          "options": [
+            "cimitarra",
+            "rapieira"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: arcabuz ou pistola, com a munição",
+          "options": [
+            "arcabuz+municao-longa",
+            "pistola+municao-leve"
+          ]
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "diario+roupas-de-pirata+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "religioso",
+      "name": "Religioso",
+      "description": "Você tem uma forte crença em algo ou alguém, seja uma divindade, um conceito ou mesmo uma filosofia. Você se guia por essa crença e acredita firmemente que ela é uma mudança positiva para o mundo ao seu redor, tendo como obrigação, proclamar essas boas novas. Qual é a sua crença? Onde ela se originou? Como é a receptividade dela a crenças divergentes? Como ela se relaciona com outras fés?\n\nPerícias: Intuição e Religião\nIdiomas: Dois idiomas comuns à sua escolha\nEquipamento: Um símbolo sagrado, um livro de preces ou uma conta de orações, 5 varetas de incenso, vestimentas cerimoniais, um conjunto de roupas comuns e uma algibeira contendo 15 PO",
+      "startingGold": 15,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Empatia da Fé",
+          "description": "Tendo um passado religioso, você detém a simpatia daqueles que possuem a mesma fé, podendo participar e realizar cerimônias para aquele(s) que você cultua. Você e seus aliados podem pedir por ajuda ou cura em um templo, santuário ou outro local sagrado de sua fé. Você também pode pedir para aqueles que compartilham de sua fé para conceder a você um abrigo temporário, cobrindo os custos de um estilo de vida modesto. Alternativamente, você pode estar relacionado diretamente com um templo ou santuário específico de sua fé, e possuir abrigo fixo nesse local. Esse local, desde que você possua boas relações com ele, pode ser de onde você veio, cresceu ou que encontrou um lar nele. Enquanto você estiver próximo desse local, você pode solicitar por auxílio para seus fiéis ou sacerdotes, desde que não os coloque em nenhuma posição de risco."
+        },
+        {
+          "type": "SKILL",
+          "skill": "INSIGHT"
+        },
+        {
+          "type": "SKILL",
+          "skill": "RELIGION"
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: símbolo sagrado",
+          "options": [
+            "group:simbolo-sagrado"
+          ]
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: livro de preces ou conta de orações",
+          "options": [
+            "livro-de-preces",
+            "conta-de-oracoes"
+          ]
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "vareta-de-incenso*5+vestimentas-cerimoniais+roupas-comuns+algibeira"
+        }
+      ]
+    },
+    {
+      "id": "soldado",
+      "name": "Soldado",
+      "description": "Felizmente ou infelizmente a guerra é uma constante em Runeterra. Felizmente pois as ameaças nem sempre são humanas, infelizmente pois quase sempre elas são contra o vizinho, e a morte ronda por todos os lados. Pelo que você luta? Qual é a sua causa e por qual motivo ela é justa o bastante para que você tire a vida dos outros? Qual é a sua crença em seu exército e em seu comando? Você segue suas funções e obedece a sua hierarquia?\n\nFunção Exercida:\n1 — Batedor\n5 — Médico de campo\n2 — Cavaleiro\n6 — Infantaria\n3 — Contramestre\n7 — Oficial\n4 — Equipe de Apoio\n8 — Recruta\n\nPerícias: Intimidação, Sobrevivência\nOfício: Guia (Piloto) de um veículo terrestre ou marítimo\nEquipamento: Um símbolo da sua unidade, 5 azagaias, vestimentas oficiais, uma arma marcial e uma algibeira contendo 10 PO",
+      "startingGold": 10,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Irmãos de Armas",
+          "description": "Você treinou e fez amigos em um pelotão de um exército de alguma região. Você possui amigos entre eles que lhe ajudariam de boa vontade oferecendo abrigo, comida e talvez até algum equipamento básico. Você é respeitado por todos aqueles que possuem conhecimento de sua patente (converse com seu mestre para defini-la), ou então pode até ser caçado por algum soldado do exército inimigo. Além disso, você possui a capacidade de intimidar aqueles que possuem uma patente menor do que a sua."
+        },
+        {
+          "type": "SKILL",
+          "skill": "INTIMIDATION"
+        },
+        {
+          "type": "SKILL",
+          "skill": "SURVIVAL"
+        },
+        {
+          "type": "CRAFT",
+          "value": "guia"
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Equipamento: uma arma marcial",
+          "options": [
+            "group:arma-marcial"
+          ]
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "simbolo-da-unidade+azagaia*5+vestimentas-oficiais+algibeira"
         }
       ]
     }

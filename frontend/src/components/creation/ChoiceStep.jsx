@@ -81,7 +81,7 @@ export default function ChoiceStep({ choices, picks, onChange, crafts, resources
 }
 
 // Proficiência mista (perícia, ofício ou arma) e especialidade em perícia ou ofício em grupos; as outras numa lista só.
-const PROFICIENCY_GROUPS = [['SKILL', 'Perícias'], ['CRAFT', 'Ofícios'], ['MARTIAL_WEAPON', 'Armas']]
+const PROFICIENCY_GROUPS = [['SKILL', 'Perícias'], ['CRAFT', 'Ofícios'], ['ARMOR', 'Armaduras'], ['WEAPON', 'Armas'], ['MARTIAL_WEAPON', 'Arma marcial']]
 
 function optionGroups(c, items) {
   // Equipamento com muitas opções ("qualquer arma simples"): agrupa pela categoria do catálogo.

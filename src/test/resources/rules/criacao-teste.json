@@ -436,6 +436,23 @@
           "skill": "MEDICINE"
         }
       ]
+    },
+    {
+      "id": "exilado-teste",
+      "name": "Exilado Teste",
+      "description": "Passado de teste.",
+      "grants": [
+        {
+          "type": "PROFICIENCY_CHOICE",
+          "count": 2,
+          "options": [
+            "ARMOR:LIGHT",
+            "ARMOR:MEDIUM",
+            "WEAPON:Armas de fogo leves"
+          ],
+          "label": "Proficiências do Exilado"
+        }
+      ]
     }
   ],
   "regions": [

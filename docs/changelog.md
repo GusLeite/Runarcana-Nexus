@@ -2,6 +2,13 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-26 — Os 22 passados do Capítulo 4 (`feature/character-sheet`)
+- `criacao.json`: os **22 passados** reais no lugar dos dois de exemplo, com texto e tabelas do livro, perícias (fixas e à escolha), ofícios, proficiências, equipamento (`EQUIPMENT`/`EQUIPMENT_CHOICE`), ouro e a Característica como passiva.
+- `itens.json`: 32 itens citados só nos passados (grupo `item-de-passado`).
+- `PROFICIENCY_CHOICE` aceita opções literais `ARMOR:<tipo>` e `WEAPON:<nome>` (Exilado, Pirata); front agrupa e nomeia essas opções.
+- Com a riqueza inicial, o ouro da classe e do passado não entra (faz parte do equipamento trocado).
+- Testes: `proficienciaDeArmaduraOuArmaAEscolha`, `passadosDoCapitulo4`. Conferido no sandbox (Combatente Pirata: Ahoy, Parceiro!, armas de fogo leves, cimitarra, arcabuz e munição, 10 PO).
+
 ## 2026-10-26 — Truques e magias conhecidas na criação (`feature/character-sheet`)
 - Concessões `MYSTERY`, `SPELL` e `SPELL_CHOICE`, e FEATURE com `value: "MYSTERY"` (a opção escolhida vira Mistério). As escolhas de magia são montadas no fim da prévia com a lista da classe e os Mistérios do personagem; as magias viram habilidades `SPELL` da ficha.
 - Ligado ao 1º nível: Acólito (3 truques), Arcanista (3 truques e 4 magias de 1º nível dos Mistérios), Xamã (2 truques), Ravasz, Cicatrizes Rúnicas, Arqueiro Rúnico, Espião e Combatente Arcano (2 truques); Mistérios fixos dos Ritos e Glifos; magias fixas (Poupar os Moribundos, Disparo Arcano, Manifestar Efígie, Mãos Mágicas).
