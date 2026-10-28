@@ -4,7 +4,7 @@ Roteiro das próximas entregas, na ordem em que serão feitas. O foco é a **mes
 
 Cada etapa é uma entrega própria: código + testes + docs (`backend.md`/`frontend.md`/`changelog.md`) no mesmo commit, como manda o `CLAUDE.md`. Ao concluir uma etapa, marque-a aqui como **feita** (com a data) e tire dela as pendências dos outros docs.
 
-Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criacao.md), Decisões da mesa): quem altera a ficha pronta é o **mestre**; o jogador altera só os próprios **PV**, os **usos de habilidade**, as **anotações** e as **preparadas** (no descanso longo). Tudo que este plano der ao jogador além disso está marcado como **decisão a confirmar**.
+Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criacao.md), Decisões da mesa): quem altera a ficha pronta é o **mestre**; o jogador altera só os próprios **PV**, os **usos de habilidade**, as **anotações** e as **preparadas** (no descanso longo). Decididas em 2026-10-27 para este plano: o jogador também **gasta** consumíveis e ouro e marca os próprios **testes contra a morte**; inspiração é **sim/não**; condições e exaustão ficam com o mestre.
 
 ## Estado atual (2026-10-27)
 
@@ -22,17 +22,17 @@ Back-end:
   - `POST { catalogId, quantity }` adiciona um item do `itens.json` (reusa a conversão de `StartingEquipmentService`, que acha/cria a linha de `Item` pelo `catalogId`); se a ficha já tem o item, soma a quantidade;
   - `POST { name, description, weight, price, rarity, quantity }` item livre (loot que não está no catálogo, `catalogId` "nome:…");
   - `PATCH /{playerItemId} { quantity }` (0 remove) e `DELETE /{playerItemId}`.
-- `PATCH /character/{id}/gold { gold }` e `PATCH /character/{id}/inspiration { inspiration }` (só o mestre; ouro ≥ 0, inspiração 0 ou 1, ou um número, ver decisão).
+- `PATCH /character/{id}/gold { gold }` e `PATCH /character/{id}/inspiration { inspiration }` (só o mestre; ouro ≥ 0; inspiração sim/não, 0 ou 1).
+- Jogador (`/character/me`): `POST /items/{playerItemId}/use` gasta 1 de um consumível (0 remove a linha; 400 se não for consumível) e `POST /gold/spend { amount }` gasta ouro (400 se faltar). Não adiciona nada.
+- Inspiração do jogador: `POST /character/me/inspiration/use` gasta a inspiração (1 → 0); só o mestre dá.
 - Tirar o escudo/armadura escolhidos da defesa quando o item sai do inventário (`Character.shield`/defesa voltam ao padrão).
 - `ItemService`: arrumar os nomes copiados (`getAllCharacters`, `createCharacter`) já que vai ganhar uso.
 
 Front:
 - Painel do mestre → **Fichas**: abas "Subir de nível" e **"Inventário e ouro"** (`MasterInventory.jsx`): escolhe o personagem, grade do inventário com +/− e remover, busca no catálogo (`/creation/catalog` já traz `equipment.items`), formulário de item livre, campos de ouro e inspiração.
-- Ficha do jogador: nada muda além de atualizar ao abrir.
+- Ficha do jogador: no inventário, **Usar** no consumível escolhido (−1); no ouro do topo, **Gastar** (valor); a inspiração vira um botão que gasta quando está acesa.
 
-Testes: `InventoryControllerTests` (403 para jogador, soma de quantidade, item livre, remover, ouro negativo = 400, escudo removido some da CA).
-
-Decisões a confirmar: inspiração é sim/não ou acumula? O jogador pode **gastar** consumível (−1) e ouro sozinho, ou só o mestre?
+Testes: `InventoryControllerTests` (403 para jogador nas rotas do mestre, soma de quantidade, item livre, remover, ouro negativo = 400, escudo removido some da CA; jogador usa consumível, gasta ouro além do que tem = 400, não usa arma como consumível, gasta inspiração).
 
 ## Etapa 2 — Ataques com arma
 
@@ -66,15 +66,13 @@ Testes: custo por nível, Mana insuficiente, truque grátis, nível acima do per
 **Por quê**: a cena de 0 PV e as condições (Caído, Agarrado, Envenenado…) acontecem em todo combate.
 
 Back-end:
-- `Character.deathSuccesses`/`deathFailures` (0–3), zerados ao ganhar PV ou no descanso; `PATCH /character/me/death-saves`.
-- Condições: lista do livro (conferir os nomes no Capítulo de regras da wiki) em `rules/condicoes.json` (nome + texto); `Character.conditions` (conjunto) e `exhaustion` (0–6); `PATCH /character/{id}/conditions` (mestre) — e do jogador, ver decisão.
+- `Character.deathSuccesses`/`deathFailures` (0–3), zerados ao ganhar PV ou no descanso; `PATCH /character/me/death-saves` (jogador) e `PATCH /character/{id}/death-saves` (mestre ajusta).
+- Condições: lista do livro (conferir os nomes no Capítulo de regras da wiki) em `rules/condicoes.json` (nome + texto); `Character.conditions` (conjunto) e `exhaustion` (0–6); `PATCH /character/{id}/conditions` (só o mestre).
 - `CharacterResponse`: `deathSaves`, `conditions` (com o texto), `exhaustion`.
 
 Front:
 - Herói: com 0 PV, a barra vira os 3+3 círculos dos testes (clicar rola d20: 10+ sucesso, 1 = duas falhas, 20 = volta com 1 PV).
-- Chips de condição no herói com o texto na dica; o mestre liga/desliga no painel.
-
-Decisões a confirmar: o jogador marca os próprios testes contra a morte e condições, ou só o mestre? (Sugestão: testes contra a morte pelo jogador, condições pelo mestre.)
+- Chips de condição no herói com o texto na dica (só leitura para o jogador); o mestre liga/desliga no painel.
 
 ## Etapa 5 — Mestre edita o que já criou
 
