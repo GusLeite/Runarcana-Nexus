@@ -9,6 +9,7 @@ import gusleite.runarcana_nexus.model.player.Character;
 import gusleite.runarcana_nexus.model.player.CharacterAbility;
 import gusleite.runarcana_nexus.record.AbilityRequest;
 import gusleite.runarcana_nexus.record.AbilityResponse;
+import gusleite.runarcana_nexus.record.CastResponse;
 import gusleite.runarcana_nexus.repository.CharacterAbilityRepository;
 import gusleite.runarcana_nexus.repository.CharacterRepository;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,11 @@ public class AbilityService {
     private final CharacterAbilityRepository abilities;
     private final CharacterRepository characters;
     private final CharacterService characterService;
+    private final RuleCatalogService rules;
 
-    public AbilityService(CharacterAbilityRepository abilities, CharacterRepository characters, CharacterService characterService) {
+    public AbilityService(CharacterAbilityRepository abilities, CharacterRepository characters, CharacterService characterService,
+                          RuleCatalogService rules) {
+        this.rules = rules;
         this.abilities = abilities;
         this.characters = characters;
         this.characterService = characterService;
@@ -34,7 +38,7 @@ public class AbilityService {
     public List<AbilityResponse> listFor(Long characterId) {
         Character character = characters.findById(characterId)
                 .orElseThrow(() -> ApiException.notFound("Personagem não encontrado."));
-        return abilities.findByCharacterOrderByIdAsc(character).stream().map(AbilityResponse::of).toList();
+        return SpellcastingRules.responses(character, abilities.findByCharacterOrderByIdAsc(character));
     }
 
     @Transactional
@@ -86,7 +90,8 @@ public class AbilityService {
 
     @Transactional
     public AbilityResponse setUses(Account account, Long abilityId, int usesLeft) {
-        CharacterAbility ability = find(characterService.characterOf(account), abilityId);
+        Character character = characterService.characterOf(account);
+        CharacterAbility ability = find(character, abilityId);
         if (ability.getMaxUses() == null) {
             throw ApiException.badRequest("Essa habilidade não tem usos para contar.");
         }
@@ -94,7 +99,8 @@ public class AbilityService {
             throw ApiException.badRequest("Não dá para ter mais usos que o máximo (" + ability.getMaxUses() + ").");
         }
         ability.setUsesLeft(usesLeft);
-        return AbilityResponse.of(ability);
+        List<SpellcastingRules.Casting> castings = SpellcastingRules.castings(character, abilities.findByCharacterOrderByIdAsc(character));
+        return AbilityResponse.of(ability, SpellcastingRules.forSpell(character, castings, ability));
     }
 
     // Descanso curto recupera o que volta no curto; o longo recupera tudo.
@@ -109,7 +115,39 @@ public class AbilityService {
                     : ability.getRecharge() == Recharge.SHORT_REST;
             if (recovers) ability.setUsesLeft(ability.getMaxUses());
         }
-        return list.stream().map(AbilityResponse::of).toList();
+        return SpellcastingRules.responses(character, list);
+    }
+
+    // Conjurar (Capítulo 10): truque não gasta nada; magia com usos próprios ("sem Mana, X vezes") no nível dela gasta
+    // um uso enquanto houver; senão gasta a Mana do nível (MagicRules.manaCost) da habilidade "Pontos de Mana".
+    // O nível vai do nível da magia ao maior nível máximo de magia da ficha (o maior entre as classes).
+    @Transactional
+    public CastResponse cast(Account account, Long abilityId, Integer requested) {
+        Character character = characterService.characterOf(account);
+        List<CharacterAbility> list = abilities.findByCharacterOrderByIdAsc(character);
+        CharacterAbility spell = find(character, abilityId);
+        if (spell.getType() != AbilityType.SPELL) throw ApiException.badRequest("Só dá para conjurar magias.");
+        if (Boolean.FALSE.equals(spell.getPrepared())) throw ApiException.badRequest(spell.getName() + " não está preparada.");
+        int base = spell.getSpellLevel() == null ? 0 : spell.getSpellLevel();
+        if (base == 0) return new CastResponse(0, 0, false, SpellcastingRules.responses(character, list));
+        int level = requested == null ? base : requested;
+        if (level < base) throw ApiException.badRequest(spell.getName() + " é de " + base + "º nível; não dá para conjurar abaixo disso.");
+        if (level == base && spell.getMaxUses() != null && spell.getUsesLeft() != null && spell.getUsesLeft() > 0) {
+            spell.setUsesLeft(spell.getUsesLeft() - 1);
+            return new CastResponse(level, 0, true, SpellcastingRules.responses(character, list));
+        }
+        int max = Math.max(base, SpellcastingRules.maxSpellLevel(SpellcastingRules.castings(character, list)));
+        if (level > max) throw ApiException.badRequest("Você conjura magias até o " + max + "º nível.");
+        Integer cost = MagicRules.manaCost(rules.catalog().magic(), level);
+        if (cost == null) throw ApiException.badRequest("Nível de magia inválido.");
+        CharacterAbility mana = list.stream().filter(a -> SpellcastingRules.MANA.equals(a.getName()) && a.getMaxUses() != null).findFirst()
+                .orElseThrow(() -> ApiException.badRequest("Sua ficha não tem Pontos de Mana."));
+        int left = mana.getUsesLeft() == null ? 0 : mana.getUsesLeft();
+        if (left < cost) {
+            throw ApiException.badRequest("Mana insuficiente: " + spell.getName() + " no " + level + "º nível custa " + cost + " e você tem " + left + ".");
+        }
+        mana.setUsesLeft(left - cost);
+        return new CastResponse(level, cost, false, SpellcastingRules.responses(character, list));
     }
 
     private CharacterAbility find(Character character, Long abilityId) {

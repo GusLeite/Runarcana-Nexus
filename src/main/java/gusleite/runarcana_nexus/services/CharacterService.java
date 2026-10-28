@@ -6,11 +6,13 @@ import gusleite.runarcana_nexus.model.auth.Account;
 import gusleite.runarcana_nexus.model.player.Background;
 import gusleite.runarcana_nexus.model.player.Character;
 import gusleite.runarcana_nexus.model.player.CharacterSkill;
+import gusleite.runarcana_nexus.model.player.CharacterAbility;
 import gusleite.runarcana_nexus.model.player.PlayerItems;
 import gusleite.runarcana_nexus.model.items.Armor;
 import gusleite.runarcana_nexus.model.items.Item;
 import gusleite.runarcana_nexus.model.items.Weapon;
 import gusleite.runarcana_nexus.record.AttackResponse;
+import gusleite.runarcana_nexus.record.SpellcastingResponse;
 import gusleite.runarcana_nexus.rules.RuleItem;
 import gusleite.runarcana_nexus.record.ArmorClassResponse;
 import org.hibernate.Hibernate;
@@ -31,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -82,12 +85,11 @@ public class CharacterService {
         List<InventoryItemResponse> inventory = items.stream()
                 .map(e -> InventoryItemResponse.of(e, EquipmentRules.consumable(rules.catalog().equipment(), e.getItem())))
                 .toList();
-        List<AbilityResponse> abilities = abilityRepository.findByCharacterOrderByIdAsc(character).stream()
-                .map(AbilityResponse::of)
-                .toList();
+        List<CharacterAbility> rows = abilityRepository.findByCharacterOrderByIdAsc(character);
+        List<AbilityResponse> abilities = SpellcastingRules.responses(character, rows);
 
         return new CharacterSheetResponse(CharacterResponse.of(character), armorClassOf(character, items),
-                attacksOf(character, items), inventory, abilities);
+                attacksOf(character, items), spellcastingOf(character, rows), inventory, abilities);
     }
 
     // Escolhe a defesa em uso ("UNARMORED", "RULE:<n>" ou "ITEM:<id>") entre as opções da ficha.
@@ -139,6 +141,16 @@ public class CharacterService {
                         .map(r -> new ArmorClassCalculator.ShieldItem("ITEM:" + e.getId(), e.getItem().getName(), r.armorClass()))
                         .stream())
                 .toList();
+    }
+
+    // Conjuração: CD e ataque de magia por fonte, o maior nível de magia e o custo de Mana por nível.
+    private SpellcastingResponse spellcastingOf(Character character, List<CharacterAbility> rows) {
+        List<SpellcastingRules.Casting> castings = SpellcastingRules.castings(character, rows);
+        Map<String, Integer> cost = rules.catalog().magic() == null || rules.catalog().magic().manaCost() == null ? Map.of()
+                : rules.catalog().magic().manaCost();
+        return new SpellcastingResponse(castings.stream()
+                .map(k -> new SpellcastingResponse.Caster(k.source(), k.className(), k.attribute(), k.maxSpellLevel(), k.saveDc(), k.attackBonus()))
+                .toList(), SpellcastingRules.maxSpellLevel(castings), cost);
     }
 
     // Ataques: as armas do inventário (pelo catálogo, ou pela linha de Weapon no item sem catálogo) + desarmado.

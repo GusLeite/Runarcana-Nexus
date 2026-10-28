@@ -11,7 +11,7 @@
 | GET | `/character-classes` | – | Lista as classes |
 | POST | `/character` | `CreateCharacterRequest` (ver abaixo) | Cria um personagem; devolve `CharacterResponse` (201). 400 com `message` se faltar campo, a classe/antecedente não existir ou o JSON tiver valor fora do enum |
 | GET | `/character` | – | Lista os personagens (`CharacterResponse[]`) |
-| GET | `/character/me` | – (Bearer) | Ficha do personagem da conta logada: `{ character: CharacterResponse, armorClass, attacks: AttackResponse[], inventory: InventoryItemResponse[], abilities: AbilityResponse[] }`. 401 sem sessão; 404 com `message` se a ficha não existir |
+| GET | `/character/me` | – (Bearer) | Ficha do personagem da conta logada: `{ character: CharacterResponse, armorClass, attacks: AttackResponse[], spellcasting: SpellcastingResponse, inventory: InventoryItemResponse[], abilities: AbilityResponse[] }`. 401 sem sessão; 404 com `message` se a ficha não existir |
 | POST | `/character/{id}/abilities` | `AbilityRequest` (Bearer **mestre**) | Cadastra magia/habilidade no personagem. 201; 403 para jogador |
 | GET | `/character/{id}/abilities` | – (Bearer **mestre**) | Habilidades do personagem (painel do mestre) |
 | PATCH | `/character/{id}/abilities/{abilityId}/icon` | `{ icon }` (Bearer **mestre**) | Troca o ícone (data URL ou link); `icon: null` remove. 400 se não for imagem PNG/JPEG/WebP/GIF ou link http(s) |
@@ -29,6 +29,7 @@
 | POST | `/character/me/items/{entryId}/use` | – (Bearer) | Jogador gasta 1 de um consumível (a última unidade tira a linha). 400 se não for consumível. Devolve a ficha (`CharacterSheetResponse`) |
 | POST | `/character/me/gold/spend` | `{ amount }` (Bearer) | Jogador gasta ouro (de 1 até o que tem). Devolve a ficha |
 | POST | `/character/me/inspiration/use` | – (Bearer) | Jogador gasta a inspiração acesa. 400 sem inspiração. Devolve a ficha |
+| POST | `/character/me/abilities/{abilityId}/cast` | `{ level? }` (Bearer) | Jogador conjura a magia no nível (sem `level` = o da magia): truque não gasta; com usos próprios, no nível dela, gasta 1 uso; senão desconta a Mana do nível de "Pontos de Mana". Devolve `{ level, manaCost, usedUse, abilities }`. 400 se não for magia, não estiver preparada, abaixo do nível da magia, acima do nível máximo da ficha ou faltar Mana |
 | POST | `/character/me/rest` | `{ type: SHORT \| LONG, prepared? }` (Bearer) | Descanso: curto recupera o que é `SHORT_REST`; longo recupera tudo que recarrega. No longo, `prepared` (`{ "ACOLYTE": ["spell:<id>"], "SHAMAN": ["ability:<id>"] }`) troca as magias preparadas antes (400 acima do limite ou fora das opções, e aí não descansa). Devolve as habilidades |
 | GET | `/character/me/preparation` | – (Bearer) | `PreparationResponse`: por classe que prepara (Acólito, Xamã), `limit`, `maxSpellLevel` (nulo = entre os conhecidos), `options` (`key`, `name`, `level`) e `prepared`. `classes` vazio se a ficha não prepara |
 | GET | `/notes` | – (Bearer) | Anotações do jogador (fixadas primeiro, depois as mais recentes) |

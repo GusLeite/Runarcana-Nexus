@@ -532,3 +532,14 @@ input.note-title{padding:10px 12px;font-family:'Cinzel',Georgia,serif;font-size:
 .chip-btn{cursor:pointer;transition:border-color .2s,box-shadow .2s}
 .chip-btn.crit{color:var(--gold-hi)}
 @container (max-width:420px){.attack{grid-template-columns:auto 1fr}.attack-dmg{grid-column:1/-1;justify-content:flex-start}}
+
+/* Conjurar */
+.spell-dc{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:8px 0;color:var(--muted);font-size:13px}
+.spell-dc b{color:var(--gold-hi);font-family:'Cinzel',Georgia,serif;font-size:16px}
+.cast-box{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:8px 0;padding:8px 10px;border:1px solid rgba(47,211,192,.25);background:rgba(47,211,192,.05)}
+.cast-level{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.cast-level select{background:rgba(0,0,0,.4);color:var(--text);border:1px solid rgba(200,162,74,.35);padding:3px 6px;font:inherit;text-transform:none}
+.cast-cost{font-size:13px;color:var(--text)}
+.cast-cost.short{color:#e0645a}
+.btn.cast-btn{width:auto;margin:0 0 0 auto;padding:7px 16px;font-size:12px}
+.btn.cast-btn:disabled{opacity:.35;cursor:default;box-shadow:none}

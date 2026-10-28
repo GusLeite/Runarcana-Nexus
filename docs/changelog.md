@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-28 — Conjurar gastando Mana, Etapa 3 do plano (`feature/character-sheet`)
+- `SpellcastingRules`: atributo de conjuração e nível máximo de magia lidos do texto das habilidades de Conjuração (vale nas fichas antigas); `saveDc`/`spellAttack` nas magias e `spellcasting` na ficha (maior nível entre as classes, custo de Mana).
+- `POST /character/me/abilities/{id}/cast`: truque grátis, usos próprios primeiro, senão a Mana do nível; 400 acima do nível máximo, sem Mana ou não preparada. Decisão: em vez de `castingAttribute` no `criacao.json`, o texto do livro já na ficha.
+- Front: CD, ataque de magia (rola) e a caixa **Conjurar** com nível e custo na aba Magias.
+- Testes: `conjurarGastaManaPeloNivel`, `SpellcastingRulesTests`. Conferido no sandbox: Arcanista CD 12, Bênção −2 Mana (4 → 2).
+
 ## 2026-10-28 — Ataques com arma, Etapa 2 do plano (`feature/character-sheet`)
 - `AttackCalculator`: `attacks` na ficha, uma linha por arma do inventário + desarmado; acuidade (maior entre FOR e DES), à distância (DES), proficiência por categoria ou pelo nome, crítico do livro ("p 19 x3") e dano versátil.
 - Front: card **Ataques** na Ficha (`Attacks.jsx`): bônus rola o d20 com a margem de crítico; dano, 2 mãos e Crítico (`critDice`) rolam o dano.

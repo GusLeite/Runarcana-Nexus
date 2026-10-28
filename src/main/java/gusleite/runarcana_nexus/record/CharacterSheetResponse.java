@@ -8,6 +8,7 @@ public record CharacterSheetResponse(
         CharacterResponse character,
         ArmorClassResponse armorClass,
         List<AttackResponse> attacks,
+        SpellcastingResponse spellcasting,
         List<InventoryItemResponse> inventory,
         List<AbilityResponse> abilities
 ) {}

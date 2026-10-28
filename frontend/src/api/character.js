@@ -1,8 +1,12 @@
 import { request } from './auth.js'
 
-// Ficha do personagem logado: { character, armorClass, inventory, abilities }.
+// Ficha do personagem logado: { character, armorClass, attacks, spellcasting, inventory, abilities }.
 // 404 quando a ficha ainda não foi criada; 401 quando a sessão venceu.
 export const fetchSheet = token => request('/character/me', { token })
+
+// Conjura no nível (nulo = o da magia): gasta a Mana ou um uso próprio. Devolve { level, manaCost, usedUse, abilities }.
+export const castSpell = (token, abilityId, level) =>
+  request('/character/me/abilities/' + abilityId + '/cast', { method: 'POST', token, body: { level } })
 
 export const setAbilityUses = (token, abilityId, usesLeft) =>
   request('/character/me/abilities/' + abilityId, { method: 'PATCH', token, body: { usesLeft } })

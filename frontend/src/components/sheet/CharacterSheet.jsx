@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, consumeItem, fetchPreparation, fetchSheet, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
+import { castSpell, chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, consumeItem, fetchPreparation, fetchSheet, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
 import { rollCheck, rollDice } from '../../data/rules.js'
@@ -153,6 +153,18 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     setAbilities(list => list.map(a => (a.id === ability.id ? { ...a, usesLeft } : a)))
     setAbilityUses(token, ability.id, usesLeft).catch(err => { setAbilities(before); fail(err) })
   }, [abilities, token, fail])
+
+  const cast = useCallback((spell, level) => {
+    setBusy(true)
+    castSpell(token, spell.id, level)
+      .then(r => {
+        setAbilities(r.abilities)
+        setToast('Conjurou ' + spell.name + (r.level ? ' no ' + r.level + 'º nível' : '')
+          + (r.usedUse ? ' (1 uso da magia).' : r.manaCost ? ' (−' + r.manaCost + ' Mana).' : '.'))
+      })
+      .catch(fail)
+      .finally(() => setBusy(false))
+  }, [token, fail])
 
   // Magias preparadas (Acólito, Xamã): o descanso longo abre a escolha antes de descansar.
   const [preparation, setPreparation] = useState(null)
@@ -333,7 +345,8 @@ export default function CharacterSheet({ character, session, notice, onChangePas
           <div className="sheet-col wide" key={tab}>
             <section className="card" style={{ '--i': 1 }}>
               {tab === 'abilities' && (
-                <AbilitiesTab abilities={abilities} onSetUses={setUses} onRest={rest} onRollDice={rollExpr} busy={busy} prepares={prepares} />
+                <AbilitiesTab abilities={abilities} spellcasting={state.sheet.spellcasting} onSetUses={setUses} onRest={rest} onRoll={roll}
+                  onRollDice={rollExpr} onCast={cast} busy={busy} prepares={prepares} />
               )}
               {tab === 'inventory' && <Inventory items={state.sheet.inventory} strength={sheet.str} onUse={consumeOne} />}
               {tab === 'documents' && (

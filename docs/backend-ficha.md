@@ -24,6 +24,12 @@
 - O mestre cadastra; o jogador só gasta/recupera usos e descansa. Os usos começam cheios.
 - Exemplo (mestre, `POST /runarcana/character/1/abilities`): `{ "name": "Seta Estelar", "type": "SPELL", "spellLevel": 1, "range": "36 m", "damage": "3d4+3", "maxUses": 4, "recharge": "LONG_REST", "description": "Três dardos de luz." }`
 
+## Conjuração (CD, ataque de magia e Mana)
+
+`SpellcastingRules` lê o texto do livro que já está nas habilidades de Conjuração da ficha ("Conjuração", "Conjuração do Espião", "Combatente Conjurador"; qualquer habilidade não-magia com "Atributo de conjuração: X"): o **atributo** e a tabela do **nível máximo de magia** ("1º no 1º nível, 2º no 3º..." do Acólito ou as linhas "3º 3/6/2º" das tabelas), no nível da classe dona da fonte (a fonte da habilidade casa com o nome da classe ou da subclasse em `classLevels`; com uma classe só, é ela; fichas antigas usam o nível do personagem). Por isso vale nas fichas antigas, sem migração. Cada magia usa a conjuração da classe de onde veio (pela `source`; sem classe reconhecível, a primeira) e ganha `saveDc` (8 + proficiência + mod.) e `spellAttack` (proficiência + mod.) em `AbilityResponse`. `GET /character/me` traz `spellcasting`: `casters` (fonte, classe, atributo, nível máximo, CD, ataque), `maxSpellLevel` (o maior entre as classes, regra de multiclasse) e `manaCost` (tabela do `magias.json`).
+
+**Conjurar** (`POST /character/me/abilities/{id}/cast`): truque não gasta; magia com usos próprios ("sem Mana, X vezes"), no nível dela, gasta 1 uso enquanto houver; senão desconta `MagicRules.manaCost(nível)` da habilidade "Pontos de Mana" (uma só, mesmo na multiclasse). O nível vai do nível da magia até `maxSpellLevel`; magia não preparada não conjura.
+
 ## Documentos do mestre (`GameDocument`)
 
 - Campos: `title`, `kind` (`LETTER | CLUE | MAP | LORE | SECRET | REWARD`, muda ícone e cor no front), `body` (texto; o front entende `## título`, `**negrito**` e `*itálico*`), `imageUrl` (opcional, `http(s)://`), `recipients` (usernames; vazio = **todos**), `createdAt`, `author`.
@@ -80,5 +86,6 @@ Por conta (não por personagem): `title`, `body` (até 20.000 caracteres), `pinn
 
 - Inventário depois da criação (`InventoryService`, decisão da mesa): o mestre dá e tira itens, ouro e inspiração; o jogador só gasta. **Consumível** = `Consumable` ou item do catálogo com kind `AMMUNITION` ou grupo `consumivel` no `itens.json` (`EquipmentRules.consumable`; as linhas de `Item` antigas foram criadas como objeto comum, por isso a conferência também olha o catálogo). A munição do catálogo vem em pacote ("Virotes de besta (20)", quantidade 1): usar gasta o pacote inteiro; o mestre ajusta pelo painel.
 - `Item.itemDescription` e `Item.effect` passaram para `varchar(4000)` (`@Column(length = 4000)`). O `ddl-auto=update` **não aumenta** coluna que já existe: no PostgreSQL local rode uma vez `ALTER TABLE item ALTER COLUMN item_description TYPE varchar(4000); ALTER TABLE item ALTER COLUMN effect TYPE varchar(4000);` (a coluna nova `catalog_id` é criada sozinha). Sem isso, criar personagem com equipamento dá erro de valor longo.
+- Conjuração: o Combatente Arcano sem o Aprimorado também lê as linhas "(Aprimorado)" da tabela (libera 3º nível no 13º); habilidade de Conjuração cadastrada pelo mestre só conta se tiver o texto "Atributo de conjuração: X".
 - Ataques: estilos de luta (Duelismo, Arquearia...), "Imprópria -N", dano extra de Heranças e a munição gasta não entram na conta; o texto das propriedades fica na dica.
 - O jogador altera os próprios PV e só **gasta** consumíveis, ouro e inspiração (decisão da mesa); não há rota para apagar a ficha.

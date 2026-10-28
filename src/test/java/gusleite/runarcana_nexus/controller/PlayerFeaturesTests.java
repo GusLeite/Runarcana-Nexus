@@ -94,6 +94,53 @@ class PlayerFeaturesTests {
                 .andExpect(jsonPath("$[0].usesLeft").value(3));
     }
 
+    // Rudo: 4º nível (proficiência +2), INT 18 (+4). A Conjuração do livro diz o atributo e o nível máximo (2º no 4º).
+    @Test
+    void conjurarGastaManaPeloNivel() throws Exception {
+        String master = login("mestre");
+        String rudo = login("rudo");
+        ability(master, """
+                {"name":"Conjuração","type":"ABILITY","description":"Truques / magias / nível máximo: 1º 3/4/1º · 2º 3/5 · 3º 3/6/2º · 5º 4/8/3º.\\n\\nAtributo de conjuração: Inteligência. CD = 8 + proficiência + mod."}
+                """);
+        long mana = ability(master, "{\"name\":\"Pontos de Mana\",\"type\":\"ABILITY\",\"maxUses\":6}");
+        long cantrip = ability(master, "{\"name\":\"Raio de Gelo\",\"type\":\"SPELL\",\"spellLevel\":0}");
+        long seta = ability(master, "{\"name\":\"Seta Estelar\",\"type\":\"SPELL\",\"spellLevel\":1}");
+        long free = ability(master, "{\"name\":\"Passo Nebuloso\",\"type\":\"SPELL\",\"spellLevel\":1,\"maxUses\":1}");
+
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + rudo))
+                .andExpect(jsonPath("$.spellcasting.maxSpellLevel").value(2))
+                .andExpect(jsonPath("$.spellcasting.casters[0].attribute").value("INTELLIGENCE"))
+                .andExpect(jsonPath("$.abilities[?(@.name == 'Seta Estelar')].saveDc").value(14))
+                .andExpect(jsonPath("$.abilities[?(@.name == 'Seta Estelar')].spellAttack").value(6));
+
+        cast(rudo, cantrip, null).andExpect(status().isOk()).andExpect(jsonPath("$.manaCost").value(0));
+        cast(rudo, seta, 1).andExpect(jsonPath("$.manaCost").value(2))
+                .andExpect(jsonPath("$.abilities[?(@.id == " + mana + ")].usesLeft").value(4));
+        cast(rudo, seta, 2).andExpect(jsonPath("$.manaCost").value(3))
+                .andExpect(jsonPath("$.abilities[?(@.id == " + mana + ")].usesLeft").value(1));
+        // Acima do nível máximo, abaixo do nível da magia e Mana que não dá.
+        cast(rudo, seta, 3).andExpect(status().isBadRequest());
+        cast(rudo, free, 0).andExpect(status().isBadRequest());
+        cast(rudo, seta, 1).andExpect(status().isBadRequest());
+        // Usos próprios: gasta o uso, não a Mana; acabou o uso, cai na Mana (que não dá).
+        cast(rudo, free, null).andExpect(jsonPath("$.usedUse").value(true))
+                .andExpect(jsonPath("$.abilities[?(@.id == " + mana + ")].usesLeft").value(1));
+        cast(rudo, free, null).andExpect(status().isBadRequest());
+        cast(rudo, mana, null).andExpect(status().isBadRequest());
+    }
+
+    private long ability(String master, String json) throws Exception {
+        return idOf(mvc.perform(post("/character/" + rudoId + "/abilities").header("Authorization", "Bearer " + master)
+                        .contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString());
+    }
+
+    private org.springframework.test.web.servlet.ResultActions cast(String token, long abilityId, Integer level) throws Exception {
+        return mvc.perform(post("/character/me/abilities/" + abilityId + "/cast").header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON).content(level == null ? "{}" : "{\"level\":" + level + "}"));
+    }
+
     @Test
     void mestreListaHabilidadesDoPersonagemEApaga() throws Exception {
         String master = login("mestre");

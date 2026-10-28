@@ -6,6 +6,8 @@ import gusleite.runarcana_nexus.record.AbilityResponse;
 import gusleite.runarcana_nexus.enums.RestType;
 import gusleite.runarcana_nexus.model.auth.Account;
 import gusleite.runarcana_nexus.record.AbilityUsesRequest;
+import gusleite.runarcana_nexus.record.CastRequest;
+import gusleite.runarcana_nexus.record.CastResponse;
 import gusleite.runarcana_nexus.record.PreparationResponse;
 import gusleite.runarcana_nexus.record.RestRequest;
 import gusleite.runarcana_nexus.services.AbilityService;
@@ -80,6 +82,15 @@ public class AbilityController {
             @PathVariable Long abilityId,
             @Valid @RequestBody AbilityUsesRequest request) {
         return ResponseEntity.ok(service.setUses(auth.authenticate(authorization), abilityId, request.usesLeft()));
+    }
+
+    // Jogador: conjura uma magia no nível escolhido, gastando a Mana (ou um uso próprio da magia).
+    @PostMapping("/me/abilities/{abilityId}/cast")
+    public ResponseEntity<CastResponse> cast(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @PathVariable Long abilityId,
+            @RequestBody(required = false) CastRequest request) {
+        return ResponseEntity.ok(service.cast(auth.authenticate(authorization), abilityId, request == null ? null : request.level()));
     }
 
     @PostMapping("/me/rest")

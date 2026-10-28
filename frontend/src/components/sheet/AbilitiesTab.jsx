@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { ABILITY_TYPES, RECHARGES, groupAbilities, parseDice, spellLevelName } from '../../data/rules.js'
+import { ABILITY_TYPES, RECHARGES, formatModifier, groupAbilities, parseDice, spellLevelName } from '../../data/rules.js'
 import AbilityIcon from './AbilityIcon.jsx'
 
 const KEYS = ['Q', 'W', 'E', 'R']
+const MANA = 'Pontos de Mana'
 
 // Tecla no estilo do LoL: habilidades ativas ganham Q/W/E/R na ordem; passivas, P.
 export function keysFor(abilities) {
@@ -17,7 +18,7 @@ export function keysFor(abilities) {
 
 // Aba de magias e habilidades: lista agrupada à esquerda e a dica da habilidade escolhida à direita.
 // Quem cadastra é o mestre; aqui o jogador gasta usos, descansa e rola o dano.
-export default function AbilitiesTab({ abilities, onSetUses, onRest, onRollDice, busy, prepares }) {
+export default function AbilitiesTab({ abilities, spellcasting, onSetUses, onRest, onRoll, onRollDice, onCast, busy, prepares }) {
   const [selectedId, setSelectedId] = useState(abilities[0]?.id ?? null)
   const selected = abilities.find(a => a.id === selectedId) ?? abilities[0]
   const keys = keysFor(abilities)
@@ -77,7 +78,10 @@ export default function AbilitiesTab({ abilities, onSetUses, onRest, onRollDice,
       </div>
 
       <div className="abl-side">
-        {selected && <AbilityDetail key={selected.id} ability={selected} hotkey={keys[selected.id]} onSetUses={onSetUses} onRollDice={onRollDice} busy={busy} />}
+        {selected && (
+          <AbilityDetail key={selected.id} ability={selected} hotkey={keys[selected.id]} onSetUses={onSetUses} onRollDice={onRollDice} busy={busy}
+            onRoll={onRoll} cast={onCast && selected.type === 'SPELL' ? { spellcasting, mana: abilities.find(a => a.name === MANA), onCast } : null} />
+        )}
       </div>
     </div>
   )
@@ -111,7 +115,7 @@ function Pips({ ability, onSetUses, disabled }) {
 }
 
 // Dica no formato da descrição de habilidade do cliente: nome, custo/recarga, detalhes e texto.
-export function AbilityDetail({ ability: a, hotkey, onSetUses, onRollDice, busy }) {
+export function AbilityDetail({ ability: a, hotkey, onSetUses, onRollDice, onRoll, cast, busy }) {
   const stats = [
     ['Tempo', a.castingTime],
     ['Alcance', a.range],
@@ -139,6 +143,17 @@ export function AbilityDetail({ ability: a, hotkey, onSetUses, onRollDice, busy 
         </dl>
       )}
 
+      {a.saveDc != null && (
+        <div className="spell-dc">
+          <span>CD <b>{a.saveDc}</b></span>
+          {onRoll ? (
+            <button type="button" className="chip-btn" onClick={() => onRoll(a.name + ' · ataque de magia', a.spellAttack)}>Ataque de magia {formatModifier(a.spellAttack)}</button>
+          ) : <span>Ataque {formatModifier(a.spellAttack)}</span>}
+        </div>
+      )}
+
+      {cast && <CastBox spell={a} {...cast} busy={busy} />}
+
       {a.description && <p className="item-desc pre">{a.description}</p>}
 
       {(a.damage || a.maxUses != null) && (
@@ -156,6 +171,37 @@ export function AbilityDetail({ ability: a, hotkey, onSetUses, onRollDice, busy 
           )}
         </div>
       )}
+    </div>
+  )
+}
+
+// Conjurar: escolhe o nível (do nível da magia ao maior que a ficha conjura), mostra o custo em Mana e a Mana que fica.
+// Truque não gasta nada; magia com usos próprios gasta o uso no nível dela enquanto houver.
+function CastBox({ spell, spellcasting, mana, onCast, busy }) {
+  const base = spell.spellLevel ?? 0
+  const max = Math.max(base, spellcasting?.maxSpellLevel ?? 0)
+  const [level, setLevel] = useState(base)
+  if (base === 0) return <div className="cast-box"><span className="muted-note">Truque: conjura sem gastar Mana.</span></div>
+  if (spell.prepared === false) return <div className="cast-box"><span className="muted-note">Não preparada: prepare no descanso longo.</span></div>
+  const ownUse = level === base && spell.maxUses != null && spell.usesLeft > 0
+  const cost = ownUse ? 0 : spellcasting?.manaCost?.[level] ?? null
+  const left = mana?.usesLeft ?? 0
+  const short = !ownUse && (cost == null || !mana || left < cost)
+  const levels = Array.from({ length: max - base + 1 }, (_, i) => base + i)
+  return (
+    <div className="cast-box">
+      {levels.length > 1 && (
+        <label className="cast-level">
+          Nível
+          <select value={level} onChange={e => setLevel(Number(e.target.value))} disabled={busy}>
+            {levels.map(l => <option key={l} value={l}>{l}º{spellcasting?.manaCost?.[l] != null ? ' · ' + spellcasting.manaCost[l] + ' Mana' : ''}</option>)}
+          </select>
+        </label>
+      )}
+      <span className={'cast-cost' + (short ? ' short' : '')}>
+        {ownUse ? 'Usa 1 uso da magia' : mana ? `Custo ${cost ?? '?'} · Mana ${left}/${mana.maxUses}` : 'Sem Pontos de Mana'}
+      </span>
+      <button type="button" className="btn cast-btn" disabled={busy || short} onClick={() => onCast(spell, level)}>CONJURAR</button>
     </div>
   )
 }
