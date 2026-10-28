@@ -2,7 +2,7 @@
 
 Roteiro das próximas entregas, na ordem em que serão feitas. O foco é a **mesa rodando com a ficha**: o que o mestre e os jogadores precisam durante uma sessão. Segurança e front/polimento vêm depois (ver o fim deste documento).
 
-Cada etapa é uma entrega própria: código + testes + docs (`backend.md`/`frontend.md`/`changelog.md`) no mesmo commit, como manda o `CLAUDE.md`. Ao concluir uma etapa, marque-a aqui como **feita** (com a data) e tire dela as pendências dos outros docs.
+Cada etapa é uma entrega própria: código + testes + docs (subdoc da área em `backend-*.md`/`frontend-*.md` + `changelog.md`) no mesmo commit, como manda o `CLAUDE.md`. Ao concluir uma etapa, marque-a aqui como **feita** (com a data) e tire dela as pendências dos outros docs.
 
 Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criacao.md), Decisões da mesa): quem altera a ficha pronta é o **mestre**; o jogador altera só os próprios **PV**, os **usos de habilidade**, as **anotações** e as **preparadas** (no descanso longo). Decididas em 2026-10-27 para este plano: o jogador também **gasta** consumíveis e ouro e marca os próprios **testes contra a morte**; inspiração é **sim/não**; condições e exaustão ficam com o mestre.
 

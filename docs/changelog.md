@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-28 — Docs divididos por assunto (`feature/character-sheet`)
+- `backend.md` virou núcleo + `backend-api.md`, `backend-criacao.md` e `backend-ficha.md`; `frontend.md` virou núcleo + `frontend-telas.md` e `frontend-visual.md` (conteúdo movido sem mudança).
+- CLAUDE.md e README: ler só o subdoc da tarefa, changelog curto e lido só no topo, um commit por entrega.
+
 ## 2026-10-28 — Inventário, ouro e inspiração, Etapa 1 do plano (`feature/character-sheet`)
 - Mestre (`InventoryController`/`InventoryService`): dá itens do catálogo (conjunto aberto, soma na mesma linha) e itens livres, muda a quantidade, tira itens (a armadura/escudo em uso volta ao padrão), define o ouro e liga/desliga a inspiração.
 - Jogador: usa 1 de um consumível, gasta ouro e gasta a inspiração (decisão da mesa: só gasta).
