@@ -13,6 +13,7 @@ import gusleite.runarcana_nexus.model.items.Item;
 import gusleite.runarcana_nexus.model.items.Weapon;
 import gusleite.runarcana_nexus.record.AttackResponse;
 import gusleite.runarcana_nexus.record.SpellcastingResponse;
+import gusleite.runarcana_nexus.record.TableCardResponse;
 import gusleite.runarcana_nexus.rules.RuleItem;
 import gusleite.runarcana_nexus.record.ArmorClassResponse;
 import org.hibernate.Hibernate;
@@ -58,6 +59,18 @@ public class CharacterService {
         this.itemsRepository = itemsRepository;
         this.abilityRepository = abilityRepository;
         this.rules = rules;
+    }
+
+    // Visão da mesa (mestre): todas as fichas com a CA em uso e a Mana.
+    @Transactional(readOnly = true)
+    public List<TableCardResponse> table() {
+        return charRepository.findAll().stream().map(c -> {
+            List<PlayerItems> items = itemsRepository.findByCharacterOrderByIdAsc(c);
+            CharacterAbility mana = abilityRepository.findByCharacterOrderByIdAsc(c).stream()
+                    .filter(a -> SpellcastingRules.MANA.equals(a.getName()) && a.getMaxUses() != null).findFirst().orElse(null);
+            return new TableCardResponse(CharacterResponse.of(c), armorClassOf(c, items).value(),
+                    mana == null ? null : mana.getUsesLeft(), mana == null ? null : mana.getMaxUses());
+        }).toList();
     }
 
     @Transactional(readOnly = true)

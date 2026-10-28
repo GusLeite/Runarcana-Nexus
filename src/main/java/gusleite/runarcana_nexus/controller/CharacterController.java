@@ -4,6 +4,7 @@ import gusleite.runarcana_nexus.record.ArmorClassResponse;
 import gusleite.runarcana_nexus.record.CharacterResponse;
 import gusleite.runarcana_nexus.record.CharacterSheetResponse;
 import gusleite.runarcana_nexus.record.CreateCharacterRequest;
+import gusleite.runarcana_nexus.record.TableCardResponse;
 import gusleite.runarcana_nexus.services.AuthService;
 import gusleite.runarcana_nexus.services.CharacterService;
 import gusleite.runarcana_nexus.services.ConditionService;
@@ -30,9 +31,20 @@ public class CharacterController {
         this.conditions = conditions;
     }
 
+    // Mestre: todas as fichas.
     @GetMapping
-    public ResponseEntity<List<CharacterResponse>> getAllCharacters() {
+    public ResponseEntity<List<CharacterResponse>> getAllCharacters(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        authService.requireMaster(authorization);
         return ResponseEntity.ok(charService.getAllCharacters());
+    }
+
+    // Mestre: visão da mesa (cada ficha com CA e Mana), consultada a cada poucos segundos pelo painel.
+    @GetMapping("/table")
+    public ResponseEntity<List<TableCardResponse>> table(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        authService.requireMaster(authorization);
+        return ResponseEntity.ok(charService.table());
     }
 
     // Ficha do personagem da conta logada (tela pós-login).

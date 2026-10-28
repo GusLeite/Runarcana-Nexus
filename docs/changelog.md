@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-28 — Visão da mesa, Etapa 6 do plano (`feature/character-sheet`)
+- `GET /character/table` (mestre): cada ficha com a CA em uso e a Mana; `GET /character` passa a exigir o mestre.
+- Front: aba **Mesa** (primeira do painel, `MasterTable.jsx`): cartões com PV (dano/cura/temporários), CA, Mana, testes contra a morte, condições (editáveis) e inspiração; polling de 5 s.
+- Testes: `criaOPersonagemResolvendoClasseAntecedenteEPericias` cobre 401/403 e a mesa. Conferido no sandbox (dano, inspiração, condição e a cura do jogador aparecendo sozinha).
+
 ## 2026-10-28 — Mestre edita o que criou, Etapa 5 do plano (`feature/character-sheet`)
 - `PUT /character/{id}/abilities/{abilityId}` (mantém ícone e usos gastos), `PUT /documents/{id}` (mantém leituras) e `readBy` na lista do mestre; `PATCH /character/{id}/hp` para o mestre. `maxHpBonus` do plano ficou de fora (PV máximo continua pela subida de nível).
 - Front: **Editar** em Habilidades e Documentos, "Leram: …" nos enviados e `HpEditor` (dano/cura/temporários) na aba Fichas.

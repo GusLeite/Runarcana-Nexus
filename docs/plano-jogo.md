@@ -8,9 +8,9 @@ Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criac
 
 ## Estado atual (2026-10-27)
 
-- Ficha: atributos, perícias, resistências, CA (com armadura e escudo do inventário), PV editáveis pelo jogador, habilidades com usos, magias, descanso curto/longo, magias preparadas, rolagens de d20 e de dano, ataques com arma (Etapa 2), conjurar gastando Mana com CD e ataque de magia (Etapa 3), testes contra a morte e condições (Etapa 4; Exaustão até 10, como no livro), mestre edita habilidades/documentos e ajusta PV (Etapa 5), inventário (o jogador gasta), documentos, anotações, aba Livro.
+- Ficha: atributos, perícias, resistências, CA (com armadura e escudo do inventário), PV editáveis pelo jogador, habilidades com usos, magias, descanso curto/longo, magias preparadas, rolagens de d20 e de dano, ataques com arma (Etapa 2), conjurar gastando Mana com CD e ataque de magia (Etapa 3), testes contra a morte e condições (Etapa 4; Exaustão até 10, como no livro), mestre edita habilidades/documentos e ajusta PV (Etapa 5), aba Mesa com todos os personagens (Etapa 6), inventário (o jogador gasta), documentos, anotações, aba Livro.
 - Mestre: cria/apaga habilidades e documentos, sobe de nível (com multiclasse), trava regras da mesa, dá e tira itens, ouro e inspiração (Etapa 1).
-- Não existe: visão da mesa para o mestre.
+- Todas as etapas do plano estão feitas; o que falta está em "Depois do para jogar".
 
 ## Etapa 1 — Inventário, ouro e inspiração pelo mestre — **feita (2026-10-28)**
 
@@ -88,7 +88,7 @@ Front:
 
 Testes: editar mantém ícone/usos, 403 para jogador, quem leu.
 
-## Etapa 6 — Visão da mesa (painel do mestre)
+## Etapa 6 — Visão da mesa (painel do mestre) — **feita (2026-10-28)**
 
 **Por quê**: durante o combate o mestre precisa ver todo mundo de uma vez.
 
@@ -99,6 +99,6 @@ Testes: editar mantém ícone/usos, 403 para jogador, quem leu.
 
 Não fazem parte deste plano; continuam nas pendências de [backend.md](backend.md) e [frontend.md](frontend.md):
 
-- **Segurança**: senha do banco fora do Git, rotas sem login (`/character`, `/background`, `/character-classes`), ligação conta ↔ personagem por chave estrangeira, reset de senha, CORS, enums salvos como ordinal, token no `localStorage`.
+- **Segurança**: senha do banco fora do Git, rotas sem login (`POST /character`, `/background`, `/character-classes`; `GET /character` já exige o mestre), ligação conta ↔ personagem por chave estrangeira, reset de senha, CORS, enums salvos como ordinal, token no `localStorage`.
 - **Front/polimento**: artes (Proto, Titan, Loge, itens), vídeos pesados no Git, roteamento, atualização em tempo real, histórico de rolagens compartilhado.
 - **Regras no texto**: efeitos de Herança, Aprimoramentos restantes, listas de magia de origem, Mistérios do Vítreo, ofícios.

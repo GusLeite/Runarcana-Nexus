@@ -116,10 +116,19 @@ class CharacterControllerTests {
                 // 10 + SAB 17 (+3) + proficiência (+2)
                 .andExpect(jsonPath("$.passivePerception").value(15));
 
-        mvc.perform(get("/character"))
+        // Só o mestre lista as fichas e vê a mesa.
+        mvc.perform(get("/character")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/character").header("Authorization", "Bearer " + login("rudo"))).andExpect(status().isForbidden());
+        String master = login("mestre");
+        mvc.perform(get("/character").header("Authorization", "Bearer " + master))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].playerName").value("Mendonça"));
+        mvc.perform(get("/character/table").header("Authorization", "Bearer " + master))
+                .andExpect(jsonPath("$[0].character.characterName").value("Rudo"))
+                .andExpect(jsonPath("$[0].armorClass").value(11))
+                .andExpect(jsonPath("$[0].manaMax").doesNotExist());
+        mvc.perform(get("/character/table").header("Authorization", "Bearer " + login("rudo"))).andExpect(status().isForbidden());
     }
 
     @Test

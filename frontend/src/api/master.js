@@ -3,6 +3,9 @@ import { request } from './auth.js'
 // Rotas do painel do mestre (todas exigem o token da conta mestre).
 export const fetchCharacters = token => request('/character', { token })
 
+// Visão da mesa: [{ character, armorClass, manaLeft, manaMax }].
+export const fetchTable = token => request('/character/table', { token })
+
 export const fetchAbilities = (token, characterId) => request('/character/' + characterId + '/abilities', { token })
 
 export const createAbility = (token, characterId, ability) =>

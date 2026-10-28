@@ -4,12 +4,14 @@ import MasterAbilities from './MasterAbilities.jsx'
 import MasterRules from './MasterRules.jsx'
 import MasterSheets from './MasterSheets.jsx'
 import MasterInventory from './MasterInventory.jsx'
+import MasterTable from './MasterTable.jsx'
 import TabBar from '../sheet/TabBar.jsx'
 import { CrownIcon, ExitIcon, KeyIcon } from '../sheet/icons.jsx'
 import '../../styles/sheet.css'
 import '../../styles/master.css'
 
 const TABS = [
+  { id: 'table', label: 'MESA' },
   { id: 'documents', label: 'DOCUMENTOS' },
   { id: 'abilities', label: 'HABILIDADES' },
   { id: 'sheets', label: 'FICHAS' },
@@ -17,9 +19,9 @@ const TABS = [
   { id: 'rules', label: 'REGRAS DA MESA' },
 ]
 
-// Painel do mestre: mesma moldura da ficha, com as abas de documentos, habilidades, fichas (subida de nível), inventário (itens, ouro e inspiração) e regras da mesa.
+// Painel do mestre: mesma moldura da ficha, com as abas da mesa (todos os personagens de uma vez), documentos, habilidades, fichas (subida de nível), inventário (itens, ouro e inspiração) e regras da mesa.
 export default function MasterPanel({ session, notice, onChangePassword, onLogout, onExpired }) {
-  const [tab, setTab] = useState('documents')
+  const [tab, setTab] = useState('table')
   const [toast, setToast] = useState(notice)
   const expired = useRef(onExpired)
   expired.current = onExpired
@@ -57,6 +59,7 @@ export default function MasterPanel({ session, notice, onChangePassword, onLogou
       </header>
 
       <main className="master-body">
+        {tab === 'table' && <MasterTable token={session.token} onError={onError} onToast={setToast} />}
         {tab === 'documents' && <MasterDocuments token={session.token} onError={onError} onToast={setToast} />}
         {tab === 'abilities' && <MasterAbilities token={session.token} onError={onError} onToast={setToast} />}
         {tab === 'sheets' && <MasterSheets token={session.token} onError={onError} onToast={setToast} />}

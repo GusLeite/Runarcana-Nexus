@@ -10,7 +10,8 @@
 | POST | `/character-classes` | `CharacterClassRequest { hitHpDice, className }` | Cria uma classe |
 | GET | `/character-classes` | – | Lista as classes |
 | POST | `/character` | `CreateCharacterRequest` (ver abaixo) | Cria um personagem; devolve `CharacterResponse` (201). 400 com `message` se faltar campo, a classe/antecedente não existir ou o JSON tiver valor fora do enum |
-| GET | `/character` | – | Lista os personagens (`CharacterResponse[]`) |
+| GET | `/character` | – (mestre) | Lista os personagens (`CharacterResponse[]`). 401 sem sessão; 403 para jogador |
+| GET | `/character/table` | – (mestre) | Visão da mesa: `[{ character: CharacterResponse, armorClass, manaLeft, manaMax }]` (Mana nula se a ficha não tem Pontos de Mana). 403 para jogador |
 | GET | `/character/me` | – (Bearer) | Ficha do personagem da conta logada: `{ character: CharacterResponse, armorClass, attacks: AttackResponse[], spellcasting: SpellcastingResponse, inventory: InventoryItemResponse[], abilities: AbilityResponse[] }`. 401 sem sessão; 404 com `message` se a ficha não existir |
 | POST | `/character/{id}/abilities` | `AbilityRequest` (Bearer **mestre**) | Cadastra magia/habilidade no personagem. 201; 403 para jogador |
 | GET | `/character/{id}/abilities` | – (Bearer **mestre**) | Habilidades do personagem (painel do mestre) |

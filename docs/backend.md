@@ -68,7 +68,7 @@ Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spri
 
 - **Credencial no Git**: a senha do banco está versionada em `application.properties`. Mover para variável de ambiente (`${DB_PASSWORD}`) e trocar a senha.
 - `Origin` não tem getters (nem `@Data`).
-- `POST /character` e `GET /character` não exigem login; só `/character/me` exige. A ligação conta ↔ personagem é pelo nome (ver acima), não por chave estrangeira.
+- `POST /character` não exige login; `GET /character` e `GET /character/table` exigem o mestre. A ligação conta ↔ personagem é pelo nome (ver acima), não por chave estrangeira.
 - O enum `region`/`alignment` em `Character` não tem `@Enumerated(STRING)` e é salvo como ordinal (frágil se a ordem mudar).
 - `BackgroundService.getBackGroundByName` dá NullPointerException quando o nome não existe; o nome do método não diz que ele altera dados.
 - `ItemService` tem métodos com nomes copiados (`getAllCharacters`, `createCharacter`) e ainda não tem controller.
