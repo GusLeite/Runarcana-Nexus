@@ -278,7 +278,8 @@
           "attribute": "DEXTERITY",
           "amount": 1
         }
-      ]
+      ],
+      "execution": "Ação bônus"
     },
     {
       "id": "aprimoramento-arqueiro",
@@ -335,7 +336,8 @@
           "type": "CRAFT",
           "value": "apotecario"
         }
-      ]
+      ],
+      "execution": "Ação bônus"
     },
     {
       "id": "aprimoramento-assassino-experiente",
@@ -518,7 +520,8 @@
           "value": "ATTACK:CROSSBOW",
           "description": "Estar a 5 pés de uma criatura hostil não impõe desvantagem nas suas jogadas de ataque à distância com bestas."
         }
-      ]
+      ],
+      "execution": "Ação bônus"
     },
     {
       "id": "aprimoramento-blindado",
@@ -565,7 +568,8 @@
           ],
           "label": "+1 em um atributo"
         }
-      ]
+      ],
+      "execution": "Ação bônus"
     },
     {
       "id": "aprimoramento-caminho-da-ceifa",
@@ -619,6 +623,24 @@
           "type": "SITUATIONAL",
           "value": "SAVE",
           "description": "A primeira salvaguarda para forçar uma canalização é feita com vantagem."
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Canalização com vantagem",
+          "usesFormula": "FIXED",
+          "maxUses": 1,
+          "recharge": "LONG_REST",
+          "description": "A primeira salvaguarda para forçar uma canalização é feita com vantagem. Isso pode acontecer apenas uma vez por descanso pleno."
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Ignorar Falha",
+          "usesFormula": "FIXED",
+          "maxUses": 1,
+          "recharge": "LONG_REST",
+          "description": "Quando você falha na canalização de um Grande Espírito, você ignora o efeito de Falha. Isso pode acontecer apenas uma vez por descanso pleno (se acumula com a Herança - Fluência Espiritual)."
         }
       ]
     },
@@ -686,7 +708,8 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Você é um cirurgião capacitado, permitindo que você trate de ferimentos rapidamente, trazendo seus aliados de volta à luta. Você adquire os seguintes benefícios:\n\n- Quando você usar um Kit Médico para estabilizar uma criatura morrendo, a criatura recupera 1 ponto de vida, ao invés disso.\n- Com uma ação, você pode gastar um uso do Kit Médico para tratar de uma criatura e restaurar 1d6 + 4 pontos de vida mais uma quantidade de pontos de vida adicionais igual ao número total de dados de vida da criatura. A criatura não pode recuperar pontos de vida através desse Aprimoramento novamente até ter terminado um descanso curto ou longo."
+      "description": "Você é um cirurgião capacitado, permitindo que você trate de ferimentos rapidamente, trazendo seus aliados de volta à luta. Você adquire os seguintes benefícios:\n\n- Quando você usar um Kit Médico para estabilizar uma criatura morrendo, a criatura recupera 1 ponto de vida, ao invés disso.\n- Com uma ação, você pode gastar um uso do Kit Médico para tratar de uma criatura e restaurar 1d6 + 4 pontos de vida mais uma quantidade de pontos de vida adicionais igual ao número total de dados de vida da criatura. A criatura não pode recuperar pontos de vida através desse Aprimoramento novamente até ter terminado um descanso curto ou longo.",
+      "execution": "Ação"
     },
     {
       "id": "aprimoramento-conjurador-belico",
@@ -703,7 +726,8 @@
           "value": "SAVE:CONSTITUTION",
           "description": "Você tem vantagem em salvaguardas de Constituição para manter sua concentração em uma magia quando você sofrer dano."
         }
-      ]
+      ],
+      "execution": "Reação"
     },
     {
       "id": "aprimoramento-conjurador-eficiente",
@@ -735,7 +759,11 @@
           "label": "+1 em um atributo",
           "value": "22"
         }
-      ]
+      ],
+      "uses": {
+        "usesFormula": "PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
     },
     {
       "id": "aprimoramento-conjurador-volatil",
@@ -870,7 +898,8 @@
           "value": "AC",
           "description": "Quando você estiver empunhando uma arma de acuidade com a qual você seja proficiente e outra criatura atingir você com um ataque corpo a corpo, você pode usar sua reação para adicionar seu bônus de proficiência a sua…"
         }
-      ]
+      ],
+      "execution": "Reação"
     },
     {
       "id": "aprimoramento-empunhadura-dupla",
@@ -993,7 +1022,8 @@
           "value": "SAVE:STRENGTH",
           "description": "Enquanto você estiver consciente e não esteja incapacitado, você pode adicionar o bônus de CA do seu escudo para salvaguardas de Destreza e Força."
         }
-      ]
+      ],
+      "execution": "Ação bônus"
     },
     {
       "id": "aprimoramento-especialista-em-armadura-media",
@@ -1052,7 +1082,8 @@
         "armor": [
           "SHIELD"
         ]
-      }
+      },
+      "execution": "Ação bônus"
     },
     {
       "id": "aprimoramento-espiritualista-versatil",
@@ -1155,7 +1186,13 @@
           ],
           "label": "+1 em um atributo"
         }
-      ]
+      ],
+      "execution": "Ação livre",
+      "uses": {
+        "usesFormula": "FIXED",
+        "maxUses": 1,
+        "recharge": "LONG_REST"
+      }
     },
     {
       "id": "aprimoramento-feridas-abertas",
@@ -1205,7 +1242,12 @@
           ],
           "label": "+1 em um atributo"
         }
-      ]
+      ],
+      "execution": "Ação bônus",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
     },
     {
       "id": "aprimoramento-forma-draconica-aprimorada",
@@ -1305,7 +1347,8 @@
           "value": "ATTACK",
           "description": "Você tem vantagem nas jogadas de ataque contra uma criatura que já está agarrada."
         }
-      ]
+      ],
+      "execution": "Ação"
     },
     {
       "id": "aprimoramento-incapacitador",
@@ -1386,7 +1429,8 @@
           "value": "ATTACK:MELEE",
           "description": "Se você percorrer pelo menos 10 pés em uma linha reta, você pode escolher receber +5 de bônus para acertar um ataque corpo a corpo ou ter vantagem para derrubar uma criatura."
         }
-      ]
+      ],
+      "execution": "Ação bônus"
     },
     {
       "id": "aprimoramento-invocador-intenso",
@@ -1477,7 +1521,12 @@
           "attribute": "WISDOM",
           "amount": 1
         }
-      ]
+      ],
+      "uses": {
+        "usesFormula": "FIXED",
+        "maxUses": 1,
+        "recharge": "LONG_REST"
+      }
     },
     {
       "id": "aprimoramento-mais-inimigos",
@@ -1776,7 +1825,8 @@
           "value": "ATTACK:FIREARM",
           "description": "Estar a 5 pés de uma criatura hostil não impõe desvantagem nas suas jogadas de ataque à distância com armas de fogo."
         }
-      ]
+      ],
+      "execution": "Ação bônus"
     },
     {
       "id": "aprimoramento-perito-em-armas-de-haste",
@@ -1785,7 +1835,8 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Você é um inimigo poderoso enquanto usa armas de haste. Você ganha os seguintes benefícios:\n\n- Quando você realiza a ação de Ataque e ataca com uma glaive, alabarda, bastão, lança, lança longa ou tridente, você pode usar uma ação bônus para realizar um ataque corpo a corpo com a outra extremidade da arma. Esse ataque usa o mesmo modificador de atributo do ataque primário. O dado de dano da arma para esse ataque é um d6 e o ataque causa dano contundente.\n- Enquanto você estiver empunhando uma glaive, alabarda, bastão, lança, lança longa ou tridente, as outras criaturas provocam um ataque de oportunidade a você quando entrarem no seu alcance."
+      "description": "Você é um inimigo poderoso enquanto usa armas de haste. Você ganha os seguintes benefícios:\n\n- Quando você realiza a ação de Ataque e ataca com uma glaive, alabarda, bastão, lança, lança longa ou tridente, você pode usar uma ação bônus para realizar um ataque corpo a corpo com a outra extremidade da arma. Esse ataque usa o mesmo modificador de atributo do ataque primário. O dado de dano da arma para esse ataque é um d6 e o ataque causa dano contundente.\n- Enquanto você estiver empunhando uma glaive, alabarda, bastão, lança, lança longa ou tridente, as outras criaturas provocam um ataque de oportunidade a você quando entrarem no seu alcance.",
+      "execution": "Ação bônus"
     },
     {
       "id": "aprimoramento-perito-em-armas-grandes",
@@ -1794,7 +1845,8 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Você aprendeu a controlar o peso e balanço de sua arma a seu favor. Você ganha os seguintes benefícios:\n\n- Ao acertar um ataque crítico com uma arma corpo a corpo pesada, ou reduzir os pontos de vida de uma criatura a 0, você pode realizar um ataque corpo a corpo com sua arma pesada com uma ação bônus.\n- Antes de você realizar um ataque corpo a corpo com uma arma pesada com a qual você tenha proficiência, você pode optar por sofrer –2 de penalidade em sua jogada de ataque. Se este ataque atingir o alvo, você adiciona 1 dado de dano da arma ao seu dano + seu bônus de proficiência."
+      "description": "Você aprendeu a controlar o peso e balanço de sua arma a seu favor. Você ganha os seguintes benefícios:\n\n- Ao acertar um ataque crítico com uma arma corpo a corpo pesada, ou reduzir os pontos de vida de uma criatura a 0, você pode realizar um ataque corpo a corpo com sua arma pesada com uma ação bônus.\n- Antes de você realizar um ataque corpo a corpo com uma arma pesada com a qual você tenha proficiência, você pode optar por sofrer –2 de penalidade em sua jogada de ataque. Se este ataque atingir o alvo, você adiciona 1 dado de dano da arma ao seu dano + seu bônus de proficiência.",
+      "execution": "Ação bônus"
     },
     {
       "id": "aprimoramento-perito-em-escopeta",
@@ -1821,7 +1873,11 @@
           "value": "ATTACK:FIREARM",
           "description": "Você recebe +1 em suas jogadas de ataque com armas de fogo médias."
         }
-      ]
+      ],
+      "uses": {
+        "usesFormula": "PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
     },
     {
       "id": "aprimoramento-perspicaz",
@@ -2066,7 +2122,11 @@
           ],
           "label": "+1 em um atributo"
         }
-      ]
+      ],
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "recharge": "LONG_REST"
+      }
     },
     {
       "id": "aprimoramento-senso-do-navegador",
@@ -2105,7 +2165,8 @@
           "attribute": "DEXTERITY",
           "amount": 1
         }
-      ]
+      ],
+      "execution": "Ação ou reação"
     },
     {
       "id": "aprimoramento-versatilidade-arcana",
@@ -2133,7 +2194,8 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Você domina técnicas para obter vantagens em combate, ganhando os seguintes benefícios:\n\n- Ao atingir uma criatura com um ataque de oportunidade, o deslocamento da criatura se torna 0 pelo resto do turno.\n- Criaturas que saírem do seu alcance, mesmo usando a ação de Desengajar, provocam ataques de oportunidade.\n- Quando uma criatura que esteja a 5 pés de você realizar um ataque que não tenha você como alvo, você pode utilizar sua reação para realizar um ataque corpo a corpo na criatura atacante."
+      "description": "Você domina técnicas para obter vantagens em combate, ganhando os seguintes benefícios:\n\n- Ao atingir uma criatura com um ataque de oportunidade, o deslocamento da criatura se torna 0 pelo resto do turno.\n- Criaturas que saírem do seu alcance, mesmo usando a ação de Desengajar, provocam ataques de oportunidade.\n- Quando uma criatura que esteja a 5 pés de você realizar um ataque que não tenha você como alvo, você pode utilizar sua reação para realizar um ataque corpo a corpo na criatura atacante.",
+      "execution": "Reação"
     },
     {
       "id": "aprimoramento-agil",

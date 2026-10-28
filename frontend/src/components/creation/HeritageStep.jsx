@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { HERITAGE_CATEGORIES, HERITAGE_SCOPES, addHeritage, heritageTimes, removeHeritage, setHeritageOption } from '../../data/rules.js'
+import { HERITAGE_CATEGORIES, HERITAGE_SCOPES, addHeritage, heritageOptions, heritageTimes, removeHeritage, setHeritageOption } from '../../data/rules.js'
 
 const FILTERS = [
   { id: 'ALL', label: 'Todas' },
@@ -102,23 +102,25 @@ export default function HeritageStep({ heritages, preview, picks, onChange }) {
                 {expanded ? 'Recolher' : 'Ler tudo'}
               </button>
 
-              {chosen && h.options?.length > 0 && (
-                <div className="her-options">
-                  <span className="her-options-label">{option ? 'Opção:' : 'Escolha uma opção:'}</span>
+              {chosen && h.options?.length > 0 && (h.optionPerPick ? heritageOptions(picks, h.id) : [option]).map((current, i, all) => (
+                <div className="her-options" key={i}>
+                  <span className="her-options-label">
+                    {all.length > 1 ? `${i + 1}ª escolha: ` : ''}{current ? 'Opção:' : 'Escolha uma opção:'}
+                  </span>
                   <div className="to-pick">
                     {h.options.map(o => (
-                      <button key={o} type="button" className={'to-chip' + (o === option ? ' on' : '')} aria-pressed={o === option}
-                        onClick={() => onChange(setHeritageOption(picks, h.id, o))}>{o}</button>
+                      <button key={o} type="button" className={'to-chip' + (o === current ? ' on' : '')} aria-pressed={o === current}
+                        onClick={() => onChange(setHeritageOption(picks, h.id, o, h.optionPerPick ? i : null))}>{o}</button>
                     ))}
                   </div>
                 </div>
-              )}
+              ))}
 
               <div className="her-foot">
                 {!s?.available && !chosen && <span className="her-reason">{capitalize(s?.reason)}</span>}
                 {chosen && <button type="button" className="ghost-btn small" onClick={() => onChange(removeHeritage(picks, h.id))}>Remover</button>}
                 {(!chosen || max > 1) && (
-                  <button type="button" className="btn her-add" disabled={!canAdd} onClick={() => onChange(addHeritage(picks, h.id))}
+                  <button type="button" className="btn her-add" disabled={!canAdd} onClick={() => onChange(addHeritage(picks, h.id, h.optionPerPick))}
                     title={!s?.available ? capitalize(s?.reason) : left === 0 ? 'Sem pontos sobrando' : undefined}>
                     {chosen ? 'Escolher de novo' : 'Escolher'}
                   </button>

@@ -195,8 +195,8 @@ public class CharacterService {
                 .toList();
     }
 
-    // Ofícios (Capítulo 4): nível dos maiores = 1 + 1 a cada 4 níveis de personagem (sem saber quando foi aprendido,
-    // conta do 1º nível); teste = mod. do atributo base + metade da proficiência (inteira com especialidade).
+    // Ofícios (Capítulo 4): nível dos maiores = 1 + 1 a cada 4 níveis de personagem desde que foi aprendido (craftLevels;
+    // fichas antigas contam do 1º); teste = mod. do atributo base + metade da proficiência (inteira com especialidade).
     private List<CraftResponse> craftsOf(Character character) {
         Map<String, RuleCatalog.Craft> byName = new java.util.HashMap<>();
         rules.catalog().craftsOrEmpty().forEach(k -> byName.put(k.name().toLowerCase(), k));
@@ -206,7 +206,8 @@ public class CharacterService {
             Attribute attribute = k == null ? null : k.attribute();
             Integer bonus = attribute == null ? null
                     : character.getModifier(attribute) + (expert ? character.getProficiencyBonus() : character.getProficiencyBonus() / 2);
-            Integer level = k != null && "MAJOR".equals(k.kind()) ? 1 + (character.getLevel() - 1) / 4 : null;
+            int learnedAt = character.getCraftLevels().getOrDefault(name, 1);
+            Integer level = k != null && "MAJOR".equals(k.kind()) ? 1 + Math.max(0, character.getLevel() - learnedAt) / 4 : null;
             List<CraftResponse.KnownFormula> known = k == null ? List.of() : character.getFormulas().stream()
                     .filter(f -> f.startsWith(k.id() + ":"))
                     .flatMap(f -> formulas.find(f).map(x -> new CraftResponse.KnownFormula(f, x.name()
@@ -214,7 +215,7 @@ public class CharacterService {
                     .sorted(java.util.Comparator.comparingInt(CraftResponse.KnownFormula::level).thenComparing(CraftResponse.KnownFormula::name))
                     .toList();
             int limit = Math.max(1, character.getModifier(Attribute.INTELLIGENCE)) * (level == null ? 1 : level);
-            return new CraftResponse(k == null ? null : k.id(), name, k == null ? null : k.kind(), attribute, level, expert, bonus, known, limit);
+            return new CraftResponse(k == null ? null : k.id(), name, k == null ? null : k.kind(), attribute, level, learnedAt, expert, bonus, known, limit);
         }).toList();
     }
 

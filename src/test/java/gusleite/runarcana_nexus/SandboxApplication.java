@@ -10,11 +10,14 @@ import java.util.stream.Stream;
 // (configuração "backend-sandbox" do .claude/launch.json).
 // Os argumentos abaixo têm prioridade sobre qualquer application.properties, então ele nunca conecta
 // no PostgreSQL: se o H2 não estiver no classpath, falha em vez de cair no banco de verdade.
+// A variável de ambiente SANDBOX_PORT troca a porta (dois sandboxes ao mesmo tempo).
 public final class SandboxApplication {
+
+    private static final String PORT = System.getenv().getOrDefault("SANDBOX_PORT", "8090");
 
     private static final String[] SANDBOX = {
             "--spring.profiles.active=sandbox",
-            "--server.port=8090",
+            "--server.port=" + PORT,
             // o application.properties de teste (que vem antes no classpath) não tem o prefixo das rotas
             "--server.servlet.context-path=/runarcana",
             "--spring.datasource.url=jdbc:h2:mem:sandbox;DB_CLOSE_DELAY=-1",

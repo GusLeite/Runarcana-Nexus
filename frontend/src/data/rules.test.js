@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  addHeritage, carryCapacity, choiceOptionName, critDice, deathSaveResult, situationalFor, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
+  addHeritage, heritageOptions, carryCapacity, choiceOptionName, critDice, deathSaveResult, situationalFor, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
   addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
   resourceCost, togglePick, levelChoices, keepChoices, rollDie, applyHp,
@@ -137,6 +137,15 @@ describe('criação de personagem', () => {
     picks = removeHeritage(picks, 'colosso')
     expect(picks).toEqual([{ id: 'colosso', option: null }, { id: 'meio-vastaya', option: 'Marai' }])
     expect(removeHeritage(picks, 'nao-tem')).toBe(picks)
+  })
+
+  it('dá uma opção a cada escolha da Herança com optionPerPick', () => {
+    let picks = addHeritage([], 'forma-de-shoma', true)
+    picks = setHeritageOption(picks, 'forma-de-shoma', 'Íbex', 0)
+    picks = addHeritage(picks, 'forma-de-shoma', true)
+    expect(heritageOptions(picks, 'forma-de-shoma')).toEqual(['Íbex', null])
+    picks = setHeritageOption(picks, 'forma-de-shoma', 'Humana', 1)
+    expect(heritageOptions(picks, 'forma-de-shoma')).toEqual(['Íbex', 'Humana'])
   })
 
   it('escolhe, repete e tira traços com a resposta de cada escolha', () => {

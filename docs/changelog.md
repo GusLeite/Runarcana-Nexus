@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-28 — Heranças ativas, Variantes por opção, Centelha Mágica e nível dos ofícios (`feature/character-sheet`)
+- Heranças/Aprimoramentos com parte ativa: `execution`/`uses` (93 Heranças e 23 Aprimoramentos) ou `FEATURE` `ABILITY` por parte; a habilidade ganha tempo e usos.
+- Variantes: `optionTexts`/`optionUses`/`optionExecution` (Meio-Vastaya, Ressurgido com resistências pela opção), `optionPerPick` (Forma de Sho'Ma, Progressão Tecnológica com Vantagens/Desvantagens e CA da Proteção Metálica); front com uma opção por escolha.
+- Centelha Mágica (2 Mistérios + magia de 1º nível) e Vesani; ofícios guardam `learnedAt` (`character_craft_levels`) e o nível conta dali.
+- Testes: `herancaAtivaGanhaTempoEUsos`, `variantesComUmaOpcaoPorEscolha`, `oficioGuardaONivelEmQueFoiAprendido`. Conferido no sandbox pela API (`SANDBOX_PORT` novo).
+
 ## 2026-10-28 — Efeitos situacionais, resistências, Ígneo, Rajada Etérea e listas de outra classe (`feature/character-sheet`)
 - Concessões `SITUATIONAL`, `RESISTANCE` e `PASSIVE_BONUS`: 76 notas (perícia, salvaguarda, ataque por tipo de arma, CA, iniciativa), 6 resistências e 4 bônus de Percepção passiva em Heranças e Aprimoramentos (Arqueiro, Sagaz, Balestreiro...); `optionGrants` (Propulsão Natural).
 - Ficha: ✦ com a nota em perícias e salvaguardas, notas nos ataques, resistências e notas de CA/iniciativa no herói.

@@ -192,8 +192,9 @@ export const HERITAGE_SCOPES = { REGION: 'Herança de Região', ORIGIN: 'Heranç
 // As Heranças escolhidas vão para o back como lista de { id, option }; repetir o id = escolher de novo.
 export const heritageTimes = (picks, id) => picks.filter(p => p.id === id).length
 
-export function addHeritage(picks, id) {
-  const option = picks.find(p => p.id === id)?.option ?? null
+// perPick (Herança com optionPerPick, ex.: Forma de Sho'Ma): a escolha nova começa sem opção.
+export function addHeritage(picks, id, perPick = false) {
+  const option = perPick ? null : picks.find(p => p.id === id)?.option ?? null
   return [...picks, { id, option }]
 }
 
@@ -203,8 +204,19 @@ export function removeHeritage(picks, id) {
   return i < 0 ? picks : picks.filter((_, n) => n !== i)
 }
 
-// A opção (ex.: tribo do Meio-Vastaya) vale para todas as escolhas da mesma Herança.
-export const setHeritageOption = (picks, id, option) => picks.map(p => (p.id === id ? { ...p, option } : p))
+// A opção (ex.: tribo do Meio-Vastaya) vale para todas as escolhas da mesma Herança; com index, só para a
+// escolha de número index dela (Heranças com uma opção por escolha).
+export function setHeritageOption(picks, id, option, index = null) {
+  let n = -1
+  return picks.map(p => {
+    if (p.id !== id) return p
+    n++
+    return index == null || n === index ? { ...p, option } : p
+  })
+}
+
+// As opções de cada escolha da Herança, na ordem.
+export const heritageOptions = (picks, id) => picks.filter(p => p.id === id).map(p => p.option ?? null)
 
 // Traços da Runinata (rules/tracos.json). Traços e desvantagens vão para o back como lista de { id, detail };
 // repetir o id = escolher de novo, e cada escolha tem a sua resposta (detail), quando o traço pede uma.

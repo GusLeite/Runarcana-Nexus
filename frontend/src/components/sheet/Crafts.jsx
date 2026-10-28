@@ -10,7 +10,8 @@ export default function Crafts({ crafts, onRoll }) {
         {crafts.map((k, n) => (
           <button key={k.name} type="button" className={'skill save prof' + (k.expertise ? ' expert' : '')} style={{ '--n': n }}
             disabled={k.bonus == null} onClick={() => onRoll('Ofício: ' + k.name, k.bonus)}
-            title={k.kind === 'MINOR' ? 'Ofício menor (disciplinas)' : k.level ? 'Ofício maior, nível ' + k.level : undefined}>
+            title={(k.kind === 'MINOR' ? 'Ofício menor (disciplinas)' : k.level ? 'Ofício maior, nível ' + k.level : 'Ofício')
+              + (k.learnedAt > 1 ? ' · aprendido no ' + k.learnedAt + 'º nível' : '')}>
             <span className="pip" aria-hidden="true" />
             <span className="skill-name">
               {k.name}{k.level ? ' ' + k.level : ''}

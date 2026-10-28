@@ -120,6 +120,26 @@
           ]
         }
       ]
+    },
+    {
+      "id": "aprimoramento-oficio",
+      "kind": "APRIMORAMENTO",
+      "name": "Ofício Teste",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "execution": "Reação",
+      "uses": {
+        "usesFormula": "PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "description": "Proficiência em Alquimia e uma reação por descanso.",
+      "grants": [
+        {
+          "type": "CRAFT",
+          "value": "alquimia"
+        }
+      ]
     }
   ]
 }

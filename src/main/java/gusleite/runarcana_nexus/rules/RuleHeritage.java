@@ -35,12 +35,36 @@ public record RuleHeritage(
         // além do texto. Fonte "Herança: <nome>"; as escolhas têm a chave "heritage:<id>:<índice>".
         List<Grant> grants,
         // Efeitos que dependem da opção escolhida (Propulsão Natural: Natureza ou Sobrevivência). Chave = a opção.
-        Map<String, List<Grant>> optionGrants
+        Map<String, List<Grant>> optionGrants,
+        // Parte ativa da Herança: a habilidade dela ganha o tempo ("Reação", "Ação bônus") e os usos por descanso.
+        String execution,
+        UsesRule uses,
+        // Variantes com muitas opções: o texto de cada opção (a habilidade mostra o description + o das escolhidas)
+        // e os usos e o tempo próprios de cada uma (Meio-Vastaya: Herança Profunda por descanso pleno...).
+        Map<String, String> optionTexts,
+        Map<String, UsesRule> optionUses,
+        Map<String, String> optionExecution,
+        // Cada escolha da Herança tem a sua opção (Forma de Sho'Ma: uma forma nova a cada vez); sem isso, a opção vale para todas.
+        Boolean optionPerPick
 ) {
-    public List<Grant> grantsFor(String option) {
+    // Efeitos das opções escolhidas (cada uma uma vez), depois dos gerais.
+    public List<Grant> grantsFor(List<String> chosen) {
         List<Grant> out = new java.util.ArrayList<>(grantsOrEmpty());
-        if (option != null && optionGrants != null) out.addAll(optionGrants.getOrDefault(option, List.of()));
+        if (optionGrants != null) chosen.stream().distinct().forEach(o -> out.addAll(optionGrants.getOrDefault(o, List.of())));
         return out;
+    }
+
+    // Texto da habilidade: o geral + o de cada opção escolhida.
+    public String textFor(List<String> chosen) {
+        if (optionTexts == null || chosen.isEmpty()) return description;
+        StringBuilder text = new StringBuilder(description == null ? "" : description);
+        chosen.stream().distinct().filter(optionTexts::containsKey)
+                .forEach(o -> text.append(text.isEmpty() ? "" : "\n\n").append(o).append("\n").append(optionTexts.get(o)));
+        return text.toString();
+    }
+
+    public boolean optionPerPickOrFalse() {
+        return Boolean.TRUE.equals(optionPerPick);
     }
 
     public List<Grant> grantsOrEmpty() {

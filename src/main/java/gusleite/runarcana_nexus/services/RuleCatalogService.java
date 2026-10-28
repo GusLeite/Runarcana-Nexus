@@ -544,8 +544,14 @@ public class RuleCatalogService {
                 if (!h.optionsOrEmpty().contains(option)) p.add(where + ": optionGrants cita opção inexistente \"" + option + "\"");
                 validateGrants(where + " (" + option + ")", optionList, p, crafts);
             });
-            h.grantsOrEmpty().stream().filter(g -> g.type() == GrantType.FEATURE || g.type() == GrantType.HERITAGE_POINTS)
-                    .forEach(g -> p.add(where + ": grants não aceita " + g.type() + " (o texto da Herança já vira a habilidade)"));
+            // FEATURE só para as partes ativas extras e as escolhas (o texto da Herança já vira a habilidade).
+            h.grantsOrEmpty().stream().filter(g -> g.type() == GrantType.HERITAGE_POINTS)
+                    .forEach(g -> p.add(where + ": grants não aceita " + g.type()));
+            for (Map.Entry<String, ?> e : optionKeys(h).entrySet()) {
+                if (!h.optionsOrEmpty().contains(e.getKey())) p.add(where + ": " + e.getValue() + " cita opção inexistente \"" + e.getKey() + "\"");
+            }
+            if (h.uses() != null && h.uses().usesFormula() == null && h.uses().maxUses() == null) p.add(where + ": uses precisa de usesFormula ou maxUses");
+            if (h.optionPerPickOrFalse() && h.optionsOrEmpty().isEmpty()) p.add(where + ": optionPerPick sem options");
             if (h.category() == null) p.add(where + ": category deve ser um destes: " + Arrays.toString(HeritageCategory.values()));
             if (h.category() == HeritageCategory.ORIGIN && h.originsOrEmpty().isEmpty() && h.anyOfOrEmpty().isEmpty()) {
                 p.add(where + ": Herança de Origem precisa de origins ou anyOf");
@@ -805,6 +811,8 @@ public class RuleCatalogService {
         if (g.usesFormula() == UsesFormula.TWO_ATTRIBUTES && (g.value() == null || !ATTRIBUTES.contains(g.value()))) {
             p.add(at + " (FEATURE): usesFormula TWO_ATTRIBUTES precisa do segundo atributo em value");
         }
+        if (g.optionTexts() != null) g.optionTexts().keySet().stream().filter(o -> !g.hasOptions() || !g.options().contains(o))
+                .forEach(o -> p.add(at + " (FEATURE): optionTexts cita opção inexistente \"" + o + "\""));
         if (g.optionUses() != null) {
             g.optionUses().forEach((option, u) -> {
                 if (!g.hasOptions() || !g.options().contains(option)) p.add(at + " (FEATURE): optionUses cita opção inexistente \"" + option + "\"");
@@ -858,6 +866,15 @@ public class RuleCatalogService {
         for (String o : options) {
             if (!allowed.contains(o)) p.add(at + ": opção desconhecida \"" + o + "\"");
         }
+    }
+
+    // Opções citadas pelos campos por opção da Herança (opção → nome do campo).
+    private static Map<String, String> optionKeys(RuleHeritage h) {
+        Map<String, String> keys = new java.util.LinkedHashMap<>();
+        if (h.optionTexts() != null) h.optionTexts().keySet().forEach(o -> keys.put(o, "optionTexts"));
+        if (h.optionUses() != null) h.optionUses().keySet().forEach(o -> keys.put(o, "optionUses"));
+        if (h.optionExecution() != null) h.optionExecution().keySet().forEach(o -> keys.put(o, "optionExecution"));
+        return keys;
     }
 
     private static boolean blank(String s) {

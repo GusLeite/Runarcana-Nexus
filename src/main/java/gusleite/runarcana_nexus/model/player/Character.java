@@ -171,6 +171,13 @@ public class Character {
     @Column(name = "craft")
     private Set<String> crafts = new LinkedHashSet<>();
 
+    // Nível do personagem em que cada ofício (pelo nome) foi aprendido. Sem entrada (fichas antigas) = 1º nível.
+    @ElementCollection
+    @CollectionTable(name = "character_craft_levels", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "craft")
+    @Column(name = "learned_at")
+    private Map<String, Integer> craftLevels = new HashMap<>();
+
     // Pontos de Herança ainda não gastos (os da criação são gastos no assistente).
     private Integer heritagePoints;
 

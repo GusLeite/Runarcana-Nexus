@@ -215,6 +215,45 @@ class CreationControllerTests {
     }
 
     @Test
+    void herancaAtivaGanhaTempoEUsos() throws Exception {
+        String token = login("gaudron");
+        // execution/uses na própria Herança; a parte ativa extra vira outra habilidade.
+        String body = FULL.replace("{\"id\":\"teste-geral\"}", "{\"id\":\"teste-ativa\"}");
+        preview(token, body)
+                .andExpect(jsonPath("$.complete").value(true))
+                .andExpect(jsonPath("$.features[?(@.name == 'Ativa Teste')].uses").value(2))
+                .andExpect(jsonPath("$.features[?(@.name == 'Golpe Ativo')].uses").value(1));
+        mvc.perform(post("/creation").header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isCreated());
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
+                .andExpect(jsonPath("$.abilities[?(@.name == 'Ativa Teste')].type").value("HERITAGE"))
+                .andExpect(jsonPath("$.abilities[?(@.name == 'Ativa Teste')].castingTime").value("Reação"))
+                .andExpect(jsonPath("$.abilities[?(@.name == 'Ativa Teste')].maxUses").value(2))
+                .andExpect(jsonPath("$.abilities[?(@.name == 'Golpe Ativo')].recharge").value("SHORT_REST"));
+    }
+
+    @Test
+    void variantesComUmaOpcaoPorEscolha() throws Exception {
+        String token = login("gaudron");
+        // Uma opção: o texto dela e os usos e o tempo dela.
+        preview(token, FULL.replace("{\"id\":\"teste-geral\"}", "{\"id\":\"teste-formas\",\"option\":\"Lobo\"}"))
+                .andExpect(jsonPath("$.complete").value(true))
+                .andExpect(jsonPath("$.features[?(@.name == 'Formas Teste (Lobo)')].description").value("Uma forma a cada escolha.\n\nLobo\nUiva para a lua."))
+                .andExpect(jsonPath("$.features[?(@.name == 'Formas Teste (Lobo)')].uses").value(1));
+        // Duas escolhas, cada uma com a sua opção; a do Urso pede a garra (texto da opção na habilidade).
+        String both = FULL.replace(HERITAGES, "\"heritages\":[{\"id\":\"teste-formas\",\"option\":\"Lobo\"},{\"id\":\"teste-formas\",\"option\":\"Urso\"}]");
+        preview(token, both)
+                .andExpect(jsonPath("$.features[?(@.name == 'Formas Teste (Lobo, Urso) (2×)')].source").value("Herança"))
+                .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-formas:0')].options[0]").value("Esquerda"));
+        preview(token, both.replace("\"class:ARCANIST:1\"", "\"heritage:teste-formas:0\":[\"Direita\"],\"class:ARCANIST:1\""))
+                .andExpect(jsonPath("$.complete").value(true))
+                .andExpect(jsonPath("$.features[?(@.name == 'Garra de Urso (Direita)')].description").value("Garra direita forte."));
+        // Cada escolha precisa da sua opção.
+        preview(token, FULL.replace(HERITAGES, "\"heritages\":[{\"id\":\"teste-formas\",\"option\":\"Lobo\"},{\"id\":\"teste-formas\"}]"))
+                .andExpect(jsonPath("$.errors", hasItem("Escolha a opção de Formas Teste.")));
+    }
+
+    @Test
     void herancasConferemPontosEPreRequisitos() throws Exception {
         String token = login("gaudron");
         String wrong = FULL.replace(HERITAGES, "\"heritages\":[{\"id\":\"teste-targon\"},{\"id\":\"teste-rival\"},"

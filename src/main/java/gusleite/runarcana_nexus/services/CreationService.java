@@ -65,6 +65,7 @@ import gusleite.runarcana_nexus.rules.RuleOption;
 import gusleite.runarcana_nexus.rules.RuleResource;
 import gusleite.runarcana_nexus.rules.RuleTrait;
 import gusleite.runarcana_nexus.rules.RuleTraits;
+import gusleite.runarcana_nexus.rules.UsesRule;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -182,6 +183,7 @@ public class CreationService {
         Map<String, String> craftNames = new LinkedHashMap<>();
         rules.catalog().craftsOrEmpty().forEach(k -> craftNames.put(k.id(), k.name()));
         b.crafts.forEach(id -> c.getCrafts().add(craftNames.getOrDefault(id, id)));
+        b.craftLevels.forEach((id, lv) -> c.getCraftLevels().put(craftNames.getOrDefault(id, id), lv));
         b.craftExpertise.forEach(id -> c.getCraftExpertise().add(craftNames.getOrDefault(id, id)));
         // Os pontos da criação são gastos no assistente; a ficha guarda o que sobrou (normalmente 0).
         c.setHeritagePoints(b.heritagePoints - b.heritagesSpent());
@@ -276,6 +278,8 @@ public class CreationService {
         Map<String, String> craftNames = new LinkedHashMap<>();
         rules.catalog().craftsOrEmpty().forEach(k -> craftNames.put(k.id(), k.name()));
         replace(c.getCrafts(), b.crafts.stream().map(id -> craftNames.getOrDefault(id, id)).toList());
+        c.getCraftLevels().clear();
+        b.craftLevels.forEach((id, lv) -> c.getCraftLevels().put(craftNames.getOrDefault(id, id), lv));
         replace(c.getCraftExpertise(), b.craftExpertise.stream().map(id -> craftNames.getOrDefault(id, id)).toList());
         c.setHeritagePoints(b.heritagePoints - b.heritagesSpent());
         replace(c.getHeritages(), b.heritages.stream().map(CreationService::displayName).toList());
@@ -536,7 +540,7 @@ public class CreationService {
         if (b.subclass != null) sources.add(new Source("subclass:" + b.subclass.id(), subclassLabel(b.klass) + ": " + b.subclass.name(), b.subclass.grantsOrEmpty()));
         if (b.background != null) sources.add(new Source("background:" + b.background.id(), "Passado: " + b.background.name(), b.background.grantsOrEmpty()));
         if (!catalog.runicNatureOrEmpty().isEmpty()) sources.add(new Source("runic-nature", "Natureza Rúnica", catalog.runicNatureOrEmpty()));
-        sources.addAll(heritageSources(r));
+        sources.addAll(heritageSources(r, b));
         if (b.klass != null) {
             b.classLevels.put(b.klass.id(), 1);
             b.classLevelAt.computeIfAbsent(b.klass.id(), x -> new ArrayList<>()).add(1);
@@ -608,7 +612,7 @@ public class CreationService {
                         b.size = CreatureSize.valueOf(g.value());
                         b.sizeFixed = true;
                     }
-                    case CRAFT -> b.crafts.add(g.value());
+                    case CRAFT -> addCraft(b, g.value(), s.key());
                     case LANGUAGE -> b.languages.add(g.value());
                     case ARMOR_CLASS -> {
                         // Com feature: decide depois das escolhas (vale só se a opção foi escolhida).
@@ -691,7 +695,14 @@ public class CreationService {
                         if (selected.size() == 1 && g.optionUses() != null && g.optionUses().containsKey(selected.getFirst())) {
                             chosen = chosen.withUses(g.optionUses().get(selected.getFirst()));
                         }
-                        if (!selected.isEmpty()) b.featureOptions.put(g.name(), selected);
+                        // Texto de cada opção (Vantagens Tecnológicas): a habilidade leva o das escolhidas.
+                        if (g.optionTexts() != null && !selected.isEmpty()) {
+                            String texts = selected.stream().map(o -> g.optionTexts().getOrDefault(o, "")).filter(t -> !t.isBlank())
+                                    .collect(java.util.stream.Collectors.joining("\n\n"));
+                            chosen = chosen.withText(g.description() == null ? texts : g.description() + "\n\n" + texts, g.castingTime());
+                        }
+                        // Duas habilidades com o mesmo nome (duas Vantagens Tecnológicas): as opções se somam.
+                        if (!selected.isEmpty()) b.featureOptions.computeIfAbsent(g.name(), k -> new ArrayList<>()).addAll(selected);
                         // Opções que são Mistérios ("Água (Elemental)"): viram Mistérios do personagem.
                         if (MYSTERY.equals(g.value())) selected.forEach(o -> mysteryByName(o).ifPresent(b.mysteries::add));
                         b.features.add(new Sourced<>(chosen, s.label()));
@@ -714,7 +725,7 @@ public class CreationService {
                         List<String> selected = choose(picked, options, g.count(), label, b.errors);
                         for (String o : selected) {
                             if (o.startsWith("SKILL:")) b.skills.put(SkillType.valueOf(o.substring(6)), s.label());
-                            else if (o.startsWith("CRAFT:")) b.crafts.add(o.substring(6));
+                            else if (o.startsWith("CRAFT:")) addCraft(b, o.substring(6), key);
                             else if (o.startsWith("ARMOR:")) b.armorProficiencies.add(o.substring(6));
                             else if (o.startsWith("WEAPON:")) b.weaponProficiencies.add(o.substring(7));
                             else {
@@ -758,7 +769,7 @@ public class CreationService {
                                 .filter(o -> !b.crafts.contains(o)).toList();
                         String label = orLabel(g, "Escolha " + g.count() + " ofício(s)");
                         b.choices.add(optionalChoice(key, g, label, options, picked, s.label(), b,
-                                "A lista de ofícios ainda não foi cadastrada nas regras.", b.crafts::add));
+                                "A lista de ofícios ainda não foi cadastrada nas regras.", o -> addCraft(b, o, key)));
                     }
                     case LANGUAGE_CHOICE -> {
                         List<String> source = g.options() != null && !g.options().isEmpty() ? g.options()
@@ -861,6 +872,13 @@ public class CreationService {
     }
 
     private record Deferred(String key, Grant grant, String source) {}
+
+    // Ofício ganho: guarda o nível do personagem em que entrou (o nível do ofício maior conta dali).
+    private static void addCraft(Build b, String id, String key) {
+        if (!b.crafts.add(id)) return;
+        int at = key.startsWith("heritage:") ? b.heritageLevel.getOrDefault(key.replaceFirst("^(heritage:[^:]+).*$", "$1"), 1) : levelOfKey(key);
+        b.craftLevels.put(id, at);
+    }
 
     // ---------- Classe de Armadura ----------
 
@@ -1613,27 +1631,48 @@ public class CreationService {
 
     // Efeitos das Heranças escolhidas (criação e níveis), uma fonte por Herança, mesmo escolhida duas vezes.
     // A compra (pontos, pré-requisitos) é conferida depois, em heritages().
-    private List<Source> heritageSources(CreationRequest r) {
-        // id → opção escolhida (a primeira que vier).
-        Map<String, String> picks = new LinkedHashMap<>();
+    // O nível em que cada uma foi escolhida fica em b.heritageLevel (para o ofício que ela ensina).
+    private List<Source> heritageSources(CreationRequest r, Build b) {
+        // id → opções escolhidas (a primeira, ou uma por escolha nas Heranças optionPerPick).
+        Map<String, List<String>> picks = new LinkedHashMap<>();
+        int[] level = {1};
         java.util.function.Consumer<HeritagePick> take = p -> {
             if (p == null) return;
-            picks.putIfAbsent(p.id(), null);
-            if (!blank(p.option()) && picks.get(p.id()) == null) picks.put(p.id(), p.option());
+            List<String> chosen = picks.computeIfAbsent(p.id(), k -> new ArrayList<>());
+            b.heritageLevel.putIfAbsent("heritage:" + p.id(), level[0]);
+            boolean perPick = rules.heritage(p.id()).map(RuleHeritage::optionPerPickOrFalse).orElse(false);
+            if (!blank(p.option()) && (perPick || chosen.isEmpty())) chosen.add(p.option());
         };
         if (r.heritages() != null) r.heritages().forEach(take);
-        for (LevelPick lp : r.levelsOrEmpty()) if (lp.heritages() != null) lp.heritages().forEach(take);
+        for (LevelPick lp : r.levelsOrEmpty()) {
+            level[0]++;
+            if (lp.heritages() != null) lp.heritages().forEach(take);
+        }
         List<Source> out = new ArrayList<>();
-        picks.forEach((id, option) -> rules.heritage(id).ifPresent(h -> {
-            List<Grant> grants = h.grantsFor(option);
+        picks.forEach((id, chosen) -> rules.heritage(id).ifPresent(h -> {
+            List<Grant> grants = h.grantsFor(chosen);
             if (!grants.isEmpty()) out.add(new Source("heritage:" + h.id(), "Herança: " + h.name(), grants));
         }));
         return out;
     }
 
+    // A habilidade da Herança: o texto (com o das opções escolhidas) e, quando ela tem parte ativa, o tempo e os usos
+    // (os da opção, se só uma foi escolhida e ela tem os seus).
+    static Grant heritageAbility(RuleHeritage h, String name, List<String> chosen) {
+        Grant g = Grant.heritage(name, h.textFor(chosen));
+        String only = chosen.size() == 1 ? chosen.getFirst() : null;
+        UsesRule uses = only != null && h.optionUses() != null && h.optionUses().containsKey(only) ? h.optionUses().get(only) : h.uses();
+        String execution = only != null && h.optionExecution() != null && h.optionExecution().containsKey(only)
+                ? h.optionExecution().get(only) : h.execution();
+        if (execution != null) g = g.withText(g.description(), execution);
+        return uses == null ? g : g.withUses(uses);
+    }
+
     private void heritages(CreationRequest r, Build b) {
         Map<String, Integer> times = new LinkedHashMap<>();
         Map<String, String> options = new LinkedHashMap<>();
+        // Todas as opções escolhidas, na ordem (Heranças com uma opção por escolha); nulo = escolha sem opção.
+        Map<String, List<String>> allOptions = new LinkedHashMap<>();
         Map<String, RuleHeritage> byId = new LinkedHashMap<>();
         List<HeritagePick> all = new ArrayList<>(r.heritages() == null ? List.<HeritagePick>of() : r.heritages());
         for (LevelPick lp : r.levelsOrEmpty()) {
@@ -1658,6 +1697,7 @@ public class CreationService {
             byId.put(h.id(), h);
             times.merge(h.id(), 1, Integer::sum);
             if (!blank(pick.option())) options.putIfAbsent(h.id(), pick.option());
+            allOptions.computeIfAbsent(h.id(), k -> new ArrayList<>()).add(blank(pick.option()) ? null : pick.option());
         }
 
         b.pools.keySet().forEach(scope -> b.spent.put(scope, 0));
@@ -1673,11 +1713,19 @@ public class CreationService {
                         : h.name() + " pode ser escolhida no máximo " + h.maxTimesOrOne() + " vezes.");
             }
             String option = options.get(h.id());
+            List<String> chosen = new ArrayList<>();
             if (h.optionsOrEmpty().isEmpty()) {
                 option = null;
+            } else if (h.optionPerPickOrFalse()) {
+                List<String> each = allOptions.get(h.id());
+                if (each.stream().anyMatch(o -> o == null || !h.optionsOrEmpty().contains(o))) b.errors.add("Escolha a opção de " + h.name() + ".");
+                each.stream().filter(o -> o != null && h.optionsOrEmpty().contains(o)).distinct().forEach(chosen::add);
+                option = chosen.isEmpty() ? null : String.join(", ", chosen);
             } else if (option == null || !h.optionsOrEmpty().contains(option)) {
                 b.errors.add("Escolha a opção de " + h.name() + ".");
                 option = null;
+            } else {
+                chosen.add(option);
             }
             for (int i = 0; i < t; i++) {
                 if (h.category() == HeritageCategory.GENERAL) generals++;
@@ -1685,7 +1733,7 @@ public class CreationService {
             }
             HeritageLine line = new HeritageLine(h.id(), h.name(), h.category(), option, t);
             b.heritages.add(line);
-            b.features.add(new Sourced<>(Grant.heritage(displayName(line), h.description()), "Herança"));
+            b.features.add(new Sourced<>(heritageAbility(h, displayName(line), chosen), "Herança"));
         }
         // As Gerais por último: usam primeiro os pontos só de Gerais, depois o que sobrar, de qualquer tipo.
         for (int i = 0; i < generals; i++) {
@@ -2089,6 +2137,9 @@ public class CreationService {
         final List<ChoiceLine> choices = new ArrayList<>();
         final Set<String> languages = new LinkedHashSet<>();
         final Set<String> crafts = new LinkedHashSet<>();
+        // Nível do personagem em que cada ofício (id) foi aprendido e em que cada Herança ("heritage:<id>") foi escolhida.
+        final Map<String, Integer> craftLevels = new LinkedHashMap<>();
+        final Map<String, Integer> heritageLevel = new LinkedHashMap<>();
         final List<String> errors = new ArrayList<>();
         // Pontos de Herança por tipo (REGION/ORIGIN/ANY) e quantos já foram gastos de cada.
         final Map<String, Integer> pools = new LinkedHashMap<>();

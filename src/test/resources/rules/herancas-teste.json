@@ -156,6 +156,73 @@
           ]
         }
       ]
+    },
+    {
+      "id": "teste-ativa",
+      "name": "Ativa Teste",
+      "category": "GENERAL",
+      "execution": "Reação",
+      "uses": {
+        "usesFormula": "PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "description": "Com sua reação, um número de vezes igual ao seu bônus de proficiência por descanso pleno.",
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Golpe Ativo",
+          "castingTime": "Ação bônus",
+          "usesFormula": "FIXED",
+          "maxUses": 1,
+          "recharge": "SHORT_REST",
+          "description": "Uma vez por descanso curto."
+        }
+      ]
+    },
+    {
+      "id": "teste-formas",
+      "name": "Formas Teste",
+      "category": "GENERAL",
+      "maxTimes": 2,
+      "optionPerPick": true,
+      "options": [
+        "Lobo",
+        "Urso"
+      ],
+      "description": "Uma forma a cada escolha.",
+      "optionTexts": {
+        "Lobo": "Uiva para a lua.",
+        "Urso": "Hiberna no inverno."
+      },
+      "optionUses": {
+        "Lobo": {
+          "usesFormula": "FIXED",
+          "maxUses": 1,
+          "recharge": "LONG_REST"
+        }
+      },
+      "optionExecution": {
+        "Lobo": "Ação"
+      },
+      "optionGrants": {
+        "Urso": [
+          {
+            "type": "FEATURE",
+            "abilityType": "PASSIVE",
+            "name": "Garra de Urso",
+            "count": 1,
+            "options": [
+              "Esquerda",
+              "Direita"
+            ],
+            "optionTexts": {
+              "Esquerda": "Garra esquerda afiada.",
+              "Direita": "Garra direita forte."
+            }
+          }
+        ]
+      }
     }
   ]
 }

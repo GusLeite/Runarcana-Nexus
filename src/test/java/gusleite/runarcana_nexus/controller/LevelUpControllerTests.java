@@ -144,6 +144,20 @@ class LevelUpControllerTests {
     }
 
     @Test
+    void oficioGuardaONivelEmQueFoiAprendido() throws Exception {
+        long id = createNyx();
+        String master = login("mestre");
+        levelUp(master, id, "{\"levels\":[{\"hpRoll\":3},{\"hpRoll\":3}]}").andExpect(status().isOk());
+        levelUp(master, id, "{\"levels\":[{\"hpRoll\":3,\"choices\":{\"level:4:class:ARCANIST:0\":[\"aprimoramento-oficio\"]}}]}")
+                .andExpect(jsonPath("$.level").value(4));
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + login("gaudron")))
+                .andExpect(jsonPath("$.crafts[?(@.name == 'Ferraria')].learnedAt").value(1))
+                .andExpect(jsonPath("$.crafts[?(@.name == 'Alquimia')].learnedAt").value(4))
+                // Aprimoramento com parte ativa: habilidade com os usos (bônus de proficiência).
+                .andExpect(jsonPath("$.abilities[?(@.name == 'Ofício Teste')].maxUses").value(2));
+    }
+
+    @Test
     void multiclasseComProficienciasReduzidasEPreRequisito() throws Exception {
         long id = createNyx();
         String master = login("mestre");
