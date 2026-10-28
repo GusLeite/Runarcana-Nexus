@@ -128,6 +128,9 @@ public class Character {
     // Nulo = a de maior CA.
     private String defense;
 
+    // Escudo em uso: "ITEM:<id do PlayerItems>", "NONE" (sem escudo) ou nulo (= o de maior bônus do inventário).
+    private String shield;
+
     @ElementCollection
     @CollectionTable(name = "character_languages", joinColumns = @JoinColumn(name = "character_id"))
     @Column(name = "language")

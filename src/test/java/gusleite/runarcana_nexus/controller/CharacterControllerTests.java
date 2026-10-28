@@ -175,6 +175,40 @@ class CharacterControllerTests {
     }
 
     @Test
+    void escudoDoInventarioSomaNaCa() throws Exception {
+        mvc.perform(post("/character").contentType(MediaType.APPLICATION_JSON).content(RUDO))
+                .andExpect(status().isCreated());
+        Character rudo = characters.findAll().getFirst();
+        // Escudo do catálogo de teste (t-escudo, +2): entra no inventário como objeto comum, achado pelo catalogId.
+        gusleite.runarcana_nexus.model.items.Object shield = new gusleite.runarcana_nexus.model.items.Object();
+        shield.setName("Escudo Teste");
+        shield.setRarity(Rarity.Common);
+        shield.setCatalogId("t-escudo");
+        PlayerItems entry = inventory.save(entry(rudo, items.save(shield), 1));
+        String key = "ITEM:" + entry.getId();
+        String token = login("rudo");
+
+        // Sem escolha, o escudo já soma: 10 + DES 13 (+1) + 2.
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
+                .andExpect(jsonPath("$.armorClass.value").value(13))
+                .andExpect(jsonPath("$.armorClass.shield").value(key))
+                .andExpect(jsonPath("$.armorClass.shields[0].bonus").value(2))
+                .andExpect(jsonPath("$.armorClass.bonuses[0]").value("Escudo Teste +2 (sem proficiência com escudos)"));
+        mvc.perform(patch("/character/me/shield").header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"key\":\"NONE\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.value").value(11))
+                .andExpect(jsonPath("$.shield").doesNotExist());
+        mvc.perform(patch("/character/me/shield").header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"key\":\"ITEM:999\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Esse escudo não está no seu inventário."));
+        mvc.perform(patch("/character/me/shield").header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"key\":\"" + key + "\"}"))
+                .andExpect(jsonPath("$.value").value(13));
+    }
+
+    @Test
     void jogadorAlteraOsPropriosPv() throws Exception {
         mvc.perform(post("/character").contentType(MediaType.APPLICATION_JSON).content(RUDO))
                 .andExpect(status().isCreated());

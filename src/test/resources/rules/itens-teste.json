@@ -43,6 +43,16 @@
       "dexterity": "FULL"
     },
     {
+      "id": "t-escudo",
+      "name": "Escudo Teste",
+      "kind": "SHIELD",
+      "groups": [
+        "escudo"
+      ],
+      "armorClass": 2,
+      "armorClassText": "2"
+    },
+    {
       "id": "t-tocha",
       "name": "Tocha Teste",
       "kind": "GEAR",

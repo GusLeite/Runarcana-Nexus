@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-27 — Escudo somando na CA (`feature/character-sheet`)
+- Os escudos do inventário (achados pelo `catalogId` no `itens.json`: Escudo Leve +1, Pesado e de Torre +2) somam na CA de qualquer defesa. Sem escolha, vale o de maior bônus; `Character.shield` guarda a escolha e `PATCH /character/me/shield` troca (`NONE` = sem escudo). `ArmorClassResponse` ganhou `shield` e `shields`; sem proficiência com escudos, o bônus vem com o aviso.
+- Ficha: parte **Escudo** no menu da Classe de Armadura.
+- Testes: `escudoDoInventarioSomaNaCa` (escudo de teste no `itens-teste.json`). Conferido no sandbox (Combatente: Cota de Malha 16 + Escudo Leve = 17; sem escudo, 16).
+
 ## 2026-10-27 — Jogador altera os próprios PV (`feature/character-sheet`)
 - `PATCH /character/me/hp` (`{ currentHp, tempHp? }`): PV atual de 0 ao máximo e PV temporários (`Character.tempHp`, também no `CharacterResponse`).
 - Ficha: **Alterar PV** no herói (`HitPoints.jsx`) com Dano (gasta os temporários primeiro), Cura e PV temp.; os temporários aparecem em azul na barra. Atualização otimista, volta atrás se o back recusar.

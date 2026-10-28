@@ -48,6 +48,14 @@ public class CharacterController {
 
     public record DefenseRequest(String key) {}
 
+    // Escudo em uso ("NONE" = sem escudo, ou "ITEM:<id>" de um escudo do inventário).
+    @PatchMapping("/me/shield")
+    public ResponseEntity<ArmorClassResponse> chooseShield(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @RequestBody DefenseRequest request) {
+        return ResponseEntity.ok(charService.chooseShield(authService.authenticate(authorization), request.key()));
+    }
+
     // Jogador: PV atual (0 até o máximo) e PV temporários (0 ou mais) da própria ficha.
     @PatchMapping("/me/hp")
     public ResponseEntity<CharacterResponse> setHp(

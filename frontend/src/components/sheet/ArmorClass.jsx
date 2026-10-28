@@ -1,12 +1,15 @@
 import { useState } from 'react'
 
 // Classe de Armadura no herói da ficha. O valor vem pronto do back (armorClass da ficha); clicar abre as
-// opções de defesa (sem armadura, CAs alternativas da origem, armaduras do inventário) para escolher a que está em uso.
-export default function ArmorClass({ armorClass, onChoose }) {
+// opções de defesa (sem armadura, CAs alternativas da origem, armaduras do inventário) para escolher a que está em uso,
+// e o escudo (os do inventário somam o bônus em qualquer defesa).
+export default function ArmorClass({ armorClass, onChoose, onShield }) {
   const [open, setOpen] = useState(false)
   if (!armorClass) return null
   const current = armorClass.options.find(o => o.key === armorClass.selected)
-  const many = armorClass.options.length > 1
+  const shields = armorClass.shields ?? []
+  const shield = shields.find(s => s.key === armorClass.shield)
+  const many = armorClass.options.length > 1 || shields.length > 0
 
   return (
     <div className={'ac' + (open ? ' open' : '')}>
@@ -18,7 +21,7 @@ export default function ArmorClass({ armorClass, onChoose }) {
         </span>
         <span className="ac-text">
           <span className="ac-label">Classe de Armadura{armorClass.reduction > 0 && <em> · RD {armorClass.reduction}</em>}</span>
-          <span className="ac-current">{current?.label ?? '—'}</span>
+          <span className="ac-current">{current?.label ?? '—'}{shield && ' + ' + shield.label}</span>
         </span>
         {many && <span className="ac-chevron" aria-hidden="true">▾</span>}
       </button>
@@ -36,6 +39,24 @@ export default function ArmorClass({ armorClass, onChoose }) {
               <span className="ac-option-value">CA {o.value}{o.reduction > 0 && <small> · RD {o.reduction}</small>}</span>
             </button>
           ))}
+          {shields.length > 0 && (
+            <>
+              <p className="ac-group">Escudo</p>
+              {[{ key: 'NONE', label: 'Sem escudo', bonus: 0 }, ...shields].map(s => {
+                const on = s.key === 'NONE' ? !armorClass.shield : s.key === armorClass.shield
+                return (
+                  <button key={s.key} type="button" role="radio" aria-checked={on} className={'ac-option' + (on ? ' on' : '')}
+                    onClick={() => {
+                      setOpen(false)
+                      if (!on) onShield(s.key)
+                    }}>
+                    <span className="ac-option-label">{s.label}</span>
+                    <span className="ac-option-value">{s.bonus ? '+' + s.bonus + ' CA' : '—'}</span>
+                  </button>
+                )
+              })}
+            </>
+          )}
           {armorClass.bonuses.length > 0 && <p className="ac-note">Bônus somados: {armorClass.bonuses.join(', ')}.</p>}
           {armorClass.blockedBy && <p className="ac-note">Armaduras do inventário não servem por causa de {armorClass.blockedBy}.</p>}
         </div>

@@ -7,7 +7,7 @@ import HitPoints from './HitPoints.jsx'
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 // Coluna da esquerda: splash do personagem (como no perfil do cliente), nível, PV e identidade.
-export default function SheetHero({ character, sheet, armorClass, onDefense, onHp }) {
+export default function SheetHero({ character, sheet, armorClass, onDefense, onShield, onHp }) {
   const level = sheet?.level ?? 0
 
   return (
@@ -33,7 +33,7 @@ export default function SheetHero({ character, sheet, armorClass, onDefense, onH
         <>
           <HitPoints currentHp={sheet.currentHp} tempHp={sheet.tempHp ?? 0} maxHp={sheet.maxHp} onChange={onHp} />
 
-          <ArmorClass armorClass={armorClass} onChoose={onDefense} />
+          <ArmorClass armorClass={armorClass} onChoose={onDefense} onShield={onShield} />
 
           <dl className="facts">
             <Fact label="Jogador" value={sheet.playerName} />

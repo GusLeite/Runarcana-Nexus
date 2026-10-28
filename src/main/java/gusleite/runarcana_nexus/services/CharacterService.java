@@ -36,17 +36,20 @@ public class CharacterService {
     private final BackGroundRepository backgroundRepository;
     private final PlayerItemsRepository itemsRepository;
     private final CharacterAbilityRepository abilityRepository;
+    private final RuleCatalogService rules;
 
     public CharacterService(CharacterRepository charRepository,
                             CharacterClassRepository classRepository,
                             BackGroundRepository backgroundRepository,
                             PlayerItemsRepository itemsRepository,
-                            CharacterAbilityRepository abilityRepository) {
+                            CharacterAbilityRepository abilityRepository,
+                            RuleCatalogService rules) {
         this.charRepository = charRepository;
         this.classRepository = classRepository;
         this.backgroundRepository = backgroundRepository;
         this.itemsRepository = itemsRepository;
         this.abilityRepository = abilityRepository;
+        this.rules = rules;
     }
 
     @Transactional(readOnly = true)
@@ -109,8 +112,31 @@ public class CharacterService {
         return CharacterResponse.of(character);
     }
 
-    // CA da ficha: as regras da criação (Character.armorRules) e as armaduras do inventário.
-    private static ArmorClassResponse armorClassOf(Character character, List<PlayerItems> items) {
+    // Escudo em uso: "NONE" (sem escudo) ou "ITEM:<id>" de um escudo do inventário. Devolve a CA recalculada.
+    @Transactional
+    public ArmorClassResponse chooseShield(Account account, String key) {
+        Character character = characterOf(account);
+        List<PlayerItems> items = itemsRepository.findByCharacterOrderByIdAsc(character);
+        boolean known = ArmorClassCalculator.NO_SHIELD.equals(key) || shieldsOf(items).stream().anyMatch(s -> s.key().equals(key));
+        if (key == null || !known) throw ApiException.badRequest("Esse escudo não está no seu inventário.");
+        character.setShield(key);
+        charRepository.save(character);
+        return armorClassOf(character, items);
+    }
+
+    // Escudos do inventário: os itens do catálogo com kind SHIELD e bônus fixo (o Broquel, "Especial", fica de fora).
+    private List<ArmorClassCalculator.ShieldItem> shieldsOf(List<PlayerItems> items) {
+        return items.stream()
+                .filter(e -> e.getItem().getCatalogId() != null)
+                .flatMap(e -> EquipmentRules.item(rules.catalog().equipment(), e.getItem().getCatalogId())
+                        .filter(r -> "SHIELD".equals(r.kind()) && r.armorClass() != null)
+                        .map(r -> new ArmorClassCalculator.ShieldItem("ITEM:" + e.getId(), e.getItem().getName(), r.armorClass()))
+                        .stream())
+                .toList();
+    }
+
+    // CA da ficha: as regras da criação (Character.armorRules), as armaduras e os escudos do inventário.
+    private ArmorClassResponse armorClassOf(Character character, List<PlayerItems> items) {
         List<ArmorClassCalculator.ArmorItem> armors = items.stream()
                 .filter(e -> Hibernate.unproxy(e.getItem()) instanceof Armor)
                 .map(e -> {
@@ -120,7 +146,8 @@ public class CharacterService {
                 })
                 .toList();
         return ArmorClassCalculator.calculate(character::getModifier, character.getProficiencyBonus(),
-                character.getArmorRules(), character.getArmorProficiencies(), armors, character.getDefense());
+                character.getArmorRules(), character.getArmorProficiencies(), armors, character.getDefense(),
+                shieldsOf(items), character.getShield());
     }
 
     @Transactional

@@ -473,6 +473,7 @@ input.note-title{padding:10px 12px;font-family:'Cinzel',Georgia,serif;font-size:
 .ac-option-value{flex:none;font-family:'Cinzel',Georgia,serif;color:var(--gold-hi)}
 .ac-option-value small{font-family:inherit;color:var(--muted)}
 .ac-note{margin:4px 2px 0;font-size:12px;font-style:italic;color:var(--muted)}
+.ac-group{margin:10px 0 4px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal)}
 
 /* Especialidade: losango duplo (proficiência em dobro) */
 .skill.expert .pip{background:var(--gold-hi);border-color:var(--gold-hi);box-shadow:0 0 6px rgba(240,199,94,.9),5px -5px 0 -2px var(--gold-hi)}
