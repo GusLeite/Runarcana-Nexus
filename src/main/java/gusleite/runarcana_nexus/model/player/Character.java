@@ -49,6 +49,8 @@ public class Character {
     private int maxHp;
     @PositiveOrZero
     private int currentHp;
+    // PV temporários (somem antes dos PV atuais ao sofrer dano). Nulo nas fichas antigas = 0.
+    private Integer tempHp;
     @Positive
     private int str;
     @Positive

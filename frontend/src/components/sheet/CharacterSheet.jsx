@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { chooseDefense as chooseDefenseApi, fetchSheet, rest as restApi, setAbilityUses } from '../../api/character.js'
+import { chooseDefense as chooseDefenseApi, fetchSheet, rest as restApi, setAbilityUses, setHp as setHpApi } from '../../api/character.js'
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
 import { rollCheck, rollDice } from '../../data/rules.js'
@@ -83,6 +83,15 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       .then(armorClass => setState(s => (s.status === 'ready' ? { ...s, sheet: { ...s.sheet, armorClass } } : s)))
       .catch(fail)
   }, [token, fail])
+
+  // PV do jogador: atualiza na hora e volta atrás se o back recusar.
+  const setHp = useCallback(next => {
+    const before = state.status === 'ready' ? state.sheet.character : null
+    if (!before) return
+    const put = character => setState(s => (s.status === 'ready' ? { ...s, sheet: { ...s.sheet, character } } : s))
+    put({ ...before, ...next })
+    setHpApi(token, next.currentHp, next.tempHp).catch(err => { put(before); fail(err) })
+  }, [state, token, fail])
 
   useEffect(() => {
     if (!toast) return
@@ -237,7 +246,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
 
       <main className={'sheet-body tab-' + tab}>
         <SheetHero character={character} sheet={sheet} armorClass={state.status === 'ready' ? state.sheet.armorClass : null}
-          onDefense={chooseDefense} />
+          onDefense={chooseDefense} onHp={setHp} />
 
         {state.status === 'loading' && (
           <div className="sheet-state" role="status"><div className="hex-spinner" />Abrindo a ficha…</div>

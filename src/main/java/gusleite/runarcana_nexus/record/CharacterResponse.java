@@ -23,6 +23,8 @@ public record CharacterResponse(
         CharacterClassType characterClass,
         int maxHp,
         int currentHp,
+        // PV temporários (0 se não houver).
+        int tempHp,
         int str,
         int dex,
         int intel,
@@ -75,6 +77,7 @@ public record CharacterResponse(
                 character.getCharacterClass().getClassName(),
                 character.getMaxHp(),
                 character.getCurrentHp(),
+                character.getTempHp() == null ? 0 : character.getTempHp(),
                 character.getStr(),
                 character.getDex(),
                 character.getIntel(),

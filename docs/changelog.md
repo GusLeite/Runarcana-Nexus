@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-27 — Jogador altera os próprios PV (`feature/character-sheet`)
+- `PATCH /character/me/hp` (`{ currentHp, tempHp? }`): PV atual de 0 ao máximo e PV temporários (`Character.tempHp`, também no `CharacterResponse`).
+- Ficha: **Alterar PV** no herói (`HitPoints.jsx`) com Dano (gasta os temporários primeiro), Cura e PV temp.; os temporários aparecem em azul na barra. Atualização otimista, volta atrás se o back recusar.
+- Testes: `jogadorAlteraOsPropriosPv` e `applyHp` no front. Conferido no sandbox (Rudo: 4 temporários + 7 de dano → 8/11).
+
 ## 2026-10-27 — Subida de nível, multiclasse e Aprimoramentos (`feature/character-sheet`)
 - **Subida de nível pelo mestre**: `POST /character/{id}/level-up/preview` e `POST /character/{id}/level-up`. Os níveis ficam no `build`; o cálculo refaz o personagem no nível novo (proficiência, usos/dados/valores pelo nível da classe, PV com o dado rolado, ponto de Herança no 5º, 9º, 13º e 17º, atributos até 20). Aplicar soma a diferença de PV no PV atual e mantém usos gastos e as habilidades cadastradas pelo mestre (`CharacterAbility.source`). `Character.classLevels` e `CharacterResponse.canLevelUp`.
 - **Multiclasse**: pré-requisitos e proficiências de multiclasse das 9 classes (`multiclass` no `criacao.json`, da página Multiclasse da wiki); a classe nova entra sem as proficiências iniciais.

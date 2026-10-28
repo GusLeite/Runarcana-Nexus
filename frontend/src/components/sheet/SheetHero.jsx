@@ -2,17 +2,13 @@ import { ALIGNMENT_NAMES, ARMOR_NAMES, CLASS_NAMES, REGION_NAMES, SIZE_NAMES, fo
 import Num from './Num.jsx'
 import SpeedToggle from './SpeedToggle.jsx'
 import ArmorClass from './ArmorClass.jsx'
+import HitPoints from './HitPoints.jsx'
 
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 // Coluna da esquerda: splash do personagem (como no perfil do cliente), nível, PV e identidade.
-export default function SheetHero({ character, sheet, armorClass, onDefense }) {
+export default function SheetHero({ character, sheet, armorClass, onDefense, onHp }) {
   const level = sheet?.level ?? 0
-  const hpMax = sheet?.maxHp ?? 0
-  const hp = Math.min(sheet?.currentHp ?? 0, hpMax)
-  const hpPct = hpMax ? (hp / hpMax) * 100 : 0
-  // Uma marca a cada 10 PV, como a barra de vida dentro do jogo.
-  const tick = hpMax ? (10 / hpMax) * 100 : 100
 
   return (
     <aside className="hero card" style={{ '--i': 0 }}>
@@ -35,15 +31,7 @@ export default function SheetHero({ character, sheet, armorClass, onDefense }) {
 
       {sheet && (
         <>
-          <div className="hp" aria-label={`Pontos de vida: ${hp} de ${hpMax}`}>
-            <div className="hp-head">
-              <span>Pontos de vida</span>
-              <b><Num value={hp} duration={1100} /> <small>/ {hpMax}</small></b>
-            </div>
-            <div className="hp-bar" style={{ '--tick': tick + '%' }}>
-              <div className={'hp-fill' + (hpPct < 35 ? ' low' : '')} style={{ width: hpPct + '%' }} />
-            </div>
-          </div>
+          <HitPoints currentHp={sheet.currentHp} tempHp={sheet.tempHp ?? 0} maxHp={sheet.maxHp} onChange={onHp} />
 
           <ArmorClass armorClass={armorClass} onChoose={onDefense} />
 

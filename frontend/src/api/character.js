@@ -12,3 +12,6 @@ export const rest = (token, type) => request('/character/me/rest', { method: 'PO
 
 // Defesa em uso: "UNARMORED", "RULE:<n>" ou "ITEM:<id>". Devolve a CA recalculada.
 export const chooseDefense = (token, key) => request('/character/me/defense', { method: 'PATCH', token, body: { key } })
+
+// PV atual (0 até o máximo) e PV temporários. Devolve a ficha (CharacterResponse).
+export const setHp = (token, currentHp, tempHp) => request('/character/me/hp', { method: 'PATCH', token, body: { currentHp, tempHp } })

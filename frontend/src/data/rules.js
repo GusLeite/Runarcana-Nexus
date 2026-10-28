@@ -457,3 +457,18 @@ export function keepChoices(picks, choices) {
   const keys = new Set((choices ?? []).map(c => c.key))
   return Object.fromEntries(Object.entries(picks).filter(([k]) => keys.has(k)))
 }
+
+// ---------- Pontos de vida ----------
+
+// Dano, cura e PV temporários: { currentHp, tempHp } depois da ação. O dano gasta os temporários primeiro;
+// a cura não passa do máximo e não mexe nos temporários; "temp" troca os temporários pelo valor (não somam).
+export function applyHp({ currentHp, tempHp = 0, maxHp }, action, amount) {
+  const n = Math.max(0, Math.floor(Number(amount) || 0))
+  if (action === 'damage') {
+    const absorbed = Math.min(tempHp, n)
+    return { currentHp: Math.max(0, currentHp - (n - absorbed)), tempHp: tempHp - absorbed }
+  }
+  if (action === 'heal') return { currentHp: Math.min(maxHp, currentHp + n), tempHp }
+  if (action === 'temp') return { currentHp, tempHp: n }
+  return { currentHp, tempHp }
+}

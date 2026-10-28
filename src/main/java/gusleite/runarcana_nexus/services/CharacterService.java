@@ -95,6 +95,20 @@ public class CharacterService {
         return armorClassOf(character, items);
     }
 
+    // PV da própria ficha: o jogador marca dano, cura e PV temporários (as contas ficam no front; aqui só os limites).
+    public CharacterResponse setHp(Account account, Integer currentHp, Integer tempHp) {
+        Character character = characterOf(account);
+        if (currentHp == null) throw ApiException.badRequest("Informe os PV atuais.");
+        if (currentHp < 0 || currentHp > character.getMaxHp()) {
+            throw ApiException.badRequest("Os PV atuais vão de 0 a " + character.getMaxHp() + ".");
+        }
+        if (tempHp != null && tempHp < 0) throw ApiException.badRequest("Os PV temporários não podem ser negativos.");
+        character.setCurrentHp(currentHp);
+        if (tempHp != null) character.setTempHp(tempHp);
+        charRepository.save(character);
+        return CharacterResponse.of(character);
+    }
+
     // CA da ficha: as regras da criação (Character.armorRules) e as armaduras do inventário.
     private static ArmorClassResponse armorClassOf(Character character, List<PlayerItems> items) {
         List<ArmorClassCalculator.ArmorItem> armors = items.stream()

@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -171,6 +172,37 @@ class CharacterControllerTests {
         mvc.perform(get("/character/me").header("Authorization", "Bearer " + login("gaudron")))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Sua ficha ainda não foi criada. Crie seu personagem."));
+    }
+
+    @Test
+    void jogadorAlteraOsPropriosPv() throws Exception {
+        mvc.perform(post("/character").contentType(MediaType.APPLICATION_JSON).content(RUDO))
+                .andExpect(status().isCreated());
+        String token = login("rudo");
+        mvc.perform(patch("/character/me/hp").header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"currentHp\":20,\"tempHp\":5}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.currentHp").value(20))
+                .andExpect(jsonPath("$.tempHp").value(5));
+        // Sem tempHp, os temporários ficam como estão.
+        mvc.perform(patch("/character/me/hp").header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"currentHp\":33}"))
+                .andExpect(jsonPath("$.currentHp").value(33))
+                .andExpect(jsonPath("$.tempHp").value(5));
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
+                .andExpect(jsonPath("$.character.tempHp").value(5));
+        mvc.perform(patch("/character/me/hp").header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"currentHp\":34}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Os PV atuais vão de 0 a 33."));
+        mvc.perform(patch("/character/me/hp").header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"currentHp\":10,\"tempHp\":-1}"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(patch("/character/me/hp").contentType(MediaType.APPLICATION_JSON).content("{\"currentHp\":1}"))
+                .andExpect(status().isUnauthorized());
+        mvc.perform(patch("/character/me/hp").header("Authorization", "Bearer " + login("gaudron"))
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"currentHp\":1}"))
+                .andExpect(status().isNotFound());
     }
 
     @Test

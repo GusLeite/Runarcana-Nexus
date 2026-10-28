@@ -3,7 +3,7 @@ import {
   addHeritage, carryCapacity, choiceOptionName, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
   addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
-  resourceCost, togglePick, levelChoices, keepChoices, rollDie,
+  resourceCost, togglePick, levelChoices, keepChoices, rollDie, applyHp,
 } from './rules.js'
 
 describe('modificadores', () => {
@@ -258,5 +258,26 @@ describe('subida de nível', () => {
   it('rola o dado de vida entre 1 e o lado', () => {
     expect(rollDie(8, () => 0)).toBe(1)
     expect(rollDie(8, () => 0.999)).toBe(8)
+  })
+})
+
+describe('pontos de vida', () => {
+  const hp = { currentHp: 20, tempHp: 5, maxHp: 30 }
+
+  it('dano gasta os temporários primeiro e não passa de 0', () => {
+    expect(applyHp(hp, 'damage', 3)).toEqual({ currentHp: 20, tempHp: 2 })
+    expect(applyHp(hp, 'damage', 8)).toEqual({ currentHp: 17, tempHp: 0 })
+    expect(applyHp(hp, 'damage', 99)).toEqual({ currentHp: 0, tempHp: 0 })
+  })
+
+  it('cura até o máximo, sem mexer nos temporários', () => {
+    expect(applyHp(hp, 'heal', 4)).toEqual({ currentHp: 24, tempHp: 5 })
+    expect(applyHp(hp, 'heal', 50)).toEqual({ currentHp: 30, tempHp: 5 })
+  })
+
+  it('PV temporários trocam pelo valor novo; valor inválido não muda nada', () => {
+    expect(applyHp(hp, 'temp', 8)).toEqual({ currentHp: 20, tempHp: 8 })
+    expect(applyHp(hp, 'damage', 'abc')).toEqual({ currentHp: 20, tempHp: 5 })
+    expect(applyHp(hp, 'heal', -5)).toEqual({ currentHp: 20, tempHp: 5 })
   })
 })

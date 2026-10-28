@@ -48,6 +48,17 @@ public class CharacterController {
 
     public record DefenseRequest(String key) {}
 
+    // Jogador: PV atual (0 até o máximo) e PV temporários (0 ou mais) da própria ficha.
+    @PatchMapping("/me/hp")
+    public ResponseEntity<CharacterResponse> setHp(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @RequestBody HpRequest request) {
+        return ResponseEntity.ok(charService.setHp(authService.authenticate(authorization), request.currentHp(), request.tempHp()));
+    }
+
+    // tempHp nulo = mantém o que já tem.
+    public record HpRequest(Integer currentHp, Integer tempHp) {}
+
     @PostMapping
     public ResponseEntity<CharacterResponse> createCharacter(@Valid @RequestBody CreateCharacterRequest request) {
         return ResponseEntity
