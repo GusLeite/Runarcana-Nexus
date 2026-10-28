@@ -4760,7 +4760,12 @@
             },
             {
               "type": "MYSTERY",
-              "value": "fogo"
+              "value": "fogo",
+              "options": [
+                "magma",
+                "inferno"
+              ],
+              "label": "Glifo Ígneo: você já tem o Mistério do Fogo; escolha Magma ou Infernal"
             }
           ],
           "levels": [

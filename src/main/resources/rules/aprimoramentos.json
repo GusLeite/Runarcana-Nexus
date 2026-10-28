@@ -202,7 +202,23 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Escolha entre: Acólito, Combatente Arcano, Xamã. Você aprende dois truques da lista de magias da classe escolhida. Além disso, escolha uma magia de 1º nível da mesma lista. Você aprende essa magia e pode conjurá-la uma vez com o menor nível possível sem gastar pontos de mana antes de realizar um descanso longo. Essa restrição aplica-se apenas à magia adquirida através desse Aprimoramento.\n\nA classe que você escolheu também determina a habilidade de conjuração dessas magias: Inteligência para Combatente Arcano e Sabedoria para Acólito ou Xamã."
+      "description": "Escolha entre: Acólito, Combatente Arcano, Xamã. Você aprende dois truques da lista de magias da classe escolhida. Além disso, escolha uma magia de 1º nível da mesma lista. Você aprende essa magia e pode conjurá-la uma vez com o menor nível possível sem gastar pontos de mana antes de realizar um descanso longo. Essa restrição aplica-se apenas à magia adquirida através desse Aprimoramento.\n\nA classe que você escolheu também determina a habilidade de conjuração dessas magias: Inteligência para Combatente Arcano e Sabedoria para Acólito ou Xamã.",
+      "grants": [
+        {
+          "type": "SPELL_CHOICE",
+          "count": 2,
+          "spellLevel": 0,
+          "value": "LIST:ACOLYTE,FIGHTER,SHAMAN",
+          "label": "Arcanista Iniciante: 2 truques da lista do Acólito, Combatente Arcano ou Xamã (a mesma da magia)"
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "count": 1,
+          "spellLevel": 1,
+          "value": "LIST:ACOLYTE,FIGHTER,SHAMAN",
+          "label": "Arcanista Iniciante: 1 magia de 1º nível da mesma lista"
+        }
+      ]
     },
     {
       "id": "aprimoramento-arcano-vital",
@@ -271,7 +287,14 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Graças a sua prática extensiva com arcos, você ganha os seguintes benefícios:\n\n- Estar a 5 pés de uma criatura hostil não impõe desvantagem nas suas jogadas de ataque à distância com arco.\n- Uma vez por turno você pode usar uma ação de ataque para atirar com duas flechas no arco, a segunda flecha rola o acerto com desvantagem.\n- Seus ataques com arco e flecha ignoram metade da RD de seus alvos dentro de seu alcance curto"
+      "description": "Graças a sua prática extensiva com arcos, você ganha os seguintes benefícios:\n\n- Estar a 5 pés de uma criatura hostil não impõe desvantagem nas suas jogadas de ataque à distância com arco.\n- Uma vez por turno você pode usar uma ação de ataque para atirar com duas flechas no arco, a segunda flecha rola o acerto com desvantagem.\n- Seus ataques com arco e flecha ignoram metade da RD de seus alvos dentro de seu alcance curto",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK:BOW",
+          "description": "Estar a 5 pés de uma criatura hostil não impõe desvantagem nas suas jogadas de ataque à distância com arco."
+        }
+      ]
     },
     {
       "id": "aprimoramento-ars-veneficius",
@@ -292,6 +315,10 @@
           "type": "ATTRIBUTE",
           "attribute": "CONSTITUTION",
           "amount": 1
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "venenoso"
         }
       ]
     },
@@ -393,7 +420,14 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Você dominou o uso de armas à distância e pode realizar tiros que seriam impossíveis para outros. Você ganha os seguintes benefícios:\n\n- Atacar um alvo além da distância normal não impõe desvantagem nas suas jogadas de ataque com armas à distância.\n- Seus ataques com armas à distância ignoram meia cobertura e três-quartos de cobertura.\n- Antes de realizar um ataque com uma arma à distância na qual você seja proficiente, você pode escolher sofrer –2 de penalidade na jogada de ataque. Se o ataque atingir, você adiciona 1 dado de dano da arma no ataque."
+      "description": "Você dominou o uso de armas à distância e pode realizar tiros que seriam impossíveis para outros. Você ganha os seguintes benefícios:\n\n- Atacar um alvo além da distância normal não impõe desvantagem nas suas jogadas de ataque com armas à distância.\n- Seus ataques com armas à distância ignoram meia cobertura e três-quartos de cobertura.\n- Antes de realizar um ataque com uma arma à distância na qual você seja proficiente, você pode escolher sofrer –2 de penalidade na jogada de ataque. Se o ataque atingir, você adiciona 1 dado de dano da arma no ataque.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK:RANGED",
+          "description": "Atacar um alvo além da distância normal não impõe desvantagem nas suas jogadas de ataque com armas à distância."
+        }
+      ]
     },
     {
       "id": "aprimoramento-atleta",
@@ -477,7 +511,14 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Graças a sua prática extensiva com bestas, você ganha os seguintes benefícios:\n\n- Você ignora a qualidade de recarga de bestas nas quais você é proficiente.\n- Estar a 5 pés de uma criatura hostil não impõe desvantagem nas suas jogadas de ataque à distância com bestas.\n- Quando você usa a ação de Ataque e ataca com uma arma de uma mão, você pode usar sua ação bônus para atacar com uma besta de mão carregada que você esteja empunhando.\n- Seus ataques com bestas ignoram metade da RD de seus alvos dentro de seu alcance curto"
+      "description": "Graças a sua prática extensiva com bestas, você ganha os seguintes benefícios:\n\n- Você ignora a qualidade de recarga de bestas nas quais você é proficiente.\n- Estar a 5 pés de uma criatura hostil não impõe desvantagem nas suas jogadas de ataque à distância com bestas.\n- Quando você usa a ação de Ataque e ataca com uma arma de uma mão, você pode usar sua ação bônus para atacar com uma besta de mão carregada que você esteja empunhando.\n- Seus ataques com bestas ignoram metade da RD de seus alvos dentro de seu alcance curto",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK:CROSSBOW",
+          "description": "Estar a 5 pés de uma criatura hostil não impõe desvantagem nas suas jogadas de ataque à distância com bestas."
+        }
+      ]
     },
     {
       "id": "aprimoramento-blindado",
@@ -550,6 +591,11 @@
           "count": 1,
           "amount": 1,
           "label": "+1 em um atributo à escolha"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK",
+          "description": "Seus ataques críticos causam seu bônus de proficiência em d4 de dano necrótico adicional."
         }
       ]
     },
@@ -567,7 +613,14 @@
           "SHAMAN"
         ],
         "classLevel": 8
-      }
+      },
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "SAVE",
+          "description": "A primeira salvaguarda para forçar uma canalização é feita com vantagem."
+        }
+      ]
     },
     {
       "id": "aprimoramento-canalizacao-eficiente",
@@ -643,7 +696,14 @@
         "Aprimoramento"
       ],
       "prerequisite": "Habilidade de conjuração",
-      "description": "Você é experiente em conjurar magias no meio do combate, aprendendo técnicas que lhe concedem os seguintes benefícios:\n\n- Você tem vantagem em salvaguardas de Constituição para manter sua concentração em uma magia quando você sofrer dano.\n- Você pode realizar os componentes somáticos de uma magia mesmo quando está com armas ou um escudo em uma ou ambas as mãos.\n- Você pode usar sua reação para conjurar uma magia na criatura, ao invés de realizar o ataque de oportunidade. A magia deve ter um tempo de conjuração de 1 ação e deve ter apenas uma criatura como alvo.\n- Seus ataques com magia ignoram metade da RD de seus alvos"
+      "description": "Você é experiente em conjurar magias no meio do combate, aprendendo técnicas que lhe concedem os seguintes benefícios:\n\n- Você tem vantagem em salvaguardas de Constituição para manter sua concentração em uma magia quando você sofrer dano.\n- Você pode realizar os componentes somáticos de uma magia mesmo quando está com armas ou um escudo em uma ou ambas as mãos.\n- Você pode usar sua reação para conjurar uma magia na criatura, ao invés de realizar o ataque de oportunidade. A magia deve ter um tempo de conjuração de 1 ação e deve ter apenas uma criatura como alvo.\n- Seus ataques com magia ignoram metade da RD de seus alvos",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "SAVE:CONSTITUTION",
+          "description": "Você tem vantagem em salvaguardas de Constituição para manter sua concentração em uma magia quando você sofrer dano."
+        }
+      ]
     },
     {
       "id": "aprimoramento-conjurador-eficiente",
@@ -777,6 +837,16 @@
           "type": "ATTRIBUTE",
           "attribute": "CHARISMA",
           "amount": 1
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:DECEPTION",
+          "description": "Você tem vantagem em testes de Atuação e Enganação quando você estiver tentando se passar por uma pessoa diferente."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERFORMANCE",
+          "description": "Você tem vantagem em testes de Atuação e Enganação quando você estiver tentando se passar por uma pessoa diferente."
         }
       ]
     },
@@ -793,7 +863,14 @@
         "attributes": {
           "DEXTERITY": 13
         }
-      }
+      },
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "AC",
+          "description": "Quando você estiver empunhando uma arma de acuidade com a qual você seja proficiente e outra criatura atingir você com um ataque corpo a corpo, você pode usar sua reação para adicionar seu bônus de proficiência a sua…"
+        }
+      ]
     },
     {
       "id": "aprimoramento-empunhadura-dupla",
@@ -824,6 +901,11 @@
           "type": "ATTRIBUTE",
           "attribute": "STRENGTH",
           "amount": 1
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK",
+          "description": "Ao invés de receber -5 em jogadas de ataque e ter desvantagem nessas rolagens, você recebe apenas -2 e não tem mais desvantagem."
         }
       ]
     },
@@ -900,6 +982,16 @@
         {
           "type": "ARMOR_PROFICIENCY",
           "value": "SHIELD"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SAVE:DEXTERITY",
+          "description": "Enquanto você estiver consciente e não esteja incapacitado, você pode adicionar o bônus de CA do seu escudo para salvaguardas de Destreza e Força."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SAVE:STRENGTH",
+          "description": "Enquanto você estiver consciente e não esteja incapacitado, você pode adicionar o bônus de CA do seu escudo para salvaguardas de Destreza e Força."
         }
       ]
     },
@@ -916,7 +1008,14 @@
         "armor": [
           "MEDIUM"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Você não tem desvantagem em testes de Furtividade enquanto estiver utilizando uma armadura média."
+        }
+      ]
     },
     {
       "id": "aprimoramento-especialista-em-armadura-pesada",
@@ -1011,7 +1110,24 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Você tem uma facilidade natural para encontrar passagens, tesouros e armadilhas escondidas. Você possui os seguintes benefícios:\n\n- Você tem vantagens em testes de Percepção e Investigação para encontrar passagens escondidas ou armadilhas, adicionalmente você possui vantagem em salvaguardas de Destreza para evitar uma armadilha.\n- Armadilhas causam metade do dano em você.\n- Enquanto você viaja, pode procurar por armadilhas preparadas em seu caminho sem diminuir o ritmo."
+      "description": "Você tem uma facilidade natural para encontrar passagens, tesouros e armadilhas escondidas. Você possui os seguintes benefícios:\n\n- Você tem vantagens em testes de Percepção e Investigação para encontrar passagens escondidas ou armadilhas, adicionalmente você possui vantagem em salvaguardas de Destreza para evitar uma armadilha.\n- Armadilhas causam metade do dano em você.\n- Enquanto você viaja, pode procurar por armadilhas preparadas em seu caminho sem diminuir o ritmo.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:INVESTIGATION",
+          "description": "Você tem vantagens em testes de Percepção e Investigação para encontrar passagens escondidas ou armadilhas, adicionalmente você possui vantagem em salvaguardas de Destreza para evitar uma armadilha."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERCEPTION",
+          "description": "Você tem vantagens em testes de Percepção e Investigação para encontrar passagens escondidas ou armadilhas, adicionalmente você possui vantagem em salvaguardas de Destreza para evitar uma armadilha."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SAVE:DEXTERITY",
+          "description": "Você tem vantagens em testes de Percepção e Investigação para encontrar passagens escondidas ou armadilhas, adicionalmente você possui vantagem em salvaguardas de Destreza para evitar uma armadilha."
+        }
+      ]
     },
     {
       "id": "aprimoramento-explosao-de-adrenalina",
@@ -1137,7 +1253,16 @@
         "Aprimoramento"
       ],
       "prerequisite": "Habilidade de conjurar pelo menos uma magia",
-      "description": "Você aprendeu técnicas de conjuração com certos tipos de magia, ganhando os seguintes benefícios:\n\n- Magias e truques que requerem acerto, tem o alcance dobrado.\n- Suas magia que requer acerto ignoram meia cobertura ou três-quartos de cobertura.\n- Você aprende um truque que requer uma jogada de ataque. Escolha o truque da lista de magias de Acólito ou Combatente Arcano. Seu atributo de conjuração para esse truque depende da lista de magia a qual você escolheu o truque: Inteligência para Combatente Arcano e Sabedoria para Acólito."
+      "description": "Você aprendeu técnicas de conjuração com certos tipos de magia, ganhando os seguintes benefícios:\n\n- Magias e truques que requerem acerto, tem o alcance dobrado.\n- Suas magia que requer acerto ignoram meia cobertura ou três-quartos de cobertura.\n- Você aprende um truque que requer uma jogada de ataque. Escolha o truque da lista de magias de Acólito ou Combatente Arcano. Seu atributo de conjuração para esse truque depende da lista de magia a qual você escolheu o truque: Inteligência para Combatente Arcano e Sabedoria para Acólito.",
+      "grants": [
+        {
+          "type": "SPELL_CHOICE",
+          "count": 1,
+          "spellLevel": 0,
+          "value": "LIST:ACOLYTE,FIGHTER+ATTACK",
+          "label": "Grão-Conjurador: 1 truque de ataque da lista do Acólito ou do Combatente Arcano"
+        }
+      ]
     },
     {
       "id": "aprimoramento-habil",
@@ -1173,7 +1298,14 @@
         "attributes": {
           "STRENGTH": 13
         }
-      }
+      },
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK",
+          "description": "Você tem vantagem nas jogadas de ataque contra uma criatura que já está agarrada."
+        }
+      ]
     },
     {
       "id": "aprimoramento-incapacitador",
@@ -1247,7 +1379,14 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Sua agilidade em combate o permite potencializar sua capacidade ofensiva, semelhante a uma ferramenta de cerco. Você adquire os seguintes benefícios:\n\n- Após realizar a ação de Disparada, você pode realizar um ataque corpo a corpo ou derrubar uma criatura com uma ação bônus.\n- Se você percorrer pelo menos 10 pés em uma linha reta, você pode escolher receber +5 de bônus para acertar um ataque corpo a corpo ou ter vantagem para derrubar uma criatura."
+      "description": "Sua agilidade em combate o permite potencializar sua capacidade ofensiva, semelhante a uma ferramenta de cerco. Você adquire os seguintes benefícios:\n\n- Após realizar a ação de Disparada, você pode realizar um ataque corpo a corpo ou derrubar uma criatura com uma ação bônus.\n- Se você percorrer pelo menos 10 pés em uma linha reta, você pode escolher receber +5 de bônus para acertar um ataque corpo a corpo ou ter vantagem para derrubar uma criatura.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK:MELEE",
+          "description": "Se você percorrer pelo menos 10 pés em uma linha reta, você pode escolher receber +5 de bônus para acertar um ataque corpo a corpo ou ter vantagem para derrubar uma criatura."
+        }
+      ]
     },
     {
       "id": "aprimoramento-invocador-intenso",
@@ -1384,6 +1523,11 @@
           "type": "ATTRIBUTE",
           "attribute": "CONSTITUTION",
           "amount": 1
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SAVE",
+          "description": "Você recebe vantagem em salvaguarda contra qualquer tipo de controle mental."
         }
       ]
     },
@@ -1588,7 +1732,14 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Você dominou a arte de arremessar armas, sacando rapidamente e golpeando com precisão. Você ganha os seguintes benefícios:\n\n- Estar a 5 pés de uma criatura hostil ou atacar um alvo além da distância normal não impõe desvantagem nas suas jogadas de ataque à distância com armas de arremesso.\n- Você pode sacar uma arma que tenha a propriedade arremesso como parte de sua ação de Ataque.\n- Armas arremessadas por você tem sua categoria de dano aumentada em 1."
+      "description": "Você dominou a arte de arremessar armas, sacando rapidamente e golpeando com precisão. Você ganha os seguintes benefícios:\n\n- Estar a 5 pés de uma criatura hostil ou atacar um alvo além da distância normal não impõe desvantagem nas suas jogadas de ataque à distância com armas de arremesso.\n- Você pode sacar uma arma que tenha a propriedade arremesso como parte de sua ação de Ataque.\n- Armas arremessadas por você tem sua categoria de dano aumentada em 1.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK:THROWN",
+          "description": "Estar a 5 pés de uma criatura hostil ou atacar um alvo além da distância normal não impõe desvantagem nas suas jogadas de ataque à distância com armas de arremesso."
+        }
+      ]
     },
     {
       "id": "aprimoramento-perito-em-armas-de-corrente",
@@ -1619,6 +1770,11 @@
         {
           "type": "CRAFT",
           "value": "armeiro"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK:FIREARM",
+          "description": "Estar a 5 pés de uma criatura hostil não impõe desvantagem nas suas jogadas de ataque à distância com armas de fogo."
         }
       ]
     },
@@ -1659,6 +1815,11 @@
           "type": "ATTRIBUTE",
           "attribute": "DEXTERITY",
           "amount": 1
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK:FIREARM",
+          "description": "Você recebe +1 em suas jogadas de ataque com armas de fogo médias."
         }
       ]
     },
@@ -1838,7 +1999,19 @@
         "attributes": {
           "DEXTERITY": 13
         }
-      }
+      },
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Ao tentar se esconder de alguma criatura, estando levemente obscurecido, você tem vantagem em seu teste de Furtividade."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERCEPTION",
+          "description": "Você não recebe desvantagem em testes de Percepção relacionados à visão quando em penumbra."
+        }
+      ]
     },
     {
       "id": "aprimoramento-sangramento-de-alma",
@@ -2001,6 +2174,11 @@
           "count": 1,
           "amount": 1,
           "label": "+1 em um atributo à escolha"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "AC",
+          "description": "Você recebe Redução de Dano igual a metade do seu bônus de proficiência contra qualquer ataque causado por seu Foco de Caça"
         }
       ]
     }

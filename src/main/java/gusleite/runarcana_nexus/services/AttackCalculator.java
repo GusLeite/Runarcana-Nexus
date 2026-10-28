@@ -80,7 +80,7 @@ public final class AttackCalculator {
                     w.dice() == null ? null : withBonus(w.dice(), mod),
                     w.versatileDice() == null ? null : withBonus(w.versatileDice(), mod),
                     w.damageType(), w.critRange(), w.critMultiplier(), w.range(), w.mastery(), w.properties(),
-                    styleVariants(w, styles, tier, attack, mod, modifier, proficiency, proficient)));
+                    styleVariants(w, styles, tier, attack, mod, modifier, proficiency, proficient), List.of()));
         }
         // Desarmado: 1 + FOR, contundente, sempre proficiente. Combate Desarmado: 1d4 + FOR e +1 no ataque (+1 no 8º e 16º).
         int str = modifier.applyAsInt(Attribute.STRENGTH);
@@ -88,7 +88,7 @@ public final class AttackCalculator {
                 ? List.of(new AttackResponse.StyleVariant("Combate Desarmado", str + proficiency + tier, withBonus("1d4", str), null))
                 : List.of();
         out.add(new AttackResponse(UNARMED, "Ataque desarmado", Attribute.STRENGTH, true, str + proficiency,
-                String.valueOf(Math.max(1, 1 + str)), null, DamageType.B, 20, 2, null, null, null, unarmed));
+                String.valueOf(Math.max(1, 1 + str)), null, DamageType.B, 20, 2, null, null, null, unarmed, List.of()));
         return out;
     }
 
@@ -161,6 +161,23 @@ public final class AttackCalculator {
         return new WeaponInput(key, w.getName(), dice, null, w.getDamageType(), p.contains(WeaponProperty.FINESSE), ranged,
                 w.getDamageAttribute(), tags, w.getCritical() == null ? 20 : w.getCritical(), 2, null, null, null,
                 p.contains(WeaponProperty.THROWN), p.contains(WeaponProperty.TWO_HANDED));
+    }
+
+    // A nota "ATTACK:<tipo>" vale para esta arma? (desarmado: só ATTACK e ATTACK:MELEE)
+    public static boolean matches(String target, WeaponInput w) {
+        if (target.equals("ATTACK")) return true;
+        String type = target.substring("ATTACK:".length());
+        if (w == null) return type.equals("MELEE");
+        String name = normalize(w.name());
+        return switch (type) {
+            case "MELEE" -> !w.ranged();
+            case "RANGED" -> w.ranged() || w.thrown();
+            case "BOW" -> name.startsWith("arco");
+            case "CROSSBOW" -> name.startsWith("besta");
+            case "THROWN" -> w.thrown();
+            case "FIREARM" -> w.tags().contains("arma-de-fogo");
+            default -> false;
+        };
     }
 
     static int[] critical(String text) {

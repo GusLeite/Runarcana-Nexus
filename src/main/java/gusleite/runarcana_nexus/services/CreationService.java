@@ -19,6 +19,7 @@ import gusleite.runarcana_nexus.model.player.Character;
 import gusleite.runarcana_nexus.model.player.CharacterAbility;
 import gusleite.runarcana_nexus.model.player.CharacterSkill;
 import gusleite.runarcana_nexus.model.player.ClassLevel;
+import gusleite.runarcana_nexus.model.player.SituationalNote;
 import gusleite.runarcana_nexus.model.roles.CharacterClass;
 import gusleite.runarcana_nexus.record.CharacterResponse;
 import gusleite.runarcana_nexus.record.CreationPreview;
@@ -172,6 +173,7 @@ public class CreationService {
         c.setCurrentHp(b.maxHp());
         c.setSpeed(b.speed());
         c.setInitiativeBonus(b.initiativeBonus);
+        applyEffects(c, b);
         c.getOtherSpeeds().putAll(b.otherSpeedsTotal());
         c.getArmorRules().addAll(b.armorRules);
         c.setSize(b.size);
@@ -262,6 +264,7 @@ public class CreationService {
         c.setSubclass(b.subclass == null ? null : b.subclass.name());
         c.setSpeed(b.speed());
         c.setInitiativeBonus(b.initiativeBonus);
+        applyEffects(c, b);
         c.getOtherSpeeds().clear();
         c.getOtherSpeeds().putAll(b.otherSpeedsTotal());
         c.getArmorRules().clear();
@@ -587,7 +590,16 @@ public class CreationService {
                     }
                     case GOLD -> b.gold += g.amount();
                     case INITIATIVE -> b.initiativeBonus += g.amount();
-                    case MYSTERY -> b.mysteries.add(g.value());
+                    case SITUATIONAL -> b.situational.add(new SituationalNote(g.value(), g.description(), s.label()));
+                    case RESISTANCE -> b.resistances.add(g.value());
+                    case PASSIVE_BONUS -> {
+                        int n = g.usesFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : g.amount();
+                        if ("PERCEPTION".equals(g.value())) b.passivePerception += n;
+                        else b.passiveInsight += n;
+                    }
+                    case MYSTERY -> {
+                        if (!g.hasOptions()) b.mysteries.add(g.value());
+                    }
                     case SPELL -> b.fixedSpells.putIfAbsent(g.value(), s.label());
                     case EQUIPMENT -> {
                         if (!b.wealth) addEquipment(b, g.value(), s.label());
@@ -634,6 +646,19 @@ public class CreationService {
                         b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, selected, s.label(), null));
                     }
                     case EXPERTISE_CHOICE -> b.deferred.add(new Deferred(key, g, s.label()));
+                    case MYSTERY -> {
+                        // Com options: o Mistério de value, ou um das options se ele já tiver (Glifo Ígneo: Fogo, ou Magma/Infernal).
+                        if (!g.hasOptions()) break;
+                        if (!b.mysteries.contains(g.value())) {
+                            b.mysteries.add(g.value());
+                            break;
+                        }
+                        List<String> options = g.options().stream().filter(o -> !b.mysteries.contains(o)).toList();
+                        String label = orLabel(g, "Você já tem o Mistério " + g.value() + ": escolha outro");
+                        List<String> selected = choose(picked, options, 1, label, b.errors);
+                        b.mysteries.addAll(selected);
+                        b.choices.add(new ChoiceLine(key, g.type(), label, 1, options, selected, s.label(), null));
+                    }
                     case SAVING_THROW_CHOICE -> {
                         List<String> options = orAll(g.options(), Attribute.values()).stream()
                                 .filter(o -> !b.saves.containsKey(Attribute.valueOf(o))).toList();
@@ -771,8 +796,8 @@ public class CreationService {
             List<String> chosen = b.featureOptions.get(g.armor().feature());
             if (chosen != null && chosen.contains(g.armor().featureOption())) b.armorRules.add(armorRule(g, null));
         }
-        resourceChoices(b);
         spellChoices(b, picks);
+        resourceChoices(b);
         mergeMana(b);
         multiclassChecks(b);
 
@@ -1186,7 +1211,9 @@ public class CreationService {
         b.mysteries.addAll(mysteries);
         Map<String, RuleMagic.Spell> byId = new LinkedHashMap<>();
         magic.spellsOrEmpty().forEach(sp -> byId.put(sp.id(), sp));
-        Set<String> taken = new LinkedHashSet<>(b.fixedSpells.keySet());
+        // As magias conhecidas ficam no build (pré-requisito de recurso: Rajada Etérea → rajada mística).
+        b.knownSpellIds.addAll(b.fixedSpells.keySet());
+        Set<String> taken = b.knownSpellIds;
         b.fixedSpells.forEach((id, source) -> {
             RuleMagic.Spell sp = byId.get(id);
             if (sp != null) b.features.add(new Sourced<>(Grant.spell(sp), source));
@@ -1206,7 +1233,20 @@ public class CreationService {
     private record Known(String spellId, String source, String classId, String from) {}
 
     // A lista de origem/linhagem (Yordle, Fauhwoon, Ottrani) vale como a lista da classe para quem é dela.
+    // "LIST:ACOLYTE,FIGHTER" (Arcanista Iniciante, Grão-Conjurador): magias da lista de uma dessas classes (FIGHTER = a do
+    // Combatente Arcano); "+ATTACK" no fim: só as que pedem ataque mágico.
+    static final String LIST = "LIST:";
+    private static final java.util.regex.Pattern SPELL_ATTACK = java.util.regex.Pattern.compile("ataque (mágico|de magia|com magia)",
+            java.util.regex.Pattern.CASE_INSENSITIVE);
+
     private static boolean inList(RuleMagic.Spell sp, String from, String classId, Set<String> mysteries, Set<String> origins) {
+        if (from.startsWith(LIST)) {
+            String spec = from.substring(LIST.length());
+            boolean attack = spec.endsWith("+ATTACK");
+            List<String> classes = List.of(spec.replace("+ATTACK", "").split(","));
+            return sp.classesOrEmpty().stream().anyMatch(classes::contains)
+                    && (!attack || (sp.description() != null && SPELL_ATTACK.matcher(sp.description()).find()));
+        }
         boolean fromClass = !"MYSTERIES".equals(from) && ((classId != null && sp.classesOrEmpty().contains(classId))
                 || sp.originsOrEmpty().stream().anyMatch(origins::contains));
         boolean fromMystery = !"CLASS".equals(from) && sp.mysteriesOrEmpty().stream().anyMatch(mysteries::contains);
@@ -1545,6 +1585,7 @@ public class CreationService {
         if (q.heritages() != null && !q.heritages().isEmpty()
                 && b.heritages.stream().noneMatch(h -> q.heritages().stream().anyMatch(x -> x.equalsIgnoreCase(h.id())))) return pre;
         if (q.resources() != null && q.resources().stream().anyMatch(x -> !b.resourceIds.contains(x))) return pre;
+        if (q.spells() != null && !b.knownSpellIds.containsAll(q.spells())) return pre;
         if (q.weapons() != null && !q.weapons().isEmpty()
                 && b.weaponProficiencies.stream().noneMatch(w -> q.weapons().stream().anyMatch(w::equalsIgnoreCase))) return pre;
         if (q.armor() != null && !b.armorProficiencies.containsAll(q.armor())) return pre;
@@ -1560,19 +1601,33 @@ public class CreationService {
 
     // Compra das Heranças com os pontos de Herança. Cada escolha custa 1 ponto do tipo certo:
     // ponto de Região compra Heranças de Região e Gerais; de Origem, de Origem e Gerais; ANY, qualquer uma.
+    // Efeitos situacionais, resistências e bônus nas passivas (Heranças, Aprimoramentos...): refeitos a cada vez.
+    private static void applyEffects(Character c, Build b) {
+        c.getSituational().clear();
+        c.getSituational().addAll(b.situational);
+        c.getResistances().clear();
+        c.getResistances().addAll(b.resistances);
+        c.setPassivePerceptionBonus(b.passivePerception);
+        c.setPassiveInsightBonus(b.passiveInsight);
+    }
+
     // Efeitos das Heranças escolhidas (criação e níveis), uma fonte por Herança, mesmo escolhida duas vezes.
     // A compra (pontos, pré-requisitos) é conferida depois, em heritages().
     private List<Source> heritageSources(CreationRequest r) {
-        Set<String> ids = new LinkedHashSet<>();
-        if (r.heritages() != null) r.heritages().stream().filter(java.util.Objects::nonNull).forEach(p -> ids.add(p.id()));
-        for (LevelPick lp : r.levelsOrEmpty()) {
-            if (lp.heritages() != null) lp.heritages().stream().filter(java.util.Objects::nonNull).forEach(p -> ids.add(p.id()));
-        }
+        // id → opção escolhida (a primeira que vier).
+        Map<String, String> picks = new LinkedHashMap<>();
+        java.util.function.Consumer<HeritagePick> take = p -> {
+            if (p == null) return;
+            picks.putIfAbsent(p.id(), null);
+            if (!blank(p.option()) && picks.get(p.id()) == null) picks.put(p.id(), p.option());
+        };
+        if (r.heritages() != null) r.heritages().forEach(take);
+        for (LevelPick lp : r.levelsOrEmpty()) if (lp.heritages() != null) lp.heritages().forEach(take);
         List<Source> out = new ArrayList<>();
-        for (String id : ids) {
-            rules.heritage(id).filter(h -> !h.grantsOrEmpty().isEmpty())
-                    .ifPresent(h -> out.add(new Source("heritage:" + h.id(), "Herança: " + h.name(), h.grantsOrEmpty())));
-        }
+        picks.forEach((id, option) -> rules.heritage(id).ifPresent(h -> {
+            List<Grant> grants = h.grantsFor(option);
+            if (!grants.isEmpty()) out.add(new Source("heritage:" + h.id(), "Herança: " + h.name(), grants));
+        }));
         return out;
     }
 
@@ -2059,6 +2114,11 @@ public class CreationService {
         final List<ArmorRule> armorRules = new ArrayList<>();
         int gold;
         int initiativeBonus;
+        int passivePerception;
+        int passiveInsight;
+        final List<SituationalNote> situational = new ArrayList<>();
+        final Set<String> resistances = new LinkedHashSet<>();
+        final Set<String> knownSpellIds = new LinkedHashSet<>();
 
         // Ids da origem e da linhagem, para as listas de magia de origem.
         Set<String> originIds() {

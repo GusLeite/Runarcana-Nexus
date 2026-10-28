@@ -44,6 +44,9 @@ export default function Attacks({ attacks, onRoll, onRollDice }) {
                   </button>
                 )}
               </span>
+              {a.notes?.length > 0 && (
+                <span className="attack-notes">{a.notes.map(t => <span key={t}>✦ {t}</span>)}</span>
+              )}
               {a.styles?.length > 0 && (
                 <span className="attack-styles">
                   {a.styles.map(s => (

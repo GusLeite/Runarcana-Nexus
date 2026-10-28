@@ -78,6 +78,8 @@ public record RuleResource(
             List<String> armor,
             Integer classLevel,
             List<String> origins,
-            List<String> lineages
+            List<String> lineages,
+            // Magias que precisa conhecer (ids do magias.json), ex.: Rajada Etérea → rajada-mistica.
+            List<String> spells
     ) {}
 }

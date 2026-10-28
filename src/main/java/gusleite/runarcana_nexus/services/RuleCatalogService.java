@@ -303,6 +303,7 @@ public class RuleCatalogService {
         for (RuleOption o : c.backgrounds() == null ? List.<RuleOption>of() : c.backgrounds()) o.grantsOrEmpty().forEach(g -> grants.add(Map.entry("passado " + o.id(), g)));
         c.resourcesOrEmpty().forEach(r -> r.grantsOrEmpty().forEach(g -> grants.add(Map.entry("recurso " + r.id(), g))));
         c.runicNatureOrEmpty().forEach(g -> grants.add(Map.entry("Natureza Rúnica", g)));
+        c.heritagesOrEmpty().forEach(h -> h.grantsOrEmpty().forEach(g -> grants.add(Map.entry("herança " + h.id(), g))));
         RuleMagic m = c.magic();
         Set<String> mysteries = new HashSet<>(), names = new HashSet<>(), spells = new HashSet<>();
         if (m != null) {
@@ -312,6 +313,8 @@ public class RuleCatalogService {
         for (Map.Entry<String, Grant> e : grants) {
             Grant g = e.getValue();
             if (g.type() == GrantType.MYSTERY && !mysteries.contains(g.value())) p.add(e.getKey() + " (MYSTERY): Mistério inexistente \"" + g.value() + "\"");
+            if (g.type() == GrantType.MYSTERY && g.options() != null) g.options().stream().filter(o -> !mysteries.contains(o))
+                    .forEach(o -> p.add(e.getKey() + " (MYSTERY): opção \"" + o + "\" não é um Mistério"));
             if (g.type() == GrantType.SPELL && !spells.contains(g.value())) p.add(e.getKey() + " (SPELL): magia inexistente \"" + g.value() + "\"");
             if (g.type() == GrantType.FEATURE && "MYSTERY".equals(g.value()) && g.options() != null) g.options().stream()
                     // "Água (Elemental)": o nome fora dos parênteses; "Charme (Encantamento)" (Vítreo): o de dentro.
@@ -319,6 +322,10 @@ public class RuleCatalogService {
                             && !names.contains(plain(o.replaceAll("^.*\\(([^)]+)\\)$", "$1"))))
                     .forEach(o -> p.add(e.getKey() + " (" + g.name() + "): opção \"" + o + "\" não é um Mistério"));
         }
+        // Pré-requisito de magia conhecida dos recursos (Rajada Etérea → rajada-mistica).
+        if (m != null) c.resourcesOrEmpty().stream().filter(r -> r.requires() != null && r.requires().spells() != null)
+                .forEach(r -> r.requires().spells().stream().filter(s -> !spells.contains(s))
+                        .forEach(s -> p.add("recurso " + r.id() + ": requires.spells cita magia inexistente \"" + s + "\"")));
     }
 
     private static String plain(String s) {
@@ -533,6 +540,10 @@ public class RuleCatalogService {
             if (blank(h.name())) p.add(where + ": falta name");
             if (blank(h.description())) p.add(where + ": falta description");
             validateGrants(where, h.grantsOrEmpty(), p, crafts);
+            if (h.optionGrants() != null) h.optionGrants().forEach((option, optionList) -> {
+                if (!h.optionsOrEmpty().contains(option)) p.add(where + ": optionGrants cita opção inexistente \"" + option + "\"");
+                validateGrants(where + " (" + option + ")", optionList, p, crafts);
+            });
             h.grantsOrEmpty().stream().filter(g -> g.type() == GrantType.FEATURE || g.type() == GrantType.HERITAGE_POINTS)
                     .forEach(g -> p.add(where + ": grants não aceita " + g.type() + " (o texto da Herança já vira a habilidade)"));
             if (h.category() == null) p.add(where + ": category deve ser um destes: " + Arrays.toString(HeritageCategory.values()));
@@ -676,6 +687,19 @@ public class RuleCatalogService {
                     if (g.amount() == null && !formula && !halfDie) p.add(at + " (HP_BONUS): precisa de amount, usesFormula ou value HALF_HIT_DIE");
                     if (g.value() != null && !halfDie) p.add(at + " (HP_BONUS): value só aceita HALF_HIT_DIE");
                 }
+                case SITUATIONAL -> {
+                    if (blank(g.value()) || blank(g.description())) p.add(at + " (SITUATIONAL): precisa de value (alvo) e description");
+                    else if (!g.value().matches("(SKILL:[A-Z_]+|SAVE(:[A-Z]+)?|INITIATIVE|AC|ATTACK(:(MELEE|RANGED|BOW|CROSSBOW|THROWN|FIREARM))?)")) {
+                        p.add(at + " (SITUATIONAL): alvo inválido " + g.value());
+                    }
+                }
+                case RESISTANCE -> {
+                    if (blank(g.value())) p.add(at + " (RESISTANCE): falta value (tipo de dano)");
+                }
+                case PASSIVE_BONUS -> {
+                    if (!"PERCEPTION".equals(g.value()) && !"INSIGHT".equals(g.value())) p.add(at + " (PASSIVE_BONUS): value é PERCEPTION ou INSIGHT");
+                    if (g.amount() == null && g.usesFormula() != UsesFormula.HALF_PROFICIENCY) p.add(at + " (PASSIVE_BONUS): precisa de amount ou usesFormula HALF_PROFICIENCY");
+                }
                 case INITIATIVE -> {
                     if (g.amount() == null) p.add(at + " (INITIATIVE): precisa de amount");
                 }
@@ -745,7 +769,13 @@ public class RuleCatalogService {
                 case SPELL_CHOICE -> {
                     if (g.count() == null || g.count() < 1) p.add(at + " (SPELL_CHOICE): precisa de count");
                     if (g.spellLevel() == null || g.spellLevel() < 0 || g.spellLevel() > 9) p.add(at + " (SPELL_CHOICE): spellLevel deve ir de 0 a 9");
-                    if (g.value() != null && !SPELL_SOURCES.contains(g.value())) p.add(at + " (SPELL_CHOICE): value deve ser um destes: " + SPELL_SOURCES);
+                    if (g.value() != null && g.value().startsWith("LIST:")) {
+                        for (String k : g.value().substring(5).replace("+ATTACK", "").split(",")) {
+                            if (Arrays.stream(CharacterClassType.values()).noneMatch(t -> t.name().equals(k))) p.add(at + " (SPELL_CHOICE): classe desconhecida em LIST: " + k);
+                        }
+                    } else if (g.value() != null && !SPELL_SOURCES.contains(g.value())) {
+                        p.add(at + " (SPELL_CHOICE): value deve ser um destes: " + SPELL_SOURCES + " ou LIST:<classes>");
+                    }
                 }
                 // Os itens citados são conferidos em validateEquipment (precisa do catálogo de itens).
                 case EQUIPMENT -> {

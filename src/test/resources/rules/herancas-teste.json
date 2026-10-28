@@ -34,6 +34,25 @@
             "ATHLETICS",
             "STEALTH"
           ]
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Vantagem no escuro."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK:MELEE",
+          "description": "+1 contra lobos."
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "venenoso"
+        },
+        {
+          "type": "PASSIVE_BONUS",
+          "value": "PERCEPTION",
+          "amount": 2
         }
       ]
     },

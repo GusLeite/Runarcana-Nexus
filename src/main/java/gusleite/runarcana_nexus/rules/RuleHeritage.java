@@ -33,8 +33,16 @@ public record RuleHeritage(
         List<HeritageCondition> anyOf,
         // Efeitos aplicados na ficha (perícia, especialidade "caso já tenha", salvaguarda, deslocamento, idioma, ofício...),
         // além do texto. Fonte "Herança: <nome>"; as escolhas têm a chave "heritage:<id>:<índice>".
-        List<Grant> grants
+        List<Grant> grants,
+        // Efeitos que dependem da opção escolhida (Propulsão Natural: Natureza ou Sobrevivência). Chave = a opção.
+        Map<String, List<Grant>> optionGrants
 ) {
+    public List<Grant> grantsFor(String option) {
+        List<Grant> out = new java.util.ArrayList<>(grantsOrEmpty());
+        if (option != null && optionGrants != null) out.addAll(optionGrants.getOrDefault(option, List.of()));
+        return out;
+    }
+
     public List<Grant> grantsOrEmpty() {
         return grants == null ? List.of() : grants;
     }

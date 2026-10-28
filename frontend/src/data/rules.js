@@ -466,6 +466,14 @@ export const CRAFT_NAMES = {
 }
 export const craftIdOf = name => Object.keys(CRAFT_NAMES).find(id => CRAFT_NAMES[id].toLowerCase() === (name ?? '').toLowerCase())
 
+// Notas situacionais da ficha para um alvo ("SKILL:STEALTH", "SAVE:DEXTERITY", "SAVE", "AC", "INITIATIVE"), já com a fonte:
+// "Sagaz: vantagem em Furtividade...". Para salvaguardas, "SAVE:X" também pega as gerais ("SAVE").
+export function situationalFor(sheet, target) {
+  const list = sheet?.situational ?? []
+  return list.filter(n => n.target === target || (target.startsWith('SAVE:') && n.target === 'SAVE'))
+    .map(n => n.source.replace(/^[^:]+: /, '') + ': ' + n.note)
+}
+
 // ---------- Subida de nível ----------
 
 // Níveis do personagem que dão 1 ponto de Herança.

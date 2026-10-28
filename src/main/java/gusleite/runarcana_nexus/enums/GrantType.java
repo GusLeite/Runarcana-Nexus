@@ -35,6 +35,10 @@ public enum GrantType {
     SPELL_CHOICE,       // count magias à escolha: spellLevel 0 = truques, N = do 1º ao Nº nível; value = de onde vêm
                         // (CLASS = lista da classe, MYSTERIES = Mistérios do personagem, CLASS_OR_MYSTERIES = as duas)
     INITIATIVE,         // +amount na iniciativa (Atento: +5)
+    SITUATIONAL,        // efeito que depende da situação, mostrado ao lado do que afeta: value = alvo (SKILL:STEALTH, SAVE,
+                        // SAVE:DEXTERITY, INITIATIVE, AC, ATTACK, ATTACK:MELEE|RANGED|BOW|CROSSBOW|THROWN|FIREARM), description = a nota
+    RESISTANCE,         // resistência a um tipo de dano: value = o tipo ("venenoso")
+    PASSIVE_BONUS,      // bônus na percepção ou intuição passiva: value PERCEPTION ou INSIGHT, amount ou usesFormula HALF_PROFICIENCY
     RESOURCE_CHOICE     // recurso de classe do Capítulo 5 (rules/recursos.json): value = tipo (SUTRA, IRA, TECNICA...), count,
                         // options = grupos aceitos (vazio = todos); VEL é opcional e usa amount como os pontos (◆) disponíveis
 }

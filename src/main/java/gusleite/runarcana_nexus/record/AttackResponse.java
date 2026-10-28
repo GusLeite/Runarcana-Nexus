@@ -26,7 +26,14 @@ public record AttackResponse(
         String properties,
         // Estilos de Luta da ficha que valem para este ataque, cada um com o bônus e o dano já somados
         // (o Combatente usa um por vez; o jogador escolhe qual rolar).
-        List<StyleVariant> styles
+        List<StyleVariant> styles,
+        // Efeitos situacionais que valem para este ataque (Arqueiro com arcos, Balestreiro com bestas...).
+        List<String> notes
 ) {
+    public AttackResponse withNotes(List<String> newNotes) {
+        return new AttackResponse(key, name, attribute, proficient, attackBonus, damage, versatileDamage, damageType, critRange,
+                critMultiplier, range, mastery, properties, styles, newNotes);
+    }
+
     public record StyleVariant(String name, int attackBonus, String damage, String note) {}
 }

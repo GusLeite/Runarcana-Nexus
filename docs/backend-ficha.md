@@ -12,6 +12,8 @@
 
 **Fórmulas** (`rules/formulas.json`, extraído da wiki: 76 Fórmulas Gerais e 237 dos ofícios; o Jogador não tem fórmulas no livro): `FormulaService` lê e confere ao subir (`runarcana.rules.formulas`; testes: `formulas-teste.json`; o perfil sandbox aponta para o real). As conhecidas ficam em `Character.formulas` (tabela `character_formulas`, chave `<id do ofício>:<id da fórmula>`); só o mestre marca (`PUT /character/{id}/formulas`, só de ofício que a ficha tem). Cada `CraftResponse` traz `id`, `formulas` (nome, nível, CD, texto) e `formulaLimit` = mod. de INT (mín. 1) × nível do ofício (regra do livro: aprende-se esse número ao ganhar ou subir o ofício; não é travado). As de nível 0 todo mundo com o ofício conhece. `GET /crafts/formulas` traz o catálogo.
 
+**Efeitos situacionais e resistências** (`Character.situational`, tabela `character_situational`; `resistances`, `character_resistances`; `passivePerceptionBonus`/`passiveInsightBonus`): refeitos a cada criação/subida de nível a partir das concessões `SITUATIONAL`, `RESISTANCE` e `PASSIVE_BONUS` (76 notas, 6 resistências e 4 bônus de Percepção passiva nas Heranças e Aprimoramentos). `CharacterResponse.situational` (`target`, `note`, `source`) e `resistances`; as passivas já vêm somadas; cada ataque ganha `notes` com as que valem para a arma (`AttackCalculator.matches`: corpo a corpo, à distância, arco pelo nome, besta, arremesso, arma de fogo).
+
 **Iniciativa**: `CharacterResponse.initiative` = mod. de DES + `initiativeBonus` (Atento).
 
 ## Ataques com arma

@@ -101,4 +101,4 @@ Não fazem parte deste plano; continuam nas pendências de [backend.md](backend.
 
 - **Segurança**: senha do banco fora do Git, rotas sem login (`POST /character`, `/background`, `/character-classes`; `GET /character` já exige o mestre), ligação conta ↔ personagem por chave estrangeira, reset de senha, CORS, enums salvos como ordinal, token no `localStorage`.
 - **Front/polimento**: artes (Proto, Titan, Loge, itens), vídeos pesados no Git, roteamento, atualização em tempo real, histórico de rolagens compartilhado.
-- **Regras no texto**: o que sobrou dos efeitos de Herança e dos Aprimoramentos (condicionais, escolhas de lista de outra classe), o nível em que cada ofício foi aprendido, o Ígneo e a Rajada Etérea.
+- **Regras no texto**: habilidades ativas de Heranças e Aprimoramentos (ações, reações, usos), Variantes com muitas opções, Centelha Mágica e o nível em que cada ofício foi aprendido.

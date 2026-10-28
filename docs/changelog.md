@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-28 — Efeitos situacionais, resistências, Ígneo, Rajada Etérea e listas de outra classe (`feature/character-sheet`)
+- Concessões `SITUATIONAL`, `RESISTANCE` e `PASSIVE_BONUS`: 76 notas (perícia, salvaguarda, ataque por tipo de arma, CA, iniciativa), 6 resistências e 4 bônus de Percepção passiva em Heranças e Aprimoramentos (Arqueiro, Sagaz, Balestreiro...); `optionGrants` (Propulsão Natural).
+- Ficha: ✦ com a nota em perícias e salvaguardas, notas nos ataques, resistências e notas de CA/iniciativa no herói.
+- Ígneo: Magma ou Infernal se já tiver Fogo; Rajada Etérea pede rajada mística (`requires.spells`); Arcanista Iniciante e Grão-Conjurador escolhem da lista de outra classe (`LIST:`).
+- Testes: efeitos da Herança de teste na ficha, `situationalFor`.
+
 ## 2026-10-28 — Fórmulas de Ofício (`feature/character-sheet`)
 - `rules/formulas.json` extraído da wiki (76 gerais + 237 dos ofícios), `FormulaService`, `GET /crafts/formulas` e `PUT /character/{id}/formulas` (mestre).
 - Ficha: fórmulas conhecidas no card Ofícios com o limite da regra (mod. de INT × nível do ofício); Livro ganhou **Fórmulas**; o mestre marca no `FormulaEditor` da aba Fichas.

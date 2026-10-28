@@ -4523,7 +4523,12 @@
         "Xamã"
       ],
       "prerequisite": "Truque - rajada mística",
-      "description": "Multiplicar Rajada: ao conjurar rajada mística, gaste até seu bônus de proficiência em Ki; cada ponto cria um raio adicional.\nExplosão: some o mod. de Sabedoria ao dano da rajada mística."
+      "description": "Multiplicar Rajada: ao conjurar rajada mística, gaste até seu bônus de proficiência em Ki; cada ponto cria um raio adicional.\nExplosão: some o mod. de Sabedoria ao dano da rajada mística.",
+      "requires": {
+        "spells": [
+          "rajada-mistica"
+        ]
+      }
     },
     {
       "id": "olhos-da-rapina-eterea",

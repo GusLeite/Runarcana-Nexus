@@ -250,8 +250,17 @@ public class CharacterService {
         // "+1 nos níveis 8 e 16": pelo nível de Combatente (ou do personagem, sem a classe).
         int level = character.getClassLevels().stream().filter(l -> "FIGHTER".equals(l.getClassId())).mapToInt(ClassLevel::getLevel)
                 .findFirst().orElse(character.getLevel());
-        return AttackCalculator.calculate(character::getModifier, character.getProficiencyBonus(),
+        List<AttackResponse> attacks = AttackCalculator.calculate(character::getModifier, character.getProficiencyBonus(),
                 character.getWeaponProficiencies(), weapons, styles, level);
+        // Notas situacionais de ataque (Arqueiro, Balestreiro, Sagaz...) em cada arma que elas valem.
+        List<gusleite.runarcana_nexus.model.player.SituationalNote> attackNotes = character.getSituational().stream()
+                .filter(n -> n.getTarget() != null && n.getTarget().startsWith("ATTACK")).toList();
+        if (attackNotes.isEmpty()) return attacks;
+        return attacks.stream().map(a -> {
+            AttackCalculator.WeaponInput w = weapons.stream().filter(x -> x.key().equals(a.key())).findFirst().orElse(null);
+            return a.withNotes(attackNotes.stream().filter(n -> AttackCalculator.matches(n.getTarget(), w))
+                    .map(n -> n.getSource().replaceFirst("^[^:]+: ", "") + ": " + n.getNote()).toList());
+        }).toList();
     }
 
     // CA da ficha: as regras da criação (Character.armorRules), as armaduras e os escudos do inventário.

@@ -5,6 +5,7 @@ import ArmorClass from './ArmorClass.jsx'
 import HitPoints from './HitPoints.jsx'
 import DeathSaves from './DeathSaves.jsx'
 import ConditionChips from './ConditionChips.jsx'
+import Situational from './Situational.jsx'
 
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
@@ -38,6 +39,7 @@ export default function SheetHero({ character, sheet, armorClass, onDefense, onS
             <DeathSaves successes={sheet.deathSuccesses ?? 0} failures={sheet.deathFailures ?? 0} onSet={onDeathSaves} onRoll={onDeathRoll} />
           )}
           <ConditionChips ids={sheet.conditions} exhaustion={sheet.exhaustion} catalog={conditionCatalog} />
+          <Situational sheet={sheet} />
 
           <ArmorClass armorClass={armorClass} onChoose={onDefense} onShield={onShield} />
 

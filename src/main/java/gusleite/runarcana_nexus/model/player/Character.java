@@ -56,6 +56,17 @@ public class Character {
     @CollectionTable(name = "character_formulas", joinColumns = @JoinColumn(name = "character_id"))
     @Column(name = "formula")
     private Set<String> formulas = new LinkedHashSet<>();
+    // Efeitos situacionais (Heranças, Aprimoramentos), resistências a dano e bônus nas passivas, vindos das concessões.
+    @ElementCollection
+    @CollectionTable(name = "character_situational", joinColumns = @JoinColumn(name = "character_id"))
+    @OrderColumn(name = "position")
+    private List<SituationalNote> situational = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(name = "character_resistances", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "damage_type")
+    private Set<String> resistances = new LinkedHashSet<>();
+    private Integer passivePerceptionBonus;
+    private Integer passiveInsightBonus;
     // Bônus na iniciativa (Atento: +5), das concessões INITIATIVE. Nulo = 0.
     private Integer initiativeBonus;
     // Bônus nos PV máximos dado pelo mestre (item, maldição, bênção); fica fora da conta da subida de nível. Nulo = 0.
@@ -233,10 +244,10 @@ public class Character {
     }
 
     public int getPassivePerception(){
-        return getPassiveSkill(SkillType.PERCEPTION);
+        return getPassiveSkill(SkillType.PERCEPTION) + (passivePerceptionBonus == null ? 0 : passivePerceptionBonus);
     }
     public int getPassiveInsight(){
-        return getPassiveSkill(SkillType.INSIGHT);
+        return getPassiveSkill(SkillType.INSIGHT) + (passiveInsightBonus == null ? 0 : passiveInsightBonus);
     }
 
     public boolean isProficient(SkillType skill) {

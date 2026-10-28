@@ -72,8 +72,13 @@ public record CharacterResponse(
         // Mod. de Destreza + bônus (Atento).
         int initiative,
         // Fórmulas de Ofício conhecidas ("<ofício>:<fórmula>").
-        List<String> formulas
+        List<String> formulas,
+        // Efeitos situacionais ({ target, note, source }) e resistências a dano.
+        List<Situational> situational,
+        List<String> resistances
 ) {
+    public record Situational(String target, String note, String source) {}
+
     public record ClassLevelResponse(String classId, String name, int level, String subclass) {}
 
     public static CharacterResponse of(Character character) {
@@ -134,7 +139,9 @@ public record CharacterResponse(
                 character.getExhaustion() == null ? 0 : character.getExhaustion(),
                 character.getMaxHpBonus() == null ? 0 : character.getMaxHpBonus(),
                 character.getModifier(Attribute.DEXTERITY) + (character.getInitiativeBonus() == null ? 0 : character.getInitiativeBonus()),
-                character.getFormulas().stream().sorted().toList()
+                character.getFormulas().stream().sorted().toList(),
+                character.getSituational().stream().map(n -> new Situational(n.getTarget(), n.getNote(), n.getSource())).toList(),
+                List.copyOf(character.getResistances())
         );
     }
 }

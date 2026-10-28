@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  addHeritage, carryCapacity, choiceOptionName, critDice, deathSaveResult, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
+  addHeritage, carryCapacity, choiceOptionName, critDice, deathSaveResult, situationalFor, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
   addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
   resourceCost, togglePick, levelChoices, keepChoices, rollDie, applyHp,
@@ -296,5 +296,17 @@ describe('deathSaveResult', () => {
     expect(deathSaveResult(1, 0, 2)).toEqual({ successes: 0, failures: 3, revived: false })
     expect(deathSaveResult(10, 2, 0)).toEqual({ successes: 3, failures: 0, revived: false })
     expect(deathSaveResult(9, 0, 0)).toEqual({ successes: 0, failures: 1, revived: false })
+  })
+})
+
+describe('situationalFor', () => {
+  it('acha as notas do alvo, com as gerais de salvaguarda', () => {
+    const sheet = { situational: [
+      { target: 'SKILL:STEALTH', note: 'Vantagem no escuro.', source: 'Aprimoramento: Sagaz' },
+      { target: 'SAVE', note: 'Vantagem contra magia.', source: 'Herança: Resistência Mágica' },
+    ] }
+    expect(situationalFor(sheet, 'SKILL:STEALTH')).toEqual(['Sagaz: Vantagem no escuro.'])
+    expect(situationalFor(sheet, 'SAVE:WISDOM')).toEqual(['Resistência Mágica: Vantagem contra magia.'])
+    expect(situationalFor(sheet, 'AC')).toEqual([])
   })
 })
