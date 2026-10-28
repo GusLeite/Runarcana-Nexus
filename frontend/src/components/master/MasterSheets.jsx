@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { applyLevelUp, fetchCatalog, fetchCharacters, fetchConditions, previewLevelUp } from '../../api/master.js'
 import ConditionEditor from './ConditionEditor.jsx'
+import HpEditor from './HpEditor.jsx'
 import { ATTRIBUTES, CLASS_NAMES, HERITAGE_LEVELS, keepChoices, levelChoices, rollDie } from '../../data/rules.js'
 import { CHARACTERS } from '../../data/characters.js'
 import ChoiceStep from '../creation/ChoiceStep.jsx'
@@ -116,7 +117,10 @@ export default function MasterSheets({ token, onError, onToast }) {
 
       {character && conditions && (
         <section className="card" style={{ '--i': 1 }}>
-          <h3 className="card-title">Condições <small>de {character.characterName}</small></h3>
+          <h3 className="card-title">Na mesa <small>{character.characterName}</small></h3>
+          <HpEditor token={token} character={character} onError={onError}
+            onSaved={updated => setCharacters(list => list.map(c => (c.id === updated.id ? updated : c)))} />
+          <span className="mlabel">Condições</span>
           <ConditionEditor token={token} character={character} catalog={conditions} onError={onError}
             onSaved={updated => setCharacters(list => list.map(c => (c.id === updated.id ? updated : c)))} />
         </section>

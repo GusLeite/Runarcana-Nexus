@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-28 — Mestre edita o que criou, Etapa 5 do plano (`feature/character-sheet`)
+- `PUT /character/{id}/abilities/{abilityId}` (mantém ícone e usos gastos), `PUT /documents/{id}` (mantém leituras) e `readBy` na lista do mestre; `PATCH /character/{id}/hp` para o mestre. `maxHpBonus` do plano ficou de fora (PV máximo continua pela subida de nível).
+- Front: **Editar** em Habilidades e Documentos, "Leram: …" nos enviados e `HpEditor` (dano/cura/temporários) na aba Fichas.
+- Testes: `mestreEditaHabilidadeSemPerderIconeNemUsos`, `mestreEditaDocumentoEVeQuemLeu`, `mestreAjustaPvDeQualquerFicha`. Conferido no sandbox.
+
 ## 2026-10-28 — Testes contra a morte e condições, Etapa 4 do plano (`feature/character-sheet`)
 - `rules/condicoes.json` (Capítulo 14 da wiki: 22 condições resumidas + Exaustão até **10**, não 6), `ConditionService` e `GET /conditions`; `Character.conditions`/`exhaustion` só pelo mestre (`PATCH /character/{id}/conditions`).
 - `deathSuccesses`/`deathFailures`: o jogador marca (`/character/me/death-saves`), o mestre ajusta; zeram ao ganhar PV e no descanso.

@@ -54,6 +54,17 @@ public class AbilityController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(characterId, request));
     }
 
+    // Mestre: edita uma magia/habilidade (mantém o ícone, se não vier outro, e os usos gastos).
+    @PutMapping("/{characterId}/abilities/{abilityId}")
+    public ResponseEntity<AbilityResponse> update(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @PathVariable Long characterId,
+            @PathVariable Long abilityId,
+            @Valid @RequestBody AbilityRequest request) {
+        auth.requireMaster(authorization);
+        return ResponseEntity.ok(service.update(characterId, abilityId, request));
+    }
+
     // Mestre: troca ou remove (icon nulo) o ícone de uma habilidade já cadastrada.
     @PatchMapping("/{characterId}/abilities/{abilityId}/icon")
     public ResponseEntity<AbilityResponse> setIcon(

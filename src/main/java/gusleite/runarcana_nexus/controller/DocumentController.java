@@ -62,6 +62,16 @@ public class DocumentController {
                 .body(service.create(auth.requireMaster(authorization), request));
     }
 
+    // Mestre: edita um documento (quem já leu continua marcado).
+    @PutMapping("/{id}")
+    public ResponseEntity<DocumentResponse> update(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @PathVariable Long id,
+            @Valid @RequestBody DocumentRequest request) {
+        auth.requireMaster(authorization);
+        return ResponseEntity.ok(service.update(id, request));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,

@@ -8,9 +8,9 @@ Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criac
 
 ## Estado atual (2026-10-27)
 
-- Ficha: atributos, perícias, resistências, CA (com armadura e escudo do inventário), PV editáveis pelo jogador, habilidades com usos, magias, descanso curto/longo, magias preparadas, rolagens de d20 e de dano, ataques com arma (Etapa 2), conjurar gastando Mana com CD e ataque de magia (Etapa 3), testes contra a morte e condições (Etapa 4; Exaustão até 10, como no livro), inventário (o jogador gasta), documentos, anotações, aba Livro.
+- Ficha: atributos, perícias, resistências, CA (com armadura e escudo do inventário), PV editáveis pelo jogador, habilidades com usos, magias, descanso curto/longo, magias preparadas, rolagens de d20 e de dano, ataques com arma (Etapa 2), conjurar gastando Mana com CD e ataque de magia (Etapa 3), testes contra a morte e condições (Etapa 4; Exaustão até 10, como no livro), mestre edita habilidades/documentos e ajusta PV (Etapa 5), inventário (o jogador gasta), documentos, anotações, aba Livro.
 - Mestre: cria/apaga habilidades e documentos, sobe de nível (com multiclasse), trava regras da mesa, dá e tira itens, ouro e inspiração (Etapa 1).
-- Não existe: editar habilidade/documento; visão da mesa para o mestre.
+- Não existe: visão da mesa para o mestre.
 
 ## Etapa 1 — Inventário, ouro e inspiração pelo mestre — **feita (2026-10-28)**
 
@@ -73,7 +73,7 @@ Front:
 - Herói: com 0 PV, a barra vira os 3+3 círculos dos testes (clicar rola d20: 10+ sucesso, 1 = duas falhas, 20 = volta com 1 PV).
 - Chips de condição no herói com o texto na dica (só leitura para o jogador); o mestre liga/desliga no painel.
 
-## Etapa 5 — Mestre edita o que já criou
+## Etapa 5 — Mestre edita o que já criou — **feita (2026-10-28)**
 
 **Por quê**: errar um texto de habilidade ou documento hoje obriga a apagar e criar de novo (e perde ícone e usos).
 

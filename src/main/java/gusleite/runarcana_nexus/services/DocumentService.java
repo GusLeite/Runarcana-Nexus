@@ -67,32 +67,52 @@ public class DocumentService {
 
     @Transactional(readOnly = true)
     public List<DocumentResponse> listAll() {
-        return documents.findAllByOrderByCreatedAtDescIdDesc().stream().map(DocumentResponse::forMaster).toList();
+        // Quem leu cada documento (uma consulta só).
+        java.util.Map<Long, List<String>> readers = new java.util.HashMap<>();
+        for (Object[] row : reads.findAllReaders()) {
+            readers.computeIfAbsent((Long) row[0], k -> new java.util.ArrayList<>()).add((String) row[1]);
+        }
+        return documents.findAllByOrderByCreatedAtDescIdDesc().stream()
+                .map(d -> DocumentResponse.forMaster(d, readers.getOrDefault(d.getId(), List.of())))
+                .toList();
     }
 
     @Transactional
     public DocumentResponse create(Account master, DocumentRequest request) {
         GameDocument document = new GameDocument();
+        document.setAuthor(master);
+        document.setCreatedAt(Instant.now());
+        fill(document, request);
+        return DocumentResponse.forMaster(documents.save(document), List.of());
+    }
+
+    // Mestre edita título, tipo, texto, imagem e destinatários; quem já leu continua marcado.
+    @Transactional
+    public DocumentResponse update(Long id, DocumentRequest request) {
+        GameDocument document = documents.findById(id)
+                .orElseThrow(() -> ApiException.notFound("Documento não encontrado."));
+        fill(document, request);
+        return DocumentResponse.forMaster(document, reads.findReaders(document));
+    }
+
+    private void fill(GameDocument document, DocumentRequest request) {
         document.setTitle(request.title().trim());
         document.setKind(request.kind());
         document.setBody(request.body() == null ? "" : request.body());
         document.setImageUrl(request.imageUrl());
-        document.setAuthor(master);
-        document.setCreatedAt(Instant.now());
 
         Set<String> usernames = new LinkedHashSet<>();
         if (request.recipients() != null) {
             request.recipients().stream().map(AuthService::normalizeUsername).filter(u -> !u.isEmpty()).forEach(usernames::add);
         }
         document.setToAll(usernames.isEmpty());
+        document.getRecipients().clear();
         for (String username : usernames) {
             Account recipient = accounts.findByUsername(username)
                     .filter(a -> !a.isMaster())
                     .orElseThrow(() -> ApiException.badRequest("Não existe jogador \"" + username + "\"."));
             document.getRecipients().add(recipient);
         }
-
-        return DocumentResponse.forMaster(documents.save(document));
     }
 
     @Transactional

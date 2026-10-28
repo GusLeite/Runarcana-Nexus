@@ -7,7 +7,7 @@ import gusleite.runarcana_nexus.model.documents.GameDocument;
 import java.time.Instant;
 import java.util.List;
 
-// recipients só vem preenchido para o mestre; o jogador não fica sabendo quem mais recebeu.
+// recipients e readBy (quem já leu) só vêm preenchidos para o mestre; o jogador não fica sabendo quem mais recebeu.
 public record DocumentResponse(
         Long id,
         String title,
@@ -17,16 +17,17 @@ public record DocumentResponse(
         Instant createdAt,
         boolean toAll,
         List<String> recipients,
-        boolean read
+        boolean read,
+        List<String> readBy
 ) {
     public static DocumentResponse forPlayer(GameDocument d, boolean read) {
         return new DocumentResponse(d.getId(), d.getTitle(), d.getKind(), d.getBody(), d.getImageUrl(),
-                d.getCreatedAt(), d.isToAll(), null, read);
+                d.getCreatedAt(), d.isToAll(), null, read, null);
     }
 
-    public static DocumentResponse forMaster(GameDocument d) {
+    public static DocumentResponse forMaster(GameDocument d, List<String> readBy) {
         List<String> recipients = d.getRecipients().stream().map(Account::getUsername).sorted().toList();
         return new DocumentResponse(d.getId(), d.getTitle(), d.getKind(), d.getBody(), d.getImageUrl(),
-                d.getCreatedAt(), d.isToAll(), recipients, true);
+                d.getCreatedAt(), d.isToAll(), recipients, true, readBy);
     }
 }

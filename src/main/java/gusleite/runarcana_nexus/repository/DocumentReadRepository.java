@@ -16,6 +16,13 @@ public interface DocumentReadRepository extends JpaRepository<DocumentRead, Long
     @Query("select r.document.id from DocumentRead r where r.account = :account")
     List<Long> findReadDocumentIds(Account account);
 
+    // [id do documento, username] de cada leitura, para a lista do mestre.
+    @Query("select r.document.id, r.account.username from DocumentRead r order by r.account.username")
+    List<Object[]> findAllReaders();
+
+    @Query("select r.account.username from DocumentRead r where r.document = :document order by r.account.username")
+    List<String> findReaders(GameDocument document);
+
     boolean existsByDocumentAndAccount(GameDocument document, Account account);
 
     @Modifying

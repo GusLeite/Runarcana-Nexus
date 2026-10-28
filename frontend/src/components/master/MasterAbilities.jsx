@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { createAbility, deleteAbility, fetchAbilities, fetchCharacters, setAbilityIcon } from '../../api/master.js'
+import { createAbility, deleteAbility, fetchAbilities, fetchCharacters, setAbilityIcon, updateAbility } from '../../api/master.js'
 import IconPicker, { IconSwap } from './IconPicker.jsx'
 import { ABILITY_TYPES, CLASS_NAMES, RECHARGES, parseDice, spellLevelName } from '../../data/rules.js'
 import { CHARACTERS } from '../../data/characters.js'
@@ -12,8 +12,14 @@ const EMPTY = {
 }
 const artOf = name => CHARACTERS.find(c => c.id === name.trim().toLowerCase())
 const noop = () => {}
+// Habilidade salva → formulário (vazio vira '').
+const formOf = a => ({
+  ...EMPTY, name: a.name, type: a.type, spellLevel: a.spellLevel ?? 1, school: a.school ?? '', castingTime: a.castingTime ?? '',
+  range: a.range ?? '', duration: a.duration ?? '', components: a.components ?? '', damage: a.damage ?? '',
+  maxUses: a.maxUses ?? '', recharge: a.recharge && a.recharge !== 'NONE' ? a.recharge : 'LONG_REST', description: a.description ?? '', icon: a.icon ?? '',
+})
 
-// Aba de habilidades do mestre: escolhe o personagem, cadastra com prévia e apaga.
+// Aba de habilidades do mestre: escolhe o personagem, cadastra com prévia, edita (mantém ícone e usos gastos) e apaga.
 export default function MasterAbilities({ token, onError, onToast }) {
   const [characters, setCharacters] = useState([])
   const [characterId, setCharacterId] = useState(null)
@@ -23,6 +29,7 @@ export default function MasterAbilities({ token, onError, onToast }) {
   const [busy, setBusy] = useState(false)
   const [confirmId, setConfirmId] = useState(null)
   const [leavingId, setLeavingId] = useState(null)
+  const [editingId, setEditingId] = useState(null)
 
   useEffect(() => {
     fetchCharacters(token)
@@ -36,6 +43,7 @@ export default function MasterAbilities({ token, onError, onToast }) {
   useEffect(() => {
     if (characterId == null) return
     setAbilities([])
+    setEditingId(null)
     fetchAbilities(token, characterId).then(setAbilities).catch(onError)
   }, [token, characterId, onError])
 
@@ -72,10 +80,19 @@ export default function MasterAbilities({ token, onError, onToast }) {
     setMsg(null)
     try {
       const { id, usesLeft, ...body } = draft
-      const created = await createAbility(token, characterId, { ...body, name: form.name.trim(), recharge: uses ? form.recharge : null })
-      setAbilities(list => [...list, created])
-      setForm(f => ({ ...EMPTY, type: f.type, spellLevel: f.spellLevel }))
-      onToast(created.name + ' adicionada a ' + character.characterName + '.')
+      const payload = { ...body, name: form.name.trim(), recharge: uses ? form.recharge : null }
+      if (editingId != null) {
+        const updated = await updateAbility(token, characterId, editingId, payload)
+        setAbilities(list => list.map(a => (a.id === updated.id ? updated : a)))
+        setEditingId(null)
+        setForm(EMPTY)
+        onToast(updated.name + ' atualizada.')
+      } else {
+        const created = await createAbility(token, characterId, payload)
+        setAbilities(list => [...list, created])
+        setForm(f => ({ ...EMPTY, type: f.type, spellLevel: f.spellLevel }))
+        onToast(created.name + ' adicionada a ' + character.characterName + '.')
+      }
     } catch (err) {
       if (err.status === 401) onError(err)
       else setMsg(err.message)
@@ -141,7 +158,9 @@ export default function MasterAbilities({ token, onError, onToast }) {
         <div className="master-grid three">
           <section className="card" style={{ '--i': 1 }}>
             <form onSubmit={submit} noValidate>
-              <h3 className="card-title">Nova para {character.characterName}</h3>
+              <h3 className="card-title">
+                {editingId != null ? <>Editando <small>{abilities.find(a => a.id === editingId)?.name}</small></> : 'Nova para ' + character.characterName}
+              </h3>
               <div className="mform">
                 <span className="mlabel first">Ícone</span>
                 <IconPicker ability={draft} value={form.icon} onChange={icon => { set('icon', icon); setMsg(null) }} onError={setMsg} />
@@ -213,7 +232,10 @@ export default function MasterAbilities({ token, onError, onToast }) {
                 <textarea id="a-desc" className="note-body mdesc" value={form.description} maxLength={4000} onChange={e => set('description', e.target.value)} placeholder="O que a habilidade faz." />
               </div>
               {msg && <div className="err" role="alert">{msg}</div>}
-              <button className="btn" type="submit" disabled={busy}>{busy ? 'SALVANDO…' : 'ADICIONAR'}</button>
+              <button className="btn" type="submit" disabled={busy}>{busy ? 'SALVANDO…' : editingId != null ? 'SALVAR' : 'ADICIONAR'}</button>
+              {editingId != null && (
+                <button type="button" className="ghost-btn small cancel-edit" onClick={() => { setEditingId(null); setForm(EMPTY); setMsg(null) }}>Cancelar edição</button>
+              )}
             </form>
           </section>
 
@@ -243,7 +265,11 @@ export default function MasterAbilities({ token, onError, onToast }) {
                       <button type="button" className="ghost-btn small" onClick={() => setConfirmId(null)}>Não</button>
                     </span>
                   ) : (
-                    <button type="button" className="ghost-btn small" onClick={() => setConfirmId(a.id)} aria-label={'Apagar ' + a.name}>Apagar</button>
+                    <span className="confirm">
+                      <button type="button" className="ghost-btn small" onClick={() => { setEditingId(a.id); setForm(formOf(a)); setMsg(null) }}
+                        aria-label={'Editar ' + a.name}>Editar</button>
+                      <button type="button" className="ghost-btn small" onClick={() => setConfirmId(a.id)} aria-label={'Apagar ' + a.name}>Apagar</button>
+                    </span>
                   )}
                 </li>
               ))}

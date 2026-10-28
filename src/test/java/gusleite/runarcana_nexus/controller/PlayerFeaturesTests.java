@@ -170,6 +170,67 @@ class PlayerFeaturesTests {
                 .andExpect(jsonPath("$.character.conditions[0]").value("caido"));
     }
 
+    // ---------- mestre edita o que criou ----------
+
+    @Test
+    void mestreEditaHabilidadeSemPerderIconeNemUsos() throws Exception {
+        String master = login("mestre");
+        String rudo = login("rudo");
+        String png = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
+        long id = ability(master, "{\"name\":\"Fúria\",\"type\":\"ABILITY\",\"maxUses\":3,\"icon\":\"" + png + "\"}");
+        patchJson("/character/me/abilities/" + id, rudo, "{\"usesLeft\":1}").andExpect(status().isOk());
+        String url = "/character/" + rudoId + "/abilities/" + id;
+        String edit = "{\"name\":\"Fúria Ancestral\",\"type\":\"ABILITY\",\"maxUses\":4,\"description\":\"Texto novo.\"}";
+        mvc.perform(put(url).header("Authorization", "Bearer " + rudo).contentType(MediaType.APPLICATION_JSON).content(edit))
+                .andExpect(status().isForbidden());
+        // 2 gastos de 3 → 2 de 4 restantes; o ícone fica.
+        mvc.perform(put(url).header("Authorization", "Bearer " + master).contentType(MediaType.APPLICATION_JSON).content(edit))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Fúria Ancestral"))
+                .andExpect(jsonPath("$.usesLeft").value(2))
+                .andExpect(jsonPath("$.maxUses").value(4))
+                .andExpect(jsonPath("$.icon").value(png));
+        // Máximo menor que os gastos: 0.
+        mvc.perform(put(url).header("Authorization", "Bearer " + master).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Fúria\",\"type\":\"ABILITY\",\"maxUses\":1}"))
+                .andExpect(jsonPath("$.usesLeft").value(0));
+    }
+
+    @Test
+    void mestreEditaDocumentoEVeQuemLeu() throws Exception {
+        String master = login("mestre");
+        String rudo = login("rudo");
+        long doc = idOf(mvc.perform(post("/documents").header("Authorization", "Bearer " + master).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"Carta\",\"kind\":\"LETTER\",\"body\":\"Erro de digitaçao.\"}"))
+                .andReturn().getResponse().getContentAsString());
+        mvc.perform(post("/documents/" + doc + "/read").header("Authorization", "Bearer " + rudo)).andExpect(status().isNoContent());
+        String edit = "{\"title\":\"Carta selada\",\"kind\":\"SECRET\",\"body\":\"Corrigido.\",\"recipients\":[\"rudo\",\"gaudron\"]}";
+        mvc.perform(put("/documents/" + doc).header("Authorization", "Bearer " + rudo).contentType(MediaType.APPLICATION_JSON).content(edit))
+                .andExpect(status().isForbidden());
+        mvc.perform(put("/documents/" + doc).header("Authorization", "Bearer " + master).contentType(MediaType.APPLICATION_JSON).content(edit))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Carta selada"))
+                .andExpect(jsonPath("$.recipients.length()").value(2))
+                .andExpect(jsonPath("$.readBy[0]").value("rudo"));
+        mvc.perform(get("/documents").header("Authorization", "Bearer " + master))
+                .andExpect(jsonPath("$[0].readBy[0]").value("rudo"))
+                .andExpect(jsonPath("$[0].kind").value("SECRET"));
+        mvc.perform(get("/documents/me").header("Authorization", "Bearer " + rudo))
+                .andExpect(jsonPath("$[0].read").value(true))
+                .andExpect(jsonPath("$[0].readBy").doesNotExist());
+    }
+
+    @Test
+    void mestreAjustaPvDeQualquerFicha() throws Exception {
+        String master = login("mestre");
+        String rudo = login("rudo");
+        patchJson("/character/" + rudoId + "/hp", rudo, "{\"currentHp\":10}").andExpect(status().isForbidden());
+        patchJson("/character/" + rudoId + "/hp", master, "{\"currentHp\":10,\"tempHp\":5}")
+                .andExpect(jsonPath("$.currentHp").value(10))
+                .andExpect(jsonPath("$.tempHp").value(5));
+        patchJson("/character/" + rudoId + "/hp", master, "{\"currentHp\":99}").andExpect(status().isBadRequest());
+    }
+
     private ResultActions patchJson(String url, String token, String json) throws Exception {
         return mvc.perform(patch(url).header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON).content(json));
     }

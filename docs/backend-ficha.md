@@ -38,7 +38,8 @@
 ## Documentos do mestre (`GameDocument`)
 
 - Campos: `title`, `kind` (`LETTER | CLUE | MAP | LORE | SECRET | REWARD`, muda ícone e cor no front), `body` (texto; o front entende `## título`, `**negrito**` e `*itálico*`), `imageUrl` (opcional, `http(s)://`), `recipients` (usernames; vazio = **todos**), `createdAt`, `author`.
-- Leitura por jogador fica em `DocumentRead` (único por documento + conta). O jogador não vê para quem mais o documento foi (`recipients` vem nulo para ele).
+- Leitura por jogador fica em `DocumentRead` (único por documento + conta); o mestre vê quem leu em `readBy` (`GET /documents` e a edição), o jogador não.
+- O mestre edita habilidades (`PUT`, mantém ícone e usos gastos) e documentos (`PUT`, mantém as leituras) e ajusta os PV de qualquer ficha (`PATCH /character/{id}/hp`). O jogador não vê para quem mais o documento foi (`recipients` vem nulo para ele).
 - Exemplo (mestre, `POST /runarcana/documents`): `{ "title": "Carta selada", "kind": "SECRET", "body": "## Só para você\n\nO templo abre à noite.", "recipients": ["rudo"] }`
 
 ## Anotações (`PlayerNote`)

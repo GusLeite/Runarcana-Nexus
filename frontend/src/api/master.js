@@ -12,6 +12,10 @@ export const createAbility = (token, characterId, ability) =>
 export const setAbilityIcon = (token, characterId, abilityId, icon) =>
   request('/character/' + characterId + '/abilities/' + abilityId + '/icon', { method: 'PATCH', token, body: { icon } })
 
+// Edita (mantém o ícone, se não vier outro, e os usos gastos).
+export const updateAbility = (token, characterId, abilityId, ability) =>
+  request('/character/' + characterId + '/abilities/' + abilityId, { method: 'PUT', token, body: ability })
+
 export const deleteAbility = (token, characterId, abilityId) =>
   request('/character/' + characterId + '/abilities/' + abilityId, { method: 'DELETE', token })
 
@@ -20,6 +24,12 @@ export const fetchAllDocuments = token => request('/documents', { token })
 export const fetchRecipients = token => request('/documents/recipients', { token })
 
 export const createDocument = (token, doc) => request('/documents', { method: 'POST', token, body: doc })
+
+export const updateDocument = (token, id, doc) => request('/documents/' + id, { method: 'PUT', token, body: doc })
+
+// PV de qualquer ficha (mestre). Devolve a ficha (CharacterResponse).
+export const setHpFor = (token, characterId, currentHp, tempHp) =>
+  request('/character/' + characterId + '/hp', { method: 'PATCH', token, body: { currentHp, tempHp } })
 
 export const deleteDocument = (token, id) => request('/documents/' + id, { method: 'DELETE', token })
 

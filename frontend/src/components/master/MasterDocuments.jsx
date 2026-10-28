@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { createDocument, deleteDocument, fetchAllDocuments, fetchRecipients } from '../../api/master.js'
+import { createDocument, deleteDocument, fetchAllDocuments, fetchRecipients, updateDocument } from '../../api/master.js'
 import { DOCUMENT_KINDS, documentKindOf, formatDate } from '../../data/rules.js'
 import { CHARACTERS } from '../../data/characters.js'
 import { DocumentView } from '../sheet/DocumentsTab.jsx'
@@ -9,7 +9,7 @@ import { afterLeave } from '../../utils/motion.js'
 const EMPTY = { title: '', kind: 'LETTER', body: '', imageUrl: '' }
 const nameOf = username => CHARACTERS.find(c => c.id === username)?.name ?? username
 
-// Aba de documentos do mestre: escrever (com prévia igual à do jogador) e ver/apagar os enviados.
+// Aba de documentos do mestre: escrever (com prévia igual à do jogador) e ver/editar/apagar os enviados, com quem já leu.
 export default function MasterDocuments({ token, onError, onToast }) {
   const [players, setPlayers] = useState([])
   const [sent, setSent] = useState([])
@@ -20,6 +20,7 @@ export default function MasterDocuments({ token, onError, onToast }) {
   const [busy, setBusy] = useState(false)
   const [confirmId, setConfirmId] = useState(null)
   const [leavingId, setLeavingId] = useState(null)
+  const [editingId, setEditingId] = useState(null)
 
   useEffect(() => {
     fetchRecipients(token).then(setPlayers).catch(onError)
@@ -36,18 +37,38 @@ export default function MasterDocuments({ token, onError, onToast }) {
     setBusy(true)
     setMsg(null)
     try {
-      const doc = await createDocument(token, { ...form, imageUrl: form.imageUrl || null, recipients: to })
-      setSent(list => [doc, ...list])
-      setForm(EMPTY)
-      setTo([])
-      setPreview(false)
-      onToast('Documento enviado para ' + (to.length ? to.map(nameOf).join(', ') : 'todos') + '.')
+      const body = { ...form, imageUrl: form.imageUrl || null, recipients: to }
+      if (editingId != null) {
+        const doc = await updateDocument(token, editingId, body)
+        setSent(list => list.map(d => (d.id === doc.id ? doc : d)))
+        onToast('Documento atualizado.')
+      } else {
+        const doc = await createDocument(token, body)
+        setSent(list => [doc, ...list])
+        onToast('Documento enviado para ' + (to.length ? to.map(nameOf).join(', ') : 'todos') + '.')
+      }
+      reset()
     } catch (err) {
       if (err.status === 401) onError(err)
       else setMsg(err.message)
     } finally {
       setBusy(false)
     }
+  }
+
+  const reset = () => {
+    setForm(EMPTY)
+    setTo([])
+    setPreview(false)
+    setEditingId(null)
+  }
+
+  const startEdit = doc => {
+    setEditingId(doc.id)
+    setForm({ title: doc.title, kind: doc.kind, body: doc.body ?? '', imageUrl: doc.imageUrl ?? '' })
+    setTo(doc.toAll ? [] : doc.recipients)
+    setPreview(false)
+    setMsg(null)
   }
 
   // A linha encolhe (leaving) e só depois sai da lista.
@@ -70,7 +91,7 @@ export default function MasterDocuments({ token, onError, onToast }) {
       <section className="card" style={{ '--i': 1 }}>
         <form onSubmit={send} noValidate>
           <div className="card-title inv-title">
-            <h3>Novo documento</h3>
+            <h3>{editingId != null ? <>Editando <small>{sent.find(d => d.id === editingId)?.title}</small></> : 'Novo documento'}</h3>
             <div className="seg" role="group" aria-label="Modo do editor">
               <button type="button" className={preview ? '' : 'on'} aria-pressed={!preview} onClick={() => setPreview(false)}>Escrever</button>
               <button type="button" className={preview ? 'on' : ''} aria-pressed={preview} onClick={() => setPreview(true)}>Prévia</button>
@@ -121,8 +142,9 @@ export default function MasterDocuments({ token, onError, onToast }) {
 
           {msg && <div className="err" role="alert">{msg}</div>}
           <button className="btn" type="submit" disabled={busy}>
-            {busy ? 'ENVIANDO…' : 'ENVIAR PARA ' + (to.length === 0 ? 'TODOS' : to.length === 1 ? nameOf(to[0]) : to.length + ' JOGADORES')}
+            {busy ? 'ENVIANDO…' : (editingId != null ? 'SALVAR PARA ' : 'ENVIAR PARA ') + (to.length === 0 ? 'TODOS' : to.length === 1 ? nameOf(to[0]) : to.length + ' JOGADORES')}
           </button>
+          {editingId != null && <button type="button" className="ghost-btn small cancel-edit" onClick={() => { reset(); setMsg(null) }}>Cancelar edição</button>}
         </form>
       </section>
 
@@ -141,6 +163,9 @@ export default function MasterDocuments({ token, onError, onToast }) {
                   <span className="sent-to">
                     {doc.toAll ? <em>Todos</em> : doc.recipients.map(u => <span key={u} className="to-tag">{nameOf(u)}</span>)}
                   </span>
+                  <span className="sent-read">
+                    {doc.readBy?.length ? <>Leram: {doc.readBy.map(nameOf).join(', ')}</> : <em>Ninguém leu ainda</em>}
+                  </span>
                 </span>
                 {confirmId === doc.id ? (
                   <span className="confirm">
@@ -148,7 +173,10 @@ export default function MasterDocuments({ token, onError, onToast }) {
                     <button type="button" className="ghost-btn small" onClick={() => setConfirmId(null)}>Não</button>
                   </span>
                 ) : (
-                  <button type="button" className="ghost-btn small" onClick={() => setConfirmId(doc.id)} aria-label={'Apagar ' + doc.title}>Apagar</button>
+                  <span className="confirm">
+                    <button type="button" className="ghost-btn small" onClick={() => startEdit(doc)} aria-label={'Editar ' + doc.title}>Editar</button>
+                    <button type="button" className="ghost-btn small" onClick={() => setConfirmId(doc.id)} aria-label={'Apagar ' + doc.title}>Apagar</button>
+                  </span>
                 )}
               </li>
             )

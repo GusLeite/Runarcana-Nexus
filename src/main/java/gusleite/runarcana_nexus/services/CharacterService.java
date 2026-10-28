@@ -108,7 +108,17 @@ public class CharacterService {
 
     // PV da própria ficha: o jogador marca dano, cura e PV temporários (as contas ficam no front; aqui só os limites).
     public CharacterResponse setHp(Account account, Integer currentHp, Integer tempHp) {
-        Character character = characterOf(account);
+        return applyHp(characterOf(account), currentHp, tempHp);
+    }
+
+    // Mestre: PV de qualquer ficha (dano e cura na mesa), com os mesmos limites.
+    @Transactional
+    public CharacterResponse setHpFor(long characterId, Integer currentHp, Integer tempHp) {
+        return applyHp(charRepository.findById(characterId).orElseThrow(() -> ApiException.notFound("Personagem não encontrado.")),
+                currentHp, tempHp);
+    }
+
+    private CharacterResponse applyHp(Character character, Integer currentHp, Integer tempHp) {
         if (currentHp == null) throw ApiException.badRequest("Informe os PV atuais.");
         if (currentHp < 0 || currentHp > character.getMaxHp()) {
             throw ApiException.badRequest("Os PV atuais vão de 0 a " + character.getMaxHp() + ".");

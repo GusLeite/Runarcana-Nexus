@@ -30,6 +30,8 @@ Responsivo: abaixo de 760px os painéis empilham na vertical e a lore some. Com 
   - **Regras da mesa** (`MasterRules.jsx`): modo de traços da Runinata em cartões ("O jogador escolhe", Controlado, Moderado, Forte); clicar salva na hora (`PUT /creation/settings`) com aviso. Travado, a etapa Traços do jogador mostra só esse modo, desativado, com "O mestre definiu o modo da mesa".
 - API em `api/master.js`; estilos em `styles/master.css` (usa também `sheet.css`).
 
+- **Editar** (Habilidades e Documentos): o botão ao lado de "Apagar" enche o formulário com o que está salvo ("Editando …", **SALVAR**, "Cancelar edição"); a habilidade mantém o ícone e os usos gastos. Em Documentos, cada enviado mostra "Leram: …" (ou "Ninguém leu ainda").
+- **Na mesa** (aba Fichas): **PV** do personagem (`HpEditor.jsx`: barra, Dano — gasta os temporários antes —, Cura e PV temp.; `PATCH /character/{id}/hp`) e, abaixo, as condições.
 - **Condições** (aba Fichas, `ConditionEditor.jsx`): para o personagem escolhido, chips de cada condição (liga/desliga, regra na dica) e a Exaustão com −/+; cada clique salva (`PATCH /character/{id}/conditions`).
 
 ## Criação de personagem (assistente)

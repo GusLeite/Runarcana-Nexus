@@ -68,6 +68,16 @@ public class CharacterController {
         return ResponseEntity.ok(charService.setHp(authService.authenticate(authorization), request.currentHp(), request.tempHp()));
     }
 
+    // Mestre: PV de qualquer ficha.
+    @PatchMapping("/{id}/hp")
+    public ResponseEntity<CharacterResponse> setHpFor(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @PathVariable long id,
+            @RequestBody HpRequest request) {
+        authService.requireMaster(authorization);
+        return ResponseEntity.ok(charService.setHpFor(id, request.currentHp(), request.tempHp()));
+    }
+
     // tempHp nulo = mantém o que já tem.
     public record HpRequest(Integer currentHp, Integer tempHp) {}
 

@@ -48,6 +48,28 @@ public class AbilityService {
 
         CharacterAbility ability = new CharacterAbility();
         ability.setCharacter(character);
+        fill(ability, request);
+        ability.setUsesLeft(request.maxUses());
+        ability.setIcon(blankToNull(request.icon()));
+
+        return AbilityResponse.of(abilities.save(ability));
+    }
+
+    // Mestre edita: mantém o ícone (a não ser que mande outro) e os usos gastos, limitados ao novo máximo.
+    @Transactional
+    public AbilityResponse update(Long characterId, Long abilityId, AbilityRequest request) {
+        Character character = characters.findById(characterId)
+                .orElseThrow(() -> ApiException.notFound("Personagem não encontrado."));
+        CharacterAbility ability = find(character, abilityId);
+        Integer spent = ability.getMaxUses() == null || ability.getUsesLeft() == null ? 0 : ability.getMaxUses() - ability.getUsesLeft();
+        fill(ability, request);
+        ability.setUsesLeft(request.maxUses() == null ? null : Math.max(0, request.maxUses() - spent));
+        if (request.icon() != null && !request.icon().isBlank()) ability.setIcon(request.icon().trim());
+        List<SpellcastingRules.Casting> castings = SpellcastingRules.castings(character, abilities.findByCharacterOrderByIdAsc(character));
+        return AbilityResponse.of(ability, SpellcastingRules.forSpell(character, castings, ability));
+    }
+
+    private static void fill(CharacterAbility ability, AbilityRequest request) {
         ability.setName(request.name().trim());
         ability.setType(request.type());
         // Círculo só faz sentido em magia.
@@ -60,12 +82,8 @@ public class AbilityService {
         ability.setDamage(request.damage() == null ? null : request.damage().replace(" ", ""));
         ability.setDescription(request.description());
         ability.setMaxUses(request.maxUses());
-        ability.setUsesLeft(request.maxUses());
         ability.setRecharge(request.maxUses() == null ? Recharge.NONE
                 : request.recharge() == null ? Recharge.LONG_REST : request.recharge());
-        ability.setIcon(blankToNull(request.icon()));
-
-        return AbilityResponse.of(abilities.save(ability));
     }
 
     @Transactional
