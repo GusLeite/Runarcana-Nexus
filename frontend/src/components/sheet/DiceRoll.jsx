@@ -4,8 +4,8 @@ import { formatModifier } from '../../data/rules.js'
 const SPIN_MS = 750
 const STAY_MS = 3600
 
-// Só testes de d20 têm crítico; rolagem de dano não.
-const outcome = r => (r.kind !== 'check' ? '' : r.d20 === 20 ? 'crit' : r.d20 === 1 ? 'fumble' : '')
+// Só testes de d20 têm crítico; rolagem de dano não. critRange: ataques com margem maior (19 = 19–20).
+const outcome = r => (r.kind !== 'check' ? '' : r.d20 >= (r.critRange ?? 20) ? 'crit' : r.d20 === 1 ? 'fumble' : '')
 const MODE_TAG = { adv: 'Vantagem', dis: 'Desvantagem' }
 
 // Rolagem em destaque: o dado gira por números aleatórios e para no resultado.

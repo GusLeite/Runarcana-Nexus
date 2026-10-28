@@ -516,3 +516,19 @@ input.note-title{padding:10px 12px;font-family:'Cinzel',Georgia,serif;font-size:
 .prep-class .choice-group{margin-top:10px}
 .prep-foot{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-top:14px}
 .prep-foot .btn{width:auto;min-width:180px}
+
+/* Ataques com arma */
+.attacks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.attack{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:6px 8px;border:1px solid rgba(200,162,74,.16);background:rgba(0,0,0,.22)}
+.attack-hit{min-width:46px;padding:6px 8px;border:1px solid rgba(200,162,74,.45);background:rgba(200,162,74,.08);color:var(--gold-hi);font:700 17px 'Cinzel',Georgia,serif;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.attack.unprof .attack-hit{color:var(--muted);border-color:rgba(141,151,168,.35)}
+.attack-hit:hover,.chip-btn:hover{border-color:var(--teal);box-shadow:0 0 10px rgba(47,211,192,.3)}
+.attack-hit:focus-visible,.chip-btn:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.attack-info{display:flex;flex-direction:column;min-width:0}
+.attack-name{font-weight:600;color:var(--text)}
+.attack-meta{font-size:12px;color:var(--muted)}
+.attack-dmg{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px}
+.chip-btn,.chip-flat{padding:3px 8px;border:1px solid rgba(200,162,74,.3);background:rgba(0,0,0,.3);color:var(--text);font:inherit;font-size:12px;white-space:nowrap}
+.chip-btn{cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.chip-btn.crit{color:var(--gold-hi)}
+@container (max-width:420px){.attack{grid-template-columns:auto 1fr}.attack-dmg{grid-column:1/-1;justify-content:flex-start}}

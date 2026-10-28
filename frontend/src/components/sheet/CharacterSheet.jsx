@@ -123,9 +123,9 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     setRolls(list => [entry, ...list].slice(0, MAX_LOG))
   }
 
-  const roll = useCallback((label, mod = 0) => {
+  const roll = useCallback((label, mod = 0, critRange = 20) => {
     const { d20, other } = rollCheck(mode)
-    pushRoll({ id: Date.now() + Math.random(), kind: 'check', label, mod, d20, other, mode, total: d20 + mod })
+    pushRoll({ id: Date.now() + Math.random(), kind: 'check', label, mod, d20, other, mode, critRange, total: d20 + mod })
   }, [mode])
 
   const rollExpr = useCallback((label, expr) => {
@@ -315,6 +315,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
         {sheet && tab === 'sheet' && (
           <OverviewTab
             sheet={sheet}
+            attacks={state.sheet.attacks ?? []}
             abilities={abilities}
             documents={documents}
             notes={notes}

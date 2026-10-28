@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-28 — Ataques com arma, Etapa 2 do plano (`feature/character-sheet`)
+- `AttackCalculator`: `attacks` na ficha, uma linha por arma do inventário + desarmado; acuidade (maior entre FOR e DES), à distância (DES), proficiência por categoria ou pelo nome, crítico do livro ("p 19 x3") e dano versátil.
+- Front: card **Ataques** na Ficha (`Attacks.jsx`): bônus rola o d20 com a margem de crítico; dano, 2 mãos e Crítico (`critDice`) rolam o dano.
+- Testes: `AttackCalculatorTests` (6) e `critDice`. Conferido no sandbox: Combatente com Cimitarra +4 (1d6+2, crítico 19–20 ×3), Besta Leve pela DES.
+
 ## 2026-10-28 — Docs divididos por assunto (`feature/character-sheet`)
 - `backend.md` virou núcleo + `backend-api.md`, `backend-criacao.md` e `backend-ficha.md`; `frontend.md` virou núcleo + `frontend-telas.md` e `frontend-visual.md` (conteúdo movido sem mudança).
 - CLAUDE.md e README: ler só o subdoc da tarefa, changelog curto e lido só no topo, um commit por entrega.

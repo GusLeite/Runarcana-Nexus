@@ -2,6 +2,7 @@ import { documentKindOf, formatDate, formatModifier, modifier } from '../../data
 import AttributeGrid from './AttributeGrid.jsx'
 import SkillList from './SkillList.jsx'
 import SavingThrows from './SavingThrows.jsx'
+import Attacks from './Attacks.jsx'
 import { RollLog } from './DiceRoll.jsx'
 import { RichText } from './DocumentsTab.jsx'
 import { keysFor } from './AbilitiesTab.jsx'
@@ -17,7 +18,7 @@ const MODES = [
 
 // Aba principal: atributos, estatísticas e perícias no centro; à direita, rolagens e atalhos
 // para as outras abas (habilidades, documentos novos e a anotação fixada).
-export default function OverviewTab({ sheet, abilities, documents, notes, rolls, mode, onMode, onRoll, onRollDice, onGo, onInspiration }) {
+export default function OverviewTab({ sheet, attacks = [], abilities, documents, notes, rolls, mode, onMode, onRoll, onRollDice, onGo, onInspiration }) {
   const initiative = modifier(sheet.dex)
   const conMod = modifier(sheet.con)
   const quick = abilities.filter(a => a.type !== 'PASSIVE').slice(0, 5)
@@ -47,6 +48,11 @@ export default function OverviewTab({ sheet, abilities, documents, notes, rolls,
             onClick={sheet.inspiration > 0 && onInspiration ? onInspiration : undefined}
             title={sheet.inspiration > 0 ? 'Clique para gastar a inspiração' : 'Só o mestre dá inspiração'} />
         </section>
+        {attacks.length > 0 && (
+          <section className="card" style={{ '--i': 3 }}>
+            <Attacks attacks={attacks} onRoll={onRoll} onRollDice={onRollDice} />
+          </section>
+        )}
         <section className="card" style={{ '--i': 3 }}>
           <SavingThrows sheet={sheet} onRoll={onRoll} />
         </section>

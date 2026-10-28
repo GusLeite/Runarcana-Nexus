@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  addHeritage, carryCapacity, choiceOptionName, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
+  addHeritage, carryCapacity, choiceOptionName, critDice, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
   addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
   resourceCost, togglePick, levelChoices, keepChoices, rollDie, applyHp,
@@ -279,5 +279,13 @@ describe('pontos de vida', () => {
     expect(applyHp(hp, 'temp', 8)).toEqual({ currentHp: 20, tempHp: 8 })
     expect(applyHp(hp, 'damage', 'abc')).toEqual({ currentHp: 20, tempHp: 5 })
     expect(applyHp(hp, 'heal', -5)).toEqual({ currentHp: 20, tempHp: 5 })
+  })
+})
+
+describe('critDice', () => {
+  it('multiplica os dados e soma o bônus uma vez', () => {
+    expect(critDice('1d8+3', 3)).toBe('3d8+3')
+    expect(critDice('2d6-1')).toBe('4d6-1')
+    expect(critDice('2', 2)).toBeNull()
   })
 })

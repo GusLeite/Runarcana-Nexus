@@ -419,6 +419,13 @@ export function parseDice(expr) {
   return { count, sides, bonus: m[3] ? (m[3] === '-' ? -1 : 1) * Number(m[4]) : 0 }
 }
 
+// Dano do crítico: os dados rolam multiplier vezes, o bônus soma uma vez ("1d8+3", 3 → "3d8+3").
+export function critDice(expr, multiplier = 2) {
+  const d = parseDice(expr)
+  if (!d) return null
+  return d.count * multiplier + 'd' + d.sides + (d.bonus ? (d.bonus > 0 ? '+' : '-') + Math.abs(d.bonus) : '')
+}
+
 export function rollDice(expr, random = defaultRandom) {
   const dice = parseDice(expr)
   if (!dice) return null

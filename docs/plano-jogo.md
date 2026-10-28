@@ -8,9 +8,9 @@ Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criac
 
 ## Estado atual (2026-10-27)
 
-- Ficha: atributos, perícias, resistências, CA (com armadura e escudo do inventário), PV editáveis pelo jogador, habilidades com usos, magias, descanso curto/longo, magias preparadas, rolagens de d20 e de dano, inventário **só leitura**, documentos, anotações, aba Livro.
+- Ficha: atributos, perícias, resistências, CA (com armadura e escudo do inventário), PV editáveis pelo jogador, habilidades com usos, magias, descanso curto/longo, magias preparadas, rolagens de d20 e de dano, ataques com arma (Etapa 2), inventário (o jogador gasta), documentos, anotações, aba Livro.
 - Mestre: cria/apaga habilidades e documentos, sobe de nível (com multiclasse), trava regras da mesa, dá e tira itens, ouro e inspiração (Etapa 1).
-- Não existe: ataques com arma; gastar Mana ao conjurar; testes contra a morte; condições; editar habilidade/documento; visão da mesa para o mestre.
+- Não existe: gastar Mana ao conjurar; testes contra a morte; condições; editar habilidade/documento; visão da mesa para o mestre.
 
 ## Etapa 1 — Inventário, ouro e inspiração pelo mestre — **feita (2026-10-28)**
 
@@ -33,7 +33,7 @@ Front:
 
 Testes: `InventoryControllerTests` (403 para jogador nas rotas do mestre, soma de quantidade, item livre, remover, ouro negativo = 400, escudo removido some da CA; jogador usa consumível, gasta ouro além do que tem = 400, não usa arma como consumível, gasta inspiração).
 
-## Etapa 2 — Ataques com arma
+## Etapa 2 — Ataques com arma — **feita (2026-10-28)**
 
 **Por quê**: o jogador hoje calcula o ataque de cabeça; é a rolagem mais comum da mesa.
 

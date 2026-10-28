@@ -8,6 +8,10 @@ import gusleite.runarcana_nexus.model.player.Character;
 import gusleite.runarcana_nexus.model.player.CharacterSkill;
 import gusleite.runarcana_nexus.model.player.PlayerItems;
 import gusleite.runarcana_nexus.model.items.Armor;
+import gusleite.runarcana_nexus.model.items.Item;
+import gusleite.runarcana_nexus.model.items.Weapon;
+import gusleite.runarcana_nexus.record.AttackResponse;
+import gusleite.runarcana_nexus.rules.RuleItem;
 import gusleite.runarcana_nexus.record.ArmorClassResponse;
 import org.hibernate.Hibernate;
 import gusleite.runarcana_nexus.model.roles.CharacterClass;
@@ -24,6 +28,7 @@ import gusleite.runarcana_nexus.repository.PlayerItemsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -81,7 +86,8 @@ public class CharacterService {
                 .map(AbilityResponse::of)
                 .toList();
 
-        return new CharacterSheetResponse(CharacterResponse.of(character), armorClassOf(character, items), inventory, abilities);
+        return new CharacterSheetResponse(CharacterResponse.of(character), armorClassOf(character, items),
+                attacksOf(character, items), inventory, abilities);
     }
 
     // Escolhe a defesa em uso ("UNARMORED", "RULE:<n>" ou "ITEM:<id>") entre as opções da ficha.
@@ -133,6 +139,21 @@ public class CharacterService {
                         .map(r -> new ArmorClassCalculator.ShieldItem("ITEM:" + e.getId(), e.getItem().getName(), r.armorClass()))
                         .stream())
                 .toList();
+    }
+
+    // Ataques: as armas do inventário (pelo catálogo, ou pela linha de Weapon no item sem catálogo) + desarmado.
+    private List<AttackResponse> attacksOf(Character character, List<PlayerItems> items) {
+        List<AttackCalculator.WeaponInput> weapons = new ArrayList<>();
+        for (PlayerItems e : items) {
+            Item item = (Item) Hibernate.unproxy(e.getItem());
+            String key = "ITEM:" + e.getId();
+            Optional<RuleItem> catalog = item.getCatalogId() == null ? Optional.empty()
+                    : EquipmentRules.item(rules.catalog().equipment(), item.getCatalogId()).filter(r -> "WEAPON".equals(r.kind()));
+            if (catalog.isPresent()) weapons.add(AttackCalculator.fromCatalog(key, catalog.get()));
+            else if (item instanceof Weapon w) weapons.add(AttackCalculator.fromWeapon(key, w));
+        }
+        return AttackCalculator.calculate(character::getModifier, character.getProficiencyBonus(),
+                character.getWeaponProficiencies(), weapons);
     }
 
     // CA da ficha: as regras da criação (Character.armorRules), as armaduras e os escudos do inventário.
