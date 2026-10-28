@@ -456,6 +456,16 @@ export function heritageChoices(choices, picks) {
   return (choices ?? []).filter(c => c.key.startsWith('heritage:') && ids.has(c.key.split(':')[1]))
 }
 
+// Ofícios do livro (id do criacao.json → nome), para as fórmulas.
+export const CRAFT_NAMES = {
+  alquimista: 'Alquimista', apotecario: 'Apotecário', armadilheiro: 'Armadilheiro', armeiro: 'Armeiro', armoreiro: 'Armoreiro',
+  arqueirista: 'Arqueirista', chaveiro: 'Chaveiro', cozinheiro: 'Cozinheiro', cuteleiro: 'Cuteleiro', encantador: 'Encantador',
+  encarrocador: 'Encarroçador', fermentador: 'Fermentador', joalheiro: 'Joalheiro', modista: 'Modista', pedreiro: 'Pedreiro',
+  tecmaturgo: 'Tecmaturgo', artesanato: 'Artesanato', artista: 'Artista', coletor: 'Coletor', falsificador: 'Falsificador',
+  guia: 'Guia', jogador: 'Jogador',
+}
+export const craftIdOf = name => Object.keys(CRAFT_NAMES).find(id => CRAFT_NAMES[id].toLowerCase() === (name ?? '').toLowerCase())
+
 // ---------- Subida de nível ----------
 
 // Níveis do personagem que dão 1 ponto de Herança.

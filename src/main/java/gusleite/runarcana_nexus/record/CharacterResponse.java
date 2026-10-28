@@ -70,7 +70,9 @@ public record CharacterResponse(
         // Bônus do mestre já somado em maxHp.
         int maxHpBonus,
         // Mod. de Destreza + bônus (Atento).
-        int initiative
+        int initiative,
+        // Fórmulas de Ofício conhecidas ("<ofício>:<fórmula>").
+        List<String> formulas
 ) {
     public record ClassLevelResponse(String classId, String name, int level, String subclass) {}
 
@@ -131,7 +133,8 @@ public record CharacterResponse(
                 character.getConditions().stream().sorted().toList(),
                 character.getExhaustion() == null ? 0 : character.getExhaustion(),
                 character.getMaxHpBonus() == null ? 0 : character.getMaxHpBonus(),
-                character.getModifier(Attribute.DEXTERITY) + (character.getInitiativeBonus() == null ? 0 : character.getInitiativeBonus())
+                character.getModifier(Attribute.DEXTERITY) + (character.getInitiativeBonus() == null ? 0 : character.getInitiativeBonus()),
+                character.getFormulas().stream().sorted().toList()
         );
     }
 }

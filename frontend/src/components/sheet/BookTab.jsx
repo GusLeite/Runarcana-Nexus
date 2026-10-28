@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { fetchCompendium, fetchRituals, fetchSpells } from '../../api/book.js'
+import { fetchCompendium, fetchFormulas, fetchRituals, fetchSpells } from '../../api/book.js'
+import { CRAFT_NAMES } from '../../data/rules.js'
 import { RichText } from './DocumentsTab.jsx'
 
 // Aba de consulta do livro: magias, rituais, tabelas e as páginas do compêndio (Familiares, Tecmaturgia).
@@ -8,6 +9,7 @@ const MODES = [
   { id: 'spells', label: 'Magias' },
   { id: 'rituals', label: 'Rituais' },
   { id: 'tables', label: 'Tabelas' },
+  { id: 'formulas', label: 'Fórmulas' },
   { id: 'pages', label: 'Compêndio' },
 ]
 const SKILLS = { ARCANA: 'Arcanismo', NATURE: 'Natureza', RELIGION: 'Religião' }
@@ -21,12 +23,13 @@ export default function BookTab({ token, onError }) {
   const [mode, setMode] = useState('spells')
   const [query, setQuery] = useState('')
   const [level, setLevel] = useState('all')
+  const [craft, setCraft] = useState('all')
   const [selectedId, setSelectedId] = useState(null)
 
   useEffect(() => {
     let alive = true
-    Promise.all([fetchSpells(token), fetchRituals(token), fetchCompendium(token)])
-      .then(([spells, magic, compendium]) => alive && setData({ spells, rituals: magic.rituals, tables: magic.tables, pages: compendium.pages }))
+    Promise.all([fetchSpells(token), fetchRituals(token), fetchCompendium(token), fetchFormulas(token)])
+      .then(([spells, magic, compendium, formulas]) => alive && setData({ spells, rituals: magic.rituals, tables: magic.tables, pages: compendium.pages, formulas }))
       .catch(e => alive && onError(e))
     return () => { alive = false }
   }, [token, onError])
@@ -40,9 +43,16 @@ export default function BookTab({ token, onError }) {
       rituals: data.rituals.map(r => ({ id: 'r:' + r.id, name: r.name, meta: 'Ritual de ' + r.level + 'º nível', item: r })),
       tables: data.tables.map(t => ({ id: 't:' + t.id, name: t.name, meta: t.rows.length + ' linhas', item: t })),
       pages: data.pages.map(p => ({ id: 'p:' + p.id, name: p.title, meta: p.chapter, item: p })),
+      formulas: [
+        ...(craft === 'all' || craft === 'general' ? data.formulas.general : [])
+          .map(f => ({ id: 'g:' + f.id, name: f.name, meta: 'Fórmula geral · nível ' + f.level, item: { ...f, craftName: f.crafts } })),
+        ...Object.entries(data.formulas.crafts).filter(([id]) => craft === 'all' || craft === id)
+          .flatMap(([id, list]) => list.map(f => ({ id: 'f:' + id + ':' + f.id, name: f.name,
+            meta: CRAFT_NAMES[id] + (f.discipline ? ' (' + f.discipline + ')' : '') + ' · nível ' + f.level, item: { ...f, craftName: CRAFT_NAMES[id] } }))),
+      ],
     }[mode]
     return q ? list.filter(e => norm(e.name).includes(q)) : list
-  }, [data, mode, query, level])
+  }, [data, mode, query, level, craft])
 
   const selected = entries.find(e => e.id === selectedId) ?? entries[0]
   const switchMode = m => { setMode(m); setQuery(''); setSelectedId(null) }
@@ -64,6 +74,13 @@ export default function BookTab({ token, onError }) {
         <div className="book-filters">
           <input type="search" className="book-search" placeholder="Buscar pelo nome" value={query}
             onChange={e => { setQuery(e.target.value); setSelectedId(null) }} aria-label="Buscar no livro" />
+          {mode === 'formulas' && (
+            <select value={craft} onChange={e => { setCraft(e.target.value); setSelectedId(null) }} aria-label="Ofício">
+              <option value="all">Todos os ofícios</option>
+              <option value="general">Fórmulas gerais</option>
+              {Object.entries(CRAFT_NAMES).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
+            </select>
+          )}
           {mode === 'spells' && (
             <select value={level} onChange={e => { setLevel(e.target.value); setSelectedId(null) }} aria-label="Nível da magia">
               <option value="all">Todos os níveis</option>
@@ -95,6 +112,7 @@ export default function BookTab({ token, onError }) {
             {mode === 'rituals' && <RitualView ritual={selected.item} />}
             {mode === 'tables' && <TableView table={selected.item} title />}
             {mode === 'pages' && <PageView page={selected.item} />}
+            {mode === 'formulas' && <FormulaView formula={selected.item} rule={data.formulas.rule} />}
           </article>
         ) : <div className="item-detail empty-detail"><p className="muted-note">Escolha uma entrada para ler.</p></div>}
       </div>
@@ -166,6 +184,23 @@ function TableView({ table, title }) {
             <tbody>{table.rows.map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j}>{c}</td>)}</tr>)}</tbody>
           </table>
         </div>
+      </div>
+    </>
+  )
+}
+
+// Uma fórmula de Ofício: pré-requisito, ofício, CD, componente, valor, tempo, texto e o 20 natural.
+export function FormulaView({ formula: f, rule }) {
+  return (
+    <>
+      <Head kind={'Fórmula · ' + (f.craftName ?? '') + (f.discipline ? ' (' + f.discipline + ')' : '')} title={f.name}
+        meta={'Nível ' + f.level + (f.prerequisite ? ' · pré-requisito: ' + f.prerequisite : '')} />
+      <div className="scroll-body">
+        <Facts rows={[['Ofício', f.craft ?? f.crafts], ['Parte', f.part], ['CD', f.dc], ['Componente', f.component], ['Valor', f.value],
+          ['Tempo', f.time], ['Detalhe', f.detail]]} />
+        <RichText text={f.description ?? ''} />
+        {f.natural20 && <p><strong><em>20 natural.</em></strong> {f.natural20}</p>}
+        {rule && <p className="muted-note">{rule}</p>}
       </div>
     </>
   )

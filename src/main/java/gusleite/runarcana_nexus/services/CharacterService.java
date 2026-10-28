@@ -55,13 +55,16 @@ public class CharacterService {
     private final PlayerItemsRepository itemsRepository;
     private final CharacterAbilityRepository abilityRepository;
     private final RuleCatalogService rules;
+    private final FormulaService formulas;
 
     public CharacterService(CharacterRepository charRepository,
                             CharacterClassRepository classRepository,
                             BackGroundRepository backgroundRepository,
                             PlayerItemsRepository itemsRepository,
                             CharacterAbilityRepository abilityRepository,
-                            RuleCatalogService rules) {
+                            RuleCatalogService rules,
+                            FormulaService formulas) {
+        this.formulas = formulas;
         this.charRepository = charRepository;
         this.classRepository = classRepository;
         this.backgroundRepository = backgroundRepository;
@@ -204,7 +207,14 @@ public class CharacterService {
             Integer bonus = attribute == null ? null
                     : character.getModifier(attribute) + (expert ? character.getProficiencyBonus() : character.getProficiencyBonus() / 2);
             Integer level = k != null && "MAJOR".equals(k.kind()) ? 1 + (character.getLevel() - 1) / 4 : null;
-            return new CraftResponse(name, k == null ? null : k.kind(), attribute, level, expert, bonus);
+            List<CraftResponse.KnownFormula> known = k == null ? List.of() : character.getFormulas().stream()
+                    .filter(f -> f.startsWith(k.id() + ":"))
+                    .flatMap(f -> formulas.find(f).map(x -> new CraftResponse.KnownFormula(f, x.name()
+                            + (x.discipline() == null ? "" : " (" + x.discipline() + ")"), x.level(), x.dc(), x.description())).stream())
+                    .sorted(java.util.Comparator.comparingInt(CraftResponse.KnownFormula::level).thenComparing(CraftResponse.KnownFormula::name))
+                    .toList();
+            int limit = Math.max(1, character.getModifier(Attribute.INTELLIGENCE)) * (level == null ? 1 : level);
+            return new CraftResponse(k == null ? null : k.id(), name, k == null ? null : k.kind(), attribute, level, expert, bonus, known, limit);
         }).toList();
     }
 

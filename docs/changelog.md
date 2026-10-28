@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-28 — Fórmulas de Ofício (`feature/character-sheet`)
+- `rules/formulas.json` extraído da wiki (76 gerais + 237 dos ofícios), `FormulaService`, `GET /crafts/formulas` e `PUT /character/{id}/formulas` (mestre).
+- Ficha: fórmulas conhecidas no card Ofícios com o limite da regra (mod. de INT × nível do ofício); Livro ganhou **Fórmulas**; o mestre marca no `FormulaEditor` da aba Fichas.
+- Testes: `FormulaServiceTests` e fórmulas no teste de criação. Conferido no sandbox.
+
 ## 2026-10-28 — Aprimoramentos, listas de origem, Vítreo e ofícios (`feature/character-sheet`)
 - Aprimoramentos: Atento (concessão nova `INITIATIVE`, `initiative` na ficha), Hábil (3 proficiências entre perícia e ofício), Especialista em Armadura Média (sem limite de DES e +1 de RD na CA).
 - Magia: listas Yordle/Fauhwoon/Ottrani valem como a da classe para quem é da origem; Janela da Mente e Persistência do Vítreo dão o Mistério ("Charme (Encantamento)").

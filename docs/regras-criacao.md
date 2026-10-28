@@ -23,6 +23,7 @@ As regras do assistente de criação (o que cada origem, região, classe e passa
 | Magias (Capítulo 10) | **558** em `rules/magias.json`, com Mistérios e as listas de classe e de origem. Truques e magias conhecidas do 1º nível escolhidos no assistente; as dos níveis seguintes, na subida de nível |
 | Regiões | As 14 do enum |
 | Idiomas | **Desligados** por enquanto (o Humano não escolhe idioma; a estrutura `LANGUAGE`/`LANGUAGE_CHOICE` continua disponível) |
+| Fórmulas | `rules/formulas.json`: Fórmulas Gerais e as de cada ofício (por id do ofício), extraídas das páginas da wiki; `dc` em texto |
 | Ofícios | Os **22** (16 maiores, 6 menores), com o atributo base de cada um (wiki, Detalhamento → Ofícios; Encantador: conjuração, INT ou SAB → INT). Níveis e fórmulas: ver backend-ficha.md |
 | Heranças | **204** em `rules/herancas.json`: 59 Gerais, 54 de Região e 91 de Origem (todas as origens, a Variante Nebulon e as 3 do Nebulon, que exigem a variante por `requires`) |
 | Classes | As **9 classes** completas, do 1º ao 20º nível: Acólito (7 Ritos), Arcanista (10 Glifos), Atirador (5 Trilhas), Bodisatva (5 Doutrinas), Bruto (3 Animas), Caçador (3 Enclaves), Combatente (4 Honras; id `FIGHTER`), Mercurial (4 Cabalas) e Xamã (4 Caminhos) |

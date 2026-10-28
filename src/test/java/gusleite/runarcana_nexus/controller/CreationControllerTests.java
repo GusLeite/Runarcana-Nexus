@@ -158,6 +158,25 @@ class CreationControllerTests {
                         .contentType(MediaType.APPLICATION_JSON).content(FULL))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value("Você já tem uma ficha."));
+
+        // Fórmulas de Ofício (formulas-teste.json): só o mestre marca, só de ofício que a ficha tem.
+        long id = Long.parseLong(mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
+                .andReturn().getResponse().getContentAsString().replaceAll("(?s).*?\"character\":\\{\"id\":(\\d+).*", "$1"));
+        String master = login("mestre");
+        mvc.perform(get("/crafts/formulas").header("Authorization", "Bearer " + token))
+                .andExpect(jsonPath("$.crafts.ferraria[0].name").value("Criar Arma"));
+        formulas(token, id, "[\"ferraria:criar-arma-1\"]").andExpect(status().isForbidden());
+        formulas(master, id, "[\"alquimia:pocao-1\"]").andExpect(status().isBadRequest());
+        formulas(master, id, "[\"ferraria:nao-existe\"]").andExpect(status().isBadRequest());
+        formulas(master, id, "[\"ferraria:criar-arma-1\"]").andExpect(jsonPath("$.formulas[0]").value("ferraria:criar-arma-1"));
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
+                .andExpect(jsonPath("$.crafts[0].formulas[0].name").value("Criar Arma"))
+                .andExpect(jsonPath("$.crafts[0].formulaLimit").isNumber());
+    }
+
+    private ResultActions formulas(String token, long id, String list) throws Exception {
+        return mvc.perform(put("/character/" + id + "/formulas").header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON).content("{\"formulas\":" + list + "}"));
     }
 
     @Test

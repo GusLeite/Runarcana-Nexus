@@ -51,6 +51,11 @@ public class Character {
     private int currentHp;
     // PV temporários (somem antes dos PV atuais ao sofrer dano). Nulo nas fichas antigas = 0.
     private Integer tempHp;
+    // Fórmulas de Ofício conhecidas ("<id do ofício>:<id da fórmula>" do rules/formulas.json); quem marca é o mestre.
+    @ElementCollection
+    @CollectionTable(name = "character_formulas", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "formula")
+    private Set<String> formulas = new LinkedHashSet<>();
     // Bônus na iniciativa (Atento: +5), das concessões INITIATIVE. Nulo = 0.
     private Integer initiativeBonus;
     // Bônus nos PV máximos dado pelo mestre (item, maldição, bênção); fica fora da conta da subida de nível. Nulo = 0.

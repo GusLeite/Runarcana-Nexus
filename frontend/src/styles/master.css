@@ -202,3 +202,7 @@ font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:13px;letter-spacing
 .cond-editor.compact .to-chip{font-size:11px;padding:3px 7px}
 
 .hp-bonus{display:block;margin-top:4px;font-size:12px;color:var(--gold-hi)}
+
+.formula-craft{margin-bottom:8px}
+.formula-craft .to-pick{margin-top:6px}
+.formula-craft .to-chip{font-size:12px;padding:4px 9px}

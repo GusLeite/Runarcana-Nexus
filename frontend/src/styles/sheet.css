@@ -566,3 +566,10 @@ input.note-title{padding:10px 12px;font-family:'Cinzel',Georgia,serif;font-size:
 .attack-style em{font-style:normal;color:var(--muted)}
 
 .craft-attr{font-size:11px;color:var(--muted);letter-spacing:.06em}
+
+.craft-formulas{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.craft-formula-name{display:block;margin-bottom:4px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal)}
+.craft-formula-name small{color:var(--muted);text-transform:none;letter-spacing:0}
+.craft-formula-list{display:flex;flex-wrap:wrap;gap:6px}
+.craft-formula{padding:3px 9px;border:1px solid rgba(200,162,74,.3);background:rgba(0,0,0,.3);font-size:12px;cursor:help}
+.craft-formula small{color:var(--muted)}

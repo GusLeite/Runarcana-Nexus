@@ -21,6 +21,22 @@ export default function Crafts({ crafts, onRoll }) {
           </button>
         ))}
       </div>
+      {crafts.some(k => k.formulas?.length) && (
+        <div className="craft-formulas">
+          {crafts.filter(k => k.formulas?.length).map(k => (
+            <div key={k.name} className="craft-formula-row">
+              <span className="craft-formula-name">{k.name} <small>{k.formulas.length}/{k.formulaLimit} fórmulas</small></span>
+              <span className="craft-formula-list">
+                {k.formulas.map(f => (
+                  <span key={f.key} className="craft-formula" title={(f.dc ? 'CD ' + f.dc + ' · ' : '') + (f.description ?? '')}>
+                    {f.name} <small>{f.level}</small>
+                  </span>
+                ))}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
     </>
   )
 }

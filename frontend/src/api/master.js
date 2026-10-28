@@ -80,6 +80,12 @@ export const setDeathSavesFor = (token, characterId, successes, failures) =>
 
 export { fetchConditions } from './character.js'
 
+// Fórmulas de Ofício conhecidas ('<ofício>:<fórmula>'; a lista substitui a atual). Devolve a ficha.
+export const setFormulas = (token, characterId, formulas) =>
+  request('/character/' + characterId + '/formulas', { method: 'PUT', token, body: { formulas } })
+
+export { fetchFormulas } from './book.js'
+
 export const setGold = (token, characterId, gold) => request('/character/' + characterId + '/gold', { method: 'PATCH', token, body: { gold } })
 
 export const setInspiration = (token, characterId, inspiration) =>
