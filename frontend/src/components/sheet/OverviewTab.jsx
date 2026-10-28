@@ -3,6 +3,7 @@ import AttributeGrid from './AttributeGrid.jsx'
 import SkillList from './SkillList.jsx'
 import SavingThrows from './SavingThrows.jsx'
 import Attacks from './Attacks.jsx'
+import Crafts from './Crafts.jsx'
 import { RollLog } from './DiceRoll.jsx'
 import { RichText } from './DocumentsTab.jsx'
 import { keysFor } from './AbilitiesTab.jsx'
@@ -18,8 +19,8 @@ const MODES = [
 
 // Aba principal: atributos, estatísticas e perícias no centro; à direita, rolagens e atalhos
 // para as outras abas (habilidades, documentos novos e a anotação fixada).
-export default function OverviewTab({ sheet, attacks = [], abilities, documents, notes, rolls, mode, onMode, onRoll, onRollDice, onGo, onInspiration }) {
-  const initiative = modifier(sheet.dex)
+export default function OverviewTab({ sheet, attacks = [], crafts = [], abilities, documents, notes, rolls, mode, onMode, onRoll, onRollDice, onGo, onInspiration }) {
+  const initiative = sheet.initiative ?? modifier(sheet.dex)
   const conMod = modifier(sheet.con)
   const quick = abilities.filter(a => a.type !== 'PASSIVE').slice(0, 5)
   const keys = keysFor(abilities)
@@ -59,6 +60,11 @@ export default function OverviewTab({ sheet, attacks = [], abilities, documents,
         <section className="card" style={{ '--i': 4 }}>
           <SkillList skills={sheet.skills} onRoll={onRoll} />
         </section>
+        {crafts.length > 0 && (
+          <section className="card" style={{ '--i': 5 }}>
+            <Crafts crafts={crafts} onRoll={onRoll} />
+          </section>
+        )}
       </div>
 
       <div className="sheet-col">

@@ -378,7 +378,13 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Você é uma pessoa observadora e atenta e recebe os seguintes benefícios:\n\n- Ao rolar a iniciativa, você adiciona +5 ao resultado rolado.\n- Enquanto estiver consciente, você não sofrerá os efeitos de uma rodada surpresa.\n- Criaturas escondidas não possuem vantagem ao te atacar.\n- Você recebe +1 de bônus de percepção passiva."
+      "description": "Você é uma pessoa observadora e atenta e recebe os seguintes benefícios:\n\n- Ao rolar a iniciativa, você adiciona +5 ao resultado rolado.\n- Enquanto estiver consciente, você não sofrerá os efeitos de uma rodada surpresa.\n- Criaturas escondidas não possuem vantagem ao te atacar.\n- Você recebe +1 de bônus de percepção passiva.",
+      "grants": [
+        {
+          "type": "INITIATIVE",
+          "amount": 5
+        }
+      ]
     },
     {
       "id": "aprimoramento-atirador-de-elite",
@@ -1141,7 +1147,18 @@
         "Aprimoramento"
       ],
       "repeatable": true,
-      "description": "Esse Aprimoramento pode ser escolhido mais de uma vez, a cada vez que você o recebe, você pode escolher 3 entre os itens abaixo:\n\n- Receber proficiência com uma Perícia\n- Receber proficiência com um Ofício\n- Aumentar o nível de um Ofício Maior (respeitando os limites do mesmo)\n- Aprender fórmulas de um Ofício Maior\n- Receber uma nova Disciplina de um Ofício Menor"
+      "description": "Esse Aprimoramento pode ser escolhido mais de uma vez, a cada vez que você o recebe, você pode escolher 3 entre os itens abaixo:\n\n- Receber proficiência com uma Perícia\n- Receber proficiência com um Ofício\n- Aumentar o nível de um Ofício Maior (respeitando os limites do mesmo)\n- Aprender fórmulas de um Ofício Maior\n- Receber uma nova Disciplina de um Ofício Menor",
+      "grants": [
+        {
+          "type": "PROFICIENCY_CHOICE",
+          "count": 3,
+          "options": [
+            "SKILL",
+            "CRAFT"
+          ],
+          "label": "Hábil: 3 proficiências (perícia ou ofício)"
+        }
+      ]
     },
     {
       "id": "aprimoramento-imobilizador",

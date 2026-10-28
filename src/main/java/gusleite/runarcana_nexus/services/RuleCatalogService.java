@@ -314,7 +314,9 @@ public class RuleCatalogService {
             if (g.type() == GrantType.MYSTERY && !mysteries.contains(g.value())) p.add(e.getKey() + " (MYSTERY): Mistério inexistente \"" + g.value() + "\"");
             if (g.type() == GrantType.SPELL && !spells.contains(g.value())) p.add(e.getKey() + " (SPELL): magia inexistente \"" + g.value() + "\"");
             if (g.type() == GrantType.FEATURE && "MYSTERY".equals(g.value()) && g.options() != null) g.options().stream()
-                    .filter(o -> !names.contains(plain(o.replaceAll("\\s*\\(.*\\)$", "")).replace("infernal", "inferno")))
+                    // "Água (Elemental)": o nome fora dos parênteses; "Charme (Encantamento)" (Vítreo): o de dentro.
+                    .filter(o -> !names.contains(plain(o.replaceAll("\\s*\\(.*\\)$", "")).replace("infernal", "inferno"))
+                            && !names.contains(plain(o.replaceAll("^.*\\(([^)]+)\\)$", "$1"))))
                     .forEach(o -> p.add(e.getKey() + " (" + g.name() + "): opção \"" + o + "\" não é um Mistério"));
         }
     }
@@ -673,6 +675,9 @@ public class RuleCatalogService {
                     boolean halfDie = CreationService.HALF_HIT_DIE.equals(g.value());
                     if (g.amount() == null && !formula && !halfDie) p.add(at + " (HP_BONUS): precisa de amount, usesFormula ou value HALF_HIT_DIE");
                     if (g.value() != null && !halfDie) p.add(at + " (HP_BONUS): value só aceita HALF_HIT_DIE");
+                }
+                case INITIATIVE -> {
+                    if (g.amount() == null) p.add(at + " (INITIATIVE): precisa de amount");
                 }
                 case GOLD -> {
                     if (g.amount() == null) p.add(at + " (GOLD): precisa de amount");

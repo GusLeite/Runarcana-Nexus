@@ -171,6 +171,7 @@ public class CreationService {
         c.setMaxHp(b.maxHp());
         c.setCurrentHp(b.maxHp());
         c.setSpeed(b.speed());
+        c.setInitiativeBonus(b.initiativeBonus);
         c.getOtherSpeeds().putAll(b.otherSpeedsTotal());
         c.getArmorRules().addAll(b.armorRules);
         c.setSize(b.size);
@@ -260,6 +261,7 @@ public class CreationService {
         c.setCha(b.total(Attribute.CHARISMA));
         c.setSubclass(b.subclass == null ? null : b.subclass.name());
         c.setSpeed(b.speed());
+        c.setInitiativeBonus(b.initiativeBonus);
         c.getOtherSpeeds().clear();
         c.getOtherSpeeds().putAll(b.otherSpeedsTotal());
         c.getArmorRules().clear();
@@ -584,6 +586,7 @@ public class CreationService {
                         }
                     }
                     case GOLD -> b.gold += g.amount();
+                    case INITIATIVE -> b.initiativeBonus += g.amount();
                     case MYSTERY -> b.mysteries.add(g.value());
                     case SPELL -> b.fixedSpells.putIfAbsent(g.value(), s.label());
                     case EQUIPMENT -> {
@@ -1157,7 +1160,13 @@ public class CreationService {
         RuleMagic magic = rules.catalog().magic();
         if (magic == null) return Optional.empty();
         String name = normalize(option.replaceAll("\\s*\\(.*\\)$", "")).replace("infernal", "inferno");
-        return magic.mysteriesOrEmpty().stream().filter(m -> normalize(m.name()).equals(name)).map(RuleMagic.Mystery::id).findFirst();
+        Optional<String> found = magic.mysteriesOrEmpty().stream().filter(m -> normalize(m.name()).equals(name)).map(RuleMagic.Mystery::id).findFirst();
+        if (found.isPresent()) return found;
+        // "Charme (Encantamento)" (Janela da Mente do Vítreo): o Mistério é o que está entre parênteses.
+        java.util.regex.Matcher inner = java.util.regex.Pattern.compile("\\(([^)]+)\\)$").matcher(option.trim());
+        if (!inner.find()) return Optional.empty();
+        String innerName = normalize(inner.group(1));
+        return magic.mysteriesOrEmpty().stream().filter(m -> normalize(m.name()).equals(innerName)).map(RuleMagic.Mystery::id).findFirst();
     }
 
     private static String normalize(String s) {
@@ -1196,8 +1205,10 @@ public class CreationService {
     // Magia escolhida numa SPELL_CHOICE: a fonte e a classe dela e de onde podia vir (para a troca ao subir de nível).
     private record Known(String spellId, String source, String classId, String from) {}
 
-    private static boolean inList(RuleMagic.Spell sp, String from, String classId, Set<String> mysteries) {
-        boolean fromClass = !"MYSTERIES".equals(from) && classId != null && sp.classesOrEmpty().contains(classId);
+    // A lista de origem/linhagem (Yordle, Fauhwoon, Ottrani) vale como a lista da classe para quem é dela.
+    private static boolean inList(RuleMagic.Spell sp, String from, String classId, Set<String> mysteries, Set<String> origins) {
+        boolean fromClass = !"MYSTERIES".equals(from) && ((classId != null && sp.classesOrEmpty().contains(classId))
+                || sp.originsOrEmpty().stream().anyMatch(origins::contains));
         boolean fromMystery = !"CLASS".equals(from) && sp.mysteriesOrEmpty().stream().anyMatch(mysteries::contains);
         return fromClass || fromMystery;
     }
@@ -1217,7 +1228,7 @@ public class CreationService {
         Map<String, String> names = new LinkedHashMap<>();
         for (RuleMagic.Spell sp : magic.spellsOrEmpty()) {
             if (sp.level() == null || (level == 0 ? sp.level() != 0 : sp.level() < 1 || sp.level() > level)) continue;
-            if (!inList(sp, from, classId, mysteries)) continue;
+            if (!inList(sp, from, classId, mysteries, b.originIds())) continue;
             if (taken.contains(sp.id()) && !c.picked().contains(sp.id())) continue;
             options.add(sp.id());
             names.put(sp.id(), spellName(sp));
@@ -1264,7 +1275,7 @@ public class CreationService {
         Map<String, String> inNames = new LinkedHashMap<>();
         for (RuleMagic.Spell sp : magic.spellsOrEmpty()) {
             if (sp.level() == null || sp.level() < 1 || sp.level() > maxLevel || taken.contains(sp.id())) continue;
-            if (froms.stream().noneMatch(f -> inList(sp, f, classId, mysteries))) continue;
+            if (froms.stream().noneMatch(f -> inList(sp, f, classId, mysteries, b.originIds()))) continue;
             inOptions.add(sp.id());
             inNames.put(sp.id(), spellName(sp));
         }
@@ -2047,6 +2058,15 @@ public class CreationService {
         // CAs alternativas e bônus de CA (viram Character.armorRules).
         final List<ArmorRule> armorRules = new ArrayList<>();
         int gold;
+        int initiativeBonus;
+
+        // Ids da origem e da linhagem, para as listas de magia de origem.
+        Set<String> originIds() {
+            Set<String> ids = new LinkedHashSet<>();
+            if (origin != null) ids.add(origin.id());
+            if (lineage != null) ids.add(lineage.id());
+            return ids;
+        }
         // Nível do personagem, níveis por classe (na ordem em que entraram), classes e subclasses, de que classe é cada
         // fonte (pelo rótulo) e os dados de vida rolados do 2º nível em diante.
         int level = 1;

@@ -564,3 +564,5 @@ input.note-title{padding:10px 12px;font-family:'Cinzel',Georgia,serif;font-size:
 .attack-styles{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 12px;padding-top:4px;border-top:1px dashed rgba(200,162,74,.15)}
 .attack-style{display:flex;align-items:center;gap:4px;font-size:12px}
 .attack-style em{font-style:normal;color:var(--muted)}
+
+.craft-attr{font-size:11px;color:var(--muted);letter-spacing:.06em}

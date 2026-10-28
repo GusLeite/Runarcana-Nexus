@@ -355,6 +355,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
           <OverviewTab
             sheet={sheet}
             attacks={state.sheet.attacks ?? []}
+            crafts={state.sheet.crafts ?? []}
             abilities={abilities}
             documents={documents}
             notes={notes}

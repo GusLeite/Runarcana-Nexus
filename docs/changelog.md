@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-28 — Aprimoramentos, listas de origem, Vítreo e ofícios (`feature/character-sheet`)
+- Aprimoramentos: Atento (concessão nova `INITIATIVE`, `initiative` na ficha), Hábil (3 proficiências entre perícia e ofício), Especialista em Armadura Média (sem limite de DES e +1 de RD na CA).
+- Magia: listas Yordle/Fauhwoon/Ottrani valem como a da classe para quem é da origem; Janela da Mente e Persistência do Vítreo dão o Mistério ("Charme (Encantamento)").
+- Ofícios: atributo base dos 22 no `criacao.json` (wiki); `crafts` na ficha com nível dos maiores e bônus do teste; card **Ofícios** na Ficha.
+- Testes: `ArmorClassCalculatorTests`, ofício no teste de criação. Conferido no sandbox (Vítreo com Encantamento, Xamã Yordle com 9 truques a mais, ofício rolando).
+
 ## 2026-10-28 — Efeitos de Herança, Estilos de Luta, Exaustão e bônus de PV (`feature/character-sheet`)
 - `RuleHeritage.grants`: 35 Heranças com perícia (especialidade se já tiver), salvaguarda, deslocamento, idioma ou ofício e 21 com Mistério; viram a fonte "Herança: X" e as escolhas aparecem na etapa Heranças (e na subida de nível).
 - Ataques: `styles` com os Estilos de Luta que valem para a arma (Duelismo, Arquearia, Arremessar, Duas Mãos, Armas Grandes, Desarmado), já calculados.

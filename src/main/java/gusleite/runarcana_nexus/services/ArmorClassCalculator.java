@@ -44,6 +44,13 @@ public final class ArmorClassCalculator {
     public static ArmorClassResponse calculate(ToIntFunction<Attribute> modifier, int proficiency, List<ArmorRule> rules,
                                                Collection<String> armorProficiencies, List<ArmorItem> items, String selected,
                                                List<ShieldItem> shields, String selectedShield) {
+        return calculate(modifier, proficiency, rules, armorProficiencies, items, selected, shields, selectedShield, false);
+    }
+
+    // mediumExpert: Aprimoramento Especialista em Armadura Média (sem limite de Destreza na média e +1 de RD nela).
+    public static ArmorClassResponse calculate(ToIntFunction<Attribute> modifier, int proficiency, List<ArmorRule> rules,
+                                               Collection<String> armorProficiencies, List<ArmorItem> items, String selected,
+                                               List<ShieldItem> shields, String selectedShield, boolean mediumExpert) {
         int dex = modifier.applyAsInt(Attribute.DEXTERITY);
         List<DefenseOption> base = new ArrayList<>();
         base.add(new DefenseOption(UNARMORED, "Sem armadura", "UNARMORED", 10 + dex, 0));
@@ -66,9 +73,10 @@ public final class ArmorClassCalculator {
             for (ArmorItem item : items) {
                 int mod = item.modifierAttribute() == null || item.weight() == ArmorWeight.HEAVY ? 0
                         : modifier.applyAsInt(item.modifierAttribute());
-                if (item.weight() == ArmorWeight.MEDIUM) mod = Math.min(mod, 2);
-                base.add(new DefenseOption(item.key(), item.name(), "ITEM", item.armorClass() + mod,
-                        item.reduction() == null ? 0 : item.reduction()));
+                boolean medium = item.weight() == ArmorWeight.MEDIUM;
+                if (medium && !mediumExpert) mod = Math.min(mod, 2);
+                int reduction = (item.reduction() == null ? 0 : item.reduction()) + (medium && mediumExpert ? 1 : 0);
+                base.add(new DefenseOption(item.key(), item.name(), "ITEM", item.armorClass() + mod, reduction));
             }
         }
 

@@ -147,6 +147,9 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.character.languages[0]").value("Targoniano"))
                 // a ficha guarda o nome do ofício, não o id
                 .andExpect(jsonPath("$.character.crafts[0]").value("Ferraria"))
+                // ofício maior: nível 1 no 1º nível, teste pela Força (atributo base) + metade da proficiência
+                .andExpect(jsonPath("$.crafts[0].attribute").value("STRENGTH"))
+                .andExpect(jsonPath("$.crafts[0].level").value(1))
                 // os 2 pontos foram gastos no assistente
                 .andExpect(jsonPath("$.character.heritagePoints").value(0))
                 .andExpect(jsonPath("$.character.skills[?(@.skill == 'ARCANA')].proficient").value(true));

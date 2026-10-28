@@ -13,6 +13,9 @@ import gusleite.runarcana_nexus.model.items.Item;
 import gusleite.runarcana_nexus.model.items.Weapon;
 import gusleite.runarcana_nexus.record.AttackResponse;
 import gusleite.runarcana_nexus.record.SpellcastingResponse;
+import gusleite.runarcana_nexus.record.CraftResponse;
+import gusleite.runarcana_nexus.rules.RuleCatalog;
+import gusleite.runarcana_nexus.enums.Attribute;
 import gusleite.runarcana_nexus.record.TableCardResponse;
 import gusleite.runarcana_nexus.rules.RuleItem;
 import gusleite.runarcana_nexus.record.ArmorClassResponse;
@@ -108,7 +111,7 @@ public class CharacterService {
         List<AbilityResponse> abilities = SpellcastingRules.responses(character, rows);
 
         return new CharacterSheetResponse(CharacterResponse.of(character), armorClassOf(character, items),
-                attacksOf(character, items), spellcastingOf(character, rows), inventory, abilities);
+                attacksOf(character, items), spellcastingOf(character, rows), craftsOf(character), inventory, abilities);
     }
 
     // Escolhe a defesa em uso ("UNARMORED", "RULE:<n>" ou "ITEM:<id>") entre as opções da ficha.
@@ -189,6 +192,22 @@ public class CharacterService {
                 .toList();
     }
 
+    // Ofícios (Capítulo 4): nível dos maiores = 1 + 1 a cada 4 níveis de personagem (sem saber quando foi aprendido,
+    // conta do 1º nível); teste = mod. do atributo base + metade da proficiência (inteira com especialidade).
+    private List<CraftResponse> craftsOf(Character character) {
+        Map<String, RuleCatalog.Craft> byName = new java.util.HashMap<>();
+        rules.catalog().craftsOrEmpty().forEach(k -> byName.put(k.name().toLowerCase(), k));
+        return character.getCrafts().stream().sorted().map(name -> {
+            RuleCatalog.Craft k = byName.get(name.toLowerCase());
+            boolean expert = character.getCraftExpertise().contains(name);
+            Attribute attribute = k == null ? null : k.attribute();
+            Integer bonus = attribute == null ? null
+                    : character.getModifier(attribute) + (expert ? character.getProficiencyBonus() : character.getProficiencyBonus() / 2);
+            Integer level = k != null && "MAJOR".equals(k.kind()) ? 1 + (character.getLevel() - 1) / 4 : null;
+            return new CraftResponse(name, k == null ? null : k.kind(), attribute, level, expert, bonus);
+        }).toList();
+    }
+
     // Conjuração: CD e ataque de magia por fonte, o maior nível de magia e o custo de Mana por nível.
     private SpellcastingResponse spellcastingOf(Character character, List<CharacterAbility> rows) {
         List<SpellcastingRules.Casting> castings = SpellcastingRules.castings(character, rows);
@@ -199,6 +218,7 @@ public class CharacterService {
                 .toList(), SpellcastingRules.maxSpellLevel(castings), cost);
     }
 
+    private static final String MEDIUM_EXPERT = "Especialista em Armadura Média";
     private static final Pattern STYLE = Pattern.compile("Estilo de Luta(?: adicional)? \\((.+)\\)");
 
     // Ataques: as armas do inventário (pelo catálogo, ou pela linha de Weapon no item sem catálogo) + desarmado.
@@ -236,7 +256,8 @@ public class CharacterService {
                 .toList();
         return ArmorClassCalculator.calculate(character::getModifier, character.getProficiencyBonus(),
                 character.getArmorRules(), character.getArmorProficiencies(), armors, character.getDefense(),
-                shieldsOf(items), character.getShield());
+                shieldsOf(items), character.getShield(),
+                abilityRepository.findByCharacterOrderByIdAsc(character).stream().anyMatch(a -> MEDIUM_EXPERT.equals(a.getName())));
     }
 
     @Transactional

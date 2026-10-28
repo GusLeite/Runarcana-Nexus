@@ -64,5 +64,6 @@ public record RuleCatalog(
     }
 
     // kind: MAJOR (ofício maior, com níveis) ou MINOR (ofício menor, com disciplinas).
-    public record Craft(String id, String name, String kind) {}
+    // attribute: atributo base dos testes do ofício (opcional nos catálogos de teste).
+    public record Craft(String id, String name, String kind, gusleite.runarcana_nexus.enums.Attribute attribute) {}
 }

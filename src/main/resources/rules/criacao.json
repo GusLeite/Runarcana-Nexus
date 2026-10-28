@@ -34,112 +34,134 @@
     {
       "id": "alquimista",
       "name": "Alquimista",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "WISDOM"
     },
     {
       "id": "apotecario",
       "name": "Apotecário",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "WISDOM"
     },
     {
       "id": "armadilheiro",
       "name": "Armadilheiro",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "INTELLIGENCE"
     },
     {
       "id": "armeiro",
       "name": "Armeiro",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "WISDOM"
     },
     {
       "id": "armoreiro",
       "name": "Armoreiro",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "STRENGTH"
     },
     {
       "id": "arqueirista",
       "name": "Arqueirista",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "DEXTERITY"
     },
     {
       "id": "chaveiro",
       "name": "Chaveiro",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "DEXTERITY"
     },
     {
       "id": "cozinheiro",
       "name": "Cozinheiro",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "CHARISMA"
     },
     {
       "id": "cuteleiro",
       "name": "Cuteleiro",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "STRENGTH"
     },
     {
       "id": "encantador",
       "name": "Encantador",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "INTELLIGENCE"
     },
     {
       "id": "encarrocador",
       "name": "Encarroçador",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "DEXTERITY"
     },
     {
       "id": "fermentador",
       "name": "Fermentador",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "WISDOM"
     },
     {
       "id": "joalheiro",
       "name": "Joalheiro",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "INTELLIGENCE"
     },
     {
       "id": "modista",
       "name": "Modista",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "DEXTERITY"
     },
     {
       "id": "pedreiro",
       "name": "Pedreiro",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "INTELLIGENCE"
     },
     {
       "id": "tecmaturgo",
       "name": "Tecmaturgo",
-      "kind": "MAJOR"
+      "kind": "MAJOR",
+      "attribute": "INTELLIGENCE"
     },
     {
       "id": "artesanato",
       "name": "Artesanato",
-      "kind": "MINOR"
+      "kind": "MINOR",
+      "attribute": "DEXTERITY"
     },
     {
       "id": "artista",
       "name": "Artista",
-      "kind": "MINOR"
+      "kind": "MINOR",
+      "attribute": "DEXTERITY"
     },
     {
       "id": "coletor",
       "name": "Coletor",
-      "kind": "MINOR"
+      "kind": "MINOR",
+      "attribute": "DEXTERITY"
     },
     {
       "id": "falsificador",
       "name": "Falsificador",
-      "kind": "MINOR"
+      "kind": "MINOR",
+      "attribute": "INTELLIGENCE"
     },
     {
       "id": "guia",
       "name": "Guia",
-      "kind": "MINOR"
+      "kind": "MINOR",
+      "attribute": "INTELLIGENCE"
     },
     {
       "id": "jogador",
       "name": "Jogador",
-      "kind": "MINOR"
+      "kind": "MINOR",
+      "attribute": "WISDOM"
     }
   ],
   "origins": [
@@ -5062,11 +5084,12 @@
               "description": "Escolha um aspecto:\n\nCharme. Uma vez por descanso pleno, com uma ação, uma criatura que te veja e ouça faz salvaguarda de Sabedoria contra seu teste de Atuação; na falha, faz o que você pedir e responde o que perguntar por 1 hora (exceto o que lhe cause mal direto). Mistério do Encantamento.\nOneiros. Você aprende sono (não conta para o máximo); ao conjurá-la, jogue 1d8 × seu mod. de Inteligência (mínimo 0) em dados adicionais. Mistério da Oniromancia.\nPequeno Falsário. Você aprende ilusão menor (não conta para o máximo), conjurável como ação bônus. Mistério da Ilusão.\nVislumbre. Uma vez por descanso pleno, refaça uma jogada que tirou 1 natural. Mistério da Adivinhação.",
               "label": "Janela da Mente: aspecto",
               "options": [
-                "Charme",
-                "Oneiros",
-                "Pequeno Falsário",
-                "Vislumbre"
-              ]
+                "Charme (Encantamento)",
+                "Oneiros (Oniromancia)",
+                "Pequeno Falsário (Ilusão)",
+                "Vislumbre (Adivinhação)"
+              ],
+              "value": "MYSTERY"
             }
           ],
           "levels": [
@@ -5088,7 +5111,8 @@
                     "Oniromancia",
                     "Ilusão",
                     "Adivinhação"
-                  ]
+                  ],
+                  "value": "MYSTERY"
                 }
               ]
             },
