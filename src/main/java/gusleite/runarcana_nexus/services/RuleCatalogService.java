@@ -441,6 +441,7 @@ public class RuleCatalogService {
                         .forEach(x -> p.add(where + ": linhagem desconhecida \"" + x + "\""));
             }
             validateGrants(where, r.grantsOrEmpty(), p, crafts);
+            validateLevels(where, r.levelsOrEmpty(), p, crafts);
         }
         // Escolhas de recurso nas classes, subclasses, ganhos por nível e nos próprios recursos.
         List<Map.Entry<String, Grant>> choices = new ArrayList<>();
@@ -455,6 +456,8 @@ public class RuleCatalogService {
             }
         }
         c.resourcesOrEmpty().forEach(r -> r.grantsOrEmpty().forEach(g -> choices.add(Map.entry("recurso " + r.id(), g))));
+        c.resourcesOrEmpty().forEach(r -> r.levelsOrEmpty().forEach(l -> (l.grants() == null ? List.<Grant>of() : l.grants())
+                .forEach(g -> choices.add(Map.entry("recurso " + r.id() + " nível " + l.level(), g)))));
         c.runicNatureOrEmpty().forEach(g -> choices.add(Map.entry("Natureza Rúnica", g)));
         for (Map.Entry<String, Grant> e : choices) {
             Grant g = e.getValue();
@@ -625,6 +628,8 @@ public class RuleCatalogService {
                 case ATTRIBUTE_CHOICE -> {
                     if (g.count() == null || g.count() < 1 || g.amount() == null) p.add(at + " (ATTRIBUTE_CHOICE): precisa de count e amount");
                     checkOptions(at, g.options(), ATTRIBUTES, p);
+                    // value: novo limite do atributo escolhido ("22": "até o máximo de 22"); sem value, 20.
+                    if (g.value() != null && !g.value().matches("2[0-9]|30")) p.add(at + " (ATTRIBUTE_CHOICE): value é o limite do atributo (20 a 30)");
                 }
                 case SKILL -> {
                     if (g.skill() == null) p.add(at + " (SKILL): precisa de skill");
@@ -662,7 +667,9 @@ public class RuleCatalogService {
                 }
                 case HP_BONUS -> {
                     boolean formula = g.usesFormula() != null && g.usesFormula() != UsesFormula.FIXED;
-                    if (g.amount() == null && !formula) p.add(at + " (HP_BONUS): precisa de amount ou usesFormula");
+                    boolean halfDie = CreationService.HALF_HIT_DIE.equals(g.value());
+                    if (g.amount() == null && !formula && !halfDie) p.add(at + " (HP_BONUS): precisa de amount, usesFormula ou value HALF_HIT_DIE");
+                    if (g.value() != null && !halfDie) p.add(at + " (HP_BONUS): value só aceita HALF_HIT_DIE");
                 }
                 case GOLD -> {
                     if (g.amount() == null) p.add(at + " (GOLD): precisa de amount");

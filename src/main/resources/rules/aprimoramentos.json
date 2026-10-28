@@ -120,7 +120,12 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Você parece ser abençoado com uma sorte sobrenatural que parece agir nos momentos mais oportunos.\n\nVocê tem 2 + metade do seu bônus de proficiência em Pontos de Sorte. Ao realizar uma jogada de ataque, teste de atributo ou salvaguarda você pode gastar um ponto de sorte para rolar um d20 adicional. Esse gasto pode ser feito depois de rolar o dado inicial mas não após saber o resultado da jogada. Ao fazer essa jogada adicional, você escolhe qual dado irá usar para essa jogada.\n\nQuando você for alvo de um ataque, você pode gastar um ponto de sorte para jogar um d20 e escolher se o ataque feito contra você irá usar o dado original ou o rolado por você; Pontos de sorte gastos por criaturas diferentes para influenciar uma jogada se anulam mutuamente e nenhum dado adicional é rolado. Toda vez que você gastar um ponto de sorte e rolar um d20, caso caia um 1, você deve rolar 1d100 e receber um efeito da tabela de Magia Descontrolada Yordle.\n\nPontos de Sorte são recuperados após terminar um descanso longo."
+      "description": "Você parece ser abençoado com uma sorte sobrenatural que parece agir nos momentos mais oportunos.\n\nVocê tem 2 + metade do seu bônus de proficiência em Pontos de Sorte. Ao realizar uma jogada de ataque, teste de atributo ou salvaguarda você pode gastar um ponto de sorte para rolar um d20 adicional. Esse gasto pode ser feito depois de rolar o dado inicial mas não após saber o resultado da jogada. Ao fazer essa jogada adicional, você escolhe qual dado irá usar para essa jogada.\n\nQuando você for alvo de um ataque, você pode gastar um ponto de sorte para jogar um d20 e escolher se o ataque feito contra você irá usar o dado original ou o rolado por você; Pontos de sorte gastos por criaturas diferentes para influenciar uma jogada se anulam mutuamente e nenhum dado adicional é rolado. Toda vez que você gastar um ponto de sorte e rolar um d20, caso caia um 1, você deve rolar 1d100 e receber um efeito da tabela de Magia Descontrolada Yordle.\n\nPontos de Sorte são recuperados após terminar um descanso longo.",
+      "uses": {
+        "usesFormula": "HALF_PROFICIENCY",
+        "usesPlus": 2,
+        "recharge": "LONG_REST"
+      }
     },
     {
       "id": "aprimoramento-aliancas-espirituais",
@@ -661,7 +666,8 @@
             "WISDOM",
             "CONSTITUTION"
           ],
-          "label": "+1 em um atributo"
+          "label": "+1 em um atributo",
+          "value": "22"
         }
       ]
     },
@@ -705,7 +711,25 @@
       ],
       "prerequisite": "Habilidade de conjurar pelo menos uma magia",
       "repeatable": true,
-      "description": "Seu controle elemental se aflora em um elemento. Você domina os aspectos de um elemento, tendo um maior controle e poder em magias que utilizem desse elemento. Ao selecionar esse Aprimoramento, escolha entre um dos tipos de dano elemental a seguir: ácido, elétrico, gélido, ígneo, trovejante ou venenoso.\n\n- Magias do elemento escolhido, ao serem conjuradas, ignoram a resistência e em caso de imunidade, causam dano reduzido pela metade ao invés de não causarem dano. Adicionalmente, dados de dano que caiam como 1 são tratados como 2.\n- Esse Aprimoramento pode ser escolhido diversas vezes, cada vez com um dano elemental diferente."
+      "description": "Seu controle elemental se aflora em um elemento. Você domina os aspectos de um elemento, tendo um maior controle e poder em magias que utilizem desse elemento. Ao selecionar esse Aprimoramento, escolha entre um dos tipos de dano elemental a seguir: ácido, elétrico, gélido, ígneo, trovejante ou venenoso.\n\n- Magias do elemento escolhido, ao serem conjuradas, ignoram a resistência e em caso de imunidade, causam dano reduzido pela metade ao invés de não causarem dano. Adicionalmente, dados de dano que caiam como 1 são tratados como 2.\n- Esse Aprimoramento pode ser escolhido diversas vezes, cada vez com um dano elemental diferente.",
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Elemento controlado",
+          "description": "Magias deste elemento ignoram resistência, causam metade do dano contra imunidade e tratam 1 nos dados de dano como 2.",
+          "label": "Controlador de Elementos: escolha o elemento",
+          "count": 1,
+          "options": [
+            "Ácido",
+            "Elétrico",
+            "Gélido",
+            "Ígneo",
+            "Trovejante",
+            "Venenoso"
+          ]
+        }
+      ]
     },
     {
       "id": "aprimoramento-desbravador-do-ki",
@@ -1232,7 +1256,8 @@
             "WISDOM",
             "CONSTITUTION"
           ],
-          "label": "+1 em um atributo"
+          "label": "+1 em um atributo",
+          "value": "22"
         }
       ]
     },
@@ -1386,7 +1411,32 @@
       ],
       "prerequisite": "Proficiência com uma arma marcial",
       "repeatable": true,
-      "description": "Seu treinamento marcial é contínuo e sempre busca se adaptar às suas tendências. Como resultado, você aprende uma opção de Estilo de Luta à sua escolha da classe Combatente. Você não pode escolher o mesmo Estilo mais de uma vez. Além disso, quando você adquire um nível que receba um Aprimoramento, você pode escolher um Estilo de Luta que você conheça e substituí-lo por outro que você ainda não possua. Esse Aprimoramento pode ser escolhido mais de uma vez."
+      "description": "Seu treinamento marcial é contínuo e sempre busca se adaptar às suas tendências. Como resultado, você aprende uma opção de Estilo de Luta à sua escolha da classe Combatente. Você não pode escolher o mesmo Estilo mais de uma vez. Além disso, quando você adquire um nível que receba um Aprimoramento, você pode escolher um Estilo de Luta que você conheça e substituí-lo por outro que você ainda não possua. Esse Aprimoramento pode ser escolhido mais de uma vez.",
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Estilo de Luta adicional",
+          "description": "Estilo de Luta do Combatente aprendido com o Mestre do Combate (não pode repetir um que você já tenha).",
+          "label": "Mestre do Combate: escolha um Estilo de Luta",
+          "count": 1,
+          "options": [
+            "Arremessar",
+            "Arquearia",
+            "Combate com Arma de Duas Mãos",
+            "Combate com Armas Grandes",
+            "Combate com Duas Armas",
+            "Combate de Escudo",
+            "Combate Desarmado",
+            "Defesa",
+            "Duelismo",
+            "Phalanx",
+            "Proteção",
+            "Defesa sem Armadura",
+            "YAAAAAR!"
+          ]
+        }
+      ]
     },
     {
       "id": "aprimoramento-maos-de-ferro",
@@ -1531,7 +1581,13 @@
         "Aprimoramento"
       ],
       "prerequisite": "Proficiência com pelo menos uma arma de corrente",
-      "description": "Você domina armas de corrente, como a foice de corrente, o martelo meteoro, entre outras. Você é considerado proficiente com essas armas e ganha os seguintes benefícios ao utilizar qualquer uma delas:\n\n- Enquanto sua arma de corrente tiver a propriedade de alcance, ao utilizar a ação de Desarmar, você utiliza as regras de desarme com arma à distância.\n- Quando você ataca um alvo com a condição Agarrado por uma extremidade de sua arma de corrente, com a extremidade oposta da arma ou com outra arma leve que esteja empunhando, você faz o ataque com vantagem.\n- Enquanto sua arma de corrente tiver a propriedade de alcance, um alvo que você atacar com ela não ganha benefícios de meia ou três quartos de cobertura."
+      "description": "Você domina armas de corrente, como a foice de corrente, o martelo meteoro, entre outras. Você é considerado proficiente com essas armas e ganha os seguintes benefícios ao utilizar qualquer uma delas:\n\n- Enquanto sua arma de corrente tiver a propriedade de alcance, ao utilizar a ação de Desarmar, você utiliza as regras de desarme com arma à distância.\n- Quando você ataca um alvo com a condição Agarrado por uma extremidade de sua arma de corrente, com a extremidade oposta da arma ou com outra arma leve que esteja empunhando, você faz o ataque com vantagem.\n- Enquanto sua arma de corrente tiver a propriedade de alcance, um alvo que você atacar com ela não ganha benefícios de meia ou três quartos de cobertura.",
+      "grants": [
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Armas de corrente"
+        }
+      ]
     },
     {
       "id": "aprimoramento-perito-em-armas-de-fogo",
@@ -1744,7 +1800,13 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Você ganha metade do seu dado de vida em seu máximo de pontos de vida no 1º nível, sempre que sua vida aumentar ao subir de nível, caso você tire menos que 1 + metade do dado de vida, você pode jogar o dado novamente e escolher o maior número entre os dois."
+      "description": "Você ganha metade do seu dado de vida em seu máximo de pontos de vida no 1º nível, sempre que sua vida aumentar ao subir de nível, caso você tire menos que 1 + metade do dado de vida, você pode jogar o dado novamente e escolher o maior número entre os dois.",
+      "grants": [
+        {
+          "type": "HP_BONUS",
+          "value": "HALF_HIT_DIE"
+        }
+      ]
     },
     {
       "id": "aprimoramento-sagaz",

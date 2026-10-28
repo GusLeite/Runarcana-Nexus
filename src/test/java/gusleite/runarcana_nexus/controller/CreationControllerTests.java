@@ -333,7 +333,7 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.craftExpertise[0]").value("ferraria"))
                 // dado e usos pela tabela do 1º nível
                 .andExpect(jsonPath("$.features[?(@.name == 'Furtivo Teste')].dice").value("1d6"))
-                .andExpect(jsonPath("$.features[?(@.name == 'Mana Teste')].uses").value(4))
+                .andExpect(jsonPath("$.features[?(@.name == 'Pontos de Mana')].uses").value(4))
                 // escolha de duas opções
                 .andExpect(jsonPath("$.features[?(@.name == 'Duas Teste (A, C)')].source").value("Classe: Mercurial Teste"))
                 // d8 + CON (+2) + origem (+1) + Cabala Sombra: metade do mod. de INT 17 (+3) = +1

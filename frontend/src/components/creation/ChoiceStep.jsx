@@ -57,6 +57,7 @@ export default function ChoiceStep({ choices, picks, onChange, crafts, resources
               <span className={'choice-count' + (current.length === c.count ? ' ok' : '')}>{current.length}/{c.count}</span>
             </div>
             <div className="choice-source">{c.source}</div>
+            {c.note && <p className="muted-note">{c.note}</p>}
             {optionGroups(c, items).map(g => (
               <div key={g.title ?? 'all'} className="choice-group">
                 {g.title && <div className="choice-group-title">{g.title}</div>}

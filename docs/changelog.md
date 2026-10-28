@@ -2,6 +2,14 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-27 — Combatente Arcano, Mana na multiclasse, troca de magia e Aprimoramentos (`feature/character-sheet`)
+- Regras conferidas na wiki (Multiclasse; Técnicas de Combate → Combatente Conjurador).
+- `RuleResource.levels`: ganhos do recurso pelo nível na classe que o escolheu. A Técnica Combatente Arcano segue a tabela Combatente Conjurador (truques, magias conhecidas, Mana até o 11º); o Aprimorado leva a Mana até 30 e libera magias de 3º e 4º nível. Recursos escolhidos por classe usam o nível nela nas tabelas.
+- Mana na multiclasse: "Pontos de Mana" vira uma habilidade só, com a soma da de cada classe.
+- Troca de uma magia conhecida ao subir de nível: escolhas opcionais `level:N:spell-swap:out`/`in`; o `ChoiceStep` passa a mostrar o `note` das escolhas.
+- Aprimoramentos: Afortunado (Pontos de Sorte), Robusto (metade do dado de vida em PV), Perito em Armas de Corrente, Mestre do Combate, Controlador de Elementos; Conjurador Eficiente e Invocador Intenso até 22.
+- Testes: `manaSomadaNaMulticlasse`, `trocaDeMagiaConhecidaAoSubir`, `recursoComGanhosPeloNivelDaClasse`.
+
 ## 2026-10-27 — Magias preparadas do Acólito e do Xamã (`feature/character-sheet`)
 - Decisão da mesa: o jogador escolhe as preparadas, só no descanso longo.
 - `preparation` nas classes (`criacao.json`): Acólito prepara SAB + nível de Acólito da lista dele e dos Mistérios, até o nível máximo de magia; Xamã prepara SAB + metade do nível de Xamã entre os feitiços conhecidos.

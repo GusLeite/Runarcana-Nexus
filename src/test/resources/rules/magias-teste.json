@@ -102,6 +102,38 @@
       "classes": [
         "ARCANIST"
       ]
+    },
+    {
+      "id": "t-sombra-a",
+      "name": "Sombra A Teste",
+      "level": 1,
+      "mysteries": [],
+      "castingTime": "1 ação",
+      "range": "30 pés",
+      "components": "V",
+      "duration": "Instantânea",
+      "concentration": false,
+      "ritual": false,
+      "description": "Magia de teste do Mercurial.",
+      "classes": [
+        "MERCURIAL"
+      ]
+    },
+    {
+      "id": "t-sombra-b",
+      "name": "Sombra B Teste",
+      "level": 1,
+      "mysteries": [],
+      "castingTime": "1 ação",
+      "range": "30 pés",
+      "components": "V",
+      "duration": "Instantânea",
+      "concentration": false,
+      "ritual": false,
+      "description": "Magia de teste do Mercurial.",
+      "classes": [
+        "MERCURIAL"
+      ]
     }
   ]
 }

@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -107,7 +108,7 @@ class LevelUpControllerTests {
                 .andExpect(jsonPath("$.classLevels[0].classId").value("ARCANIST"))
                 .andExpect(jsonPath("$.classLevels[0].level").value(2));
         mvc.perform(get("/character/me").header("Authorization", "Bearer " + player))
-                .andExpect(jsonPath("$.abilities.length()").value(9))
+                .andExpect(jsonPath("$.abilities.length()").value(10))
                 .andExpect(jsonPath("$.abilities[?(@.name == 'Inspirado')].usesLeft").value(0))
                 .andExpect(jsonPath("$.abilities[?(@.name == 'Bênção do Mestre')].type").value("PASSIVE"));
 
@@ -206,6 +207,50 @@ class LevelUpControllerTests {
         // Lista vazia desprepara tudo.
         rest(player, "{\"type\":\"LONG\",\"prepared\":{\"ARCANIST\":[]}}")
                 .andExpect(jsonPath("$[?(@.name == 'Escudo Arcano Teste')]").isEmpty());
+    }
+
+    @Test
+    void manaSomadaNaMulticlasse() throws Exception {
+        long id = createNyx();
+        // Arcanista 2 (3 de Mana) + Mercurial 1 (4, pela tabela dele): uma habilidade só, com a soma.
+        levelUpPreview(login("mestre"), id, "{\"levels\":[{\"hpRoll\":3},{\"classId\":\"MERCURIAL\",\"subclassId\":\"sombra\",\"hpRoll\":5}]}")
+                .andExpect(jsonPath("$.preview.features[?(@.name == 'Pontos de Mana')]", hasSize(1)))
+                .andExpect(jsonPath("$.preview.features[?(@.name == 'Pontos de Mana')].uses").value(7));
+    }
+
+    @Test
+    void trocaDeMagiaConhecidaAoSubir() throws Exception {
+        long id = createNyx();
+        String master = login("mestre");
+        // Arcanista 2, Mercurial 1, Mercurial 2 (aprende Sombra A), Mercurial 3 (troca Sombra A por Sombra B).
+        String base = "{\"levels\":[{\"hpRoll\":3},{\"classId\":\"MERCURIAL\",\"subclassId\":\"sombra\",\"hpRoll\":5},"
+                + "{\"classId\":\"MERCURIAL\",\"hpRoll\":5,\"choices\":{\"level:4:class:MERCURIAL:0\":[\"t-sombra-a\"]}},"
+                + "{\"classId\":\"MERCURIAL\",\"hpRoll\":5,\"choices\":{%s}}]}";
+        levelUpPreview(master, id, base.formatted("\"level:5:spell-swap:out\":[\"t-sombra-a\"],\"level:5:spell-swap:in\":[\"t-sombra-b\"]"))
+                .andExpect(jsonPath("$.preview.choices[?(@.key == 'level:5:spell-swap:out')].options[*]", hasItem("t-sombra-a")))
+                .andExpect(jsonPath("$.preview.choices[?(@.key == 'level:5:spell-swap:in')].options[*]", hasItem("t-sombra-b")))
+                .andExpect(jsonPath("$.preview.features[?(@.name == 'Sombra B Teste')].source").value("Troca de magia (5º nível)"))
+                .andExpect(jsonPath("$.preview.features[?(@.name == 'Sombra A Teste')]").isEmpty());
+        // Sem trocar, Sombra A continua; só a que sai, sem a que entra, é erro.
+        levelUpPreview(master, id, base.formatted(""))
+                .andExpect(jsonPath("$.preview.features[?(@.name == 'Sombra A Teste')]", hasSize(1)));
+        levelUpPreview(master, id, base.formatted("\"level:5:spell-swap:out\":[\"t-sombra-a\"]"))
+                .andExpect(jsonPath("$.preview.errors", hasItem("Troca de magia do 5º nível: escolha a que sai e a que entra (ou nenhuma).")));
+    }
+
+    @Test
+    void recursoComGanhosPeloNivelDaClasse() throws Exception {
+        long id = createNyx();
+        String master = login("mestre");
+        levelUp(master, id, "{\"levels\":[{\"hpRoll\":3},{\"hpRoll\":3}]}").andExpect(status().isOk());
+        String pick = "{\"hpRoll\":3,\"choices\":{\"level:4:class:ARCANIST:0\":[\"aprimoramento-progressivo\"]}}";
+        // Escolhido no 4º nível de Arcanista: o ganho do 4º entra junto; o do 5º, só no 5º. Robusto de teste: +3 (metade do d6).
+        levelUpPreview(master, id, "{\"levels\":[" + pick + "]}")
+                .andExpect(jsonPath("$.preview.features[?(@.name == 'Progresso 4')]", hasSize(1)))
+                .andExpect(jsonPath("$.preview.features[?(@.name == 'Progresso 5')]").isEmpty())
+                .andExpect(jsonPath("$.hpGain").value(9));
+        levelUpPreview(master, id, "{\"levels\":[" + pick + ",{\"hpRoll\":3}]}")
+                .andExpect(jsonPath("$.preview.features[?(@.name == 'Progresso 5')].source").value("Aprimoramento: Progressivo (5º nível)"));
     }
 
     private ResultActions rest(String token, String body) throws Exception {

@@ -58,6 +58,7 @@ import gusleite.runarcana_nexus.rules.RuleItem;
 import gusleite.runarcana_nexus.rules.RuleMagic;
 import gusleite.runarcana_nexus.rules.RuleClass;
 import gusleite.runarcana_nexus.rules.RuleHeritage;
+import gusleite.runarcana_nexus.rules.RuleLevel;
 import gusleite.runarcana_nexus.rules.RuleLineage;
 import gusleite.runarcana_nexus.rules.RuleOption;
 import gusleite.runarcana_nexus.rules.RuleResource;
@@ -532,6 +533,7 @@ public class CreationService {
         if (!catalog.runicNatureOrEmpty().isEmpty()) sources.add(new Source("runic-nature", "Natureza Rúnica", catalog.runicNatureOrEmpty()));
         if (b.klass != null) {
             b.classLevels.put(b.klass.id(), 1);
+            b.classLevelAt.computeIfAbsent(b.klass.id(), x -> new ArrayList<>()).add(1);
             b.classById.put(b.klass.id(), b.klass);
             if (b.subclass != null) b.subclassByClass.put(b.klass.id(), b.subclass);
             b.sourceClass.put("Classe: " + b.klass.name(), b.klass.id());
@@ -622,6 +624,8 @@ public class CreationService {
                         String label = orLabel(g, "Escolha " + g.count() + " atributo(s) para +" + g.amount());
                         List<String> selected = choose(picked, options, g.count(), label, b.errors);
                         selected.forEach(a -> b.bonus.merge(Attribute.valueOf(a), g.amount(), Integer::sum));
+                        // "Até o máximo de 22" (Conjurador Eficiente): o atributo escolhido passa a ter outro limite.
+                        if (g.value() != null) selected.forEach(a -> b.attributeCap.merge(Attribute.valueOf(a), Integer.parseInt(g.value()), Math::max));
                         sourceAttributes.addAll(selected);
                         b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, selected, s.label(), null));
                     }
@@ -764,7 +768,8 @@ public class CreationService {
             if (chosen != null && chosen.contains(g.armor().featureOption())) b.armorRules.add(armorRule(g, null));
         }
         resourceChoices(b);
-        spellChoices(b);
+        spellChoices(b, picks);
+        mergeMana(b);
         multiclassChecks(b);
 
         if (blank(r.characterName())) b.errors.add("Dê um nome ao personagem.");
@@ -1055,6 +1060,7 @@ public class CreationService {
                 continue;
             }
             int n = b.classLevels.merge(k.id(), 1, Integer::sum);
+            b.classLevelAt.computeIfAbsent(k.id(), x -> new ArrayList<>()).add(charLevel);
             b.classById.put(k.id(), k);
             String classLabel = "Classe: " + k.name() + " (" + n + "º nível)";
             b.sourceClass.put(classLabel, k.id());
@@ -1111,7 +1117,7 @@ public class CreationService {
     }
 
     // Multiclasse: o pré-requisito vale para cada classe nova e para as que o personagem já tinha (com os atributos
-    // finais). Nenhum atributo passa de 20.
+    // finais). Nenhum atributo passa de 20 (ou do limite que um Aprimoramento deu a ele).
     private void multiclassChecks(Build b) {
         if (!b.multiclassed.isEmpty()) {
             for (RuleClass k : b.classById.values()) {
@@ -1120,7 +1126,8 @@ public class CreationService {
             }
         }
         for (Attribute a : Attribute.values()) {
-            if (b.total(a) > 20) b.errors.add(a.name() + " passa de 20.");
+            int cap = b.attributeCap.getOrDefault(a, 20);
+            if (b.total(a) > cap) b.errors.add(a.name() + " passa de " + cap + ".");
         }
     }
 
@@ -1159,7 +1166,7 @@ public class CreationService {
     // Magias conhecidas: as fixas (SPELL) e as escolhas (SPELL_CHOICE), com as opções da lista da classe e/ou dos Mistérios
     // do personagem (o Elemental Geral vem com o primeiro Mistério Elemental). Uma magia escolhida não aparece de novo.
     // Cada magia vira uma habilidade SPELL com a fonte da escolha.
-    private void spellChoices(Build b) {
+    private void spellChoices(Build b, Map<String, List<String>> picks) {
         RuleMagic magic = rules.catalog().magic();
         if (magic == null) return;
         Set<String> mysteries = new LinkedHashSet<>(b.mysteries);
@@ -1174,39 +1181,120 @@ public class CreationService {
             RuleMagic.Spell sp = byId.get(id);
             if (sp != null) b.features.add(new Sourced<>(Grant.spell(sp), source));
         });
-        for (SpellChoice c : b.spellChoices) {
-            Grant g = c.grant();
-            int level = g.spellLevel() == null ? 0 : g.spellLevel();
-            String from = g.value() == null ? "CLASS_OR_MYSTERIES" : g.value();
-            // Lista da classe de onde vem a escolha (multiclasse: a da outra classe).
-            String classId = b.sourceClass.getOrDefault(c.source(), b.klass == null ? null : b.klass.id());
-            List<String> options = new ArrayList<>();
-            Map<String, String> names = new LinkedHashMap<>();
-            for (RuleMagic.Spell sp : magic.spellsOrEmpty()) {
-                if (sp.level() == null || (level == 0 ? sp.level() != 0 : sp.level() < 1 || sp.level() > level)) continue;
-                boolean fromClass = !"MYSTERIES".equals(from) && classId != null && sp.classesOrEmpty().contains(classId);
-                boolean fromMystery = !"CLASS".equals(from) && sp.mysteriesOrEmpty().stream().anyMatch(mysteries::contains);
-                if (!fromClass && !fromMystery) continue;
-                if (taken.contains(sp.id()) && !c.picked().contains(sp.id())) continue;
-                options.add(sp.id());
-                names.put(sp.id(), sp.name() + (sp.level() == 0 ? "" : " (" + sp.level() + "º)"));
+        // Nível a nível: as escolhas do nível e, do 2º em diante, a troca opcional de uma magia conhecida.
+        List<Known> known = new ArrayList<>();
+        int last = b.spellChoices.stream().mapToInt(c -> levelOfKey(c.key())).max().orElse(1);
+        for (int lv = 1; lv <= Math.max(b.level, last); lv++) {
+            for (SpellChoice c : b.spellChoices) {
+                if (levelOfKey(c.key()) == lv) spellChoice(c, b, magic, mysteries, byId, taken, known);
             }
-            int count = g.count() == null ? 1 : g.count();
-            String label = orLabel(g, level == 0 ? "Truques: escolha " + count : "Magias até o " + level + "º nível: escolha " + count);
-            String note = null;
-            List<String> selected;
-            if (options.isEmpty()) {
-                // Sem Mistério ainda (Arcanista) ou sem lista: avisa, sem bloquear com "faltam escolhas".
-                note = "MYSTERIES".equals(from) ? "Escolha um Mistério para ver as magias." : "Nenhuma magia disponível nesta lista.";
-                selected = List.of();
-                if (!c.picked().isEmpty()) b.errors.add("Opção inválida em \"" + label + "\".");
-            } else {
-                selected = choose(c.picked(), options, count, label, b.errors);
-            }
-            taken.addAll(selected);
-            selected.forEach(id -> b.features.add(new Sourced<>(Grant.spell(byId.get(id)), c.source())));
-            b.choices.add(new ChoiceLine(c.key(), g.type(), label, count, options, selected, c.source(), note, names));
+            if (lv > 1) spellSwap(lv, picks, b, magic, mysteries, byId, taken, known);
         }
+    }
+
+    // Magia escolhida numa SPELL_CHOICE: a fonte e a classe dela e de onde podia vir (para a troca ao subir de nível).
+    private record Known(String spellId, String source, String classId, String from) {}
+
+    private static boolean inList(RuleMagic.Spell sp, String from, String classId, Set<String> mysteries) {
+        boolean fromClass = !"MYSTERIES".equals(from) && classId != null && sp.classesOrEmpty().contains(classId);
+        boolean fromMystery = !"CLASS".equals(from) && sp.mysteriesOrEmpty().stream().anyMatch(mysteries::contains);
+        return fromClass || fromMystery;
+    }
+
+    private static String spellName(RuleMagic.Spell sp) {
+        return sp.name() + (sp.level() == 0 ? "" : " (" + sp.level() + "º)");
+    }
+
+    private void spellChoice(SpellChoice c, Build b, RuleMagic magic, Set<String> mysteries, Map<String, RuleMagic.Spell> byId,
+                             Set<String> taken, List<Known> known) {
+        Grant g = c.grant();
+        int level = g.spellLevel() == null ? 0 : g.spellLevel();
+        String from = g.value() == null ? "CLASS_OR_MYSTERIES" : g.value();
+        // Lista da classe de onde vem a escolha (multiclasse: a da outra classe).
+        String classId = b.sourceClass.getOrDefault(c.source(), b.klass == null ? null : b.klass.id());
+        List<String> options = new ArrayList<>();
+        Map<String, String> names = new LinkedHashMap<>();
+        for (RuleMagic.Spell sp : magic.spellsOrEmpty()) {
+            if (sp.level() == null || (level == 0 ? sp.level() != 0 : sp.level() < 1 || sp.level() > level)) continue;
+            if (!inList(sp, from, classId, mysteries)) continue;
+            if (taken.contains(sp.id()) && !c.picked().contains(sp.id())) continue;
+            options.add(sp.id());
+            names.put(sp.id(), spellName(sp));
+        }
+        int count = g.count() == null ? 1 : g.count();
+        String label = orLabel(g, level == 0 ? "Truques: escolha " + count : "Magias até o " + level + "º nível: escolha " + count);
+        String note = null;
+        List<String> selected;
+        if (options.isEmpty()) {
+            // Sem Mistério ainda (Arcanista) ou sem lista: avisa, sem bloquear com "faltam escolhas".
+            note = "MYSTERIES".equals(from) ? "Escolha um Mistério para ver as magias." : "Nenhuma magia disponível nesta lista.";
+            selected = List.of();
+            if (!c.picked().isEmpty()) b.errors.add("Opção inválida em \"" + label + "\".");
+        } else {
+            selected = choose(c.picked(), options, count, label, b.errors);
+        }
+        taken.addAll(selected);
+        selected.forEach(id -> {
+            b.features.add(new Sourced<>(Grant.spell(byId.get(id)), c.source()));
+            known.add(new Known(id, c.source(), classId, from));
+        });
+        b.choices.add(new ChoiceLine(c.key(), g.type(), label, count, options, selected, c.source(), note, names));
+    }
+
+    // Chaves da troca de magia conhecida do nível N: a que sai e a que entra.
+    static final String SWAP_OUT = "spell-swap:out", SWAP_IN = "spell-swap:in";
+
+    // Ao ganhar um nível numa classe que conhece magias, pode trocar uma magia conhecida dela (1º nível ou mais, escolhida
+    // numa SPELL_CHOICE) por outra da mesma lista, até o maior nível de magia que a classe já escolhe. Opcional.
+    private void spellSwap(int lv, Map<String, List<String>> picks, Build b, RuleMagic magic, Set<String> mysteries,
+                           Map<String, RuleMagic.Spell> byId, Set<String> taken, List<Known> known) {
+        String classId = b.classLevelAt.entrySet().stream().filter(e -> e.getValue().contains(lv)).map(Map.Entry::getKey).findFirst().orElse(null);
+        if (classId == null) return;
+        List<Known> swappable = known.stream()
+                .filter(k -> classId.equals(k.classId()) && byId.get(k.spellId()) != null && byId.get(k.spellId()).level() != null && byId.get(k.spellId()).level() >= 1)
+                .toList();
+        if (swappable.isEmpty()) return;
+        int maxLevel = b.spellChoices.stream()
+                .filter(c -> levelOfKey(c.key()) <= lv && classId.equals(b.sourceClass.getOrDefault(c.source(), b.klass == null ? null : b.klass.id())))
+                .mapToInt(c -> c.grant().spellLevel() == null ? 0 : c.grant().spellLevel()).max().orElse(0);
+        Set<String> froms = new LinkedHashSet<>();
+        swappable.forEach(k -> froms.add(k.from()));
+        List<String> inOptions = new ArrayList<>();
+        Map<String, String> inNames = new LinkedHashMap<>();
+        for (RuleMagic.Spell sp : magic.spellsOrEmpty()) {
+            if (sp.level() == null || sp.level() < 1 || sp.level() > maxLevel || taken.contains(sp.id())) continue;
+            if (froms.stream().noneMatch(f -> inList(sp, f, classId, mysteries))) continue;
+            inOptions.add(sp.id());
+            inNames.put(sp.id(), spellName(sp));
+        }
+        List<String> outOptions = swappable.stream().map(Known::spellId).toList();
+        Map<String, String> outNames = new LinkedHashMap<>();
+        outOptions.forEach(id -> outNames.put(id, spellName(byId.get(id))));
+        String prefix = "level:" + lv + ":";
+        String source = "Troca de magia (" + lv + "º nível)";
+        RuleClass k = b.classById.get(classId);
+        String className = k == null ? classId : k.name();
+        List<String> out = picks.getOrDefault(prefix + SWAP_OUT, List.of()).stream().filter(outOptions::contains).distinct().toList();
+        List<String> in = picks.getOrDefault(prefix + SWAP_IN, List.of()).stream().filter(inOptions::contains).distinct().toList();
+        String outLabel = "Trocar uma magia de " + className + " (opcional): a que sai";
+        String inLabel = "Trocar uma magia de " + className + " (opcional): a que entra";
+        if (out.size() != picks.getOrDefault(prefix + SWAP_OUT, List.of()).size() || out.size() > 1) b.errors.add("Opção inválida em \"" + outLabel + "\".");
+        else if (in.size() != picks.getOrDefault(prefix + SWAP_IN, List.of()).size() || in.size() > 1) b.errors.add("Opção inválida em \"" + inLabel + "\".");
+        else if (out.size() != in.size()) b.errors.add("Troca de magia do " + lv + "º nível: escolha a que sai e a que entra (ou nenhuma).");
+        else if (out.size() == 1) {
+            Known old = swappable.stream().filter(x -> x.spellId().equals(out.getFirst())).findFirst().orElseThrow();
+            String oldName = byId.get(old.spellId()).name();
+            b.features.removeIf(f -> f.source().equals(old.source()) && oldName.equals(f.value().name()) && f.value().abilityType() == AbilityType.SPELL);
+            known.remove(old);
+            taken.remove(old.spellId());
+            b.sourceClass.put(source, classId);
+            b.features.add(new Sourced<>(Grant.spell(byId.get(in.getFirst())), source));
+            known.add(new Known(in.getFirst(), source, classId, old.from()));
+            taken.add(in.getFirst());
+        }
+        String note = "Ao subir de nível, pode trocar uma magia conhecida por outra da mesma lista.";
+        b.choices.add(new ChoiceLine(prefix + SWAP_OUT, GrantType.SPELL_CHOICE, outLabel, 1, outOptions, out, source, note, outNames));
+        b.choices.add(new ChoiceLine(prefix + SWAP_IN, GrantType.SPELL_CHOICE, inLabel, 1, inOptions, in, source, note, inNames));
     }
 
     // Itens de uma opção de equipamento ("besta-leve+virotes-de-besta") na lista do equipamento inicial.
@@ -1239,10 +1327,39 @@ public class CreationService {
                     // "level:N:..." como as outras daquele nível.
                     boolean keyed = res.repeats() || key.startsWith("level:") || key.contains("@level:");
                     if (!b.resourceIds.add(res.id()) && !res.repeats()) continue;
-                    sources.add(new Source("resource:" + res.id() + (keyed ? "@" + key : ""), resourceKindLabel(res.kind()) + ": " + res.name(), resourceGrants(res)));
+                    String label = resourceKindLabel(res.kind()) + ": " + res.name();
+                    sources.add(new Source("resource:" + res.id() + (keyed ? "@" + key : ""), label, resourceGrants(res)));
+                    // Recurso escolhido pela classe (Técnica do Combatente): as tabelas dele usam o nível nessa classe,
+                    // as magias dele vêm da lista dela e os levels dele entram pelo nível nela.
+                    String classId = b.sourceClass.get(src.label());
+                    if (classId == null) continue;
+                    b.sourceClass.put(label, classId);
+                    resourceLevelSources(res, label, classId, levelOfKey(key), sources, b);
                 }
             }
         }
+    }
+
+    // Ganhos do recurso pelo nível na classe já alcançado. Cada um vale no nível do personagem em que a classe chegou
+    // lá, ou no da escolha do recurso, se veio depois (a chave "level:N:..." põe as escolhas internas naquele nível).
+    private static void resourceLevelSources(RuleResource res, String label, String classId, int chosenAt, List<Source> sources, Build b) {
+        List<Integer> at = b.classLevelAt.getOrDefault(classId, List.of());
+        for (RuleLevel l : res.levelsOrEmpty()) {
+            if (l.level() == null || l.level() > at.size()) continue;
+            int charLevel = Math.max(at.get(l.level() - 1), chosenAt);
+            String levelLabel = label + " (" + l.level() + "º nível)";
+            b.sourceClass.put(levelLabel, classId);
+            sources.add(new Source((charLevel > 1 ? "level:" + charLevel + ":" : "") + "resource:" + res.id() + ":" + l.level(),
+                    levelLabel, l.grants() == null ? List.of() : l.grants()));
+        }
+    }
+
+    // Nível do personagem de uma chave de escolha ("level:5:..." ou "resource:x@level:5:..."); 1 = criação.
+    private static final Pattern LEVEL_KEY = Pattern.compile("(?:^|@)level:(\\d+):");
+
+    static int levelOfKey(String key) {
+        Matcher m = LEVEL_KEY.matcher(key);
+        return m.find() ? Integer.parseInt(m.group(1)) : 1;
     }
 
     // A habilidade com o texto do recurso (pré-requisito, execução e componentes no topo) + as concessões dele.
@@ -1335,6 +1452,42 @@ public class CreationService {
         g.usesByLevel().forEach((lv, n) -> table.put(lv, n == null ? null : Math.max(0, n - inactive)));
         Grant reduced = g.withUsesByLevel(table, g.description() + "\n\nKi inativado pelos Vel: " + inactive + " ponto(s).");
         b.features.set(b.features.indexOf(ki.get()), new Sourced<>(reduced, ki.get().source()));
+    }
+
+    // Habilidade com a Mana de cada classe conjuradora (Acólito, Arcanista, subclasses, Técnica Combatente Arcano).
+    static final String MANA = "Pontos de Mana";
+
+    // Multiclasse (Capítulo 3): a Mana é a soma da Mana de cada classe conjuradora, cada uma pela própria tabela e pelo
+    // nível nela. Duas na mesma classe (Combatente Arcano e o Aprimorado) valem a maior. Fica uma habilidade só.
+    private static void mergeMana(Build b) {
+        Map<String, Sourced<Grant>> best = new LinkedHashMap<>();
+        Map<String, Integer> points = new LinkedHashMap<>();
+        for (Sourced<Grant> f : b.features) {
+            if (!MANA.equals(f.value().name())) continue;
+            String group = b.sourceClass.getOrDefault(f.source(), f.source());
+            Integer n = usesFor(f.value(), b.proficiency(), b.scale(f.source()), b.roundUp, b::modifier);
+            int value = n == null ? 0 : n;
+            if (!points.containsKey(group) || value > points.get(group)) {
+                best.put(group, f);
+                points.put(group, value);
+            }
+        }
+        if (best.isEmpty()) return;
+        Sourced<Grant> first = best.values().iterator().next();
+        Grant merged = first.value();
+        if (best.size() > 1) {
+            int total = points.values().stream().mapToInt(Integer::intValue).sum();
+            List<String> parts = new ArrayList<>();
+            points.forEach((group, n) -> {
+                RuleClass k = b.classById.get(group);
+                parts.add((k == null ? group : k.name()) + " " + n);
+            });
+            merged = merged.withUsesByLevel(Map.of("1", total), merged.description()
+                    + "\n\nMulticlasse: a Mana é a soma da de cada classe conjuradora (" + String.join(" + ", parts) + " = " + total + ").");
+        }
+        int at = b.features.indexOf(first);
+        b.features.removeIf(f -> MANA.equals(f.value().name()));
+        b.features.add(Math.min(at, b.features.size()), new Sourced<>(merged, first.source()));
     }
 
     static String resourceLabel(Grant g) {
@@ -1700,6 +1853,9 @@ public class CreationService {
         return g.usesFormula() == UsesFormula.PROFICIENCY ? proficiency : half(proficiency, roundUp);
     }
 
+    // HP_BONUS com value HALF_HIT_DIE: metade do dado de vida (Aprimoramento Robusto).
+    static final String HALF_HIT_DIE = "HALF_HIT_DIE";
+
     static int half(int value, boolean roundUp) {
         return roundUp ? (value + 1) / 2 : value / 2;
     }
@@ -1821,6 +1977,8 @@ public class CreationService {
         boolean roundUp;
         final Map<Attribute, Integer> base = new EnumMap<>(Attribute.class);
         final Map<Attribute, Integer> bonus = new EnumMap<>(Attribute.class);
+        // Limite de cada atributo acima de 20 (ATTRIBUTE_CHOICE com value: Conjurador Eficiente, até 22).
+        final Map<Attribute, Integer> attributeCap = new EnumMap<>(Attribute.class);
         PointBuyStatus pointBuy;
         final Map<SkillType, String> skills = new LinkedHashMap<>();
         // Perícias com especialidade (sempre entre as de skills) e as concessões decididas no fim (ver expertise()).
@@ -1879,6 +2037,8 @@ public class CreationService {
         final Map<String, RuleClass> classById = new LinkedHashMap<>();
         final Map<String, RuleLineage> subclassByClass = new LinkedHashMap<>();
         final Map<String, String> sourceClass = new LinkedHashMap<>();
+        // Em que nível do personagem cada nível de classe entrou (classe → [nível do personagem no 1º, no 2º...]).
+        final Map<String, List<Integer>> classLevelAt = new LinkedHashMap<>();
         final List<Integer> hpRolls = new ArrayList<>();
         // Classes que entraram por multiclasse (conferir o pré-requisito no fim, com os atributos prontos).
         final List<RuleClass> multiclassed = new ArrayList<>();
@@ -1900,7 +2060,8 @@ public class CreationService {
             if (klass == null) return 0;
             int con = modifier(Attribute.CONSTITUTION);
             // HP_BONUS com perLevel soma em cada nível (Pacto Carmesim); sem, uma vez só.
-            int bonus = hpGrants.stream().mapToInt(g -> hpBonusFor(g, proficiency(), roundUp, this::modifier)
+            // HALF_HIT_DIE (Robusto): metade do dado de vida da primeira classe, uma vez.
+            int bonus = hpGrants.stream().mapToInt(g -> HALF_HIT_DIE.equals(g.value()) ? klass.hitDie() / 2 : hpBonusFor(g, proficiency(), roundUp, this::modifier)
                     * (Boolean.TRUE.equals(g.perLevel()) ? level : 1)).sum();
             int hp = Math.max(1, klass.hitDie() + con);
             for (int roll : hpRolls) hp += Math.max(1, roll + con);

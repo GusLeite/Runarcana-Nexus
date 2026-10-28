@@ -30,7 +30,10 @@ public record RuleResource(
         // Usos da habilidade do recurso (Runas: metade do bônus de proficiência por descanso longo).
         UsesRule uses,
         // Pode ser escolhido de novo em outra escolha (Aprimoramentos "Mais Inimigos", o aumento de atributo).
-        Boolean repeatable
+        Boolean repeatable,
+        // Ganhos pelo NÍVEL NA CLASSE que escolheu o recurso (Técnica Combatente Arcano: magias conhecidas do 3º nível de
+        // Combatente em diante). Escolhido depois do nível, o ganho entra junto com a escolha.
+        List<RuleLevel> levels
 ) {
     public boolean repeats() {
         return Boolean.TRUE.equals(repeatable);
@@ -42,6 +45,10 @@ public record RuleResource(
 
     public List<Grant> grantsOrEmpty() {
         return grants == null ? List.of() : grants;
+    }
+
+    public List<RuleLevel> levelsOrEmpty() {
+        return levels == null ? List.of() : levels;
     }
 
     public int costOrOne() {

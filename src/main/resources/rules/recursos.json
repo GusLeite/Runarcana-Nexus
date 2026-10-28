@@ -3279,7 +3279,7 @@
           "type": "FEATURE",
           "abilityType": "PASSIVE",
           "name": "Combatente Conjurador",
-          "description": "Você conjura magias da lista de Combatente (Capítulo 10), seguindo a tabela Combatente Conjurador até o 11º nível (o Combatente Arcano Aprimorado libera o resto e magias de 3º e 4º nível). Truques / magias conhecidas / nível máximo: 1º 2/–/– · 3º 2/3/1º · 4º 2/4 · 5º 3/4 · 7º 3/5 · 8º 3/6/2º · 10º 4/7 · 11º 4/8 · (Aprimorado) 13º 4/9/3º · 14º 4/10 · 16º 4/11 · 19º 4/12/4º · 20º 4/13. Ao subir de nível, pode trocar uma magia conhecida. Não pode usar listas de outra Classe.\n\nAtributo de conjuração: Inteligência. CD = 8 + proficiência + mod. de Inteligência; ataque de magia = proficiência + mod. de Inteligência. Esta técnica não pode ser trocada."
+          "description": "Você conjura magias da lista de Combatente (Capítulo 10), seguindo a tabela Combatente Conjurador até o 11º nível (o Combatente Arcano Aprimorado libera o resto e magias de 3º e 4º nível). Truques / magias conhecidas / nível máximo: 1º 2/–/– · 3º 2/3/1º · 4º 2/4 · 5º 3/4 · 7º 3/5 · 8º 3/6/2º · 10º 4/7 · 11º 4/8 · (Aprimorado) 13º 4/9/3º · 14º 4/10 · 16º 4/11 · 19º 4/12/4º · 20º 4/13. Ao subir de nível de Combatente, pode trocar uma magia conhecida. Não pode usar listas de outra Classe.\n\nAtributo de conjuração: Inteligência. CD = 8 + proficiência + mod. de Inteligência; ataque de magia = proficiência + mod. de Inteligência. Esta técnica não pode ser trocada."
         },
         {
           "type": "FEATURE",
@@ -3306,6 +3306,99 @@
           "value": "CLASS",
           "label": "Truques de Combatente: escolha 2"
         }
+      ],
+      "levels": [
+        {
+          "level": 3,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 3,
+              "spellLevel": 1,
+              "value": "CLASS",
+              "label": "Magia de Combatente até o 1º nível: escolha 3"
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 1,
+              "value": "CLASS",
+              "label": "Magia de Combatente até o 1º nível: escolha 1"
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 0,
+              "value": "CLASS",
+              "label": "Truque de Combatente: escolha 1"
+            }
+          ]
+        },
+        {
+          "level": 7,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 1,
+              "value": "CLASS",
+              "label": "Magia de Combatente até o 1º nível: escolha 1"
+            }
+          ]
+        },
+        {
+          "level": 8,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 2,
+              "value": "CLASS",
+              "label": "Magia de Combatente até o 2º nível: escolha 1"
+            }
+          ]
+        },
+        {
+          "level": 10,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 0,
+              "value": "CLASS",
+              "label": "Truque de Combatente: escolha 1"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 2,
+              "value": "CLASS",
+              "label": "Magia de Combatente até o 2º nível: escolha 1"
+            }
+          ]
+        },
+        {
+          "level": 11,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 2,
+              "value": "CLASS",
+              "label": "Magia de Combatente até o 2º nível: escolha 1"
+            }
+          ]
+        }
       ]
     },
     {
@@ -3325,7 +3418,98 @@
         "resources": [
           "combatente-arcano"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Pontos de Mana",
+          "description": "Mana do Combatente Conjurador. Recupera o mod. de Inteligência num descanso longo e toda a Mana num descanso pleno. Com o Combatente Arcano Aprimorado, a tabela segue até o 20º nível.",
+          "usesByLevel": {
+            "3": 4,
+            "4": 6,
+            "5": 8,
+            "6": 9,
+            "7": 10,
+            "8": 13,
+            "9": 14,
+            "10": 15,
+            "11": 16,
+            "12": 17,
+            "13": 20,
+            "14": 21,
+            "15": 22,
+            "16": 23,
+            "17": 24,
+            "18": 25,
+            "19": 28,
+            "20": 30
+          },
+          "recharge": "LONG_REST"
+        }
+      ],
+      "levels": [
+        {
+          "level": 13,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 3,
+              "value": "CLASS",
+              "label": "Magia de Combatente até o 3º nível: escolha 1"
+            }
+          ]
+        },
+        {
+          "level": 14,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 3,
+              "value": "CLASS",
+              "label": "Magia de Combatente até o 3º nível: escolha 1"
+            }
+          ]
+        },
+        {
+          "level": 16,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 3,
+              "value": "CLASS",
+              "label": "Magia de Combatente até o 3º nível: escolha 1"
+            }
+          ]
+        },
+        {
+          "level": 19,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 4,
+              "value": "CLASS",
+              "label": "Magia de Combatente até o 4º nível: escolha 1"
+            }
+          ]
+        },
+        {
+          "level": 20,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 4,
+              "value": "CLASS",
+              "label": "Magia de Combatente até o 4º nível: escolha 1"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "combatente-montado",

@@ -264,6 +264,16 @@
             {
               "type": "HP_BONUS",
               "amount": 1
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Pontos de Mana",
+              "description": "Mana do Arcanista de teste.",
+              "usesByLevel": {
+                "2": 3
+              },
+              "recharge": "LONG_REST"
             }
           ]
         },
@@ -348,7 +358,7 @@
         {
           "type": "FEATURE",
           "abilityType": "ABILITY",
-          "name": "Mana Teste",
+          "name": "Pontos de Mana",
           "description": "Usos pelo nível.",
           "usesByLevel": {
             "1": 4,
@@ -417,7 +427,21 @@
             "value": "LIGHT"
           }
         ]
-      }
+      },
+      "levels": [
+        {
+          "level": 2,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 1,
+              "value": "CLASS",
+              "label": "Magia do Mercurial: escolha 1"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "BRUTE",
