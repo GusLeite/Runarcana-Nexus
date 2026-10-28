@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, fetchSheet, rest as restApi, setAbilityUses, setHp as setHpApi } from '../../api/character.js'
+import { chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, fetchPreparation, fetchSheet, rest as restApi, setAbilityUses, setHp as setHpApi } from '../../api/character.js'
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
 import { rollCheck, rollDice } from '../../data/rules.js'
 import SheetHero from './SheetHero.jsx'
+import PrepareSpells from './PrepareSpells.jsx'
 import OverviewTab from './OverviewTab.jsx'
 import AbilitiesTab from './AbilitiesTab.jsx'
 import Inventory from './Inventory.jsx'
@@ -143,16 +144,33 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     setAbilityUses(token, ability.id, usesLeft).catch(err => { setAbilities(before); fail(err) })
   }, [abilities, token, fail])
 
-  const rest = useCallback(type => {
+  // Magias preparadas (Acólito, Xamã): o descanso longo abre a escolha antes de descansar.
+  const [preparation, setPreparation] = useState(null)
+  const [preparing, setPreparing] = useState(false)
+  useEffect(() => {
+    if (state.status !== 'ready') return
+    fetchPreparation(token).then(setPreparation).catch(() => setPreparation(null))
+  }, [token, state.status])
+  const prepares = preparation?.classes?.length > 0
+
+  const doRest = useCallback((type, prepared) => {
     setBusy(true)
-    restApi(token, type)
+    restApi(token, type, prepared)
       .then(list => {
         setAbilities(list)
-        setToast(type === 'LONG' ? 'Descanso longo: todos os usos voltaram.' : 'Descanso curto: usos recuperados.')
+        setPreparing(false)
+        setToast(type === 'LONG' ? (prepared ? 'Descanso longo: usos de volta e magias preparadas.' : 'Descanso longo: todos os usos voltaram.')
+          : 'Descanso curto: usos recuperados.')
+        if (prepared) fetchPreparation(token).then(setPreparation).catch(() => {})
       })
       .catch(fail)
       .finally(() => setBusy(false))
   }, [token, fail])
+
+  const rest = useCallback(type => {
+    if (type === 'LONG' && prepares) setPreparing(true)
+    else doRest(type)
+  }, [prepares, doRest])
 
   // ---------- documentos ----------
 
@@ -306,7 +324,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
           <div className="sheet-col wide" key={tab}>
             <section className="card" style={{ '--i': 1 }}>
               {tab === 'abilities' && (
-                <AbilitiesTab abilities={abilities} onSetUses={setUses} onRest={rest} onRollDice={rollExpr} busy={busy} />
+                <AbilitiesTab abilities={abilities} onSetUses={setUses} onRest={rest} onRollDice={rollExpr} busy={busy} prepares={prepares} />
               )}
               {tab === 'inventory' && <Inventory items={state.sheet.inventory} strength={sheet.str} />}
               {tab === 'documents' && (
@@ -330,6 +348,9 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       </main>
 
       <DiceRoll roll={current} onClose={closeRoll} />
+      {preparing && preparation && (
+        <PrepareSpells preparation={preparation} busy={busy} onConfirm={picks => doRest('LONG', picks)} onCancel={() => setPreparing(false)} />
+      )}
       {toast && <div key={toast} className="toast" role="status">{toast}</div>}
     </div>
   )

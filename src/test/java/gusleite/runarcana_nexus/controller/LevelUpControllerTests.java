@@ -167,6 +167,52 @@ class LevelUpControllerTests {
                 .andExpect(jsonPath("$.preview.errors", hasItem("Multiclasse com Mercurial Teste: pré-requisito Destreza 13.")));
     }
 
+    @Test
+    void magiasPreparadasNoDescansoLongo() throws Exception {
+        long id = createNyx();
+        String player = login("gaudron");
+        // Arcanista de teste prepara INT (+3) + nível (1) = 4, da lista dele até o 1º nível.
+        mvc.perform(get("/character/me/preparation").header("Authorization", "Bearer " + player))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.classes[0].classId").value("ARCANIST"))
+                .andExpect(jsonPath("$.classes[0].limit").value(4))
+                .andExpect(jsonPath("$.classes[0].maxSpellLevel").value(1))
+                .andExpect(jsonPath("$.classes[0].options.length()").value(1))
+                .andExpect(jsonPath("$.classes[0].options[0].key").value("spell:t-escudo-arcano"))
+                .andExpect(jsonPath("$.classes[0].prepared.length()").value(0));
+        // Magia de 2º nível e classe que não prepara: recusadas, e o descanso não acontece.
+        rest(player, "{\"type\":\"LONG\",\"prepared\":{\"ARCANIST\":[\"spell:t-misseis\"]}}")
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Há magia que Arcanista não pode preparar agora."));
+        rest(player, "{\"type\":\"LONG\",\"prepared\":{\"BRUTE\":[]}}")
+                .andExpect(status().isBadRequest());
+
+        rest(player, "{\"type\":\"LONG\",\"prepared\":{\"ARCANIST\":[\"spell:t-escudo-arcano\"]}}")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[?(@.name == 'Escudo Arcano Teste')].prepared").value(true));
+        mvc.perform(get("/character/me/preparation").header("Authorization", "Bearer " + player))
+                .andExpect(jsonPath("$.classes[0].prepared[0]").value("spell:t-escudo-arcano"));
+        // O descanso curto não troca as preparadas.
+        rest(player, "{\"type\":\"SHORT\",\"prepared\":{\"ARCANIST\":[]}}")
+                .andExpect(jsonPath("$[?(@.name == 'Escudo Arcano Teste')].prepared").value(true));
+
+        // A subida de nível mantém as preparadas; no 3º nível, as de 2º entram nas opções.
+        levelUp(login("mestre"), id, "{\"levels\":[{\"hpRoll\":3},{\"hpRoll\":3}]}").andExpect(status().isOk());
+        mvc.perform(get("/character/me/preparation").header("Authorization", "Bearer " + player))
+                .andExpect(jsonPath("$.classes[0].limit").value(6))
+                .andExpect(jsonPath("$.classes[0].maxSpellLevel").value(2))
+                .andExpect(jsonPath("$.classes[0].options[*].key", hasItem("spell:t-misseis")))
+                .andExpect(jsonPath("$.classes[0].prepared[0]").value("spell:t-escudo-arcano"));
+        // Lista vazia desprepara tudo.
+        rest(player, "{\"type\":\"LONG\",\"prepared\":{\"ARCANIST\":[]}}")
+                .andExpect(jsonPath("$[?(@.name == 'Escudo Arcano Teste')]").isEmpty());
+    }
+
+    private ResultActions rest(String token, String body) throws Exception {
+        return mvc.perform(post("/character/me/rest").header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON).content(body));
+    }
+
     private long createNyx() throws Exception {
         return create("gaudron", NYX);
     }

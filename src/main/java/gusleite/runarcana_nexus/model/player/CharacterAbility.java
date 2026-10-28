@@ -54,4 +54,9 @@ public class CharacterAbility {
     // De onde veio pelo assistente ("Classe: Bruto", "Aprimoramento: Atleta"); nulo = cadastrada pelo mestre.
     // A subida de nível refaz as que têm fonte e não mexe nas do mestre.
     private String source;
+
+    // Magia que se prepara (Acólito, Xamã): true = preparada, false = conhecida mas não preparada, nulo = não se prepara.
+    private Boolean prepared;
+    // Id da magia no rules/magias.json (as preparadas do Acólito).
+    private String spellId;
 }

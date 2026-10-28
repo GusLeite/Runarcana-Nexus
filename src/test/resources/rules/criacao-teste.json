@@ -302,6 +302,15 @@
           "INTELLIGENCE": 13
         },
         "anotherAttribute": 13
+      },
+      "preparation": {
+        "attribute": "INTELLIGENCE",
+        "levels": "FULL",
+        "from": "CLASS_OR_MYSTERIES",
+        "maxSpellLevel": {
+          "1": 1,
+          "3": 2
+        }
       }
     },
     {

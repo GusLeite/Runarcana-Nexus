@@ -2,6 +2,13 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-27 — Magias preparadas do Acólito e do Xamã (`feature/character-sheet`)
+- Decisão da mesa: o jogador escolhe as preparadas, só no descanso longo.
+- `preparation` nas classes (`criacao.json`): Acólito prepara SAB + nível de Acólito da lista dele e dos Mistérios, até o nível máximo de magia; Xamã prepara SAB + metade do nível de Xamã entre os feitiços conhecidos.
+- `GET /character/me/preparation` e `prepared` no `POST /character/me/rest` (só no longo). `CharacterAbility.prepared`/`spellId`, `AbilityResponse.prepared`.
+- Ficha: o Descanso longo abre a escolha das preparadas (`PrepareSpells.jsx`); marcas "preparada"/"não preparada" na aba Magias.
+- Testes: `magiasPreparadasNoDescansoLongo`. Conferido no sandbox (Acólito prepara Bênção; Xamã de 2º nível prepara 1 dos 3 feitiços conhecidos; acima do limite, 400).
+
 ## 2026-10-27 — Escudo somando na CA (`feature/character-sheet`)
 - Os escudos do inventário (achados pelo `catalogId` no `itens.json`: Escudo Leve +1, Pesado e de Torre +2) somam na CA de qualquer defesa. Sem escolha, vale o de maior bônus; `Character.shield` guarda a escolha e `PATCH /character/me/shield` troca (`NONE` = sem escudo). `ArmorClassResponse` ganhou `shield` e `shields`; sem proficiência com escudos, o bônus vem com o aviso.
 - Ficha: parte **Escudo** no menu da Classe de Armadura.

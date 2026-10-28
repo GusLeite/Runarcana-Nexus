@@ -492,3 +492,16 @@ input.note-title{padding:10px 12px;font-family:'Cinzel',Georgia,serif;font-size:
 .book-table th{font-family:'Cinzel',Georgia,serif;font-size:12px;letter-spacing:.06em;color:var(--gold-hi);text-align:left;border-bottom:1px solid var(--gold-soft);padding:6px 8px}
 .book-table td{padding:6px 8px;border-bottom:1px solid rgba(200,162,74,.12);vertical-align:top}
 .book .doc-view{max-height:calc(100vh - 120px);overflow-y:auto}
+
+/* Magias preparadas (PrepareSpells) */
+.prep-tag{margin-left:8px;padding:0 6px;border:1px solid rgba(200,162,74,.3);font-style:normal;font-size:11px;letter-spacing:.06em;color:var(--muted)}
+.prep-tag.on{border-color:rgba(143,124,255,.6);color:#b9adff}
+.abl-row.unprepared{opacity:.55}
+.prep-overlay{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:16px;background:rgba(1,10,19,.78);animation:prep-in .25s ease both}
+@keyframes prep-in{from{opacity:0}}
+.prep{width:min(760px,100%);max-height:min(86vh,900px);display:flex;flex-direction:column;padding:18px 20px;outline:none}
+.prep-search{flex:none;width:100%;margin:4px 0 10px}
+.prep-body{overflow:auto;display:flex;flex-direction:column;gap:16px;padding-right:4px}
+.prep-class .choice-group{margin-top:10px}
+.prep-foot{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-top:14px}
+.prep-foot .btn{width:auto;min-width:180px}

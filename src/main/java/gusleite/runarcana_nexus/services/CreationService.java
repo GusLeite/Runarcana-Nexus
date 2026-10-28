@@ -41,6 +41,7 @@ import gusleite.runarcana_nexus.record.CreationRequest;
 import gusleite.runarcana_nexus.record.CreationRequest.LevelPick;
 import gusleite.runarcana_nexus.record.LevelUpPreview;
 import gusleite.runarcana_nexus.record.LevelUpRequest;
+import gusleite.runarcana_nexus.record.PreparationResponse;
 import gusleite.runarcana_nexus.record.SpeedLine;
 import gusleite.runarcana_nexus.record.CreationRequest.HeritagePick;
 import gusleite.runarcana_nexus.record.CreationRequest.TraitPick;
@@ -200,6 +201,7 @@ public class CreationService {
         for (Sourced<Grant> f : b.features) {
             CharacterAbility a = abilityFrom(c, f.value(), b.proficiency(), b.scale(f.source()));
             a.setSource(f.source());
+            markPreparable(a, f, b);
             abilities.save(a);
         }
         startingEquipment.give(c, b.equipment);
@@ -353,6 +355,7 @@ public class CreationService {
                             .findFirst().orElse(null));
             if (old == null) {
                 fresh.setSource(f.source());
+                markPreparable(fresh, f, b);
                 abilities.save(fresh);
                 continue;
             }
@@ -372,7 +375,113 @@ public class CreationService {
             old.setSource(f.source());
             abilities.save(old);
         }
-        existing.stream().filter(a -> a.getSource() != null).forEach(abilities::delete);
+        // As magias preparadas do Acólito não vêm do assistente: ficam até o próximo descanso longo.
+        existing.stream().filter(a -> a.getSource() != null && !a.getSource().startsWith(PREPARED)).forEach(abilities::delete);
+    }
+
+    // ---------- Magias preparadas (Acólito, Xamã) ----------
+
+    // Fonte das magias preparadas da lista da classe ("Magias preparadas: Acólito").
+    static final String PREPARED = "Magias preparadas: ";
+
+    // Feitiço conhecido (1º nível ou mais) de uma classe que prepara entre os conhecidos (Xamã): nasce não preparado.
+    private static void markPreparable(CharacterAbility a, Sourced<Grant> f, Build b) {
+        if (a.getType() != AbilityType.SPELL || a.getSpellLevel() == null || a.getSpellLevel() < 1) return;
+        RuleClass k = b.classById.get(b.sourceClass.get(f.source()));
+        if (k != null && k.preparation() != null && RuleClass.Preparation.KNOWN.equals(k.preparation().from())) a.setPrepared(false);
+    }
+
+    // O que o jogador pode preparar agora, por classe que prepara.
+    @Transactional(readOnly = true)
+    public PreparationResponse preparation(Account account) {
+        return preparationOf(characterService.characterOf(account));
+    }
+
+    // Troca as preparadas (só no descanso longo). picks: classe → chaves das opções; classe fora de picks não muda.
+    @Transactional
+    public void prepare(Account account, Map<String, List<String>> picks) {
+        Character c = characterService.characterOf(account);
+        PreparationResponse now = preparationOf(c);
+        Map<String, RuleMagic.Spell> spells = new LinkedHashMap<>();
+        if (rules.catalog().magic() != null) rules.catalog().magic().spellsOrEmpty().forEach(sp -> spells.put(sp.id(), sp));
+        List<CharacterAbility> mine = abilities.findByCharacterOrderByIdAsc(c);
+        for (Map.Entry<String, List<String>> e : picks.entrySet()) {
+            PreparationResponse.PreparingClass pc = now.classes().stream().filter(x -> x.classId().equalsIgnoreCase(e.getKey()))
+                    .findFirst().orElseThrow(() -> ApiException.badRequest("Sua ficha não prepara magias dessa classe."));
+            List<String> chosen = List.copyOf(new LinkedHashSet<>(e.getValue() == null ? List.<String>of() : e.getValue()));
+            if (chosen.size() > pc.limit()) {
+                throw ApiException.badRequest("Você prepara no máximo " + pc.limit() + " magia(s) de " + pc.name() + ".");
+            }
+            Set<String> valid = new LinkedHashSet<>();
+            pc.options().forEach(o -> valid.add(o.key()));
+            if (!valid.containsAll(chosen)) throw ApiException.badRequest("Há magia que " + pc.name() + " não pode preparar agora.");
+            if (pc.maxSpellLevel() == null) {
+                // Entre os conhecidos: só a marca muda.
+                for (CharacterAbility a : mine) {
+                    if (!valid.contains("ability:" + a.getId())) continue;
+                    a.setPrepared(chosen.contains("ability:" + a.getId()));
+                    abilities.save(a);
+                }
+                continue;
+            }
+            String label = PREPARED + pc.name();
+            mine.stream().filter(a -> label.equals(a.getSource())).forEach(abilities::delete);
+            int level = c.getClassLevels().stream().filter(l -> l.getClassId().equals(pc.classId())).mapToInt(ClassLevel::getLevel)
+                    .findFirst().orElse(c.getLevel());
+            for (String key : chosen) {
+                RuleMagic.Spell sp = spells.get(key.substring("spell:".length()));
+                CharacterAbility a = abilityFrom(c, Grant.spell(sp), c.getProficiencyBonus(), level);
+                a.setSource(label);
+                a.setPrepared(true);
+                a.setSpellId(sp.id());
+                abilities.save(a);
+            }
+        }
+    }
+
+    private PreparationResponse preparationOf(Character c) {
+        Build b = c.getBuild() == null ? null : evaluate(buildOf(c));
+        Map<String, Integer> levels = new LinkedHashMap<>();
+        if (b != null) levels.putAll(b.classLevels);
+        else levels.put(c.getCharacterClass().getClassName().name(), c.getLevel());
+        List<CharacterAbility> mine = abilities.findByCharacterOrderByIdAsc(c);
+        RuleMagic magic = rules.catalog().magic();
+        List<PreparationResponse.PreparingClass> out = new ArrayList<>();
+        levels.forEach((id, lvl) -> {
+            RuleClass k = rules.characterClass(id).orElse(null);
+            if (k == null || k.preparation() == null) return;
+            RuleClass.Preparation p = k.preparation();
+            int limit = Math.max(1, c.getModifier(p.attribute()) + (RuleClass.Preparation.HALF.equals(p.levels()) ? lvl / 2 : lvl));
+            List<PreparationResponse.Option> options = new ArrayList<>();
+            List<String> prepared = new ArrayList<>();
+            Integer max = null;
+            if (RuleClass.Preparation.KNOWN.equals(p.from())) {
+                for (CharacterAbility a : mine) {
+                    if (a.getPrepared() == null || b == null || !id.equals(b.sourceClass.get(a.getSource()))) continue;
+                    options.add(new PreparationResponse.Option("ability:" + a.getId(), a.getName(), a.getSpellLevel() == null ? 1 : a.getSpellLevel()));
+                    if (a.getPrepared()) prepared.add("ability:" + a.getId());
+                }
+            } else {
+                int top = 0;
+                if (p.maxSpellLevel() != null) {
+                    for (Map.Entry<String, Integer> e : p.maxSpellLevel().entrySet()) {
+                        if (Integer.parseInt(e.getKey()) <= lvl) top = Math.max(top, e.getValue());
+                    }
+                }
+                max = top;
+                Set<String> mysteries = b == null ? Set.of() : b.mysteries;
+                for (RuleMagic.Spell sp : magic == null ? List.<RuleMagic.Spell>of() : magic.spellsOrEmpty()) {
+                    if (sp.level() == null || sp.level() < 1 || sp.level() > top) continue;
+                    if (!sp.classesOrEmpty().contains(id) && sp.mysteriesOrEmpty().stream().noneMatch(mysteries::contains)) continue;
+                    options.add(new PreparationResponse.Option("spell:" + sp.id(), sp.name(), sp.level()));
+                }
+                options.sort(java.util.Comparator.comparingInt(PreparationResponse.Option::level).thenComparing(PreparationResponse.Option::name));
+                String label = PREPARED + k.name();
+                mine.stream().filter(a -> label.equals(a.getSource()) && a.getSpellId() != null).forEach(a -> prepared.add("spell:" + a.getSpellId()));
+            }
+            out.add(new PreparationResponse.PreparingClass(id, k.name(), limit, max, List.copyOf(options), List.copyOf(prepared)));
+        });
+        return new PreparationResponse(List.copyOf(out));
     }
 
     // ---------- cálculo ----------

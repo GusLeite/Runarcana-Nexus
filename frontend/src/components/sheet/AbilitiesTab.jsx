@@ -17,7 +17,7 @@ export function keysFor(abilities) {
 
 // Aba de magias e habilidades: lista agrupada à esquerda e a dica da habilidade escolhida à direita.
 // Quem cadastra é o mestre; aqui o jogador gasta usos, descansa e rola o dano.
-export default function AbilitiesTab({ abilities, onSetUses, onRest, onRollDice, busy }) {
+export default function AbilitiesTab({ abilities, onSetUses, onRest, onRollDice, busy, prepares }) {
   const [selectedId, setSelectedId] = useState(abilities[0]?.id ?? null)
   const selected = abilities.find(a => a.id === selectedId) ?? abilities[0]
   const keys = keysFor(abilities)
@@ -29,12 +29,12 @@ export default function AbilitiesTab({ abilities, onSetUses, onRest, onRollDice,
       <div className="abl-main">
         <div className="card-title abl-title">
           <h3>Magias e habilidades <small>{abilities.length} no total</small></h3>
-          {hasUses && (
+          {(hasUses || prepares) && (
             <div className="rest-btns">
               <button type="button" className="ghost-btn small" disabled={busy} onClick={() => onRest('SHORT')} title="Recupera o que volta no descanso curto">
                 Descanso curto
               </button>
-              <button type="button" className="ghost-btn small" disabled={busy} onClick={() => onRest('LONG')} title="Recupera todos os usos">
+              <button type="button" className="ghost-btn small" disabled={busy} onClick={() => onRest('LONG')} title={prepares ? 'Recupera todos os usos e troca as magias preparadas' : 'Recupera todos os usos'}>
                 Descanso longo
               </button>
             </div>
@@ -51,7 +51,7 @@ export default function AbilitiesTab({ abilities, onSetUses, onRest, onRollDice,
             {group.list.map((a, n) => (
               <div
                 key={a.id}
-                className={'abl-row' + (a.id === selected?.id ? ' on' : '') + ' t-' + a.type.toLowerCase()}
+                className={'abl-row' + (a.id === selected?.id ? ' on' : '') + ' t-' + a.type.toLowerCase() + (a.prepared === false ? ' unprepared' : '')}
                 style={{ '--n': n }}
                 onClick={() => setSelectedId(a.id)}
               >
@@ -59,7 +59,7 @@ export default function AbilitiesTab({ abilities, onSetUses, onRest, onRollDice,
                   <AbilityIcon ability={a} hotkey={keys[a.id]} />
                   <span className="abl-info">
                     <span className="abl-name">{a.name}</span>
-                    <span className="abl-meta">{metaLine(a)}</span>
+                    <span className="abl-meta">{metaLine(a)}{a.prepared != null && <em className={'prep-tag' + (a.prepared ? ' on' : '')}>{a.prepared ? 'preparada' : 'não preparada'}</em>}</span>
                   </span>
                 </button>
                 <div className="abl-actions">

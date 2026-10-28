@@ -70,6 +70,38 @@
       "concentration": false,
       "ritual": false,
       "description": "Magia de 1º nível."
+    },
+    {
+      "id": "t-escudo-arcano",
+      "name": "Escudo Arcano Teste",
+      "level": 1,
+      "mysteries": [],
+      "castingTime": "1 ação",
+      "range": "30 pés",
+      "components": "V",
+      "duration": "Instantânea",
+      "concentration": false,
+      "ritual": false,
+      "description": "Um escudo de força.",
+      "classes": [
+        "ARCANIST"
+      ]
+    },
+    {
+      "id": "t-misseis",
+      "name": "Mísseis Teste",
+      "level": 2,
+      "mysteries": [],
+      "castingTime": "1 ação",
+      "range": "30 pés",
+      "components": "V",
+      "duration": "Instantânea",
+      "concentration": false,
+      "ritual": false,
+      "description": "Dardos de luz.",
+      "classes": [
+        "ARCANIST"
+      ]
     }
   ]
 }

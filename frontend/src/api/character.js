@@ -7,8 +7,11 @@ export const fetchSheet = token => request('/character/me', { token })
 export const setAbilityUses = (token, abilityId, usesLeft) =>
   request('/character/me/abilities/' + abilityId, { method: 'PATCH', token, body: { usesLeft } })
 
-// type: 'SHORT' | 'LONG'. Devolve a lista de habilidades atualizada.
-export const rest = (token, type) => request('/character/me/rest', { method: 'POST', token, body: { type } })
+// type: 'SHORT' | 'LONG'. prepared (só no longo): { classe: [chaves] } das magias preparadas. Devolve as habilidades.
+export const rest = (token, type, prepared) => request('/character/me/rest', { method: 'POST', token, body: { type, prepared } })
+
+// Magias que a ficha prepara (Acólito, Xamã): { classes: [{ classId, name, limit, maxSpellLevel, options, prepared }] }.
+export const fetchPreparation = token => request('/character/me/preparation', { token })
 
 // Defesa em uso: "UNARMORED", "RULE:<n>" ou "ITEM:<id>". Devolve a CA recalculada.
 export const chooseDefense = (token, key) => request('/character/me/defense', { method: 'PATCH', token, body: { key } })

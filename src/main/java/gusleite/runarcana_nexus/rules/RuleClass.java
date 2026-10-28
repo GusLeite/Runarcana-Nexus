@@ -19,8 +19,21 @@ public record RuleClass(
         List<RuleLineage> subclasses,
         // Multiclasse (Capítulo 5): pré-requisito de atributos para entrar ou sair da classe e as proficiências que
         // ela dá quando não é a primeira classe.
-        Multiclass multiclass
+        Multiclass multiclass,
+        // Magias preparadas (Acólito, Xamã): escolhidas pelo jogador no descanso longo.
+        Preparation preparation
 ) {
+    // Quantas: mod. de attribute + nível na classe (levels FULL) ou metade dele (HALF), mínimo 1.
+    // from: CLASS_OR_MYSTERIES (qualquer magia da lista da classe ou dos Mistérios, até maxSpellLevel pelo nível na
+    // classe; viram habilidades da ficha) ou KNOWN (entre os feitiços conhecidos da classe, que ficam marcados).
+    public record Preparation(gusleite.runarcana_nexus.enums.Attribute attribute, String levels, String from,
+                              java.util.Map<String, Integer> maxSpellLevel) {
+        public static final String FULL = "FULL";
+        public static final String HALF = "HALF";
+        public static final String CLASS_OR_MYSTERIES = "CLASS_OR_MYSTERIES";
+        public static final String KNOWN = "KNOWN";
+    }
+
     // attributes: todos os mínimos; anyAttributes: basta um ("Força 13 ou Destreza 13"); anotherAttribute: além dos
     // mínimos, mais um atributo qualquer com esse valor (Arcanista: "Inteligência 13 e outro atributo 13").
     // grants: só as proficiências da tabela Proficiências de Multiclasse.
