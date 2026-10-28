@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, fetchPreparation, fetchSheet, rest as restApi, setAbilityUses, setHp as setHpApi } from '../../api/character.js'
+import { chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, consumeItem, fetchPreparation, fetchSheet, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
 import { rollCheck, rollDice } from '../../data/rules.js'
@@ -8,14 +8,14 @@ import PrepareSpells from './PrepareSpells.jsx'
 import OverviewTab from './OverviewTab.jsx'
 import AbilitiesTab from './AbilitiesTab.jsx'
 import Inventory from './Inventory.jsx'
+import Purse from './Purse.jsx'
 import DocumentsTab from './DocumentsTab.jsx'
 import NotesTab from './NotesTab.jsx'
 import BookTab from './BookTab.jsx'
 import DiceRoll from './DiceRoll.jsx'
 import TabBar from './TabBar.jsx'
 import CreationWizard from '../creation/CreationWizard.jsx'
-import Num from './Num.jsx'
-import { CoinIcon, ExitIcon, KeyIcon } from './icons.jsx'
+import { ExitIcon, KeyIcon } from './icons.jsx'
 import '../../styles/sheet.css'
 
 const MAX_LOG = 8
@@ -93,6 +93,16 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     put({ ...before, ...next })
     setHpApi(token, next.currentHp, next.tempHp).catch(err => { put(before); fail(err) })
   }, [state, token, fail])
+
+  // O jogador só gasta: o back devolve a ficha inteira (inventário, ouro, inspiração).
+  const putSheet = useCallback(sheet => setState(s => (s.status === 'ready' ? { ...s, sheet } : s)), [])
+  const consumeOne = useCallback(item => {
+    consumeItem(token, item.id).then(sheet => { putSheet(sheet); setToast('Usou 1: ' + item.name + '.') }).catch(fail)
+  }, [token, fail, putSheet])
+  const spendGold = useCallback(amount => spendGoldApi(token, amount).then(putSheet).catch(err => { fail(err); throw err }), [token, fail, putSheet])
+  const spendInspirationNow = useCallback(() => {
+    spendInspiration(token).then(sheet => { putSheet(sheet); setToast('Inspiração gasta.') }).catch(fail)
+  }, [token, fail, putSheet])
 
   const chooseShield = useCallback(key => {
     chooseShieldApi(token, key)
@@ -250,10 +260,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
         <TabBar tabs={TABS} active={tab} onChange={setTab} badges={badges} alertId="documents" label="Seções" />
         <div className="topbar-right">
           {sheet && (
-            <div className="purse" title="Ouro">
-              <CoinIcon />
-              <b><Num value={sheet.gold} duration={1000} /></b>
-            </div>
+            <Purse gold={sheet.gold} onSpend={spendGold} />
           )}
           <div className="who">
             <span className="who-name">{character.name}</span>
@@ -317,6 +324,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             onRoll={roll}
             onRollDice={rollExpr}
             onGo={go}
+            onInspiration={spendInspirationNow}
           />
         )}
 
@@ -326,7 +334,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
               {tab === 'abilities' && (
                 <AbilitiesTab abilities={abilities} onSetUses={setUses} onRest={rest} onRollDice={rollExpr} busy={busy} prepares={prepares} />
               )}
-              {tab === 'inventory' && <Inventory items={state.sheet.inventory} strength={sheet.str} />}
+              {tab === 'inventory' && <Inventory items={state.sheet.inventory} strength={sheet.str} onUse={consumeOne} />}
               {tab === 'documents' && (
                 <DocumentsTab documents={documents} selectedId={docId} onSelect={setDocId} onOpen={markRead} />
               )}

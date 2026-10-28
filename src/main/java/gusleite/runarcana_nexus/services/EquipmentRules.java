@@ -1,7 +1,11 @@
 package gusleite.runarcana_nexus.services;
 
+import gusleite.runarcana_nexus.model.items.Consumable;
+import gusleite.runarcana_nexus.model.items.Item;
 import gusleite.runarcana_nexus.rules.RuleItem;
 import gusleite.runarcana_nexus.rules.RuleItems;
+
+import org.hibernate.Hibernate;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -30,6 +34,20 @@ public final class EquipmentRules {
 
     // Item e quantidade de uma parte já resolvida (sem grupo).
     public record Entry(String item, int quantity) {}
+
+    // Gasto ao usar (o jogador desconta 1): munição e os itens do grupo "consumivel" (poção, tocha, rações...).
+    public static boolean consumable(RuleItem item) {
+        return item != null && ("AMMUNITION".equals(item.kind()) || item.groupsOrEmpty().contains("consumivel"));
+    }
+
+    // Item da ficha: criado como Consumable (item livre, ou do catálogo depois que os consumíveis foram marcados) ou
+    // marcado no catálogo (as linhas de Item antigas foram criadas como objeto comum).
+    public static boolean consumable(RuleItems items, Item item) {
+        Item real = (Item) Hibernate.unproxy(item);
+        if (real instanceof Consumable) return true;
+        String id = real.getCatalogId();
+        return id != null && item(items, id).map(EquipmentRules::consumable).orElse(false);
+    }
 
     public static Optional<RuleItem> item(RuleItems items, String id) {
         return items == null ? Optional.empty() : items.itemsOrEmpty().stream().filter(i -> i.id().equals(id)).findFirst();

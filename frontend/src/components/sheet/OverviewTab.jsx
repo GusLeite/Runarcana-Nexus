@@ -17,7 +17,7 @@ const MODES = [
 
 // Aba principal: atributos, estatísticas e perícias no centro; à direita, rolagens e atalhos
 // para as outras abas (habilidades, documentos novos e a anotação fixada).
-export default function OverviewTab({ sheet, abilities, documents, notes, rolls, mode, onMode, onRoll, onRollDice, onGo }) {
+export default function OverviewTab({ sheet, abilities, documents, notes, rolls, mode, onMode, onRoll, onRollDice, onGo, onInspiration }) {
   const initiative = modifier(sheet.dex)
   const conMod = modifier(sheet.con)
   const quick = abilities.filter(a => a.type !== 'PASSIVE').slice(0, 5)
@@ -43,7 +43,9 @@ export default function OverviewTab({ sheet, abilities, documents, notes, rolls,
             title={`Clique para rolar 1d${sheet.hitDie} ${formatModifier(conMod)} (CON)`}
             onClick={() => onRollDice('Dado de vida', '1d' + sheet.hitDie + (conMod >= 0 ? '+' : '-') + Math.abs(conMod))}
           />
-          <Stat label="Inspiração" value={sheet.inspiration > 0 ? '◆'.repeat(Math.min(sheet.inspiration, 5)) : '—'} lit={sheet.inspiration > 0} />
+          <Stat label="Inspiração" value={sheet.inspiration > 0 ? '◆' : '—'} lit={sheet.inspiration > 0}
+            onClick={sheet.inspiration > 0 && onInspiration ? onInspiration : undefined}
+            title={sheet.inspiration > 0 ? 'Clique para gastar a inspiração' : 'Só o mestre dá inspiração'} />
         </section>
         <section className="card" style={{ '--i': 3 }}>
           <SavingThrows sheet={sheet} onRoll={onRoll} />

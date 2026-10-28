@@ -46,6 +46,17 @@ clip-path:polygon(9px 0,calc(100% - 9px) 0,100% 50%,calc(100% - 9px) 100%,9px 10
 .play:active{transform:scale(.97)}
 .play:focus-visible{outline:none;filter:drop-shadow(0 0 0 2px var(--teal)) drop-shadow(0 0 10px var(--teal))}
 .purse{display:flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--gold-soft);background:rgba(0,0,0,.35);font-family:'Cinzel',Georgia,serif;color:var(--gold-hi);font-size:15px}
+.purse{cursor:pointer}
+.purse:hover{border-color:var(--gold)}
+.purse:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.purse-wrap{position:relative}
+.purse-pop{position:absolute;top:calc(100% + 8px);right:0;z-index:30;display:flex;flex-direction:column;gap:6px;width:220px;padding:12px;border:1px solid var(--gold-soft);background:var(--panel);box-shadow:0 10px 30px rgba(0,0,0,.55);animation:purse-in .18s ease}
+@keyframes purse-in{from{opacity:0;transform:translateY(-4px)}}
+.purse-pop label{font-family:'Cinzel',Georgia,serif;font-size:12px;letter-spacing:.12em;color:var(--gold-hi)}
+.purse-row{display:flex;gap:6px}
+.purse-row input{flex:1;min-width:0;padding:6px 8px;font-size:15px}
+.purse-pop small{color:var(--muted);font-size:12px}
+.item-use{margin-top:12px;width:100%}
 .coin{width:16px;height:16px;flex:none}
 .who{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15}
 .who-name{font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:14px;letter-spacing:.1em;color:var(--gold-hi)}

@@ -36,3 +36,25 @@ export const previewLevelUp = (token, characterId, levels) =>
 
 export const applyLevelUp = (token, characterId, levels) =>
   request('/character/' + characterId + '/level-up', { method: 'POST', token, body: { levels } })
+
+// Inventário, ouro e inspiração de uma ficha: { characterId, characterName, gold, inspiration, items }.
+export const fetchInventory = (token, characterId) => request('/character/' + characterId + '/items', { token })
+
+export const addCatalogItem = (token, characterId, catalogId, quantity) =>
+  request('/character/' + characterId + '/items', { method: 'POST', token, body: { catalogId, quantity } })
+
+// item: { name, description, effect, weight, price, rarity, quantity, consumable }.
+export const addCustomItem = (token, characterId, item) =>
+  request('/character/' + characterId + '/items/custom', { method: 'POST', token, body: item })
+
+// 0 tira o item.
+export const setItemQuantity = (token, characterId, entryId, quantity) =>
+  request('/character/' + characterId + '/items/' + entryId, { method: 'PATCH', token, body: { quantity } })
+
+export const removeItem = (token, characterId, entryId) =>
+  request('/character/' + characterId + '/items/' + entryId, { method: 'DELETE', token })
+
+export const setGold = (token, characterId, gold) => request('/character/' + characterId + '/gold', { method: 'PATCH', token, body: { gold } })
+
+export const setInspiration = (token, characterId, inspiration) =>
+  request('/character/' + characterId + '/inspiration', { method: 'PATCH', token, body: { inspiration } })

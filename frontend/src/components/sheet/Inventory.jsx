@@ -14,7 +14,7 @@ const FILTERS = [
 
 // Aba de inventário: casas quadradas como a loja do LoL (a borda mostra a raridade),
 // filtro por tipo e a dica do item escolhido ao lado.
-export default function Inventory({ items, strength }) {
+export default function Inventory({ items, strength, onUse }) {
   const [filter, setFilter] = useState('ALL')
   const [selectedId, setSelectedId] = useState(items[0]?.id ?? null)
   const visible = filter === 'ALL' ? items : items.filter(i => i.kind === filter)
@@ -84,7 +84,7 @@ export default function Inventory({ items, strength }) {
       </div>
 
       <div className="inv-side">
-        {selected ? <ItemDetail key={selected.id} item={selected} /> : (
+        {selected ? <ItemDetail key={selected.id} item={selected} onUse={onUse} /> : (
           <div className="item-detail empty-detail">
             <p className="muted-note">Mochila vazia. Quando o mestre entregar itens, eles aparecem aqui.</p>
           </div>
@@ -95,7 +95,7 @@ export default function Inventory({ items, strength }) {
 }
 
 // Painel de detalhes no formato da dica de item do LoL.
-function ItemDetail({ item }) {
+function ItemDetail({ item, onUse }) {
   const rarity = rarityOf(item.rarity)
   const stats = itemStats(item)
   return (
@@ -114,6 +114,11 @@ function ItemDetail({ item }) {
         <span>{item.weight != null ? formatKg(item.weight * item.quantity) : 'Sem peso'}{item.quantity > 1 && ` (${item.quantity}×)`}</span>
         {item.price != null && <span className="price"><CoinIcon />{item.price}</span>}
       </div>
+      {onUse && item.kind === 'CONSUMABLE' && (
+        <button type="button" className="ghost-btn small item-use" onClick={() => onUse(item)}>
+          USAR {item.quantity > 1 ? '(fica ' + (item.quantity - 1) + ')' : '(último)'}
+        </button>
+      )}
     </div>
   )
 }

@@ -2,6 +2,13 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-28 — Inventário, ouro e inspiração, Etapa 1 do plano (`feature/character-sheet`)
+- Mestre (`InventoryController`/`InventoryService`): dá itens do catálogo (conjunto aberto, soma na mesma linha) e itens livres, muda a quantidade, tira itens (a armadura/escudo em uso volta ao padrão), define o ouro e liga/desliga a inspiração.
+- Jogador: usa 1 de um consumível, gasta ouro e gasta a inspiração (decisão da mesa: só gasta).
+- Consumíveis: grupo `consumivel` no `itens.json` (poção, tocha, rações, óleo...) e toda munição; itens novos do catálogo nascem `Consumable`.
+- Front: aba **Inventário** no painel do mestre (`MasterInventory.jsx`); na ficha, **Gastar** no ouro (`Purse.jsx`), **USAR** no consumível e a inspiração clicável.
+- Testes: `InventoryControllerTests` (5). Conferido no sandbox: o mestre deu 3 poções, 50 PO e inspiração ao Rudo; o Rudo gastou 15 PO, a inspiração e 1 poção.
+
 ## 2026-10-27 — Plano do que falta para jogar (`feature/character-sheet`)
 - Novo [plano-jogo.md](plano-jogo.md): 6 etapas na ordem (inventário/ouro/inspiração pelo mestre, ataques com arma, conjurar gastando Mana, testes contra a morte e condições, edição pelo mestre, visão da mesa), com as decisões da mesa: o jogador gasta consumíveis, ouro e inspiração (só o mestre dá), inspiração sim/não, testes contra a morte pelo jogador, condições pelo mestre. Segurança e polimento ficam para depois.
 

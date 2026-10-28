@@ -9,10 +9,10 @@ Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criac
 ## Estado atual (2026-10-27)
 
 - Ficha: atributos, perícias, resistências, CA (com armadura e escudo do inventário), PV editáveis pelo jogador, habilidades com usos, magias, descanso curto/longo, magias preparadas, rolagens de d20 e de dano, inventário **só leitura**, documentos, anotações, aba Livro.
-- Mestre: cria/apaga habilidades e documentos, sobe de nível (com multiclasse), trava regras da mesa.
-- Não existe: alterar inventário, ouro ou inspiração; ataques com arma; gastar Mana ao conjurar; testes contra a morte; condições; editar habilidade/documento; visão da mesa para o mestre.
+- Mestre: cria/apaga habilidades e documentos, sobe de nível (com multiclasse), trava regras da mesa, dá e tira itens, ouro e inspiração (Etapa 1).
+- Não existe: ataques com arma; gastar Mana ao conjurar; testes contra a morte; condições; editar habilidade/documento; visão da mesa para o mestre.
 
-## Etapa 1 — Inventário, ouro e inspiração pelo mestre
+## Etapa 1 — Inventário, ouro e inspiração pelo mestre — **feita (2026-10-28)**
 
 **Por quê**: depois da criação ninguém mexe no inventário; loot, compras e gastos param a mesa.
 
@@ -20,16 +20,15 @@ Back-end:
 - `InventoryController` (só o mestre, `/character/{id}/items`):
   - `GET` lista (reusa `InventoryItemResponse`);
   - `POST { catalogId, quantity }` adiciona um item do `itens.json` (reusa a conversão de `StartingEquipmentService`, que acha/cria a linha de `Item` pelo `catalogId`); se a ficha já tem o item, soma a quantidade;
-  - `POST { name, description, weight, price, rarity, quantity }` item livre (loot que não está no catálogo, `catalogId` "nome:…");
+  - `POST /custom { name, description, effect, weight, price, rarity, quantity, consumable }` item livre (loot que não está no catálogo, sem `catalogId`);
   - `PATCH /{playerItemId} { quantity }` (0 remove) e `DELETE /{playerItemId}`.
 - `PATCH /character/{id}/gold { gold }` e `PATCH /character/{id}/inspiration { inspiration }` (só o mestre; ouro ≥ 0; inspiração sim/não, 0 ou 1).
 - Jogador (`/character/me`): `POST /items/{playerItemId}/use` gasta 1 de um consumível (0 remove a linha; 400 se não for consumível) e `POST /gold/spend { amount }` gasta ouro (400 se faltar). Não adiciona nada.
 - Inspiração do jogador: `POST /character/me/inspiration/use` gasta a inspiração (1 → 0); só o mestre dá.
 - Tirar o escudo/armadura escolhidos da defesa quando o item sai do inventário (`Character.shield`/defesa voltam ao padrão).
-- `ItemService`: arrumar os nomes copiados (`getAllCharacters`, `createCharacter`) já que vai ganhar uso.
 
 Front:
-- Painel do mestre → **Fichas**: abas "Subir de nível" e **"Inventário e ouro"** (`MasterInventory.jsx`): escolhe o personagem, grade do inventário com +/− e remover, busca no catálogo (`/creation/catalog` já traz `equipment.items`), formulário de item livre, campos de ouro e inspiração.
+- Painel do mestre → aba própria **Inventário** (`MasterInventory.jsx`): escolhe o personagem, grade do inventário com +/− e remover, busca no catálogo (`/creation/catalog` já traz `equipment.items`), formulário de item livre, campos de ouro e inspiração.
 - Ficha do jogador: no inventário, **Usar** no consumível escolhido (−1); no ouro do topo, **Gastar** (valor); a inspiração vira um botão que gasta quando está acesa.
 
 Testes: `InventoryControllerTests` (403 para jogador nas rotas do mestre, soma de quantidade, item livre, remover, ouro negativo = 400, escudo removido some da CA; jogador usa consumível, gasta ouro além do que tem = 400, não usa arma como consumível, gasta inspiração).

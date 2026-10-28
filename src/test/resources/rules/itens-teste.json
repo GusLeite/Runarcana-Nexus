@@ -56,7 +56,10 @@
       "id": "t-tocha",
       "name": "Tocha Teste",
       "kind": "GEAR",
-      "description": "Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro."
+      "description": "Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro. Texto longo como os do livro.",
+      "groups": [
+        "consumivel"
+      ]
     },
     {
       "id": "t-conjunto",

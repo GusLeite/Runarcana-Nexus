@@ -21,3 +21,10 @@ export const chooseShield = (token, key) => request('/character/me/shield', { me
 
 // PV atual (0 até o máximo) e PV temporários. Devolve a ficha (CharacterResponse).
 export const setHp = (token, currentHp, tempHp) => request('/character/me/hp', { method: 'PATCH', token, body: { currentHp, tempHp } })
+
+// O jogador só gasta (decisão da mesa): 1 de um consumível, ouro e a inspiração acesa. Devolvem a ficha inteira.
+export const consumeItem = (token, entryId) => request('/character/me/items/' + entryId + '/use', { method: 'POST', token })
+
+export const spendGold = (token, amount) => request('/character/me/gold/spend', { method: 'POST', token, body: { amount } })
+
+export const spendInspiration = (token) => request('/character/me/inspiration/use', { method: 'POST', token })

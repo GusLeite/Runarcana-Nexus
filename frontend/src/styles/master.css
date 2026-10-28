@@ -133,3 +133,26 @@ font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:13px;letter-spacing
 .lvl-errors{margin:14px 0;padding:10px 14px 10px 28px;border:1px solid rgba(255,138,122,.4);background:rgba(120,20,10,.18);color:#ffb4a8;font-size:14px}
 .lvl-summary .btn{margin-top:14px;width:100%}
 @keyframes lvl-in{from{opacity:0;transform:translateX(-6px)}}
+
+/* ---------- inventário (mestre) ---------- */
+.inv-top{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:flex-end}
+.inv-gold{flex:1 1 220px;max-width:320px}
+.inv-gold label{display:flex;align-items:center;gap:6px;margin:0 0 6px;font-size:14px;color:var(--teal);letter-spacing:.06em}
+.inv-rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.inv-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:14px;padding:8px 12px;border:1px solid rgba(200,162,74,.18);border-left:3px solid var(--r);background:rgba(0,0,0,.28)}
+.inv-name{display:flex;flex-direction:column;min-width:0}
+.inv-name b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.inv-name small{color:var(--muted);font-size:12px}
+.inv-qty{display:flex;align-items:center;gap:8px}
+.inv-qty b{min-width:2.5ch;text-align:center;font-family:'Cinzel',Georgia,serif;color:var(--gold-hi)}
+.qty-btn{width:28px;height:28px;display:grid;place-items:center;padding:0;border:1px solid rgba(200,162,74,.4);background:rgba(0,0,0,.35);color:var(--gold-hi);font-size:16px;cursor:pointer}
+.qty-btn:hover:not(:disabled){border-color:var(--gold-hi)}
+.qty-btn:disabled{opacity:.4;cursor:default}
+.qty-btn:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.qty-in{flex:0 0 84px!important}
+.cat-results{list-style:none;margin:10px 0 0;padding:0;max-height:300px;overflow:auto;display:flex;flex-direction:column;gap:4px}
+.cat-results li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 10px;border:1px solid rgba(200,162,74,.14);background:rgba(0,0,0,.22)}
+.cat-results small{color:var(--muted)}
+.mform .check{display:flex;align-items:center;gap:8px;margin:14px 0;color:var(--text);font-size:14px;letter-spacing:0}
+.mform .check input{width:auto;accent-color:var(--teal)}
+@container (max-width:560px){.inv-row{grid-template-columns:minmax(0,1fr) auto}.inv-row .link-btn{grid-column:1/-1;justify-self:start}}

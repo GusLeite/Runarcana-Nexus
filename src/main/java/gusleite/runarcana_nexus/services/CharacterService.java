@@ -75,7 +75,7 @@ public class CharacterService {
 
         List<PlayerItems> items = itemsRepository.findByCharacterOrderByIdAsc(character);
         List<InventoryItemResponse> inventory = items.stream()
-                .map(InventoryItemResponse::of)
+                .map(e -> InventoryItemResponse.of(e, EquipmentRules.consumable(rules.catalog().equipment(), e.getItem())))
                 .toList();
         List<AbilityResponse> abilities = abilityRepository.findByCharacterOrderByIdAsc(character).stream()
                 .map(AbilityResponse::of)

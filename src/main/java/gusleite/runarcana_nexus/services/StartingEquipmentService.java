@@ -7,6 +7,7 @@ import gusleite.runarcana_nexus.enums.Rarity;
 import gusleite.runarcana_nexus.enums.WeaponCategory;
 import gusleite.runarcana_nexus.enums.WeaponProperty;
 import gusleite.runarcana_nexus.model.items.Armor;
+import gusleite.runarcana_nexus.model.items.Consumable;
 import gusleite.runarcana_nexus.model.items.Item;
 import gusleite.runarcana_nexus.model.items.Weapon;
 import gusleite.runarcana_nexus.model.player.Character;
@@ -75,11 +76,16 @@ public class StartingEquipmentService {
         }
     }
 
+    // Item que a ficha já tem soma na mesma linha (o mestre dando mais tochas); senão, linha nova.
     private void add(Character character, Item item, int quantity) {
-        PlayerItems entry = new PlayerItems();
-        entry.setCharacter(character);
-        entry.setItem(item);
-        entry.setQuantity(quantity);
+        PlayerItems entry = inventory.findFirstByCharacterAndItem(character, item).orElseGet(() -> {
+            PlayerItems e = new PlayerItems();
+            e.setCharacter(character);
+            e.setItem(item);
+            e.setQuantity(0);
+            return e;
+        });
+        entry.setQuantity((entry.getQuantity() == null ? 0 : entry.getQuantity()) + quantity);
         inventory.save(entry);
     }
 
@@ -131,7 +137,7 @@ public class StartingEquipmentService {
                 a.setNerfStealth(Boolean.TRUE.equals(r.stealthDisadvantage()));
                 item = a;
             }
-            default -> item = new gusleite.runarcana_nexus.model.items.Object();
+            default -> item = EquipmentRules.consumable(r) ? new Consumable() : new gusleite.runarcana_nexus.model.items.Object();
         }
         item.setCatalogId(r.id());
         item.setName(r.name());

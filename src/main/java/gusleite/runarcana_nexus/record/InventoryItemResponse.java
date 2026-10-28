@@ -31,6 +31,11 @@ public record InventoryItemResponse(
         ArmorWeight armorWeight
 ) {
     public static InventoryItemResponse of(PlayerItems entry) {
+        return of(entry, false);
+    }
+
+    // consumable: marcado no catálogo (as linhas antigas de Item não são Consumable); vira kind CONSUMABLE.
+    public static InventoryItemResponse of(PlayerItems entry, boolean consumable) {
         Item item = (Item) Hibernate.unproxy(entry.getItem());
         int quantity = entry.getQuantity() == null ? 1 : entry.getQuantity();
 
@@ -53,7 +58,7 @@ public record InventoryItemResponse(
             kind = "ARMOR";
             armorClass = armor.getArmorClass();
             armorWeight = armor.getArmorWeight();
-        } else if (item instanceof Consumable) {
+        } else if (item instanceof Consumable || consumable) {
             kind = "CONSUMABLE";
         }
 

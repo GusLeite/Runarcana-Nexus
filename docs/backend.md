@@ -50,6 +50,16 @@ Configuração em `src/main/resources/application.properties`:
 | PATCH | `/character/me/abilities/{abilityId}` | `{ usesLeft }` (Bearer) | Jogador gasta/recupera usos. 400 se passar do máximo ou a habilidade não tiver usos |
 | PATCH | `/character/me/shield` | `{ key }` (Bearer) | Escudo em uso: `NONE` (sem escudo) ou `ITEM:<id>` de um escudo do inventário. Devolve a CA recalculada. 400 se o escudo não está no inventário |
 | PATCH | `/character/me/hp` | `{ currentHp, tempHp? }` (Bearer) | Jogador marca os próprios PV: atual de 0 ao máximo e temporários (0 ou mais; sem `tempHp` = mantém). Devolve `CharacterResponse`. 400 fora dos limites; 404 sem ficha |
+| GET | `/character/{id}/items` | – (Bearer **mestre**) | `MasterInventory { characterId, characterName, gold, inspiration, items }`. As rotas do mestre abaixo devolvem o mesmo |
+| POST | `/character/{id}/items` | `{ catalogId, quantity? }` (Bearer **mestre**) | Dá um item do `itens.json` (conjunto entra aberto; item que a ficha já tem soma na mesma linha). 400 se o item não existe ou a quantidade sai de 1–9999 |
+| POST | `/character/{id}/items/custom` | `{ name, description?, effect?, weight?, price?, rarity?, quantity?, consumable? }` (Bearer **mestre**) | Loot fora do catálogo (`Consumable` se `consumable`, senão objeto comum; sem `catalogId`) |
+| PATCH | `/character/{id}/items/{entryId}` | `{ quantity }` (Bearer **mestre**) | Nova quantidade (0 tira o item). 404 se o item não é dessa ficha |
+| DELETE | `/character/{id}/items/{entryId}` | – (Bearer **mestre**) | Tira o item. Se era a armadura ou o escudo em uso, a defesa volta ao padrão |
+| PATCH | `/character/{id}/gold` | `{ gold }` (Bearer **mestre**) | Ouro (0 ou mais) |
+| PATCH | `/character/{id}/inspiration` | `{ inspiration: boolean }` (Bearer **mestre**) | Dá ou tira a inspiração (sim/não) |
+| POST | `/character/me/items/{entryId}/use` | – (Bearer) | Jogador gasta 1 de um consumível (a última unidade tira a linha). 400 se não for consumível. Devolve a ficha (`CharacterSheetResponse`) |
+| POST | `/character/me/gold/spend` | `{ amount }` (Bearer) | Jogador gasta ouro (de 1 até o que tem). Devolve a ficha |
+| POST | `/character/me/inspiration/use` | – (Bearer) | Jogador gasta a inspiração acesa. 400 sem inspiração. Devolve a ficha |
 | POST | `/character/me/rest` | `{ type: SHORT \| LONG, prepared? }` (Bearer) | Descanso: curto recupera o que é `SHORT_REST`; longo recupera tudo que recarrega. No longo, `prepared` (`{ "ACOLYTE": ["spell:<id>"], "SHAMAN": ["ability:<id>"] }`) troca as magias preparadas antes (400 acima do limite ou fora das opções, e aí não descansa). Devolve as habilidades |
 | GET | `/character/me/preparation` | – (Bearer) | `PreparationResponse`: por classe que prepara (Acólito, Xamã), `limit`, `maxSpellLevel` (nulo = entre os conhecidos), `options` (`key`, `name`, `level`) e `prepared`. `classes` vazio se a ficha não prepara |
 | GET | `/notes` | – (Bearer) | Anotações do jogador (fixadas primeiro, depois as mais recentes) |
@@ -213,10 +223,10 @@ Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spri
 
 - **Credencial no Git**: a senha do banco está versionada em `application.properties`. Mover para variável de ambiente (`${DB_PASSWORD}`) e trocar a senha.
 - `Origin` não tem getters (nem `@Data`).
-- Não há rotas de itens nem de inventário: os itens entram pelo **equipamento inicial** da criação (`StartingEquipmentService`) ou direto no banco. Depois de criada a ficha, ninguém altera o inventário pela API.
+- Inventário depois da criação (`InventoryService`, decisão da mesa): o mestre dá e tira itens, ouro e inspiração; o jogador só gasta. **Consumível** = `Consumable` ou item do catálogo com kind `AMMUNITION` ou grupo `consumivel` no `itens.json` (`EquipmentRules.consumable`; as linhas de `Item` antigas foram criadas como objeto comum, por isso a conferência também olha o catálogo). A munição do catálogo vem em pacote ("Virotes de besta (20)", quantidade 1): usar gasta o pacote inteiro; o mestre ajusta pelo painel.
 - `Item.itemDescription` e `Item.effect` passaram para `varchar(4000)` (`@Column(length = 4000)`). O `ddl-auto=update` **não aumenta** coluna que já existe: no PostgreSQL local rode uma vez `ALTER TABLE item ALTER COLUMN item_description TYPE varchar(4000); ALTER TABLE item ALTER COLUMN effect TYPE varchar(4000);` (a coluna nova `catalog_id` é criada sozinha). Sem isso, criar personagem com equipamento dá erro de valor longo.
 - `POST /character` e `GET /character` não exigem login; só `/character/me` exige. A ligação conta ↔ personagem é pelo nome (ver acima), não por chave estrangeira.
-- O jogador só altera os próprios PV (`PATCH /character/me/hp`, decisão da mesa); não há rotas para ouro, inspiração nem para apagar a ficha.
+- O jogador altera os próprios PV e só **gasta** consumíveis, ouro e inspiração (decisão da mesa); não há rota para apagar a ficha.
 - O enum `region`/`alignment` em `Character` não tem `@Enumerated(STRING)` e é salvo como ordinal (frágil se a ordem mudar).
 - `BackgroundService.getBackGroundByName` dá NullPointerException quando o nome não existe; o nome do método não diz que ele altera dados.
 - `ItemService` tem métodos com nomes copiados (`getAllCharacters`, `createCharacter`) e ainda não tem controller.
