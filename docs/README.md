@@ -8,6 +8,7 @@ Esta pasta é a **fonte de verdade** do projeto. Ela serve para quem chega ao c�
 | [backend.md](backend.md) | API Spring Boot: pacotes, entidades, endpoints, enums, regras de negócio e pendências |
 | [frontend.md](frontend.md) | App React/Vite: estrutura, componentes, animações, assets e como adicionar personagens |
 | [regras-criacao.md](regras-criacao.md) | Formato do catálogo de regras de criação (origens, regiões, classes, passados, ofícios, Heranças) e o que falta preencher |
+| [plano-jogo.md](plano-jogo.md) | **Roteiro atual**: as etapas do que falta para jogar (inventário, ataques, Mana, morte e condições, edição pelo mestre, visão da mesa), na ordem de desenvolvimento |
 | [changelog.md](changelog.md) | Registro do que foi entregue, em ordem cronológica (mais recente no topo) |
 
 ## Como manter esta documentação

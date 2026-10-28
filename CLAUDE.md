@@ -10,6 +10,7 @@ A pasta [`docs/`](docs/README.md) é a fonte de verdade do projeto. No início d
    - back-end (Spring, entidades, endpoints, regras do RPG) → [`docs/backend.md`](docs/backend.md)
    - front-end (React, telas, animações, assets) → [`docs/frontend.md`](docs/frontend.md)
    - stack, branches, como rodar → [`docs/visao-geral.md`](docs/visao-geral.md)
+   - o que desenvolver em seguida → [`docs/plano-jogo.md`](docs/plano-jogo.md) (siga as etapas na ordem; ao concluir uma, marque-a como feita)
 2. Use o que está lá (convenções, decisões, pendências) para planejar a mudança, sem redescobrir tudo do zero.
 3. Se a documentação estiver errada ou desatualizada em relação ao código, confie no código, corrija o doc e avise o usuário.
 

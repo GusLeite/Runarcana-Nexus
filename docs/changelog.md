@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-27 — Plano do que falta para jogar (`feature/character-sheet`)
+- Novo [plano-jogo.md](plano-jogo.md): 6 etapas na ordem (inventário/ouro/inspiração pelo mestre, ataques com arma, conjurar gastando Mana, testes contra a morte e condições, edição pelo mestre, visão da mesa), com as decisões da mesa a confirmar. Segurança e polimento ficam para depois.
+
 ## 2026-10-27 — Combatente Arcano, Mana na multiclasse, troca de magia e Aprimoramentos (`feature/character-sheet`)
 - Regras conferidas na wiki (Multiclasse; Técnicas de Combate → Combatente Conjurador).
 - `RuleResource.levels`: ganhos do recurso pelo nível na classe que o escolheu. A Técnica Combatente Arcano segue a tabela Combatente Conjurador (truques, magias conhecidas, Mana até o 11º); o Aprimorado leva a Mana até 30 e libera magias de 3º e 4º nível. Recursos escolhidos por classe usam o nível nela nas tabelas.
