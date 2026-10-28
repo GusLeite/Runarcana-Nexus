@@ -30,8 +30,15 @@ public record RuleHeritage(
         List<String> options,
         String description,
         // Pré-requisito com caminhos alternativos: basta cumprir um. Quando existe, substitui origins/lineages na conferência.
-        List<HeritageCondition> anyOf
+        List<HeritageCondition> anyOf,
+        // Efeitos aplicados na ficha (perícia, especialidade "caso já tenha", salvaguarda, deslocamento, idioma, ofício...),
+        // além do texto. Fonte "Herança: <nome>"; as escolhas têm a chave "heritage:<id>:<índice>".
+        List<Grant> grants
 ) {
+    public List<Grant> grantsOrEmpty() {
+        return grants == null ? List.of() : grants;
+    }
+
     public List<HeritageCondition> anyOfOrEmpty() {
         return anyOf == null ? List.of() : anyOf;
     }

@@ -168,6 +168,20 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.choices[3].note").value("Os idiomas desta região ainda não foram cadastrados nas regras."));
     }
 
+    // A Herança aplica as concessões dela: Arcanismo (já tem pela classe → especialidade) e uma perícia à escolha.
+    @Test
+    void herancaAplicaPericiaEEspecialidade() throws Exception {
+        String token = login("gaudron");
+        String body = FULL.replace("{\"id\":\"teste-geral\"}", "{\"id\":\"teste-pericia\"}");
+        preview(token, body)
+                .andExpect(jsonPath("$.complete").value(false))
+                .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-pericia:1')].options[0]").value("ATHLETICS"))
+                .andExpect(jsonPath("$.skills[?(@.skill == 'ARCANA')].expertise").value(true));
+        preview(token, body.replace("\"class:ARCANIST:1\"", "\"heritage:teste-pericia:1\":[\"STEALTH\"],\"class:ARCANIST:1\""))
+                .andExpect(jsonPath("$.complete").value(true))
+                .andExpect(jsonPath("$.skills[?(@.skill == 'STEALTH')].source").value("Herança: Perícia Teste"));
+    }
+
     @Test
     void herancasConferemPontosEPreRequisitos() throws Exception {
         String token = login("gaudron");

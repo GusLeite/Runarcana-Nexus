@@ -17,6 +17,27 @@
       "description": "Só para os fortes."
     },
     {
+      "id": "teste-pericia",
+      "name": "Perícia Teste",
+      "category": "GENERAL",
+      "description": "Arcanismo (especialidade se já tiver) e Atletismo ou Furtividade.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "ARCANA",
+          "expertise": true
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "ATHLETICS",
+            "STEALTH"
+          ]
+        }
+      ]
+    },
+    {
       "id": "teste-targon",
       "name": "Targon Teste",
       "category": "REGION",

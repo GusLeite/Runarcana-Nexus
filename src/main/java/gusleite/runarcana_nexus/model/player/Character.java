@@ -51,6 +51,8 @@ public class Character {
     private int currentHp;
     // PV temporários (somem antes dos PV atuais ao sofrer dano). Nulo nas fichas antigas = 0.
     private Integer tempHp;
+    // Bônus nos PV máximos dado pelo mestre (item, maldição, bênção); fica fora da conta da subida de nível. Nulo = 0.
+    private Integer maxHpBonus;
     // Testes contra a morte (0–3 cada) com 0 PV; zerados ao ganhar PV ou descansar. Nulos nas fichas antigas = 0.
     private Integer deathSuccesses;
     private Integer deathFailures;
@@ -177,6 +179,11 @@ public class Character {
     @OrderColumn(name = "position")
     private List<ClassLevel> classLevels = new ArrayList<>();
 
+
+    // PV máximos com o bônus do mestre (o que a ficha mostra e o limite da cura).
+    public int getMaxHpTotal() {
+        return Math.max(1, maxHp + (maxHpBonus == null ? 0 : maxHpBonus));
+    }
 
     private int getModifier(int attribute){
         return Math.floorDiv(attribute - 10, 2);

@@ -208,10 +208,12 @@ export default function CharacterSheet({ character, session, notice, onChangePas
         setToast(type === 'LONG' ? (prepared ? 'Descanso longo: usos de volta e magias preparadas.' : 'Descanso longo: todos os usos voltaram.')
           : 'Descanso curto: usos recuperados.')
         if (prepared) fetchPreparation(token).then(setPreparation).catch(() => {})
+        // Descanso zera os testes contra a morte e o longo baixa a Exaustão: atualiza a ficha.
+        fetchSheet(token).then(putSheet).catch(() => {})
       })
       .catch(fail)
       .finally(() => setBusy(false))
-  }, [token, fail])
+  }, [token, fail, putSheet])
 
   const rest = useCallback(type => {
     if (type === 'LONG' && prepares) setPreparing(true)

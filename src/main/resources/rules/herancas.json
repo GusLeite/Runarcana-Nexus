@@ -15,7 +15,13 @@
       "name": "Acordes de Poder",
       "category": "GENERAL",
       "prerequisite": "Conjuração, Ofício de Artista (Músico)",
-      "description": "A música não é apenas uma atividade para você, mas uma forma de se expressar e se conectar com o universo. Você recebe os seguintes benefícios:\n\nVocê recebe o Mistério do Som\nVocê pode utilizar um instrumento musical como Foco de Conjuração e pode utilizar Carisma como atributo de Conjuração de sua classe ou subclasse e substituir o uso de componentes verbais de suas magias por acordes de seu instrumento musical.\nApós conjurar 3 magias, você pode utilizar sua ação bônus para realizar um ataque com arma que causará seu dado Base de Pulso em dano adicional do tipo igual a sua última magia de dano conjurada, por exemplo, caso você tenha utilizado o truque raio elemental (fogo), o dano adicional de sua arma será ígneo."
+      "description": "A música não é apenas uma atividade para você, mas uma forma de se expressar e se conectar com o universo. Você recebe os seguintes benefícios:\n\nVocê recebe o Mistério do Som\nVocê pode utilizar um instrumento musical como Foco de Conjuração e pode utilizar Carisma como atributo de Conjuração de sua classe ou subclasse e substituir o uso de componentes verbais de suas magias por acordes de seu instrumento musical.\nApós conjurar 3 magias, você pode utilizar sua ação bônus para realizar um ataque com arma que causará seu dado Base de Pulso em dano adicional do tipo igual a sua última magia de dano conjurada, por exemplo, caso você tenha utilizado o truque raio elemental (fogo), o dano adicional de sua arma será ígneo.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "som"
+        }
+      ]
     },
     {
       "id": "agilidade-primal",
@@ -31,7 +37,13 @@
         "HUNTER"
       ],
       "prerequisite": "Caçador",
-      "description": "Por algum motivo, você estuda seus inimigos favoritos desde cedo, antes mesmo de se tornar um Caçador. Você recebe os seguintes benefícios:\n\nA cada rodada, o primeiro ataque feito por um inimigo favorito contra você, tem seu dano reduzido em um valor igual a metade do seu bônus de Proficiência.\nVocê recebe proficiência com a perícia Sobrevivência. Caso já tenha, recebe especialidade com a mesma."
+      "description": "Por algum motivo, você estuda seus inimigos favoritos desde cedo, antes mesmo de se tornar um Caçador. Você recebe os seguintes benefícios:\n\nA cada rodada, o primeiro ataque feito por um inimigo favorito contra você, tem seu dano reduzido em um valor igual a metade do seu bônus de Proficiência.\nVocê recebe proficiência com a perícia Sobrevivência. Caso já tenha, recebe especialidade com a mesma.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "SURVIVAL"
+        }
+      ]
     },
     {
       "id": "ambidestro",
@@ -77,7 +89,14 @@
       "id": "bioenergia",
       "name": "Bioenergia",
       "category": "GENERAL",
-      "description": "Talvez tenha sido a proximidade de cristais hextec, talvez uma mutação positiva em contato com alguma fonte tecnológica. O interessante é que você possui uma fagulha do que os Tecmaturgos buscam, energia. Você recebe os seguintes benefícios:\n\nVocê recebe seu bônus de Proficiência em pontos de Energia por descanso longo.\nVocê adquire proficiência em Tecnologia, caso já possua, você recebe especialidade."
+      "description": "Talvez tenha sido a proximidade de cristais hextec, talvez uma mutação positiva em contato com alguma fonte tecnológica. O interessante é que você possui uma fagulha do que os Tecmaturgos buscam, energia. Você recebe os seguintes benefícios:\n\nVocê recebe seu bônus de Proficiência em pontos de Energia por descanso longo.\nVocê adquire proficiência em Tecnologia, caso já possua, você recebe especialidade.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "TECHNOLOGY",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "canalizador-versatil",
@@ -99,7 +118,18 @@
       "id": "comandante",
       "name": "Comandante",
       "category": "GENERAL",
-      "description": "Sua visão estratégica é privilegiada e isso pode ser aproveitado por você e seus aliados. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Intimidação ou Persuasão, caso já possua proficiência na perícia escolhida, você recebe especialidade com a mesma.\nVocê pode utilizar seu modificador de Força ao invés de Carisma ao utilizar a perícia Intimidação\nUtilizando sua ação bônus, você pode conceder aos seus aliados que possam vê-lo ou ouvi-lo um bônus de Moral em seu acerto igual ao seu bônus de Proficiência pelo próximo minuto. O bônus no acerto não se acumula. Você pode utilizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+      "description": "Sua visão estratégica é privilegiada e isso pode ser aproveitado por você e seus aliados. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Intimidação ou Persuasão, caso já possua proficiência na perícia escolhida, você recebe especialidade com a mesma.\nVocê pode utilizar seu modificador de Força ao invés de Carisma ao utilizar a perícia Intimidação\nUtilizando sua ação bônus, você pode conceder aos seus aliados que possam vê-lo ou ouvi-lo um bônus de Moral em seu acerto igual ao seu bônus de Proficiência pelo próximo minuto. O bônus no acerto não se acumula. Você pode utilizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por descanso pleno.",
+      "grants": [
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "INTIMIDATION",
+            "PERSUASION"
+          ],
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "conjurador-natural",
@@ -127,7 +157,18 @@
       "id": "curandeiro-abencoado",
       "name": "Curandeiro Abençoado",
       "category": "GENERAL",
-      "description": "Em seu sangue corre um talento inato para a cura das mazelas que afligem o mundo. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Medicina, caso já possua você recebe especialidade.\nVocê aprende a magia palavra curativa, podendo conjurá-la sem gastar pontos de mana um número de vezes igual à metade do seu bônus de Proficiência por descanso pleno. O valor de cura dessa magia é 1d4 + seu bônus de Proficiência.\nVocê recebe o Mistério Água"
+      "description": "Em seu sangue corre um talento inato para a cura das mazelas que afligem o mundo. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Medicina, caso já possua você recebe especialidade.\nVocê aprende a magia palavra curativa, podendo conjurá-la sem gastar pontos de mana um número de vezes igual à metade do seu bônus de Proficiência por descanso pleno. O valor de cura dessa magia é 1d4 + seu bônus de Proficiência.\nVocê recebe o Mistério Água",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "MEDICINE",
+          "expertise": true
+        },
+        {
+          "type": "MYSTERY",
+          "value": "agua"
+        }
+      ]
     },
     {
       "id": "detectar-fraquezas",
@@ -190,19 +231,44 @@
       "category": "GENERAL",
       "initial": true,
       "prerequisite": "Inicial",
-      "description": "Seu organismo ressona com os metais desde cedo, concedendo a você uma magia extremamente rara. Você recebe os seguintes benefícios:\n\nVocê recebe o Mistério do Metal\nSuas magias do Mistério do Metal custam 1 ponto de mana a menos (o custo de uma magia não pode chegar a 0 dessa forma).\nVocê recebe proficiência com uma arma marcial de sua região à sua escolha"
+      "description": "Seu organismo ressona com os metais desde cedo, concedendo a você uma magia extremamente rara. Você recebe os seguintes benefícios:\n\nVocê recebe o Mistério do Metal\nSuas magias do Mistério do Metal custam 1 ponto de mana a menos (o custo de uma magia não pode chegar a 0 dessa forma).\nVocê recebe proficiência com uma arma marcial de sua região à sua escolha",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "metal"
+        }
+      ]
     },
     {
       "id": "graciosidade",
       "name": "Graciosidade",
       "category": "GENERAL",
-      "description": "Sua movimentação e seu andar possuem uma graciosidade única e natural. Você ganha os seguintes benefícios:\n\nVocê pode realizar a ação de Esquivar utilizando uma ação bônus um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê possui proficiência em Salvaguardas de Carisma, caso já possua proficiência você recebe especialidade com essa salvaguarda."
+      "description": "Sua movimentação e seu andar possuem uma graciosidade única e natural. Você ganha os seguintes benefícios:\n\nVocê pode realizar a ação de Esquivar utilizando uma ação bônus um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê possui proficiência em Salvaguardas de Carisma, caso já possua proficiência você recebe especialidade com essa salvaguarda.",
+      "grants": [
+        {
+          "type": "SAVING_THROW",
+          "attribute": "CHARISMA"
+        }
+      ]
     },
     {
       "id": "guerreiro-primal",
       "name": "Guerreiro Primal",
       "category": "GENERAL",
-      "description": "Seus instintos são extremamente aflorados, seja pela sua agressividade em combate que é similar à de um predador, seja pela familiaridade que você tem com as criaturas irracionais. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em uma das seguintes perícias: Intimidação, Lidar com Animais, Natureza ou Sobrevivência, caso já possua proficiência na perícia escolhida, você recebe especialidade com a mesma.\nDesde que não esteja utilizando armadura, sua CA se torna 10 + seu modificador de Constituição (mínimo de 1). Se receber a característica defesa sem armadura de qualquer fonte, você ignora a habilidade dessa Herança.\nQuando atingir com um ataque corpo a corpo uma criatura que ainda não tenha recebido dano nessa rodada, você causa 1d4 + seu bônus de proficiência de dano adicional."
+      "description": "Seus instintos são extremamente aflorados, seja pela sua agressividade em combate que é similar à de um predador, seja pela familiaridade que você tem com as criaturas irracionais. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em uma das seguintes perícias: Intimidação, Lidar com Animais, Natureza ou Sobrevivência, caso já possua proficiência na perícia escolhida, você recebe especialidade com a mesma.\nDesde que não esteja utilizando armadura, sua CA se torna 10 + seu modificador de Constituição (mínimo de 1). Se receber a característica defesa sem armadura de qualquer fonte, você ignora a habilidade dessa Herança.\nQuando atingir com um ataque corpo a corpo uma criatura que ainda não tenha recebido dano nessa rodada, você causa 1d4 + seu bônus de proficiência de dano adicional.",
+      "grants": [
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "INTIMIDATION",
+            "ANIMAL_HANDLING",
+            "NATURE",
+            "SURVIVAL"
+          ],
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "habilidoso",
@@ -214,7 +280,13 @@
       "id": "hiperatividade-runica",
       "name": "Hiperatividade Rúnica",
       "category": "GENERAL",
-      "description": "A energia natural rúnica percorre seu corpo com maior facilidade que as outras pessoas. Você ganha os seguintes benefícios:\n\nVocê possui um número de cargas de Hiperatividade igual a metade do seu bônus de Proficiência por Descanso Pleno. Você pode utilizar uma dessas cargas para utilizar uma de suas Runas sem gastar um uso da mesma.\nVocê pode fazer uma nova jogada de seu Pulso Rúnico durante um Descanso Pleno. Você deve ficar com o novo resultado.\nSempre que estiver usando armaduras leves ou nenhuma, você recebe 1 de RD/dano verdadeiro.\nVocê recebe o Mistério da Runomancia"
+      "description": "A energia natural rúnica percorre seu corpo com maior facilidade que as outras pessoas. Você ganha os seguintes benefícios:\n\nVocê possui um número de cargas de Hiperatividade igual a metade do seu bônus de Proficiência por Descanso Pleno. Você pode utilizar uma dessas cargas para utilizar uma de suas Runas sem gastar um uso da mesma.\nVocê pode fazer uma nova jogada de seu Pulso Rúnico durante um Descanso Pleno. Você deve ficar com o novo resultado.\nSempre que estiver usando armaduras leves ou nenhuma, você recebe 1 de RD/dano verdadeiro.\nVocê recebe o Mistério da Runomancia",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "runomancia"
+        }
+      ]
     },
     {
       "id": "instinto-assassino",
@@ -224,7 +296,13 @@
         "MERCURIAL"
       ],
       "prerequisite": "Mercurial",
-      "description": "As oportunidades são conquistadas apenas pelos que são capazes de percebê-las. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência com a perícia Medicina. Caso já tenha, recebe especialidade com a mesma.\nEm seu turno, caso uma criatura tenha falhado em alguma salvaguarda desde sua última ação, você pode fazer um ataque contra essa criatura usando sua Ação Ardilosa."
+      "description": "As oportunidades são conquistadas apenas pelos que são capazes de percebê-las. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência com a perícia Medicina. Caso já tenha, recebe especialidade com a mesma.\nEm seu turno, caso uma criatura tenha falhado em alguma salvaguarda desde sua última ação, você pode fazer um ataque contra essa criatura usando sua Ação Ardilosa.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "MEDICINE"
+        }
+      ]
     },
     {
       "id": "isso-e-pessoal",
@@ -262,7 +340,13 @@
       "id": "magia-da-floresta",
       "name": "Magia da Floresta",
       "category": "GENERAL",
-      "description": "Você consegue sintonizar com as energias da natureza e das florestas. Você recebe os seguintes benefícios:\n\nVocê aprende a magia constrição, podendo conjurá-la sem gastar pontos de mana. Você pode conjurar essa magia um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério Flora."
+      "description": "Você consegue sintonizar com as energias da natureza e das florestas. Você recebe os seguintes benefícios:\n\nVocê aprende a magia constrição, podendo conjurá-la sem gastar pontos de mana. Você pode conjurar essa magia um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério Flora.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "flora"
+        }
+      ]
     },
     {
       "id": "manifestacao-primordial",
@@ -276,7 +360,20 @@
       "id": "mediador",
       "name": "Mediador",
       "category": "GENERAL",
-      "description": "“Vou fazer uma oferta que ele não pode recusar.” Ok, padrinho. Você ganha os seguintes benefícios:\n\nEscolha uma entre Enganação, Intimidação, Intuição ou Persuasão, você recebe proficiência com essa perícia. Caso já possua proficiência na perícia escolhida, você recebe especialidade com a mesma.\nVocê possui vantagem em interações sociais com criaturas que estejam hostis em relação à você ou seus aliados."
+      "description": "“Vou fazer uma oferta que ele não pode recusar.” Ok, padrinho. Você ganha os seguintes benefícios:\n\nEscolha uma entre Enganação, Intimidação, Intuição ou Persuasão, você recebe proficiência com essa perícia. Caso já possua proficiência na perícia escolhida, você recebe especialidade com a mesma.\nVocê possui vantagem em interações sociais com criaturas que estejam hostis em relação à você ou seus aliados.",
+      "grants": [
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "DECEPTION",
+            "INTIMIDATION",
+            "INSIGHT",
+            "PERSUASION"
+          ],
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "meditacao-profunda",
@@ -288,7 +385,18 @@
       "id": "mente-intuitiva",
       "name": "Mente Intuitiva",
       "category": "GENERAL",
-      "description": "Seu conhecimento e seu raciocínio funcionam muito bem em conjunto, conseguindo acessar seu conhecimento de forma rápida e efetiva. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Investigação ou Intuição, caso você já possua proficiência na perícia escolhida, você recebe especialidade com essa perícia.\nVocê pode escolher substituir o atributo das perícias Investigação e Intuição para Inteligência ou Sabedoria."
+      "description": "Seu conhecimento e seu raciocínio funcionam muito bem em conjunto, conseguindo acessar seu conhecimento de forma rápida e efetiva. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Investigação ou Intuição, caso você já possua proficiência na perícia escolhida, você recebe especialidade com essa perícia.\nVocê pode escolher substituir o atributo das perícias Investigação e Intuição para Inteligência ou Sabedoria.",
+      "grants": [
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "INVESTIGATION",
+            "INSIGHT"
+          ],
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "mestre-artesao",
@@ -352,7 +460,14 @@
       "id": "punguista",
       "name": "Punguista",
       "category": "GENERAL",
-      "description": "Como se fosse uma criança criada nas ruas, você aprendeu a treinar sua visão para coisas de valor, sabendo quem e onde deve praticar suas habilidades. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Prestidigitação, caso já possua você recebe especialidade.\nVocê possui vantagem em testes de Prestidigitação sempre que estiver tentando roubar um objeto pequeno de alguém.\nOutras criaturas possuem desvantagem em testes de Investigação ou Percepção para perceber um objeto oculto que esteja em suas mãos\nVocê pode passar 1 minuto observando uma criatura fora de combate, ao fazer isso você pode descobrir se ela possui algum objeto de valor que custe ao menos 1 PO, como um brinco, um colar ou uma joia."
+      "description": "Como se fosse uma criança criada nas ruas, você aprendeu a treinar sua visão para coisas de valor, sabendo quem e onde deve praticar suas habilidades. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Prestidigitação, caso já possua você recebe especialidade.\nVocê possui vantagem em testes de Prestidigitação sempre que estiver tentando roubar um objeto pequeno de alguém.\nOutras criaturas possuem desvantagem em testes de Investigação ou Percepção para perceber um objeto oculto que esteja em suas mãos\nVocê pode passar 1 minuto observando uma criatura fora de combate, ao fazer isso você pode descobrir se ela possui algum objeto de valor que custe ao menos 1 PO, como um brinco, um colar ou uma joia.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "SLEIGHT_OF_HAND",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "resiliencia-adaptativa",
@@ -418,7 +533,13 @@
       "id": "voz-sedosa",
       "name": "Voz Sedosa",
       "category": "GENERAL",
-      "description": "Sua voz soa como melodia àqueles que não o conhecem, fazendo com que você pareça uma pessoa extremamente importante dentro de qualquer sociedade. Você ganha os seguintes benefícios:\n\nVocê tem vantagem em teste de Persuasão contra desconhecidos que não estejam hostis à você.\nVocê recebe o Mistério do Encantamento"
+      "description": "Sua voz soa como melodia àqueles que não o conhecem, fazendo com que você pareça uma pessoa extremamente importante dentro de qualquer sociedade. Você ganha os seguintes benefícios:\n\nVocê tem vantagem em teste de Persuasão contra desconhecidos que não estejam hostis à você.\nVocê recebe o Mistério do Encantamento",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "encantamento"
+        }
+      ]
     },
     {
       "id": "bencao-da-fortuna",
@@ -518,7 +639,14 @@
         "DEMACIA"
       ],
       "prerequisite": "Demaciano",
-      "description": "Você possui um senso de justiça extremamente poderoso e que molda seus atos doa a quem doer, a justiça deve sempre prevalecer, você recebe os seguintes benefícios:\n\nVocê adquire proficiência em Investigação, caso já tenha, recebe especialidade.\nVocê tem vantagem em testes para detectar mentiras.\nSeu primeiro ataque contra um alvo que tenha cometido uma injustiça possui vantagem. A margem de crítico de todos seus ataques contra essa criatura é reduzida em 1 enquanto ela não tiver se acertado com a justiça.\nVocê é afligido pelo Abalo Fardo da Justiça."
+      "description": "Você possui um senso de justiça extremamente poderoso e que molda seus atos doa a quem doer, a justiça deve sempre prevalecer, você recebe os seguintes benefícios:\n\nVocê adquire proficiência em Investigação, caso já tenha, recebe especialidade.\nVocê tem vantagem em testes para detectar mentiras.\nSeu primeiro ataque contra um alvo que tenha cometido uma injustiça possui vantagem. A margem de crítico de todos seus ataques contra essa criatura é reduzida em 1 enquanto ela não tiver se acertado com a justiça.\nVocê é afligido pelo Abalo Fardo da Justiça.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "INVESTIGATION",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "gelo-ancestral",
@@ -528,7 +656,13 @@
         "FRELJORD"
       ],
       "prerequisite": "Freljordiano",
-      "description": "Você aprende a invocar o gelo ancestral para servir seus comandos. Você ganha os seguintes benefícios:\n\nQuando causar dano gélido por qualquer fonte que seja originada de você, você pode rolar novamente qualquer 1 natural na rolagem de dado de dano gélido, você deve utilizar a nova rolagem.\nVocê recebe o Mistério Gelo"
+      "description": "Você aprende a invocar o gelo ancestral para servir seus comandos. Você ganha os seguintes benefícios:\n\nQuando causar dano gélido por qualquer fonte que seja originada de você, você pode rolar novamente qualquer 1 natural na rolagem de dado de dano gélido, você deve utilizar a nova rolagem.\nVocê recebe o Mistério Gelo",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "gelo"
+        }
+      ]
     },
     {
       "id": "quebra-gelo",
@@ -538,7 +672,14 @@
         "FRELJORD"
       ],
       "prerequisite": "Freljordiano",
-      "description": "Você nasceu em uma região inóspita sem nenhuma vantagem adaptativa, mas conseguiu encontrar formas de compensar esse fato, você recebe os seguintes benefícios:\n\nAo receber dano gélido ou glacial, você pode usar sua reação para reduzir o dano recebido em um valor igual ao dobro do seu bônus de Proficiência. Você pode utilizar essa habilidade apenas uma vez por rodada, um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê adquire proficiência em Sobrevivência, caso já tenha, recebe especialidade.\nVocê recebe vantagens em salvaguardas e testes relacionados a um ambiente ártico."
+      "description": "Você nasceu em uma região inóspita sem nenhuma vantagem adaptativa, mas conseguiu encontrar formas de compensar esse fato, você recebe os seguintes benefícios:\n\nAo receber dano gélido ou glacial, você pode usar sua reação para reduzir o dano recebido em um valor igual ao dobro do seu bônus de Proficiência. Você pode utilizar essa habilidade apenas uma vez por rodada, um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê adquire proficiência em Sobrevivência, caso já tenha, recebe especialidade.\nVocê recebe vantagens em salvaguardas e testes relacionados a um ambiente ártico.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "SURVIVAL",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "resistencia-gelida",
@@ -568,7 +709,14 @@
         "IONIA"
       ],
       "prerequisite": "Ioniano",
-      "description": "Tudo tem seu ritmo, harmonia e fluxo, você aprendeu a ler os sinais vitais das criaturas e é capaz de auxiliar suas aflições. Você recebe os seguintes benefícios:\n\nVocê recebe a magia Curar Ferimentos, podendo conjurá-la sem gastar pontos de mana em um nível igual ao seu bônus de proficiência. Você pode fazer isso um número de vezes igual ao seu bônus de Proficiência por descanso pleno.\nVocê tem vantagem em testes para identificar aflições mundanas e, caso a aflição seja nativa de Ionia, tem vantagem em testes para identificar seu tratamento.\nVocê adquire proficiência em Medicina, caso já tenha, recebe especialidade."
+      "description": "Tudo tem seu ritmo, harmonia e fluxo, você aprendeu a ler os sinais vitais das criaturas e é capaz de auxiliar suas aflições. Você recebe os seguintes benefícios:\n\nVocê recebe a magia Curar Ferimentos, podendo conjurá-la sem gastar pontos de mana em um nível igual ao seu bônus de proficiência. Você pode fazer isso um número de vezes igual ao seu bônus de Proficiência por descanso pleno.\nVocê tem vantagem em testes para identificar aflições mundanas e, caso a aflição seja nativa de Ionia, tem vantagem em testes para identificar seu tratamento.\nVocê adquire proficiência em Medicina, caso já tenha, recebe especialidade.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "MEDICINE",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "talento-magico-ioniano",
@@ -598,7 +746,14 @@
         "IXTAL"
       ],
       "prerequisite": "Ixtali",
-      "description": "Nascer e viver em uma região com uma conexão profunda com a mana faz com que você tenha um maior entendimento da mesma, você recebe os seguintes benefícios:\n\nVocê adquire proficiência em Arcanismo, caso já tenha, recebe especialidade.\nAo escolher essa Herança você se torna capaz de utilizar a mana com maior precisão. Você pode reduzir o custo de mana de uma magia num valor igual ao modificador do seu atributo de Conjuração (não podendo reduzir para 0) um número de vezes igual ao seu bônus de Proficiência por descanso pleno.\nAo utilizar qualquer recurso que recupere mana, você pode recuperar 1 dado de vida."
+      "description": "Nascer e viver em uma região com uma conexão profunda com a mana faz com que você tenha um maior entendimento da mesma, você recebe os seguintes benefícios:\n\nVocê adquire proficiência em Arcanismo, caso já tenha, recebe especialidade.\nAo escolher essa Herança você se torna capaz de utilizar a mana com maior precisão. Você pode reduzir o custo de mana de uma magia num valor igual ao modificador do seu atributo de Conjuração (não podendo reduzir para 0) um número de vezes igual ao seu bônus de Proficiência por descanso pleno.\nAo utilizar qualquer recurso que recupere mana, você pode recuperar 1 dado de vida.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "ARCANA",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "sinergia-elemental",
@@ -658,7 +813,18 @@
         "NOXUS"
       ],
       "prerequisite": "Noxiano",
-      "description": "Você é imbuído pelos valores Noxianos com isso intimamente ligado ao seu ser. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Intimidação ou Persuasão, caso já possua proficiência na perícia escolhida, você recebe especialidade com a perícia escolhida.\nSe uma criatura obtiver sucesso em um ataque contra você, você tem vantagem em rolagens de acerto com armas corpo a corpo contra aquela criatura até o final do seu próximo turno. Você pode utilizar essa habilidade dessa maneira um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+      "description": "Você é imbuído pelos valores Noxianos com isso intimamente ligado ao seu ser. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em Intimidação ou Persuasão, caso já possua proficiência na perícia escolhida, você recebe especialidade com a perícia escolhida.\nSe uma criatura obtiver sucesso em um ataque contra você, você tem vantagem em rolagens de acerto com armas corpo a corpo contra aquela criatura até o final do seu próximo turno. Você pode utilizar essa habilidade dessa maneira um número de vezes igual ao seu bônus de Proficiência por descanso pleno.",
+      "grants": [
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "INTIMIDATION",
+            "PERSUASION"
+          ],
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "disciplina-e-forca",
@@ -708,7 +874,19 @@
         "NOXUS"
       ],
       "prerequisite": "Noxiano",
-      "description": "Observar os arredores e manter-se vigilante durante patrulhas nas fronteiras e em postos avançados lhe tornou atento e precavido. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em uma das perícias a seguir: Intuição, Investigação, Percepção ou Prestidigitação. Você faz rolagens com Vantagem caso já tenha Proficiência na perícia escolhida.\nEnquanto estiver consciente, você não pode ser surpreendido ou atacado com vantagem por criaturas escondidas.\nSua Percepção Passiva aumenta em um valor igual a metade do seu Bônus de Proficiência."
+      "description": "Observar os arredores e manter-se vigilante durante patrulhas nas fronteiras e em postos avançados lhe tornou atento e precavido. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em uma das perícias a seguir: Intuição, Investigação, Percepção ou Prestidigitação. Você faz rolagens com Vantagem caso já tenha Proficiência na perícia escolhida.\nEnquanto estiver consciente, você não pode ser surpreendido ou atacado com vantagem por criaturas escondidas.\nSua Percepção Passiva aumenta em um valor igual a metade do seu Bônus de Proficiência.",
+      "grants": [
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "INSIGHT",
+            "INVESTIGATION",
+            "PERCEPTION",
+            "SLEIGHT_OF_HAND"
+          ]
+        }
+      ]
     },
     {
       "id": "temor-noxiano",
@@ -732,7 +910,15 @@
         "privilegiado"
       ],
       "prerequisite": "Piltovense, não ter as Heranças Operário ou Privilegiado",
-      "description": "Você pertence a uma das Casas Maiores de Piltover e teve acesso às melhores oportunidades, destacando-se em áreas que nem todos puderam acessar. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em uma Perícia à sua escolha. Você recebe Especialidade caso já tenha Proficiência na Perícia escolhida.\nFora de combate, ao realizar Testes de Atributo os quais seus aliados não tenham Proficiência, mas você sim, você os faz como se tivesse Especialidade. Caso já tenha Especialidade, você os faz com Vantagem. Você pode executar esta habilidade um número de vezes igual ao seu Bônus de Proficiência por Descanso Pleno.\nVocê recebe um pertence que custa até 200 PO, 2 pertences que custem até 100 PO cada ou 3 pertences que custem até 75 PO cada."
+      "description": "Você pertence a uma das Casas Maiores de Piltover e teve acesso às melhores oportunidades, destacando-se em áreas que nem todos puderam acessar. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em uma Perícia à sua escolha. Você recebe Especialidade caso já tenha Proficiência na Perícia escolhida.\nFora de combate, ao realizar Testes de Atributo os quais seus aliados não tenham Proficiência, mas você sim, você os faz como se tivesse Especialidade. Caso já tenha Especialidade, você os faz com Vantagem. Você pode executar esta habilidade um número de vezes igual ao seu Bônus de Proficiência por Descanso Pleno.\nVocê recebe um pertence que custa até 200 PO, 2 pertences que custem até 100 PO cada ou 3 pertences que custem até 75 PO cada.",
+      "grants": [
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": null,
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "autoridade-justa",
@@ -772,7 +958,19 @@
         "PILTOVER"
       ],
       "prerequisite": "Piltovense",
-      "description": "Você é atento aos detalhes, gosta de fazer um bom trabalho e não deixa nada passar despercebido. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em uma das perícias a seguir: Intuição, Investigação, Percepção ou Prestidigitação. Você recebe Especialidade caso já tenha Proficiência.\nVocê aumenta 1 nível em um de seus ofícios. Caso já tenha aumentado o nível de um ofício através de Heranças, você deverá escolher um ofício diferente.\nSua Percepção Passiva aumenta em um valor igual a metade do seu Bônus de Proficiência."
+      "description": "Você é atento aos detalhes, gosta de fazer um bom trabalho e não deixa nada passar despercebido. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em uma das perícias a seguir: Intuição, Investigação, Percepção ou Prestidigitação. Você recebe Especialidade caso já tenha Proficiência.\nVocê aumenta 1 nível em um de seus ofícios. Caso já tenha aumentado o nível de um ofício através de Heranças, você deverá escolher um ofício diferente.\nSua Percepção Passiva aumenta em um valor igual a metade do seu Bônus de Proficiência.",
+      "grants": [
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "INSIGHT",
+            "INVESTIGATION",
+            "PERCEPTION",
+            "SLEIGHT_OF_HAND"
+          ]
+        }
+      ]
     },
     {
       "id": "operario",
@@ -786,7 +984,13 @@
         "privilegiado"
       ],
       "prerequisite": "Piltovense, não ter as Heranças Abastado ou Privilegiado",
-      "description": "Você não pertence a nenhuma Casa Piltovense, seja grande ou pequena e sempre precisou trabalhar duro para conseguir um lugar no meio de tantos grandes nomes. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência em duas Perícias à sua escolha.\nVocê adiciona metade do seu Bônus de Proficiência ao valor de PO que você pode produzir por dia.\nVocê aumenta 1 nível em um de seus ofícios. Caso já tenha aumentado o nível de um ofício através de Heranças, você deverá escolher um ofício diferente."
+      "description": "Você não pertence a nenhuma Casa Piltovense, seja grande ou pequena e sempre precisou trabalhar duro para conseguir um lugar no meio de tantos grandes nomes. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência em duas Perícias à sua escolha.\nVocê adiciona metade do seu Bônus de Proficiência ao valor de PO que você pode produzir por dia.\nVocê aumenta 1 nível em um de seus ofícios. Caso já tenha aumentado o nível de um ofício através de Heranças, você deverá escolher um ofício diferente.",
+      "grants": [
+        {
+          "type": "SKILL_CHOICE",
+          "count": 2
+        }
+      ]
     },
     {
       "id": "patrocinio",
@@ -810,7 +1014,30 @@
         "operario"
       ],
       "prerequisite": "Piltovense, não ter a Heranças Abastado ou Operário",
-      "description": "Você pertence a uma das Casas Menores de Piltover e trabalhou prestando assistência ao lado de grandes nomes para se manter em condições favoráveis. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em duas Perícias de Carisma, Inteligência ou Sabedoria à sua escolha.\nFora de combate, quando um aliado fizer um Teste de Atributo, ele pode pedir que você realize o mesmo teste e então ficar com o maior resultado. Você faz o teste como se tivesse Proficiência, mesmo que não tenha. Caso já tenha Proficiência, você os faz com vantagem. Você pode executar esta habilidade um número de vezes igual ao seu Bônus de Proficiência por Descanso Pleno.\nVocê aumenta 1 nível em um de seus ofícios. Caso já tenha aumentado o nível de um ofício através de Heranças, você deverá escolher um ofício diferente."
+      "description": "Você pertence a uma das Casas Menores de Piltover e trabalhou prestando assistência ao lado de grandes nomes para se manter em condições favoráveis. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em duas Perícias de Carisma, Inteligência ou Sabedoria à sua escolha.\nFora de combate, quando um aliado fizer um Teste de Atributo, ele pode pedir que você realize o mesmo teste e então ficar com o maior resultado. Você faz o teste como se tivesse Proficiência, mesmo que não tenha. Caso já tenha Proficiência, você os faz com vantagem. Você pode executar esta habilidade um número de vezes igual ao seu Bônus de Proficiência por Descanso Pleno.\nVocê aumenta 1 nível em um de seus ofícios. Caso já tenha aumentado o nível de um ofício através de Heranças, você deverá escolher um ofício diferente.",
+      "grants": [
+        {
+          "type": "SKILL_CHOICE",
+          "count": 2,
+          "options": [
+            "ARCANA",
+            "HISTORY",
+            "INVESTIGATION",
+            "NATURE",
+            "RELIGION",
+            "TECHNOLOGY",
+            "INSIGHT",
+            "ANIMAL_HANDLING",
+            "MEDICINE",
+            "PERCEPTION",
+            "SURVIVAL",
+            "DECEPTION",
+            "INTIMIDATION",
+            "PERFORMANCE",
+            "PERSUASION"
+          ]
+        }
+      ]
     },
     {
       "id": "resistencia-ao-sai",
@@ -840,7 +1067,14 @@
         "SHURIMA"
       ],
       "prerequisite": "Shurimane",
-      "description": "Tu sabes os paranauê da vida loka! Você ganha os seguintes benefícios:\n\nVocê tem proficiência em Sobrevivência, caso já possua proficiência você recebe especialidade com essa perícia.\nVocê tem uma memória excelente para mapas e geografia do deserto e terras áridas, você sempre pode recobrar o plano geral de terrenos, assentamentos ou outras características ao seu redor. Além disso, você pode encontrar comida e água fresca no deserto para você e até cinco outras pessoas a cada dia."
+      "description": "Tu sabes os paranauê da vida loka! Você ganha os seguintes benefícios:\n\nVocê tem proficiência em Sobrevivência, caso já possua proficiência você recebe especialidade com essa perícia.\nVocê tem uma memória excelente para mapas e geografia do deserto e terras áridas, você sempre pode recobrar o plano geral de terrenos, assentamentos ou outras características ao seu redor. Além disso, você pode encontrar comida e água fresca no deserto para você e até cinco outras pessoas a cada dia.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "SURVIVAL",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "bencao-dourada",
@@ -890,7 +1124,13 @@
         "TARGON"
       ],
       "prerequisite": "Targonense",
-      "description": "Você ou um de seus ancestrais alcançou ou se aproximou muito do Cume de Targon e desde então os seres divinos possuem algum tipo de apreço por você, lhe mostrando tramas de magia e lhe concedendo favores mágicos periodicamente. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em Arcanismo. Você recebe Especialidade caso já tenha Proficiência.\nVocê pode conjurar a magia Detectar Magia de maneira não mágica um número de vezes igual a metade do seu Bônus de Proficiência por Descanso Longo.\nUma vez por Descanso Pleno você pode utilizar um Truque de qualquer Mistério Celestial de maneira não mágica. Escolha entre Inteligência, Sabedoria ou Carisma como seu atributo de conjuração para esse Truque."
+      "description": "Você ou um de seus ancestrais alcançou ou se aproximou muito do Cume de Targon e desde então os seres divinos possuem algum tipo de apreço por você, lhe mostrando tramas de magia e lhe concedendo favores mágicos periodicamente. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em Arcanismo. Você recebe Especialidade caso já tenha Proficiência.\nVocê pode conjurar a magia Detectar Magia de maneira não mágica um número de vezes igual a metade do seu Bônus de Proficiência por Descanso Longo.\nUma vez por Descanso Pleno você pode utilizar um Truque de qualquer Mistério Celestial de maneira não mágica. Escolha entre Inteligência, Sabedoria ou Carisma como seu atributo de conjuração para esse Truque.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "ARCANA"
+        }
+      ]
     },
     {
       "id": "nucleo-solar",
@@ -913,7 +1153,13 @@
         "TARGON"
       ],
       "prerequisite": "Targonense",
-      "description": "Trabalhar e/ou viver em uma fazenda lhe ajudou a desenvolver empatia com os animais. Você sabe como se portar diante de diferentes tipos de criatura e elas costumam se sentir confortáveis na sua presença. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em Lidar com Animais. Você recebe Especialidade caso já tenha Proficiência.\nVocê recebe Proficiência com o Ofício de Guia (Piloto) de Veículos Terrestres ou Apotecário.\nVocê recebe um animal de até 100 PO da tabela Montaria e Outros Animais do Capítulo 6."
+      "description": "Trabalhar e/ou viver em uma fazenda lhe ajudou a desenvolver empatia com os animais. Você sabe como se portar diante de diferentes tipos de criatura e elas costumam se sentir confortáveis na sua presença. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em Lidar com Animais. Você recebe Especialidade caso já tenha Proficiência.\nVocê recebe Proficiência com o Ofício de Guia (Piloto) de Veículos Terrestres ou Apotecário.\nVocê recebe um animal de até 100 PO da tabela Montaria e Outros Animais do Capítulo 6.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "ANIMAL_HANDLING"
+        }
+      ]
     },
     {
       "id": "pes-cascudos",
@@ -923,7 +1169,17 @@
         "TARGON"
       ],
       "prerequisite": "Targonense, Crescido em Targon",
-      "description": "Você foi uma criança destemida, ou imprudente, e não tinha medo de se aventurar em meio a perigosa geografia de Targon, escalando rochedos, saltando sobre fendas e deslizando em desfiladeiros que lhe serviam como atalho. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em uma das perícias a seguir: Atletismo ou Sobrevivência. Você recebe Especialidade caso já tenha Proficiência.\nVocê ignora Terrenos Difíceis rochosos.\nSeu Deslocamento de Escalada é o mesmo que o seu Deslocamento de Caminhada."
+      "description": "Você foi uma criança destemida, ou imprudente, e não tinha medo de se aventurar em meio a perigosa geografia de Targon, escalando rochedos, saltando sobre fendas e deslizando em desfiladeiros que lhe serviam como atalho. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em uma das perícias a seguir: Atletismo ou Sobrevivência. Você recebe Especialidade caso já tenha Proficiência.\nVocê ignora Terrenos Difíceis rochosos.\nSeu Deslocamento de Escalada é o mesmo que o seu Deslocamento de Caminhada.",
+      "grants": [
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "ATHLETICS",
+            "SURVIVAL"
+          ]
+        }
+      ]
     },
     {
       "id": "viajante-cauteloso",
@@ -933,7 +1189,18 @@
         "TARGON"
       ],
       "prerequisite": "Targonense",
-      "description": "Targon tem geografias variadas e depois de tanto percorrer a região em quase toda sua totalidade, você aprendeu a lidar com diferentes tipos de ambientes. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em Sobrevivência. Você recebe Especialidade caso já tenha Proficiência.\n\nVocê recebe Proficiência em uma disciplina do Ofício de Guia.\n\nApós um Descanso Pleno, você pode escolher um tipo qualquer de Terreno Difícil para ignorar. Você não pode mudar o tipo de terreno até o próximo Descanso Pleno."
+      "description": "Targon tem geografias variadas e depois de tanto percorrer a região em quase toda sua totalidade, você aprendeu a lidar com diferentes tipos de ambientes. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em Sobrevivência. Você recebe Especialidade caso já tenha Proficiência.\n\nVocê recebe Proficiência em uma disciplina do Ofício de Guia.\n\nApós um Descanso Pleno, você pode escolher um tipo qualquer de Terreno Difícil para ignorar. Você não pode mudar o tipo de terreno até o próximo Descanso Pleno.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "SURVIVAL",
+          "expertise": true
+        },
+        {
+          "type": "CRAFT",
+          "value": "guia"
+        }
+      ]
     },
     {
       "id": "visao-lunar",
@@ -946,7 +1213,17 @@
         "nucleo-solar"
       ],
       "prerequisite": "Targonense, Nascido e criado em Targon, não ter a Herança Núcleo Solar",
-      "description": "Observando e estudando o movimento dos astros e acostumando sua visão ao escuro da noite, você aprendeu a adivinhar o futuro e ver além do que o dia permite. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em Intuição. Você recebe Especialidade caso já tenha Proficiência.\nDurante a noite, você tem Vantagem em testes de Intuição. Adicionalmente, você recebe o Mistério da Adivinhação.\nVocê recebe 15 pés de Visão no Escuro ou adiciona 15 pés caso já tenha."
+      "description": "Observando e estudando o movimento dos astros e acostumando sua visão ao escuro da noite, você aprendeu a adivinhar o futuro e ver além do que o dia permite. Você recebe os seguintes benefícios:\n\nVocê recebe Proficiência em Intuição. Você recebe Especialidade caso já tenha Proficiência.\nDurante a noite, você tem Vantagem em testes de Intuição. Adicionalmente, você recebe o Mistério da Adivinhação.\nVocê recebe 15 pés de Visão no Escuro ou adiciona 15 pés caso já tenha.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "INSIGHT"
+        },
+        {
+          "type": "MYSTERY",
+          "value": "adivinhacao"
+        }
+      ]
     },
     {
       "id": "experimento-bem-sucedido",
@@ -1296,7 +1573,14 @@
         "construto"
       ],
       "prerequisite": "Construto",
-      "description": "Seu corpo possui engrenagens reforçadas que podem ser alavancadas para movimentos mais poderosos. Você recebe os seguintes benefícios:\n\nUsando sua ação de movimento, você abdica de se mover durante seu turno para amplificar seu primeiro ataque corpo a corpo. O dano de seu primeiro ataque nesse turno tem seu modificador de Força dobrado (mínimo de 0). Você pode utilizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por Descanso Pleno. Ao alcançar o 7º nível, ao invés de abdicar de seu movimento, ele é apenas reduzido pela metade e, ao alcançar o 10º nível, o modificador de Força é dobrado para todos ataques corpo a corpo feitos nesse turno.\nSeu modificador de Força adicionado ao dano de seus ataques corpo a corpo é afetado pelo multiplicador de seu ataques críticos.\nForça Predatória\nPré-requisito: Troll\n\nA capacidade de adaptação do seu organismo ao meio ambiente concede a você os seguintes benefícios:\n\nVocê recebe proficiência em Sobrevivência, caso já tenha, recebe especialidade. Você pode encontrar comida em lugares quase impossíveis (embora essa comida possa não servir para não Trolls).\nSeus olhos se adaptaram de forma surpreendente ao escuro. Você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+      "description": "Seu corpo possui engrenagens reforçadas que podem ser alavancadas para movimentos mais poderosos. Você recebe os seguintes benefícios:\n\nUsando sua ação de movimento, você abdica de se mover durante seu turno para amplificar seu primeiro ataque corpo a corpo. O dano de seu primeiro ataque nesse turno tem seu modificador de Força dobrado (mínimo de 0). Você pode utilizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por Descanso Pleno. Ao alcançar o 7º nível, ao invés de abdicar de seu movimento, ele é apenas reduzido pela metade e, ao alcançar o 10º nível, o modificador de Força é dobrado para todos ataques corpo a corpo feitos nesse turno.\nSeu modificador de Força adicionado ao dano de seus ataques corpo a corpo é afetado pelo multiplicador de seu ataques críticos.\nForça Predatória\nPré-requisito: Troll\n\nA capacidade de adaptação do seu organismo ao meio ambiente concede a você os seguintes benefícios:\n\nVocê recebe proficiência em Sobrevivência, caso já tenha, recebe especialidade. Você pode encontrar comida em lugares quase impossíveis (embora essa comida possa não servir para não Trolls).\nSeus olhos se adaptaram de forma surpreendente ao escuro. Você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "SURVIVAL",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "modularidade",
@@ -1339,7 +1623,13 @@
         "arboreo"
       ],
       "prerequisite": "Arbóreo",
-      "description": "Um ancião de uma espécie já ancestral, você vagueia pelo mundo a séculos ou já viu muitas almas vivas passarem por você, com o tempo você se tornou mais resistente, tanto mentalmente quanto fisicamente. Você ganha os seguintes benefícios:\n\nVocê pode utilizar o truque druidismo sem utilizar quaisquer componentes verbais, somáticos ou materiais. Você pode usar esse truque dessa maneira um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê pode utilizar o truque resistência em si mesmo sem utilizar quaisquer componentes verbais, somáticos ou materiais. Você pode usar esse truque dessa maneira um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê recebe o Mistério da Flora."
+      "description": "Um ancião de uma espécie já ancestral, você vagueia pelo mundo a séculos ou já viu muitas almas vivas passarem por você, com o tempo você se tornou mais resistente, tanto mentalmente quanto fisicamente. Você ganha os seguintes benefícios:\n\nVocê pode utilizar o truque druidismo sem utilizar quaisquer componentes verbais, somáticos ou materiais. Você pode usar esse truque dessa maneira um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê pode utilizar o truque resistência em si mesmo sem utilizar quaisquer componentes verbais, somáticos ou materiais. Você pode usar esse truque dessa maneira um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê recebe o Mistério da Flora.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "flora"
+        }
+      ]
     },
     {
       "id": "arbusto-frutifero",
@@ -1349,7 +1639,13 @@
         "antroplantae"
       ],
       "prerequisite": "Antroplantæ",
-      "description": "Como as mais diversas plantas frutíferas você pode prover um doce sabor aos seus aliados. Você ganha os seguintes benefícios:\n\nVocê pode utilizar a magia bom fruto sem gastar pontos de mana nem precisa utilizar quaisquer componentes verbais, somáticos ou materiais. Você pode usar essa magia dessa maneira um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê recebe o Mistério Flora."
+      "description": "Como as mais diversas plantas frutíferas você pode prover um doce sabor aos seus aliados. Você ganha os seguintes benefícios:\n\nVocê pode utilizar a magia bom fruto sem gastar pontos de mana nem precisa utilizar quaisquer componentes verbais, somáticos ou materiais. Você pode usar essa magia dessa maneira um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê recebe o Mistério Flora.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "flora"
+        }
+      ]
     },
     {
       "id": "arsenal-floral",
@@ -1359,7 +1655,13 @@
         "antroplantae"
       ],
       "prerequisite": "Antroplantæ",
-      "description": "Algumas plantas tem seus espinhos, mas você tem todos eles. Você ganha os seguintes benefícios:\n\nVocê pode produzir espinhos resistentes capazes de serem usados como arma. Você possui proficiência com esses espinhos e eles causam 1d4 de dano perfurante e possuem as propriedades: leve, acuidade e arremesso (10-20 pés). Você pode criar um número de espinhos iguais ao dobro do seu bônus de Proficiência por descanso pleno. Criaturas que não sejam você possuem desvantagem em rolagem de ataques com esses espinhos. Espinhos criados dessa forma ficam secos e quebradiços depois de 24 horas, se tornando inutilizáveis.\nVocê recebe o Mistério Flora."
+      "description": "Algumas plantas tem seus espinhos, mas você tem todos eles. Você ganha os seguintes benefícios:\n\nVocê pode produzir espinhos resistentes capazes de serem usados como arma. Você possui proficiência com esses espinhos e eles causam 1d4 de dano perfurante e possuem as propriedades: leve, acuidade e arremesso (10-20 pés). Você pode criar um número de espinhos iguais ao dobro do seu bônus de Proficiência por descanso pleno. Criaturas que não sejam você possuem desvantagem em rolagem de ataques com esses espinhos. Espinhos criados dessa forma ficam secos e quebradiços depois de 24 horas, se tornando inutilizáveis.\nVocê recebe o Mistério Flora.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "flora"
+        }
+      ]
     },
     {
       "id": "esporos-inebriantes",
@@ -1372,7 +1674,13 @@
         "arboreo"
       ],
       "prerequisite": "Arbóreo",
-      "description": "Você pode criar um feromônio em seu corpo capaz de atordoar os sentidos de criaturas próximas à você. Você ganha os seguintes benefícios:\n\nUma vez por descanso longo, utilizando sua ação, você espalha esses esporos pelo seu corpo, criaturas a até 5 pés de você devem realizar uma salvaguarda de Constituição CD 8 + bônus de proficiência + modificador de Constituição. Em uma falha, a criatura fica Atordoada pelo próximo minuto, podendo repetir a salvaguarda no início de cada um dos seus turnos com desvantagem, enquanto em um sucesso fica imune desse efeito pelas próximas 24 horas.\nVocê recebe o Mistério Veneno."
+      "description": "Você pode criar um feromônio em seu corpo capaz de atordoar os sentidos de criaturas próximas à você. Você ganha os seguintes benefícios:\n\nUma vez por descanso longo, utilizando sua ação, você espalha esses esporos pelo seu corpo, criaturas a até 5 pés de você devem realizar uma salvaguarda de Constituição CD 8 + bônus de proficiência + modificador de Constituição. Em uma falha, a criatura fica Atordoada pelo próximo minuto, podendo repetir a salvaguarda no início de cada um dos seus turnos com desvantagem, enquanto em um sucesso fica imune desse efeito pelas próximas 24 horas.\nVocê recebe o Mistério Veneno.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "veneno"
+        }
+      ]
     },
     {
       "id": "florescimento-acelerado",
@@ -1418,7 +1726,13 @@
         "floral"
       ],
       "prerequisite": "Floral",
-      "description": "Você aprende a magia das florestas primitivas, que são reverenciadas e protegidas pelo seu povo. Você ganha os seguintes benefícios:\n\nVocê aprende a magia passos sem pegadas, podendo conjurá-la sem gastar mana um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério da Umbramancia."
+      "description": "Você aprende a magia das florestas primitivas, que são reverenciadas e protegidas pelo seu povo. Você ganha os seguintes benefícios:\n\nVocê aprende a magia passos sem pegadas, podendo conjurá-la sem gastar mana um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério da Umbramancia.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "umbramancia"
+        }
+      ]
     },
     {
       "id": "coletivo-forte",
@@ -1539,7 +1853,13 @@
         "nuvens"
       ],
       "prerequisite": "Meio-Dragão das Nuvens",
-      "description": "Os ventos parecem recuperar sua energia interior, como se a cada sopro renovado você fosse provido de mais força. Você recebe os seguintes benefícios:\n\nAo ser alvo de uma magia ou efeito que recupere uma quantidade de pontos de vida equivalentes ou maiores que o máximo de seu dado de vida, você pode usar sua reação para recuperar metade do seu bônus de Proficiência em pontos de mana. Você pode usar essa característica um número de vezes igual ao dobro de seu bônus de Proficiência por descanso pleno.\nVocê pode utilizar o truque leque de vento sem utilizar quaisquer componentes verbais, somáticos ou materiais. Você pode usar esse truque dessa maneira um número de vezes igual ao seu bônus de Proficiência por descanso pleno. O atributo de Conjuração para essa magia é Constituição.\nVocê recebe o Mistério Vento."
+      "description": "Os ventos parecem recuperar sua energia interior, como se a cada sopro renovado você fosse provido de mais força. Você recebe os seguintes benefícios:\n\nAo ser alvo de uma magia ou efeito que recupere uma quantidade de pontos de vida equivalentes ou maiores que o máximo de seu dado de vida, você pode usar sua reação para recuperar metade do seu bônus de Proficiência em pontos de mana. Você pode usar essa característica um número de vezes igual ao dobro de seu bônus de Proficiência por descanso pleno.\nVocê pode utilizar o truque leque de vento sem utilizar quaisquer componentes verbais, somáticos ou materiais. Você pode usar esse truque dessa maneira um número de vezes igual ao seu bônus de Proficiência por descanso pleno. O atributo de Conjuração para essa magia é Constituição.\nVocê recebe o Mistério Vento.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "vento"
+        }
+      ]
     },
     {
       "id": "essencia-elemental",
@@ -1590,7 +1910,14 @@
         "meio-dragao"
       ],
       "prerequisite": "Meio-Dragão",
-      "description": "Seu ancestral possuia uma resistência incomparável entre os Dragões, podendo ficar dias sem exaurir a própria energia. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência com Sobrevivência, caso já possua você recebe especialidade com a mesma.\nVocê pode, uma vez por descanso longo, remover um ponto de exaustão durante um descanso curto."
+      "description": "Seu ancestral possuia uma resistência incomparável entre os Dragões, podendo ficar dias sem exaurir a própria energia. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência com Sobrevivência, caso já possua você recebe especialidade com a mesma.\nVocê pode, uma vez por descanso longo, remover um ponto de exaustão durante um descanso curto.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "SURVIVAL",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "rocha-bruta",
@@ -1649,7 +1976,17 @@
         "troll-selva"
       ],
       "prerequisite": "Troll da Selva",
-      "description": "Os Trolls da Selva quando se dedicam a Venefício são exímios, você recebe os seguintes benefícios:\n\nVocê recebe o Mistério Elemental Veneno.\nVocê aprende o truque borrifo venenoso, esse truque é conjurado usando seu atributo de conjuração ou Constituição, o que for maior. Você pode conjurar este truque um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê recebe o Ofício de Apotecário."
+      "description": "Os Trolls da Selva quando se dedicam a Venefício são exímios, você recebe os seguintes benefícios:\n\nVocê recebe o Mistério Elemental Veneno.\nVocê aprende o truque borrifo venenoso, esse truque é conjurado usando seu atributo de conjuração ou Constituição, o que for maior. Você pode conjurar este truque um número de vezes igual ao seu bônus de proficiência por descanso pleno.\nVocê recebe o Ofício de Apotecário.",
+      "grants": [
+        {
+          "type": "CRAFT",
+          "value": "apotecario"
+        },
+        {
+          "type": "MYSTERY",
+          "value": "veneno"
+        }
+      ]
     },
     {
       "id": "forca-predatoria",
@@ -1659,7 +1996,14 @@
         "troll"
       ],
       "prerequisite": "Troll",
-      "description": "A capacidade de adaptação do seu organismo ao meio ambiente concede a você os seguintes benefícios:\n\nVocê recebe proficiência em Sobrevivência, caso já tenha, recebe especialidade. Você pode encontrar comida em lugares quase impossíveis (embora essa comida possa não servir para não Trolls).\nSeus olhos se adaptaram de forma surpreendente ao escuro. Você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+      "description": "A capacidade de adaptação do seu organismo ao meio ambiente concede a você os seguintes benefícios:\n\nVocê recebe proficiência em Sobrevivência, caso já tenha, recebe especialidade. Você pode encontrar comida em lugares quase impossíveis (embora essa comida possa não servir para não Trolls).\nSeus olhos se adaptaram de forma surpreendente ao escuro. Você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "SURVIVAL",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "furia-de-warmog",
@@ -1740,7 +2084,13 @@
         "vesani"
       ],
       "prerequisite": "Vesani",
-      "description": "Você é versado nos caminhos mágicos dos Vesani, possuindo muita habilidade e conhecimento em como conjurar essas magias. Você recebe os seguintes benefícios:\n\nVocê recebe o Mistério do Encantamento e outro Mistério Espiritual à sua escolha.\nUm número de vezes igual ao seu bônus de proficiência por descanso longo, você pode subtrair seu bônus de Proficiência do custo de mana de uma magia desses dois Mistérios (o custo não pode ser menor que 1)."
+      "description": "Você é versado nos caminhos mágicos dos Vesani, possuindo muita habilidade e conhecimento em como conjurar essas magias. Você recebe os seguintes benefícios:\n\nVocê recebe o Mistério do Encantamento e outro Mistério Espiritual à sua escolha.\nUm número de vezes igual ao seu bônus de proficiência por descanso longo, você pode subtrair seu bônus de Proficiência do custo de mana de uma magia desses dois Mistérios (o custo não pode ser menor que 1).",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "encantamento"
+        }
+      ]
     },
     {
       "id": "conjurador-marai",
@@ -1753,7 +2103,13 @@
         "marai"
       ],
       "prerequisite": "Marai",
-      "description": "Você aprendeu a se adaptar tanto na superfície quanto nas profundezas. Você ganha os seguintes benefícios:\n\nVocê aprende a magia criar ou destruir água, podendo conjurá-la sem pontos de mana. Você pode conjurar essa magia um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério Água."
+      "description": "Você aprendeu a se adaptar tanto na superfície quanto nas profundezas. Você ganha os seguintes benefícios:\n\nVocê aprende a magia criar ou destruir água, podendo conjurá-la sem pontos de mana. Você pode conjurar essa magia um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério Água.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "agua"
+        }
+      ]
     },
     {
       "id": "conjurador-suporte",
@@ -1766,7 +2122,13 @@
         "marai"
       ],
       "prerequisite": "Marai e habilidade de conjuração",
-      "description": "Você sempre se prepara para o próximo perigo que pode encontrar. Você ganha os seguintes benefícios:\n\nQuando você escolhe essa Herança, ela permite que você conjure duas magias de uma só vez com uma única ação, com os níveis máximos de magia que podem ser usados. Ambas as magias devem ter um tempo de conjuração de 1 Ação, ter uma duração de Instantâneo e pelo menos uma magia precisa atingir uma criatura aliada não causando dano à ela. Você pode usar essa habilidade um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério da Étermancia."
+      "description": "Você sempre se prepara para o próximo perigo que pode encontrar. Você ganha os seguintes benefícios:\n\nQuando você escolhe essa Herança, ela permite que você conjure duas magias de uma só vez com uma única ação, com os níveis máximos de magia que podem ser usados. Ambas as magias devem ter um tempo de conjuração de 1 Ação, ter uma duração de Instantâneo e pelo menos uma magia precisa atingir uma criatura aliada não causando dano à ela. Você pode usar essa habilidade um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério da Étermancia.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "etermancia"
+        }
+      ]
     },
     {
       "id": "contemplacao-estelar",
@@ -1779,7 +2141,13 @@
         "ottrani"
       ],
       "prerequisite": "Ottrani",
-      "description": "Você aprendeu como influenciar levemente o Sho’ma ao redor de uma criatura, fazendo com que seja mais difícil ter uma imagem certa da posição dela. Você recebe os seguintes benefícios:\n\nAo curar uma criatura, até o final do próximo turno dela, ataques de oportunidade realizados contra ela possuirão desvantagem e o próximo ataque que ela realizar possuirá vantagem.\nVocê recebe o Mistério da Étermancia."
+      "description": "Você aprendeu como influenciar levemente o Sho’ma ao redor de uma criatura, fazendo com que seja mais difícil ter uma imagem certa da posição dela. Você recebe os seguintes benefícios:\n\nAo curar uma criatura, até o final do próximo turno dela, ataques de oportunidade realizados contra ela possuirão desvantagem e o próximo ataque que ela realizar possuirá vantagem.\nVocê recebe o Mistério da Étermancia.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "etermancia"
+        }
+      ]
     },
     {
       "id": "controle-de-plumadagas",
@@ -1805,7 +2173,14 @@
         "ottrani"
       ],
       "prerequisite": "Vastaya Ottrani",
-      "description": "Você recebeu ensinamentos preciosos sobre como promover a cura, sendo especialista nisso. Você recebe os seguintes benefícios:\n\nAo utilizar habilidades, magias ou runas que curem uma criatura, você pode adicionar seu bônus de proficiência à cura. Além disso, você recebe proficiência em Medicina, caso já tenha, recebe especialidade.\nCaso você seja um Acólito do Rito das Estrelas, você recebe um uso adicional de sua Liturgia."
+      "description": "Você recebeu ensinamentos preciosos sobre como promover a cura, sendo especialista nisso. Você recebe os seguintes benefícios:\n\nAo utilizar habilidades, magias ou runas que curem uma criatura, você pode adicionar seu bônus de proficiência à cura. Além disso, você recebe proficiência em Medicina, caso já tenha, recebe especialidade.\nCaso você seja um Acólito do Rito das Estrelas, você recebe um uso adicional de sua Liturgia.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "MEDICINE",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "dancarino",
@@ -1818,7 +2193,23 @@
         "lhotlan"
       ],
       "prerequisite": "Lhotlan",
-      "description": "Você sabe como conquistar a atenção dos outros dançando. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência em Acrobacia e Atuação, caso você já possua proficiência na perícia escolhida, você recebe especialização com a mesma.\nEscolha entre Atuação ou Prestidigitação, a perícia escolhida recebe seu bônus de proficiência.\nSeu deslocamento aumenta em 10 pés."
+      "description": "Você sabe como conquistar a atenção dos outros dançando. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência em Acrobacia e Atuação, caso você já possua proficiência na perícia escolhida, você recebe especialização com a mesma.\nEscolha entre Atuação ou Prestidigitação, a perícia escolhida recebe seu bônus de proficiência.\nSeu deslocamento aumenta em 10 pés.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "ACROBATICS",
+          "expertise": true
+        },
+        {
+          "type": "SKILL",
+          "skill": "PERFORMANCE",
+          "expertise": true
+        },
+        {
+          "type": "SPEED",
+          "feet": 10
+        }
+      ]
     },
     {
       "id": "devorador-de-conhecimento",
@@ -1988,7 +2379,13 @@
         "shimon"
       ],
       "prerequisite": "Vastaya - Shimon",
-      "description": "A agilidade dos Shimon já é considerável, mas você conseguiu desenvolver ainda mais isso. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência com a perícia Atletismo. Caso já tenha, recebe especialidade com a mesma. Quando for escalar você pode usar todo seu deslocamento de caminhada.\nQuando você recebe dano, você pode usar sua reação para reduzir o dano em 1d6 + seu bônus de Proficiência. Você pode utilizar isso um número de vezes igual ao seu bônus de proficiência por Descanso Pleno. Esse dado aumenta para 1d8 no nível 7, 1d10 no nível 13 e 1d12 no nível 19."
+      "description": "A agilidade dos Shimon já é considerável, mas você conseguiu desenvolver ainda mais isso. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência com a perícia Atletismo. Caso já tenha, recebe especialidade com a mesma. Quando for escalar você pode usar todo seu deslocamento de caminhada.\nQuando você recebe dano, você pode usar sua reação para reduzir o dano em 1d6 + seu bônus de Proficiência. Você pode utilizar isso um número de vezes igual ao seu bônus de proficiência por Descanso Pleno. Esse dado aumenta para 1d8 no nível 7, 1d10 no nível 13 e 1d12 no nível 19.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "ATHLETICS"
+        }
+      ]
     },
     {
       "id": "nascido-em-kumungu",
@@ -2041,7 +2438,14 @@
         "lhotlan"
       ],
       "prerequisite": "Lhotlan",
-      "description": "Você treinou diligentemente para reunir segredos ativamente e passivamente. Você tem o dom de lembrar e sabe exatamente as perguntas certas a fazer quando procura informações. Você ganha os seguintes benefícios:\n\nVocê tem uma excelente memória, e pode recordar com precisão a maioria das coisas que viu e ouviu, incluindo o texto de um livro que você casualmente folheou, uma lista grande de nomes que você leu, ou o número de pronomes usados em um livro ou de um discurso que você ouviu. Pequenos detalhes podem exigir um teste de Inteligência com o CD definido pelo seu Mestre.\nVocê ganha a habilidade de ler os lábios a uma distância de 100 pés.\nVocê possui proficiência com Percepção e você recebe +1 em sua Percepção Passiva. Caso já possua proficiência em Percepção, você recebe especialidade com a mesma."
+      "description": "Você treinou diligentemente para reunir segredos ativamente e passivamente. Você tem o dom de lembrar e sabe exatamente as perguntas certas a fazer quando procura informações. Você ganha os seguintes benefícios:\n\nVocê tem uma excelente memória, e pode recordar com precisão a maioria das coisas que viu e ouviu, incluindo o texto de um livro que você casualmente folheou, uma lista grande de nomes que você leu, ou o número de pronomes usados em um livro ou de um discurso que você ouviu. Pequenos detalhes podem exigir um teste de Inteligência com o CD definido pelo seu Mestre.\nVocê ganha a habilidade de ler os lábios a uma distância de 100 pés.\nVocê possui proficiência com Percepção e você recebe +1 em sua Percepção Passiva. Caso já possua proficiência em Percepção, você recebe especialidade com a mesma.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "PERCEPTION",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "proficiencia-onirica",
@@ -2054,7 +2458,13 @@
         "fauhwoon"
       ],
       "prerequisite": "Fauhwoon",
-      "description": "Com uma profunda relação com a magia dos sonhos, você aprendeu a… forçá-los nos outros. Você ganha os seguintes benefícios:\n\nVocê aprende a magia sono, podendo conjurá-la sem gastar pontos de mana um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério da Oniromancia."
+      "description": "Com uma profunda relação com a magia dos sonhos, você aprendeu a… forçá-los nos outros. Você ganha os seguintes benefícios:\n\nVocê aprende a magia sono, podendo conjurá-la sem gastar pontos de mana um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério da Oniromancia.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "oniromancia"
+        }
+      ]
     },
     {
       "id": "propulsao-natural",
@@ -2132,7 +2542,18 @@
         "yordle"
       ],
       "prerequisite": "Yordle",
-      "description": "Você é um Yordle curioso e interessado nas culturas do reino material. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em História, caso você já possua, recebe especialidade com essa perícia.\nVocê aprende um idioma adicional à sua escolha da tabela de Idiomas Comuns no Capítulo 4: Detalhamento.\nVocê aprende o truque reparar. Você pode conjurar este truque um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+      "description": "Você é um Yordle curioso e interessado nas culturas do reino material. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência em História, caso você já possua, recebe especialidade com essa perícia.\nVocê aprende um idioma adicional à sua escolha da tabela de Idiomas Comuns no Capítulo 4: Detalhamento.\nVocê aprende o truque reparar. Você pode conjurar este truque um número de vezes igual ao seu bônus de Proficiência por descanso pleno.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "HISTORY",
+          "expertise": true
+        },
+        {
+          "type": "LANGUAGE_CHOICE",
+          "count": 1
+        }
+      ]
     },
     {
       "id": "teleporte-das-fadas",
@@ -2155,7 +2576,13 @@
         "aquatico"
       ],
       "prerequisite": "Yordle Aquático",
-      "description": "Você sabe se beneficiar dos ensinamentos da maré, você recebe os seguintes benefícios:\n\nVocê recebe acesso à magia jato d’água, podendo conjurá-la como uma magia de 2º nível sem gastar pontos de mana. Você pode conjurar essa magia um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério Elemental Água."
+      "description": "Você sabe se beneficiar dos ensinamentos da maré, você recebe os seguintes benefícios:\n\nVocê recebe acesso à magia jato d’água, podendo conjurá-la como uma magia de 2º nível sem gastar pontos de mana. Você pode conjurar essa magia um número de vezes igual a metade do seu bônus de Proficiência por descanso pleno.\nVocê recebe o Mistério Elemental Água.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "agua"
+        }
+      ]
     },
     {
       "id": "gas-corrosivo",

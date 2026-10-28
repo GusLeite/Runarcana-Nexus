@@ -200,3 +200,5 @@ font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:13px;letter-spacing
 .tc-cond{display:block;margin-top:8px}
 .cond-editor.compact{margin-top:8px}
 .cond-editor.compact .to-chip{font-size:11px;padding:3px 7px}
+
+.hp-bonus{display:block;margin-top:4px;font-size:12px;color:var(--gold-hi)}

@@ -126,6 +126,9 @@ public class AbilityService {
     public List<AbilityResponse> rest(Account account, RestType type) {
         Character character = characterService.characterOf(account);
         CharacterService.clearDeathSaves(character);
+        if (type == RestType.LONG && character.getExhaustion() != null && character.getExhaustion() > 0) {
+            character.setExhaustion(Math.max(0, character.getExhaustion() - Math.max(0, character.getModifier(gusleite.runarcana_nexus.enums.Attribute.CONSTITUTION))));
+        }
         List<CharacterAbility> list = abilities.findByCharacterOrderByIdAsc(character);
         for (CharacterAbility ability : list) {
             if (ability.getMaxUses() == null) continue;

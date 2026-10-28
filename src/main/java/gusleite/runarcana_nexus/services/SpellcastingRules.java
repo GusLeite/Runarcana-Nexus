@@ -35,10 +35,16 @@ public final class SpellcastingRules {
     // Uma fonte de conjuração da ficha. source: a fonte da habilidade de Conjuração ("Classe: Arcanista").
     public record Casting(String source, String className, Attribute attribute, int maxSpellLevel, int saveDc, int attackBonus) {}
 
+    static final String IMPROVED = "Combatente Arcano Aprimorado";
+    static final String IMPROVED_ROWS = "(Aprimorado)";
+
     private SpellcastingRules() {}
 
     public static List<Casting> castings(Character c, List<CharacterAbility> abilities) {
         List<Casting> out = new ArrayList<>();
+        // A tabela do Combatente Conjurador só segue depois de "(Aprimorado)" com a Técnica Combatente Arcano Aprimorado.
+        boolean improved = abilities.stream().anyMatch(a -> a.getName().contains(IMPROVED)
+                || (a.getSource() != null && a.getSource().contains(IMPROVED)));
         for (CharacterAbility a : abilities) {
             if (a.getType() == AbilityType.SPELL || a.getDescription() == null) continue;
             Matcher m = ATTRIBUTE.matcher(a.getDescription());
@@ -48,8 +54,11 @@ public final class SpellcastingRules {
             ClassLevel klass = classOf(c, a.getSource());
             int classLevel = klass != null ? klass.getLevel() : c.getLevel();
             int mod = c.getModifier(attribute);
+            String table = a.getDescription();
+            int cut = table.indexOf(IMPROVED_ROWS);
+            if (!improved && cut >= 0) table = table.substring(0, cut);
             out.add(new Casting(a.getSource(), klass == null ? null : klass.getClassName(), attribute,
-                    maxSpellLevel(a.getDescription(), classLevel), 8 + c.getProficiencyBonus() + mod, c.getProficiencyBonus() + mod));
+                    maxSpellLevel(table, classLevel), 8 + c.getProficiencyBonus() + mod, c.getProficiencyBonus() + mod));
         }
         return out;
     }

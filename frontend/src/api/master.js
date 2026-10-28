@@ -34,6 +34,10 @@ export const updateDocument = (token, id, doc) => request('/documents/' + id, { 
 export const setHpFor = (token, characterId, currentHp, tempHp) =>
   request('/character/' + characterId + '/hp', { method: 'PATCH', token, body: { currentHp, tempHp } })
 
+// Bônus nos PV máximos (pode ser negativo). Devolve a ficha.
+export const setMaxHpBonus = (token, characterId, maxHpBonus) =>
+  request('/character/' + characterId + '/hp', { method: 'PATCH', token, body: { maxHpBonus } })
+
 export const deleteDocument = (token, id) => request('/documents/' + id, { method: 'DELETE', token })
 
 // Regras da mesa: modo de traços da Runinata travado (traitBudget: id do modo ou null = o jogador escolhe).

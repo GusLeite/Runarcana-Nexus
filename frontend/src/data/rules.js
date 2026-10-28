@@ -450,6 +450,12 @@ function defaultRandom() {
   return Math.random()
 }
 
+// Escolhas que vêm das Heranças (chave "heritage:<id>:<índice>"), só das que estão em picks ([{ id }]).
+export function heritageChoices(choices, picks) {
+  const ids = new Set((picks ?? []).map(p => p.id))
+  return (choices ?? []).filter(c => c.key.startsWith('heritage:') && ids.has(c.key.split(':')[1]))
+}
+
 // ---------- Subida de nível ----------
 
 // Níveis do personagem que dão 1 ponto de Herança.

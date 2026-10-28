@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { applyLevelUp, fetchCatalog, fetchCharacters, fetchConditions, previewLevelUp } from '../../api/master.js'
 import ConditionEditor from './ConditionEditor.jsx'
 import HpEditor from './HpEditor.jsx'
-import { ATTRIBUTES, CLASS_NAMES, HERITAGE_LEVELS, keepChoices, levelChoices, rollDie } from '../../data/rules.js'
+import { ATTRIBUTES, CLASS_NAMES, HERITAGE_LEVELS, heritageChoices, keepChoices, levelChoices, rollDie } from '../../data/rules.js'
 import { CHARACTERS } from '../../data/characters.js'
 import ChoiceStep from '../creation/ChoiceStep.jsx'
 import HeritageStep from '../creation/HeritageStep.jsx'
@@ -61,7 +61,9 @@ export default function MasterSheets({ token, onError, onToast }) {
     return () => clearTimeout(t)
   }, [token, character, classId, request, onError])
 
-  const choices = useMemo(() => levelChoices(preview?.preview?.choices, newLevel), [preview, newLevel])
+  // As do nível e as das Heranças novas deste nível.
+  const choices = useMemo(() => [...levelChoices(preview?.preview?.choices, newLevel), ...heritageChoices(preview?.preview?.choices, draft.heritages)],
+    [preview, newLevel, draft.heritages])
   // Trocar a classe ou a opção de um recurso tira as escolhas que não existem mais.
   useEffect(() => {
     if (!preview) return

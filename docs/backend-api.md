@@ -32,7 +32,7 @@
 | POST | `/character/me/inspiration/use` | – (Bearer) | Jogador gasta a inspiração acesa. 400 sem inspiração. Devolve a ficha |
 | POST | `/character/me/abilities/{abilityId}/cast` | `{ level? }` (Bearer) | Jogador conjura a magia no nível (sem `level` = o da magia): truque não gasta; com usos próprios, no nível dela, gasta 1 uso; senão desconta a Mana do nível de "Pontos de Mana". Devolve `{ level, manaCost, usedUse, abilities }`. 400 se não for magia, não estiver preparada, abaixo do nível da magia, acima do nível máximo da ficha ou faltar Mana |
 | PATCH | `/character/me/death-saves` | `{ successes, failures }` (Bearer) | Jogador marca os próprios testes contra a morte (0–3 cada). Devolve `CharacterResponse`. 400 fora dos limites |
-| PATCH | `/character/{id}/hp` | `{ currentHp, tempHp? }` (mestre) | Mestre ajusta os PV de qualquer ficha (mesmos limites do jogador; PV > 0 zera os testes contra a morte). 403 para jogador |
+| PATCH | `/character/{id}/hp` | `{ currentHp?, tempHp?, maxHpBonus? }` (mestre) | Mestre ajusta os PV de qualquer ficha e o bônus nos PV máximos (`maxHpBonus`, pode ser negativo) (mesmos limites do jogador; PV > 0 zera os testes contra a morte). 403 para jogador |
 | PUT | `/character/{id}/abilities/{abilityId}` | `AbilityRequest` (mestre) | Edita a habilidade: mantém o ícone (se não vier outro) e os usos gastos (usos restantes = novo máximo − gastos, mínimo 0). 403 para jogador; 404 se não for da ficha |
 | PUT | `/documents/{id}` | `DocumentRequest` (mestre) | Edita título, tipo, texto, imagem e destinatários; as leituras ficam. Devolve com `readBy` |
 | PATCH | `/character/{id}/death-saves` | `{ successes, failures }` (mestre) | Mestre ajusta os testes contra a morte de qualquer ficha. 403 para jogador |

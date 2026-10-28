@@ -31,7 +31,13 @@ import gusleite.runarcana_nexus.repository.PlayerItemsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import gusleite.runarcana_nexus.model.player.ClassLevel;
+
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -124,6 +130,16 @@ public class CharacterService {
         return applyHp(characterOf(account), currentHp, tempHp);
     }
 
+    // Mestre: bônus nos PV máximos (pode ser negativo); os PV atuais não passam do novo máximo.
+    @Transactional
+    public CharacterResponse setMaxHpBonus(long characterId, int bonus) {
+        Character c = charRepository.findById(characterId).orElseThrow(() -> ApiException.notFound("Personagem não encontrado."));
+        if (c.getMaxHp() + bonus < 1) throw ApiException.badRequest("Os PV máximos não podem ficar abaixo de 1.");
+        c.setMaxHpBonus(bonus);
+        c.setCurrentHp(Math.min(c.getCurrentHp(), c.getMaxHpTotal()));
+        return CharacterResponse.of(c);
+    }
+
     // Mestre: PV de qualquer ficha (dano e cura na mesa), com os mesmos limites.
     @Transactional
     public CharacterResponse setHpFor(long characterId, Integer currentHp, Integer tempHp) {
@@ -133,8 +149,8 @@ public class CharacterService {
 
     private CharacterResponse applyHp(Character character, Integer currentHp, Integer tempHp) {
         if (currentHp == null) throw ApiException.badRequest("Informe os PV atuais.");
-        if (currentHp < 0 || currentHp > character.getMaxHp()) {
-            throw ApiException.badRequest("Os PV atuais vão de 0 a " + character.getMaxHp() + ".");
+        if (currentHp < 0 || currentHp > character.getMaxHpTotal()) {
+            throw ApiException.badRequest("Os PV atuais vão de 0 a " + character.getMaxHpTotal() + ".");
         }
         if (tempHp != null && tempHp < 0) throw ApiException.badRequest("Os PV temporários não podem ser negativos.");
         character.setCurrentHp(currentHp);
@@ -183,6 +199,8 @@ public class CharacterService {
                 .toList(), SpellcastingRules.maxSpellLevel(castings), cost);
     }
 
+    private static final Pattern STYLE = Pattern.compile("Estilo de Luta(?: adicional)? \\((.+)\\)");
+
     // Ataques: as armas do inventário (pelo catálogo, ou pela linha de Weapon no item sem catálogo) + desarmado.
     private List<AttackResponse> attacksOf(Character character, List<PlayerItems> items) {
         List<AttackCalculator.WeaponInput> weapons = new ArrayList<>();
@@ -194,8 +212,16 @@ public class CharacterService {
             if (catalog.isPresent()) weapons.add(AttackCalculator.fromCatalog(key, catalog.get()));
             else if (item instanceof Weapon w) weapons.add(AttackCalculator.fromWeapon(key, w));
         }
+        Set<String> styles = new HashSet<>();
+        for (CharacterAbility a : abilityRepository.findByCharacterOrderByIdAsc(character)) {
+            Matcher m = STYLE.matcher(a.getName());
+            if (m.matches()) for (String s : m.group(1).split(",\\s*")) styles.add(s.trim());
+        }
+        // "+1 nos níveis 8 e 16": pelo nível de Combatente (ou do personagem, sem a classe).
+        int level = character.getClassLevels().stream().filter(l -> "FIGHTER".equals(l.getClassId())).mapToInt(ClassLevel::getLevel)
+                .findFirst().orElse(character.getLevel());
         return AttackCalculator.calculate(character::getModifier, character.getProficiencyBonus(),
-                character.getWeaponProficiencies(), weapons);
+                character.getWeaponProficiencies(), weapons, styles, level);
     }
 
     // CA da ficha: as regras da criação (Character.armorRules), as armaduras e os escudos do inventário.

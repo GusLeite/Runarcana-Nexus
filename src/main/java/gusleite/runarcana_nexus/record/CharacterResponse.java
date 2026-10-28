@@ -66,7 +66,9 @@ public record CharacterResponse(
         int deathSuccesses,
         int deathFailures,
         List<String> conditions,
-        int exhaustion
+        int exhaustion,
+        // Bônus do mestre já somado em maxHp.
+        int maxHpBonus
 ) {
     public record ClassLevelResponse(String classId, String name, int level, String subclass) {}
 
@@ -80,7 +82,7 @@ public record CharacterResponse(
                 character.getAge(),
                 character.getHeight(),
                 character.getCharacterClass().getClassName(),
-                character.getMaxHp(),
+                character.getMaxHpTotal(),
                 character.getCurrentHp(),
                 character.getTempHp() == null ? 0 : character.getTempHp(),
                 character.getStr(),
@@ -125,7 +127,8 @@ public record CharacterResponse(
                 character.getDeathFailures() == null ? 0 : character.getDeathFailures(),
                 // Em ordem alfabética, como no livro.
                 character.getConditions().stream().sorted().toList(),
-                character.getExhaustion() == null ? 0 : character.getExhaustion()
+                character.getExhaustion() == null ? 0 : character.getExhaustion(),
+                character.getMaxHpBonus() == null ? 0 : character.getMaxHpBonus()
         );
     }
 }

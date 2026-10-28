@@ -87,11 +87,16 @@ public class CharacterController {
             @PathVariable long id,
             @RequestBody HpRequest request) {
         authService.requireMaster(authorization);
-        return ResponseEntity.ok(charService.setHpFor(id, request.currentHp(), request.tempHp()));
+        CharacterResponse out = null;
+        if (request.maxHpBonus() != null) out = charService.setMaxHpBonus(id, request.maxHpBonus());
+        if (request.currentHp() != null) out = charService.setHpFor(id, request.currentHp(), request.tempHp());
+        if (out == null) throw gusleite.runarcana_nexus.exception.ApiException.badRequest("Informe os PV atuais ou o bônus de PV máximos.");
+        return ResponseEntity.ok(out);
     }
 
     // tempHp nulo = mantém o que já tem.
-    public record HpRequest(Integer currentHp, Integer tempHp) {}
+    // maxHpBonus: só o mestre (PATCH /character/{id}/hp).
+    public record HpRequest(Integer currentHp, Integer tempHp, Integer maxHpBonus) {}
 
     // Jogador: marca os próprios testes contra a morte (0–3 sucessos e falhas).
     @PatchMapping("/me/death-saves")

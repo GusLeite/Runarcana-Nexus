@@ -35,6 +35,14 @@ class SpellcastingRulesTests {
     }
 
     @Test
+    void combatenteArcanoSemOAprimoradoParaNoSegundoNivel() {
+        String text = "Truques / magias / nível máximo: 1º 2/–/– · 3º 2/3/1º · 8º 3/6/2º · (Aprimorado) 13º 4/9/3º · 19º 4/12/4º.";
+        String cut = text.substring(0, text.indexOf(SpellcastingRules.IMPROVED_ROWS));
+        assertThat(SpellcastingRules.maxSpellLevel(cut, 20)).isEqualTo(2);
+        assertThat(SpellcastingRules.maxSpellLevel(text, 20)).isEqualTo(4);
+    }
+
+    @Test
     void arcanistaEXamaPelaTabela() {
         assertThat(SpellcastingRules.maxSpellLevel(conjuration("ARCANIST"), 3)).isEqualTo(2);
         assertThat(SpellcastingRules.maxSpellLevel(conjuration("ARCANIST"), 20)).isEqualTo(9);

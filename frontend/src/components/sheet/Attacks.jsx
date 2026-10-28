@@ -2,6 +2,7 @@ import { DAMAGE_TYPES, attributeById, critDice, formatModifier, parseDice } from
 
 // Ataques com arma (contas do back-end): o bônus rola o d20 (com o modo das rolagens e a margem de crítico),
 // o dano rola os dados; "Crítico" rola os dados multiplicados e "2 mãos" o dano versátil.
+// Embaixo, cada Estilo de Luta que vale para a arma (bônus e dano já somados; o Combatente usa um por vez).
 export default function Attacks({ attacks, onRoll, onRollDice }) {
   return (
     <>
@@ -43,6 +44,21 @@ export default function Attacks({ attacks, onRoll, onRollDice }) {
                   </button>
                 )}
               </span>
+              {a.styles?.length > 0 && (
+                <span className="attack-styles">
+                  {a.styles.map(s => (
+                    <span key={s.name} className="attack-style" title={s.note ?? undefined}>
+                      <em>{s.name}</em>
+                      <button type="button" className="chip-btn" onClick={() => onRoll(a.name + ' · ' + s.name, s.attackBonus, a.critRange)}>
+                        {formatModifier(s.attackBonus)}
+                      </button>
+                      {parseDice(s.damage) && (
+                        <button type="button" className="chip-btn" onClick={() => onRollDice(a.name + ' · ' + s.name, s.damage)}>{s.damage}</button>
+                      )}
+                    </span>
+                  ))}
+                </span>
+              )}
             </li>
           )
         })}

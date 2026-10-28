@@ -251,7 +251,7 @@ public class CreationService {
         int newMax = b.maxHp();
         c.setLevel(b.level);
         c.setMaxHp(newMax);
-        c.setCurrentHp(Math.max(0, Math.min(newMax, c.getCurrentHp() + newMax - oldMax)));
+        c.setCurrentHp(Math.max(0, Math.min(c.getMaxHpTotal(), c.getCurrentHp() + newMax - oldMax)));
         c.setStr(b.total(Attribute.STRENGTH));
         c.setDex(b.total(Attribute.DEXTERITY));
         c.setCon(b.total(Attribute.CONSTITUTION));
@@ -531,6 +531,7 @@ public class CreationService {
         if (b.subclass != null) sources.add(new Source("subclass:" + b.subclass.id(), subclassLabel(b.klass) + ": " + b.subclass.name(), b.subclass.grantsOrEmpty()));
         if (b.background != null) sources.add(new Source("background:" + b.background.id(), "Passado: " + b.background.name(), b.background.grantsOrEmpty()));
         if (!catalog.runicNatureOrEmpty().isEmpty()) sources.add(new Source("runic-nature", "Natureza Rúnica", catalog.runicNatureOrEmpty()));
+        sources.addAll(heritageSources(r));
         if (b.klass != null) {
             b.classLevels.put(b.klass.id(), 1);
             b.classLevelAt.computeIfAbsent(b.klass.id(), x -> new ArrayList<>()).add(1);
@@ -1548,6 +1549,22 @@ public class CreationService {
 
     // Compra das Heranças com os pontos de Herança. Cada escolha custa 1 ponto do tipo certo:
     // ponto de Região compra Heranças de Região e Gerais; de Origem, de Origem e Gerais; ANY, qualquer uma.
+    // Efeitos das Heranças escolhidas (criação e níveis), uma fonte por Herança, mesmo escolhida duas vezes.
+    // A compra (pontos, pré-requisitos) é conferida depois, em heritages().
+    private List<Source> heritageSources(CreationRequest r) {
+        Set<String> ids = new LinkedHashSet<>();
+        if (r.heritages() != null) r.heritages().stream().filter(java.util.Objects::nonNull).forEach(p -> ids.add(p.id()));
+        for (LevelPick lp : r.levelsOrEmpty()) {
+            if (lp.heritages() != null) lp.heritages().stream().filter(java.util.Objects::nonNull).forEach(p -> ids.add(p.id()));
+        }
+        List<Source> out = new ArrayList<>();
+        for (String id : ids) {
+            rules.heritage(id).filter(h -> !h.grantsOrEmpty().isEmpty())
+                    .ifPresent(h -> out.add(new Source("heritage:" + h.id(), "Herança: " + h.name(), h.grantsOrEmpty())));
+        }
+        return out;
+    }
+
     private void heritages(CreationRequest r, Build b) {
         Map<String, Integer> times = new LinkedHashMap<>();
         Map<String, String> options = new LinkedHashMap<>();

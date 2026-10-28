@@ -79,6 +79,25 @@ class AttackCalculatorTests {
     }
 
     @Test
+    void estilosDeLutaComOBonusJaSomado() {
+        // FOR +1, DES +3, proficiência +2, 8º nível (+2 nos estilos).
+        var espada = AttackCalculator.fromCatalog("ITEM:1", EquipmentRules.item(items, "espada-longa").orElseThrow());
+        var arco = AttackCalculator.fromCatalog("ITEM:2", EquipmentRules.item(items, "arco-curto").orElseThrow());
+        List<AttackResponse> attacks = AttackCalculator.calculate(MODS, 2, List.of("Armas marciais", "Armas simples"), List.of(espada, arco),
+                java.util.Set.of("Duelismo", "Arquearia", "Combate com Armas Grandes", "Combate Desarmado"), 8);
+        assertThat(attacks.get(0).styles()).extracting(AttackResponse.StyleVariant::name)
+                .containsExactly("Combate com Armas Grandes", "Duelismo");
+        // Duelismo: +2 no ataque e +4 no dano; Armas Grandes usa o dano versátil.
+        assertThat(attacks.get(0).styles().get(1).attackBonus()).isEqualTo(5);
+        assertThat(attacks.get(0).styles().get(1).damage()).isEqualTo("1d8+5");
+        assertThat(attacks.get(0).styles().get(0).damage()).isEqualTo("1d10+3");
+        // Arquearia: + metade da proficiência; arco de duas mãos não ganha Duelismo.
+        assertThat(attacks.get(1).styles()).singleElement().satisfies(s -> assertThat(s.attackBonus()).isEqualTo(6));
+        // Combate Desarmado: 1d4 + FOR.
+        assertThat(attacks.get(2).styles().getFirst().damage()).isEqualTo("1d4+1");
+    }
+
+    @Test
     void criticoPadraoEMultiplicador() {
         assertThat(AttackCalculator.critical("x2")).containsExactly(20, 2);
         assertThat(AttackCalculator.critical("18 x4")).containsExactly(18, 4);

@@ -3,6 +3,8 @@ package gusleite.runarcana_nexus.record;
 import gusleite.runarcana_nexus.enums.Attribute;
 import gusleite.runarcana_nexus.enums.DamageType;
 
+import java.util.List;
+
 // Um ataque da ficha (arma do inventário ou desarmado), já com as contas: o front só rola.
 // - attackBonus: mod. do atributo + proficiência (se proficiente); damage: "1d8+3" (dado + o mesmo mod.).
 // - versatileDamage: dano com as duas mãos ("1d10+3"), só nas armas versáteis.
@@ -21,5 +23,10 @@ public record AttackResponse(
         int critMultiplier,
         String range,
         String mastery,
-        String properties
-) {}
+        String properties,
+        // Estilos de Luta da ficha que valem para este ataque, cada um com o bônus e o dano já somados
+        // (o Combatente usa um por vez; o jogador escolhe qual rolar).
+        List<StyleVariant> styles
+) {
+    public record StyleVariant(String name, int attackBonus, String damage, String note) {}
+}

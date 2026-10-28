@@ -133,7 +133,7 @@ Como os pontos funcionam no assistente:
 - Cada Herança custa **1 ponto**. O tipo do ponto vem da concessão `HERITAGE_POINTS` da origem: `REGION` compra Heranças **de Região** (da região escolhida) e **Gerais**; `ORIGIN` compra **de Origem** e **Gerais**; `GENERAL` só compra **Gerais** (traço Herança da Runinata); `ANY` compra qualquer uma. O Humano tem 2 pontos `REGION` ("Receba 2 pontos de Herança de Região").
 - Os pré-requisitos de origem, linhagem, região, classe, atributo mínimo, `requires` e `excludes` são conferidos sozinhos. O resto do texto (ex.: "Conjuração", "proficiência com arma de fogo") **só é mostrado**: confira com o mestre.
 - Ponto sobrando com alguma Herança disponível impede a criação.
-- O efeito de cada Herança é o **texto**: ela vira uma habilidade do tipo Herança na ficha. Nenhum bônus é aplicado sozinho ainda.
+- O efeito de cada Herança é o **texto** (vira uma habilidade do tipo Herança). O que dá para aplicar sozinho vai em `grants`, no formato das concessões (`SKILL` com `expertise`, `SKILL_CHOICE`, `SAVING_THROW`, `SPEED`, `LANGUAGE_CHOICE`, `CRAFT`, `MYSTERY`...); `FEATURE` e `HERITAGE_POINTS` não são aceitos. As escolhas aparecem na etapa Heranças, logo abaixo dos cartões.
 - Níveis 5, 9, 13 e 17 (Heranças de Origem e Gerais, sem as de Região nem as "Inicial") entram com a subida de nível.
 
 As Variantes do Humano levam o texto completo do capítulo "Heranças Variantes": Anfíbio, Colosso, Progressão Tecnológica e Ressurgido podem ser escolhidas 2 vezes; Meio-Vastaya, Progressão Tecnológica e Ressurgido pedem a opção. A Glacinata usa o texto da Natividade Elemental.

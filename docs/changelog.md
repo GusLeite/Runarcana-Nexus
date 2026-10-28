@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-28 — Efeitos de Herança, Estilos de Luta, Exaustão e bônus de PV (`feature/character-sheet`)
+- `RuleHeritage.grants`: 35 Heranças com perícia (especialidade se já tiver), salvaguarda, deslocamento, idioma ou ofício e 21 com Mistério; viram a fonte "Herança: X" e as escolhas aparecem na etapa Heranças (e na subida de nível).
+- Ataques: `styles` com os Estilos de Luta que valem para a arma (Duelismo, Arquearia, Arremessar, Duas Mãos, Armas Grandes, Desarmado), já calculados.
+- Combatente Arcano sem o Aprimorado para no 2º nível de magia; descanso longo tira Exaustão = mod. de CON; `maxHpBonus` do mestre (PV máx. +/− no painel).
+- Testes: `herancaAplicaPericiaEEspecialidade`, `estilosDeLutaComOBonusJaSomado`, `combatenteArcanoSemOAprimoradoParaNoSegundoNivel`, `descansoLongoBaixaAExaustao` e bônus de PV.
+
 ## 2026-10-28 — Visão da mesa, Etapa 6 do plano (`feature/character-sheet`)
 - `GET /character/table` (mestre): cada ficha com a CA em uso e a Mana; `GET /character` passa a exigir o mestre.
 - Front: aba **Mesa** (primeira do painel, `MasterTable.jsx`): cartões com PV (dano/cura/temporários), CA, Mana, testes contra a morte, condições (editáveis) e inspiração; polling de 5 s.

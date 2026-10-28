@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { createCharacter, fetchCatalog, previewCreation } from '../../api/creation.js'
-import { ATTRIBUTES } from '../../data/rules.js'
+import { ATTRIBUTES, heritageChoices } from '../../data/rules.js'
 import { replay } from '../../utils/motion.js'
 import OptionStep from './OptionStep.jsx'
 import AttributeStep from './AttributeStep.jsx'
@@ -195,7 +195,13 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
               onChange={(key, list) => setDraft(d => ({ ...d, choices: { ...d.choices, [key]: list } }))} />
           )}
           {current === 'heritages' && (
-            <HeritageStep heritages={catalog.heritages} preview={preview} picks={draft.heritages} onChange={list => set('heritages', list)} />
+            <>
+              <HeritageStep heritages={catalog.heritages} preview={preview} picks={draft.heritages} onChange={list => set('heritages', list)} />
+              {heritageChoices(preview?.choices, draft.heritages).length > 0 && (
+                <ChoiceStep choices={heritageChoices(preview?.choices, draft.heritages)} picks={draft.choices} crafts={catalog.crafts ?? []}
+                  onChange={(key, list) => setDraft(d => ({ ...d, choices: { ...d.choices, [key]: list } }))} />
+              )}
+            </>
           )}
           {current === 'details' && (
             <DetailsStep draft={draft} onChange={set} />

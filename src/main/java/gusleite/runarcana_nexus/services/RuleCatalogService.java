@@ -530,6 +530,9 @@ public class RuleCatalogService {
             else if (!seen.add(h.id().toLowerCase())) p.add(where + ": id repetido");
             if (blank(h.name())) p.add(where + ": falta name");
             if (blank(h.description())) p.add(where + ": falta description");
+            validateGrants(where, h.grantsOrEmpty(), p, crafts);
+            h.grantsOrEmpty().stream().filter(g -> g.type() == GrantType.FEATURE || g.type() == GrantType.HERITAGE_POINTS)
+                    .forEach(g -> p.add(where + ": grants não aceita " + g.type() + " (o texto da Herança já vira a habilidade)"));
             if (h.category() == null) p.add(where + ": category deve ser um destes: " + Arrays.toString(HeritageCategory.values()));
             if (h.category() == HeritageCategory.ORIGIN && h.originsOrEmpty().isEmpty() && h.anyOfOrEmpty().isEmpty()) {
                 p.add(where + ": Herança de Origem precisa de origins ou anyOf");

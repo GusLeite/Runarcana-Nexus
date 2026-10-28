@@ -101,4 +101,4 @@ Não fazem parte deste plano; continuam nas pendências de [backend.md](backend.
 
 - **Segurança**: senha do banco fora do Git, rotas sem login (`POST /character`, `/background`, `/character-classes`; `GET /character` já exige o mestre), ligação conta ↔ personagem por chave estrangeira, reset de senha, CORS, enums salvos como ordinal, token no `localStorage`.
 - **Front/polimento**: artes (Proto, Titan, Loge, itens), vídeos pesados no Git, roteamento, atualização em tempo real, histórico de rolagens compartilhado.
-- **Regras no texto**: efeitos de Herança, Aprimoramentos restantes, listas de magia de origem, Mistérios do Vítreo, ofícios.
+- **Regras no texto**: o que sobrou dos efeitos de Herança e dos Aprimoramentos, listas de magia de origem, Mistérios do Vítreo, ofícios (em andamento; ver o changelog).

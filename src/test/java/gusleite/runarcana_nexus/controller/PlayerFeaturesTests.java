@@ -229,6 +229,29 @@ class PlayerFeaturesTests {
                 .andExpect(jsonPath("$.currentHp").value(10))
                 .andExpect(jsonPath("$.tempHp").value(5));
         patchJson("/character/" + rudoId + "/hp", master, "{\"currentHp\":99}").andExpect(status().isBadRequest());
+        // Bônus nos PV máximos: 33 + 5; a cura vai até 38. Bônus negativo baixa os PV atuais.
+        patchJson("/character/" + rudoId + "/hp", master, "{\"maxHpBonus\":5}")
+                .andExpect(jsonPath("$.maxHp").value(38))
+                .andExpect(jsonPath("$.maxHpBonus").value(5));
+        patchJson("/character/me/hp", rudo, "{\"currentHp\":38}").andExpect(status().isOk());
+        patchJson("/character/" + rudoId + "/hp", master, "{\"maxHpBonus\":-10}")
+                .andExpect(jsonPath("$.maxHp").value(23))
+                .andExpect(jsonPath("$.currentHp").value(23));
+        patchJson("/character/" + rudoId + "/hp", master, "{\"maxHpBonus\":-40}").andExpect(status().isBadRequest());
+    }
+
+    // Rudo: CON 15 (+2). O descanso longo tira 2 níveis de Exaustão; o curto, nenhum.
+    @Test
+    void descansoLongoBaixaAExaustao() throws Exception {
+        String master = login("mestre");
+        String rudo = login("rudo");
+        patchJson("/character/" + rudoId + "/conditions", master, "{\"exhaustion\":3}").andExpect(status().isOk());
+        mvc.perform(post("/character/me/rest").header("Authorization", "Bearer " + rudo)
+                .contentType(MediaType.APPLICATION_JSON).content("{\"type\":\"SHORT\"}")).andExpect(status().isOk());
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + rudo)).andExpect(jsonPath("$.character.exhaustion").value(3));
+        mvc.perform(post("/character/me/rest").header("Authorization", "Bearer " + rudo)
+                .contentType(MediaType.APPLICATION_JSON).content("{\"type\":\"LONG\"}")).andExpect(status().isOk());
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + rudo)).andExpect(jsonPath("$.character.exhaustion").value(1));
     }
 
     private ResultActions patchJson(String url, String token, String json) throws Exception {
