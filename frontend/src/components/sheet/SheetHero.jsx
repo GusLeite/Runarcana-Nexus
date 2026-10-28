@@ -3,11 +3,13 @@ import Num from './Num.jsx'
 import SpeedToggle from './SpeedToggle.jsx'
 import ArmorClass from './ArmorClass.jsx'
 import HitPoints from './HitPoints.jsx'
+import DeathSaves from './DeathSaves.jsx'
+import ConditionChips from './ConditionChips.jsx'
 
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 // Coluna da esquerda: splash do personagem (como no perfil do cliente), nível, PV e identidade.
-export default function SheetHero({ character, sheet, armorClass, onDefense, onShield, onHp }) {
+export default function SheetHero({ character, sheet, armorClass, onDefense, onShield, onHp, onDeathSaves, onDeathRoll, conditionCatalog }) {
   const level = sheet?.level ?? 0
 
   return (
@@ -32,6 +34,10 @@ export default function SheetHero({ character, sheet, armorClass, onDefense, onS
       {sheet && (
         <>
           <HitPoints currentHp={sheet.currentHp} tempHp={sheet.tempHp ?? 0} maxHp={sheet.maxHp} onChange={onHp} />
+          {sheet.currentHp === 0 && onDeathSaves && (
+            <DeathSaves successes={sheet.deathSuccesses ?? 0} failures={sheet.deathFailures ?? 0} onSet={onDeathSaves} onRoll={onDeathRoll} />
+          )}
+          <ConditionChips ids={sheet.conditions} exhaustion={sheet.exhaustion} catalog={conditionCatalog} />
 
           <ArmorClass armorClass={armorClass} onChoose={onDefense} onShield={onShield} />
 

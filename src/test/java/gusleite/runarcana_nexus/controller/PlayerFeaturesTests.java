@@ -129,6 +129,51 @@ class PlayerFeaturesTests {
         cast(rudo, mana, null).andExpect(status().isBadRequest());
     }
 
+    // ---------- testes contra a morte e condições ----------
+
+    @Test
+    void testesContraAMorteZeramAoGanharPv() throws Exception {
+        String master = login("mestre");
+        String rudo = login("rudo");
+        patchJson("/character/me/hp", rudo, "{\"currentHp\":0}").andExpect(status().isOk());
+        patchJson("/character/me/death-saves", rudo, "{\"successes\":2,\"failures\":1}")
+                .andExpect(jsonPath("$.deathSuccesses").value(2))
+                .andExpect(jsonPath("$.deathFailures").value(1));
+        patchJson("/character/me/death-saves", rudo, "{\"successes\":4,\"failures\":0}").andExpect(status().isBadRequest());
+        patchJson("/character/" + rudoId + "/death-saves", rudo, "{\"successes\":0,\"failures\":3}").andExpect(status().isForbidden());
+        patchJson("/character/" + rudoId + "/death-saves", master, "{\"successes\":2,\"failures\":3}")
+                .andExpect(jsonPath("$.deathFailures").value(3));
+        // Voltou com 1 PV: zera.
+        patchJson("/character/me/hp", rudo, "{\"currentHp\":1}")
+                .andExpect(jsonPath("$.deathSuccesses").value(0))
+                .andExpect(jsonPath("$.deathFailures").value(0));
+    }
+
+    @Test
+    void soOMestreMexeNasCondicoes() throws Exception {
+        String master = login("mestre");
+        String rudo = login("rudo");
+        mvc.perform(get("/conditions").header("Authorization", "Bearer " + rudo))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exhaustionMax").value(10))
+                .andExpect(jsonPath("$.conditions[?(@.id == 'caido')].name").value("Caído"));
+        patchJson("/character/" + rudoId + "/conditions", rudo, "{\"conditions\":[\"caido\"]}").andExpect(status().isForbidden());
+        patchJson("/character/" + rudoId + "/conditions", master, "{\"conditions\":[\"caido\",\"envenenado\"],\"exhaustion\":2}")
+                .andExpect(jsonPath("$.conditions.length()").value(2))
+                .andExpect(jsonPath("$.exhaustion").value(2));
+        patchJson("/character/" + rudoId + "/conditions", master, "{\"conditions\":[\"voando\"]}").andExpect(status().isBadRequest());
+        patchJson("/character/" + rudoId + "/conditions", master, "{\"exhaustion\":11}").andExpect(status().isBadRequest());
+        // Só a Exaustão: as condições ficam.
+        patchJson("/character/" + rudoId + "/conditions", master, "{\"exhaustion\":0}")
+                .andExpect(jsonPath("$.conditions.length()").value(2));
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + rudo))
+                .andExpect(jsonPath("$.character.conditions[0]").value("caido"));
+    }
+
+    private ResultActions patchJson(String url, String token, String json) throws Exception {
+        return mvc.perform(patch(url).header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON).content(json));
+    }
+
     private long ability(String master, String json) throws Exception {
         return idOf(mvc.perform(post("/character/" + rudoId + "/abilities").header("Authorization", "Bearer " + master)
                         .contentType(MediaType.APPLICATION_JSON).content(json))

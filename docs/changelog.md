@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-28 — Testes contra a morte e condições, Etapa 4 do plano (`feature/character-sheet`)
+- `rules/condicoes.json` (Capítulo 14 da wiki: 22 condições resumidas + Exaustão até **10**, não 6), `ConditionService` e `GET /conditions`; `Character.conditions`/`exhaustion` só pelo mestre (`PATCH /character/{id}/conditions`).
+- `deathSuccesses`/`deathFailures`: o jogador marca (`/character/me/death-saves`), o mestre ajusta; zeram ao ganhar PV e no descanso.
+- Front: círculos dos testes com 0 PV (rolar: 10+, 1 = duas falhas, 20 = 1 PV), chips de condição no herói e `ConditionEditor` na aba Fichas do mestre.
+- Testes: `testesContraAMorteZeramAoGanharPv`, `soOMestreMexeNasCondicoes`, `deathSaveResult`. Conferido no sandbox.
+
 ## 2026-10-28 — Conjurar gastando Mana, Etapa 3 do plano (`feature/character-sheet`)
 - `SpellcastingRules`: atributo de conjuração e nível máximo de magia lidos do texto das habilidades de Conjuração (vale nas fichas antigas); `saveDc`/`spellAttack` nas magias e `spellcasting` na ficha (maior nível entre as classes, custo de Mana).
 - `POST /character/me/abilities/{id}/cast`: truque grátis, usos próprios primeiro, senão a Mana do nível; 400 acima do nível máximo, sem Mana ou não preparada. Decisão: em vez de `castingAttribute` no `criacao.json`, o texto do livro já na ficha.

@@ -54,6 +54,15 @@ export const setItemQuantity = (token, characterId, entryId, quantity) =>
 export const removeItem = (token, characterId, entryId) =>
   request('/character/' + characterId + '/items/' + entryId, { method: 'DELETE', token })
 
+// Condições (ids; a lista substitui a atual) e Exaustão; nulos = mantém. Devolve a ficha (CharacterResponse).
+export const setConditions = (token, characterId, conditions, exhaustion) =>
+  request('/character/' + characterId + '/conditions', { method: 'PATCH', token, body: { conditions, exhaustion } })
+
+export const setDeathSavesFor = (token, characterId, successes, failures) =>
+  request('/character/' + characterId + '/death-saves', { method: 'PATCH', token, body: { successes, failures } })
+
+export { fetchConditions } from './character.js'
+
 export const setGold = (token, characterId, gold) => request('/character/' + characterId + '/gold', { method: 'PATCH', token, body: { gold } })
 
 export const setInspiration = (token, characterId, inspiration) =>

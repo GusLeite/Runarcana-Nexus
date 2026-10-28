@@ -107,6 +107,7 @@ public class AbilityService {
     @Transactional
     public List<AbilityResponse> rest(Account account, RestType type) {
         Character character = characterService.characterOf(account);
+        CharacterService.clearDeathSaves(character);
         List<CharacterAbility> list = abilities.findByCharacterOrderByIdAsc(character);
         for (CharacterAbility ability : list) {
             if (ability.getMaxUses() == null) continue;

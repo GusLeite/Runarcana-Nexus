@@ -8,9 +8,9 @@ Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criac
 
 ## Estado atual (2026-10-27)
 
-- Ficha: atributos, perícias, resistências, CA (com armadura e escudo do inventário), PV editáveis pelo jogador, habilidades com usos, magias, descanso curto/longo, magias preparadas, rolagens de d20 e de dano, ataques com arma (Etapa 2), conjurar gastando Mana com CD e ataque de magia (Etapa 3), inventário (o jogador gasta), documentos, anotações, aba Livro.
+- Ficha: atributos, perícias, resistências, CA (com armadura e escudo do inventário), PV editáveis pelo jogador, habilidades com usos, magias, descanso curto/longo, magias preparadas, rolagens de d20 e de dano, ataques com arma (Etapa 2), conjurar gastando Mana com CD e ataque de magia (Etapa 3), testes contra a morte e condições (Etapa 4; Exaustão até 10, como no livro), inventário (o jogador gasta), documentos, anotações, aba Livro.
 - Mestre: cria/apaga habilidades e documentos, sobe de nível (com multiclasse), trava regras da mesa, dá e tira itens, ouro e inspiração (Etapa 1).
-- Não existe: testes contra a morte; condições; editar habilidade/documento; visão da mesa para o mestre.
+- Não existe: editar habilidade/documento; visão da mesa para o mestre.
 
 ## Etapa 1 — Inventário, ouro e inspiração pelo mestre — **feita (2026-10-28)**
 
@@ -60,7 +60,7 @@ Front:
 
 Testes: custo por nível, Mana insuficiente, truque grátis, nível acima do permitido, multiclasse.
 
-## Etapa 4 — Testes contra a morte e condições
+## Etapa 4 — Testes contra a morte e condições — **feita (2026-10-28)**
 
 **Por quê**: a cena de 0 PV e as condições (Caído, Agarrado, Envenenado…) acontecem em todo combate.
 

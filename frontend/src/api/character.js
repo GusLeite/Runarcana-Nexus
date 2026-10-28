@@ -29,6 +29,13 @@ export const setHp = (token, currentHp, tempHp) => request('/character/me/hp', {
 // O jogador só gasta (decisão da mesa): 1 de um consumível, ouro e a inspiração acesa. Devolvem a ficha inteira.
 export const consumeItem = (token, entryId) => request('/character/me/items/' + entryId + '/use', { method: 'POST', token })
 
+// Testes contra a morte da própria ficha (0–3 cada). Devolve a ficha (CharacterResponse).
+export const setDeathSaves = (token, successes, failures) =>
+  request('/character/me/death-saves', { method: 'PATCH', token, body: { successes, failures } })
+
+// Condições do livro: { exhaustionMax, exhaustion, conditions: [{ id, name, text }] }.
+export const fetchConditions = token => request('/conditions', { token })
+
 export const spendGold = (token, amount) => request('/character/me/gold/spend', { method: 'POST', token, body: { amount } })
 
 export const spendInspiration = (token) => request('/character/me/inspiration/use', { method: 'POST', token })

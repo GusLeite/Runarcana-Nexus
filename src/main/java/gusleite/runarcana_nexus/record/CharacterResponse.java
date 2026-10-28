@@ -61,7 +61,12 @@ public record CharacterResponse(
         // Níveis em cada classe (multiclasse); vazio nas fichas antigas. canLevelUp: a ficha tem as escolhas guardadas
         // (criada pelo assistente) e ainda não está no 20º nível.
         List<ClassLevelResponse> classLevels,
-        boolean canLevelUp
+        boolean canLevelUp,
+        // Testes contra a morte (0–3), condições (ids do rules/condicoes.json; o texto vem de GET /conditions) e Exaustão.
+        int deathSuccesses,
+        int deathFailures,
+        List<String> conditions,
+        int exhaustion
 ) {
     public record ClassLevelResponse(String classId, String name, int level, String subclass) {}
 
@@ -115,7 +120,12 @@ public record CharacterResponse(
                 List.copyOf(character.getCraftExpertise()),
                 character.getClassLevels().stream()
                         .map(l -> new ClassLevelResponse(l.getClassId(), l.getClassName(), l.getLevel(), l.getSubclass())).toList(),
-                character.getBuild() != null && character.getLevel() < 20
+                character.getBuild() != null && character.getLevel() < 20,
+                character.getDeathSuccesses() == null ? 0 : character.getDeathSuccesses(),
+                character.getDeathFailures() == null ? 0 : character.getDeathFailures(),
+                // Em ordem alfabética, como no livro.
+                character.getConditions().stream().sorted().toList(),
+                character.getExhaustion() == null ? 0 : character.getExhaustion()
         );
     }
 }

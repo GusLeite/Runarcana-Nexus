@@ -51,6 +51,15 @@ public class Character {
     private int currentHp;
     // PV temporários (somem antes dos PV atuais ao sofrer dano). Nulo nas fichas antigas = 0.
     private Integer tempHp;
+    // Testes contra a morte (0–3 cada) com 0 PV; zerados ao ganhar PV ou descansar. Nulos nas fichas antigas = 0.
+    private Integer deathSuccesses;
+    private Integer deathFailures;
+    // Condições do rules/condicoes.json (ids) e nível de Exaustão (0–10); quem mexe é o mestre. Exaustão nula = 0.
+    @ElementCollection
+    @CollectionTable(name = "character_conditions", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "condition_id")
+    private Set<String> conditions = new LinkedHashSet<>();
+    private Integer exhaustion;
     @Positive
     private int str;
     @Positive

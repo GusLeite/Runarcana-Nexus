@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  addHeritage, carryCapacity, choiceOptionName, critDice, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
+  addHeritage, carryCapacity, choiceOptionName, critDice, deathSaveResult, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
   addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
   resourceCost, togglePick, levelChoices, keepChoices, rollDie, applyHp,
@@ -287,5 +287,14 @@ describe('critDice', () => {
     expect(critDice('1d8+3', 3)).toBe('3d8+3')
     expect(critDice('2d6-1')).toBe('4d6-1')
     expect(critDice('2', 2)).toBeNull()
+  })
+})
+
+describe('deathSaveResult', () => {
+  it('segue o d20: 20 volta, 1 são duas falhas, 10+ sucesso', () => {
+    expect(deathSaveResult(20, 1, 2)).toEqual({ successes: 0, failures: 0, revived: true })
+    expect(deathSaveResult(1, 0, 2)).toEqual({ successes: 0, failures: 3, revived: false })
+    expect(deathSaveResult(10, 2, 0)).toEqual({ successes: 3, failures: 0, revived: false })
+    expect(deathSaveResult(9, 0, 0)).toEqual({ successes: 0, failures: 1, revived: false })
   })
 })

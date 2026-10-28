@@ -30,6 +30,10 @@
 | POST | `/character/me/gold/spend` | `{ amount }` (Bearer) | Jogador gasta ouro (de 1 até o que tem). Devolve a ficha |
 | POST | `/character/me/inspiration/use` | – (Bearer) | Jogador gasta a inspiração acesa. 400 sem inspiração. Devolve a ficha |
 | POST | `/character/me/abilities/{abilityId}/cast` | `{ level? }` (Bearer) | Jogador conjura a magia no nível (sem `level` = o da magia): truque não gasta; com usos próprios, no nível dela, gasta 1 uso; senão desconta a Mana do nível de "Pontos de Mana". Devolve `{ level, manaCost, usedUse, abilities }`. 400 se não for magia, não estiver preparada, abaixo do nível da magia, acima do nível máximo da ficha ou faltar Mana |
+| PATCH | `/character/me/death-saves` | `{ successes, failures }` (Bearer) | Jogador marca os próprios testes contra a morte (0–3 cada). Devolve `CharacterResponse`. 400 fora dos limites |
+| PATCH | `/character/{id}/death-saves` | `{ successes, failures }` (mestre) | Mestre ajusta os testes contra a morte de qualquer ficha. 403 para jogador |
+| PATCH | `/character/{id}/conditions` | `{ conditions?, exhaustion? }` (mestre) | Condições (ids do `condicoes.json`; a lista substitui a atual) e Exaustão (0–10); nulo = mantém. Devolve `CharacterResponse`. 400 com id desconhecido ou Exaustão fora dos limites; 403 para jogador |
+| GET | `/conditions` | – (Bearer) | Catálogo das condições: `{ exhaustionMax, exhaustion, conditions: [{ id, name, text }] }` |
 | POST | `/character/me/rest` | `{ type: SHORT \| LONG, prepared? }` (Bearer) | Descanso: curto recupera o que é `SHORT_REST`; longo recupera tudo que recarrega. No longo, `prepared` (`{ "ACOLYTE": ["spell:<id>"], "SHAMAN": ["ability:<id>"] }`) troca as magias preparadas antes (400 acima do limite ou fora das opções, e aí não descansa). Devolve as habilidades |
 | GET | `/character/me/preparation` | – (Bearer) | `PreparationResponse`: por classe que prepara (Acólito, Xamã), `limit`, `maxSpellLevel` (nulo = entre os conhecidos), `options` (`key`, `name`, `level`) e `prepared`. `classes` vazio se a ficha não prepara |
 | GET | `/notes` | – (Bearer) | Anotações do jogador (fixadas primeiro, depois as mais recentes) |

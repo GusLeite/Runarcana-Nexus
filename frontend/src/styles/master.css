@@ -156,3 +156,10 @@ font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:13px;letter-spacing
 .mform .check{display:flex;align-items:center;gap:8px;margin:14px 0;color:var(--text);font-size:14px;letter-spacing:0}
 .mform .check input{width:auto;accent-color:var(--teal)}
 @container (max-width:560px){.inv-row{grid-template-columns:minmax(0,1fr) auto}.inv-row .link-btn{grid-column:1/-1;justify-self:start}}
+
+/* Condições (painel do mestre) */
+.cond-editor .to-pick{margin-bottom:10px}
+.exh-row{display:flex;align-items:center;gap:10px}
+.exh-row .mlabel{margin:0}
+.exh-row b{font-family:'Cinzel',Georgia,serif;font-size:18px;color:var(--gold-hi);min-width:44px;text-align:center}
+.exh-row b small{font-size:12px;color:var(--muted)}

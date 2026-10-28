@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { applyLevelUp, fetchCatalog, fetchCharacters, previewLevelUp } from '../../api/master.js'
+import { applyLevelUp, fetchCatalog, fetchCharacters, fetchConditions, previewLevelUp } from '../../api/master.js'
+import ConditionEditor from './ConditionEditor.jsx'
 import { ATTRIBUTES, CLASS_NAMES, HERITAGE_LEVELS, keepChoices, levelChoices, rollDie } from '../../data/rules.js'
 import { CHARACTERS } from '../../data/characters.js'
 import ChoiceStep from '../creation/ChoiceStep.jsx'
@@ -21,9 +22,11 @@ export default function MasterSheets({ token, onError, onToast }) {
   const [preview, setPreview] = useState(null)
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState(null)
+  const [conditions, setConditionCatalog] = useState(null)
 
   useEffect(() => {
     fetchCatalog(token).then(setCatalog).catch(onError)
+    fetchConditions(token).then(setConditionCatalog).catch(onError)
     fetchCharacters(token)
       .then(list => {
         setCharacters(list)
@@ -110,6 +113,14 @@ export default function MasterSheets({ token, onError, onToast }) {
           })}
         </div>
       </section>
+
+      {character && conditions && (
+        <section className="card" style={{ '--i': 1 }}>
+          <h3 className="card-title">Condições <small>de {character.characterName}</small></h3>
+          <ConditionEditor token={token} character={character} catalog={conditions} onError={onError}
+            onSaved={updated => setCharacters(list => list.map(c => (c.id === updated.id ? updated : c)))} />
+        </section>
+      )}
 
       {character && !character.canLevelUp && (
         <section className="card" style={{ '--i': 1 }}>

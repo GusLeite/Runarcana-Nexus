@@ -1,0 +1,29 @@
+{
+  "source": "Capítulo 14 (Conduzindo o Jogo) → Condições, wiki.runarcana.org. Resumo das regras de cada condição.",
+  "exhaustionMax": 10,
+  "exhaustion": "Cada nível de Exaustão é uma penalidade em toda jogada de d20 (ataques, salvaguardas, testes) e na CD de magias, Sutras e Invocações. Acima de 10, a criatura morre. O descanso longo (com comida e água) tira níveis iguais ao mod. de Constituição; o descanso pleno zera. Restauração Menor tira 1; Restauração Maior tira 1d6 + mod. de conjuração.",
+  "conditions": [
+    { "id": "agarrado", "name": "Agarrado", "text": "Deslocamento 0, sem bônus de deslocamento. Acaba se quem agarra ficar incapacitado ou se um efeito tirar a criatura do alcance dele." },
+    { "id": "amedrontado", "name": "Amedrontado", "text": "Desvantagem em testes de atributo e ataques enquanto vê a fonte do medo; não pode se aproximar dela por vontade própria." },
+    { "id": "atordoado", "name": "Atordoado", "text": "Incapacitado, não se move e só balbucia. Falha automática em salvaguardas de Força e Destreza; ataques contra ele têm vantagem." },
+    { "id": "caido", "name": "Caído", "text": "Só rasteja até se levantar (o que encerra a condição). Desvantagem nos próprios ataques; ataques contra ele têm vantagem a até 5 pés e desvantagem de mais longe." },
+    { "id": "cego", "name": "Cego", "text": "Não enxerga e falha nos testes que dependem da visão. Ataques contra ele têm vantagem; os dele, desvantagem." },
+    { "id": "chamuscado", "name": "Chamuscado", "text": "Sofre dano ígneo no início de cada turno até o fogo apagar. Até 6 de dano por turno (e magias até o 4º nível): ação + Destreza CD 10. Acima disso: ação, algo para abafar (água, capa, cobertor) e Destreza CD 15. Fogo de magia acima do 4º nível só com água mágica ou Remover Maldição." },
+    { "id": "contido", "name": "Contido", "text": "Deslocamento 0, sem bônus de deslocamento. Ataques contra ele têm vantagem; os dele, desvantagem; desvantagem em salvaguardas de Destreza." },
+    { "id": "enfeiticado", "name": "Enfeitiçado", "text": "Não ataca nem mira com dano quem o enfeitiçou; quem enfeitiçou tem vantagem nos testes sociais com ele." },
+    { "id": "enfraquecido", "name": "Enfraquecido", "text": "Desvantagem em salvaguardas e testes de Força, Destreza e Constituição." },
+    { "id": "envenenado", "name": "Envenenado", "text": "Sofre dano venenoso no início de cada turno (conforme o veneno) até ser curado, tirar a fonte ou tomar o antídoto." },
+    { "id": "exposicao", "name": "Exposição", "text": "Recebe o valor de Exposição como dano adicional de qualquer fonte enquanto durar; contra Redução de Dano, a Exposição primeiro anula a redução." },
+    { "id": "incapacitado", "name": "Incapacitado", "text": "Não faz ações nem reações." },
+    { "id": "inconsciente", "name": "Inconsciente", "text": "Incapacitado, não se move nem fala e não percebe o redor; larga o que segura e cai. Falha automática em salvaguardas de Força e Destreza; ataques contra ele têm vantagem e são críticos a até 5 pés." },
+    { "id": "intoxicado", "name": "Intoxicado", "text": "Desvantagem em ataques e testes de atributo." },
+    { "id": "invisivel", "name": "Invisível", "text": "Não pode ser visto sem magia ou sentido especial (fortemente obscurecido para se esconder); som e rastros o denunciam. Ataques contra ele têm desvantagem; os dele, vantagem." },
+    { "id": "lentidao", "name": "Lentidão", "text": "Deslocamento reduzido conforme o efeito que causou. É uma condição debilitante." },
+    { "id": "paralisado", "name": "Paralisado", "text": "Incapacitado, não se move nem fala. Falha automática em salvaguardas de Força e Destreza; ataques contra ele têm vantagem e são críticos a até 5 pés." },
+    { "id": "petrificado", "name": "Petrificado", "text": "Vira pedra com o que veste (peso ×10, não envelhece): incapacitado, sem se mover, falar ou perceber. Ataques contra ele têm vantagem; falha em salvaguardas de Força e Destreza; resistência a todo dano; imune a veneno e doença (os que já tinha ficam suspensos)." },
+    { "id": "provocado", "name": "Provocado", "text": "Precisa atacar o alvo da provocação do melhor jeito que puder e usar o movimento para se aproximar dele; não se afasta por vontade própria." },
+    { "id": "sangramento", "name": "Sangramento", "text": "Pontos cumulativos: sofre no início de cada turno dano igual aos pontos (1, depois 2...). Para ao curar 1 PV ou com Medicina CD 8 + o dobro dos pontos (Kit Médico dá vantagem)." },
+    { "id": "silenciado", "name": "Silenciado", "text": "Não conjura magias nem sutras com componente Verbal e não se comunica pela voz." },
+    { "id": "surdo", "name": "Surdo", "text": "Não ouve e falha nos testes que dependem da audição." }
+  ]
+}

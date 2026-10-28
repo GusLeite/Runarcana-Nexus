@@ -419,6 +419,14 @@ export function parseDice(expr) {
   return { count, sides, bonus: m[3] ? (m[3] === '-' ? -1 : 1) * Number(m[4]) : 0 }
 }
 
+// Teste contra a morte (d20): 20 = volta com 1 PV; 1 = duas falhas; 10+ = um sucesso; senão uma falha (máx. 3 cada).
+export function deathSaveResult(d20, successes = 0, failures = 0) {
+  if (d20 === 20) return { successes: 0, failures: 0, revived: true }
+  if (d20 === 1) return { successes, failures: Math.min(3, failures + 2), revived: false }
+  if (d20 >= 10) return { successes: Math.min(3, successes + 1), failures, revived: false }
+  return { successes, failures: Math.min(3, failures + 1), revived: false }
+}
+
 // Dano do crítico: os dados rolam multiplier vezes, o bônus soma uma vez ("1d8+3", 3 → "3d8+3").
 export function critDice(expr, multiplier = 2) {
   const d = parseDice(expr)

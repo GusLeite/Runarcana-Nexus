@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { castSpell, chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, consumeItem, fetchPreparation, fetchSheet, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
+import { castSpell, fetchConditions, setDeathSaves as setDeathSavesApi, chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, consumeItem, fetchPreparation, fetchSheet, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
-import { rollCheck, rollDice } from '../../data/rules.js'
+import { deathSaveResult, rollCheck, rollD20, rollDice } from '../../data/rules.js'
 import SheetHero from './SheetHero.jsx'
 import PrepareSpells from './PrepareSpells.jsx'
 import OverviewTab from './OverviewTab.jsx'
@@ -90,9 +90,33 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     const before = state.status === 'ready' ? state.sheet.character : null
     if (!before) return
     const put = character => setState(s => (s.status === 'ready' ? { ...s, sheet: { ...s.sheet, character } } : s))
-    put({ ...before, ...next })
+    // Com PV de novo, os testes contra a morte zeram (o back faz o mesmo).
+    put({ ...before, ...next, ...(next.currentHp > 0 ? { deathSuccesses: 0, deathFailures: 0 } : {}) })
     setHpApi(token, next.currentHp, next.tempHp).catch(err => { put(before); fail(err) })
   }, [state, token, fail])
+
+  // Testes contra a morte (0 PV): marcar à mão ou rolar o d20 (20 volta com 1 PV).
+  const putCharacter = useCallback(character => setState(s => (s.status === 'ready' ? { ...s, sheet: { ...s.sheet, character } } : s)), [])
+  const setDeathSaves = useCallback((successes, failures) => {
+    setDeathSavesApi(token, successes, failures).then(putCharacter).catch(fail)
+  }, [token, fail, putCharacter])
+  const rollDeathSave = useCallback(() => {
+    const c = state.status === 'ready' ? state.sheet.character : null
+    if (!c) return
+    const d20 = rollD20()
+    pushRoll({ id: Date.now() + Math.random(), kind: 'check', label: 'Teste contra a morte', mod: 0, d20, other: null, mode: 'normal', total: d20 })
+    const r = deathSaveResult(d20, c.deathSuccesses ?? 0, c.deathFailures ?? 0)
+    if (r.revived) {
+      setHp({ currentHp: 1, tempHp: c.tempHp ?? 0 })
+      setToast('20 natural: ' + c.characterName + ' volta com 1 PV!')
+    } else setDeathSaves(r.successes, r.failures)
+  }, [state, setHp, setDeathSaves])
+
+  // Condições do livro (nome e regra), para os chips do herói.
+  const [conditionCatalog, setConditionCatalog] = useState(null)
+  useEffect(() => {
+    if (state.status === 'ready' && !conditionCatalog) fetchConditions(token).then(setConditionCatalog).catch(() => {})
+  }, [token, state.status, conditionCatalog])
 
   // O jogador só gasta: o back devolve a ficha inteira (inventário, ouro, inspiração).
   const putSheet = useCallback(sheet => setState(s => (s.status === 'ready' ? { ...s, sheet } : s)), [])
@@ -289,7 +313,8 @@ export default function CharacterSheet({ character, session, notice, onChangePas
 
       <main className={'sheet-body tab-' + tab}>
         <SheetHero character={character} sheet={sheet} armorClass={state.status === 'ready' ? state.sheet.armorClass : null}
-          onDefense={chooseDefense} onShield={chooseShield} onHp={setHp} />
+          onDefense={chooseDefense} onShield={chooseShield} onHp={setHp}
+          onDeathSaves={setDeathSaves} onDeathRoll={rollDeathSave} conditionCatalog={conditionCatalog} />
 
         {state.status === 'loading' && (
           <div className="sheet-state" role="status"><div className="hex-spinner" />Abrindo a ficha…</div>

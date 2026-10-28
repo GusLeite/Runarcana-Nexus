@@ -30,6 +30,11 @@
 
 **Conjurar** (`POST /character/me/abilities/{id}/cast`): truque não gasta; magia com usos próprios ("sem Mana, X vezes"), no nível dela, gasta 1 uso enquanto houver; senão desconta `MagicRules.manaCost(nível)` da habilidade "Pontos de Mana" (uma só, mesmo na multiclasse). O nível vai do nível da magia até `maxSpellLevel`; magia não preparada não conjura.
 
+## Testes contra a morte e condições
+
+- `Character.deathSuccesses`/`deathFailures` (0–3; nulos = 0): o jogador marca os próprios (`PATCH /character/me/death-saves`), o mestre ajusta qualquer ficha. Zeram quando os PV voltam a ser mais que 0 (`CharacterService.clearDeathSaves`, chamado no `setHp`) e em qualquer descanso.
+- Condições: `rules/condicoes.json` (Capítulo 14 da wiki, resumo de cada regra; 22 condições + a Exaustão), lido e conferido ao subir pelo `ConditionService` (`runarcana.rules.conditions`). `Character.conditions` (tabela `character_conditions`, ids) e `exhaustion` (0–10: no Runarcana a Exaustão vai até 10, e acima disso a criatura morre). Só o mestre muda (`PATCH /character/{id}/conditions`). `CharacterResponse` traz `deathSuccesses`, `deathFailures`, `conditions` (ids em ordem alfabética) e `exhaustion`; o texto vem de `GET /conditions`.
+
 ## Documentos do mestre (`GameDocument`)
 
 - Campos: `title`, `kind` (`LETTER | CLUE | MAP | LORE | SECRET | REWARD`, muda ícone e cor no front), `body` (texto; o front entende `## título`, `**negrito**` e `*itálico*`), `imageUrl` (opcional, `http(s)://`), `recipients` (usernames; vazio = **todos**), `createdAt`, `author`.
@@ -86,6 +91,7 @@ Por conta (não por personagem): `title`, `body` (até 20.000 caracteres), `pinn
 
 - Inventário depois da criação (`InventoryService`, decisão da mesa): o mestre dá e tira itens, ouro e inspiração; o jogador só gasta. **Consumível** = `Consumable` ou item do catálogo com kind `AMMUNITION` ou grupo `consumivel` no `itens.json` (`EquipmentRules.consumable`; as linhas de `Item` antigas foram criadas como objeto comum, por isso a conferência também olha o catálogo). A munição do catálogo vem em pacote ("Virotes de besta (20)", quantidade 1): usar gasta o pacote inteiro; o mestre ajusta pelo painel.
 - `Item.itemDescription` e `Item.effect` passaram para `varchar(4000)` (`@Column(length = 4000)`). O `ddl-auto=update` **não aumenta** coluna que já existe: no PostgreSQL local rode uma vez `ALTER TABLE item ALTER COLUMN item_description TYPE varchar(4000); ALTER TABLE item ALTER COLUMN effect TYPE varchar(4000);` (a coluna nova `catalog_id` é criada sozinha). Sem isso, criar personagem com equipamento dá erro de valor longo.
+- Exaustão não baixa sozinha no descanso longo (o livro tira o mod. de CON com comida e água): o mestre ajusta.
 - Conjuração: o Combatente Arcano sem o Aprimorado também lê as linhas "(Aprimorado)" da tabela (libera 3º nível no 13º); habilidade de Conjuração cadastrada pelo mestre só conta se tiver o texto "Atributo de conjuração: X".
 - Ataques: estilos de luta (Duelismo, Arquearia...), "Imprópria -N", dano extra de Heranças e a munição gasta não entram na conta; o texto das propriedades fica na dica.
 - O jogador altera os próprios PV e só **gasta** consumíveis, ouro e inspiração (decisão da mesa); não há rota para apagar a ficha.

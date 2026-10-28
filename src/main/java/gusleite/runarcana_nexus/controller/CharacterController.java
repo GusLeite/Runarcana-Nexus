@@ -6,6 +6,7 @@ import gusleite.runarcana_nexus.record.CharacterSheetResponse;
 import gusleite.runarcana_nexus.record.CreateCharacterRequest;
 import gusleite.runarcana_nexus.services.AuthService;
 import gusleite.runarcana_nexus.services.CharacterService;
+import gusleite.runarcana_nexus.services.ConditionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,9 +22,12 @@ public class CharacterController {
     private final CharacterService charService;
     private final AuthService authService;
 
-    public CharacterController(CharacterService charService, AuthService authService) {
+    private final ConditionService conditions;
+
+    public CharacterController(CharacterService charService, AuthService authService, ConditionService conditions) {
         this.charService = charService;
         this.authService = authService;
+        this.conditions = conditions;
     }
 
     @GetMapping
@@ -66,6 +70,39 @@ public class CharacterController {
 
     // tempHp nulo = mantém o que já tem.
     public record HpRequest(Integer currentHp, Integer tempHp) {}
+
+    // Jogador: marca os próprios testes contra a morte (0–3 sucessos e falhas).
+    @PatchMapping("/me/death-saves")
+    public ResponseEntity<CharacterResponse> setMyDeathSaves(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @RequestBody DeathSavesRequest request) {
+        return ResponseEntity.ok(conditions.setDeathSaves(charService.characterOf(authService.authenticate(authorization)),
+                request.successes(), request.failures()));
+    }
+
+    // Mestre: ajusta os testes contra a morte de qualquer ficha.
+    @PatchMapping("/{id}/death-saves")
+    public ResponseEntity<CharacterResponse> setDeathSaves(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @PathVariable long id,
+            @RequestBody DeathSavesRequest request) {
+        authService.requireMaster(authorization);
+        return ResponseEntity.ok(conditions.setDeathSaves(id, request.successes(), request.failures()));
+    }
+
+    public record DeathSavesRequest(Integer successes, Integer failures) {}
+
+    // Mestre: condições (ids do rules/condicoes.json; a lista substitui a atual) e Exaustão (0–10). Nulos = mantém.
+    @PatchMapping("/{id}/conditions")
+    public ResponseEntity<CharacterResponse> setConditions(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @PathVariable long id,
+            @RequestBody ConditionsRequest request) {
+        authService.requireMaster(authorization);
+        return ResponseEntity.ok(conditions.setConditions(id, request.conditions(), request.exhaustion()));
+    }
+
+    public record ConditionsRequest(List<String> conditions, Integer exhaustion) {}
 
     @PostMapping
     public ResponseEntity<CharacterResponse> createCharacter(@Valid @RequestBody CreateCharacterRequest request) {

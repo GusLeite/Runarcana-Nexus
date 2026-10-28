@@ -116,8 +116,15 @@ public class CharacterService {
         if (tempHp != null && tempHp < 0) throw ApiException.badRequest("Os PV temporários não podem ser negativos.");
         character.setCurrentHp(currentHp);
         if (tempHp != null) character.setTempHp(tempHp);
+        // Com PV de novo, os testes contra a morte zeram.
+        if (currentHp > 0) clearDeathSaves(character);
         charRepository.save(character);
         return CharacterResponse.of(character);
+    }
+
+    public static void clearDeathSaves(Character character) {
+        character.setDeathSuccesses(0);
+        character.setDeathFailures(0);
     }
 
     // Escudo em uso: "NONE" (sem escudo) ou "ITEM:<id>" de um escudo do inventário. Devolve a CA recalculada.
