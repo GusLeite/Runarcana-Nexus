@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Usos de outra habilidade, deslocamento relativo, Carapaça, Limiar e 2ª escolha do Ressurgido (`feature/character-sheet`)
+- Concessão `ABILITY_USES` (Inspirar Aliados, Adepto Espiritual, Controle de Plumadagas); `SPEED.walkFraction` (Vida Marinha, Pés Cascudos, Adaptações).
+- `when`: concessão que só vale com a opção escolhida (Vantagens/Desvantagens Tecnológicas: CA, RD, deslocamento, notas); RD de metade da proficiência no `AC_BONUS` (Carapaça).
+- Heranças: `repeatGrants` (2ª escolha do Ressurgido) e `threshold` (Limiar Tecnológico: Construto Vivo ou Mutante com 5 Vantagens).
+- Teste: `herancaMudaOutraHabilidadeDeslocamentoERd`, limiar e 2ª escolha nos testes de Heranças.
+
 ## 2026-10-28 — Heranças ativas, Variantes por opção, Centelha Mágica e nível dos ofícios (`feature/character-sheet`)
 - Heranças/Aprimoramentos com parte ativa: `execution`/`uses` (93 Heranças e 23 Aprimoramentos) ou `FEATURE` `ABILITY` por parte; a habilidade ganha tempo e usos.
 - Variantes: `optionTexts`/`optionUses`/`optionExecution` (Meio-Vastaya, Ressurgido com resistências pela opção), `optionPerPick` (Forma de Sho'Ma, Progressão Tecnológica com Vantagens/Desvantagens e CA da Proteção Metálica); front com uma opção por escolha.

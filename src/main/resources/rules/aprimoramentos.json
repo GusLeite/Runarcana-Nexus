@@ -84,6 +84,11 @@
           "type": "ATTRIBUTE",
           "attribute": "WISDOM",
           "amount": 1
+        },
+        {
+          "type": "ABILITY_USES",
+          "value": "Liturgia",
+          "amount": 1
         }
       ]
     },

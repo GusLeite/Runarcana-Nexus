@@ -90,16 +90,20 @@ public final class ArmorClassCalculator {
         List<DefenseOption> options = new ArrayList<>();
         for (DefenseOption o : base) {
             int total = o.value() + shieldBonus;
+            int reduction = o.reduction();
             for (ArmorRule r : rules) {
                 if (!r.isBonus() || (r.isUnarmoredOnly() && o.kind().equals("ITEM"))) continue;
                 total += (r.getAmount() == null ? 0 : r.getAmount()) + (r.isProficiency() ? proficiency : 0);
+                reduction += bonusReduction(r, proficiency);
             }
-            options.add(new DefenseOption(o.key(), o.label(), o.kind(), total, o.reduction()));
+            options.add(new DefenseOption(o.key(), o.label(), o.kind(), total, reduction));
         }
         for (ArmorRule r : rules) {
             if (!r.isBonus()) continue;
             int amount = (r.getAmount() == null ? 0 : r.getAmount()) + (r.isProficiency() ? proficiency : 0);
-            bonuses.add(r.getName() + " " + (amount >= 0 ? "+" : "") + amount + (r.isUnarmoredOnly() ? " (sem armadura)" : ""));
+            int reduction = bonusReduction(r, proficiency);
+            String text = reduction > 0 && amount == 0 ? "RD +" + reduction : (amount >= 0 ? "+" : "") + amount + (reduction > 0 ? ", RD +" + reduction : "");
+            bonuses.add(r.getName() + " " + text + (r.isUnarmoredOnly() ? " (sem armadura)" : ""));
         }
 
         if (shield != null) {
@@ -112,6 +116,11 @@ public final class ArmorClassCalculator {
                 .orElseGet(() -> options.stream().max(Comparator.comparingInt(DefenseOption::value)).orElseThrow());
         return new ArmorClassResponse(current.value(), current.reduction(), current.key(), options, bonuses, blockedBy,
                 shield == null ? null : shield.key(), shieldOptions);
+    }
+
+    // RD que um bônus soma a todas as opções (Carapaça: metade do bônus de proficiência).
+    private static int bonusReduction(ArmorRule r, int proficiency) {
+        return (r.getReduction() == null ? 0 : r.getReduction()) + (Boolean.TRUE.equals(r.getHalfProficiencyReduction()) ? proficiency / 2 : 0);
     }
 
     // Nome da opção com o atributo escolhido: "Armadura Natural (Constituição)".

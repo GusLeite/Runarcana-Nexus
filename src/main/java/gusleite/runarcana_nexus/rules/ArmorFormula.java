@@ -24,7 +24,9 @@ public record ArmorFormula(
         Boolean blocksArmor,
         String requiresArmor,
         String feature,
-        String featureOption
+        String featureOption,
+        // RD de metade do bônus de proficiência (AC_BONUS: Carapaça), somada à RD de todas as opções.
+        Boolean halfProficiencyReduction
 ) {
     public boolean dexOrTrue() {
         return dex == null || dex;

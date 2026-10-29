@@ -45,8 +45,15 @@ public record RuleHeritage(
         Map<String, UsesRule> optionUses,
         Map<String, String> optionExecution,
         // Cada escolha da Herança tem a sua opção (Forma de Sho'Ma: uma forma nova a cada vez); sem isso, a opção vale para todas.
-        Boolean optionPerPick
+        Boolean optionPerPick,
+        // Efeitos da 2ª escolha da mesma Herança, pela opção (Ressurgido: Alternância, Aura de Medo, Super Camaradinha).
+        Map<String, List<Grant>> repeatGrants,
+        // Limiar: com count opções escolhidas na habilidade feature, ganha os efeitos da opção da Herança
+        // (Progressão Tecnológica: 5 Vantagens Tecnológicas → Construto Vivo ou Mutante).
+        Threshold threshold
 ) {
+    public record Threshold(String feature, int count, Map<String, List<Grant>> grants) {}
+
     // Efeitos das opções escolhidas (cada uma uma vez), depois dos gerais.
     public List<Grant> grantsFor(List<String> chosen) {
         List<Grant> out = new java.util.ArrayList<>(grantsOrEmpty());

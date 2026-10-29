@@ -557,75 +557,11 @@ public class CreationService {
         baseAttributes(r, catalog.attributeMethods(), b);
 
         // 1ª passada: o que é fixo. 2ª: as escolhas (que não podem repetir algo já ganho).
+        // Concessão com "when" (só com a opção escolhida): decidida depois das escolhas (conditionalGrants).
         for (Source s : sources) {
             for (Grant g : s.grants()) {
-                switch (g.type()) {
-                    case ATTRIBUTE -> b.bonus.merge(g.attribute(), valueAt(g, g.amount(), b.scale(s.label())), Integer::sum);
-                    case SKILL -> {
-                        // "Caso já tenha, especialidade": decide no fim, depois de todas as perícias.
-                        if (Boolean.TRUE.equals(g.expertise())) b.deferred.add(new Deferred(null, g, s.label()));
-                        else b.skills.putIfAbsent(g.skill(), s.label());
-                    }
-                    case SAVING_THROW -> b.saves.putIfAbsent(g.attribute(), s.label());
-                    case FEATURE -> {
-                        if (!g.hasOptions()) b.features.add(new Sourced<>(g, s.label()));
-                    }
-                    // PV calculado no fim (maxHp), quando os atributos já estão definidos.
-                    case HP_BONUS -> b.hpGrants.add(g);
-                    case ARMOR_PROFICIENCY -> b.armorProficiencies.add(g.value());
-                    case WEAPON_PROFICIENCY -> b.weaponProficiencies.add(g.value());
-                    case SPEED -> {
-                        // value: tipo de deslocamento (sem value = caminhada; ALL = todos os que o personagem tiver).
-                        // usesFormula PROFICIENCY: feet × bônus de proficiência (Brisa de Impulso: 5 pés × bônus).
-                        // valueByLevel: pés pelo nível (Aspecto Feral: Natação 30 → 35 no 6º...); o aumento "se já tiver" cresce junto.
-                        double base = valueAt(g, g.feet() == null ? null : g.feet().intValue(), b.scale(s.label()));
-                        double feet = g.usesFormula() == UsesFormula.PROFICIENCY ? base * b.proficiency() : base;
-                        String mode = g.value() == null ? "WALK" : g.value();
-                        switch (mode) {
-                            case "WALK" -> b.speedBonus += feet;
-                            case "ALL" -> b.allSpeedBonus += feet;
-                            default -> {
-                                // amount: aumento quando ele já tem esse deslocamento (Aptidão Marinha: natação 30, ou +15).
-                                MovementType type = MovementType.valueOf(mode);
-                                double gain = g.amount() != null && b.otherSpeeds.containsKey(type) ? g.amount() + (base - g.feet()) : feet;
-                                b.otherSpeeds.merge(type, gain, Double::sum);
-                            }
-                        }
-                    }
-                    case GOLD -> b.gold += g.amount();
-                    case INITIATIVE -> b.initiativeBonus += g.amount();
-                    case SITUATIONAL -> b.situational.add(new SituationalNote(g.value(), g.description(), s.label()));
-                    case RESISTANCE -> b.resistances.add(g.value());
-                    case PASSIVE_BONUS -> {
-                        int n = g.usesFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : g.amount();
-                        if ("PERCEPTION".equals(g.value())) b.passivePerception += n;
-                        else b.passiveInsight += n;
-                    }
-                    case MYSTERY -> {
-                        if (!g.hasOptions()) b.mysteries.add(g.value());
-                    }
-                    case SPELL -> b.fixedSpells.putIfAbsent(g.value(), s.label());
-                    case EQUIPMENT -> {
-                        if (!b.wealth) addEquipment(b, g.value(), s.label());
-                    }
-                    case SIZE -> {
-                        b.size = CreatureSize.valueOf(g.value());
-                        b.sizeFixed = true;
-                    }
-                    case CRAFT -> addCraft(b, g.value(), s.key());
-                    case LANGUAGE -> b.languages.add(g.value());
-                    case ARMOR_CLASS -> {
-                        // Com feature: decide depois das escolhas (vale só se a opção foi escolhida).
-                        if (g.armor() != null && g.armor().feature() != null) b.optionArmor.add(g);
-                        else if (!g.hasOptions()) b.armorRules.add(armorRule(g, null));
-                    }
-                    case AC_BONUS -> b.armorRules.add(armorBonus(g, b.scale(s.label())));
-                    case HERITAGE_POINTS -> {
-                        b.heritagePoints += g.amount();
-                        b.pools.merge(g.value() == null ? "ANY" : g.value(), g.amount(), Integer::sum);
-                    }
-                    default -> { }
-                }
+                if (g.when() != null) b.conditional.add(new Sourced<>(g, s.key() + "|" + s.label()));
+                else applyFixed(b, s, g);
             }
         }
         List<String> allCrafts = catalog.craftsOrEmpty().stream().map(RuleCatalog.Craft::id).toList();
@@ -807,9 +743,25 @@ public class CreationService {
             List<String> chosen = b.featureOptions.get(g.armor().feature());
             if (chosen != null && chosen.contains(g.armor().featureOption())) b.armorRules.add(armorRule(g, null));
         }
+        // Concessões que só valem com a opção escolhida ("when": "Vantagem Tecnológica:Carapaça"). A mesma concessão
+        // em duas fontes (Progressão Tecnológica e Benefício Colateral) vale uma vez.
+        Set<Grant> applied = new java.util.HashSet<>();
+        for (Sourced<Grant> c : b.conditional) {
+            String[] when = c.value().when().split(":", 2);
+            List<String> chosen = b.featureOptions.get(when[0]);
+            if (chosen == null || when.length < 2 || !chosen.contains(when[1]) || !applied.add(c.value())) continue;
+            String[] src = c.source().split("\\|", 2);
+            applyFixed(b, new Source(src[0], src[1], List.of()), c.value());
+        }
+        for (Sourced<RuleHeritage.Threshold> t : b.thresholds) {
+            List<String> chosen = b.featureOptions.getOrDefault(t.value().feature(), List.of());
+            if (chosen.size() < t.value().count()) continue;
+            for (Grant g : t.value().grants().getOrDefault(t.source(), List.of())) applyFixed(b, new Source("threshold", "Limiar Tecnológico", List.of()), g);
+        }
         spellChoices(b, picks);
         resourceChoices(b);
         mergeMana(b);
+        abilityUses(b);
         multiclassChecks(b);
 
         if (blank(r.characterName())) b.errors.add("Dê um nome ao personagem.");
@@ -873,6 +825,104 @@ public class CreationService {
 
     private record Deferred(String key, Grant grant, String source) {}
 
+    // ABILITY_USES: muda os usos de outra habilidade pelo nome (value). Com usesFormula/maxUses troca a fórmula
+    // (Inspirar Aliados: Inspirado = proficiência); com amount soma usos (Adepto Espiritual: Liturgia +1).
+    private static void abilityUses(Build b) {
+        for (Grant change : b.usesChanges) {
+            for (int i = 0; i < b.features.size(); i++) {
+                Sourced<Grant> f = b.features.get(i);
+                Grant g = f.value();
+                if (!change.value().equals(g.name())) continue;
+                Grant changed;
+                if (change.usesFormula() != null || change.maxUses() != null) {
+                    changed = g.withUses(new UsesRule(change.usesFormula(), change.maxUses(), change.attribute(), change.usesPlus(), change.recharge()));
+                } else if (g.usesFormula() == null || g.usesFormula() == UsesFormula.FIXED) {
+                    changed = g.withUses(new UsesRule(UsesFormula.FIXED, (g.maxUses() == null ? 0 : g.maxUses()) + change.amount(), g.attribute(), null, null));
+                } else {
+                    changed = g.withUses(new UsesRule(g.usesFormula(), g.maxUses(), g.attribute(), (g.usesPlus() == null ? 0 : g.usesPlus()) + change.amount(), null));
+                }
+                b.features.set(i, new Sourced<>(changed, f.source()));
+            }
+        }
+    }
+
+    // O que é fixo numa concessão (1ª passada; e as condicionais, depois das escolhas).
+    private void applyFixed(Build b, Source s, Grant g) {
+        switch (g.type()) {
+            case ATTRIBUTE -> b.bonus.merge(g.attribute(), valueAt(g, g.amount(), b.scale(s.label())), Integer::sum);
+            case SKILL -> {
+                // "Caso já tenha, especialidade": decide no fim, depois de todas as perícias.
+                if (Boolean.TRUE.equals(g.expertise())) b.deferred.add(new Deferred(null, g, s.label()));
+                else b.skills.putIfAbsent(g.skill(), s.label());
+            }
+            case SAVING_THROW -> b.saves.putIfAbsent(g.attribute(), s.label());
+            case FEATURE -> {
+                if (!g.hasOptions()) b.features.add(new Sourced<>(g, s.label()));
+            }
+            // PV calculado no fim (maxHp), quando os atributos já estão definidos.
+            case HP_BONUS -> b.hpGrants.add(g);
+            case ARMOR_PROFICIENCY -> b.armorProficiencies.add(g.value());
+            case WEAPON_PROFICIENCY -> b.weaponProficiencies.add(g.value());
+            case SPEED -> {
+                // walkFraction: fração da caminhada final (Vida Marinha: natação igual à caminhada), calculada no fim.
+                if (g.walkFraction() != null) {
+                    b.relativeSpeeds.merge(MovementType.valueOf(g.value()), g.walkFraction(), Math::max);
+                    return;
+                }
+                // value: tipo de deslocamento (sem value = caminhada; ALL = todos os que o personagem tiver).
+                // usesFormula PROFICIENCY: feet × bônus de proficiência (Brisa de Impulso: 5 pés × bônus).
+                // valueByLevel: pés pelo nível (Aspecto Feral: Natação 30 → 35 no 6º...); o aumento "se já tiver" cresce junto.
+                double base = valueAt(g, g.feet() == null ? null : g.feet().intValue(), b.scale(s.label()));
+                double feet = g.usesFormula() == UsesFormula.PROFICIENCY ? base * b.proficiency() : base;
+                String mode = g.value() == null ? "WALK" : g.value();
+                switch (mode) {
+                    case "WALK" -> b.speedBonus += feet;
+                    case "ALL" -> b.allSpeedBonus += feet;
+                    default -> {
+                        // amount: aumento quando ele já tem esse deslocamento (Aptidão Marinha: natação 30, ou +15).
+                        MovementType type = MovementType.valueOf(mode);
+                        double gain = g.amount() != null && b.otherSpeeds.containsKey(type) ? g.amount() + (base - g.feet()) : feet;
+                        b.otherSpeeds.merge(type, gain, Double::sum);
+                    }
+                }
+            }
+            case GOLD -> b.gold += g.amount();
+            case ABILITY_USES -> b.usesChanges.add(g);
+            case INITIATIVE -> b.initiativeBonus += g.amount();
+            case SITUATIONAL -> b.situational.add(new SituationalNote(g.value(), g.description(), s.label()));
+            case RESISTANCE -> b.resistances.add(g.value());
+            case PASSIVE_BONUS -> {
+                int n = g.usesFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : g.amount();
+                if ("PERCEPTION".equals(g.value())) b.passivePerception += n;
+                else b.passiveInsight += n;
+            }
+            case MYSTERY -> {
+                if (!g.hasOptions()) b.mysteries.add(g.value());
+            }
+            case SPELL -> b.fixedSpells.putIfAbsent(g.value(), s.label());
+            case EQUIPMENT -> {
+                if (!b.wealth) addEquipment(b, g.value(), s.label());
+            }
+            case SIZE -> {
+                b.size = CreatureSize.valueOf(g.value());
+                b.sizeFixed = true;
+            }
+            case CRAFT -> addCraft(b, g.value(), s.key());
+            case LANGUAGE -> b.languages.add(g.value());
+            case ARMOR_CLASS -> {
+                // Com feature: decide depois das escolhas (vale só se a opção foi escolhida).
+                if (g.armor() != null && g.armor().feature() != null) b.optionArmor.add(g);
+                else if (!g.hasOptions()) b.armorRules.add(armorRule(g, null));
+            }
+            case AC_BONUS -> b.armorRules.add(armorBonus(g, b.scale(s.label())));
+            case HERITAGE_POINTS -> {
+                b.heritagePoints += g.amount();
+                b.pools.merge(g.value() == null ? "ANY" : g.value(), g.amount(), Integer::sum);
+            }
+            default -> { }
+        }
+    }
+
     // Ofício ganho: guarda o nível do personagem em que entrou (o nível do ofício maior conta dali).
     private static void addCraft(Build b, String id, String key) {
         if (!b.crafts.add(id)) return;
@@ -884,7 +934,7 @@ public class CreationService {
 
     // Opção de defesa (ARMOR_CLASS). chosen: atributo escolhido quando a concessão tem options.
     static ArmorRule armorRule(Grant g, Attribute chosen) {
-        ArmorFormula f = g.armor() == null ? new ArmorFormula(null, null, null, null, null, null, null, null, null, null, null, null) : g.armor();
+        ArmorFormula f = g.armor() == null ? new ArmorFormula(null, null, null, null, null, null, null, null, null, null, null, null, null) : g.armor();
         ArmorRule r = new ArmorRule();
         r.setName(ArmorClassCalculator.withAttribute(g.name() != null ? g.name() : g.label(), chosen));
         r.setBase(f.base());
@@ -913,6 +963,8 @@ public class CreationService {
         r.setProficiency(g.usesFormula() == UsesFormula.PROFICIENCY || (f != null && Boolean.TRUE.equals(f.proficiency())));
         r.setUnarmoredOnly(f != null && Boolean.TRUE.equals(f.unarmoredOnly()));
         r.setBlocksArmor(f != null && Boolean.TRUE.equals(f.blocksArmor()));
+        if (f != null) r.setReduction(f.reduction());
+        if (f != null && Boolean.TRUE.equals(f.halfProficiencyReduction())) r.setHalfProficiencyReduction(true);
         return r;
     }
 
@@ -1649,8 +1701,19 @@ public class CreationService {
             if (lp.heritages() != null) lp.heritages().forEach(take);
         }
         List<Source> out = new ArrayList<>();
+        Map<String, Integer> times = new LinkedHashMap<>();
+        if (r.heritages() != null) r.heritages().stream().filter(java.util.Objects::nonNull).forEach(p -> times.merge(p.id(), 1, Integer::sum));
+        for (LevelPick lp : r.levelsOrEmpty()) {
+            if (lp.heritages() != null) lp.heritages().stream().filter(java.util.Objects::nonNull).forEach(p -> times.merge(p.id(), 1, Integer::sum));
+        }
         picks.forEach((id, chosen) -> rules.heritage(id).ifPresent(h -> {
-            List<Grant> grants = h.grantsFor(chosen);
+            List<Grant> grants = new ArrayList<>(h.grantsFor(chosen));
+            // Escolhida de novo: os efeitos da 2ª vez (pela opção), depois dos outros (as chaves das escolhas não mudam).
+            if (times.getOrDefault(id, 0) >= 2 && h.repeatGrants() != null && !chosen.isEmpty()) {
+                grants.addAll(h.repeatGrants().getOrDefault(chosen.getFirst(), List.of()));
+            }
+            // Limiar: decidido depois das escolhas (quantas opções a habilidade tem).
+            if (h.threshold() != null && !chosen.isEmpty()) b.thresholds.add(new Sourced<>(h.threshold(), chosen.getFirst()));
             if (!grants.isEmpty()) out.add(new Source("heritage:" + h.id(), "Herança: " + h.name(), grants));
         }));
         return out;
@@ -2124,6 +2187,12 @@ public class CreationService {
         final List<SpellChoice> spellChoices = new ArrayList<>();
         // CAs que dependem de uma opção escolhida numa habilidade (ArmorFormula.feature).
         final List<Grant> optionArmor = new ArrayList<>();
+        // Concessões com "when" (fonte = "chave|rótulo"), deslocamentos relativos à caminhada e mudanças de usos.
+        final List<Sourced<Grant>> conditional = new ArrayList<>();
+        final Map<MovementType, Double> relativeSpeeds = new EnumMap<>(MovementType.class);
+        final List<Grant> usesChanges = new ArrayList<>();
+        // Limiares das Heranças escolhidas, com a opção (a primeira) que decide os efeitos.
+        final List<Sourced<RuleHeritage.Threshold>> thresholds = new ArrayList<>();
         final Map<Attribute, String> saves = new LinkedHashMap<>();
         final List<Sourced<Grant>> features = new ArrayList<>();
         // Opção escolhida em cada habilidade com escolha (nome da habilidade → opção), para pré-requisitos de Herança.
@@ -2249,6 +2318,8 @@ public class CreationService {
                 double total = feet + allSpeedBonus;
                 if (total > 0) out.put(type, total);
             });
+            // "Igual (ou metade) ao seu deslocamento de caminhada": vale o maior entre esse e o que ele já tem.
+            relativeSpeeds.forEach((type, fraction) -> out.merge(type, speed() * fraction, Math::max));
             return out;
         }
 

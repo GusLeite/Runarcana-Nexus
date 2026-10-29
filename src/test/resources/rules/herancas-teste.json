@@ -93,7 +93,19 @@
         "Sol",
         "Lua"
       ],
-      "description": "Escolha uma tribo."
+      "description": "Escolha uma tribo.",
+      "repeatGrants": {
+        "Sol": [
+          {
+            "type": "FEATURE",
+            "abilityType": "ABILITY",
+            "name": "Raio de Sol",
+            "usesFormula": "PROFICIENCY",
+            "recharge": "LONG_REST",
+            "description": "Só na 2ª escolha."
+          }
+        ]
+      }
     },
     {
       "id": "teste-noxus",
@@ -222,7 +234,58 @@
             }
           }
         ]
+      },
+      "threshold": {
+        "feature": "Garra de Urso",
+        "count": 1,
+        "grants": {
+          "Lobo": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Limiar Teste",
+              "description": "Passou do limiar."
+            }
+          ]
+        }
       }
+    },
+    {
+      "id": "teste-inspira",
+      "name": "Inspira Teste",
+      "category": "GENERAL",
+      "description": "Mexe em outra habilidade.",
+      "grants": [
+        {
+          "type": "ABILITY_USES",
+          "value": "Inspirado",
+          "usesFormula": "PROFICIENCY"
+        },
+        {
+          "type": "SPEED",
+          "value": "SWIM",
+          "walkFraction": 1
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Peça",
+          "count": 1,
+          "options": [
+            "Casco",
+            "Nada"
+          ]
+        },
+        {
+          "type": "AC_BONUS",
+          "name": "Casco",
+          "amount": 0,
+          "armor": {
+            "halfProficiencyReduction": true
+          },
+          "when": "Peça:Casco"
+        }
+      ]
     }
   ]
 }

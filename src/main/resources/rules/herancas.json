@@ -154,6 +154,47 @@
               "recharge": "LONG_REST"
             }
           }
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Proteção Metálica",
+          "armor": {
+            "base": 13
+          },
+          "when": "Vantagem Tecnológica:Proteção Metálica"
+        },
+        {
+          "type": "AC_BONUS",
+          "name": "Carapaça",
+          "amount": 0,
+          "armor": {
+            "halfProficiencyReduction": true
+          },
+          "when": "Vantagem Tecnológica:Carapaça"
+        },
+        {
+          "type": "SPEED",
+          "value": "CLIMB",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação de Escalada"
+        },
+        {
+          "type": "SPEED",
+          "value": "SWIM",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação Subaquática"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERCEPTION",
+          "description": "Vantagem em Percepção pela audição, olfato ou visão.",
+          "when": "Vantagem Tecnológica:Sentido Superior"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Vantagem em Furtividade para se ocultar; sem armadura e parado, pode se esconder sem cobertura.",
+          "when": "Vantagem Tecnológica:Epiderme Cromática"
         }
       ]
     },
@@ -923,6 +964,11 @@
           "type": "SITUATIONAL",
           "value": "SAVE",
           "description": "Você tem vantagem nas Salvaguardas para resistir a efeitos de estar no Mar."
+        },
+        {
+          "type": "SPEED",
+          "value": "SWIM",
+          "walkFraction": 1
         }
       ]
     },
@@ -1760,6 +1806,11 @@
             "ATHLETICS",
             "SURVIVAL"
           ]
+        },
+        {
+          "type": "SPEED",
+          "value": "CLIMB",
+          "walkFraction": 1
         }
       ]
     },
@@ -1859,7 +1910,15 @@
         "humano"
       ],
       "prerequisite": "Humano",
-      "description": "Você possui grandes feitos em sua mente, sendo capaz de ampliar sua inspiração e até estendê-la para aliados. Você recebe os seguintes benefícios:\n\nSua quantidade de dados de Inspiração passa a ser seu bônus de Proficiência ao invés de apenas metade.\nUsando uma ação bônus, você pode usar sua Inspiração para inspirar um aliado que esteja a até 30 pés de você e possa ouví-lo. Pelos próximos 10 minutos, esse aliado pode utilizar esse dado uma vez. O aliado pode jogar esse dado e adicionar o resultado a qualquer teste de atributo, salvaguarda ou jogada de ataque que realizar pela duração. Ele pode jogar o d20 antes de decidir se usará o dado de Inspiração, mas precisa decidir antes do Mestre dizer se a jogada foi bem-sucedida ou não. Uma vez que o dado de Inspiração tenha sido jogado, ele terá sido gasto. Uma criatura pode ganhar apenas um dado de Inspiração por vez."
+      "description": "Você possui grandes feitos em sua mente, sendo capaz de ampliar sua inspiração e até estendê-la para aliados. Você recebe os seguintes benefícios:\n\nSua quantidade de dados de Inspiração passa a ser seu bônus de Proficiência ao invés de apenas metade.\nUsando uma ação bônus, você pode usar sua Inspiração para inspirar um aliado que esteja a até 30 pés de você e possa ouví-lo. Pelos próximos 10 minutos, esse aliado pode utilizar esse dado uma vez. O aliado pode jogar esse dado e adicionar o resultado a qualquer teste de atributo, salvaguarda ou jogada de ataque que realizar pela duração. Ele pode jogar o d20 antes de decidir se usará o dado de Inspiração, mas precisa decidir antes do Mestre dizer se a jogada foi bem-sucedida ou não. Uma vez que o dado de Inspiração tenha sido jogado, ele terá sido gasto. Uma criatura pode ganhar apenas um dado de Inspiração por vez.",
+      "grants": [
+        {
+          "type": "ABILITY_USES",
+          "value": "Inspirado",
+          "usesFormula": "PROFICIENCY"
+        }
+      ],
+      "execution": "Ação bônus"
     },
     {
       "id": "perceptivo",
@@ -2304,12 +2363,98 @@
           "type": "ARMOR_CLASS",
           "name": "Proteção Metálica",
           "armor": {
-            "base": 13,
-            "feature": "Vantagem Tecnológica",
-            "featureOption": "Proteção Metálica"
-          }
+            "base": 13
+          },
+          "when": "Vantagem Tecnológica:Proteção Metálica"
+        },
+        {
+          "type": "AC_BONUS",
+          "name": "Carapaça",
+          "amount": 0,
+          "armor": {
+            "halfProficiencyReduction": true
+          },
+          "when": "Vantagem Tecnológica:Carapaça"
+        },
+        {
+          "type": "SPEED",
+          "value": "CLIMB",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação de Escalada"
+        },
+        {
+          "type": "SPEED",
+          "value": "SWIM",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação Subaquática"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERCEPTION",
+          "description": "Vantagem em Percepção pela audição, olfato ou visão.",
+          "when": "Vantagem Tecnológica:Sentido Superior"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Vantagem em Furtividade para se ocultar; sem armadura e parado, pode se esconder sem cobertura.",
+          "when": "Vantagem Tecnológica:Epiderme Cromática"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Desvantagem em Furtividade (fumaça dos canos).",
+          "when": "Desvantagem Tecnológica:Canos e Fumaça"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERSUASION",
+          "description": "Desvantagem em Persuasão (Cara da Morte).",
+          "when": "Desvantagem Tecnológica:Cara da Morte"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:DECEPTION",
+          "description": "Desvantagem em Enganação (Cara da Morte).",
+          "when": "Desvantagem Tecnológica:Cara da Morte"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERFORMANCE",
+          "description": "Desvantagem em Atuação relacionada à voz (Modulador de Voz).",
+          "when": "Desvantagem Tecnológica:Modulador de Voz"
         }
-      ]
+      ],
+      "threshold": {
+        "feature": "Vantagem Tecnológica",
+        "count": 5,
+        "grants": {
+          "Fonte Estável": [
+            {
+              "type": "RESISTANCE",
+              "value": "venenoso"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Construto Vivo",
+              "description": "- Habilidades que afetam Construtos passam a afetar você\n- Resistência a venenos e a dano venenoso\n- Imunidade a doenças não mágicas\n- Não precisa comer, beber ou respirar\n- Não precisa dormir, não sofre efeito de exaustão por falta de descanso e não sofre efeitos de magia de sono\n- Cura apenas metade da vida com magias e efeitos de cura. A magia reparar dano cura normalmente."
+            }
+          ],
+          "Fonte Instável": [
+            {
+              "type": "RESISTANCE",
+              "value": "venenoso"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Mutante",
+              "description": "- Você passa a ser considerado uma Mutação\n- Resistência a venenos e a dano venenoso\n- Imunidade a doenças não mágicas\n- Sua necessidade diária de comer e beber é reduzida pela metade\n- Não sofre efeitos da magia sono"
+            }
+          ]
+        }
+      }
     },
     {
       "id": "variante-ressurgido",
@@ -2363,6 +2508,41 @@
             "type": "SITUATIONAL",
             "value": "SAVE",
             "description": "Você possui vantagem em salvaguardas para resistir a qualquer efeito que fosse lhe causar a condição Enfeitiçado."
+          }
+        ]
+      },
+      "repeatGrants": {
+        "Espectral": [
+          {
+            "type": "FEATURE",
+            "abilityType": "ABILITY",
+            "name": "Alternância",
+            "castingTime": "Ação",
+            "usesFormula": "PROFICIENCY",
+            "recharge": "LONG_REST",
+            "description": "Utilizando uma ação, você pode se mover através de outras criaturas e objetos como se fossem terreno difícil. Por 1 minuto você se torna imune a ataques não mágicos e ainda é capaz de conjurar magias, mas se torna incapaz de realizar ataques físicos. Se você encerrar seu turno dentro de uma criatura ou objeto, você recebe 1d10 de dano energético e é empurrado para o espaço desocupado mais próximo. Você só pode realizar essa ação um número de vezes igual ao seu bônus de Proficiência por descanso longo."
+          }
+        ],
+        "Meio-Azakana": [
+          {
+            "type": "FEATURE",
+            "abilityType": "ABILITY",
+            "name": "Aura de Medo",
+            "castingTime": "Ação",
+            "usesFormula": "PROFICIENCY",
+            "recharge": "LONG_REST",
+            "description": "Sua mera presença pode aterrorizar outras criaturas. Utilizando uma ação, você pode criar uma aura ao seu redor em um raio de 30 pés centrado em você, essa aura dura por até 1 minuto ou até que você fique Incapacitado. Criaturas que estejam nessa área, iniciem seu turno dentro dela ou entrem nela devem realizar uma salvaguarda de Sabedoria CD 10 + seu bônus de proficiência + metade do seu nível de personagem. Em uma falha, a criatura estará Amedrontada por você até o final da duração dessa aura. Uma criatura afetada pode repetir a salvaguarda no início de cada um de seus turnos para encerrar essa condição. Em um sucesso, a criatura ficará imune a esse efeito pelo próximo minuto. Você pode utilizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+          }
+        ],
+        "Meio-Kanmei": [
+          {
+            "type": "FEATURE",
+            "abilityType": "ABILITY",
+            "name": "Super Camaradinha",
+            "castingTime": "Ação",
+            "usesFormula": "PROFICIENCY",
+            "recharge": "LONG_REST",
+            "description": "Você possui charme sobrenatural natural, algo praticamente etéreo. Utilizando uma ação, você pode tentar encantar uma criatura que esteja a até 60 pés de você que possa vê-lo ou ouvi-lo. Essa criatura deve realizar uma salvaguarda de Sabedoria CD 10 + seu bônus de proficiência + metade do seu nível de personagem. Em uma falha, a criatura ficará Enfeitiçada por você pelo próximo minuto, podendo repetir a salvaguarda no final de cada um de seus turnos para encerrar essa condição. Apenas uma criatura pode ser Enfeitiçada por vez. Você pode utilizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
           }
         ]
       }
@@ -3354,7 +3534,15 @@
       "uses": {
         "usesFormula": "PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "ABILITY_USES",
+          "value": "Plumadagas",
+          "usesFormula": "DOUBLE_PROFICIENCY",
+          "usesPlus": 3
+        }
+      ]
     },
     {
       "id": "cura-ottrani",

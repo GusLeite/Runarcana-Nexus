@@ -57,6 +57,10 @@ public class RuleCatalogService {
     static final Set<String> ARMOR_TYPES = Set.of("LIGHT", "MEDIUM", "HEAVY", "SHIELD");
     // Tipo de deslocamento da concessão SPEED (sem value = WALK; ALL = todos os deslocamentos que o personagem tiver).
     static final Set<String> SPEED_TYPES = Set.of("WALK", "SWIM", "CLIMB", "FLY", "BURROW", "ALL");
+    // Escolhas: não aceitam "when" (só concessões fixas são decididas depois das escolhas).
+    static final Set<GrantType> CHOICE_TYPES = java.util.EnumSet.of(GrantType.ATTRIBUTE_CHOICE, GrantType.SKILL_CHOICE, GrantType.SIZE_CHOICE,
+            GrantType.CRAFT_CHOICE, GrantType.LANGUAGE_CHOICE, GrantType.PROFICIENCY_CHOICE, GrantType.EXPERTISE_CHOICE,
+            GrantType.SAVING_THROW_CHOICE, GrantType.EQUIPMENT_CHOICE, GrantType.SPELL_CHOICE, GrantType.RESOURCE_CHOICE, GrantType.HERITAGE_POINTS);
     private static final Set<String> CRAFT_KINDS = Set.of("MAJOR", "MINOR");
     // Tipos de recurso de classe (rules/recursos.json e value da concessão RESOURCE_CHOICE).
     static final Set<String> RESOURCE_KINDS = Set.of("IRA", "SUTRA", "VEL", "TECNICA", "INVOCACAO", "GRANDE_ESPIRITO",
@@ -634,6 +638,9 @@ public class RuleCatalogService {
                 p.add(at + ": falta type");
                 continue;
             }
+            if (g.when() != null && (!g.when().contains(":") || g.type() == GrantType.FEATURE && g.hasOptions() || CHOICE_TYPES.contains(g.type()))) {
+                p.add(at + ": when é \"Habilidade:Opção\" e só vale em concessão fixa");
+            }
             if (g.valueByLevel() != null) {
                 if (!Set.of(GrantType.ATTRIBUTE, GrantType.AC_BONUS, GrantType.SPEED).contains(g.type())) {
                     p.add(at + ": valueByLevel só vale em ATTRIBUTE, AC_BONUS e SPEED");
@@ -716,8 +723,15 @@ public class RuleCatalogService {
                     if (g.amount() == null) p.add(at + " (HERITAGE_POINTS): precisa de amount");
                     if (g.value() != null && !HERITAGE_SCOPES.contains(g.value())) p.add(at + " (HERITAGE_POINTS): value deve ser REGION, ORIGIN, GENERAL ou ANY");
                 }
+                case ABILITY_USES -> {
+                    if (blank(g.value())) p.add(at + " (ABILITY_USES): falta value (nome da habilidade)");
+                    if (g.amount() == null && g.usesFormula() == null && g.maxUses() == null) p.add(at + " (ABILITY_USES): precisa de amount, usesFormula ou maxUses");
+                }
                 case SPEED -> {
-                    if (g.feet() == null) p.add(at + " (SPEED): precisa de feet");
+                    if (g.walkFraction() != null && (g.value() == null || g.value().equals("WALK") || g.value().equals("ALL"))) {
+                        p.add(at + " (SPEED): walkFraction só vale para SWIM, CLIMB, FLY ou BURROW");
+                    }
+                    if (g.feet() == null && g.walkFraction() == null) p.add(at + " (SPEED): precisa de feet ou walkFraction");
                     if (g.value() != null && !SPEED_TYPES.contains(g.value())) p.add(at + " (SPEED): value deve ser um destes: " + SPEED_TYPES);
                     if (g.usesFormula() != null && g.usesFormula() != UsesFormula.PROFICIENCY) p.add(at + " (SPEED): usesFormula só aceita PROFICIENCY");
                     if (g.amount() != null && (g.value() == null || g.value().equals("WALK") || g.value().equals("ALL"))) {

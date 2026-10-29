@@ -233,6 +233,25 @@ class CreationControllerTests {
     }
 
     @Test
+    void herancaMudaOutraHabilidadeDeslocamentoERd() throws Exception {
+        String token = login("gaudron");
+        String body = FULL.replace("{\"id\":\"teste-geral\"}", "{\"id\":\"teste-inspira\"}");
+        // Sem o Casco: sem RD; com ele (when "Peça:Casco"): RD de metade da proficiência (2 → 1).
+        preview(token, body.replace("\"class:ARCANIST:1\"", "\"heritage:teste-inspira:2\":[\"Nada\"],\"class:ARCANIST:1\""))
+                .andExpect(jsonPath("$.armorClass.reduction").value(0));
+        String json = preview(token, body.replace("\"class:ARCANIST:1\"", "\"heritage:teste-inspira:2\":[\"Casco\"],\"class:ARCANIST:1\""))
+                .andExpect(jsonPath("$.complete").value(true))
+                // Inspirado: metade da proficiência → a proficiência inteira (2).
+                .andExpect(jsonPath("$.features[?(@.name == 'Inspirado')].uses").value(2))
+                .andExpect(jsonPath("$.armorClass.reduction").value(1))
+                .andReturn().getResponse().getContentAsString();
+        // Natação igual à caminhada.
+        List<Double> walk = com.jayway.jsonpath.JsonPath.read(json, "$.speeds[?(@.type == 'WALK')].feet");
+        List<Double> swim = com.jayway.jsonpath.JsonPath.read(json, "$.speeds[?(@.type == 'SWIM')].feet");
+        assertThat(swim).isEqualTo(walk);
+    }
+
+    @Test
     void variantesComUmaOpcaoPorEscolha() throws Exception {
         String token = login("gaudron");
         // Uma opção: o texto dela e os usos e o tempo dela.
@@ -247,7 +266,9 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-formas:0')].options[0]").value("Esquerda"));
         preview(token, both.replace("\"class:ARCANIST:1\"", "\"heritage:teste-formas:0\":[\"Direita\"],\"class:ARCANIST:1\""))
                 .andExpect(jsonPath("$.complete").value(true))
-                .andExpect(jsonPath("$.features[?(@.name == 'Garra de Urso (Direita)')].description").value("Garra direita forte."));
+                .andExpect(jsonPath("$.features[?(@.name == 'Garra de Urso (Direita)')].description").value("Garra direita forte."))
+                // Limiar (1 opção na Garra de Urso), pela primeira opção da Herança (Lobo).
+                .andExpect(jsonPath("$.features[?(@.name == 'Limiar Teste')].source").value("Limiar Tecnológico"));
         // Cada escolha precisa da sua opção.
         preview(token, FULL.replace(HERITAGES, "\"heritages\":[{\"id\":\"teste-formas\",\"option\":\"Lobo\"},{\"id\":\"teste-formas\"}]"))
                 .andExpect(jsonPath("$.errors", hasItem("Escolha a opção de Formas Teste.")));
@@ -275,7 +296,9 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.heritages[0].times").value(2))
                 // requires: só com a Targon Teste escolhida
                 .andExpect(jsonPath("$.heritageOptions[?(@.id == 'teste-requer')].reason").value("pré-requisito: Targon Teste"))
-                .andExpect(jsonPath("$.features[?(@.name == 'Tribo Teste (Sol) (2×)')].source").value("Herança"));
+                .andExpect(jsonPath("$.features[?(@.name == 'Tribo Teste (Sol) (2×)')].source").value("Herança"))
+                // 2ª escolha: o efeito dela pela opção (repeatGrants).
+                .andExpect(jsonPath("$.features[?(@.name == 'Raio de Sol')].uses").value(2));
 
         preview(token, FULL.replace("," + HERITAGES, ""))
                 .andExpect(jsonPath("$.errors", hasItem("Gaste os 2 pontos de Herança que faltam.")));

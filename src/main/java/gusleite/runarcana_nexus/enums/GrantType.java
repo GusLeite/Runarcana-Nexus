@@ -39,6 +39,8 @@ public enum GrantType {
                         // SAVE:DEXTERITY, INITIATIVE, AC, ATTACK, ATTACK:MELEE|RANGED|BOW|CROSSBOW|THROWN|FIREARM), description = a nota
     RESISTANCE,         // resistência a um tipo de dano: value = o tipo ("venenoso")
     PASSIVE_BONUS,      // bônus na percepção ou intuição passiva: value PERCEPTION ou INSIGHT, amount ou usesFormula HALF_PROFICIENCY
+    ABILITY_USES,       // muda os usos de outra habilidade (value = nome): usesFormula/maxUses/usesPlus trocam a fórmula,
+                        // amount soma usos (Inspirar Aliados, Adepto Espiritual, Controle de Plumadagas)
     RESOURCE_CHOICE     // recurso de classe do Capítulo 5 (rules/recursos.json): value = tipo (SUTRA, IRA, TECNICA...), count,
                         // options = grupos aceitos (vazio = todos); VEL é opcional e usa amount como os pontos (◆) disponíveis
 }

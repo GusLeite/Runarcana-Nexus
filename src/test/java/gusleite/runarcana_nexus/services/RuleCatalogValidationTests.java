@@ -34,7 +34,7 @@ class RuleCatalogValidationTests {
     void conferenciaDasHerancas() {
         RuleHeritage noRegion = new RuleHeritage("h1", "H1", HeritageCategory.REGION, null, null, List.of("tribo-x"), List.of("MAGO"), null, null,
                 List.of("nao-existe"), List.of("tambem-nao"), null, 0, null, "texto",
-                List.of(new HeritageCondition(null, List.of("tribo-y"), "sem-heranca", null, null, null)), null, null, null, null, null, null, null, null);
+                List.of(new HeritageCondition(null, List.of("tribo-y"), "sem-heranca", null, null, null)), null, null, null, null, null, null, null, null, null, null);
         RuleCatalog catalog = new RuleCatalog(new AttributeMethods(null, List.of(15, 14, 13, 12, 10, 8), null), 30.0, "DOWN",
                 List.of(new RuleCatalog.Craft("x", "X", "GRANDE", null)), List.of(), List.of(), List.of(), List.of(), List.of(noRegion), null, null, null, null, null);
 

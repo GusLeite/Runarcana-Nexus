@@ -56,7 +56,12 @@ public record Grant(
         // do SPEED. Ex.: Casca Grossa {"1": 1, "6": 2, "12": 3, ...}; Natação {"1": 30, "6": 35, ...}.
         Map<String, Integer> valueByLevel,
         // FEATURE com options: o texto de cada opção (chave = a opção); a habilidade leva o texto das escolhidas.
-        Map<String, String> optionTexts
+        Map<String, String> optionTexts,
+        // SPEED: o deslocamento vale esta fração da caminhada final (Vida Marinha: natação = 1; Adaptação de Escalada: 0,5).
+        Double walkFraction,
+        // Só vale se a opção foi escolhida na habilidade: "Vantagem Tecnológica:Carapaça" (concessões fixas; decidido depois
+        // das escolhas).
+        String when
 ) {
     // Sem optionTexts (as concessões montadas no código e nos testes).
     public Grant(GrantType type, Attribute attribute, Integer amount, Integer count, List<String> options, SkillType skill,
@@ -68,7 +73,7 @@ public record Grant(
                  Map<String, Integer> valueByLevel) {
         this(type, attribute, amount, count, options, skill, value, label, name, description, abilityType, spellLevel, damage,
                 maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration, components, perLevel, feet,
-                fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, null);
+                fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, null, null, null);
     }
 
     @com.fasterxml.jackson.annotation.JsonCreator
@@ -91,21 +96,21 @@ public record Grant(
         String text = (s.description() == null ? "" : s.description()) + (s.higherLevels() == null ? "" : "\n\nEm níveis superiores. " + s.higherLevels());
         return new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, s.name(), text, AbilityType.SPELL,
                 s.level(), null, null, null, null, null, s.castingTime(), s.range(), s.duration(), components, null, null, null, null,
-                null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null);
     }
 
     // A mesma concessão com outro nome (habilidade com opção: "Resistente" → "Resistente (Ígneo)").
     public Grant withName(String newName) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, newName, description, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
-                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts);
+                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts, walkFraction, when);
     }
 
     // A mesma concessão com outra quantidade de pés (SPEED que cresce a cada escolha do traço: 15, 15, 10…).
     public Grant withFeet(Double newFeet) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, name, description, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
-                components, perLevel, newFeet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts);
+                components, perLevel, newFeet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts, walkFraction, when);
     }
 
     // A mesma concessão com os usos da opção escolhida (optionUses).
@@ -113,21 +118,21 @@ public record Grant(
         return new Grant(type, u.attribute() != null ? u.attribute() : attribute, amount, count, options,
                 skill, value, label, name, description, abilityType, spellLevel, damage, u.maxUses(), u.usesFormula(),
                 diceByProficiency, u.recharge() == null ? recharge : u.recharge(), castingTime, range, duration, components,
-                perLevel, feet, fromRegion, damageBonus, armor, u.usesPlus(), expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts);
+                perLevel, feet, fromRegion, damageBonus, armor, u.usesPlus(), expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts, walkFraction, when);
     }
 
     // A mesma concessão com outra tabela de usos e outro texto (Ki com pontos inativados pelos Vel).
     public Grant withUsesByLevel(Map<String, Integer> table, String newDescription) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, name, newDescription, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
-                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, table, diceByLevel, valueByLevel, optionTexts);
+                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, table, diceByLevel, valueByLevel, optionTexts, walkFraction, when);
     }
 
     // A mesma concessão com outro texto e tempo de execução (Herança com parte ativa: "Reação", "Ação bônus").
     public Grant withText(String newDescription, String newCastingTime) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, name, newDescription, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, newCastingTime, range, duration,
-                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts);
+                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts, walkFraction, when);
     }
 
     // FEATURE com options: a habilidade pede uma escolha (ex.: o tipo de dano do Resistente).

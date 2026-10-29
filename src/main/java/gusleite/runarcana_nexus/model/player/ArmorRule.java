@@ -33,6 +33,8 @@ public class ArmorRule {
     private boolean proficiency;
     private Integer amount;
     private Integer reduction;
+    // Bônus (Carapaça): RD de metade do bônus de proficiência em todas as opções. Nulo nas fichas antigas.
+    private Boolean halfProficiencyReduction;
     private boolean unarmoredOnly;
     private boolean blocksArmor;
     // Proficiência com armadura exigida para a opção aparecer (MEDIUM, HEAVY).
