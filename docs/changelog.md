@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Assombração do Loge sem os olhos vermelhos (`feature/character-sheet`)
+- Removida a camada `.lg-eyes`, que brilhava sobre o rosto da princesa; ficam só os olhos da própria arte.
+
 ## 2026-10-30 — Assombração do Loge mais contida (`feature/character-sheet`)
 - Bebedeira com metade da amplitude ou menos e só ~3 s (antes contínua); os olhos somem junto com o rosto e o escurecimento quase sai no fim.
 

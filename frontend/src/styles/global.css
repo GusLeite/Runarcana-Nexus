@@ -133,7 +133,7 @@ background:radial-gradient(circle,rgba(255,210,210,.9),rgba(230,20,50,.55) 35%,t
 .login.blood h2{color:#ff6a7a;text-shadow:0 0 14px rgba(224,32,74,.6)}
 /* Loge: assombração no hover (components/effects/Haunting.jsx). Sem hover, tudo invisível.
    Sequência: visão dupla e cambaleio leves (~3 s) > facada aos .22s > escuridão aos .7s > rosto da princesa aos .95s,
-   sussurros de 1.5s a 5s > o rosto e os olhos se desfazem juntos; depois fica só a arte, com a fumaça. */
+   sussurros de 1.5s a 5s > o rosto se desfaz; depois fica só a arte, com a fumaça. */
 .haunted .role{color:#ff7a88}
 .haunted .rule{background:linear-gradient(90deg,transparent,#e0203f,transparent)}
 .haunted .name{text-shadow:calc(var(--t,0)*1.5px) 0 rgba(224,32,63,.6),calc(var(--t,0)*-1.5px) 0 rgba(150,40,190,.4)}
@@ -173,17 +173,10 @@ background:radial-gradient(circle,rgba(255,210,210,.9),rgba(230,20,50,.55) 35%,t
 .p.hot .lg-dark{animation:lg-dark 4.4s .7s ease-in-out forwards}
 @keyframes lg-dark{0%{opacity:0}18%,70%{opacity:1}100%{opacity:.25}}
 /* O rosto dela é um recorte do pôster: background-size/position enquadram o rosto (1600×900, em torno de x 945, y 175). */
-.lg-ghost,.lg-eyes{position:absolute;left:50%;top:36%;height:min(66%,620px);aspect-ratio:1;margin:0;transform:translate(-50%,-50%)}
-.lg-ghost{opacity:0;mix-blend-mode:screen;background-size:381% auto;background-position:62.3% 0;
+.lg-ghost{position:absolute;left:50%;top:36%;height:min(66%,620px);aspect-ratio:1;margin:0;transform:translate(-50%,-50%);opacity:0;mix-blend-mode:screen;background-size:381% auto;background-position:62.3% 0;
 -webkit-mask-image:radial-gradient(ellipse 44% 50% at 50% 44%,#000 35%,transparent 100%);mask-image:radial-gradient(ellipse 44% 50% at 50% 44%,#000 35%,transparent 100%)}
 .p.hot .lg-ghost{animation:lg-ghost 3.8s .95s ease-out forwards}
 @keyframes lg-ghost{0%{opacity:0;transform:translate(-50%,-44%) scale(.86);filter:blur(9px) grayscale(.6) brightness(1.2)}32%{opacity:.95;transform:translate(-50%,-50%) scale(1);filter:blur(0) grayscale(.35) brightness(1.25)}62%{opacity:.75;transform:translate(-50%,-52%) scale(1.04);filter:blur(1px) grayscale(.5) brightness(1.1)}100%{opacity:0;transform:translate(-50%,-62%) scale(1.25);filter:blur(16px) grayscale(.8) brightness(1)}}
-.lg-eyes{opacity:0}
-.lg-eyes i{position:absolute;top:39%;width:6%;height:3.4%;margin:-1.7% 0 0 -3%;border-radius:50%;background:radial-gradient(ellipse,#fff2e6,#ff3a3a 45%,transparent 72%);box-shadow:0 0 16px 5px rgba(255,30,50,.75)}
-.lg-eyes i:first-child{left:42%}
-.lg-eyes i:last-child{left:58%}
-.p.hot .lg-eyes{animation:lg-eyes 3.55s 1.2s ease-in-out forwards}
-@keyframes lg-eyes{0%{opacity:0}25%,60%{opacity:1}100%{opacity:0}}
 .lg-whisper{position:absolute;left:50%;white-space:nowrap;font-family:'Cinzel',Georgia,serif;font-style:italic;font-size:15px;letter-spacing:.08em;color:#ffc2c8;text-shadow:0 0 10px rgba(255,30,60,.95);opacity:0;transform:translateX(-50%)}
 .lg-whisper.w0{top:52%;margin-left:-14px}
 .lg-whisper.w1{top:59%;margin-left:16px}

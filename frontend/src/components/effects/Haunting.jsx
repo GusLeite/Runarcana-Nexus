@@ -1,6 +1,6 @@
 // Loge (assassino bêbado, assombrado pela princesa morta): ao passar o mouse a visão fica dupla e a
 // arte cambaleia por alguns segundos; uma facada corta o painel ao meio, tudo escurece e o rosto dela
-// surge, sussurra e se desfaz junto com os olhos. A animação roda quando o painel ganha a classe .hot.
+// surge, sussurra e se desfaz. A animação roda quando o painel ganha a classe .hot.
 
 const WHISPERS = ['você prometeu…', 'mais uma dose…', 'era pra ter sido você…']
 
@@ -31,7 +31,6 @@ export default function Haunting({ img, pos }) {
       <span className="lg-flash" />
       <div className="lg-dark" />
       <div className="lg-ghost" style={{ backgroundImage: `url("${img}")` }} />
-      <div className="lg-eyes"><i /><i /></div>
       {WHISPERS.map((text, i) => <span key={i} className={'lg-whisper w' + i}>{text}</span>)}
     </div>
   )
