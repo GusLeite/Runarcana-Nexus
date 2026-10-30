@@ -14,6 +14,7 @@ import chireano from '../assets/origins/chireano.mp4'
 import meioDragao from '../assets/origins/meio-dragao.mp4'
 import troll from '../assets/origins/troll.mp4'
 import vastaya from '../assets/origins/vastaya.mp4'
+import yordle from '../assets/origins/yordle.mp4'
 
 export const ORIGIN_ART = {
   humano: { tagline: 'A espécie mais numerosa de Runeterra, moldada por cada cultura que a cerca.', hue: 42, motes: 'spark',
@@ -32,7 +33,8 @@ export const ORIGIN_ART = {
     video: { src: troll, focus: 0.65, focusNarrow: 0.6, show: 0.62, end: 14.8 } },
   vastaya: { tagline: 'Quimeras de sangue humano e magia espiritual, em sintonia com a natureza.', hue: 286, motes: 'feather',
     video: { src: vastaya, focus: 0.5, focusNarrow: 0.49, show: 0.55, start: 2, end: 47 } },
-  yordle: { tagline: 'Pequenos espíritos de Bandópolis, escondidos sob o véu mágico do Glamour.', hue: 322, motes: 'petal' },
+  yordle: { tagline: 'Pequenos espíritos de Bandópolis, escondidos sob o véu mágico do Glamour.', hue: 322, motes: 'petal',
+    video: { src: yordle, focus: 0.71, focusNarrow: 0.69, show: 0.45 } },
   runinata: { tagline: 'Um ser único, nascido das Runas Globais. Cada traço é você quem monta.', hue: 258, motes: 'hex' },
 }
 

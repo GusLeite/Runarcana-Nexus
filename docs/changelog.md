@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Vídeo do Gnar no Yordle (`feature/character-sheet`)
+- `assets/origins/yordle.mp4` (1080p, 3,5 MB, 17 s): o Gnar é pequeno e fica à direita do quadro; foco 0,71 (0,69 nos painéis estreitos), `show: 0.45`. Centralizado conferindo o recorte do painel com uma linha no centro.
+
 ## 2026-10-30 — Sett centralizado no painel estreito (`feature/character-sheet`)
 - O foco do Sett estava em 0,57 e o painel estreito mostrava o ombro, sem o rosto; medido num recorte igual ao do painel, rosto e esterno ficam em 0,49-0,5.
 
