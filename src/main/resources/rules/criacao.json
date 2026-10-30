@@ -2681,6 +2681,33 @@
               "type": "ARMOR_PROFICIENCY",
               "value": "HEAVY",
               "when": "Chamado Sagrado:Protetor"
+            },
+            {
+              "type": "SKILL_CHOICE",
+              "count": 2,
+              "options": [
+                "ARCANA",
+                "HISTORY",
+                "NATURE",
+                "PERSUASION",
+                "RELIGION"
+              ],
+              "label": "Chamado Sagrado (Estudioso): duas perícias",
+              "when": "Chamado Sagrado:Estudioso"
+            },
+            {
+              "type": "SPELL_CHOICE",
+              "value": "MYSTERY:adivinhacao,encantamento,etermancia,hemomancia,ilusao,invocacao,necromancia,oniromancia,transmutacao,umbramancia",
+              "spellLevel": 0,
+              "count": 1,
+              "label": "Chamado Sagrado (Obreiro): um truque de Mistério Espiritual",
+              "when": "Chamado Sagrado:Obreiro"
+            },
+            {
+              "type": "ABILITY_USES",
+              "value": "Liturgia",
+              "amount": 1,
+              "when": "Chamado Sagrado:Obreiro"
             }
           ]
         },

@@ -561,7 +561,10 @@ public class CreationService {
         // Concessão com "when" (só com a opção escolhida): decidida depois das escolhas (conditionalGrants).
         for (Source s : sources) {
             for (Grant g : s.grants()) {
-                if (g.when() != null) b.conditional.add(new Sourced<>(g, s.key() + "|" + s.label()));
+                // Escolha com "when" é feita na 2ª passada, se a opção já foi escolhida (Chamado Sagrado: Estudioso).
+                if (g.when() != null) {
+                    if (!isChoice(g)) b.conditional.add(new Sourced<>(g, s.key() + "|" + s.label()));
+                }
                 else applyFixed(b, s, g);
             }
         }
@@ -576,7 +579,16 @@ public class CreationService {
                 Grant g = grants.get(i);
                 String key = s.key() + ":" + i;
                 List<String> picked = picks.get(key);
+                if (g.when() != null && !(isChoice(g) && whenMet(b, g.when()))) continue;
                 switch (g.type()) {
+                    case SITUATIONAL -> {
+                        // Com options: a nota vale para o alvo escolhido (traço Habilidoso: a perícia).
+                        if (!g.hasOptions()) break;
+                        String label = orLabel(g, "Escolha onde vale: " + g.description());
+                        List<String> selected = choose(picked, g.options(), 1, label, b.errors);
+                        selected.forEach(t -> b.situational.add(new SituationalNote(t, g.description(), s.label())));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, 1, g.options(), selected, s.label(), null));
+                    }
                     case ATTRIBUTE_CHOICE -> {
                         List<String> options = orAll(g.options(), Attribute.values()).stream()
                                 .filter(o -> !sourceAttributes.contains(o)).toList();
@@ -930,7 +942,9 @@ public class CreationService {
             case GOLD -> b.gold += g.amount();
             case ABILITY_USES -> b.usesChanges.add(g);
             case INITIATIVE -> b.initiativeBonus += g.amount();
-            case SITUATIONAL -> b.situational.add(new SituationalNote(g.value(), g.description(), s.label()));
+            case SITUATIONAL -> {
+                if (!g.hasOptions()) b.situational.add(new SituationalNote(g.value(), g.description(), s.label()));
+            }
             // Com options: escolha (2ª passada). expertise: "caso já tenha, imunidade", decidido no fim (damageUpgrades).
             case RESISTANCE -> {
                 if (g.hasOptions()) break;
@@ -1593,7 +1607,7 @@ public class CreationService {
                 boolean mine = c.picked().contains(r.id());
                 // Escolhido em outra escolha: não aparece de novo (a não ser que possa repetir).
                 if (!mine && !r.repeats() && b.resourceIds.contains(r.id())) continue;
-                String reason = resourceBlock(r, b, mine);
+                String reason = resourceBlock(r, b, mine, Boolean.TRUE.equals(g.anyClass()));
                 if (reason == null) options.add(r.id());
                 else locked++;
                 if (mine) {
@@ -1697,7 +1711,8 @@ public class CreationService {
     }
 
     // Por que o recurso não pode ser escolhido agora (null = pode). Na criação o personagem é de 1º nível.
-    private static String resourceBlock(RuleResource r, Build b, boolean mine) {
+    // anyClass: ignora classe, subclasse e nível de classe ("exceto o de Classe": Mestre Tático).
+    private static String resourceBlock(RuleResource r, Build b, boolean mine, boolean anyClass) {
         String pre = "pré-requisito: " + (r.prerequisite() == null ? "não atendido" : r.prerequisite());
         // Vel que inativa Ki: o personagem precisa ter esse Ki.
         if (r.ki() != null && r.ki() > kiTotal(b)) return pre;
@@ -1711,7 +1726,7 @@ public class CreationService {
         if (q.anyAttributes() != null && !q.anyAttributes().isEmpty()
                 && q.anyAttributes().entrySet().stream().noneMatch(e -> value.applyAsInt(e.getKey()) >= e.getValue())) return pre;
         // Classe (e nível nela, "Caçador 8"): qualquer uma das classes do personagem; subclasse de qualquer classe.
-        if (q.classes() != null && !q.classes().isEmpty()) {
+        if (!anyClass && q.classes() != null && !q.classes().isEmpty()) {
             int need = q.classLevel() == null ? 1 : q.classLevel();
             boolean has = b.classLevels.isEmpty()
                     ? b.klass != null && need <= 1 && q.classes().stream().anyMatch(x -> x.equalsIgnoreCase(b.klass.id()))
@@ -1719,7 +1734,7 @@ public class CreationService {
                             && q.classes().stream().anyMatch(x -> x.equalsIgnoreCase(e.getKey())));
             if (!has) return pre;
         }
-        if (q.subclasses() != null && !q.subclasses().isEmpty() && b.subclassByClass.values().stream()
+        if (!anyClass && q.subclasses() != null && !q.subclasses().isEmpty() && b.subclassByClass.values().stream()
                 .noneMatch(s -> q.subclasses().stream().anyMatch(x -> x.equalsIgnoreCase(s.id())))
                 && (b.subclass == null || q.subclasses().stream().noneMatch(x -> x.equalsIgnoreCase(b.subclass.id())))) return pre;
         // Origem e Herança juntas: basta uma ("Construto ou Variante Progressão Tecnológica").
@@ -1816,6 +1831,18 @@ public class CreationService {
             if (b.resistances.remove(type)) b.immunities.add(type);
             else b.resistances.add(type);
         }
+    }
+
+    // Concessão de escolha (perícia, magia, ofício... à escolha), que pode depender de uma opção ("when").
+    private static boolean isChoice(Grant g) {
+        return g.type().name().endsWith("_CHOICE") || (g.type() == GrantType.SITUATIONAL && g.hasOptions());
+    }
+
+    // "Chamado Sagrado:Estudioso": a opção foi escolhida na habilidade.
+    private static boolean whenMet(Build b, String when) {
+        String[] w = when.split(":", 2);
+        List<String> chosen = b.featureOptions.get(w[0]);
+        return w.length == 2 && chosen != null && chosen.contains(w[1]);
     }
 
     // Quem tem mais de uma fonte para o mesmo Limiar (Fonte Estável e Instável) escolhe a dominante ("Fonte Dominante").

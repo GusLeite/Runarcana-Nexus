@@ -305,6 +305,8 @@ export function choiceOptionName(type, id, crafts = [], items = []) {
     case 'ATTRIBUTE_CHOICE':
     case 'ARMOR_CLASS': return attrName(id)
     case 'SKILL_CHOICE': return SKILL_NAMES[id] ?? id
+    // Nota situacional à escolha (traço Habilidoso): o alvo é "SKILL:STEALTH".
+    case 'SITUATIONAL': return id.startsWith('SKILL:') ? SKILL_NAMES[id.slice(6)] ?? id : id
     case 'SAVING_THROW_CHOICE': return attrName(id)
     // Especialidade: perícia ("STEALTH") ou, com ofícios, "SKILL:STEALTH" / "CRAFT:chaveiro".
     case 'EXPERTISE_CHOICE': {

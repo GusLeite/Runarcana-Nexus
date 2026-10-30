@@ -642,8 +642,9 @@ public class RuleCatalogService {
                 p.add(at + ": falta type");
                 continue;
             }
-            if (g.when() != null && (!g.when().contains(":") || g.type() == GrantType.FEATURE && g.hasOptions() || CHOICE_TYPES.contains(g.type()))) {
-                p.add(at + ": when é \"Habilidade:Opção\" e só vale em concessão fixa");
+            // when: fixa, ou escolha "_CHOICE" (feita se a opção já foi escolhida antes na mesma fonte); não em RESOURCE_CHOICE nem FEATURE com opções.
+            if (g.when() != null && (!g.when().contains(":") || g.type() == GrantType.FEATURE && g.hasOptions() || g.type() == GrantType.RESOURCE_CHOICE)) {
+                p.add(at + ": when é \"Habilidade:Opção\" e não vale em RESOURCE_CHOICE nem em FEATURE com opções");
             }
             if (g.valueByLevel() != null) {
                 if (!Set.of(GrantType.ATTRIBUTE, GrantType.AC_BONUS, GrantType.SPEED).contains(g.type())) {
@@ -705,10 +706,11 @@ public class RuleCatalogService {
                     if (g.value() != null && !halfDie) p.add(at + " (HP_BONUS): value só aceita HALF_HIT_DIE");
                 }
                 case SITUATIONAL -> {
-                    if (blank(g.value()) || blank(g.description())) p.add(at + " (SITUATIONAL): precisa de value (alvo) e description");
-                    else if (!g.value().matches("(SKILL:[A-Z_]+|SAVE(:[A-Z]+)?|INITIATIVE|AC|ATTACK(:(MELEE|RANGED|BOW|CROSSBOW|THROWN|FIREARM))?)")) {
-                        p.add(at + " (SITUATIONAL): alvo inválido " + g.value());
-                    }
+                    // Alvo fixo (value) ou à escolha (options: os alvos possíveis).
+                    String target = "(SKILL:[A-Z_]+|SAVE(:[A-Z]+)?|INITIATIVE|AC|ATTACK(:(MELEE|RANGED|BOW|CROSSBOW|THROWN|FIREARM))?)";
+                    List<String> targets = g.hasOptions() ? g.options() : blank(g.value()) ? List.of() : List.of(g.value());
+                    if (targets.isEmpty() || blank(g.description())) p.add(at + " (SITUATIONAL): precisa de value (alvo) ou options, e description");
+                    else targets.stream().filter(t -> !t.matches(target)).forEach(t -> p.add(at + " (SITUATIONAL): alvo inválido " + t));
                 }
                 // Tipo de dano fixo (value) ou à escolha (options).
                 case RESISTANCE, VULNERABILITY, ABSORPTION, IMMUNITY -> {

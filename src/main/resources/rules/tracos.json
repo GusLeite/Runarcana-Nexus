@@ -349,7 +349,34 @@
       "tier": "MINOR",
       "description": "Escolha uma Perícia ou Ofício com o qual você tenha proficiência; você possui vantagem nas rolagens feitas com essa Perícia ou Ofício. Você só pode escolher esse traço 2 vezes.",
       "maxTimes": 2,
-      "detail": "Qual perícia ou ofício?"
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "options": [
+            "SKILL:ATHLETICS",
+            "SKILL:ACROBATICS",
+            "SKILL:SLEIGHT_OF_HAND",
+            "SKILL:STEALTH",
+            "SKILL:ARCANA",
+            "SKILL:HISTORY",
+            "SKILL:INVESTIGATION",
+            "SKILL:NATURE",
+            "SKILL:RELIGION",
+            "SKILL:TECHNOLOGY",
+            "SKILL:INSIGHT",
+            "SKILL:ANIMAL_HANDLING",
+            "SKILL:MEDICINE",
+            "SKILL:PERCEPTION",
+            "SKILL:SURVIVAL",
+            "SKILL:DECEPTION",
+            "SKILL:INTIMIDATION",
+            "SKILL:PERFORMANCE",
+            "SKILL:PERSUASION"
+          ],
+          "description": "Vantagem (traço Habilidoso).",
+          "label": "Habilidoso: a perícia com vantagem"
+        }
+      ]
     },
     {
       "id": "membros-longos",

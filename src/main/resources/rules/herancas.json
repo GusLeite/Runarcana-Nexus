@@ -1181,7 +1181,8 @@
           "type": "RESOURCE_CHOICE",
           "value": "TECNICA",
           "count": 1,
-          "label": "Mestre Tático: uma Técnica de Combate"
+          "label": "Mestre Tático: uma Técnica de Combate",
+          "anyClass": true
         }
       ]
     },
@@ -1286,7 +1287,24 @@
       "uses": {
         "usesFormula": "PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "count": 1,
+          "options": [
+            "deserto",
+            "inferno",
+            "som",
+            "veneno",
+            "cristal",
+            "metal",
+            "nevasca",
+            "artico"
+          ],
+          "label": "Princípio Elemental: um elemento terciário ou de transição"
+        }
+      ]
     },
     {
       "id": "punguista",

@@ -255,9 +255,15 @@ class CreationControllerTests {
         String token = login("gaudron");
         String body = FULL.replace("{\"id\":\"teste-geral\"}", "{\"id\":\"teste-inspira\"}");
         // Sem o Casco: sem RD; com ele (when "Peça:Casco"): RD de metade da proficiência (2 → 1).
-        preview(token, body.replace("\"class:ARCANIST:1\"", "\"heritage:teste-inspira:2\":[\"Nada\"],\"class:ARCANIST:1\""))
-                .andExpect(jsonPath("$.armorClass.reduction").value(0));
-        String json = preview(token, body.replace("\"class:ARCANIST:1\"", "\"heritage:teste-inspira:2\":[\"Casco\"],\"class:ARCANIST:1\""))
+        // Escolha com "when" só aparece com a opção (Casco); a nota situacional à escolha vale para a perícia escolhida.
+        preview(token, body.replace("\"class:ARCANIST:1\"", "\"heritage:teste-inspira:2\":[\"Nada\"],\"heritage:teste-inspira:5\":[\"SKILL:STEALTH\"],\"class:ARCANIST:1\""))
+                .andExpect(jsonPath("$.armorClass.reduction").value(0))
+                .andExpect(jsonPath("$.complete").value(true))
+                .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-inspira:4')]").isEmpty());
+        preview(token, body.replace("\"class:ARCANIST:1\"", "\"heritage:teste-inspira:2\":[\"Casco\"],\"class:ARCANIST:1\""))
+                .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-inspira:4')].options[0]").value("ATHLETICS"));
+        String json = preview(token, body.replace("\"class:ARCANIST:1\"", "\"heritage:teste-inspira:2\":[\"Casco\"],"
+                + "\"heritage:teste-inspira:4\":[\"ATHLETICS\"],\"heritage:teste-inspira:5\":[\"SKILL:STEALTH\"],\"class:ARCANIST:1\""))
                 .andExpect(jsonPath("$.complete").value(true))
                 // Inspirado: metade da proficiência → a proficiência inteira (2).
                 .andExpect(jsonPath("$.features[?(@.name == 'Inspirado')].uses").value(2))

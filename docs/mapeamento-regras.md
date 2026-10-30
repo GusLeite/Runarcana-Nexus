@@ -26,7 +26,7 @@ Legenda dos blocos:
 - **Lendário Guardião** (Combatente Guardião, 20º): falta Constituição +2 (máximo 22).
 
 ### A2. Proficiências e Mistérios fixos ou à escolha ✅
-Ficou de fora: Princípio Elemental (a lista de elementos terciários/de transição não está no catálogo) e o truque da Essência Elemental (vai no A3). A Centelha Vesani já tinha a escolha. O Mestre Tático mostra as Técnicas com os pré-requisitos delas (o "exceto o de Classe" não é aplicado). "Armas regionais" = as Impróprias do catálogo de itens.
+Princípio Elemental: elementos terciários e de transição pelo `tier` do catálogo de magia. O truque da Essência Elemental foi no A3. A Centelha Vesani já tinha a escolha. O Mestre Tático ignora o pré-requisito de classe/subclasse das Técnicas (`anyClass`). "Armas regionais" = as Impróprias do catálogo de itens.
 
 - Ofícios: Mestre Artesão (ofício + especialidade), Artesão Nazumita (1 de 6, ou especialidade), Coletor Nazumita (Biologista e Curtidor), Tecnomaníaco e Musicista Prodígio (ou especialidade), Hospitaleiro (Cozinheiro), Pastor da Montanha (Guia-Piloto ou Apotecário), Acólito da Forja 2º (Coletor-Minerador).
 - Armas: Armas Avançadas (a escolhida), Enxofre/Salitre/Carvão (arma de fogo), Estudioso de Armas (arma regional), Ferromante (marcial regional), Disciplina é Força (uma arma), Estudioso das Armas (4 armas), Variante Anfíbio e Estilo do Mar (rede, lança, tridente), Bélico (Runinata), Sutra Estrada do Ceifador, Mercurial Explorador 3º (bestas de repetição ou armas de fogo).
@@ -42,7 +42,7 @@ Viram a magia na ficha (concessão `SPELL`), com os usos que a Herança já tem:
 - À escolha: Benefício Colateral (truque), Musicista Prodígio (truque do Som), Incentivo Celeste (truque celestial), Conjurador Natural (magia de Xamã), Vislumbre Estelar (1º nível de Adivinhação/Oniromancia), Ritualista (ritual de 1º), Adepto e Iniciado Shugenja.
 
 ### A4. Defesas contra dano (resistência, vulnerabilidade, absorção, "caso já tenha, imunidade") ✅
-Meio-Dragão: a "fraqueza" vale para o tipo simples e o mágico. Hakensai 15º/20º pelo Caminho Elemental escolhido (o 20º usa o mesmo tipo do 15º). A imunidade a venenoso da forma Cobra (Nascimento da Ninhada) depende da forma e ficou no texto.
+Meio-Dragão: a "fraqueza" vale para o tipo simples e o mágico. Hakensai 15º/20º pelo Caminho Elemental escolhido (o 20º usa o mesmo tipo do 15º). Nascimento da Ninhada ganhou a escolha Aranha/Cobra; Cobra dá imunidade a venenoso (a imunidade da Aranha a Amedrontado é condição, bloco B2).
 
 - Heranças: Pele Rígida (cortante/perfurante/contundente à escolha; caso já tenha, imunidade), Construção Primorosa (2ª resistência da lista do Brutal).
 - Origens: Construto (venenoso), Brutal (o "Resistente" hoje é uma escolha sem efeito → resistência à escolha), Meio-Dragão (resistência e vulnerabilidade da linhagem; no 15º, a versão mágica), Yordle Aquático (contundente).
@@ -51,7 +51,7 @@ Meio-Dragão: a "fraqueza" vale para o tipo simples e o mágico. Hakensai 15º/2
 - Runinata: Resistência Natural (à escolha), Construído (venenoso), Consistência Gelatinosa (físicos).
 
 ### A5. Notas situacionais (vantagens) ✅
-Ficou de fora o traço Habilidoso da Runinata (a perícia é escolhida em texto livre).
+O traço Habilidoso virou uma escolha de perícia (a nota vai nela); ofício não é alvo de nota, então vale só para perícias.
 
 - Origens: Construto (desvantagem contra clima hostil), Emissário (vantagem contra clima), Aelus (iniciativa e Percepção contra surpresa), Alnuk (frio extremo), Arbóreo (movimento forçado), Chireano (audição), Nocti (desvantagem: luz forte, Intoxicado respiratório), Kiilash (Percepção por olfato/audição), Yordle Feérico (Enfeitiçado).
 - Classes: Bruto 2º (salvaguarda de DES) e 7º (iniciativa), Caçador 1º (iniciativa) e 6º (salvaguardas contra Inimigos Favoritos), Arcanista Zhonya (iniciativa), Púrpura (venenos, controle mental, Percepção), Atirador 11º (Furtividade), Desperado 17º (iniciativa), Acólito da Forja (frio), Mercurial Explorador 13º (Envenenado/Intoxicado).
@@ -62,8 +62,8 @@ Ficou de fora o traço Habilidoso da Runinata (a perícia é escolhida em texto 
 ### A6. CA, RD e deslocamento ✅
 - Guerreiro Primal (CA 10 + CON sem armadura), Alnuk (RD de metade da proficiência; o tipo já existe, da Carapaça), Especialista em Armadura Pesada (+1 RD com pesada, como a média), Constituição Anfíbia (natação 35), Ascensão Feérica (runa: voo 30), Constituição Montanhosa (+metade da proficiência em PV por nível, como o Minotauro).
 
-### A7. Opções que hoje não fazem nada ✅ (parcial)
-Protetor feito. Estudioso (duas perícias) e Obreiro (truque) pedem uma escolha que depende da opção; o sistema só tem efeitos fixos pela opção (`when`), então ficam no texto.
+### A7. Opções que hoje não fazem nada ✅
+Protetor (proficiências), Estudioso (duas perícias) e Obreiro (truque espiritual e +1 uso de Liturgia), pela opção.
 
 - Chamado Sagrado (Acólito 2º): Protetor (armas marciais e armadura pesada) e Estudioso (2 perícias) viram efeito pela opção.
 

@@ -6386,7 +6386,26 @@
       "uses": {
         "usesFormula": "HALF_PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Ninhada",
+          "count": 1,
+          "options": [
+            "Aranha",
+            "Cobra"
+          ],
+          "label": "Nascimento da Ninhada: Aranha ou Cobra",
+          "description": "A Ninhada à qual sua essência rúnica está ligada."
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "venenoso",
+          "when": "Ninhada:Cobra"
+        }
+      ]
     },
     {
       "id": "runa-essencia-da-ninhada",

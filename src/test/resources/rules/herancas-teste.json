@@ -358,6 +358,23 @@
             "halfProficiencyReduction": true
           },
           "when": "Peça:Casco"
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "ATHLETICS",
+            "STEALTH"
+          ],
+          "when": "Peça:Casco"
+        },
+        {
+          "type": "SITUATIONAL",
+          "options": [
+            "SKILL:ATHLETICS",
+            "SKILL:STEALTH"
+          ],
+          "description": "Vantagem de teste."
         }
       ]
     }
