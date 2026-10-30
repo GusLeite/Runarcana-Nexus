@@ -148,6 +148,18 @@
           "type": "DAMAGE_REDUCTION",
           "value": "gélido",
           "usesFormula": "PROFICIENCY"
+        },
+        {
+          "type": "EXTRA_USES",
+          "value": "Inspirado",
+          "amount": 1
+        },
+        {
+          "type": "EXTRA_USES",
+          "value": "Ki Teste",
+          "amount": 1,
+          "maxUses": 2,
+          "description": "Ki de teste."
         }
       ]
     },

@@ -878,6 +878,10 @@ public class CreationService {
     // (Inspirar Aliados: Inspirado = proficiência); com amount soma usos (Adepto Espiritual: Liturgia +1).
     private static void abilityUses(Build b) {
         for (Grant change : b.usesChanges) {
+            if (change.type() == GrantType.EXTRA_USES) {
+                extraUses(b, change);
+                continue;
+            }
             for (int i = 0; i < b.features.size(); i++) {
                 Sourced<Grant> f = b.features.get(i);
                 Grant g = f.value();
@@ -893,6 +897,29 @@ public class CreationService {
                 b.features.set(i, new Sourced<>(changed, f.source()));
             }
         }
+    }
+
+    // Usos a mais numa habilidade (Ki do Cultivo de Ki, do Conjurador Natural, das Alianças Espirituais): soma ao que ela
+    // tem (tabela, fórmula ou fixo); sem a habilidade, cria uma com o texto e os usos da concessão.
+    private static void extraUses(Build b, Grant change) {
+        int add = change.amount() != null ? change.amount()
+                : usesFor(change.withUses(new UsesRule(change.usesFormula(), null, change.attribute(), null, null)), b.proficiency(), b.level, b.roundUp, b::modifier);
+        boolean found = false;
+        for (int i = 0; i < b.features.size(); i++) {
+            Sourced<Grant> f = b.features.get(i);
+            Grant g = f.value();
+            if (!change.value().equals(g.name())) continue;
+            found = true;
+            boolean fixed = (g.usesByLevel() == null || g.usesByLevel().isEmpty()) && (g.usesFormula() == null || g.usesFormula() == UsesFormula.FIXED);
+            Grant changed = fixed
+                    ? g.withUses(new UsesRule(UsesFormula.FIXED, (g.maxUses() == null ? 0 : g.maxUses()) + add, g.attribute(), null, null))
+                    : g.withUses(new UsesRule(g.usesFormula(), g.maxUses(), g.attribute(), (g.usesPlus() == null ? 0 : g.usesPlus()) + add, null));
+            b.features.set(i, new Sourced<>(changed, f.source()));
+        }
+        if (found || change.description() == null) return;
+        UsesRule uses = change.maxUses() != null ? new UsesRule(UsesFormula.FIXED, change.maxUses(), null, null, Recharge.LONG_REST)
+                : new UsesRule(change.usesFormula(), null, change.attribute(), null, Recharge.LONG_REST);
+        b.features.add(new Sourced<>(Grant.feature(AbilityType.ABILITY, change.value(), change.description()).withUses(uses), change.label() == null ? change.value() : change.label()));
     }
 
     // O que é fixo numa concessão (1ª passada; e as condicionais, depois das escolhas).
@@ -945,7 +972,7 @@ public class CreationService {
                 }
             }
             case GOLD -> b.gold += g.amount();
-            case ABILITY_USES -> b.usesChanges.add(g);
+            case ABILITY_USES, EXTRA_USES -> b.usesChanges.add(g);
             case INITIATIVE -> b.initiativeBonus += g.amount();
             case SITUATIONAL -> {
                 if (!g.hasOptions()) b.situational.add(new SituationalNote(g.value(), g.description(), s.label()));
@@ -2203,7 +2230,12 @@ public class CreationService {
     static Integer usesFor(Grant g, int proficiency, int level, boolean roundUp, ToIntFunction<Attribute> modifier) {
         // Tabela por nível do personagem (Mana do Arcanista, Carga Rúnica...) vence a fórmula.
         // Valor nulo na tabela = sem limite a partir desse nível (Fúria do Bruto no 20º): sem contador.
-        if (g.usesByLevel() != null && !g.usesByLevel().isEmpty()) return byLevel(g.usesByLevel(), level);
+        // usesPlus também soma na tabela (Ki + Cultivo de Ki).
+        if (g.usesByLevel() != null && !g.usesByLevel().isEmpty()) {
+            Integer v = byLevel(g.usesByLevel(), level);
+            if (v == null || g.usesPlus() == null) return v;
+            return v + g.usesPlus();
+        }
         UsesFormula formula = g.usesFormula() == null ? UsesFormula.FIXED : g.usesFormula();
         // Fixo pode ser nulo (sem usos): fora do switch, que é numérico.
         if (formula == UsesFormula.FIXED) return g.maxUses();

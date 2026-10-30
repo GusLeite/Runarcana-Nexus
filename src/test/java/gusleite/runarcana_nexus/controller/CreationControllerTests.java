@@ -230,6 +230,9 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.character.savingThrowExpertise").value(org.hamcrest.Matchers.contains("INTELLIGENCE")))
                 // RD contra gélido = bônus de proficiência (2).
                 .andExpect(jsonPath("$.character.typedReductions['gélido']").value(2))
+                // Usos a mais: soma na habilidade que existe (Inspirado 1 → 2) e cria a que falta (Ki Teste com 2).
+                .andExpect(jsonPath("$.abilities[?(@.name == 'Inspirado')].maxUses").value(2))
+                .andExpect(jsonPath("$.abilities[?(@.name == 'Ki Teste')].maxUses").value(2))
                 // Ofício "caso já tenha, especialidade": Ferraria vem da origem.
                 .andExpect(jsonPath("$.character.craftExpertise").value(org.hamcrest.Matchers.contains("Ferraria")))
                 // Vulnerável a radiante e ao tipo escolhido; a necrótica foi tirada por outra concessão (amount -1).

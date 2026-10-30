@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento B8: Ki extra (`feature/character-sheet`)
+- Concessão `EXTRA_USES`: Cultivo de Ki (+1, ou 2 pontos sem Ki), Conjurador Natural (+proficiência), Alianças Espirituais (+metade); a tabela de usos passa a somar `usesPlus`.
+- Conferido no sandbox (Bodisatva 2 → 3; Combatente ganha Ki 2; Colosso Médio → Grande).
+
 ## 2026-10-29 — Mapeamento B7: RD contra um tipo de dano (`feature/character-sheet`)
 - Concessão `DAMAGE_REDUCTION`; ficha com `typedReductions` (`character_typed_reductions`) em chips "RD N: tipo".
 - Variante Glacinata (gélido = proficiência), Adaptação Selvagem (ácido e ígneo), Ascensão Feérica (sombrio 2).

@@ -414,6 +414,13 @@
           "spellLevel": 1,
           "count": 1,
           "label": "Conjurador Natural: uma magia da lista de Xamã"
+        },
+        {
+          "type": "EXTRA_USES",
+          "value": "Ki",
+          "usesFormula": "PROFICIENCY",
+          "description": "Pontos de Ki para Conjuração (Conjurador Natural): conjuram a magia da lista de Xamã escolhida.",
+          "label": "Herança: Conjurador Natural"
         }
       ]
     },
@@ -437,7 +444,17 @@
       "id": "cultivo-de-ki",
       "name": "Cultivo de Ki",
       "category": "GENERAL",
-      "description": "Você aprendeu a canalizar a energia de seu próprio corpo para realizar feitos quase sobrenaturais.. Você ganha os seguintes benefícios:\n\nVocê recebe +1 de ponto de Ki caso já tenha Ki ou 2 pontos de Ki caso sua classe não tenha um valor de Ki.\nVocê pode escolher um Sutra geral ou um Sutra de Bodisatva, desde que atenda aos pré-requisitos do mesmo."
+      "description": "Você aprendeu a canalizar a energia de seu próprio corpo para realizar feitos quase sobrenaturais.. Você ganha os seguintes benefícios:\n\nVocê recebe +1 de ponto de Ki caso já tenha Ki ou 2 pontos de Ki caso sua classe não tenha um valor de Ki.\nVocê pode escolher um Sutra geral ou um Sutra de Bodisatva, desde que atenda aos pré-requisitos do mesmo.",
+      "grants": [
+        {
+          "type": "EXTRA_USES",
+          "value": "Ki",
+          "amount": 1,
+          "maxUses": 2,
+          "description": "Pontos de Ki: abastecem as características de Ki e os Sutras; você os recupera num descanso longo.",
+          "label": "Herança: Cultivo de Ki"
+        }
+      ]
     },
     {
       "id": "curandeiro-abencoado",

@@ -570,7 +570,14 @@
         "classes": [
           "SHAMAN"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "EXTRA_USES",
+          "value": "Ki",
+          "usesFormula": "HALF_PROFICIENCY"
+        }
+      ]
     },
     {
       "id": "aprimoramento-alternancia-continua",

@@ -713,6 +713,10 @@ public class RuleCatalogService {
                     else targets.stream().filter(t -> !t.matches(target)).forEach(t -> p.add(at + " (SITUATIONAL): alvo inválido " + t));
                 }
                 // Tipo de dano fixo (value) ou à escolha (options).
+                case EXTRA_USES -> {
+                    if (blank(g.value())) p.add(at + " (EXTRA_USES): falta value (nome da habilidade)");
+                    if (g.amount() == null && (g.usesFormula() == null || g.usesFormula() == UsesFormula.FIXED)) p.add(at + " (EXTRA_USES): precisa de amount ou usesFormula");
+                }
                 case DAMAGE_REDUCTION -> {
                     if (blank(g.value())) p.add(at + " (DAMAGE_REDUCTION): falta value (tipo de dano)");
                     if (g.amount() == null && g.usesFormula() != UsesFormula.PROFICIENCY && g.usesFormula() != UsesFormula.HALF_PROFICIENCY) p.add(at + " (DAMAGE_REDUCTION): precisa de amount ou usesFormula PROFICIENCY/HALF_PROFICIENCY");
