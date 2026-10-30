@@ -38,6 +38,7 @@ public enum GrantType {
     SITUATIONAL,        // efeito que depende da situação, mostrado ao lado do que afeta: value = alvo (SKILL:STEALTH, SAVE,
                         // SAVE:DEXTERITY, INITIATIVE, AC, ATTACK, ATTACK:MELEE|RANGED|BOW|CROSSBOW|THROWN|FIREARM), description = a nota
     RESISTANCE,         // resistência a um tipo de dano: value = o tipo ("venenoso")
+    VULNERABILITY,      // vulnerabilidade a um tipo de dano (value = "radiante", "armas de ouro e de prata"); amount -1 = deixa de ter
     PASSIVE_BONUS,      // bônus na percepção ou intuição passiva: value PERCEPTION ou INSIGHT, amount ou usesFormula HALF_PROFICIENCY
     ABILITY_USES,       // muda os usos de outra habilidade (value = nome): usesFormula/maxUses/usesPlus trocam a fórmula,
                         // amount soma usos (Inspirar Aliados, Adepto Espiritual, Controle de Plumadagas)

@@ -53,6 +53,19 @@
           "type": "PASSIVE_BONUS",
           "value": "PERCEPTION",
           "amount": 2
+        },
+        {
+          "type": "VULNERABILITY",
+          "value": "radiante"
+        },
+        {
+          "type": "VULNERABILITY",
+          "value": "necrótico"
+        },
+        {
+          "type": "VULNERABILITY",
+          "value": "necrótico",
+          "amount": -1
         }
       ]
     },
@@ -196,11 +209,15 @@
       "id": "teste-formas",
       "name": "Formas Teste",
       "category": "GENERAL",
-      "maxTimes": 2,
+      "maxTimes": 3,
       "optionPerPick": true,
       "options": [
         "Lobo",
-        "Urso"
+        "Urso",
+        "Reforço"
+      ],
+      "repeatOptions": [
+        "Reforço"
       ],
       "description": "Uma forma a cada escolha.",
       "optionTexts": {
@@ -246,8 +263,17 @@
               "name": "Limiar Teste",
               "description": "Passou do limiar."
             }
+          ],
+          "Urso": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Limiar Urso",
+              "description": "Limiar pela forma de urso."
+            }
           ]
-        }
+        },
+        "dominant": "Forma Dominante"
       }
     },
     {

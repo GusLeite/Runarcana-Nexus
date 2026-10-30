@@ -33,7 +33,9 @@ public record RuleResource(
         Boolean repeatable,
         // Ganhos pelo NÍVEL NA CLASSE que escolheu o recurso (Técnica Combatente Arcano: magias conhecidas do 3º nível de
         // Combatente em diante). Escolhido depois do nível, o ganho entra junto com a escolha.
-        List<RuleLevel> levels
+        List<RuleLevel> levels,
+        // Limiar de Herança que o recurso também alcança (Adaptação Tecnológica: 5 Vantagens → Construto Vivo ou Mutante).
+        RuleHeritage.Threshold threshold
 ) {
     public boolean repeats() {
         return Boolean.TRUE.equals(repeatable);

@@ -556,6 +556,7 @@ public class RuleCatalogService {
             }
             if (h.uses() != null && h.uses().usesFormula() == null && h.uses().maxUses() == null) p.add(where + ": uses precisa de usesFormula ou maxUses");
             if (h.optionPerPickOrFalse() && h.optionsOrEmpty().isEmpty()) p.add(where + ": optionPerPick sem options");
+            if (!h.optionsOrEmpty().containsAll(h.repeatOptionsOrEmpty())) p.add(where + ": repeatOptions fora de options");
             if (h.category() == null) p.add(where + ": category deve ser um destes: " + Arrays.toString(HeritageCategory.values()));
             if (h.category() == HeritageCategory.ORIGIN && h.originsOrEmpty().isEmpty() && h.anyOfOrEmpty().isEmpty()) {
                 p.add(where + ": Herança de Origem precisa de origins ou anyOf");
@@ -708,6 +709,9 @@ public class RuleCatalogService {
                 }
                 case RESISTANCE -> {
                     if (blank(g.value())) p.add(at + " (RESISTANCE): falta value (tipo de dano)");
+                }
+                case VULNERABILITY -> {
+                    if (blank(g.value())) p.add(at + " (VULNERABILITY): falta value (tipo de dano)");
                 }
                 case PASSIVE_BONUS -> {
                     if (!"PERCEPTION".equals(g.value()) && !"INSIGHT".equals(g.value())) p.add(at + " (PASSIVE_BONUS): value é PERCEPTION ou INSIGHT");

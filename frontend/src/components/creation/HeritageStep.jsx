@@ -108,7 +108,8 @@ export default function HeritageStep({ heritages, preview, picks, onChange }) {
                     {all.length > 1 ? `${i + 1}ª escolha: ` : ''}{current ? 'Opção:' : 'Escolha uma opção:'}
                   </span>
                   <div className="to-pick">
-                    {h.options.map(o => (
+                    {/* repeatOptions ("Aprimorar Fonte"): só da 2ª escolha em diante. */}
+                    {h.options.filter(o => i > 0 || !h.repeatOptions?.includes(o)).map(o => (
                       <button key={o} type="button" className={'to-chip' + (o === current ? ' on' : '')} aria-pressed={o === current}
                         onClick={() => onChange(setHeritageOption(picks, h.id, o, h.optionPerPick ? i : null))}>{o}</button>
                     ))}

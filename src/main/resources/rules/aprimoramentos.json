@@ -39,7 +39,7 @@
     {
       "id": "aprimoramento-adaptacao-tecnologica",
       "kind": "APRIMORAMENTO",
-      "name": "Adaptação Tecnológica",
+      "name": "Adaptação Tecnológica (Estável)",
       "groups": [
         "Aprimoramento"
       ],
@@ -49,6 +49,9 @@
       "requires": {
         "origins": [
           "construto"
+        ],
+        "heritages": [
+          "variante-progressao-tecnologica"
         ]
       },
       "grants": [
@@ -62,8 +65,396 @@
             "CONSTITUTION"
           ],
           "label": "+1 em um atributo"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Vantagem Tecnológica",
+          "label": "Vantagem Tecnológica: escolha uma",
+          "count": 1,
+          "options": [
+            "Adaptação de Escalada",
+            "Adaptação Subaquática",
+            "Arma Integrada",
+            "Armas Naturais",
+            "Bolsa de Tinta",
+            "Carapaça",
+            "Defesa Adaptativa",
+            "Epiderme Cromática",
+            "Gancho de Manobras",
+            "Idade Congelada",
+            "Membro Robótico",
+            "Patagia",
+            "Pele Intoxicante",
+            "Proteção Metálica",
+            "Sentido Superior",
+            "Visão no Escuro"
+          ],
+          "optionTexts": {
+            "Adaptação de Escalada": "Você recebe deslocamento de escalada igual a metade do seu deslocamento de caminhada.",
+            "Adaptação Subaquática": "Você pode respirar tanto ar quanto água e recebe deslocamento de natação igual a metade do seu deslocamento de caminhada.",
+            "Arma Integrada": "Criaturas aprimoradas por tecnologia podem substituir um membro do seu corpo por uma arma corpo a corpo ou à distância que esteja em seu equipamento inicial, você utiliza essa arma normalmente. Essa vantagem pode ser escolhida mais de uma vez.",
+            "Armas Naturais": "Você possui garras que podem causar 1d8 + seu modificador de Força de dano cortante, e presas que podem causar 1d6 + seu modificador de Força de dano perfurante.",
+            "Bolsa de Tinta": "Você pode usar um ataque para fazer um ataque à distância especial para cegar uma criatura em sua linha de visão a até 15 pés de você caso a mesma falhe em uma Salvaguarda de Destreza CD 12. Criaturas que não precisem da visão não são afetadas por esse ataque e criaturas afetadas precisam usar uma ação para limpar a tinta. Essa habilidade funciona de forma diferente debaixo da água: com uma ação bônus você pode criar uma área de obscurecimento pesada em um raio de 5 pés a partir de você. Você pode utilizar essa habilidade um número de vezes igual a metade do seu bônus de Proficiência por descanso longo. Você pode escolher essa habilidade mais de uma vez.",
+            "Carapaça": "Sua pele tem uma cobertura adicional. Você recebe Redução de Dano igual a metade do seu bônus de proficiência, exceto a dano verdadeiro e espiritual. Você não diminui o dano recebido através de condições.",
+            "Defesa Adaptativa": "Utilizando uma ação bônus, você envia um comando para sua fonte de energia, fazendo com que ela emita um campo que te protege de ataques por 1 minuto. Ao enviar o comando você deve direcioná-lo para ataques físicos ou magia, ataques do tipo escolhido possuem desvantagem contra você (caso o ataque exija salvaguarda, você faz a mesma com vantagem). Você pode utilizar essa característica um número de vezes igual a metade do seu bônus de proficiência por Descanso Pleno.",
+            "Epiderme Cromática": "Você tem vantagens em testes de Furtividade que você faz para se ocultar. Adicionalmente, enquanto estiver sem armadura, você pode tentar se esconder mesmo sem estar com cobertura leve ou pesada, contanto que permaneça parado.",
+            "Gancho de Manobras": "Você possui um gancho atrelado a uma linha metálica com 60 pés de comprimento. Utilizando uma ação, você pode disparar o gancho em uma superfície dentro do alcance, se prendendo na mesma. Adicionalmente, utilizando uma ação bônus, você pode se soltar e saltar em um alvo a até 15 pés de você, podendo realizar um ataque corpo a corpo contra o mesmo.",
+            "Idade Congelada": "Sua idade física pode não corresponder aos anos que você viveu, diferente de um humano normal.",
+            "Membro Robótico": "Você possui 1 membro mecânico superior em alguma parte do seu corpo e tem controle sobre ele normalmente. Essa vantagem pode ser escolhida mais de uma vez para membros adicionais. Consulte o Capítulo 9 - Membros Múltiplos para as regras de combate com membros adicionais",
+            "Patagia": "Você tem membranas que atuam como barbatanas e podem ser usadas como asas para desacelerar sua queda ou permitir que você plane. Se você sofrer uma queda e não estiver Incapacitado, você pode subtrair até 100 pés do cálculo de dano da queda, você pode também se mover 2 pés para a frente para cada 1 pé que você esteja em queda.",
+            "Pele Intoxicante": "Qualquer criatura que agarre você ou entre em contato direto com sua pele deve passar em uma salvaguarda de Constituição de CD 12 ou é Intoxicada por 1 minuto. Uma criatura Intoxicada que não esteja mais em contato com sua pele pode repetir a salvaguarda no fim de seu turno, encerrando o efeito em caso de sucesso.",
+            "Proteção Metálica": "Você revestiu sua pele com um liga metálica que concede à você uma proteção natural. Desde que não esteja utilizando nenhuma armadura, sua CA é igual a 13 + seu modificador de Destreza.",
+            "Sentido Superior": "Criaturas aprimoradas por tecnologia possuem vantagem em testes de Percepção através da audição, olfato ou visão.",
+            "Visão no Escuro": "Seus olhos foram substituídos por câmeras com a capacidade de se adaptar à escuridão. Você enxerga na penumbra a até 30 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+          },
+          "optionUses": {
+            "Bolsa de Tinta": {
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            },
+            "Defesa Adaptativa": {
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            }
+          }
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Proteção Metálica",
+          "armor": {
+            "base": 13
+          },
+          "when": "Vantagem Tecnológica:Proteção Metálica"
+        },
+        {
+          "type": "AC_BONUS",
+          "name": "Carapaça",
+          "amount": 0,
+          "armor": {
+            "halfProficiencyReduction": true
+          },
+          "when": "Vantagem Tecnológica:Carapaça"
+        },
+        {
+          "type": "SPEED",
+          "value": "CLIMB",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação de Escalada"
+        },
+        {
+          "type": "SPEED",
+          "value": "SWIM",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação Subaquática"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERCEPTION",
+          "description": "Vantagem em Percepção pela audição, olfato ou visão.",
+          "when": "Vantagem Tecnológica:Sentido Superior"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Vantagem em Furtividade para se ocultar; sem armadura e parado, pode se esconder sem cobertura.",
+          "when": "Vantagem Tecnológica:Epiderme Cromática"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Desvantagem em Furtividade (fumaça dos canos).",
+          "when": "Desvantagem Tecnológica:Canos e Fumaça"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERSUASION",
+          "description": "Desvantagem em Persuasão (Cara da Morte).",
+          "when": "Desvantagem Tecnológica:Cara da Morte"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:DECEPTION",
+          "description": "Desvantagem em Enganação (Cara da Morte).",
+          "when": "Desvantagem Tecnológica:Cara da Morte"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERFORMANCE",
+          "description": "Desvantagem em Atuação relacionada à voz (Modulador de Voz).",
+          "when": "Desvantagem Tecnológica:Modulador de Voz"
         }
-      ]
+      ],
+      "threshold": {
+        "feature": "Vantagem Tecnológica",
+        "count": 5,
+        "grants": {
+          "Fonte Estável": [
+            {
+              "type": "RESISTANCE",
+              "value": "venenoso"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Construto Vivo",
+              "description": "- Habilidades que afetam Construtos passam a afetar você\n- Resistência a venenos e a dano venenoso\n- Imunidade a doenças não mágicas\n- Não precisa comer, beber ou respirar\n- Não precisa dormir, não sofre efeito de exaustão por falta de descanso e não sofre efeitos de magia de sono\n- Cura apenas metade da vida com magias e efeitos de cura. A magia reparar dano cura normalmente."
+            }
+          ]
+        },
+        "dominant": "Fonte Dominante"
+      }
+    },
+    {
+      "id": "aprimoramento-adaptacao-tecnologica-instavel",
+      "kind": "APRIMORAMENTO",
+      "name": "Adaptação Tecnológica (Instável)",
+      "groups": [
+        "Aprimoramento"
+      ],
+      "prerequisite": "Construto ou Variante Progressão Tecnológica",
+      "repeatable": true,
+      "description": "Ao escolher esse aprimoramento, você deve conhecer ou ser um Inventor especializado em Tecnologia e em Medicina, além de possuir acesso aos materiais necessários para realizar as adaptações em seu corpo, ambos definidos pelo Mestre com base no Ofício de Inventor. O valor em dinheiro é coberto pela aquisição do Aprimoramento.\n\nPara receber os benefícios desse aprimoramento, você deve passar pelo menos 8 horas de trabalho aplicando as adaptações tecnológicas em questão, o Mestre deve aumentar esse período dependendo das circunstâncias e das suas escolhas. Após esse período de trabalho você recebe os seguintes benefícios:\n\n- Aumente o valor de Força, Destreza ou Constituição em +1, até o máximo de 20.\n- Escolha entre Estável ou Instável:Estável. Você deve escolher uma Vantagem Tecnológica da Variante Tecnológica;\n- Instável. Você deve escolher duas Vantagens Tecnológicas e uma Desvantagem Tecnológica da Variante Tecnológica\n\nVocê pode escolher esse aprimoramento mais de uma vez, caso você possua 5 ou mais Vantagens Tecnológicas, você recebe os traços de Limiar Tecnológico ligados à sua fonte de energia.",
+      "requires": {
+        "origins": [
+          "construto"
+        ],
+        "heritages": [
+          "variante-progressao-tecnologica"
+        ]
+      },
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "STRENGTH",
+            "DEXTERITY",
+            "CONSTITUTION"
+          ],
+          "label": "+1 em um atributo"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Vantagem Tecnológica",
+          "label": "Vantagem Tecnológica: escolha uma",
+          "count": 1,
+          "options": [
+            "Adaptação de Escalada",
+            "Adaptação Subaquática",
+            "Arma Integrada",
+            "Armas Naturais",
+            "Bolsa de Tinta",
+            "Carapaça",
+            "Defesa Adaptativa",
+            "Epiderme Cromática",
+            "Gancho de Manobras",
+            "Idade Congelada",
+            "Membro Robótico",
+            "Patagia",
+            "Pele Intoxicante",
+            "Proteção Metálica",
+            "Sentido Superior",
+            "Visão no Escuro"
+          ],
+          "optionTexts": {
+            "Adaptação de Escalada": "Você recebe deslocamento de escalada igual a metade do seu deslocamento de caminhada.",
+            "Adaptação Subaquática": "Você pode respirar tanto ar quanto água e recebe deslocamento de natação igual a metade do seu deslocamento de caminhada.",
+            "Arma Integrada": "Criaturas aprimoradas por tecnologia podem substituir um membro do seu corpo por uma arma corpo a corpo ou à distância que esteja em seu equipamento inicial, você utiliza essa arma normalmente. Essa vantagem pode ser escolhida mais de uma vez.",
+            "Armas Naturais": "Você possui garras que podem causar 1d8 + seu modificador de Força de dano cortante, e presas que podem causar 1d6 + seu modificador de Força de dano perfurante.",
+            "Bolsa de Tinta": "Você pode usar um ataque para fazer um ataque à distância especial para cegar uma criatura em sua linha de visão a até 15 pés de você caso a mesma falhe em uma Salvaguarda de Destreza CD 12. Criaturas que não precisem da visão não são afetadas por esse ataque e criaturas afetadas precisam usar uma ação para limpar a tinta. Essa habilidade funciona de forma diferente debaixo da água: com uma ação bônus você pode criar uma área de obscurecimento pesada em um raio de 5 pés a partir de você. Você pode utilizar essa habilidade um número de vezes igual a metade do seu bônus de Proficiência por descanso longo. Você pode escolher essa habilidade mais de uma vez.",
+            "Carapaça": "Sua pele tem uma cobertura adicional. Você recebe Redução de Dano igual a metade do seu bônus de proficiência, exceto a dano verdadeiro e espiritual. Você não diminui o dano recebido através de condições.",
+            "Defesa Adaptativa": "Utilizando uma ação bônus, você envia um comando para sua fonte de energia, fazendo com que ela emita um campo que te protege de ataques por 1 minuto. Ao enviar o comando você deve direcioná-lo para ataques físicos ou magia, ataques do tipo escolhido possuem desvantagem contra você (caso o ataque exija salvaguarda, você faz a mesma com vantagem). Você pode utilizar essa característica um número de vezes igual a metade do seu bônus de proficiência por Descanso Pleno.",
+            "Epiderme Cromática": "Você tem vantagens em testes de Furtividade que você faz para se ocultar. Adicionalmente, enquanto estiver sem armadura, você pode tentar se esconder mesmo sem estar com cobertura leve ou pesada, contanto que permaneça parado.",
+            "Gancho de Manobras": "Você possui um gancho atrelado a uma linha metálica com 60 pés de comprimento. Utilizando uma ação, você pode disparar o gancho em uma superfície dentro do alcance, se prendendo na mesma. Adicionalmente, utilizando uma ação bônus, você pode se soltar e saltar em um alvo a até 15 pés de você, podendo realizar um ataque corpo a corpo contra o mesmo.",
+            "Idade Congelada": "Sua idade física pode não corresponder aos anos que você viveu, diferente de um humano normal.",
+            "Membro Robótico": "Você possui 1 membro mecânico superior em alguma parte do seu corpo e tem controle sobre ele normalmente. Essa vantagem pode ser escolhida mais de uma vez para membros adicionais. Consulte o Capítulo 9 - Membros Múltiplos para as regras de combate com membros adicionais",
+            "Patagia": "Você tem membranas que atuam como barbatanas e podem ser usadas como asas para desacelerar sua queda ou permitir que você plane. Se você sofrer uma queda e não estiver Incapacitado, você pode subtrair até 100 pés do cálculo de dano da queda, você pode também se mover 2 pés para a frente para cada 1 pé que você esteja em queda.",
+            "Pele Intoxicante": "Qualquer criatura que agarre você ou entre em contato direto com sua pele deve passar em uma salvaguarda de Constituição de CD 12 ou é Intoxicada por 1 minuto. Uma criatura Intoxicada que não esteja mais em contato com sua pele pode repetir a salvaguarda no fim de seu turno, encerrando o efeito em caso de sucesso.",
+            "Proteção Metálica": "Você revestiu sua pele com um liga metálica que concede à você uma proteção natural. Desde que não esteja utilizando nenhuma armadura, sua CA é igual a 13 + seu modificador de Destreza.",
+            "Sentido Superior": "Criaturas aprimoradas por tecnologia possuem vantagem em testes de Percepção através da audição, olfato ou visão.",
+            "Visão no Escuro": "Seus olhos foram substituídos por câmeras com a capacidade de se adaptar à escuridão. Você enxerga na penumbra a até 30 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+          },
+          "optionUses": {
+            "Bolsa de Tinta": {
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            },
+            "Defesa Adaptativa": {
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            }
+          }
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Vantagem Tecnológica",
+          "label": "Vantagem Tecnológica: escolha uma",
+          "count": 1,
+          "options": [
+            "Adaptação de Escalada",
+            "Adaptação Subaquática",
+            "Arma Integrada",
+            "Armas Naturais",
+            "Bolsa de Tinta",
+            "Carapaça",
+            "Defesa Adaptativa",
+            "Epiderme Cromática",
+            "Gancho de Manobras",
+            "Idade Congelada",
+            "Membro Robótico",
+            "Patagia",
+            "Pele Intoxicante",
+            "Proteção Metálica",
+            "Sentido Superior",
+            "Visão no Escuro"
+          ],
+          "optionTexts": {
+            "Adaptação de Escalada": "Você recebe deslocamento de escalada igual a metade do seu deslocamento de caminhada.",
+            "Adaptação Subaquática": "Você pode respirar tanto ar quanto água e recebe deslocamento de natação igual a metade do seu deslocamento de caminhada.",
+            "Arma Integrada": "Criaturas aprimoradas por tecnologia podem substituir um membro do seu corpo por uma arma corpo a corpo ou à distância que esteja em seu equipamento inicial, você utiliza essa arma normalmente. Essa vantagem pode ser escolhida mais de uma vez.",
+            "Armas Naturais": "Você possui garras que podem causar 1d8 + seu modificador de Força de dano cortante, e presas que podem causar 1d6 + seu modificador de Força de dano perfurante.",
+            "Bolsa de Tinta": "Você pode usar um ataque para fazer um ataque à distância especial para cegar uma criatura em sua linha de visão a até 15 pés de você caso a mesma falhe em uma Salvaguarda de Destreza CD 12. Criaturas que não precisem da visão não são afetadas por esse ataque e criaturas afetadas precisam usar uma ação para limpar a tinta. Essa habilidade funciona de forma diferente debaixo da água: com uma ação bônus você pode criar uma área de obscurecimento pesada em um raio de 5 pés a partir de você. Você pode utilizar essa habilidade um número de vezes igual a metade do seu bônus de Proficiência por descanso longo. Você pode escolher essa habilidade mais de uma vez.",
+            "Carapaça": "Sua pele tem uma cobertura adicional. Você recebe Redução de Dano igual a metade do seu bônus de proficiência, exceto a dano verdadeiro e espiritual. Você não diminui o dano recebido através de condições.",
+            "Defesa Adaptativa": "Utilizando uma ação bônus, você envia um comando para sua fonte de energia, fazendo com que ela emita um campo que te protege de ataques por 1 minuto. Ao enviar o comando você deve direcioná-lo para ataques físicos ou magia, ataques do tipo escolhido possuem desvantagem contra você (caso o ataque exija salvaguarda, você faz a mesma com vantagem). Você pode utilizar essa característica um número de vezes igual a metade do seu bônus de proficiência por Descanso Pleno.",
+            "Epiderme Cromática": "Você tem vantagens em testes de Furtividade que você faz para se ocultar. Adicionalmente, enquanto estiver sem armadura, você pode tentar se esconder mesmo sem estar com cobertura leve ou pesada, contanto que permaneça parado.",
+            "Gancho de Manobras": "Você possui um gancho atrelado a uma linha metálica com 60 pés de comprimento. Utilizando uma ação, você pode disparar o gancho em uma superfície dentro do alcance, se prendendo na mesma. Adicionalmente, utilizando uma ação bônus, você pode se soltar e saltar em um alvo a até 15 pés de você, podendo realizar um ataque corpo a corpo contra o mesmo.",
+            "Idade Congelada": "Sua idade física pode não corresponder aos anos que você viveu, diferente de um humano normal.",
+            "Membro Robótico": "Você possui 1 membro mecânico superior em alguma parte do seu corpo e tem controle sobre ele normalmente. Essa vantagem pode ser escolhida mais de uma vez para membros adicionais. Consulte o Capítulo 9 - Membros Múltiplos para as regras de combate com membros adicionais",
+            "Patagia": "Você tem membranas que atuam como barbatanas e podem ser usadas como asas para desacelerar sua queda ou permitir que você plane. Se você sofrer uma queda e não estiver Incapacitado, você pode subtrair até 100 pés do cálculo de dano da queda, você pode também se mover 2 pés para a frente para cada 1 pé que você esteja em queda.",
+            "Pele Intoxicante": "Qualquer criatura que agarre você ou entre em contato direto com sua pele deve passar em uma salvaguarda de Constituição de CD 12 ou é Intoxicada por 1 minuto. Uma criatura Intoxicada que não esteja mais em contato com sua pele pode repetir a salvaguarda no fim de seu turno, encerrando o efeito em caso de sucesso.",
+            "Proteção Metálica": "Você revestiu sua pele com um liga metálica que concede à você uma proteção natural. Desde que não esteja utilizando nenhuma armadura, sua CA é igual a 13 + seu modificador de Destreza.",
+            "Sentido Superior": "Criaturas aprimoradas por tecnologia possuem vantagem em testes de Percepção através da audição, olfato ou visão.",
+            "Visão no Escuro": "Seus olhos foram substituídos por câmeras com a capacidade de se adaptar à escuridão. Você enxerga na penumbra a até 30 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+          },
+          "optionUses": {
+            "Bolsa de Tinta": {
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            },
+            "Defesa Adaptativa": {
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            }
+          }
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Desvantagem Tecnológica",
+          "label": "Desvantagem Tecnológica: escolha uma",
+          "count": 1,
+          "options": [
+            "Aparato Respiratório",
+            "Canos e Fumaça",
+            "Cara da Morte",
+            "Loucura",
+            "Metamorfo",
+            "Modulador de Voz",
+            "Sede de Sangue",
+            "Sobrecarga",
+            "Tubos Quimtec"
+          ],
+          "optionTexts": {
+            "Aparato Respiratório": "Você possui problemas para respirar normalmente, tendo a necessidade de um dispositivo que te ajude nesse processo vital, caso seu dispositivo quebre ou você esteja sem ele, você possui desvantagem em salvaguardas de Constituição relacionados à respiração, você usa apenas metade do seu modificador de Constituição arredondado para baixo, se o valor for positivo, para prender a respiração e ao sufocar. O dispositivo é a prova d’água e caso ele quebre é necessário 1 hora de trabalho e um teste bem-sucedido CD 10 usando Conjunto de Tecmaturgo para arrumá-lo.",
+            "Canos e Fumaça": "Você tem canos saindo do seu corpo e deles saem fumaça, quando rolar um teste de Furtividade você possui desvantagem devido a fumaça dos canos .",
+            "Cara da Morte": "Você sofreu algum acidente decorrente ou não de sua modificação causando uma deformidade facial, você possui desvantagem em testes de Persuasão e Enganação.",
+            "Loucura": "Você sofreu com um trauma durante ou ao acordar de sua modificação. Junto ao seu Mestre você deve definir um tipo de Abalo Mental Indefinido ou Episódico para receber com base em sua modificação.",
+            "Metamorfo": "Sua aparência difere muito da humana, seja você um humano com características animais ou um animal com características humanas.",
+            "Modulador de Voz": "Você não é capaz de falar, para isso você utiliza um dispositivo que substitui sua voz. Você possui desvantagem em testes de Atuação relacionados à voz.",
+            "Sede de Sangue": "Você possui uma obsessão por sangue, seja para consumir, sentir seu cheiro no ar ou apenas uma forte vontade de derramar cada vez mais sangue. Você tem um olfato bem sensível para detectar sangue. Você recebe a Dependência Sede de Sangue.",
+            "Sobrecarga": "Se tirar 1 no dado, role mais um d20, se cair um número menor que 7 você recebe 1 ponto de exaustão.",
+            "Tubos Quimtec": "Você tem diversos tubos acoplados ao seu corpo te tornando vulnerável a certos ataques, ao receber um ataque crítico, você fica Enfraquecido até que gaste 1 ação reparando o dano aos tubos."
+          }
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Proteção Metálica",
+          "armor": {
+            "base": 13
+          },
+          "when": "Vantagem Tecnológica:Proteção Metálica"
+        },
+        {
+          "type": "AC_BONUS",
+          "name": "Carapaça",
+          "amount": 0,
+          "armor": {
+            "halfProficiencyReduction": true
+          },
+          "when": "Vantagem Tecnológica:Carapaça"
+        },
+        {
+          "type": "SPEED",
+          "value": "CLIMB",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação de Escalada"
+        },
+        {
+          "type": "SPEED",
+          "value": "SWIM",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação Subaquática"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERCEPTION",
+          "description": "Vantagem em Percepção pela audição, olfato ou visão.",
+          "when": "Vantagem Tecnológica:Sentido Superior"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Vantagem em Furtividade para se ocultar; sem armadura e parado, pode se esconder sem cobertura.",
+          "when": "Vantagem Tecnológica:Epiderme Cromática"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Desvantagem em Furtividade (fumaça dos canos).",
+          "when": "Desvantagem Tecnológica:Canos e Fumaça"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERSUASION",
+          "description": "Desvantagem em Persuasão (Cara da Morte).",
+          "when": "Desvantagem Tecnológica:Cara da Morte"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:DECEPTION",
+          "description": "Desvantagem em Enganação (Cara da Morte).",
+          "when": "Desvantagem Tecnológica:Cara da Morte"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERFORMANCE",
+          "description": "Desvantagem em Atuação relacionada à voz (Modulador de Voz).",
+          "when": "Desvantagem Tecnológica:Modulador de Voz"
+        }
+      ],
+      "threshold": {
+        "feature": "Vantagem Tecnológica",
+        "count": 5,
+        "grants": {
+          "Fonte Instável": [
+            {
+              "type": "RESISTANCE",
+              "value": "venenoso"
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Mutante",
+              "description": "- Você passa a ser considerado uma Mutação\n- Resistência a venenos e a dano venenoso\n- Imunidade a doenças não mágicas\n- Sua necessidade diária de comer e beber é reduzida pela metade\n- Não sofre efeitos da magia sono"
+            }
+          ]
+        },
+        "dominant": "Fonte Dominante"
+      }
     },
     {
       "id": "aprimoramento-adepto-espiritual",

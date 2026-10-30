@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Vulnerabilidades, Fontes da Progressão Tecnológica e Adaptação Tecnológica (`feature/character-sheet`)
+- Concessão `VULNERABILITY` (`amount: -1` tira): Ressurgido; a ficha guarda `vulnerabilities` (`character_vulnerabilities`) e mostra em chips vermelhos.
+- Progressão Tecnológica: a mesma Fonte duas vezes dá as Vantagens de novo; "Aprimorar Fonte" (`repeatOptions`, só da 2ª escolha); escolha da **Fonte Dominante** (`threshold.dominant`) com as duas fontes.
+- Adaptação Tecnológica (Estável/Instável): +1 em FOR/DES/CON, Vantagens, efeitos `when` e Limiar; pré-requisito Construto ou a Variante.
+- Testes: vulnerabilidades na ficha, opção repetida, fonte dominante e `repeatOptions` em `CreationControllerTests`.
+
 ## 2026-10-29 — Usos de outra habilidade, deslocamento relativo, Carapaça, Limiar e 2ª escolha do Ressurgido (`feature/character-sheet`)
 - Concessão `ABILITY_USES` (Inspirar Aliados, Adepto Espiritual, Controle de Plumadagas); `SPEED.walkFraction` (Vida Marinha, Pés Cascudos, Adaptações).
 - `when`: concessão que só vale com a opção escolhida (Vantagens/Desvantagens Tecnológicas: CA, RD, deslocamento, notas); RD de metade da proficiência no `AC_BONUS` (Carapaça).

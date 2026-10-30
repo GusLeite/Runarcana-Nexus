@@ -210,6 +210,8 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.character.situational[0].target").value("SKILL:STEALTH"))
                 .andExpect(jsonPath("$.character.situational[0].source").value("Herança: Perícia Teste"))
                 .andExpect(jsonPath("$.character.resistances[0]").value("venenoso"))
+                // Vulnerável a radiante; a necrótica foi tirada por outra concessão (amount -1).
+                .andExpect(jsonPath("$.character.vulnerabilities").value(org.hamcrest.Matchers.contains("radiante")))
                 .andExpect(jsonPath("$.character.passivePerception").value(12))
                 .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].notes[0]").value("Perícia Teste: +1 contra lobos."));
     }
@@ -265,10 +267,27 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.features[?(@.name == 'Formas Teste (Lobo, Urso) (2×)')].source").value("Herança"))
                 .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-formas:0')].options[0]").value("Esquerda"));
         preview(token, both.replace("\"class:ARCANIST:1\"", "\"heritage:teste-formas:0\":[\"Direita\"],\"class:ARCANIST:1\""))
-                .andExpect(jsonPath("$.complete").value(true))
+                // Falta a forma dominante (Lobo e Urso têm Limiar).
+                .andExpect(jsonPath("$.complete").value(false))
                 .andExpect(jsonPath("$.features[?(@.name == 'Garra de Urso (Direita)')].description").value("Garra direita forte."))
-                // Limiar (1 opção na Garra de Urso), pela primeira opção da Herança (Lobo).
+                // Limiar (1 opção na Garra de Urso): sem a dominante, pela primeira opção da Herança (Lobo).
                 .andExpect(jsonPath("$.features[?(@.name == 'Limiar Teste')].source").value("Limiar Tecnológico"));
+        // A mesma opção duas vezes: as concessões dela de novo (duas garras), com chaves próprias.
+        String twice = FULL.replace(HERITAGES, "\"heritages\":[{\"id\":\"teste-formas\",\"option\":\"Urso\"},{\"id\":\"teste-formas\",\"option\":\"Urso\"}]");
+        preview(token, twice)
+                .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-formas:0')].label").exists())
+                .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-formas:1')].label").exists());
+        // Duas fontes para o Limiar: escolhe a dominante (sem escolher, vale a primeira: Lobo).
+        String dominant = both.replace("\"class:ARCANIST:1\"", "\"heritage:teste-formas:0\":[\"Direita\"],\"dominant:Forma Dominante:0\":[\"Urso\"],\"class:ARCANIST:1\"");
+        preview(token, both)
+                .andExpect(jsonPath("$.choices[?(@.key == 'dominant:Forma Dominante:0')].options[1]").value("Urso"));
+        preview(token, dominant)
+                .andExpect(jsonPath("$.complete").value(true))
+                .andExpect(jsonPath("$.features[?(@.name == 'Limiar Urso')].source").value("Limiar Tecnológico"))
+                .andExpect(jsonPath("$.features[?(@.name == 'Limiar Teste')]").isEmpty());
+        // Opção só da 2ª escolha em diante.
+        preview(token, FULL.replace(HERITAGES, "\"heritages\":[{\"id\":\"teste-formas\",\"option\":\"Reforço\"},{\"id\":\"teste-formas\",\"option\":\"Lobo\"}]"))
+                .andExpect(jsonPath("$.errors", hasItem("Formas Teste: Reforço só a partir da 2ª escolha.")));
         // Cada escolha precisa da sua opção.
         preview(token, FULL.replace(HERITAGES, "\"heritages\":[{\"id\":\"teste-formas\",\"option\":\"Lobo\"},{\"id\":\"teste-formas\"}]"))
                 .andExpect(jsonPath("$.errors", hasItem("Escolha a opção de Formas Teste.")));

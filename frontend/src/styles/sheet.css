@@ -580,5 +580,6 @@ input.note-title{padding:10px 12px;font-family:'Cinzel',Georgia,serif;font-size:
 .situational{margin:8px 18px 0}
 .cond-chips.resist{margin:0 0 6px}
 .cond-chip.res{border-color:rgba(47,211,192,.45);background:rgba(47,211,192,.1);color:var(--teal)}
+.cond-chip.vul{border-color:rgba(224,32,74,.5);background:rgba(224,32,74,.1);color:#ff8a7a}
 .sit-line{margin:4px 0;font-size:12px;color:var(--muted);line-height:1.4}
 .sit-line b{color:var(--gold-hi);font-weight:600}

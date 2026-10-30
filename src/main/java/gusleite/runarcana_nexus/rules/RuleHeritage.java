@@ -50,14 +50,19 @@ public record RuleHeritage(
         Map<String, List<Grant>> repeatGrants,
         // Limiar: com count opções escolhidas na habilidade feature, ganha os efeitos da opção da Herança
         // (Progressão Tecnológica: 5 Vantagens Tecnológicas → Construto Vivo ou Mutante).
-        Threshold threshold
+        Threshold threshold,
+        // Opções que só valem da 2ª escolha em diante (Progressão Tecnológica: "Aprimorar Fonte", 1 Vantagem).
+        List<String> repeatOptions
 ) {
-    public record Threshold(String feature, int count, Map<String, List<Grant>> grants) {}
+    // dominant: nome da escolha que decide a fonte de quem tem mais de uma ("Fonte Dominante"); sem ela, vale a primeira.
+    public record Threshold(String feature, int count, Map<String, List<Grant>> grants, String dominant) {}
 
-    // Efeitos das opções escolhidas (cada uma uma vez), depois dos gerais.
+    // Efeitos das opções escolhidas, depois dos gerais: cada opção uma vez, ou uma vez por escolha nas optionPerPick
+    // (a mesma Fonte escolhida duas vezes dá as Vantagens de novo).
     public List<Grant> grantsFor(List<String> chosen) {
         List<Grant> out = new java.util.ArrayList<>(grantsOrEmpty());
-        if (optionGrants != null) chosen.stream().distinct().forEach(o -> out.addAll(optionGrants.getOrDefault(o, List.of())));
+        if (optionGrants != null) (optionPerPickOrFalse() ? chosen.stream() : chosen.stream().distinct())
+                .forEach(o -> out.addAll(optionGrants.getOrDefault(o, List.of())));
         return out;
     }
 
@@ -108,6 +113,10 @@ public record RuleHeritage(
 
     public List<String> requiresOrEmpty() {
         return requires == null ? List.of() : requires;
+    }
+
+    public List<String> repeatOptionsOrEmpty() {
+        return repeatOptions == null ? List.of() : repeatOptions;
     }
 
     public List<String> optionsOrEmpty() {

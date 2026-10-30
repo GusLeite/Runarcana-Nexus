@@ -554,6 +554,7 @@ public class CreationService {
         picks = allPicks;
 
         resourceSources(sources, picks, b);
+        dominantSources(sources, b);
         baseAttributes(r, catalog.attributeMethods(), b);
 
         // 1ª passada: o que é fixo. 2ª: as escolhas (que não podem repetir algo já ganho).
@@ -753,10 +754,15 @@ public class CreationService {
             String[] src = c.source().split("\\|", 2);
             applyFixed(b, new Source(src[0], src[1], List.of()), c.value());
         }
+        // Limiar: uma vez por habilidade contada, pela fonte dominante (a escolhida, ou a primeira).
+        Set<String> crossed = new java.util.HashSet<>();
         for (Sourced<RuleHeritage.Threshold> t : b.thresholds) {
-            List<String> chosen = b.featureOptions.getOrDefault(t.value().feature(), List.of());
-            if (chosen.size() < t.value().count()) continue;
-            for (Grant g : t.value().grants().getOrDefault(t.source(), List.of())) applyFixed(b, new Source("threshold", "Limiar Tecnológico", List.of()), g);
+            RuleHeritage.Threshold th = t.value();
+            List<String> chosen = b.featureOptions.getOrDefault(th.feature(), List.of());
+            if (chosen.size() < th.count() || !crossed.add(th.feature())) continue;
+            List<String> dominant = th.dominant() == null ? List.of() : b.featureOptions.getOrDefault(th.dominant(), List.of());
+            String fonte = dominant.isEmpty() ? t.source() : dominant.getFirst();
+            for (Grant g : th.grants().getOrDefault(fonte, List.of())) applyFixed(b, new Source("threshold", "Limiar Tecnológico", List.of()), g);
         }
         spellChoices(b, picks);
         resourceChoices(b);
@@ -891,6 +897,11 @@ public class CreationService {
             case INITIATIVE -> b.initiativeBonus += g.amount();
             case SITUATIONAL -> b.situational.add(new SituationalNote(g.value(), g.description(), s.label()));
             case RESISTANCE -> b.resistances.add(g.value());
+            // amount -1: a 2ª escolha tira a vulnerabilidade (Meio-Azakana deixa de ser vulnerável a radiante).
+            case VULNERABILITY -> {
+                if (g.amount() != null && g.amount() < 0) b.vulnerabilities.remove(g.value());
+                else b.vulnerabilities.add(g.value());
+            }
             case PASSIVE_BONUS -> {
                 int n = g.usesFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : g.amount();
                 if ("PERCEPTION".equals(g.value())) b.passivePerception += n;
@@ -1451,6 +1462,7 @@ public class CreationService {
                     if (!b.resourceIds.add(res.id()) && !res.repeats()) continue;
                     String label = resourceKindLabel(res.kind()) + ": " + res.name();
                     sources.add(new Source("resource:" + res.id() + (keyed ? "@" + key : ""), label, resourceGrants(res)));
+                    if (res.threshold() != null) res.threshold().grants().keySet().forEach(o -> b.thresholds.add(new Sourced<>(res.threshold(), o)));
                     // Recurso escolhido pela classe (Técnica do Combatente): as tabelas dele usam o nível nessa classe,
                     // as magias dele vêm da lista dela e os levels dele entram pelo nível nela.
                     String classId = b.sourceClass.get(src.label());
@@ -1645,14 +1657,16 @@ public class CreationService {
         if (q.subclasses() != null && !q.subclasses().isEmpty() && b.subclassByClass.values().stream()
                 .noneMatch(s -> q.subclasses().stream().anyMatch(x -> x.equalsIgnoreCase(s.id())))
                 && (b.subclass == null || q.subclasses().stream().noneMatch(x -> x.equalsIgnoreCase(b.subclass.id())))) return pre;
-        if (q.origins() != null && !q.origins().isEmpty()
+        // Origem e Herança juntas: basta uma ("Construto ou Variante Progressão Tecnológica").
+        boolean byHeritage = q.heritages() != null && b.heritages.stream().anyMatch(h -> q.heritages().stream().anyMatch(x -> x.equalsIgnoreCase(h.id())));
+        if (q.origins() != null && !q.origins().isEmpty() && !byHeritage
                 && (b.origin == null || q.origins().stream().noneMatch(x -> x.equalsIgnoreCase(b.origin.id())))) return pre;
         if (q.lineages() != null && !q.lineages().isEmpty()
                 && (b.lineage == null || q.lineages().stream().noneMatch(x -> x.equalsIgnoreCase(b.lineage.id())))) return pre;
         if (q.regions() != null && !q.regions().isEmpty()
                 && (b.region == null || q.regions().stream().noneMatch(x -> x.equalsIgnoreCase(b.region.id())))) return pre;
         if (q.skills() != null && q.skills().stream().anyMatch(x -> !b.skills.containsKey(SkillType.valueOf(x)))) return pre;
-        if (q.heritages() != null && !q.heritages().isEmpty()
+        if (q.heritages() != null && !q.heritages().isEmpty() && (q.origins() == null || q.origins().isEmpty())
                 && b.heritages.stream().noneMatch(h -> q.heritages().stream().anyMatch(x -> x.equalsIgnoreCase(h.id())))) return pre;
         if (q.resources() != null && q.resources().stream().anyMatch(x -> !b.resourceIds.contains(x))) return pre;
         if (q.spells() != null && !b.knownSpellIds.containsAll(q.spells())) return pre;
@@ -1671,12 +1685,14 @@ public class CreationService {
 
     // Compra das Heranças com os pontos de Herança. Cada escolha custa 1 ponto do tipo certo:
     // ponto de Região compra Heranças de Região e Gerais; de Origem, de Origem e Gerais; ANY, qualquer uma.
-    // Efeitos situacionais, resistências e bônus nas passivas (Heranças, Aprimoramentos...): refeitos a cada vez.
+    // Efeitos situacionais, resistências, vulnerabilidades e bônus nas passivas (Heranças, Aprimoramentos...): refeitos a cada vez.
     private static void applyEffects(Character c, Build b) {
         c.getSituational().clear();
         c.getSituational().addAll(b.situational);
         c.getResistances().clear();
         c.getResistances().addAll(b.resistances);
+        c.getVulnerabilities().clear();
+        c.getVulnerabilities().addAll(b.vulnerabilities);
         c.setPassivePerceptionBonus(b.passivePerception);
         c.setPassiveInsightBonus(b.passiveInsight);
     }
@@ -1712,11 +1728,28 @@ public class CreationService {
             if (times.getOrDefault(id, 0) >= 2 && h.repeatGrants() != null && !chosen.isEmpty()) {
                 grants.addAll(h.repeatGrants().getOrDefault(chosen.getFirst(), List.of()));
             }
-            // Limiar: decidido depois das escolhas (quantas opções a habilidade tem).
-            if (h.threshold() != null && !chosen.isEmpty()) b.thresholds.add(new Sourced<>(h.threshold(), chosen.getFirst()));
+            // Limiar: decidido depois das escolhas (quantas opções a habilidade tem); cada fonte escolhida é candidata.
+            if (h.threshold() != null) chosen.stream().distinct().filter(h.threshold().grants()::containsKey)
+                    .forEach(o -> b.thresholds.add(new Sourced<>(h.threshold(), o)));
             if (!grants.isEmpty()) out.add(new Source("heritage:" + h.id(), "Herança: " + h.name(), grants));
         }));
         return out;
+    }
+
+    // Quem tem mais de uma fonte para o mesmo Limiar (Fonte Estável e Instável) escolhe a dominante ("Fonte Dominante").
+    private static void dominantSources(List<Source> sources, Build b) {
+        Map<String, Set<String>> byDominant = new LinkedHashMap<>();
+        for (Sourced<RuleHeritage.Threshold> t : b.thresholds) {
+            if (t.value().dominant() != null) byDominant.computeIfAbsent(t.value().dominant(), k -> new LinkedHashSet<>()).add(t.source());
+        }
+        byDominant.forEach((name, fontes) -> {
+            if (fontes.size() < 2) return;
+            Grant choice = new Grant(GrantType.FEATURE, null, null, 1, List.copyOf(fontes), null, null,
+                    name + ": escolha qual fonte é a dominante (irreversível)", name,
+                    "Com as duas fontes de energia, a dominante decide o Limiar Tecnológico.", AbilityType.PASSIVE, null, null, null,
+                    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+            sources.add(new Source("dominant:" + name, "Limiar Tecnológico", List.of(choice)));
+        });
     }
 
     // A habilidade da Herança: o texto (com o das opções escolhidas) e, quando ela tem parte ativa, o tempo e os usos
@@ -1783,6 +1816,10 @@ public class CreationService {
                 List<String> each = allOptions.get(h.id());
                 if (each.stream().anyMatch(o -> o == null || !h.optionsOrEmpty().contains(o))) b.errors.add("Escolha a opção de " + h.name() + ".");
                 each.stream().filter(o -> o != null && h.optionsOrEmpty().contains(o)).distinct().forEach(chosen::add);
+                // "Aprimorar Fonte": só depois da 1ª escolha.
+                if (!each.isEmpty() && h.repeatOptionsOrEmpty().contains(each.getFirst())) {
+                    b.errors.add(h.name() + ": " + each.getFirst() + " só a partir da 2ª escolha.");
+                }
                 option = chosen.isEmpty() ? null : String.join(", ", chosen);
             } else if (option == null || !h.optionsOrEmpty().contains(option)) {
                 b.errors.add("Escolha a opção de " + h.name() + ".");
@@ -2238,6 +2275,7 @@ public class CreationService {
         int passiveInsight;
         final List<SituationalNote> situational = new ArrayList<>();
         final Set<String> resistances = new LinkedHashSet<>();
+        final Set<String> vulnerabilities = new LinkedHashSet<>();
         final Set<String> knownSpellIds = new LinkedHashSet<>();
 
         // Ids da origem e da linhagem, para as listas de magia de origem.
