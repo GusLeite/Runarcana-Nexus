@@ -129,6 +129,11 @@
           "value": "radiante",
           "expertise": true,
           "amount": 1
+        },
+        {
+          "type": "SAVING_THROW",
+          "attribute": "INTELLIGENCE",
+          "expertise": true
         }
       ]
     },

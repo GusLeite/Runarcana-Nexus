@@ -73,7 +73,7 @@ Protetor (proficiências), Estudioso (duas perícias) e Obreiro (truque espiritu
 - ✅ **B2. Imunidade a condições e doenças** (`CONDITION_IMMUNITY`; também Trolls da Areia/Gelo, Glacinata, Atirador 11º, Desperado 20º, sono mágico do Feérico/Linhagem Vastaya/Toque Feérico) (lista na ficha, como as de dano): Ressurgido Espectral, Limiar Tecnológico, Construto Vivo, Bodisatva 10º, Nascimento da Ninhada (Amedrontado), Essência Etílica (Intoxicado por álcool), Lendário Guardião, Experimento Zaunita (Cinza de Zaun).
 - ✅ **B3. Resistência que muda com o nível** (`minLevel`; Runinata pela escolha "Resistência Natural". Venenoso, energético e os espirituais não têm versão mágica, então a Resistência Mágica não muda nada neles): Gás Corrosivo/Ionizado/Termiônico (outro tipo no 11º), Resistência Natural da Runinata (versão mágica no 12º, imunidade no 16º, absorção no 18º).
 - ✅ **B4. "Um avanço na resistência"** (`RESISTANCE` com `expertise` e `amount: 1`) (degraus: resistência → imunidade → absorção): Bênção do Urso e do Vorme (Invocações).
-- **B5. Especialidade em salvaguarda**: Graciosidade ("caso já tenha proficiência").
+- ✅ **B5. Especialidade em salvaguarda**: Graciosidade ("caso já tenha proficiência").
 - **B6. Tamanho +1 categoria**: Variante Colosso.
 - **B7. RD contra um tipo de dano**: Variante Glacinata (gélido = proficiência), Adaptação Selvagem (ácido e ígneo), Ascensão Feérica (sombrio 2), Domínio Azakana (radiante 2).
 - **B8. Ki e Energia extras**: Cultivo de Ki, Conjurador Natural, Alianças Espirituais (Ki); Bioenergia, Experimento Reconhecido, Chireano (Energia).

@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento B5: especialidade em salvaguarda (`feature/character-sheet`)
+- `SAVING_THROW` com `expertise` (Graciosidade); ficha com `savingThrowExpertise` (`character_save_expertise`); a resistência soma a proficiência em dobro e fica marcada como especialista.
+
 ## 2026-10-29 — Mapeamento B3/B4: resistência por nível e "um avanço" (`feature/character-sheet`)
 - `minLevel` em concessão fixa: Gases (versão mágica no 11º) e a cadeia da Runinata (Resistência Natural escolhida → Mágica 12º → Lendária 16º → Absorção 18º).
 - "Um avanço na resistência" (Bênção do Urso e do Vorme); o degrau maior apaga os menores na ficha.

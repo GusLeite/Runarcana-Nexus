@@ -209,6 +209,12 @@ public class Character {
     @Enumerated(EnumType.STRING)
     @Column(name = "attribute")
     private Set<Attribute> savingThrows = new HashSet<>();
+    // Especialidade em salvaguarda (Graciosidade: "caso já tenha proficiência"): proficiência em dobro.
+    @ElementCollection
+    @CollectionTable(name = "character_save_expertise", joinColumns = @JoinColumn(name = "character_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "attribute")
+    private Set<Attribute> savingThrowExpertise = new HashSet<>();
 
     // Escolhas feitas na criação e nos níveis ganhos (JSON do CreationRequest), para a subida de nível reaproveitar.
     @Column(length = 100000)

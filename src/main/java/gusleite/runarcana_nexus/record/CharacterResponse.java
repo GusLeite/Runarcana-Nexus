@@ -80,7 +80,9 @@ public record CharacterResponse(
         List<String> vulnerabilities,
         List<String> immunities,
         List<String> absorptions,
-        List<String> conditionImmunities
+        List<String> conditionImmunities,
+        // Salvaguardas com especialidade (proficiência em dobro).
+        List<Attribute> savingThrowExpertise
 ) {
     public record Situational(String target, String note, String source) {}
 
@@ -150,7 +152,8 @@ public record CharacterResponse(
                 List.copyOf(character.getVulnerabilities()),
                 List.copyOf(character.getImmunities()),
                 List.copyOf(character.getAbsorptions()),
-                List.copyOf(character.getConditionImmunities())
+                List.copyOf(character.getConditionImmunities()),
+                character.getSavingThrowExpertise().stream().sorted().toList()
         );
     }
 }

@@ -226,6 +226,8 @@ class CreationControllerTests {
                 // Radiante: imunidade + "um avanço" → absorção. Trovejante só a partir do 2º nível (minLevel).
                 .andExpect(jsonPath("$.character.absorptions").value(org.hamcrest.Matchers.containsInAnyOrder("ácido", "radiante")))
                 .andExpect(jsonPath("$.character.conditionImmunities").value(org.hamcrest.Matchers.contains("Envenenado")))
+                // Salvaguarda de INT já vem da classe: especialidade.
+                .andExpect(jsonPath("$.character.savingThrowExpertise").value(org.hamcrest.Matchers.contains("INTELLIGENCE")))
                 // Ofício "caso já tenha, especialidade": Ferraria vem da origem.
                 .andExpect(jsonPath("$.character.craftExpertise").value(org.hamcrest.Matchers.contains("Ferraria")))
                 // Vulnerável a radiante e ao tipo escolhido; a necrótica foi tirada por outra concessão (amount -1).

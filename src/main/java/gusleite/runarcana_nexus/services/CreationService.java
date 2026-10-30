@@ -909,7 +909,11 @@ public class CreationService {
                 if (Boolean.TRUE.equals(g.expertise())) b.deferred.add(new Deferred(null, g, s.label()));
                 else b.skills.putIfAbsent(g.skill(), s.label());
             }
-            case SAVING_THROW -> b.saves.putIfAbsent(g.attribute(), s.label());
+            // expertise: "caso já tenha proficiência, especialidade" (decidido no fim, em damageUpgrades).
+            case SAVING_THROW -> {
+                if (Boolean.TRUE.equals(g.expertise())) b.saveUpgrades.add(new Sourced<>(g.attribute(), s.label()));
+                else b.saves.putIfAbsent(g.attribute(), s.label());
+            }
             case FEATURE -> {
                 if (!g.hasOptions()) b.features.add(new Sourced<>(g, s.label()));
             }
@@ -1782,6 +1786,8 @@ public class CreationService {
         c.getAbsorptions().addAll(b.absorptions);
         c.getConditionImmunities().clear();
         c.getConditionImmunities().addAll(b.conditionImmunities);
+        c.getSavingThrowExpertise().clear();
+        c.getSavingThrowExpertise().addAll(b.saveExpertise);
         c.setPassivePerceptionBonus(b.passivePerception);
         c.setPassiveInsightBonus(b.passiveInsight);
     }
@@ -1827,6 +1833,10 @@ public class CreationService {
 
     // "Caso já tenha" decidido depois de tudo: ofício → especialidade; resistência → imunidade (Meio-Azakana, Meio-Kanmei).
     private static void damageUpgrades(Build b) {
+        for (Sourced<Attribute> sv : b.saveUpgrades) {
+            if (b.saves.containsKey(sv.value())) b.saveExpertise.add(sv.value());
+            else b.saves.put(sv.value(), sv.source());
+        }
         for (Sourced<String> c : b.craftUpgrades) {
             if (b.crafts.contains(c.value())) b.craftExpertise.add(c.value());
             else addCraft(b, c.value(), c.source());
@@ -2404,6 +2414,8 @@ public class CreationService {
         final Set<String> immunities = new LinkedHashSet<>();
         final Set<String> absorptions = new LinkedHashSet<>();
         final Set<String> conditionImmunities = new LinkedHashSet<>();
+        final List<Sourced<Attribute>> saveUpgrades = new ArrayList<>();
+        final Set<Attribute> saveExpertise = new LinkedHashSet<>();
         // Resistências "caso já tenha, imunidade" (Meio-Azakana), decididas depois de todas as outras.
         final List<String> resistanceUpgrades = new ArrayList<>();
         final Set<String> knownSpellIds = new LinkedHashSet<>();

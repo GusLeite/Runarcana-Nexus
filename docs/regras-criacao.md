@@ -75,7 +75,7 @@ Escolhas sem opções cadastradas aparecem no assistente como aviso e **não blo
 | `SKILL` | `skill`, `expertise`? | Proficiência fixa na perícia. Com `expertise: true` ("caso já tenha, especialidade"), se o personagem já tiver a perícia (de qualquer fonte), ganha **especialidade** |
 | `SKILL_CHOICE` | `count`, `options`?, `label`?, `expertise`? | Escolhe `count` perícias (sem `options` = qualquer uma); as que ele já tem somem das opções. Com `expertise: true` elas continuam, e escolher uma que já tem dá especialidade (Técnicos do Nocti) |
 | `EXPERTISE_CHOICE` | `count`, `options`?, `label`?, `value`? | **Especialidade** em `count` perícias que o personagem já tem (traço Especialista). Especialidade soma o bônus de proficiência duas vezes. Com `value: "WITH_CRAFTS"`, também ofícios que ele tem (opções `SKILL:...`/`CRAFT:...`; Especialização do Mercurial; ficha: `craftExpertise`) |
-| `SAVING_THROW` | `attribute` | Proficiência no teste de resistência |
+| `SAVING_THROW` | `attribute`, `expertise`? | Proficiência no teste de resistência; com `expertise`, "caso já tenha, especialidade" (proficiência em dobro; ficha: `savingThrowExpertise`) |
 | `SAVING_THROW_CHOICE` | `count`, `options` (atributos), `label`? | Resistência à escolha (Arcanista: Sabedoria ou Carisma) |
 | `ARMOR_PROFICIENCY` | `value` (`LIGHT`, `MEDIUM`, `HEAVY`, `SHIELD`) | Proficiência com armaduras (ficha: `armorProficiencies`) |
 | `WEAPON_PROFICIENCY` | `value` (o nome: "Armas simples", "Rapieiras") | Proficiência com armas (ficha: `weaponProficiencies`) |

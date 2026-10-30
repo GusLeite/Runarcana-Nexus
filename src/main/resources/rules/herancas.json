@@ -854,7 +854,8 @@
       "grants": [
         {
           "type": "SAVING_THROW",
-          "attribute": "CHARISMA"
+          "attribute": "CHARISMA",
+          "expertise": true
         }
       ],
       "execution": "Ação bônus",
