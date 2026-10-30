@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Vídeo do Chireano (`feature/character-sheet`)
+- `assets/origins/chireano.mp4` (1080p, 9,6 MB, 8 s): personagem à esquerda do quadro, foco 0,4 no conjunto e 0,37 no rosto nos painéis estreitos, `show: 0.62`.
+
 ## 2026-10-30 — Vídeo do Ivern no Antroplantæ (`feature/character-sheet`)
 - `assets/origins/antroplantae.mp4` (Ivern animado, 1080p, 1,5 MB, 10 s): foco 0,6 no conjunto (com a Daisy) e 0,56 no rosto nos painéis estreitos, `show: 0.62`.
 

@@ -67,6 +67,6 @@ A tela foi prototipada num `index.html` único (React via CDN, imagens e vídeo 
 
 ## Pendências / problemas conhecidos
 
-- As origens da criação, menos Humano (Yasuo), Minotauro (Alistar), Construto (Orianna) e Antroplantæ (Ivern), ainda só têm o sigilo: falta a arte definitiva (um `video`, `living` ou `img` por origem em `data/originArt.js`). O vídeo do Humano é pesado (31 MB, 2110×1440, 77 s, com uns 1,5 s de preto no início): se o carregamento pesar, cortar e comprimir.
+- As origens da criação, menos Humano (Yasuo), Minotauro (Alistar), Construto (Orianna), Antroplantæ (Ivern) e Chireano, ainda só têm o sigilo: falta a arte definitiva (um `video`, `living` ou `img` por origem em `data/originArt.js`). O vídeo do Humano é pesado (31 MB, 2110×1440, 77 s, com uns 1,5 s de preto no início): se o carregamento pesar, cortar e comprimir.
 - Ainda não há roteamento (react-router): as abas da ficha são estado local e não mudam a URL (recarregar volta para "FICHA").
 - O token fica no `localStorage` (simples, mas acessível a scripts da página); se o projeto crescer, considerar cookie `HttpOnly`.
