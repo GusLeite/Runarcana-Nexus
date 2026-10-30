@@ -52,6 +52,77 @@
             "umbramancia"
           ],
           "label": "Acólito Arcanista: um Mistério"
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:CHOSEN",
+          "spellLevel": 1,
+          "count": 1,
+          "label": "Acólito Arcanista: uma magia de até 1º nível do Mistério escolhido"
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:CHOSEN",
+          "spellLevel": 2,
+          "count": 1,
+          "label": "Acólito Arcanista: uma magia de até 2º nível do Mistério escolhido",
+          "minLevel": 3
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:CHOSEN",
+          "spellLevel": 3,
+          "count": 1,
+          "label": "Acólito Arcanista: uma magia de até 3º nível do Mistério escolhido",
+          "minLevel": 5
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:CHOSEN",
+          "spellLevel": 4,
+          "count": 1,
+          "label": "Acólito Arcanista: uma magia de até 4º nível do Mistério escolhido",
+          "minLevel": 7
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:CHOSEN",
+          "spellLevel": 5,
+          "count": 1,
+          "label": "Acólito Arcanista: uma magia de até 5º nível do Mistério escolhido",
+          "minLevel": 9
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:CHOSEN",
+          "spellLevel": 6,
+          "count": 1,
+          "label": "Acólito Arcanista: uma magia de até 6º nível do Mistério escolhido",
+          "minLevel": 11
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:CHOSEN",
+          "spellLevel": 7,
+          "count": 1,
+          "label": "Acólito Arcanista: uma magia de até 7º nível do Mistério escolhido",
+          "minLevel": 13
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:CHOSEN",
+          "spellLevel": 8,
+          "count": 1,
+          "label": "Acólito Arcanista: uma magia de até 8º nível do Mistério escolhido",
+          "minLevel": 15
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:CHOSEN",
+          "spellLevel": 9,
+          "count": 1,
+          "label": "Acólito Arcanista: uma magia de até 9º nível do Mistério escolhido",
+          "minLevel": 17
         }
       ]
     },
@@ -6050,7 +6121,40 @@
         "Carisma",
         "Constituição"
       ],
-      "description": "Sua essência espiritual é poderosa o bastante para que você possa conjurar magias de forma inata. Você recebe os seguintes benefícios:\n\nVocê pode conjurar um número de truques e magias um número de vezes por descanso pleno, baseados em seu nível de personagem conforme a tabela de Magia Inata, sem o gasto de mana e sem a necessidade de componentes materiais. A lista de magia é baseada em sua Origem e pode ser encontrada no Capítulo 10. Seu Atributo de Conjuração para essas magias deve ser escolhido no momento em que você escolhe essa Herança entre Inteligência, Sabedoria, Carisma ou Constituição.\n\nMagia Inata (truques / usos de 1º, 2º e 3º nível): 1º nível: 1 truque; 5º: 1 truque e 1 de 1º; 11º: 1 truque, 1 de 1º e 1 de 2º; 17º: 1 truque, 1 de 1º, 1 de 2º e 1 de 3º.\nCD para suas Magias Inatas = 8 + seu bônus de proficiência + seu modificador de Atributo de Conjuração.\nModificador de Ataque de Magia Inata = seu bônus de proficiência + seu modificador de Atributo de Conjuração.\n\nMagia Inata Yordle. A Magia Inata Yordle reflete a relação que eles têm com a sua própria essência espiritual e mágica, funcionando em termos narrativos de forma diferente da magia de classes conjuradoras. Sempre que um Yordle conjura uma Magia Inata Yordle, ela tem necessariamente um componente narrativo que pode soar até absurdo, como por exemplo, ao usar a magia de 3º nível luz do dia, o Yordle pode dizer que seu personagem está assoprando a escuridão para longe. Conforme o Yordle sobe de nível e tem acesso a novas magias, elas obrigatoriamente têm que ter alguma explicação narrativa para serem “aprendidas”."
+      "description": "Sua essência espiritual é poderosa o bastante para que você possa conjurar magias de forma inata. Você recebe os seguintes benefícios:\n\nVocê pode conjurar um número de truques e magias um número de vezes por descanso pleno, baseados em seu nível de personagem conforme a tabela de Magia Inata, sem o gasto de mana e sem a necessidade de componentes materiais. A lista de magia é baseada em sua Origem e pode ser encontrada no Capítulo 10. Seu Atributo de Conjuração para essas magias deve ser escolhido no momento em que você escolhe essa Herança entre Inteligência, Sabedoria, Carisma ou Constituição.\n\nMagia Inata (truques / usos de 1º, 2º e 3º nível): 1º nível: 1 truque; 5º: 1 truque e 1 de 1º; 11º: 1 truque, 1 de 1º e 1 de 2º; 17º: 1 truque, 1 de 1º, 1 de 2º e 1 de 3º.\nCD para suas Magias Inatas = 8 + seu bônus de proficiência + seu modificador de Atributo de Conjuração.\nModificador de Ataque de Magia Inata = seu bônus de proficiência + seu modificador de Atributo de Conjuração.\n\nMagia Inata Yordle. A Magia Inata Yordle reflete a relação que eles têm com a sua própria essência espiritual e mágica, funcionando em termos narrativos de forma diferente da magia de classes conjuradoras. Sempre que um Yordle conjura uma Magia Inata Yordle, ela tem necessariamente um componente narrativo que pode soar até absurdo, como por exemplo, ao usar a magia de 3º nível luz do dia, o Yordle pode dizer que seu personagem está assoprando a escuridão para longe. Conforme o Yordle sobe de nível e tem acesso a novas magias, elas obrigatoriamente têm que ter alguma explicação narrativa para serem “aprendidas”.",
+      "grants": [
+        {
+          "type": "SPELL_CHOICE",
+          "value": "ORIGIN",
+          "spellLevel": 0,
+          "count": 1,
+          "label": "Magia Inata: um truque da lista da sua origem"
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "ORIGIN",
+          "spellLevel": 1,
+          "count": 1,
+          "label": "Magia Inata (5º nível): uma magia de 1º nível",
+          "minLevel": 5
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "ORIGIN",
+          "spellLevel": 2,
+          "count": 1,
+          "label": "Magia Inata (11º nível): uma magia de até 2º nível",
+          "minLevel": 11
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "ORIGIN",
+          "spellLevel": 3,
+          "count": 1,
+          "label": "Magia Inata (17º nível): uma magia de até 3º nível",
+          "minLevel": 17
+        }
+      ]
     },
     {
       "id": "bola-de-pelos",

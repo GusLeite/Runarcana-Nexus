@@ -838,7 +838,7 @@ public class RuleCatalogService {
                         for (String k : g.value().substring(5).replace("+ATTACK", "").replace("+RITUAL", "").split(",")) {
                             if (Arrays.stream(CharacterClassType.values()).noneMatch(t -> t.name().equals(k))) p.add(at + " (SPELL_CHOICE): classe desconhecida em LIST: " + k);
                         }
-                    } else if (g.value() != null && !SPELL_SOURCES.contains(g.value()) && !"ANY".equals(g.value()) && !g.value().startsWith("MYSTERY:")) {
+                    } else if (g.value() != null && !SPELL_SOURCES.contains(g.value()) && !"ANY".equals(g.value()) && !"ORIGIN".equals(g.value()) && !g.value().startsWith("MYSTERY:")) {
                         p.add(at + " (SPELL_CHOICE): value deve ser um destes: " + SPELL_SOURCES + ", ANY, MYSTERY:<ids> ou LIST:<classes>");
                     }
                 }

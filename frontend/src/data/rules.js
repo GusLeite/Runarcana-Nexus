@@ -464,11 +464,16 @@ function defaultRandom() {
   return Math.random()
 }
 
-// Escolha da fonte dominante (chave "dominant:...", Progressão Tecnológica com as duas Fontes) que ainda não foi feita
-// (ou que está sendo feita agora, em draftChoices): na subida de nível, quando a 2ª Fonte chega.
-export function dominantChoices(choices, draftChoices) {
-  return (choices ?? []).filter(c => c.key.startsWith('dominant:') && (!c.selected?.length || c.key in (draftChoices ?? {})))
+// Escolhas que ficaram para depois e ainda não foram feitas (ou que estão sendo feitas agora, em draftChoices): a fonte
+// dominante (Progressão Tecnológica com as duas Fontes) e as de Herança que só abrem num nível (Magia Inata no 5º,
+// magia do Acólito Arcanista). Na subida de nível, junto das do nível.
+export function pendingChoices(choices, draftChoices, shown = []) {
+  const skip = new Set(shown.map(c => c.key))
+  return (choices ?? []).filter(c => !skip.has(c.key) && (c.key.startsWith('dominant:') || c.key.startsWith('heritage:'))
+    && (c.key.startsWith('dominant:') || (c.options?.length ?? 0) > 0) && (!c.selected?.length || c.key in (draftChoices ?? {})))
 }
+
+export const dominantChoices = (choices, draftChoices) => pendingChoices(choices, draftChoices).filter(c => c.key.startsWith('dominant:'))
 
 // Escolhas que vêm das Heranças (chave "heritage:<id>:<índice>"), só das que estão em picks ([{ id }]).
 export function heritageChoices(choices, picks) {

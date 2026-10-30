@@ -3,7 +3,7 @@ import { applyLevelUp, fetchCatalog, fetchCharacters, fetchConditions, fetchForm
 import ConditionEditor from './ConditionEditor.jsx'
 import HpEditor from './HpEditor.jsx'
 import FormulaEditor from './FormulaEditor.jsx'
-import { ATTRIBUTES, CLASS_NAMES, HERITAGE_LEVELS, dominantChoices, heritageChoices, keepChoices, levelChoices, rollDie } from '../../data/rules.js'
+import { ATTRIBUTES, CLASS_NAMES, HERITAGE_LEVELS, heritageChoices, pendingChoices, keepChoices, levelChoices, rollDie } from '../../data/rules.js'
 import { CHARACTERS } from '../../data/characters.js'
 import ChoiceStep from '../creation/ChoiceStep.jsx'
 import HeritageStep from '../creation/HeritageStep.jsx'
@@ -64,10 +64,11 @@ export default function MasterSheets({ token, onError, onToast }) {
     return () => clearTimeout(t)
   }, [token, character, classId, request, onError])
 
-  // As do nível, as das Heranças novas deste nível e a fonte dominante ainda não escolhida.
-  const choices = useMemo(() => [...levelChoices(preview?.preview?.choices, newLevel), ...heritageChoices(preview?.preview?.choices, draft.heritages),
-    ...dominantChoices(preview?.preview?.choices, draft.choices)],
-    [preview, newLevel, draft.heritages, draft.choices])
+  // As do nível, as das Heranças novas deste nível e as que ficaram pendentes (fonte dominante, Magia Inata no 5º...).
+  const choices = useMemo(() => {
+    const now = [...levelChoices(preview?.preview?.choices, newLevel), ...heritageChoices(preview?.preview?.choices, draft.heritages)]
+    return [...now, ...pendingChoices(preview?.preview?.choices, draft.choices, now)]
+  }, [preview, newLevel, draft.heritages, draft.choices])
   // Trocar a classe ou a opção de um recurso tira as escolhas que não existem mais.
   useEffect(() => {
     if (!preview) return

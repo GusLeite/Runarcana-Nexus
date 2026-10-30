@@ -215,6 +215,13 @@
             },
             "size": "UP"
           }
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:CHOSEN",
+          "spellLevel": 1,
+          "count": 1,
+          "minLevel": 2
         }
       ]
     },

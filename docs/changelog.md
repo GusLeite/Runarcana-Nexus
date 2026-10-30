@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento C6: Magia Inata e magias por nível (`feature/character-sheet`)
+- Escolhas com `minLevel` (só aparecem a partir do nível); `SPELL_CHOICE` `ORIGIN` (lista da origem) e `MYSTERY:CHOSEN` (Mistério escolhido na mesma fonte).
+- Magia Inata (truque; 1º no 5º; 2º no 11º; 3º no 17º) e Acólito Arcanista (uma magia do Mistério a cada novo nível de magia).
+- Subida de nível mostra as escolhas de Herança pendentes (`pendingChoices`). Testes: escolha com `minLevel` e `pendingChoices`.
+
 ## 2026-10-29 — Mapeamento C5: formas temporárias (`feature/character-sheet`)
 - Concessão `FORM`; a ficha guarda as formas (`character_forms`) e a ativa (`activeForm`): atributos somados, maior deslocamento e tamanho mudam enquanto ela está ligada. `PATCH /character/me/form`.
 - 18 formas de Sho'Ma (efeitos lidos do texto de cada uma) e a Forma Dracônica das 5 linhagens do Meio-Dragão.

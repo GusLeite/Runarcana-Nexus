@@ -209,8 +209,12 @@ class CreationControllerTests {
         // Magia à escolha só dos Mistérios dados (MYSTERY:agua, até o 1º nível): a Onda, não o Escudo Arcano.
         preview(token, damage)
                 .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-pericia:16')].options", hasItem(List.of("t-onda"))));
+        // Escolha com minLevel 2 (magia do Mistério escolhido): não aparece no 1º nível; no 2º, aparece.
+        preview(token, done.replaceFirst("^\\{", "{\"levels\":[{\"hpRoll\":3}],"))
+                .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-pericia:33')].label").exists());
         preview(token, done)
                 .andExpect(jsonPath("$.complete").value(true))
+                .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-pericia:33')]").isEmpty())
                 // Mistério à escolha (sem virar habilidade), com o nome de cada opção.
                 .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-pericia:13')].optionNames.agua").value("Água"))
                 .andExpect(jsonPath("$.skills[?(@.skill == 'STEALTH')].source").value("Herança: Perícia Teste"));

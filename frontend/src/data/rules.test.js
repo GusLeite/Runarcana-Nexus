@@ -3,7 +3,7 @@ import {
   addHeritage, heritageOptions, carryCapacity, choiceOptionName, critDice, deathSaveResult, situationalFor, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
   addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
-  resourceCost, togglePick, levelChoices, keepChoices, dominantChoices, senseLabel, formEffects, rollDie, applyHp,
+  resourceCost, togglePick, levelChoices, keepChoices, dominantChoices, pendingChoices, senseLabel, formEffects, rollDie, applyHp,
 } from './rules.js'
 
 describe('modificadores', () => {
@@ -341,5 +341,14 @@ describe('formEffects', () => {
     expect(formEffects({ attributes: 'STRENGTH:2,DEXTERITY:4', speeds: 'WALK:50.0', size: 'UP' })).toBe('FOR +2, DES +4 · caminhada 50 pés · tamanho +1')
     expect(formEffects({ attributes: 'CONSTITUTION:P', speeds: 'FLY:60.0' })).toBe('CON +½ prof. · voo 60 pés')
     expect(formEffects({})).toBe('')
+  })
+})
+
+describe('pendingChoices', () => {
+  it('mostra na subida as escolhas de Herança que abriram e não foram feitas, sem repetir as já mostradas', () => {
+    const all = [{ key: 'heritage:magia-inata:1', options: ['a'], selected: [] }, { key: 'heritage:x:0', options: ['b'], selected: ['b'] },
+      { key: 'level:5:class:A:0', options: ['c'], selected: [] }, { key: 'heritage:y:0', options: ['d'], selected: [] }]
+    expect(pendingChoices(all, {}, [all[3]]).map(c => c.key)).toEqual(['heritage:magia-inata:1'])
+    expect(pendingChoices(all, { 'heritage:x:0': ['b'] }).map(c => c.key)).toEqual(['heritage:magia-inata:1', 'heritage:x:0', 'heritage:y:0'])
   })
 })

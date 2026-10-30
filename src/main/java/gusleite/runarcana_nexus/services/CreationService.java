@@ -588,6 +588,8 @@ public class CreationService {
                 String key = s.key() + ":" + i;
                 List<String> picked = picks.get(key);
                 if (g.when() != null && !(isChoice(g) && whenMet(b, g.when()))) continue;
+                // Escolha que só aparece a partir de um nível do personagem (Magia Inata: magia de 1º nível no 5º).
+                if (g.minLevel() != null && b.level < g.minLevel()) continue;
                 switch (g.type()) {
                     case CRAFT_LEVEL -> {
                         // Sem value: +amount num ofício maior que ele tem, diferente dos que outra fonte já aumentou.
@@ -640,6 +642,7 @@ public class CreationService {
                             String label = orLabel(g, "Escolha " + count + " Mistério(s)");
                             List<String> selected = choose(picked, options, count, label, b.errors);
                             b.mysteries.addAll(selected);
+                            b.chosenMysteries.computeIfAbsent(s.key(), k -> new ArrayList<>()).addAll(selected);
                             b.choices.add(new ChoiceLine(key, g.type(), label, count, options, selected, s.label(), null, mysteryNames(options)));
                             break;
                         }
@@ -1488,13 +1491,16 @@ public class CreationService {
     // A lista de origem/linhagem (Yordle, Fauhwoon, Ottrani) vale como a lista da classe para quem é dela.
     // "LIST:ACOLYTE,FIGHTER" (Arcanista Iniciante, Grão-Conjurador): magias da lista de uma dessas classes (FIGHTER = a do
     // Combatente Arcano); "+ATTACK" no fim: só as que pedem ataque mágico; "+RITUAL": só rituais (Ritualista).
-    // "MYSTERY:som,luz": magias desses Mistérios (Musicista Prodígio); "ANY": qualquer magia (Benefício Colateral).
+    // "MYSTERY:som,luz": magias desses Mistérios (Musicista Prodígio); "ANY": qualquer magia (Benefício Colateral);
+    // "ORIGIN": a lista da origem e da linhagem (Magia Inata).
     static final String LIST = "LIST:";
     private static final java.util.regex.Pattern SPELL_ATTACK = java.util.regex.Pattern.compile("ataque (mágico|de magia|com magia)",
             java.util.regex.Pattern.CASE_INSENSITIVE);
 
     private static boolean inList(RuleMagic.Spell sp, String from, String classId, Set<String> mysteries, Set<String> origins) {
         if ("ANY".equals(from)) return true;
+        // Lista da origem/linhagem (Magia Inata).
+        if ("ORIGIN".equals(from)) return sp.originsOrEmpty().stream().anyMatch(origins::contains);
         if (from.startsWith("MYSTERY:")) {
             List<String> ids = List.of(from.substring(8).split(","));
             return sp.mysteriesOrEmpty().stream().anyMatch(ids::contains);
@@ -1522,7 +1528,10 @@ public class CreationService {
                              Set<String> taken, List<Known> known) {
         Grant g = c.grant();
         int level = g.spellLevel() == null ? 0 : g.spellLevel();
-        String from = g.value() == null ? "CLASS_OR_MYSTERIES" : g.value();
+        String given = g.value() == null ? "CLASS_OR_MYSTERIES" : g.value();
+        // "MYSTERY:CHOSEN": o(s) Mistério(s) escolhido(s) na mesma fonte (a chave sem o índice da concessão).
+        List<String> chosenIds = b.chosenMysteries.getOrDefault(c.key().replaceFirst(":\\d+$", ""), List.of());
+        String from = !"MYSTERY:CHOSEN".equals(given) ? given : chosenIds.isEmpty() ? "MYSTERY:-" : "MYSTERY:" + String.join(",", chosenIds);
         // Lista da classe de onde vem a escolha (multiclasse: a da outra classe).
         String classId = b.sourceClass.getOrDefault(c.source(), b.klass == null ? null : b.klass.id());
         List<String> options = new ArrayList<>();
@@ -2622,6 +2631,8 @@ public class CreationService {
         final Map<String, Integer> craftFormulas = new LinkedHashMap<>();
         final List<Sourced<Grant>> craftGrants = new ArrayList<>();
         final Map<String, List<String>> chosenCrafts = new LinkedHashMap<>();
+        // Mistérios escolhidos em cada fonte (SPELL_CHOICE "MYSTERY:CHOSEN": Acólito Arcanista).
+        final Map<String, List<String>> chosenMysteries = new LinkedHashMap<>();
         final Map<String, Integer> senses = new LinkedHashMap<>();
         final List<Sourced<Attribute>> saveUpgrades = new ArrayList<>();
         final Set<Attribute> saveExpertise = new LinkedHashSet<>();
