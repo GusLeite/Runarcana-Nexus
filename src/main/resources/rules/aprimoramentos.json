@@ -1104,6 +1104,11 @@
             "CONSTITUTION"
           ],
           "label": "+1 em um atributo"
+        },
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "UNARMED",
+          "damage": "1d4"
         }
       ],
       "execution": "Ação bônus"
@@ -2307,6 +2312,11 @@
         {
           "type": "WEAPON_PROFICIENCY",
           "value": "Manoplas de guerra"
+        },
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "WEAPON:Manopla de Guerra",
+          "amount": 1
         }
       ]
     },

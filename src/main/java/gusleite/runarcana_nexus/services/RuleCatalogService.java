@@ -713,6 +713,12 @@ public class RuleCatalogService {
                     else targets.stream().filter(t -> !t.matches(target)).forEach(t -> p.add(at + " (SITUATIONAL): alvo inválido " + t));
                 }
                 // Tipo de dano fixo (value) ou à escolha (options).
+                case DAMAGE_BONUS -> {
+                    if (blank(g.value()) || !g.value().matches("ATTACK(:(MELEE|RANGED|BOW|CROSSBOW|THROWN|FIREARM))?|UNARMED|TWO_HANDED|CHOSEN|WEAPON:.+")) {
+                        p.add(at + " (DAMAGE_BONUS): alvo inválido " + g.value());
+                    }
+                    if (g.amount() == null && g.damage() == null && g.usesFormula() == null) p.add(at + " (DAMAGE_BONUS): precisa de amount, damage ou usesFormula");
+                }
                 case SENSE -> {
                     java.util.Set<String> kinds = java.util.Set.of("DARKVISION", "BLINDSIGHT", "TREMORSENSE", "TELEPATHY");
                     List<String> types = g.hasOptions() ? g.options() : g.value() == null ? List.of() : List.of(g.value());

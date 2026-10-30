@@ -241,7 +241,10 @@ class CreationControllerTests {
                 // Vulnerável a radiante e ao tipo escolhido; a necrótica foi tirada por outra concessão (amount -1).
                 .andExpect(jsonPath("$.character.vulnerabilities").value(org.hamcrest.Matchers.containsInAnyOrder("radiante", "gélido")))
                 .andExpect(jsonPath("$.character.passivePerception").value(12))
-                .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].notes[0]").value("Perícia Teste: +1 contra lobos."));
+                .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].notes[*]", hasItem("Perícia Teste: +1 contra lobos.")))
+                // Bônus de dano: +1d4 desarmado e +2 corpo a corpo (o desarmado conta como corpo a corpo), com a nota.
+                .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].damage").value("1+1d4+2"))
+                .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].notes[*]", hasItem("Perícia Teste: +1d4 no dano")));
     }
 
     // 2ª escolha de uma Herança sem opção (chave "*"): uma categoria de tamanho acima (Variante Colosso).

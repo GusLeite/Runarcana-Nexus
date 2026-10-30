@@ -177,6 +177,16 @@
           "value": "DARKVISION",
           "feet": 30,
           "description": "submerso"
+        },
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "UNARMED",
+          "damage": "1d4"
+        },
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "ATTACK:MELEE",
+          "amount": 2
         }
       ]
     },

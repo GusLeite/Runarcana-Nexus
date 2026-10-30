@@ -254,14 +254,31 @@ public class CharacterService {
                 .findFirst().orElse(character.getLevel());
         List<AttackResponse> attacks = AttackCalculator.calculate(character::getModifier, character.getProficiencyBonus(),
                 character.getWeaponProficiencies(), weapons, styles, level);
+        // Bônus de dano ("DAMAGE:<alvo>", "+2" ou "+1d4"): somados no dano de cada ataque que eles valem, com a nota.
+        List<gusleite.runarcana_nexus.model.player.SituationalNote> damageNotes = character.getSituational().stream()
+                .filter(n -> n.getTarget() != null && n.getTarget().startsWith("DAMAGE:")).toList();
+        if (!damageNotes.isEmpty()) attacks = attacks.stream().map(a -> {
+            AttackCalculator.WeaponInput w = weapons.stream().filter(x -> x.key().equals(a.key())).findFirst().orElse(null);
+            List<gusleite.runarcana_nexus.model.player.SituationalNote> mine = damageNotes.stream()
+                    .filter(n -> AttackCalculator.matchesDamage(n.getTarget().substring(7), w)).toList();
+            if (mine.isEmpty()) return a;
+            int flat = mine.stream().filter(n -> n.getNote().matches("\\+\\d+")).mapToInt(n -> Integer.parseInt(n.getNote().substring(1))).sum();
+            List<String> dice = mine.stream().filter(n -> !n.getNote().matches("\\+\\d+")).map(n -> n.getNote().substring(1)).toList();
+            List<String> notes = new ArrayList<>(a.notes());
+            mine.forEach(n -> notes.add(n.getSource().replaceFirst("^[^:]+: ", "") + ": " + n.getNote() + " no dano"));
+            return a.withDamage(AttackCalculator.addDamage(a.damage(), flat, dice), AttackCalculator.addDamage(a.versatileDamage(), flat, dice))
+                    .withNotes(notes);
+        }).toList();
         // Notas situacionais de ataque (Arqueiro, Balestreiro, Sagaz...) em cada arma que elas valem.
         List<gusleite.runarcana_nexus.model.player.SituationalNote> attackNotes = character.getSituational().stream()
                 .filter(n -> n.getTarget() != null && n.getTarget().startsWith("ATTACK")).toList();
         if (attackNotes.isEmpty()) return attacks;
         return attacks.stream().map(a -> {
             AttackCalculator.WeaponInput w = weapons.stream().filter(x -> x.key().equals(a.key())).findFirst().orElse(null);
-            return a.withNotes(attackNotes.stream().filter(n -> AttackCalculator.matches(n.getTarget(), w))
-                    .map(n -> n.getSource().replaceFirst("^[^:]+: ", "") + ": " + n.getNote()).toList());
+            List<String> notes = new ArrayList<>(a.notes());
+            attackNotes.stream().filter(n -> AttackCalculator.matches(n.getTarget(), w))
+                    .map(n -> n.getSource().replaceFirst("^[^:]+: ", "") + ": " + n.getNote()).forEach(notes::add);
+            return a.withNotes(notes);
         }).toList();
     }
 

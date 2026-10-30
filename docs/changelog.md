@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento C2: bônus no dano dos ataques (`feature/character-sheet`)
+- Concessão `DAMAGE_BONUS`, guardada como nota `DAMAGE:<alvo>` e somada no dano dos ataques da ficha (com a nota da fonte).
+- Disciplina é Força (+proficiência na arma escolhida), Fúria de Warmog (duas mãos), Briguento (+1d4 desarmado), Detectar/Perceber Fraquezas (metade do atributo, pela escolha), Colosso e Mãos de Ferro (+1).
+- Testes: `somaBonusNoDano` e o desarmado do Nyx com +1d4+2.
+
 ## 2026-10-29 — Mapeamento C1: sentidos (`feature/character-sheet`)
 - Concessão `SENSE` (visão no escuro, visão às cegas, sentido sísmico, telepatia), com "ou +N se já tiver", lugar ("debaixo d'água") e alcance pelo nível; ficha com `senses` (`character_senses`) em chips.
 - ~45 fontes: Yordle, Chireano/Nocti, Troll da Selva, Marai, Kiilash, Heranças (Visão Treinada/Lunar, Perceptivo, Anfíbio, Meio-Vastaya, Força Predatória, Vantagem Tecnológica), Púrpura, Tecelã, Atirador, Bodisatva, Assassino, Sutras, Vel, Invocações, runas e traços da Runinata.

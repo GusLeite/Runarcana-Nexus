@@ -35,5 +35,11 @@ public record AttackResponse(
                 critMultiplier, range, mastery, properties, styles, newNotes);
     }
 
+    // Dano com os bônus de Heranças e Aprimoramentos (Fúria de Warmog, Briguento...).
+    public AttackResponse withDamage(String newDamage, String newVersatile) {
+        return new AttackResponse(key, name, attribute, proficient, attackBonus, newDamage, newVersatile, damageType, critRange,
+                critMultiplier, range, mastery, properties, styles, notes);
+    }
+
     public record StyleVariant(String name, int attackBonus, String damage, String note) {}
 }

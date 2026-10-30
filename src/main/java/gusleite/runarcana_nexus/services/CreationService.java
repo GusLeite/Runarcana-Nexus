@@ -707,7 +707,10 @@ public class CreationService {
                             if (o.startsWith("SKILL:")) b.skills.put(SkillType.valueOf(o.substring(6)), s.label());
                             else if (o.startsWith("CRAFT:")) addCraft(b, o.substring(6), key);
                             else if (o.startsWith("ARMOR:")) b.armorProficiencies.add(o.substring(6));
-                            else if (o.startsWith("WEAPON:")) b.weaponProficiencies.add(o.substring(7));
+                            else if (o.startsWith("WEAPON:")) {
+                                b.weaponProficiencies.add(o.substring(7));
+                                b.chosenWeapons.computeIfAbsent(s.key(), k -> new ArrayList<>()).add(o.substring(7));
+                            }
                             else {
                                 b.weaponProficiencies.add("Uma arma marcial à escolha");
                                 b.features.add(new Sourced<>(Grant.feature(AbilityType.PASSIVE, "Proficiência em arma marcial",
@@ -997,6 +1000,7 @@ public class CreationService {
             }
             case IMMUNITY -> b.immunities.add(g.value());
             case CONDITION_IMMUNITY -> b.conditionImmunities.add(g.value());
+            case DAMAGE_BONUS -> b.damageBonuses.add(new Sourced<>(g, s.key() + "|" + s.label()));
             case SENSE -> {
                 if (!g.hasOptions()) addSense(b, g.value(), g, b.scale(s.label()));
             }
@@ -1888,6 +1892,7 @@ public class CreationService {
     // resistência → imunidade (Meio-Azakana, Meio-Kanmei).
     private static void damageUpgrades(Build b) {
         resolveSenses(b);
+        resolveDamageBonuses(b);
         if (b.sizeSteps > 0 && b.size != null) {
             CreatureSize[] all = CreatureSize.values();
             b.size = all[Math.min(all.length - 1, b.size.ordinal() + b.sizeSteps)];
@@ -1914,6 +1919,27 @@ public class CreationService {
         b.immunities.removeAll(b.absorptions);
         b.resistances.removeAll(b.immunities);
         b.resistances.removeAll(b.absorptions);
+    }
+
+    // Bônus de dano viram notas "DAMAGE:<alvo>" ("+2", "+1d4"), somadas no dano dos ataques da ficha.
+    private static void resolveDamageBonuses(Build b) {
+        for (Sourced<Grant> d : b.damageBonuses) {
+            Grant g = d.value();
+            String[] src = d.source().split("\\|", 2);
+            String text;
+            if (g.damage() != null) text = "+" + g.damage();
+            else {
+                int n = g.usesFormula() == UsesFormula.PROFICIENCY ? b.proficiency()
+                        : g.usesFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2
+                        : g.usesFormula() == UsesFormula.HALF_ATTRIBUTE_MODIFIER ? Math.max(0, b.modifier(g.attribute()) / 2)
+                        : g.amount() == null ? 0 : g.amount();
+                if (n == 0) continue;
+                text = "+" + n;
+            }
+            List<String> targets = "CHOSEN".equals(g.value())
+                    ? b.chosenWeapons.getOrDefault(src[0], List.of()).stream().map(w -> "WEAPON:" + w).toList() : List.of(g.value());
+            targets.forEach(t -> b.situational.add(new SituationalNote("DAMAGE:" + t, text, src[1])));
+        }
     }
 
     // Um sentido ganho; a chave leva onde vale ("DARKVISION|debaixo d'água").
@@ -2504,6 +2530,9 @@ public class CreationService {
         final Map<String, Integer> typedReductions = new LinkedHashMap<>();
         // Sentidos ganhos (chave, pés da fonte, quanto soma se já tiver), resolvidos no fim (senses).
         final List<SenseGain> senseGains = new ArrayList<>();
+        // Bônus de dano (decididos no fim, com os atributos prontos) e as armas escolhidas em cada fonte (DAMAGE_BONUS CHOSEN).
+        final List<Sourced<Grant>> damageBonuses = new ArrayList<>();
+        final Map<String, List<String>> chosenWeapons = new LinkedHashMap<>();
         final Map<String, Integer> senses = new LinkedHashMap<>();
         final List<Sourced<Attribute>> saveUpgrades = new ArrayList<>();
         final Set<Attribute> saveExpertise = new LinkedHashSet<>();

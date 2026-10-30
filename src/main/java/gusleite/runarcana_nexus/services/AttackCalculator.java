@@ -165,6 +165,27 @@ public final class AttackCalculator {
     }
 
     // A nota "ATTACK:<tipo>" vale para esta arma? (desarmado: só ATTACK e ATTACK:MELEE)
+    // Alvo de bônus de dano: os do matches (ATTACK...), UNARMED, TWO_HANDED (corpo a corpo de duas mãos) e WEAPON:<nome>.
+    public static boolean matchesDamage(String target, WeaponInput w) {
+        if (target.startsWith("ATTACK")) return matches(target, w);
+        if (target.equals("UNARMED")) return w == null;
+        if (target.equals("TWO_HANDED")) return w != null && !w.ranged() && w.twoHanded();
+        if (target.startsWith("WEAPON:")) return w != null && normalize(w.name()).equals(normalize(target.substring(7)));
+        return false;
+    }
+
+    private static final java.util.regex.Pattern TRAILING_MOD = java.util.regex.Pattern.compile("^(.*?)([+-]\\d+)?$");
+
+    // "1d8+3" + 2 → "1d8+5"; "1d8+3" + "1d4" → "1d8+1d4+3".
+    public static String addDamage(String damage, int flat, List<String> dice) {
+        if (damage == null) return null;
+        java.util.regex.Matcher m = TRAILING_MOD.matcher(damage);
+        if (!m.matches()) return damage;
+        int mod = (m.group(2) == null ? 0 : Integer.parseInt(m.group(2))) + flat;
+        String withDice = m.group(1) + dice.stream().map(d -> "+" + d).collect(java.util.stream.Collectors.joining());
+        return mod == 0 ? withDice : withDice + (mod > 0 ? "+" : "") + mod;
+    }
+
     public static boolean matches(String target, WeaponInput w) {
         if (target.equals("ATTACK")) return true;
         String type = target.substring("ATTACK:".length());

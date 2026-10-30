@@ -491,7 +491,28 @@
       "id": "detectar-fraquezas",
       "name": "Detectar Fraquezas",
       "category": "GENERAL",
-      "description": "Você é frio e calculista, quase como Tomé Celso. Você ganha os seguintes benefícios:\n\nEscolha entre: você pode adicionar metade do seu modificador de Inteligência ao dano causado por ataques ou, você substitui o modificador de Força por metade do modificador de Inteligência para ataques."
+      "description": "Você é frio e calculista, quase como Tomé Celso. Você ganha os seguintes benefícios:\n\nEscolha entre: você pode adicionar metade do seu modificador de Inteligência ao dano causado por ataques ou, você substitui o modificador de Força por metade do modificador de Inteligência para ataques.",
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Detectar Fraquezas",
+          "count": 1,
+          "options": [
+            "Dano (metade da Inteligência)",
+            "Ataque (metade da Inteligência no lugar da Força)"
+          ],
+          "label": "Detectar Fraquezas: escolha o benefício",
+          "description": "O benefício escolhido de Detectar Fraquezas."
+        },
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "ATTACK",
+          "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+          "attribute": "INTELLIGENCE",
+          "when": "Detectar Fraquezas:Dano (metade da Inteligência)"
+        }
+      ]
     },
     {
       "id": "distracao-de-combate",
@@ -1272,7 +1293,28 @@
       "id": "perceber-fraquezas",
       "name": "Perceber Fraquezas",
       "category": "GENERAL",
-      "description": "Para você pontos fracos em seus inimigos é algo natural, quase que como um ponto reluzente lhe chamando atenção. Você ganha os seguintes benefícios:\n\nEscolha entre: você pode adicionar metade do seu modificador de Sabedoria ao dano causado por ataques ou, você substitui o modificador de Força por metade do modificador de Sabedoria em ataques."
+      "description": "Para você pontos fracos em seus inimigos é algo natural, quase que como um ponto reluzente lhe chamando atenção. Você ganha os seguintes benefícios:\n\nEscolha entre: você pode adicionar metade do seu modificador de Sabedoria ao dano causado por ataques ou, você substitui o modificador de Força por metade do modificador de Sabedoria em ataques.",
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Perceber Fraquezas",
+          "count": 1,
+          "options": [
+            "Dano (metade da Sabedoria)",
+            "Ataque (metade da Sabedoria no lugar da Força)"
+          ],
+          "label": "Perceber Fraquezas: escolha o benefício",
+          "description": "O benefício escolhido de Perceber Fraquezas."
+        },
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "ATTACK",
+          "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+          "attribute": "WISDOM",
+          "when": "Perceber Fraquezas:Dano (metade da Sabedoria)"
+        }
+      ]
     },
     {
       "id": "persistencia-adaptavel",
@@ -2183,6 +2225,11 @@
             "WEAPON:Revólver Laminar"
           ],
           "label": "Disciplina é Força: uma arma"
+        },
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "CHOSEN",
+          "usesFormula": "PROFICIENCY"
         }
       ]
     },
@@ -3180,7 +3227,14 @@
             "value": "UP"
           }
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "ATTACK:MELEE",
+          "amount": 1
+        }
+      ]
     },
     {
       "id": "variante-glacinata",
@@ -4923,7 +4977,14 @@
         "troll"
       ],
       "prerequisite": "Troll",
-      "description": "Você é uma encarnação da fúria de Warmog, um Troll lendário da era das Guerras Rúnicas. E você está dedicado a honrar isso. Você ganha os seguintes benefícios:\n\nAo usar armas de combate corpo a corpo de duas mãos você adiciona seu bônus de proficiência ao dano da arma, e a margem de crítico feita com essas armas diminui em 1, ou seja, se for 20 se torna 19 ou se for 19, se torna 18."
+      "description": "Você é uma encarnação da fúria de Warmog, um Troll lendário da era das Guerras Rúnicas. E você está dedicado a honrar isso. Você ganha os seguintes benefícios:\n\nAo usar armas de combate corpo a corpo de duas mãos você adiciona seu bônus de proficiência ao dano da arma, e a margem de crítico feita com essas armas diminui em 1, ou seja, se for 20 se torna 19 ou se for 19, se torna 18.",
+      "grants": [
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "TWO_HANDED",
+          "usesFormula": "PROFICIENCY"
+        }
+      ]
     },
     {
       "id": "mordida-infecciosa",

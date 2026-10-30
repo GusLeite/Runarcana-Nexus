@@ -103,4 +103,13 @@ class AttackCalculatorTests {
         assertThat(AttackCalculator.critical("18 x4")).containsExactly(18, 4);
         assertThat(AttackCalculator.critical(null)).containsExactly(20, 2);
     }
+
+    // Bônus de dano das Heranças: o fixo soma no modificador, o dado entra antes dele.
+    @Test
+    void somaBonusNoDano() {
+        assertThat(AttackCalculator.addDamage("1d8+3", 2, List.of())).isEqualTo("1d8+5");
+        assertThat(AttackCalculator.addDamage("1d8+3", 0, List.of("1d4"))).isEqualTo("1d8+1d4+3");
+        assertThat(AttackCalculator.addDamage("1d6-1", 1, List.of())).isEqualTo("1d6");
+        assertThat(AttackCalculator.addDamage(null, 2, List.of())).isNull();
+    }
 }
