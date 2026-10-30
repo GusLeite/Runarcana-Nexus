@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Imagens dos Minotauros (`feature/character-sheet`)
+- `assets/lineages/`: aelus.webp, alnuk.jpg e auroque.webp (100 a 440 KB cada). A do Alnuk é quadrada e usa `LINEAGE_POS` (50% 12%) para não cortar os chifres.
+
 ## 2026-10-30 — Faixa de ilustração nas linhagens (`feature/character-sheet`)
 - Os cartões da aba Linhagens ganharam uma faixa 16:9 no topo com o nome da linhagem por cima; a imagem é lida de `assets/lineages/<id>.webp` (`data/lineageArt.js`, automático) e, enquanto não existe, aparece o símbolo da origem com "Arte provisória".
 

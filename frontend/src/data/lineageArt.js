@@ -8,7 +8,9 @@ export const LINEAGE_IMAGES = Object.fromEntries(
 )
 
 // Enquadramento (object-position) de uma imagem que precisa de ajuste; o padrão mostra o centro, um pouco acima.
-export const LINEAGE_POS = {}
+export const LINEAGE_POS = {
+  alnuk: '50% 12%', // imagem quadrada: sobe o recorte para não cortar os chifres
+}
 
 export const lineageImage = id => LINEAGE_IMAGES[id] ?? null
 export const lineagePos = id => LINEAGE_POS[id] ?? '50% 30%'
