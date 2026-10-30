@@ -11,6 +11,7 @@ import minotauro from '../assets/origins/minotauro.mp4'
 import construto from '../assets/origins/construto.mp4'
 import antroplantae from '../assets/origins/antroplantae.mp4'
 import chireano from '../assets/origins/chireano.mp4'
+import meioDragao from '../assets/origins/meio-dragao.mp4'
 
 export const ORIGIN_ART = {
   humano: { tagline: 'A espécie mais numerosa de Runeterra, moldada por cada cultura que a cerca.', hue: 42, motes: 'spark',
@@ -23,7 +24,8 @@ export const ORIGIN_ART = {
     video: { src: antroplantae, focus: 0.6, focusNarrow: 0.56, show: 0.62 } },
   chireano: { tagline: 'Gente-morcego de Zaun: curiosa, ágil, apaixonada por maquinário.', hue: 158, motes: 'hex',
     video: { src: chireano, focus: 0.4, focusNarrow: 0.37, show: 0.62 } },
-  'meio-dragao': { tagline: 'Herdeiros raríssimos dos dragões elementais, que despertam a cada nível.', hue: 352, motes: 'spark' },
+  'meio-dragao': { tagline: 'Herdeiros raríssimos dos dragões elementais, que despertam a cada nível.', hue: 352, motes: 'spark',
+    video: { src: meioDragao, focus: 0.58, show: 0.5 } },
   troll: { tagline: 'Enormes, grotescos e tribais, com presas à mostra e uma regeneração brutal.', hue: 88, motes: 'snow' },
   vastaya: { tagline: 'Quimeras de sangue humano e magia espiritual, em sintonia com a natureza.', hue: 286, motes: 'feather' },
   yordle: { tagline: 'Pequenos espíritos de Bandópolis, escondidos sob o véu mágico do Glamour.', hue: 322, motes: 'petal' },

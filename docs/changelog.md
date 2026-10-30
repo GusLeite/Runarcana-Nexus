@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Vídeo da Shyvana no Meio-Dragão (`feature/character-sheet`)
+- `assets/origins/meio-dragao.mp4` (1280×576, 19 MB, 215 s da mesma cena): ela fica no centro (0,58), `show: 0.5` porque o quadro é ultra-largo.
+
 ## 2026-10-30 — Vídeo do Chireano (`feature/character-sheet`)
 - `assets/origins/chireano.mp4` (1080p, 9,6 MB, 8 s): personagem à esquerda do quadro, foco 0,4 no conjunto e 0,37 no rosto nos painéis estreitos, `show: 0.62`.
 
