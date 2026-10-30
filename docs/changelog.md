@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento A1: erros nos dados (`feature/character-sheet`)
+- Força Pneumática sem o texto/Sobrevivência da Força Predatória; perícias que faltavam (Inventor Renomado, Acólito Arcanista, Prestidigitador), Mistério do Fogo (Piromaníaco), passivas (Atento +1, Perspicaz +5), proficiências do Treinamento Demaciano, CON +2 (máx. 22) do Lendário Guardião.
+- Concessões: `ATTRIBUTE.value` (limite), `MYSTERY` à escolha sem habilidade, `IMMUNITY`; grupo "Armas marciais corpo a corpo" nos ataques.
+
 ## 2026-10-29 — Mapeamento do que está só no texto (`feature/character-sheet`)
 - `docs/mapeamento-regras.md`: todas as Heranças, Aprimoramentos, recursos, origens, classes, passados e traços comparados com as concessões.
 - Blocos: A (só dados, inclui erros como a Força Pneumática com a Sobrevivência da Força Predatória), B (sistema pequeno), C (sistema novo: sentidos, dano, níveis de ofício...), M (mestre).

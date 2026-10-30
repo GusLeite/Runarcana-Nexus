@@ -92,6 +92,17 @@
             "ácido",
             "gélido"
           ]
+        },
+        {
+          "type": "MYSTERY",
+          "count": 1,
+          "options": [
+            "agua"
+          ]
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "radiante"
         }
       ]
     },

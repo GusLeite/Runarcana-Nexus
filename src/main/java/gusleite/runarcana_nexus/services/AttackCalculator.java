@@ -48,7 +48,8 @@ public final class AttackCalculator {
     // Proficiências por categoria → grupo do itens.json.
     private static final Map<String, String> CATEGORY_GROUPS = Map.of(
             "armas simples", "arma-simples", "armas marciais", "arma-marcial", "armas de fogo", "arma-de-fogo",
-            "armas bodisatva", "arma-bodisatva", "armas de corrente", "arma-de-corrente", "armas improprias", "arma-impropria");
+            "armas bodisatva", "arma-bodisatva", "armas de corrente", "arma-de-corrente", "armas improprias", "arma-impropria",
+            "armas marciais corpo a corpo", "arma-marcial-corpo-a-corpo");
 
     private AttackCalculator() {}
 

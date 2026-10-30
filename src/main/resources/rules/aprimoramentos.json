@@ -808,6 +808,11 @@
         {
           "type": "INITIATIVE",
           "amount": 5
+        },
+        {
+          "type": "PASSIVE_BONUS",
+          "value": "PERCEPTION",
+          "amount": 1
         }
       ]
     },
@@ -2288,6 +2293,11 @@
           "type": "ATTRIBUTE",
           "attribute": "WISDOM",
           "amount": 1
+        },
+        {
+          "type": "PASSIVE_BONUS",
+          "value": "PERCEPTION",
+          "amount": 5
         }
       ]
     },

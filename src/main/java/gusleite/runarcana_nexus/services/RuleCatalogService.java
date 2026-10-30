@@ -316,7 +316,10 @@ public class RuleCatalogService {
         }
         for (Map.Entry<String, Grant> e : grants) {
             Grant g = e.getValue();
-            if (g.type() == GrantType.MYSTERY && !mysteries.contains(g.value())) p.add(e.getKey() + " (MYSTERY): Mistério inexistente \"" + g.value() + "\"");
+            if (g.type() == GrantType.MYSTERY && g.value() != null && !mysteries.contains(g.value())) p.add(e.getKey() + " (MYSTERY): Mistério inexistente \"" + g.value() + "\"");
+            // Mistério à escolha: cada opção é um id de Mistério.
+            if (g.type() == GrantType.MYSTERY && g.value() == null && g.hasOptions()) g.options().stream().filter(o -> !mysteries.contains(o))
+                    .forEach(o -> p.add(e.getKey() + " (MYSTERY): Mistério inexistente \"" + o + "\""));
             if (g.type() == GrantType.MYSTERY && g.options() != null) g.options().stream().filter(o -> !mysteries.contains(o))
                     .forEach(o -> p.add(e.getKey() + " (MYSTERY): opção \"" + o + "\" não é um Mistério"));
             if (g.type() == GrantType.SPELL && !spells.contains(g.value())) p.add(e.getKey() + " (SPELL): magia inexistente \"" + g.value() + "\"");
@@ -708,7 +711,7 @@ public class RuleCatalogService {
                     }
                 }
                 // Tipo de dano fixo (value) ou à escolha (options).
-                case RESISTANCE, VULNERABILITY, ABSORPTION -> {
+                case RESISTANCE, VULNERABILITY, ABSORPTION, IMMUNITY -> {
                     if (blank(g.value()) && !g.hasOptions()) p.add(at + " (" + g.type() + "): falta value ou options (tipo de dano)");
                 }
                 case PASSIVE_BONUS -> {
@@ -786,7 +789,7 @@ public class RuleCatalogService {
                 }
                 // Mistérios e magias citados são conferidos em validateSpellGrants (precisa do catálogo de magia).
                 case MYSTERY, SPELL -> {
-                    if (blank(g.value())) p.add(at + " (" + g.type() + "): falta value");
+                    if (blank(g.value()) && !(g.type() == GrantType.MYSTERY && g.hasOptions())) p.add(at + " (" + g.type() + "): falta value");
                 }
                 case SPELL_CHOICE -> {
                     if (g.count() == null || g.count() < 1) p.add(at + " (SPELL_CHOICE): precisa de count");

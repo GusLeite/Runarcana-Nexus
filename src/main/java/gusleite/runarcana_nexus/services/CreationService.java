@@ -592,6 +592,16 @@ public class CreationService {
                     case MYSTERY -> {
                         // Com options: o Mistério de value, ou um das options se ele já tiver (Glifo Ígneo: Fogo, ou Magma/Infernal).
                         if (!g.hasOptions()) break;
+                        // Sem value: Mistério(s) à escolha entre as options (ids), sem virar habilidade (Sangue Arcano).
+                        if (g.value() == null) {
+                            int count = g.count() == null ? 1 : g.count();
+                            List<String> options = g.options().stream().filter(o -> !b.mysteries.contains(o)).toList();
+                            String label = orLabel(g, "Escolha " + count + " Mistério(s)");
+                            List<String> selected = choose(picked, options, count, label, b.errors);
+                            b.mysteries.addAll(selected);
+                            b.choices.add(new ChoiceLine(key, g.type(), label, count, options, selected, s.label(), null, mysteryNames(options)));
+                            break;
+                        }
                         if (!b.mysteries.contains(g.value())) {
                             b.mysteries.add(g.value());
                             break;
@@ -867,7 +877,11 @@ public class CreationService {
     // O que é fixo numa concessão (1ª passada; e as condicionais, depois das escolhas).
     private void applyFixed(Build b, Source s, Grant g) {
         switch (g.type()) {
-            case ATTRIBUTE -> b.bonus.merge(g.attribute(), valueAt(g, g.amount(), b.scale(s.label())), Integer::sum);
+            case ATTRIBUTE -> {
+                b.bonus.merge(g.attribute(), valueAt(g, g.amount(), b.scale(s.label())), Integer::sum);
+                // value: novo limite do atributo ("Constituição +2, máximo 22").
+                if (g.value() != null) b.attributeCap.merge(g.attribute(), Integer.parseInt(g.value()), Math::max);
+            }
             case SKILL -> {
                 // "Caso já tenha, especialidade": decide no fim, depois de todas as perícias.
                 if (Boolean.TRUE.equals(g.expertise())) b.deferred.add(new Deferred(null, g, s.label()));
@@ -917,6 +931,7 @@ public class CreationService {
             case ABSORPTION -> {
                 if (!g.hasOptions()) b.absorptions.add(g.value());
             }
+            case IMMUNITY -> b.immunities.add(g.value());
             // amount -1: a 2ª escolha tira a vulnerabilidade (Meio-Azakana deixa de ser vulnerável a radiante).
             case VULNERABILITY -> {
                 if (g.hasOptions()) break;
@@ -1283,6 +1298,14 @@ public class CreationService {
     static final String MYSTERY = "MYSTERY";
 
     // "Água (Elemental)", "Infernal" → id do Mistério, pelo nome (sem acento nem maiúscula; Infernal = Inferno).
+    // Nome de cada Mistério (id → "Água") para as opções de escolha.
+    private Map<String, String> mysteryNames(List<String> ids) {
+        RuleMagic magic = rules.catalog().magic();
+        Map<String, String> names = new LinkedHashMap<>();
+        if (magic != null) magic.mysteriesOrEmpty().stream().filter(m -> ids.contains(m.id())).forEach(m -> names.put(m.id(), m.name()));
+        return names;
+    }
+
     private Optional<String> mysteryByName(String option) {
         RuleMagic magic = rules.catalog().magic();
         if (magic == null) return Optional.empty();

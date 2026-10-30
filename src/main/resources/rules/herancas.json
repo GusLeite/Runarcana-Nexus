@@ -8,7 +8,13 @@
         "ACOLYTE"
       ],
       "prerequisite": "Acólito",
-      "description": "Seu estudo do mundo espiritual deixou um toque mágico em sua alma, fazendo com que você se torne mais versado magicamente conhecendo outras magias. Você recebe os seguintes benefícios:\n\nAo escolher essa Herança, você deve escolher um Mistério a que tenha acesso. Quando você se tornar capaz de conjurar um novo nível de magia, você pode escolher uma magia desse Mistério, de um nível que você possa conjurar, essa magia está sempre preparada e conta como uma magia de Acólito para você.\nVocê recebe proficiência com Arcanismo"
+      "description": "Seu estudo do mundo espiritual deixou um toque mágico em sua alma, fazendo com que você se torne mais versado magicamente conhecendo outras magias. Você recebe os seguintes benefícios:\n\nAo escolher essa Herança, você deve escolher um Mistério a que tenha acesso. Quando você se tornar capaz de conjurar um novo nível de magia, você pode escolher uma magia desse Mistério, de um nível que você possa conjurar, essa magia está sempre preparada e conta como uma magia de Acólito para você.\nVocê recebe proficiência com Arcanismo",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "ARCANA"
+        }
+      ]
     },
     {
       "id": "acordes-de-poder",
@@ -864,7 +870,13 @@
       "id": "piromaniaco",
       "name": "Piromaníaco",
       "category": "GENERAL",
-      "description": "Com os olhos vendo apenas o vermelho das chamas, você segue querendo o calor cada vez mais próximo e sentir o cheiro de carne carbonizada. Você ganha os seguintes benefícios:\n\nQuando causar dano ígneo por qualquer fonte que seja originada de você, você pode rolar novamente qualquer 1 natural na jogada de dano ígneo, você deve utilizar a nova rolagem.\nVocê recebe acesso ao Mistério do Fogo"
+      "description": "Com os olhos vendo apenas o vermelho das chamas, você segue querendo o calor cada vez mais próximo e sentir o cheiro de carne carbonizada. Você ganha os seguintes benefícios:\n\nQuando causar dano ígneo por qualquer fonte que seja originada de você, você pode rolar novamente qualquer 1 natural na jogada de dano ígneo, você deve utilizar a nova rolagem.\nVocê recebe acesso ao Mistério do Fogo",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "value": "fogo"
+        }
+      ]
     },
     {
       "id": "prestidigitador",
@@ -875,7 +887,13 @@
       "uses": {
         "usesFormula": "PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "SLEIGHT_OF_HAND"
+        }
+      ]
     },
     {
       "id": "principio-elemental",
@@ -1161,7 +1179,25 @@
         "DEMACIA"
       ],
       "prerequisite": "Demaciano",
-      "description": "O treinamento rígido do exército lhe trouxe uma adaptabilidade incomum para todo e qualquer combate. Você ganha os seguintes benefícios:\n\nVocê possui proficiência com armas marciais corpo a corpo, com escudos e armaduras leves e médias."
+      "description": "O treinamento rígido do exército lhe trouxe uma adaptabilidade incomum para todo e qualquer combate. Você ganha os seguintes benefícios:\n\nVocê possui proficiência com armas marciais corpo a corpo, com escudos e armaduras leves e médias.",
+      "grants": [
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Armas marciais corpo a corpo"
+        },
+        {
+          "type": "ARMOR_PROFICIENCY",
+          "value": "SHIELD"
+        },
+        {
+          "type": "ARMOR_PROFICIENCY",
+          "value": "LIGHT"
+        },
+        {
+          "type": "ARMOR_PROFICIENCY",
+          "value": "MEDIUM"
+        }
+      ]
     },
     {
       "id": "valor-da-justiceira",
@@ -1587,6 +1623,11 @@
           "type": "SITUATIONAL",
           "value": "SKILL:TECHNOLOGY",
           "description": "Você recebe seu bônus de proficiência em qualquer rolagem que utilize Tecnologia"
+        },
+        {
+          "type": "SKILL",
+          "skill": "TECHNOLOGY",
+          "expertise": true
         }
       ]
     },
@@ -3135,14 +3176,7 @@
         "construto"
       ],
       "prerequisite": "Construto",
-      "description": "Seu corpo possui engrenagens reforçadas que podem ser alavancadas para movimentos mais poderosos. Você recebe os seguintes benefícios:\n\nUsando sua ação de movimento, você abdica de se mover durante seu turno para amplificar seu primeiro ataque corpo a corpo. O dano de seu primeiro ataque nesse turno tem seu modificador de Força dobrado (mínimo de 0). Você pode utilizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por Descanso Pleno. Ao alcançar o 7º nível, ao invés de abdicar de seu movimento, ele é apenas reduzido pela metade e, ao alcançar o 10º nível, o modificador de Força é dobrado para todos ataques corpo a corpo feitos nesse turno.\nSeu modificador de Força adicionado ao dano de seus ataques corpo a corpo é afetado pelo multiplicador de seu ataques críticos.\nForça Predatória\nPré-requisito: Troll\n\nA capacidade de adaptação do seu organismo ao meio ambiente concede a você os seguintes benefícios:\n\nVocê recebe proficiência em Sobrevivência, caso já tenha, recebe especialidade. Você pode encontrar comida em lugares quase impossíveis (embora essa comida possa não servir para não Trolls).\nSeus olhos se adaptaram de forma surpreendente ao escuro. Você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza.",
-      "grants": [
-        {
-          "type": "SKILL",
-          "skill": "SURVIVAL",
-          "expertise": true
-        }
-      ],
+      "description": "Seu corpo possui engrenagens reforçadas que podem ser alavancadas para movimentos mais poderosos. Você recebe os seguintes benefícios:\n\nUsando sua ação de movimento, você abdica de se mover durante seu turno para amplificar seu primeiro ataque corpo a corpo. O dano de seu primeiro ataque nesse turno tem seu modificador de Força dobrado (mínimo de 0). Você pode utilizar essa habilidade um número de vezes igual ao seu bônus de Proficiência por Descanso Pleno. Ao alcançar o 7º nível, ao invés de abdicar de seu movimento, ele é apenas reduzido pela metade e, ao alcançar o 10º nível, o modificador de Força é dobrado para todos ataques corpo a corpo feitos nesse turno.\nSeu modificador de Força adicionado ao dano de seus ataques corpo a corpo é afetado pelo multiplicador de seu ataques críticos.",
       "execution": "Movimento",
       "uses": {
         "usesFormula": "PROFICIENCY",

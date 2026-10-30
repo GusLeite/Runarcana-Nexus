@@ -204,9 +204,12 @@ class CreationControllerTests {
         preview(token, damage)
                 .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-pericia:12')].options[0]").value("gélido"));
         String done = body.replace("\"class:ARCANIST:1\"", "\"heritage:teste-pericia:1\":[\"STEALTH\"],"
-                + "\"heritage:teste-pericia:11\":[\"ácido\"],\"heritage:teste-pericia:12\":[\"gélido\"],\"class:ARCANIST:1\"");
+                + "\"heritage:teste-pericia:11\":[\"ácido\"],\"heritage:teste-pericia:12\":[\"gélido\"],"
+                + "\"heritage:teste-pericia:13\":[\"agua\"],\"class:ARCANIST:1\"");
         preview(token, done)
                 .andExpect(jsonPath("$.complete").value(true))
+                // Mistério à escolha (sem virar habilidade), com o nome de cada opção.
+                .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-pericia:13')].optionNames.agua").value("Água"))
                 .andExpect(jsonPath("$.skills[?(@.skill == 'STEALTH')].source").value("Herança: Perícia Teste"));
         // Na ficha: nota situacional, resistências e +2 na Percepção passiva (Nyx: SAB 10, sem Percepção → 10 + 2).
         mvc.perform(post("/creation").header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON).content(done))
@@ -216,7 +219,7 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.character.situational[0].source").value("Herança: Perícia Teste"))
                 // "Caso já tenha, imunidade": venenoso já era resistência → imunidade; ígneo não era → resistência.
                 .andExpect(jsonPath("$.character.resistances").value(org.hamcrest.Matchers.contains("ígneo")))
-                .andExpect(jsonPath("$.character.immunities").value(org.hamcrest.Matchers.contains("venenoso")))
+                .andExpect(jsonPath("$.character.immunities").value(org.hamcrest.Matchers.containsInAnyOrder("venenoso", "radiante")))
                 .andExpect(jsonPath("$.character.absorptions").value(org.hamcrest.Matchers.contains("ácido")))
                 // Vulnerável a radiante e ao tipo escolhido; a necrótica foi tirada por outra concessão (amount -1).
                 .andExpect(jsonPath("$.character.vulnerabilities").value(org.hamcrest.Matchers.containsInAnyOrder("radiante", "gélido")))

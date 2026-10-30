@@ -9799,6 +9799,12 @@
                   "abilityType": "PASSIVE",
                   "name": "Lendário Guardião",
                   "description": "Constituição +2 (máximo 22); imune a calor, altura e frio extremos, a doenças e a envelhecimento mágico; reação extra no Surto de Ação para Técnicas; vantagem em salvaguardas contra a morte; +1 uso de Retomar o Fôlego; todo dano recebido −20 (críticos −10)."
+                },
+                {
+                  "type": "ATTRIBUTE",
+                  "attribute": "CONSTITUTION",
+                  "amount": 2,
+                  "value": "22"
                 }
               ]
             }

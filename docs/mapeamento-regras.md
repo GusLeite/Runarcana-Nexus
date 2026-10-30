@@ -14,7 +14,7 @@ Legenda dos blocos:
 
 ## A. Só dados (o sistema já sabe fazer)
 
-### A1. Erros nos dados (corrigir primeiro)
+### A1. Erros nos dados (corrigir primeiro) ✅
 - **Força Pneumática**: a descrição traz junto o texto da Herança **Força Predatória**, e a concessão dela (Sobrevivência) foi aplicada na Força Pneumática.
 - **Inventor Renomado**: tem a nota situacional, mas falta a proficiência em Tecnologia ("caso já tenha, especialidade").
 - **Acólito Arcanista**: falta a proficiência em Arcanismo.
