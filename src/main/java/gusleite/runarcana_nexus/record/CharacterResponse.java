@@ -96,7 +96,7 @@ public record CharacterResponse(
     public record Situational(String target, String note, String source) {}
 
     public record Form(String name, String description, String attributes, String speeds, String size, String kind, Double speedBonus,
-                       Integer ac, String resistances, String immunities, String damage) {}
+                       Integer ac, String resistances, String immunities, String damage, Integer reduction, Integer initiative) {}
 
     public record ClassLevelResponse(String classId, String name, int level, String subclass) {}
 
@@ -158,7 +158,7 @@ public record CharacterResponse(
                 character.getConditions().stream().sorted().toList(),
                 character.getExhaustion() == null ? 0 : character.getExhaustion(),
                 character.getMaxHpBonus() == null ? 0 : character.getMaxHpBonus(),
-                character.getModifier(Attribute.DEXTERITY) + (character.getInitiativeBonus() == null ? 0 : character.getInitiativeBonus()),
+                character.getModifier(Attribute.DEXTERITY) + (character.getInitiativeBonus() == null ? 0 : character.getInitiativeBonus()) + character.getEffectInitiative(),
                 character.getFormulas().stream().sorted().toList(),
                 character.getSituational().stream().map(n -> new Situational(n.getTarget(), n.getNote(), n.getSource())).toList(),
                 character.getEffectiveResistances(),
@@ -170,7 +170,7 @@ public record CharacterResponse(
                 new java.util.TreeMap<>(character.getTypedReductions()),
                 new java.util.TreeMap<>(character.getSenses()),
                 character.getForms().stream().map(fm -> new Form(fm.getName(), fm.getDescription(), fm.getAttributes(), fm.getSpeeds(), fm.getSize(),
-                        fm.isEffect() ? "EFFECT" : "FORM", fm.getSpeedBonus(), fm.getAc(), fm.getResistances(), fm.getImmunities(), fm.getDamage())).toList(),
+                        fm.isEffect() ? "EFFECT" : "FORM", fm.getSpeedBonus(), fm.getAc(), fm.getResistances(), fm.getImmunities(), fm.getDamage(), fm.getReduction(), fm.getInitiative())).toList(),
                 character.getActiveForm(),
                 List.copyOf(character.getActiveEffects())
         );

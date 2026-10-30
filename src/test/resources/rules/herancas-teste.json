@@ -259,7 +259,9 @@
             "resistances": [
               "cortante"
             ],
-            "speedBonus": 10
+            "speedBonus": 10,
+            "reductionFormula": "PROFICIENCY",
+            "initiative": 3
           },
           "value": "UNARMED",
           "damage": "1d6"

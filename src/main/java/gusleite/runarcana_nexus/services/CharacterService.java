@@ -342,12 +342,14 @@ public class CharacterService {
     // Regras de CA com o bônus dos efeitos ativos (Coragem, Defesa Espiritual...), como um bônus somado à defesa.
     private static List<gusleite.runarcana_nexus.model.player.ArmorRule> withEffectAc(Character character) {
         int ac = character.getEffectAc();
-        if (ac == 0) return character.getArmorRules();
+        int reduction = character.getEffectReduction();
+        if (ac == 0 && reduction == 0) return character.getArmorRules();
         List<gusleite.runarcana_nexus.model.player.ArmorRule> rules = new ArrayList<>(character.getArmorRules());
         gusleite.runarcana_nexus.model.player.ArmorRule bonus = new gusleite.runarcana_nexus.model.player.ArmorRule();
         bonus.setName("Efeitos ativos");
         bonus.setBonus(true);
         bonus.setAmount(ac);
+        bonus.setReduction(reduction == 0 ? null : reduction);
         rules.add(bonus);
         return rules;
     }

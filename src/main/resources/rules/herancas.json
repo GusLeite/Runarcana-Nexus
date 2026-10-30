@@ -5627,6 +5627,16 @@
         {
           "type": "SPEED",
           "feet": 10
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "PERFORMANCE",
+            "SLEIGHT_OF_HAND"
+          ],
+          "expertise": true,
+          "label": "Dançarino: Atuação ou Prestidigitação"
         }
       ]
     },

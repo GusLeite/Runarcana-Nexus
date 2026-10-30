@@ -11,7 +11,8 @@ import java.util.Map;
 // - attributes: soma em cada atributo (Íbex: FOR +2, DES +4); halfProficiency: +metade da proficiência (Forma Dracônica).
 // - speeds: deslocamento em pés (vale o maior entre ele e o normal); speedBonus: soma na caminhada (Movimento Relampejante).
 // - size: tamanho fixo ou "UP" (uma categoria acima).
-// - ac / acFormula (PROFICIENCY, HALF_PROFICIENCY): bônus de CA; resistances / immunities: tipos de dano.
+// - ac / acFormula (PROFICIENCY, HALF_PROFICIENCY): bônus de CA; reduction / reductionFormula: RD; initiative /
+//   initiativeFormula: bônus na iniciativa (Totem do Basilisco); resistances / immunities: tipos de dano.
 public record FormRule(
         Map<Attribute, Integer> attributes,
         List<Attribute> halfProficiency,
@@ -21,5 +22,9 @@ public record FormRule(
         Integer ac,
         UsesFormula acFormula,
         List<String> resistances,
-        List<String> immunities
+        List<String> immunities,
+        Integer reduction,
+        UsesFormula reductionFormula,
+        Integer initiative,
+        UsesFormula initiativeFormula
 ) {}

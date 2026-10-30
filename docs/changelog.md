@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento: Sinergia das Runas, Bônus de Totem e Dançarino (`feature/character-sheet`)
+- Sinergia só com o Pulso da Runa (Elegia, Bênção do Vigia, Fôlego de Guerra); Bônus de Totem dos 15 Grandes Espíritos como efeito ativo; Dançarino com proficiência na perícia escolhida.
+- Efeitos ativos ganham RD e iniciativa (`reduction`/`initiative`). Teste: o efeito de teste soma RD e iniciativa.
+
 ## 2026-10-29 — Mapeamento M: efeitos ativos (`feature/character-sheet`)
 - Concessão `EFFECT`: efeitos temporários com números do nível (CA, resistências, imunidades, deslocamento, dano) que o jogador liga e desliga na ficha (`PATCH /character/me/effect`, `activeEffects`).
 - ~35 efeitos: Fúria do Bruto (Dano de Fúria pelo nível), Iras, Técnicas, Sutras, Vel, Caçador, Combatente, Bodisatva, Acólito das Marés, Heranças, Runinata e runas.

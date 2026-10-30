@@ -5114,7 +5114,15 @@
       "groups": [
         "Xamã"
       ],
-      "description": "Espírito bondoso, empertigado e arrogante, colecionador de conhecimento; nunca dá sem querer mais em troca e exige cortesia e respeito à hierarquia. Região: Piltover. Canalização: Sabedoria, CD 40 − nível de Xamã.\n\nBônus de Totem: 2 Ki valem 1 ponto de Energia e vantagem em Tecnologia.\nFalha: por 7 dias, arrogância extrema; falha automaticamente em interações sociais que fujam dos seus planos.\nSucesso: especialista em todas as perícias (+1 onde já for); usa Ki como Energia nos inventos de Tecmaturgo; seus ataques corpo a corpo, à distância e de arremesso ignoram metade da RD.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "Espírito bondoso, empertigado e arrogante, colecionador de conhecimento; nunca dá sem querer mais em troca e exige cortesia e respeito à hierarquia. Região: Piltover. Canalização: Sabedoria, CD 40 − nível de Xamã.\n\nBônus de Totem: 2 Ki valem 1 ponto de Energia e vantagem em Tecnologia.\nFalha: por 7 dias, arrogância extrema; falha automaticamente em interações sociais que fujam dos seus planos.\nSucesso: especialista em todas as perícias (+1 onde já for); usa Ki como Energia nos inventos de Tecmaturgo; seus ataques corpo a corpo, à distância e de arremesso ignoram metade da RD.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: A Aranha das Engrenagens",
+          "description": "Bônus de Totem: 2 Ki valem 1 ponto de Energia e vantagem em Tecnologia.",
+          "form": {}
+        }
+      ]
     },
     {
       "id": "arvore-dos-sonhos",
@@ -5123,7 +5131,15 @@
       "groups": [
         "Xamã"
       ],
-      "description": "Serenidade e contemplação, a harmonia de tudo que respeita os ciclos; fala por metáforas oníricas, vagas e confusas. Região: Ionia. Canalização: Sabedoria, CD 40 − nível de Xamã.\n\nBônus de Totem: imune a sono mágico e vantagem em salvaguardas contra controle e manipulação mental.\nFalha: Atordoado até o seu próximo turno; por 7 dias, estado contemplativo e distante, sem foco em nada que não seja espiritual.\nSucesso: magias custam 1 Ki a menos (mínimo 1); ataques e magias causam +metade da proficiência em dano rúnico (em cada jogada de dano); CD das magias +metade da proficiência.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "Serenidade e contemplação, a harmonia de tudo que respeita os ciclos; fala por metáforas oníricas, vagas e confusas. Região: Ionia. Canalização: Sabedoria, CD 40 − nível de Xamã.\n\nBônus de Totem: imune a sono mágico e vantagem em salvaguardas contra controle e manipulação mental.\nFalha: Atordoado até o seu próximo turno; por 7 dias, estado contemplativo e distante, sem foco em nada que não seja espiritual.\nSucesso: magias custam 1 Ki a menos (mínimo 1); ataques e magias causam +metade da proficiência em dano rúnico (em cada jogada de dano); CD das magias +metade da proficiência.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: A Árvore dos Sonhos",
+          "description": "Bônus de Totem: imune a sono mágico e vantagem em salvaguardas contra controle e manipulação mental.",
+          "form": {}
+        }
+      ]
     },
     {
       "id": "avatar-das-mares",
@@ -5132,7 +5148,19 @@
       "groups": [
         "Xamã"
       ],
-      "description": "Lao’Lei para os Marai, o Grande Espírito da mudança, cujas asas movem as marés da vida. Região: Targon/Marai. Canalização: Sabedoria, CD 40 − nível de Xamã.\n\nBônus de Totem: prende a respiração pelo dobro do tempo e resistência a dano contundente.\nFalha: por 7 dias, metade do deslocamento, corpo dolorido, e todo dano seu é reduzido em 7 no 1º dia, 6 no 2º, e assim por diante.\nSucesso: respira debaixo d’água, natação e voo iguais ao deslocamento, RD igual ao mod. de Sabedoria (dobro na água), imune a ataques de oportunidade e +metade da proficiência na CA.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "Lao’Lei para os Marai, o Grande Espírito da mudança, cujas asas movem as marés da vida. Região: Targon/Marai. Canalização: Sabedoria, CD 40 − nível de Xamã.\n\nBônus de Totem: prende a respiração pelo dobro do tempo e resistência a dano contundente.\nFalha: por 7 dias, metade do deslocamento, corpo dolorido, e todo dano seu é reduzido em 7 no 1º dia, 6 no 2º, e assim por diante.\nSucesso: respira debaixo d’água, natação e voo iguais ao deslocamento, RD igual ao mod. de Sabedoria (dobro na água), imune a ataques de oportunidade e +metade da proficiência na CA.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: A Avatar das Marés",
+          "description": "Bônus de Totem: prende a respiração pelo dobro do tempo e resistência a dano contundente.",
+          "form": {
+            "resistances": [
+              "contundente"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "coelha-ametista",
@@ -5141,7 +5169,15 @@
       "groups": [
         "Xamã"
       ],
-      "description": "Entidade alegre e curiosa, atraída por grandes populações; seus filhotes habitam os reflexos espirituais das cidades. Um dos espíritos mais fáceis e amigáveis de canalizar. Região: qualquer. Canalização: Sabedoria, CD 30 − nível de Xamã.\n\nBônus de Totem: soma o bônus de proficiência em testes amistosos de Carisma.\nFalha: por 7 dias, enorme dificuldade em tarefas que não sejam necessárias; dorme sempre que pode.\nSucesso: Regeneração (bônus de proficiência em d4 + metade da proficiência em PV no início de cada turno); a distância do salto é multiplicada por metade da proficiência, sem corrida e sem dano de queda até a altura do salto.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "Entidade alegre e curiosa, atraída por grandes populações; seus filhotes habitam os reflexos espirituais das cidades. Um dos espíritos mais fáceis e amigáveis de canalizar. Região: qualquer. Canalização: Sabedoria, CD 30 − nível de Xamã.\n\nBônus de Totem: soma o bônus de proficiência em testes amistosos de Carisma.\nFalha: por 7 dias, enorme dificuldade em tarefas que não sejam necessárias; dorme sempre que pode.\nSucesso: Regeneração (bônus de proficiência em d4 + metade da proficiência em PV no início de cada turno); a distância do salto é multiplicada por metade da proficiência, sem corrida e sem dano de queda até a altura do salto.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: A Coelha Ametista",
+          "description": "Bônus de Totem: soma o bônus de proficiência em testes amistosos de Carisma.",
+          "form": {}
+        }
+      ]
     },
     {
       "id": "criofenix",
@@ -5150,7 +5186,15 @@
       "groups": [
         "Xamã"
       ],
-      "description": "Semideusa alada e benevolente que renasce em ciclos para proteger Freljord, símbolo de esperança e de grandes mudanças. Região: Freljord. Canalização: Sabedoria, CD 35 − nível de Xamã.\n\nBônus de Totem: uma vez por descanso pleno, reduzido a 0 PV ou morto, após 3 rodadas você volta com 5 × bônus de proficiência PV (não é cura).\nFalha: por 7 dias, dano gélido te dá desvantagem nos ataques por 10 − bônus de proficiência rodadas, e desvantagem contra Frio Extremo.\nSucesso: aura gélida (quem começa a 5 pés faz salvaguarda contra Frio Extremo); ataques e magias causam +dado de Pulso glacial; raio elemental (gelo) como ação bônus; no 11º nível, esfera congelante como 6º nível por 4 Ki.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "Semideusa alada e benevolente que renasce em ciclos para proteger Freljord, símbolo de esperança e de grandes mudanças. Região: Freljord. Canalização: Sabedoria, CD 35 − nível de Xamã.\n\nBônus de Totem: uma vez por descanso pleno, reduzido a 0 PV ou morto, após 3 rodadas você volta com 5 × bônus de proficiência PV (não é cura).\nFalha: por 7 dias, dano gélido te dá desvantagem nos ataques por 10 − bônus de proficiência rodadas, e desvantagem contra Frio Extremo.\nSucesso: aura gélida (quem começa a 5 pés faz salvaguarda contra Frio Extremo); ataques e magias causam +dado de Pulso glacial; raio elemental (gelo) como ação bônus; no 11º nível, esfera congelante como 6º nível por 4 Ki.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: A Criofênix",
+          "description": "Bônus de Totem: uma vez por descanso pleno, reduzido a 0 PV ou morto, após 3 rodadas você volta com 5 × bônus de proficiência PV (não é cura).",
+          "form": {}
+        }
+      ]
     },
     {
       "id": "fenix",
@@ -5159,7 +5203,15 @@
       "groups": [
         "Xamã"
       ],
-      "description": "O espírito ígneo do renascimento: tudo um dia queima para renascer melhor. Talvez ligue o mundo espiritual ao celestial. Região: qualquer. Canalização: Constituição, CD 45 − nível de Xamã.\n\nBônus de Totem: cada ataque que acerta cura um terço do bônus de proficiência.\nFalha: por 7 dias, vulnerável a dano ígneo, desvantagem contra Calor Extremo e sob 3 níveis de Exaustão.\nSucesso: quem começa o turno a 5 pés faz salvaguarda contra Calor Extremo e, falhando, sofre seu dado de Pulso ígneo; imune a incinerante; ação bônus e 1 Ki para um cone de 15 pés (Destreza, bônus de proficiência em d8 incinerante); uma vez por canalização, ao cair a 0 PV volta com metade dos PV máximos.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "O espírito ígneo do renascimento: tudo um dia queima para renascer melhor. Talvez ligue o mundo espiritual ao celestial. Região: qualquer. Canalização: Constituição, CD 45 − nível de Xamã.\n\nBônus de Totem: cada ataque que acerta cura um terço do bônus de proficiência.\nFalha: por 7 dias, vulnerável a dano ígneo, desvantagem contra Calor Extremo e sob 3 níveis de Exaustão.\nSucesso: quem começa o turno a 5 pés faz salvaguarda contra Calor Extremo e, falhando, sofre seu dado de Pulso ígneo; imune a incinerante; ação bônus e 1 Ki para um cone de 15 pés (Destreza, bônus de proficiência em d8 incinerante); uma vez por canalização, ao cair a 0 PV volta com metade dos PV máximos.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: A Fênix",
+          "description": "Bônus de Totem: cada ataque que acerta cura um terço do bônus de proficiência.",
+          "form": {}
+        }
+      ]
     },
     {
       "id": "basilisco-de-obsidiana",
@@ -5168,7 +5220,20 @@
       "groups": [
         "Xamã"
       ],
-      "description": "Espírito de força do passado tribal de Noxus, intimidador e arrogante, que testa o valor de quem o procura. Região: Noxus. Canalização: Constituição, CD 40 − nível de Xamã.\n\nBônus de Totem: soma o bônus de proficiência à iniciativa e resistência a venenos.\nFalha: por 7 dias, ataques com desvantagem e dano reduzido em 7 no 1º dia, 6 no 2º...; você questiona seus valores e conquistas.\nSucesso: dano causado soma o mod. de Sabedoria em disruptivo; um ataque extra; uma vez por rodada, troque um ataque por uma investida de 10 pés com bônus de proficiência em d8 esmagador (Força CD 18 ou empurrado 20 pés e derrubado).\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "Espírito de força do passado tribal de Noxus, intimidador e arrogante, que testa o valor de quem o procura. Região: Noxus. Canalização: Constituição, CD 40 − nível de Xamã.\n\nBônus de Totem: soma o bônus de proficiência à iniciativa e resistência a venenos.\nFalha: por 7 dias, ataques com desvantagem e dano reduzido em 7 no 1º dia, 6 no 2º...; você questiona seus valores e conquistas.\nSucesso: dano causado soma o mod. de Sabedoria em disruptivo; um ataque extra; uma vez por rodada, troque um ataque por uma investida de 10 pés com bônus de proficiência em d8 esmagador (Força CD 18 ou empurrado 20 pés e derrubado).\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: O Basilisco de Obsidiana",
+          "description": "Bônus de Totem: soma o bônus de proficiência à iniciativa e resistência a venenos.",
+          "form": {
+            "resistances": [
+              "venenoso"
+            ],
+            "initiativeFormula": "PROFICIENCY"
+          }
+        }
+      ]
     },
     {
       "id": "cavalo-relampejante",
@@ -5177,7 +5242,15 @@
       "groups": [
         "Xamã"
       ],
-      "description": "Nobreza e cordialidade, atento aos protocolos, ideal demaciano tomado de angústia: cada mago morto em perseguição lhe tira um pouco da sanidade. Região: Demacia. Canalização: Sabedoria, CD 40 − nível de Xamã.\n\nBônus de Totem: vantagem em salvaguardas contra Agarrado, Amedrontado, Atordoado, Caído, Contido, Enfraquecido, Incapacitado, Paralisado e Petrificado.\nFalha: por 7 dias, depressão profunda: desvantagem em tudo que não seja defesa e nenhuma iniciativa própria.\nSucesso: um avanço na resistência a danos físicos e elementais; imune a essas condições; +30 pés; sem ataques de oportunidade contra você; corpo a corpo com +metade da proficiência em d6 vibracional.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "Nobreza e cordialidade, atento aos protocolos, ideal demaciano tomado de angústia: cada mago morto em perseguição lhe tira um pouco da sanidade. Região: Demacia. Canalização: Sabedoria, CD 40 − nível de Xamã.\n\nBônus de Totem: vantagem em salvaguardas contra Agarrado, Amedrontado, Atordoado, Caído, Contido, Enfraquecido, Incapacitado, Paralisado e Petrificado.\nFalha: por 7 dias, depressão profunda: desvantagem em tudo que não seja defesa e nenhuma iniciativa própria.\nSucesso: um avanço na resistência a danos físicos e elementais; imune a essas condições; +30 pés; sem ataques de oportunidade contra você; corpo a corpo com +metade da proficiência em d6 vibracional.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: O Cavalo Relampejante",
+          "description": "Bônus de Totem: vantagem em salvaguardas contra Agarrado, Amedrontado, Atordoado, Caído, Contido, Enfraquecido, Incapacitado, Paralisado e Petrificado.",
+          "form": {}
+        }
+      ]
     },
     {
       "id": "carneiro-vulcanico",
@@ -5186,7 +5259,17 @@
       "groups": [
         "Xamã"
       ],
-      "description": "Semideus freljordano da forja, isolado na caverna de lava sob o vulcão Pedra-Lar, que põe em seu lugar os deuses que se metem com os mortais. Região: Noxus e Freljord. Canalização: Constituição, CD 40 − nível de Xamã.\n\nBônus de Totem: RD igual ao bônus de proficiência.\nFalha: Atordoado até o fim do próximo turno; por 7 dias, extremamente irritado e irritante.\nSucesso: vantagem contra controle mental, ataques com +dado de Pulso incinerante e CA 25 (ou a sua, se for maior).\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "Semideus freljordano da forja, isolado na caverna de lava sob o vulcão Pedra-Lar, que põe em seu lugar os deuses que se metem com os mortais. Região: Noxus e Freljord. Canalização: Constituição, CD 40 − nível de Xamã.\n\nBônus de Totem: RD igual ao bônus de proficiência.\nFalha: Atordoado até o fim do próximo turno; por 7 dias, extremamente irritado e irritante.\nSucesso: vantagem contra controle mental, ataques com +dado de Pulso incinerante e CA 25 (ou a sua, se for maior).\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: O Carneiro Vulcânico",
+          "description": "Bônus de Totem: RD igual ao bônus de proficiência.",
+          "form": {
+            "reductionFormula": "PROFICIENCY"
+          }
+        }
+      ]
     },
     {
       "id": "cervo-prateado",
@@ -5195,7 +5278,15 @@
       "groups": [
         "Xamã"
       ],
-      "description": "Grande Espírito de Targon e da lua, conhecido entre os lunari; protege os caçados e perseguidos e não perdoa traição. Região: Targon. Canalização: Constituição, CD 40 − nível de Xamã.\n\nBônus de Totem: o primeiro ataque de cada turno, se acertar, causa +dado base de Pulso radiante.\nFalha: por 7 dias, paranoico e recluso, com desvantagem em interações sociais.\nSucesso: imune a danos espirituais, resistente a elementais mágicos, vantagem ao lidar com espíritos (exceto Grandes), magias com +mod. de Sabedoria em dano Lunar e corpo a corpo pode causar dano Lunar.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "Grande Espírito de Targon e da lua, conhecido entre os lunari; protege os caçados e perseguidos e não perdoa traição. Região: Targon. Canalização: Constituição, CD 40 − nível de Xamã.\n\nBônus de Totem: o primeiro ataque de cada turno, se acertar, causa +dado base de Pulso radiante.\nFalha: por 7 dias, paranoico e recluso, com desvantagem em interações sociais.\nSucesso: imune a danos espirituais, resistente a elementais mágicos, vantagem ao lidar com espíritos (exceto Grandes), magias com +mod. de Sabedoria em dano Lunar e corpo a corpo pode causar dano Lunar.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: O Cervo Prateado",
+          "description": "Bônus de Totem: o primeiro ataque de cada turno, se acertar, causa +dado base de Pulso radiante.",
+          "form": {}
+        }
+      ]
     },
     {
       "id": "dragao-de-jade",
@@ -5204,7 +5295,17 @@
       "groups": [
         "Xamã"
       ],
-      "description": "A alma dos dragões perseguidos até a extinção; detesta humanos e se deleita em dissolvê-los em sua massa espiritual. Extremamente agressivo. Região: Demacia e Ionia. Canalização: Sabedoria, CD 40 − nível de Xamã.\n\nBônus de Totem: desarmados com +metade da proficiência em energético (dobro contra humanos).\nFalha: se você for humano, ele toma seu corpo (asas, voo 30 pés) e ataca todos os vivos por 1 hora; senão, cai Inconsciente e vulnerável a elementais por 1 hora. Por 7 dias, ódio profundo a humanos. Duas falhas no ano dão desvantagem; a terceira entrega o personagem ao dragão.\nSucesso: pele de joia esverdeada, asas com voo igual à caminhada e, com uma ação de Ataque, Sopro Ácido (1 Ki, cone de 30 pés, Constituição CD 22, proficiência em d10 antimônico) ou Sopro Sonífero (3 Ki, cone de 90 pés, Constituição CD 22 ou Inconsciente por 10 minutos).\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "A alma dos dragões perseguidos até a extinção; detesta humanos e se deleita em dissolvê-los em sua massa espiritual. Extremamente agressivo. Região: Demacia e Ionia. Canalização: Sabedoria, CD 40 − nível de Xamã.\n\nBônus de Totem: desarmados com +metade da proficiência em energético (dobro contra humanos).\nFalha: se você for humano, ele toma seu corpo (asas, voo 30 pés) e ataca todos os vivos por 1 hora; senão, cai Inconsciente e vulnerável a elementais por 1 hora. Por 7 dias, ódio profundo a humanos. Duas falhas no ano dão desvantagem; a terceira entrega o personagem ao dragão.\nSucesso: pele de joia esverdeada, asas com voo igual à caminhada e, com uma ação de Ataque, Sopro Ácido (1 Ki, cone de 30 pés, Constituição CD 22, proficiência em d10 antimônico) ou Sopro Sonífero (3 Ki, cone de 90 pés, Constituição CD 22 ou Inconsciente por 10 minutos).\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: O Dragão de Jade",
+          "description": "Bônus de Totem: desarmados com +metade da proficiência em energético (dobro contra humanos).",
+          "form": {},
+          "value": "UNARMED",
+          "usesFormula": "HALF_PROFICIENCY"
+        }
+      ]
     },
     {
       "id": "polvo-estelar",
@@ -5213,7 +5314,15 @@
       "groups": [
         "Xamã"
       ],
-      "description": "Mente estranha, quase alienígena, de personalidade e objetivos instáveis; procurado só como último recurso. Região: Águas de Sentina. Canalização: Sabedoria, CD 40 − nível de Xamã.\n\nBônus de Totem: um benefício aleatório (do Mestre) a cada descanso longo.\nFalha: Desgaste Mental Médio por 7 dias, rolando uma nova Loucura Longa a cada dia.\nSucesso: piscar do vazio sem Ki com ação bônus ou um ataque (+1 Ki por nível acima), podendo repetir uma vez com ação bônus na mesma rodada; ação e 1 Ki para invisibilidade maior em si.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "Mente estranha, quase alienígena, de personalidade e objetivos instáveis; procurado só como último recurso. Região: Águas de Sentina. Canalização: Sabedoria, CD 40 − nível de Xamã.\n\nBônus de Totem: um benefício aleatório (do Mestre) a cada descanso longo.\nFalha: Desgaste Mental Médio por 7 dias, rolando uma nova Loucura Longa a cada dia.\nSucesso: piscar do vazio sem Ki com ação bônus ou um ataque (+1 Ki por nível acima), podendo repetir uma vez com ação bônus na mesma rodada; ação e 1 Ki para invisibilidade maior em si.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: O Polvo Estelar",
+          "description": "Bônus de Totem: um benefício aleatório (do Mestre) a cada descanso longo.",
+          "form": {}
+        }
+      ]
     },
     {
       "id": "rato-cintilante",
@@ -5222,7 +5331,19 @@
       "groups": [
         "Xamã"
       ],
-      "description": "Um dos espíritos mais bondosos, que acolhe Zaun e partilha o saber do quimtec em troca de bons atos; preza comunidade, família e amigos, e não tolera traição. Região: Zaun. Canalização: Constituição, CD 40 − nível de Xamã.\n\nBônus de Totem: vantagem em Tecnologia e resistência a dano venenoso e Envenenamento.\nFalha: por 7 dias, toda cura em você cai pela metade.\nSucesso: vantagem em rolagens sociais de Carisma; substâncias que você usa ficam melhores (curas +50%, durações maximizadas ou +50%); vantagem contra venenos, toxinas e efeitos colaterais; RD a venenoso igual ao nível de Xamã.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "Um dos espíritos mais bondosos, que acolhe Zaun e partilha o saber do quimtec em troca de bons atos; preza comunidade, família e amigos, e não tolera traição. Região: Zaun. Canalização: Constituição, CD 40 − nível de Xamã.\n\nBônus de Totem: vantagem em Tecnologia e resistência a dano venenoso e Envenenamento.\nFalha: por 7 dias, toda cura em você cai pela metade.\nSucesso: vantagem em rolagens sociais de Carisma; substâncias que você usa ficam melhores (curas +50%, durações maximizadas ou +50%); vantagem contra venenos, toxinas e efeitos colaterais; RD a venenoso igual ao nível de Xamã.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: O Rato Cintilante",
+          "description": "Bônus de Totem: vantagem em Tecnologia e resistência a dano venenoso e Envenenamento.",
+          "form": {
+            "resistances": [
+              "venenoso"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "urso-da-tempestade",
@@ -5231,7 +5352,17 @@
       "groups": [
         "Xamã"
       ],
-      "description": "A tempestade manifesta, destrutiva e selvagem, anterior aos mortais de Freljord, que odeia a civilização e luta pelos velhos costumes. Região: Freljord. Canalização: Sabedoria, CD 45 − nível de Xamã.\n\nBônus de Totem: desarmados com +metade da proficiência em elétrico.\nFalha: por 1 hora, o Urso domina seu corpo, atacando quem incomodar e destruindo construções. Duas falhas no ano dão desvantagem; a terceira te transforma num Ursine, fora do seu controle.\nSucesso: forma de grande urso branco: +1 categoria de tamanho, vantagem em testes e salvaguardas de Força e Constituição, corpo a corpo com +proficiência em d10, Força e Constituição + bônus de proficiência, +5 × proficiência pés. Após 1 hora, repita a canalização com vantagem (falhando, sofre a Falha).\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "A tempestade manifesta, destrutiva e selvagem, anterior aos mortais de Freljord, que odeia a civilização e luta pelos velhos costumes. Região: Freljord. Canalização: Sabedoria, CD 45 − nível de Xamã.\n\nBônus de Totem: desarmados com +metade da proficiência em elétrico.\nFalha: por 1 hora, o Urso domina seu corpo, atacando quem incomodar e destruindo construções. Duas falhas no ano dão desvantagem; a terceira te transforma num Ursine, fora do seu controle.\nSucesso: forma de grande urso branco: +1 categoria de tamanho, vantagem em testes e salvaguardas de Força e Constituição, corpo a corpo com +proficiência em d10, Força e Constituição + bônus de proficiência, +5 × proficiência pés. Após 1 hora, repita a canalização com vantagem (falhando, sofre a Falha).\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: O Urso da Tempestade",
+          "description": "Bônus de Totem: desarmados com +metade da proficiência em elétrico.",
+          "form": {},
+          "value": "UNARMED",
+          "usesFormula": "HALF_PROFICIENCY"
+        }
+      ]
     },
     {
       "id": "vorme-espectral",
@@ -5240,7 +5371,15 @@
       "groups": [
         "Xamã"
       ],
-      "description": "Aprecia a vida nômade e sem amarras; inimigo jurado dos Xer’Sai, ajuda quem os combate. Região: Shurima. Canalização: Constituição, CD 40 − nível de Xamã.\n\nBônus de Totem: +metade da proficiência em salvaguardas contra Agarrado, Caído, Contido, Incapacitado, Inconsciente, Lentidão, Paralisado e Petrificado.\nFalha: por 7 dias, sons mais altos que uma fala exigem Constituição CD 17 ou fica Surdo, Silenciado e Paralisado até o próximo turno (2 minutos fora de combate); falhando por 10 ou mais, Inconsciente.\nSucesso: reação para ficar intangível até o próximo turno (ataques e magias erram); escavação igual ao dobro do deslocamento; ação bônus e 1 Ki para um pulso de 15 pés (Constituição ou proficiência em d8 vibracional), mesmo intangível.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito."
+      "description": "Aprecia a vida nômade e sem amarras; inimigo jurado dos Xer’Sai, ajuda quem os combate. Região: Shurima. Canalização: Constituição, CD 40 − nível de Xamã.\n\nBônus de Totem: +metade da proficiência em salvaguardas contra Agarrado, Caído, Contido, Incapacitado, Inconsciente, Lentidão, Paralisado e Petrificado.\nFalha: por 7 dias, sons mais altos que uma fala exigem Constituição CD 17 ou fica Surdo, Silenciado e Paralisado até o próximo turno (2 minutos fora de combate); falhando por 10 ou mais, Inconsciente.\nSucesso: reação para ficar intangível até o próximo turno (ataques e magias erram); escavação igual ao dobro do deslocamento; ação bônus e 1 Ki para um pulso de 15 pés (Constituição ou proficiência em d8 vibracional), mesmo intangível.\n\nCanalização = bônus de proficiência + mod. do atributo indicado, contra a CD do espírito.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Totem: O Vorme Espectral",
+          "description": "Bônus de Totem: +metade da proficiência em salvaguardas contra Agarrado, Caído, Contido, Incapacitado, Inconsciente, Lentidão, Paralisado e Petrificado.",
+          "form": {}
+        }
+      ]
     },
     {
       "id": "aspecto-aranha",
@@ -5763,7 +5902,16 @@
       },
       "requires": {
         "level": 8
-      }
+      },
+      "grants": [
+        {
+          "type": "HP_BONUS",
+          "amount": 1,
+          "perLevel": true,
+          "label": "Sinergia: +nível de personagem nos PV máximos",
+          "when": "Pulso Rúnico:Esmeralda"
+        }
+      ]
     },
     {
       "id": "runa-bencao-estelar",
@@ -5870,7 +6018,14 @@
       },
       "requires": {
         "level": 15
-      }
+      },
+      "grants": [
+        {
+          "type": "RESISTANCE",
+          "value": "necrótico",
+          "when": "Pulso Rúnico:Ametista"
+        }
+      ]
     },
     {
       "id": "runa-encorajar",
@@ -5980,6 +6135,13 @@
           "form": {
             "ac": 4
           }
+        },
+        {
+          "type": "HP_BONUS",
+          "amount": 1,
+          "perLevel": true,
+          "label": "Sinergia: +nível de personagem nos PV máximos",
+          "when": "Pulso Rúnico:Esmeralda"
         }
       ]
     },

@@ -359,6 +359,14 @@ public class Character {
         return getActiveLines().stream().mapToInt(f -> f.getAc() == null ? 0 : f.getAc()).sum();
     }
 
+    public int getEffectReduction() {
+        return getActiveLines().stream().mapToInt(f -> f.getReduction() == null ? 0 : f.getReduction()).sum();
+    }
+
+    public int getEffectInitiative() {
+        return getActiveLines().stream().mapToInt(f -> f.getInitiative() == null ? 0 : f.getInitiative()).sum();
+    }
+
     // Resistências e imunidades com as dos efeitos ativos.
     public List<String> getEffectiveResistances() {
         return withActive(resistances, CharacterForm::getResistances);

@@ -95,11 +95,11 @@ Protetor (proficiências), Estudioso (duas perícias) e Obreiro (truque espiritu
 - ✅ Terreno, clima, queda, salto e carga viram notas gerais no herói (`SITUATIONAL` com `GENERAL`), e efeitos em magias, notas `SPELL` (Sangue Arcano, Floricorvus, Ferromante, Cura Ottrani, Tocado pela Mana).
 - Idiomas (desligados por decisão sua).
 
-## A conferir antes de implementar
-- **Sinergia das Runas**: quando vale (Elegia: resistência a necrótico; Bênção do Vigia e Fôlego de Guerra: +nível em PV máximos)?
-- **Bônus de Totem dos Grandes Espíritos**: é permanente ou só com o Totem? (resistência a contundente, RD igual à proficiência, iniciativa + proficiência, resistência a venenoso).
-- **Dançarino**: "a perícia escolhida recebe seu bônus de proficiência" (é proficiência ou bônus extra?).
-- **Hakensai 15º**: depende do elemento escolhido; conferir onde fica essa escolha.
+## A conferir antes de implementar ✅ (resolvido)
+- ✅ **Sinergia das Runas**: só com o Pulso da Runa (`when` "Pulso Rúnico:<pulso>"): Elegia (resistência a necrótico, Ametista), Bênção do Vigia e Fôlego de Guerra (+nível nos PV máximos, Esmeralda).
+- ✅ **Bônus de Totem dos Grandes Espíritos**: efeito ativo "Totem: <espírito>" em todos os 15 (resistência do Avatar das Marés e do Rato, iniciativa e resistência do Basilisco, RD do Carneiro, dano desarmado do Dragão de Jade e do Urso; os demais com o texto). Antes: é permanente ou só com o Totem? (resistência a contundente, RD igual à proficiência, iniciativa + proficiência, resistência a venenoso).
+- ✅ **Dançarino**: proficiência na escolhida (Atuação ou Prestidigitação; especialidade se já tiver).
+- ✅ **Hakensai 15º**: pelo Caminho Elemental escolhido (feito no A4).
 
 ## Ordem sugerida
 1. A1 (erros) → 2. A2 + A3 (proficiências, Mistérios, magias) → 3. A4 + B1 (defesas) → 4. A5 + A6 + A7 → 5. B2–B8 → 6. C1 (sentidos, o maior) → 7. C2–C6, conforme você decidir.

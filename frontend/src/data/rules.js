@@ -560,6 +560,8 @@ export function formEffects(form) {
   if (form.size) parts.push(form.size === 'UP' ? 'tamanho +1' : 'tamanho ' + form.size)
   // Efeitos ativos: CA, deslocamento a mais, resistências, imunidades e dano.
   if (form.ac) parts.push('CA +' + form.ac)
+  if (form.reduction) parts.push('RD +' + form.reduction)
+  if (form.initiative) parts.push('iniciativa +' + form.initiative)
   if (form.speedBonus) parts.push('+' + Number(form.speedBonus) + ' pés')
   if (form.resistances) parts.push('resistência: ' + form.resistances.split(',').join(', '))
   if (form.immunities) parts.push('imune: ' + form.immunities.split(',').join(', '))

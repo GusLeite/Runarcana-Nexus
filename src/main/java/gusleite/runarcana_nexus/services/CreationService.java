@@ -2084,6 +2084,12 @@ public class CreationService {
             line.setSpeedBonus(f.speedBonus());
             if (f.resistances() != null) line.setResistances(String.join(",", f.resistances()));
             if (f.immunities() != null) line.setImmunities(String.join(",", f.immunities()));
+            int red = f.reduction() != null ? f.reduction() : f.reductionFormula() == UsesFormula.PROFICIENCY ? b.proficiency()
+                    : f.reductionFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : 0;
+            line.setReduction(red == 0 ? null : red);
+            int init = f.initiative() != null ? f.initiative() : f.initiativeFormula() == UsesFormula.PROFICIENCY ? b.proficiency()
+                    : f.initiativeFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : 0;
+            line.setInitiative(init == 0 ? null : init);
         }
         if (g.value() != null) {
             String dice = g.diceByLevel() != null && !g.diceByLevel().isEmpty() ? byLevel(g.diceByLevel(), level) : g.damage();

@@ -284,11 +284,15 @@ class CreationControllerTests {
         String before = mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
                 .andReturn().getResponse().getContentAsString();
         int ac = com.jayway.jsonpath.JsonPath.read(before, "$.armorClass.value");
+        int rd = com.jayway.jsonpath.JsonPath.read(before, "$.armorClass.reduction");
+        int initiative = com.jayway.jsonpath.JsonPath.read(before, "$.character.initiative");
         mvc.perform(patch("/character/me/effect").header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"key\":\"Efeito Teste\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.character.activeEffects[0]").value("Efeito Teste"))
                 .andExpect(jsonPath("$.armorClass.value").value(ac + 2))
+                .andExpect(jsonPath("$.armorClass.reduction").value(rd + 2))
+                .andExpect(jsonPath("$.character.initiative").value(initiative + 3))
                 .andExpect(jsonPath("$.character.resistances", hasItem("cortante")))
                 .andExpect(jsonPath("$.character.speeds[?(@.type == 'WALK')].feet").value(45.0))
                 .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].damage").value("1+1d4+1d6+2"));

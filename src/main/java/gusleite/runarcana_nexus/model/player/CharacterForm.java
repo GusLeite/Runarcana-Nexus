@@ -33,9 +33,12 @@ public class CharacterForm {
     private String immunities;
     @Column(length = 1000)
     private String damage;
+    // RD e bônus na iniciativa dos efeitos (Totem do Carneiro Vulcânico, do Basilisco).
+    private Integer reduction;
+    private Integer initiative;
 
     public CharacterForm(String name, String description, String attributes, String speeds, String size) {
-        this(name, description, attributes, speeds, size, "FORM", null, null, null, null, null);
+        this(name, description, attributes, speeds, size, "FORM", null, null, null, null, null, null, null);
     }
 
     public boolean isEffect() {
