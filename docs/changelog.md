@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Assombração do Loge mais contida (`feature/character-sheet`)
+- Bebedeira com metade da amplitude ou menos e só ~3 s (antes contínua); os olhos somem junto com o rosto e o escurecimento quase sai no fim.
+
 ## 2026-10-30 — Efeito exclusivo do Loge: assombração (`feature/character-sheet`)
 - `effects/Haunting.jsx` (`fx: 'haunt'`): visão dupla e cambaleio de bêbado, facada que parte a arte, escuridão, rosto da princesa com sussurros e olhos que ficam acesos.
 - Brilho do painel de verde para vermelho (`hue: 348`) e login no mesmo tom (`.login.haunt`). Conferido no preview.
