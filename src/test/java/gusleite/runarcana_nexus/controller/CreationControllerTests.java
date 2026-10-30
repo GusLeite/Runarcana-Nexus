@@ -250,7 +250,24 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].notes[*]", hasItem("Perícia Teste: +1 contra lobos.")))
                 // Bônus de dano: +1d4 desarmado e +2 corpo a corpo (o desarmado conta como corpo a corpo), com a nota.
                 .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].damage").value("1+1d4+2"))
-                .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].notes[*]", hasItem("Perícia Teste: +1d4 no dano")));
+                .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].notes[*]", hasItem("Perícia Teste: +1d4 no dano")))
+                .andExpect(jsonPath("$.character.forms[0].name").value("Forma Teste"))
+                .andExpect(jsonPath("$.character.activeForm").doesNotExist());
+        // Forma ativa: FOR 9 + 4 = 13, uma categoria acima (Pequeno → Médio) e voo 30; desligar volta ao normal.
+        mvc.perform(patch("/character/me/form").header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"key\":\"Forma Teste\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.character.activeForm").value("Forma Teste"))
+                .andExpect(jsonPath("$.character.str").value(13))
+                .andExpect(jsonPath("$.character.size").value("MEDIUM"))
+                .andExpect(jsonPath("$.character.speeds[?(@.type == 'FLY')].feet").value(30.0));
+        mvc.perform(patch("/character/me/form").header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"key\":\"Nada\"}"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(patch("/character/me/form").header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"key\":null}"))
+                .andExpect(jsonPath("$.character.str").value(9))
+                .andExpect(jsonPath("$.character.size").value("SMALL"));
     }
 
     // 2ª escolha de uma Herança sem opção (chave "*"): uma categoria de tamanho acima (Variante Colosso).

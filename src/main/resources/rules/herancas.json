@@ -5497,6 +5497,229 @@
       "uses": {
         "usesFormula": "PROFICIENCY",
         "recharge": "LONG_REST"
+      },
+      "optionGrants": {
+        "Feral Íbex": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Feral Íbex",
+            "description": "Fauhwoon – Feral Íbex: chifres mais curvos, pelo pelo corpo, pernas fortalecidas. Chifres causam 2d8 ao invés de 1d8; deslocamento de caminhada 40 pés; salto em distância com o dobro do alcance.",
+            "form": {
+              "speeds": {
+                "WALK": 40
+              }
+            }
+          }
+        ],
+        "Íbex": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Íbex",
+            "description": "Fauhwoon – Íbex (FOR +2, DES +4): quadrúpede semelhante a um Íbex, tamanho aumenta uma categoria; deslocamento de caminhada 50 pés; Chifres causam 2d8 + bônus de proficiência + mod. de Força ao invés de 1d8.",
+            "form": {
+              "attributes": {
+                "STRENGTH": 2,
+                "DEXTERITY": 4
+              },
+              "speeds": {
+                "WALK": 50
+              },
+              "size": "UP"
+            }
+          }
+        ],
+        "Feral Sabre": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Feral Sabre",
+            "description": "Kiilash – Feral Sabre: garras mais protuberantes; Garras 2d6 ao invés de 1d6; Mordida e Garras causam 1d4 de Sangramento.",
+            "form": {}
+          }
+        ],
+        "Dentes de Sabre": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Dentes de Sabre",
+            "description": "Kiilash – Dentes de Sabre (FOR +4, DES +4): +30 cm de tamanho; deslocamento base 50 pés; Mordida 3d4 ao invés de 2d4 e Garras 2d6 ao invés de 1d6; ambos causam 1d4 de Sangramento.",
+            "form": {
+              "attributes": {
+                "STRENGTH": 4,
+                "DEXTERITY": 4
+              },
+              "speeds": {
+                "WALK": 50
+              }
+            }
+          }
+        ],
+        "Feral Rapina": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Feral Rapina",
+            "description": "Lhotlan – Feral Rapina: garras nos pés (proficiente; armas leves; +1d6 cortante no chute); bico 1d4 + mod. de Força (perfurante); patágio que dá deslocamento de planagem por 15 pés.",
+            "form": {}
+          }
+        ],
+        "Feral Vulpina": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Feral Vulpina",
+            "description": "Lhotlan – Feral Vulpina: garras nas mãos e audição superior; vantagem em Percepção pela audição e não pode ser surpreendido (salvo pela magia silêncio); Garras 2d6 + mod. de Destreza (cortante).\nVesani – Feral Vulpina: garras nas mãos e audição superior; vantagem em Percepção pela audição e em rolagens contra ser surpreendido (salvo pela magia silêncio); Garras 2d6 + mod. de Destreza (cortante).",
+            "form": {}
+          }
+        ],
+        "Rapina": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Rapina",
+            "description": "Lhotlan – Rapina (FOR +2, DES +4): deslocamento de voo 40 pés; ataque com Bico 2d4 + mod. de Força (perfurante) e Garras 2d6 + mod. de Destreza (cortante).",
+            "form": {
+              "attributes": {
+                "STRENGTH": 2,
+                "DEXTERITY": 4
+              },
+              "speeds": {
+                "FLY": 40
+              }
+            }
+          }
+        ],
+        "Vulpina": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Vulpina",
+            "description": "Lhotlan – Vulpina (FOR +3, DES +3): deslocamento base 60 pés; Garras 3d6 + mod. de Destreza (cortante) e Mordida 3d4 + mod. de Força (perfurante).\nVesani – Vulpina (FOR +3, DES +3): deslocamento base 60 pés; Garras 3d6 + mod. de Destreza (cortante) e Mordida 3d4 + mod. de Força (perfurante).",
+            "form": {
+              "attributes": {
+                "STRENGTH": 3,
+                "DEXTERITY": 3
+              },
+              "speeds": {
+                "WALK": 60
+              }
+            }
+          }
+        ],
+        "Feral Seláquio": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Feral Seláquio",
+            "description": "Marai – Feral Seláquio: presas de tubarão; com uma ação, morde a até 5 pés causando 1d8 perfurante.",
+            "form": {}
+          }
+        ],
+        "Feral Sirênio": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Feral Sirênio",
+            "description": "Marai – Feral Sirênio: presas de moréia; com uma ação, morde a até 5 pés causando 1d4 perfurante; Sonar como ataque causando 1d6 trovejante em cone de 20 pés.",
+            "form": {}
+          }
+        ],
+        "Seláquio": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Seláquio",
+            "description": "Marai – Seláquio (FOR +4, DES +2): tamanho igual ao da forma natural na água; presas de tubarão, mordida 2d6 + bônus de proficiência + mod. de Força.",
+            "form": {
+              "attributes": {
+                "STRENGTH": 4,
+                "DEXTERITY": 2
+              }
+            }
+          }
+        ],
+        "Sirênio": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Sirênio",
+            "description": "Marai – Sirênio (FOR +2, DES +4): tamanho igual ao da forma natural; deslocamento na água 60 pés; Sonar como ataque causando 1d6 trovejante em cone de 20 pés.",
+            "form": {
+              "attributes": {
+                "STRENGTH": 2,
+                "DEXTERITY": 4
+              },
+              "speeds": {
+                "SWIM": 60
+              }
+            }
+          }
+        ],
+        "Feral Camaleão": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Feral Camaleão",
+            "description": "Oovi’Kat – Feral Camaleão: com sua ação, esconde sua presença pela magia invisibilidade por um número de turnos igual ao seu bônus de proficiência.",
+            "form": {}
+          }
+        ],
+        "Camaleão": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Camaleão",
+            "description": "Oovi’Kat – Camaleão (FOR +2, DES +4): ataques com a cauda a até 10 pés, 1d8 + mod. de Força (ou Destreza) contundente; com sua ação, esconde sua presença pela magia invisibilidade por metade do seu bônus de proficiência em turnos.",
+            "form": {
+              "attributes": {
+                "STRENGTH": 2,
+                "DEXTERITY": 4
+              }
+            }
+          }
+        ],
+        "Feral Bode": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Feral Bode",
+            "description": "Ottrani – Feral Bode: forma de guerra com mais pelos e focinho; Chifres causam 1d6 ao invés de 1d4; deslocamento de escalada 40 pés; salto em altura e distância com o dobro do alcance.",
+            "form": {
+              "speeds": {
+                "CLIMB": 40
+              }
+            }
+          }
+        ],
+        "Bode": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Bode",
+            "description": "Ottrani – Bode (FOR +3, DES +3): quadrúpede semelhante a um carneiro, tamanho aumenta uma categoria; deslocamento de escalada 50 pés; Chifres causam 1d8 ao invés de 1d4.",
+            "form": {
+              "attributes": {
+                "STRENGTH": 3,
+                "DEXTERITY": 3
+              },
+              "speeds": {
+                "CLIMB": 50
+              },
+              "size": "UP"
+            }
+          }
+        ],
+        "Feral Símio": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Feral Símio",
+            "description": "Shimon – Feral Símio: forma de guerra com +1 de Força; a cauda carrega objetos de até 20 kg; com uma ação bônus, a cauda tenta derrubar uma criatura (salvaguarda de Destreza CD 8 + bônus de proficiência + mod. de Força; em uma falha, fica Caída).",
+            "form": {
+              "attributes": {
+                "STRENGTH": 1
+              }
+            }
+          }
+        ],
+        "Kong": [
+          {
+            "type": "FORM",
+            "name": "Forma de Sho'Ma: Kong",
+            "description": "Shimon – Kong (FOR +4, DES +2): +30 cm de tamanho; ataque Mordida 1d6 + mod. de Força (perfurante).",
+            "form": {
+              "attributes": {
+                "STRENGTH": 4,
+                "DEXTERITY": 2
+              }
+            }
+          }
+        ]
       }
     },
     {

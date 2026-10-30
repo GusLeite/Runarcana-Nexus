@@ -1280,6 +1280,20 @@
                   "duration": "Até 3 horas",
                   "usesFormula": "HALF_PROFICIENCY",
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "FORM",
+                  "name": "Forma Dracônica",
+                  "description": "Sua Constituição é aumentada, aumentando seus pontos de vida pela duração. Suas asas também possuem garras, permitindo ataques com Garras usando uma ação bônus.\n\nVocê aprende a assumir sua Forma de Dragão, podendo se transformar um número de vezes igual a metade do seu bônus de proficiência por descanso pleno. Essa forma dura até 3 horas ou até você se destransformar usando uma ação bônus. Enquanto transformado:\n\nVocê recebe um aumento igual à metade do seu bônus de proficiência em um atributo físico (Força, Destreza ou Constituição), definido pela sua essência.\nSeu tamanho aumenta em 1 categoria (até o máximo de Enorme).\nVocê recebe 60 pés de deslocamento de voo.\nVocê recebe usos adicionais da arma de sopro iguais à metade do seu bônus de proficiência, e a escala dos dados de dano dela aumenta em 1.\nAs armas naturais da sua essência têm o dano aumentado em uma categoria.\nVocê mantém seus pontos de vida e dados de vida. Caindo a 0 pontos de vida, você se destransforma e faz salvaguardas contra a morte normalmente. Morrer em forma de Dragão significa a morte do personagem.\nVocê conjura feitiços normalmente, exceto os que consomem componente material.\nVocê mantém os benefícios de todas as características de Classe, Origem ou outras fontes, e pode usá-las se a nova forma for fisicamente capaz.\nVocê escolhe se o equipamento cai no chão, é assimilado à nova forma ou é usado por ela; o Mestre decide o que a nova forma consegue vestir ou usar. Equipamento fundido não tem efeito até você deixar a forma.",
+                  "form": {
+                    "halfProficiency": [
+                      "CONSTITUTION"
+                    ],
+                    "speeds": {
+                      "FLY": 60
+                    },
+                    "size": "UP"
+                  }
                 }
               ]
             },
@@ -1394,6 +1408,20 @@
                   "duration": "Até 3 horas",
                   "usesFormula": "HALF_PROFICIENCY",
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "FORM",
+                  "name": "Forma Dracônica",
+                  "description": "Sua Força é aumentada e sua arma de sopro causa 1 dado de dano adicional.\n\nVocê aprende a assumir sua Forma de Dragão, podendo se transformar um número de vezes igual a metade do seu bônus de proficiência por descanso pleno. Essa forma dura até 3 horas ou até você se destransformar usando uma ação bônus. Enquanto transformado:\n\nVocê recebe um aumento igual à metade do seu bônus de proficiência em um atributo físico (Força, Destreza ou Constituição), definido pela sua essência.\nSeu tamanho aumenta em 1 categoria (até o máximo de Enorme).\nVocê recebe 60 pés de deslocamento de voo.\nVocê recebe usos adicionais da arma de sopro iguais à metade do seu bônus de proficiência, e a escala dos dados de dano dela aumenta em 1.\nAs armas naturais da sua essência têm o dano aumentado em uma categoria.\nVocê mantém seus pontos de vida e dados de vida. Caindo a 0 pontos de vida, você se destransforma e faz salvaguardas contra a morte normalmente. Morrer em forma de Dragão significa a morte do personagem.\nVocê conjura feitiços normalmente, exceto os que consomem componente material.\nVocê mantém os benefícios de todas as características de Classe, Origem ou outras fontes, e pode usá-las se a nova forma for fisicamente capaz.\nVocê escolhe se o equipamento cai no chão, é assimilado à nova forma ou é usado por ela; o Mestre decide o que a nova forma consegue vestir ou usar. Equipamento fundido não tem efeito até você deixar a forma.",
+                  "form": {
+                    "halfProficiency": [
+                      "STRENGTH"
+                    ],
+                    "speeds": {
+                      "FLY": 60
+                    },
+                    "size": "UP"
+                  }
                 }
               ]
             },
@@ -1508,6 +1536,20 @@
                   "duration": "Até 3 horas",
                   "usesFormula": "HALF_PROFICIENCY",
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "FORM",
+                  "name": "Forma Dracônica",
+                  "description": "Sua Constituição é aumentada, aumentando seus pontos de vida pela duração.\n\nVocê aprende a assumir sua Forma de Dragão, podendo se transformar um número de vezes igual a metade do seu bônus de proficiência por descanso pleno. Essa forma dura até 3 horas ou até você se destransformar usando uma ação bônus. Enquanto transformado:\n\nVocê recebe um aumento igual à metade do seu bônus de proficiência em um atributo físico (Força, Destreza ou Constituição), definido pela sua essência.\nSeu tamanho aumenta em 1 categoria (até o máximo de Enorme).\nVocê recebe 60 pés de deslocamento de voo.\nVocê recebe usos adicionais da arma de sopro iguais à metade do seu bônus de proficiência, e a escala dos dados de dano dela aumenta em 1.\nAs armas naturais da sua essência têm o dano aumentado em uma categoria.\nVocê mantém seus pontos de vida e dados de vida. Caindo a 0 pontos de vida, você se destransforma e faz salvaguardas contra a morte normalmente. Morrer em forma de Dragão significa a morte do personagem.\nVocê conjura feitiços normalmente, exceto os que consomem componente material.\nVocê mantém os benefícios de todas as características de Classe, Origem ou outras fontes, e pode usá-las se a nova forma for fisicamente capaz.\nVocê escolhe se o equipamento cai no chão, é assimilado à nova forma ou é usado por ela; o Mestre decide o que a nova forma consegue vestir ou usar. Equipamento fundido não tem efeito até você deixar a forma.",
+                  "form": {
+                    "halfProficiency": [
+                      "CONSTITUTION"
+                    ],
+                    "speeds": {
+                      "FLY": 60
+                    },
+                    "size": "UP"
+                  }
                 }
               ]
             },
@@ -1622,6 +1664,20 @@
                   "duration": "Até 3 horas",
                   "usesFormula": "HALF_PROFICIENCY",
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "FORM",
+                  "name": "Forma Dracônica",
+                  "description": "Sua Destreza é aumentada e seu deslocamento de voo aumenta em 10 pés.\n\nVocê aprende a assumir sua Forma de Dragão, podendo se transformar um número de vezes igual a metade do seu bônus de proficiência por descanso pleno. Essa forma dura até 3 horas ou até você se destransformar usando uma ação bônus. Enquanto transformado:\n\nVocê recebe um aumento igual à metade do seu bônus de proficiência em um atributo físico (Força, Destreza ou Constituição), definido pela sua essência.\nSeu tamanho aumenta em 1 categoria (até o máximo de Enorme).\nVocê recebe 60 pés de deslocamento de voo.\nVocê recebe usos adicionais da arma de sopro iguais à metade do seu bônus de proficiência, e a escala dos dados de dano dela aumenta em 1.\nAs armas naturais da sua essência têm o dano aumentado em uma categoria.\nVocê mantém seus pontos de vida e dados de vida. Caindo a 0 pontos de vida, você se destransforma e faz salvaguardas contra a morte normalmente. Morrer em forma de Dragão significa a morte do personagem.\nVocê conjura feitiços normalmente, exceto os que consomem componente material.\nVocê mantém os benefícios de todas as características de Classe, Origem ou outras fontes, e pode usá-las se a nova forma for fisicamente capaz.\nVocê escolhe se o equipamento cai no chão, é assimilado à nova forma ou é usado por ela; o Mestre decide o que a nova forma consegue vestir ou usar. Equipamento fundido não tem efeito até você deixar a forma.",
+                  "form": {
+                    "halfProficiency": [
+                      "DEXTERITY"
+                    ],
+                    "speeds": {
+                      "FLY": 70
+                    },
+                    "size": "UP"
+                  }
                 }
               ]
             },
@@ -1736,6 +1792,20 @@
                   "duration": "Até 3 horas",
                   "usesFormula": "HALF_PROFICIENCY",
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "FORM",
+                  "name": "Forma Dracônica",
+                  "description": "Sua Constituição é aumentada, aumentando seus pontos de vida pela duração.\n\nVocê aprende a assumir sua Forma de Dragão, podendo se transformar um número de vezes igual a metade do seu bônus de proficiência por descanso pleno. Essa forma dura até 3 horas ou até você se destransformar usando uma ação bônus. Enquanto transformado:\n\nVocê recebe um aumento igual à metade do seu bônus de proficiência em um atributo físico (Força, Destreza ou Constituição), definido pela sua essência.\nSeu tamanho aumenta em 1 categoria (até o máximo de Enorme).\nVocê recebe 60 pés de deslocamento de voo.\nVocê recebe usos adicionais da arma de sopro iguais à metade do seu bônus de proficiência, e a escala dos dados de dano dela aumenta em 1.\nAs armas naturais da sua essência têm o dano aumentado em uma categoria.\nVocê mantém seus pontos de vida e dados de vida. Caindo a 0 pontos de vida, você se destransforma e faz salvaguardas contra a morte normalmente. Morrer em forma de Dragão significa a morte do personagem.\nVocê conjura feitiços normalmente, exceto os que consomem componente material.\nVocê mantém os benefícios de todas as características de Classe, Origem ou outras fontes, e pode usá-las se a nova forma for fisicamente capaz.\nVocê escolhe se o equipamento cai no chão, é assimilado à nova forma ou é usado por ela; o Mestre decide o que a nova forma consegue vestir ou usar. Equipamento fundido não tem efeito até você deixar a forma.",
+                  "form": {
+                    "halfProficiency": [
+                      "CONSTITUTION"
+                    ],
+                    "speeds": {
+                      "FLY": 60
+                    },
+                    "size": "UP"
+                  }
                 }
               ]
             },

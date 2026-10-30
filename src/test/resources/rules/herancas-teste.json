@@ -201,6 +201,20 @@
           "type": "ATTRIBUTE_SWAP",
           "value": "SKILL:ATHLETICS",
           "attribute": "INTELLIGENCE"
+        },
+        {
+          "type": "FORM",
+          "name": "Forma Teste",
+          "description": "Vira um bicho.",
+          "form": {
+            "attributes": {
+              "STRENGTH": 4
+            },
+            "speeds": {
+              "FLY": 30
+            },
+            "size": "UP"
+          }
         }
       ]
     },

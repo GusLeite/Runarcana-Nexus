@@ -4,6 +4,7 @@ import SkillList from './SkillList.jsx'
 import SavingThrows from './SavingThrows.jsx'
 import Attacks from './Attacks.jsx'
 import Crafts from './Crafts.jsx'
+import Forms from './Forms.jsx'
 import { RollLog } from './DiceRoll.jsx'
 import { RichText } from './DocumentsTab.jsx'
 import { keysFor } from './AbilitiesTab.jsx'
@@ -19,7 +20,7 @@ const MODES = [
 
 // Aba principal: atributos, estatísticas e perícias no centro; à direita, rolagens e atalhos
 // para as outras abas (habilidades, documentos novos e a anotação fixada).
-export default function OverviewTab({ sheet, attacks = [], crafts = [], abilities, documents, notes, rolls, mode, onMode, onRoll, onRollDice, onGo, onInspiration }) {
+export default function OverviewTab({ sheet, attacks = [], crafts = [], abilities, documents, notes, rolls, mode, onMode, onRoll, onRollDice, onGo, onInspiration, onForm }) {
   const initiative = sheet.initiative ?? modifier(sheet.dex)
   const conMod = modifier(sheet.con)
   const quick = abilities.filter(a => a.type !== 'PASSIVE').slice(0, 5)
@@ -49,6 +50,11 @@ export default function OverviewTab({ sheet, attacks = [], crafts = [], abilitie
             onClick={sheet.inspiration > 0 && onInspiration ? onInspiration : undefined}
             title={sheet.inspiration > 0 ? 'Clique para gastar a inspiração' : 'Só o mestre dá inspiração'} />
         </section>
+        {(sheet.forms ?? []).length > 0 && onForm && (
+          <section className="card" style={{ '--i': 3 }}>
+            <Forms sheet={sheet} onForm={onForm} />
+          </section>
+        )}
         {attacks.length > 0 && (
           <section className="card" style={{ '--i': 3 }}>
             <Attacks attacks={attacks} onRoll={onRoll} onRollDice={onRollDice} />

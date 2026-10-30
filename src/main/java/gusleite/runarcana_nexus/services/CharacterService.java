@@ -117,6 +117,18 @@ public class CharacterService {
                 attacksOf(character, items), spellcastingOf(character, rows), craftsOf(character), inventory, abilities);
     }
 
+    // Forma temporária ativa (uma das formas da ficha; nulo = forma normal): a ficha volta recalculada.
+    @Transactional
+    public CharacterSheetResponse chooseForm(Account account, String name) {
+        Character character = characterOf(account);
+        if (name != null && character.getForms().stream().noneMatch(f -> f.getName().equals(name))) {
+            throw ApiException.badRequest("Essa forma não está disponível para a sua ficha.");
+        }
+        character.setActiveForm(name);
+        charRepository.save(character);
+        return getSheet(account);
+    }
+
     // Escolhe a defesa em uso ("UNARMORED", "RULE:<n>" ou "ITEM:<id>") entre as opções da ficha.
     @Transactional
     public ArmorClassResponse chooseDefense(Account account, String key) {

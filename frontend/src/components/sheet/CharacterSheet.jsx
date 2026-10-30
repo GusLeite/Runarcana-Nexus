@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { castSpell, fetchConditions, setDeathSaves as setDeathSavesApi, chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, consumeItem, fetchPreparation, fetchSheet, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
+import { castSpell, fetchConditions, setDeathSaves as setDeathSavesApi, chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, chooseForm as chooseFormApi, consumeItem, fetchPreparation, fetchSheet, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
 import { deathSaveResult, rollCheck, rollD20, rollDice } from '../../data/rules.js'
@@ -127,6 +127,13 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const spendInspirationNow = useCallback(() => {
     spendInspiration(token).then(sheet => { putSheet(sheet); setToast('Inspiração gasta.') }).catch(fail)
   }, [token, fail, putSheet])
+
+  // Forma temporária: o back devolve a ficha inteira (atributos, deslocamento e tamanho mudam).
+  const chooseForm = useCallback(name => {
+    chooseFormApi(token, name)
+      .then(sheet => setState(s => (s.status === 'ready' ? { ...s, sheet } : s)))
+      .catch(fail)
+  }, [token, fail])
 
   const chooseShield = useCallback(key => {
     chooseShieldApi(token, key)
@@ -366,6 +373,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             onRollDice={rollExpr}
             onGo={go}
             onInspiration={spendInspirationNow}
+            onForm={chooseForm}
           />
         )}
 

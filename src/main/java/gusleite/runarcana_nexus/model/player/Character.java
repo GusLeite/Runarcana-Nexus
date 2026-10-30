@@ -227,6 +227,12 @@ public class Character {
     @MapKeyColumn(name = "target")
     @Column(name = "attribute")
     private Map<String, String> attributeSwaps = new HashMap<>();
+    // Formas temporárias que o personagem pode assumir e a que está ativa (nulo = forma normal).
+    @ElementCollection
+    @CollectionTable(name = "character_forms", joinColumns = @JoinColumn(name = "character_id"))
+    @OrderColumn(name = "position")
+    private List<CharacterForm> forms = new ArrayList<>();
+    private String activeForm;
 
     // Pontos de Herança ainda não gastos (os da criação são gastos no assistente).
     private Integer heritagePoints;
@@ -271,6 +277,11 @@ public class Character {
         }
 
     public int getModifier(Attribute attribute) {
+        return getModifier(getEffective(attribute));
+    }
+
+    // Valor do atributo com a forma ativa (Íbex: FOR +2, DES +4; Forma Dracônica: +metade da proficiência).
+    public int getEffective(Attribute attribute) {
         int value = switch (attribute) {
             case STRENGTH -> str;
             case DEXTERITY -> dex;
@@ -280,8 +291,45 @@ public class Character {
             case CHARISMA -> cha;
             default -> 0;
         };
+        return value + formBonus(attribute);
+    }
 
-        return getModifier(value);
+    public CharacterForm getActiveFormLine() {
+        if (activeForm == null) return null;
+        return forms.stream().filter(f -> activeForm.equals(f.getName())).findFirst().orElse(null);
+    }
+
+    private int formBonus(Attribute attribute) {
+        CharacterForm f = getActiveFormLine();
+        if (f == null || f.getAttributes() == null || f.getAttributes().isBlank()) return 0;
+        int total = 0;
+        for (String part : f.getAttributes().split(",")) {
+            String[] kv = part.split(":");
+            if (kv.length != 2 || !kv[0].equals(attribute.name())) continue;
+            total += "P".equals(kv[1]) ? getProficiencyBonus() / 2 : Integer.parseInt(kv[1]);
+        }
+        return total;
+    }
+
+    // Deslocamentos da forma ativa (tipo → pés).
+    public Map<MovementType, Double> getFormSpeeds() {
+        CharacterForm f = getActiveFormLine();
+        Map<MovementType, Double> out = new HashMap<>();
+        if (f == null || f.getSpeeds() == null || f.getSpeeds().isBlank()) return out;
+        for (String part : f.getSpeeds().split(",")) {
+            String[] kv = part.split(":");
+            if (kv.length == 2) out.put(MovementType.valueOf(kv[0]), Double.parseDouble(kv[1]));
+        }
+        return out;
+    }
+
+    // Tamanho com a forma ativa ("UP" = uma categoria acima).
+    public CreatureSize getEffectiveSize() {
+        CharacterForm f = getActiveFormLine();
+        if (f == null || f.getSize() == null || size == null) return size;
+        if (!"UP".equals(f.getSize())) return CreatureSize.valueOf(f.getSize());
+        CreatureSize[] all = CreatureSize.values();
+        return all[Math.min(all.length - 1, size.ordinal() + 1)];
     }
 
     public int getProficiencyBonus() {

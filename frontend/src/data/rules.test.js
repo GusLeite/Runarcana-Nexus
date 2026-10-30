@@ -3,7 +3,7 @@ import {
   addHeritage, heritageOptions, carryCapacity, choiceOptionName, critDice, deathSaveResult, situationalFor, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
   addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
-  resourceCost, togglePick, levelChoices, keepChoices, dominantChoices, senseLabel, rollDie, applyHp,
+  resourceCost, togglePick, levelChoices, keepChoices, dominantChoices, senseLabel, formEffects, rollDie, applyHp,
 } from './rules.js'
 
 describe('modificadores', () => {
@@ -333,5 +333,13 @@ describe('senseLabel', () => {
     expect(senseLabel('DARKVISION', 60)).toBe('Visão no escuro 60 pés')
     expect(senseLabel("DARKVISION|debaixo d'água", 30)).toBe("Visão no escuro (debaixo d'água) 30 pés")
     expect(senseLabel('TELEPATHY', 60)).toBe('Telepatia 60 pés')
+  })
+})
+
+describe('formEffects', () => {
+  it('resume atributos, deslocamentos e tamanho da forma', () => {
+    expect(formEffects({ attributes: 'STRENGTH:2,DEXTERITY:4', speeds: 'WALK:50.0', size: 'UP' })).toBe('FOR +2, DES +4 · caminhada 50 pés · tamanho +1')
+    expect(formEffects({ attributes: 'CONSTITUTION:P', speeds: 'FLY:60.0' })).toBe('CON +½ prof. · voo 60 pés')
+    expect(formEffects({})).toBe('')
   })
 })

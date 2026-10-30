@@ -19,6 +19,8 @@ export const fetchPreparation = token => request('/character/me/preparation', { 
 
 // Defesa em uso: "UNARMORED", "RULE:<n>" ou "ITEM:<id>". Devolve a CA recalculada.
 export const chooseDefense = (token, key) => request('/character/me/defense', { method: 'PATCH', token, body: { key } })
+// Forma temporária ativa (nome; null = forma normal): devolve a ficha inteira recalculada.
+export const chooseForm = (token, key) => request('/character/me/form', { method: 'PATCH', token, body: { key } })
 
 // Escudo em uso: "NONE" (sem escudo) ou "ITEM:<id>". Devolve a CA recalculada.
 export const chooseShield = (token, key) => request('/character/me/shield', { method: 'PATCH', token, body: { key } })

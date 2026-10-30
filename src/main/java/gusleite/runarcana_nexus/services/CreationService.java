@@ -66,6 +66,8 @@ import gusleite.runarcana_nexus.rules.RuleResource;
 import gusleite.runarcana_nexus.rules.RuleTrait;
 import gusleite.runarcana_nexus.rules.RuleTraits;
 import gusleite.runarcana_nexus.rules.UsesRule;
+import gusleite.runarcana_nexus.rules.FormRule;
+import gusleite.runarcana_nexus.model.player.CharacterForm;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -1028,6 +1030,7 @@ public class CreationService {
             }
             case IMMUNITY -> b.immunities.add(g.value());
             case CONDITION_IMMUNITY -> b.conditionImmunities.add(g.value());
+            case FORM -> b.forms.add(formLine(g));
             case ATTRIBUTE_SWAP -> b.attributeSwaps.put(g.value(), g.attribute().name()
                     + (g.usesFormula() == UsesFormula.HALF_ATTRIBUTE_MODIFIER ? "/2" : ""));
             case CRAFT_LEVEL, CRAFT_FORMULAS -> {
@@ -1883,6 +1886,10 @@ public class CreationService {
         c.getSenses().putAll(b.senses);
         c.getAttributeSwaps().clear();
         c.getAttributeSwaps().putAll(b.attributeSwaps);
+        c.getForms().clear();
+        c.getForms().addAll(b.forms);
+        // A forma ativa some se ele não a tiver mais.
+        if (c.getActiveForm() != null && b.forms.stream().noneMatch(f -> f.getName().equals(c.getActiveForm()))) c.setActiveForm(null);
         c.getSavingThrowExpertise().clear();
         c.getSavingThrowExpertise().addAll(b.saveExpertise);
         c.setPassivePerceptionBonus(b.passivePerception);
@@ -2003,6 +2010,17 @@ public class CreationService {
                     ? b.chosenWeapons.getOrDefault(src[0], List.of()).stream().map(w -> "WEAPON:" + w).toList() : List.of(g.value());
             targets.forEach(t -> b.situational.add(new SituationalNote("DAMAGE:" + t, text, src[1])));
         }
+    }
+
+    // Forma temporária em texto curto para a ficha (ver CharacterForm).
+    static CharacterForm formLine(Grant g) {
+        FormRule f = g.form();
+        List<String> attrs = new ArrayList<>();
+        if (f != null && f.attributes() != null) f.attributes().forEach((a, n) -> attrs.add(a.name() + ":" + n));
+        if (f != null && f.halfProficiency() != null) f.halfProficiency().forEach(a -> attrs.add(a.name() + ":P"));
+        List<String> speeds = new ArrayList<>();
+        if (f != null && f.speeds() != null) f.speeds().forEach((t, v) -> speeds.add(t.name() + ":" + v));
+        return new CharacterForm(g.name(), g.description(), String.join(",", attrs), String.join(",", speeds), f == null ? null : f.size());
     }
 
     // Um sentido ganho; a chave leva onde vale ("DARKVISION|debaixo d'água").
@@ -2599,6 +2617,7 @@ public class CreationService {
         // Níveis de ofício: +níveis, nível mínimo e fórmulas a mais (por id); as concessões fixas e os ofícios escolhidos por fonte.
         final Map<String, Integer> craftBonus = new LinkedHashMap<>();
         final Map<String, String> attributeSwaps = new LinkedHashMap<>();
+        final List<CharacterForm> forms = new ArrayList<>();
         final Map<String, Integer> craftFloor = new LinkedHashMap<>();
         final Map<String, Integer> craftFormulas = new LinkedHashMap<>();
         final List<Sourced<Grant>> craftGrants = new ArrayList<>();

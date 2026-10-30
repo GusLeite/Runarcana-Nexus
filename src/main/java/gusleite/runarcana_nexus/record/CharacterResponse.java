@@ -86,9 +86,14 @@ public record CharacterResponse(
         // RD contra um tipo de dano (tipo → valor).
         java.util.Map<String, Integer> typedReductions,
         // Sentidos ("DARKVISION", "DARKVISION|debaixo d'água") → pés.
-        java.util.Map<String, Integer> senses
+        java.util.Map<String, Integer> senses,
+        // Formas temporárias (nome, texto, efeitos) e a ativa (nula = forma normal).
+        List<Form> forms,
+        String activeForm
 ) {
     public record Situational(String target, String note, String source) {}
+
+    public record Form(String name, String description, String attributes, String speeds, String size) {}
 
     public record ClassLevelResponse(String classId, String name, int level, String subclass) {}
 
@@ -105,12 +110,13 @@ public record CharacterResponse(
                 character.getMaxHpTotal(),
                 character.getCurrentHp(),
                 character.getTempHp() == null ? 0 : character.getTempHp(),
-                character.getStr(),
-                character.getDex(),
-                character.getIntel(),
-                character.getWis(),
-                character.getCha(),
-                character.getCon(),
+                // Com a forma ativa somada (Forma de Sho'Ma, Forma Dracônica).
+                character.getEffective(Attribute.STRENGTH),
+                character.getEffective(Attribute.DEXTERITY),
+                character.getEffective(Attribute.INTELLIGENCE),
+                character.getEffective(Attribute.WISDOM),
+                character.getEffective(Attribute.CHARISMA),
+                character.getEffective(Attribute.CONSTITUTION),
                 // Todas as perícias do sistema, não só as proficientes, para a ficha mostrar cada bônus.
                 Arrays.stream(SkillType.values())
                         .map(type -> new SkillResponse(type, character.getSkillAttribute(type),
@@ -130,7 +136,7 @@ public record CharacterResponse(
                 SpeedLine.of(character),
                 // Na ordem da ficha (FOR, DES, CON, INT, SAB, CAR).
                 character.getSavingThrows().stream().sorted().toList(),
-                character.getSize(),
+                character.getEffectiveSize(),
                 List.copyOf(character.getLanguages()),
                 List.copyOf(character.getCrafts()),
                 character.getHeritagePoints(),
@@ -159,7 +165,9 @@ public record CharacterResponse(
                 List.copyOf(character.getConditionImmunities()),
                 character.getSavingThrowExpertise().stream().sorted().toList(),
                 new java.util.TreeMap<>(character.getTypedReductions()),
-                new java.util.TreeMap<>(character.getSenses())
+                new java.util.TreeMap<>(character.getSenses()),
+                character.getForms().stream().map(fm -> new Form(fm.getName(), fm.getDescription(), fm.getAttributes(), fm.getSpeeds(), fm.getSize())).toList(),
+                character.getActiveForm()
         );
     }
 }

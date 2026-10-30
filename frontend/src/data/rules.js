@@ -539,3 +539,19 @@ export function senseLabel(key, feet) {
   const [type, where] = key.split('|')
   return (SENSES[type] ?? type) + (where ? ' (' + where + ')' : '') + ' ' + feet + ' pés'
 }
+
+// Efeitos de uma forma temporária em texto ("FOR +2, DES +4 · caminhada 50 pés · tamanho +1").
+const FORM_ATTRS = { STRENGTH: 'FOR', DEXTERITY: 'DES', CONSTITUTION: 'CON', INTELLIGENCE: 'INT', WISDOM: 'SAB', CHARISMA: 'CAR' }
+const FORM_SPEEDS = { WALK: 'caminhada', FLY: 'voo', SWIM: 'natação', CLIMB: 'escalada', BURROW: 'escavação' }
+
+export function formEffects(form) {
+  const parts = []
+  const attrs = (form.attributes ?? '').split(',').filter(Boolean)
+    .map(p => p.split(':')).map(([a, n]) => (FORM_ATTRS[a] ?? a) + ' +' + (n === 'P' ? '½ prof.' : n))
+  if (attrs.length) parts.push(attrs.join(', '))
+  const speeds = (form.speeds ?? '').split(',').filter(Boolean)
+    .map(p => p.split(':')).map(([t, v]) => (FORM_SPEEDS[t] ?? t) + ' ' + Number(v) + ' pés')
+  if (speeds.length) parts.push(speeds.join(', '))
+  if (form.size) parts.push(form.size === 'UP' ? 'tamanho +1' : 'tamanho ' + form.size)
+  return parts.join(' · ')
+}

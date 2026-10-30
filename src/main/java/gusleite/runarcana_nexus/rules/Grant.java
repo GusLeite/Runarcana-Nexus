@@ -65,7 +65,9 @@ public record Grant(
         // RESOURCE_CHOICE: ignora o pré-requisito de classe, subclasse e nível de classe do recurso ("exceto o de Classe": Mestre Tático).
         Boolean anyClass,
         // Concessão fixa que só vale a partir deste nível do personagem (Gás Corrosivo: antimônico no 11º).
-        Integer minLevel
+        Integer minLevel,
+        // FORM: o que muda enquanto a forma está ativa (atributos, deslocamentos, tamanho).
+        FormRule form
 ) {
     // Sem optionTexts (as concessões montadas no código e nos testes).
     public Grant(GrantType type, Attribute attribute, Integer amount, Integer count, List<String> options, SkillType skill,
@@ -77,7 +79,7 @@ public record Grant(
                  Map<String, Integer> valueByLevel) {
         this(type, attribute, amount, count, options, skill, value, label, name, description, abilityType, spellLevel, damage,
                 maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration, components, perLevel, feet,
-                fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, null, null, null, null, null);
+                fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, null, null, null, null, null, null);
     }
 
     @com.fasterxml.jackson.annotation.JsonCreator
@@ -100,21 +102,21 @@ public record Grant(
         String text = (s.description() == null ? "" : s.description()) + (s.higherLevels() == null ? "" : "\n\nEm níveis superiores. " + s.higherLevels());
         return new Grant(GrantType.FEATURE, null, null, null, null, null, null, null, s.name(), text, AbilityType.SPELL,
                 s.level(), null, null, null, null, null, s.castingTime(), s.range(), s.duration(), components, null, null, null, null,
-                null, null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     // A mesma concessão com outro nome (habilidade com opção: "Resistente" → "Resistente (Ígneo)").
     public Grant withName(String newName) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, newName, description, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
-                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts, walkFraction, when, anyClass, minLevel);
+                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts, walkFraction, when, anyClass, minLevel, form);
     }
 
     // A mesma concessão com outra quantidade de pés (SPEED que cresce a cada escolha do traço: 15, 15, 10…).
     public Grant withFeet(Double newFeet) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, name, description, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
-                components, perLevel, newFeet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts, walkFraction, when, anyClass, minLevel);
+                components, perLevel, newFeet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts, walkFraction, when, anyClass, minLevel, form);
     }
 
     // A mesma concessão com os usos da opção escolhida (optionUses).
@@ -122,21 +124,21 @@ public record Grant(
         return new Grant(type, u.attribute() != null ? u.attribute() : attribute, amount, count, options,
                 skill, value, label, name, description, abilityType, spellLevel, damage, u.maxUses(), u.usesFormula(),
                 diceByProficiency, u.recharge() == null ? recharge : u.recharge(), castingTime, range, duration, components,
-                perLevel, feet, fromRegion, damageBonus, armor, u.usesPlus(), expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts, walkFraction, when, anyClass, minLevel);
+                perLevel, feet, fromRegion, damageBonus, armor, u.usesPlus(), expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts, walkFraction, when, anyClass, minLevel, form);
     }
 
     // A mesma concessão com outra tabela de usos e outro texto (Ki com pontos inativados pelos Vel).
     public Grant withUsesByLevel(Map<String, Integer> table, String newDescription) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, name, newDescription, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, castingTime, range, duration,
-                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, table, diceByLevel, valueByLevel, optionTexts, walkFraction, when, anyClass, minLevel);
+                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, table, diceByLevel, valueByLevel, optionTexts, walkFraction, when, anyClass, minLevel, form);
     }
 
     // A mesma concessão com outro texto e tempo de execução (Herança com parte ativa: "Reação", "Ação bônus").
     public Grant withText(String newDescription, String newCastingTime) {
         return new Grant(type, attribute, amount, count, options, skill, value, label, name, newDescription, abilityType,
                 spellLevel, damage, maxUses, usesFormula, diceByProficiency, recharge, newCastingTime, range, duration,
-                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts, walkFraction, when, anyClass, minLevel);
+                components, perLevel, feet, fromRegion, damageBonus, armor, usesPlus, expertise, optionUses, usesByLevel, diceByLevel, valueByLevel, optionTexts, walkFraction, when, anyClass, minLevel, form);
     }
 
     // FEATURE com options: a habilidade pede uma escolha (ex.: o tipo de dano do Resistente).

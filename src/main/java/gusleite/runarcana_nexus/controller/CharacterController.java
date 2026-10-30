@@ -64,6 +64,14 @@ public class CharacterController {
 
     public record DefenseRequest(String key) {}
 
+    // Forma temporária ativa (nome de uma das formas da ficha; nulo = forma normal). Devolve a ficha recalculada.
+    @PatchMapping("/me/form")
+    public ResponseEntity<CharacterSheetResponse> chooseForm(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @RequestBody DefenseRequest request) {
+        return ResponseEntity.ok(charService.chooseForm(authService.authenticate(authorization), request.key()));
+    }
+
     // Escudo em uso ("NONE" = sem escudo, ou "ITEM:<id>" de um escudo do inventário).
     @PatchMapping("/me/shield")
     public ResponseEntity<ArmorClassResponse> chooseShield(
