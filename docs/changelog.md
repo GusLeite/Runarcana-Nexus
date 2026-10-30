@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Vídeo do Ivern no Antroplantæ (`feature/character-sheet`)
+- `assets/origins/antroplantae.mp4` (Ivern animado, 1080p, 1,5 MB, 10 s): foco 0,6 no conjunto (com a Daisy) e 0,56 no rosto nos painéis estreitos, `show: 0.62`.
+
 ## 2026-10-30 — Construto: rosto da Orianna no painel em repouso (`feature/character-sheet`)
 - `focusNarrow` no vídeo: nos painéis estreitos o foco vai para o rosto (0,86), e conforme o painel se alarga volta para o conjunto (0,66). Antes a faixa caía entre a bola e a Orianna.
 
