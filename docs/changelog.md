@@ -11,8 +11,8 @@ Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 - Tremor, explosão e ondas de choque sincronizados com o golpe; login em laranja (`.login.embers`). Conferido no preview, pausando em cada etapa, no computador e no celular.
 
 ## 2026-10-30 — Galeria e destaque na escolha de origem (`feature/character-sheet`)
-- A etapa Origem virou galeria de painéis expansíveis (`OriginStep.jsx`) com descrição breve; os detalhes só aparecem ao clicar.
-- O cartão cresce até o centro (`OriginStage.jsx`), com abas Ganhos, Habilidades, Linhagens e Sobre, setas entre origens e selo ao confirmar.
+- A etapa Origem virou um salão em tela cheia (`OriginStep.jsx`), com um painel vertical por origem que se expande no hover, como a seleção de personagem; os detalhes só aparecem ao clicar.
+- O painel cresce até quase a tela toda (`OriginStage.jsx`), com abas Ganhos, Habilidades, Linhagens e Sobre, setas entre origens e selo ao confirmar.
 - Sigilos e partículas provisórios por origem; a arte real entra em `data/originArt.js`.
 - `grantLabel` agora nomeia resistências, imunidades, vulnerabilidades, sentidos, situacionais e formas, que apareciam como o tipo cru.
 

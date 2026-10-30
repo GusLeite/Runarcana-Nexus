@@ -135,8 +135,16 @@ export default function OriginStage({ origins, startId, crafts, equipment, origi
     }
     card.scrollIntoView({ block: 'nearest' })
     const anim = panel.current.animate([frame(panel.current.getBoundingClientRect()), frame(card.getBoundingClientRect())], { duration: CLOSE_MS, easing: 'cubic-bezier(.55,0,.8,.4)', fill: 'forwards' })
-    anim.onfinish = () => onClose(currentId)
-    anim.oncancel = () => onClose(currentId)
+    // Em aba escondida a animação não avança: o prazo garante que o destaque feche do mesmo jeito.
+    let done = false
+    const finish = () => {
+      if (done) return
+      done = true
+      onClose(currentId)
+    }
+    anim.onfinish = finish
+    anim.oncancel = finish
+    setTimeout(finish, CLOSE_MS + 200)
   }, [cardOf, currentId, onClose])
 
   const move = step => {

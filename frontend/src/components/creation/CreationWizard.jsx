@@ -143,7 +143,8 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
           {current === 'origin' && (
             <OriginStep origins={catalog.origins} crafts={catalog.crafts} equipment={catalog.equipment?.items}
               originId={draft.originId} lineageId={draft.lineageId}
-              onPick={(originId, lineageId) => setDraft(d => ({ ...d, originId, lineageId }))} />
+              onPick={(originId, lineageId) => setDraft(d => ({ ...d, originId, lineageId }))}
+              onNext={() => setStep(s => s + 1)} />
           )}
           {current === 'traits' && (
             <TraitStep system={catalog.traits} preview={preview} draft={draft} onChange={set} />
