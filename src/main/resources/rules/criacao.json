@@ -508,6 +508,10 @@
             "blocksArmor": true,
             "requiresArmor": "MEDIUM"
           }
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "venenoso"
         }
       ],
       "lineages": [
@@ -552,6 +556,46 @@
                 "blocksArmor": true,
                 "requiresArmor": "HEAVY"
               }
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "ácido",
+              "when": "Resistente:Ácido"
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "elétrico",
+              "when": "Resistente:Elétrico"
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "energético",
+              "when": "Resistente:Energético"
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "ígneo",
+              "when": "Resistente:Ígneo"
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "gélido",
+              "when": "Resistente:Gélido"
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "necrótico",
+              "when": "Resistente:Necrótico"
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "psíquico",
+              "when": "Resistente:Psíquico"
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "radiante",
+              "when": "Resistente:Radiante"
             }
           ]
         },
@@ -1125,6 +1169,18 @@
               ],
               "castingTime": "Ataque",
               "range": "Corpo a corpo"
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "gélido"
+            },
+            {
+              "type": "VULNERABILITY",
+              "value": "ígneo"
+            },
+            {
+              "type": "VULNERABILITY",
+              "value": "incinerante"
             }
           ],
           "levels": [
@@ -1172,6 +1228,10 @@
                   "abilityType": "PASSIVE",
                   "name": "Resistência Dracônica (Glacial)",
                   "description": "Sua resistência elemental passa a se aplicar à versão mágica do dano: você recebe resistência a dano Glacial."
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "glacial"
                 }
               ]
             }
@@ -1223,6 +1283,18 @@
               ],
               "castingTime": "Ataque",
               "range": "Corpo a corpo"
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "ígneo"
+            },
+            {
+              "type": "VULNERABILITY",
+              "value": "gélido"
+            },
+            {
+              "type": "VULNERABILITY",
+              "value": "glacial"
             }
           ],
           "levels": [
@@ -1270,6 +1342,10 @@
                   "abilityType": "PASSIVE",
                   "name": "Resistência Dracônica (Incinerante)",
                   "description": "Sua resistência elemental passa a se aplicar à versão mágica do dano: você recebe resistência a dano Incinerante."
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "incinerante"
                 }
               ]
             }
@@ -1321,6 +1397,18 @@
               ],
               "castingTime": "Ataque",
               "range": "Corpo a corpo"
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "trovejante"
+            },
+            {
+              "type": "VULNERABILITY",
+              "value": "ácido"
+            },
+            {
+              "type": "VULNERABILITY",
+              "value": "antimônico"
             }
           ],
           "levels": [
@@ -1368,6 +1456,10 @@
                   "abilityType": "PASSIVE",
                   "name": "Resistência Dracônica (Vibracional)",
                   "description": "Sua resistência elemental passa a se aplicar à versão mágica do dano: você recebe resistência a dano Vibracional."
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "vibracional"
                 }
               ]
             }
@@ -1419,6 +1511,18 @@
               ],
               "castingTime": "Ataque",
               "range": "Corpo a corpo"
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "elétrico"
+            },
+            {
+              "type": "VULNERABILITY",
+              "value": "gélido"
+            },
+            {
+              "type": "VULNERABILITY",
+              "value": "glacial"
             }
           ],
           "levels": [
@@ -1466,6 +1570,10 @@
                   "abilityType": "PASSIVE",
                   "name": "Resistência Dracônica (Plásmico)",
                   "description": "Sua resistência elemental passa a se aplicar à versão mágica do dano: você recebe resistência a dano Plásmico."
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "plásmico"
                 }
               ]
             }
@@ -1517,6 +1625,18 @@
               ],
               "castingTime": "Ataque",
               "range": "Corpo a corpo"
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "ácido"
+            },
+            {
+              "type": "VULNERABILITY",
+              "value": "elétrico"
+            },
+            {
+              "type": "VULNERABILITY",
+              "value": "plásmico"
             }
           ],
           "levels": [
@@ -1564,6 +1684,10 @@
                   "abilityType": "PASSIVE",
                   "name": "Resistência Dracônica (Antimônico)",
                   "description": "Sua resistência elemental passa a se aplicar à versão mágica do dano: você recebe resistência a dano Antimônico."
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "antimônico"
                 }
               ]
             }
@@ -1726,6 +1850,10 @@
               "abilityType": "PASSIVE",
               "name": "Visão no Escuro",
               "description": "Devido a sua familiaridade de agir no escuro: Você enxerga na penumbra a até 120 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+            },
+            {
+              "type": "IMMUNITY",
+              "value": "venenoso"
             }
           ]
         }
@@ -2186,6 +2314,10 @@
               "type": "AC_BONUS",
               "name": "Escorregadio",
               "usesFormula": "PROFICIENCY"
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "contundente"
             }
           ]
         },
@@ -2977,6 +3109,10 @@
                   "abilityType": "PASSIVE",
                   "name": "Forja Viva",
                   "description": "Suas armas e armaduras não são afetadas por magias como esquentar metal; com armadura de metal, soma metade do mod. de Sabedoria à CA (Defesa Aprimorada); vantagem em salvaguardas contra Frio; resistência a dano ígneo (incinerante no 10º; imune no 15º)."
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "ígneo"
                 }
               ]
             },
@@ -3024,6 +3160,15 @@
               ]
             },
             {
+              "level": 10,
+              "grants": [
+                {
+                  "type": "RESISTANCE",
+                  "value": "incinerante"
+                }
+              ]
+            },
+            {
               "level": 11,
               "grants": [
                 {
@@ -3054,6 +3199,15 @@
                   "description": "Numa magia de Concentração em uma arma, reduza a duração pela metade para remover a Concentração (ou gaste uma Liturgia para manter a duração, numa arma sua). Magias pessoais ou de toque que afetem armas podem ser conjuradas numa arma sob sua Liturgia a até 30 pés.",
                   "usesFormula": "PROFICIENCY",
                   "recharge": "LONG_REST"
+                }
+              ]
+            },
+            {
+              "level": 15,
+              "grants": [
+                {
+                  "type": "IMMUNITY",
+                  "value": "ígneo"
                 }
               ]
             },
@@ -3476,6 +3630,10 @@
                   "abilityType": "PASSIVE",
                   "name": "Sudário Sombrio",
                   "description": "Resistência a dano necrótico (imunidade no 11º nível)."
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "necrótico"
                 }
               ]
             },
@@ -3539,6 +3697,10 @@
                   "description": "Quando um aliado a até 30 pés sofrer dano necrótico de outra fonte, use a reação para reduzi-lo à metade e criar um glóbulo de névoa dos lamentos (até seu bônus de proficiência). Suas invocações têm vantagem contra alvos marcados por esses glóbulos.",
                   "castingTime": "Reação",
                   "range": "30 pés"
+                },
+                {
+                  "type": "IMMUNITY",
+                  "value": "necrótico"
                 }
               ]
             },
@@ -3585,6 +3747,10 @@
                   "usesFormula": "ATTRIBUTE_MODIFIER",
                   "attribute": "WISDOM",
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "radiante"
                 }
               ]
             }
@@ -3644,6 +3810,10 @@
                   "abilityType": "PASSIVE",
                   "name": "Pés Descalços",
                   "description": "Resistência a dano elétrico e vantagem contra empurrões."
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "elétrico"
                 }
               ]
             },
@@ -3730,6 +3900,10 @@
                   "abilityType": "PASSIVE",
                   "name": "Filho da Tempestade",
                   "description": "Fora de locais subterrâneos ou fechados, você tem deslocamento de voo igual ao de caminhada. Imunidade a dano plásmico."
+                },
+                {
+                  "type": "IMMUNITY",
+                  "value": "plásmico"
                 }
               ]
             },
@@ -4968,6 +5142,10 @@
             {
               "type": "MYSTERY",
               "value": "transmutacao"
+            },
+            {
+              "type": "RESISTANCE",
+              "value": "venenoso"
             }
           ],
           "levels": [
@@ -7312,6 +7490,36 @@
                   "abilityType": "PASSIVE",
                   "name": "Força dos Elementos",
                   "description": "Resistência ao dano elemental do seu elemento: Água letífero, Terra vibracional, Fogo incinerante, Ar antimônico, Gelo glacial, Raio plásmico. Com Têmpera de Ki dando dano mágico, resistência a esse dano mágico pela duração."
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "letífero",
+                  "when": "Caminho Elemental:Estilo do Zelote (Água)"
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "vibracional",
+                  "when": "Caminho Elemental:Estilo do Sentinela (Terra)"
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "incinerante",
+                  "when": "Caminho Elemental:Estilo do Doutrinador (Fogo)"
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "antimônico",
+                  "when": "Caminho Elemental:Estilo do Errante (Ar)"
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "glacial",
+                  "when": "Caminho Elemental:Estilo do Ártico (Gelo)"
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "plásmico",
+                  "when": "Caminho Elemental:Estilo do Dínamo (Raio)"
                 }
               ]
             },
@@ -7335,6 +7543,36 @@
                   "abilityType": "PASSIVE",
                   "name": "Plenitude Elemental",
                   "description": "Imunidade ao dano do seu elemento; alvos imunes ao seu dano elemental contam só como resistentes."
+                },
+                {
+                  "type": "IMMUNITY",
+                  "value": "letífero",
+                  "when": "Caminho Elemental:Estilo do Zelote (Água)"
+                },
+                {
+                  "type": "IMMUNITY",
+                  "value": "vibracional",
+                  "when": "Caminho Elemental:Estilo do Sentinela (Terra)"
+                },
+                {
+                  "type": "IMMUNITY",
+                  "value": "incinerante",
+                  "when": "Caminho Elemental:Estilo do Doutrinador (Fogo)"
+                },
+                {
+                  "type": "IMMUNITY",
+                  "value": "antimônico",
+                  "when": "Caminho Elemental:Estilo do Errante (Ar)"
+                },
+                {
+                  "type": "IMMUNITY",
+                  "value": "glacial",
+                  "when": "Caminho Elemental:Estilo do Ártico (Gelo)"
+                },
+                {
+                  "type": "IMMUNITY",
+                  "value": "plásmico",
+                  "when": "Caminho Elemental:Estilo do Dínamo (Raio)"
                 }
               ]
             }
@@ -8889,6 +9127,10 @@
                   "spellLevel": 1,
                   "value": "CLASS_OR_MYSTERIES",
                   "label": "Magias de Caçador: +1 (até o 1º nível)"
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "psíquico"
                 }
               ]
             },
@@ -11042,6 +11284,10 @@
                   "usesFormula": "ATTRIBUTE_MODIFIER",
                   "attribute": "INTELLIGENCE",
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "RESISTANCE",
+                  "value": "venenoso"
                 }
               ]
             },

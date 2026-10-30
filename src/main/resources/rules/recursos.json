@@ -2877,6 +2877,14 @@
           "type": "ATTRIBUTE",
           "attribute": "CONSTITUTION",
           "amount": 2
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "ígneo"
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "cortante"
         }
       ]
     },
@@ -6257,7 +6265,13 @@
         "resources": [
           "runa-bencao-de-statikk"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "RESISTANCE",
+          "value": "elétrico"
+        }
+      ]
     },
     {
       "id": "runa-furia-de-statikk",
@@ -6278,7 +6292,13 @@
         "resources": [
           "runa-forca-de-statikk"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "RESISTANCE",
+          "value": "plásmico"
+        }
+      ]
     },
     {
       "id": "runa-lanca-gelida",
@@ -6336,7 +6356,21 @@
         "resources": [
           "runa-garras-de-gelo"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "IMMUNITY",
+          "value": "gélido"
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "ígneo"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "glacial"
+        }
+      ]
     },
     {
       "id": "runa-nascimento-da-ninhada",

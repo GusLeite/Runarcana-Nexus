@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento A4/B1: defesas contra dano (`feature/character-sheet`)
+- Resistências, vulnerabilidades e imunidades de Heranças (Pele Rígida, Construção Primorosa), origens (Construto, Brutal pela opção, Meio-Dragão por linhagem e no 15º, Yordle Aquático, Troll da Selva), subclasses (Forja, Sepultura, Tempestade, Púrpura, Arqueiro Rúnico, Explorador, Hakensai), runas, Vel e traços da Runinata.
+- Resistência à escolha com `expertise` (caso já tenha, imunidade).
+
 ## 2026-10-29 — Mapeamento A3: magias das Heranças (`feature/character-sheet`)
 - 22 magias fixas de Heranças (`SPELL`) e 11 escolhas (Benefício Colateral, Musicista, Incentivo Celeste, Conjurador Natural, Vislumbre, Ritualista, Essência Elemental, Shugenja).
 - `SPELL_CHOICE`: `MYSTERY:<ids>`, `ANY` e `+RITUAL`.

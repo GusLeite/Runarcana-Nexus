@@ -1204,7 +1204,20 @@
       "id": "pele-rigida",
       "name": "Pele Rígida",
       "category": "GENERAL",
-      "description": "Sua pele grossa é capaz de atos inacreditáveis. Essa Herança pode ser escolhida apenas uma vez. Você ganha os seguintes benefícios:\n\nEscolha um tipo de dano entre Cortante, Perfurante ou Contundente, você se torna resistente a ele. Caso já tenha resistência, ou a receba, se torna imune à esse dano."
+      "description": "Sua pele grossa é capaz de atos inacreditáveis. Essa Herança pode ser escolhida apenas uma vez. Você ganha os seguintes benefícios:\n\nEscolha um tipo de dano entre Cortante, Perfurante ou Contundente, você se torna resistente a ele. Caso já tenha resistência, ou a receba, se torna imune à esse dano.",
+      "grants": [
+        {
+          "type": "RESISTANCE",
+          "count": 1,
+          "options": [
+            "cortante",
+            "perfurante",
+            "contundente"
+          ],
+          "label": "Pele Rígida: um tipo de dano (caso já tenha resistência, imunidade)",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "perceber-fraquezas",
@@ -3815,7 +3828,24 @@
         "brutal"
       ],
       "prerequisite": "Construto Brutal",
-      "description": "Os materiais empregados em sua construção foram de excelente qualidade ou tiveram uma excelente sinergia entre si, conferindo a você uma resistência adicional. Você recebe os seguintes benefícios:\n\nVocê recebe uma segunda resistência das disponíveis na lista Resistente do Construto Brutal."
+      "description": "Os materiais empregados em sua construção foram de excelente qualidade ou tiveram uma excelente sinergia entre si, conferindo a você uma resistência adicional. Você recebe os seguintes benefícios:\n\nVocê recebe uma segunda resistência das disponíveis na lista Resistente do Construto Brutal.",
+      "grants": [
+        {
+          "type": "RESISTANCE",
+          "count": 1,
+          "options": [
+            "ácido",
+            "elétrico",
+            "energético",
+            "ígneo",
+            "gélido",
+            "necrótico",
+            "psíquico",
+            "radiante"
+          ],
+          "label": "Construção Primorosa: uma segunda resistência"
+        }
+      ]
     },
     {
       "id": "corpo-leve",

@@ -41,7 +41,9 @@ Filho da Escuridão, Castelo de Areia e Dupliventos já tinham a magia como habi
 Viram a magia na ficha (concessão `SPELL`), com os usos que a Herança já tem: Convocar Auxílio (convocar familiar), Curandeiro Abençoado (palavra curativa), Filho da Escuridão (escuridão), Magia da Floresta (constrição), Medicina Natural (curar ferimentos), Sinergia Elemental (raio elemental), Autoridade Justa (taumaturgia), Sangue Buhru (chama sagrada), Toque Feérico (ilusão menor), Ladrão de Segredos (mensagem, zombaria viciosa), Arbusto Frutífero e Hospitaleiro (bom fruto), Sombra da Folha (passos sem pegadas), Conjurador Marai (criar ou destruir água), Proficiência Onírica (sono), Salva-IIP-guarda (bênção), Teleporte das Fadas (passo nebuloso), Truque da Maré (jato d'água), Encanto Vulpino (enfeitiçar pessoa), Extrovertido (reparar), Conhecimentos Venéficos (borrifo venenoso), Dupliventos (leque de vento), Castelo de Areia (aumentar/reduzir), Leveza das Nuvens (queda suave).
 - À escolha: Benefício Colateral (truque), Musicista Prodígio (truque do Som), Incentivo Celeste (truque celestial), Conjurador Natural (magia de Xamã), Vislumbre Estelar (1º nível de Adivinhação/Oniromancia), Ritualista (ritual de 1º), Adepto e Iniciado Shugenja.
 
-### A4. Defesas contra dano (resistência, vulnerabilidade, absorção, "caso já tenha, imunidade")
+### A4. Defesas contra dano (resistência, vulnerabilidade, absorção, "caso já tenha, imunidade") ✅
+Meio-Dragão: a "fraqueza" vale para o tipo simples e o mágico. Hakensai 15º/20º pelo Caminho Elemental escolhido (o 20º usa o mesmo tipo do 15º). A imunidade a venenoso da forma Cobra (Nascimento da Ninhada) depende da forma e ficou no texto.
+
 - Heranças: Pele Rígida (cortante/perfurante/contundente à escolha; caso já tenha, imunidade), Construção Primorosa (2ª resistência da lista do Brutal).
 - Origens: Construto (venenoso), Brutal (o "Resistente" hoje é uma escolha sem efeito → resistência à escolha), Meio-Dragão (resistência e vulnerabilidade da linhagem; no 15º, a versão mágica), Yordle Aquático (contundente).
 - Classes: Acólito da Forja (ígneo 5º, incinerante 10º, imunidade 15º), Sepultura (necrótico 2º, imune 11º; 20º imune necrótico e resistente a radiante), Tempestade (elétrico 2º, imune plásmico 17º), Arcanista Púrpura (venenoso), Caçador Arqueiro Rúnico 7º (psíquico), Mercurial Explorador 13º (venenoso).
@@ -63,7 +65,7 @@ Viram a magia na ficha (concessão `SPELL`), com os usos que a Herança já tem:
 
 ## B. Algo pequeno e novo no sistema
 
-- **B1. Imunidade a dano fixa** (`IMMUNITY`): Troll da Selva (venenoso), Vel Escamas do Dragão (ígneo e cortante), Precursor do Gelo Sombrio (gélido e ígneo), Nascimento da Ninhada (venenoso), Hakensai 20º, e as imunidades de classe listadas em A4.
+- ✅ **B1. Imunidade a dano fixa** (`IMMUNITY`, feito junto com o A4): Troll da Selva (venenoso), Vel Escamas do Dragão (ígneo e cortante), Precursor do Gelo Sombrio (gélido e ígneo), Nascimento da Ninhada (venenoso), Hakensai 20º, e as imunidades de classe listadas em A4.
 - **B2. Imunidade a condições e doenças** (lista na ficha, como as de dano): Ressurgido Espectral, Limiar Tecnológico, Construto Vivo, Bodisatva 10º, Nascimento da Ninhada (Amedrontado), Essência Etílica (Intoxicado por álcool), Lendário Guardião, Experimento Zaunita (Cinza de Zaun).
 - **B3. Resistência que muda com o nível**: Gás Corrosivo/Ionizado/Termiônico (outro tipo no 11º), Resistência Natural da Runinata (versão mágica no 12º, imunidade no 16º, absorção no 18º).
 - **B4. "Um avanço na resistência"** (degraus: resistência → imunidade → absorção): Bênção do Urso e do Vorme (Invocações).

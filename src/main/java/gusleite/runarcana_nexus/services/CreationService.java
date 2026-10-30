@@ -625,7 +625,9 @@ public class CreationService {
                         List<String> options = g.options().stream().filter(o -> !sourceDamage.contains(o)).toList();
                         String label = orLabel(g, "Escolha " + g.count() + " tipo(s) de dano");
                         List<String> selected = choose(picked, options, g.count() == null ? 1 : g.count(), label, b.errors);
-                        (g.type() == GrantType.RESISTANCE ? b.resistances : g.type() == GrantType.VULNERABILITY ? b.vulnerabilities : b.absorptions).addAll(selected);
+                        // Resistência à escolha com expertise: "caso já tenha, imunidade" (Pele Rígida).
+                        if (g.type() == GrantType.RESISTANCE && Boolean.TRUE.equals(g.expertise())) b.resistanceUpgrades.addAll(selected);
+                        else (g.type() == GrantType.RESISTANCE ? b.resistances : g.type() == GrantType.VULNERABILITY ? b.vulnerabilities : b.absorptions).addAll(selected);
                         sourceDamage.addAll(selected);
                         b.choices.add(new ChoiceLine(key, g.type(), label, g.count() == null ? 1 : g.count(), options, selected, s.label(), null));
                     }
