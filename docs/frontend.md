@@ -67,7 +67,7 @@ A tela foi prototipada num `index.html` único (React via CDN, imagens e vídeo 
 
 ## Pendências / problemas conhecidos
 
-- Faltam imagens de 23 das 29 linhagens (só o espaço provisório; já têm: aelus, alnuk, auroque, brutal, emissario, ligeiro): colocar `<id>.webp` em `src/assets/lineages/` (ids em `criacao.json`; webp de uns 1280 px de largura é suficiente, pois o cartão tem ~16:9).
+- Faltam imagens de 21 das 29 linhagens (só o espaço provisório; já têm: aelus, alnuk, auroque, brutal, emissario, ligeiro, arboreo, floral): colocar `<id>.webp` em `src/assets/lineages/` (ids em `criacao.json`; webp de uns 1280 px de largura é suficiente, pois o cartão tem ~16:9).
 - Vídeos das origens (`assets/origins/`, ~12 MB no total): para trocar um, corte o original num loop de até 10 s e recomprima, por exemplo `ffmpeg -ss INICIO -t DURACAO -i orig.mp4 -ss FIM_DO_TRECHO -t 1 -i orig.mp4 -filter_complex "[0:v]scale=-2:'min(1080,ih)'[a];[1:v]scale=-2:'min(1080,ih)',format=yuva420p,fade=t=out:st=0:d=1:alpha=1[b];[a][b]overlay=0:0:eof_action=pass,format=yuv420p[v]" -map "[v]" -an -c:v libx264 -preset slow -crf 24 -movflags +faststart saida.mp4` (o segundo `-ss` é INICIO+DURACAO: o último segundo é fundido com o começo para o loop emendar). O ffmpeg não está instalado na máquina; foi usado o pacote npm `ffmpeg-static` numa pasta temporária.
 - Ainda não há roteamento (react-router): as abas da ficha são estado local e não mudam a URL (recarregar volta para "FICHA").
 - O token fica no `localStorage` (simples, mas acessível a scripts da página); se o projeto crescer, considerar cookie `HttpOnly`.

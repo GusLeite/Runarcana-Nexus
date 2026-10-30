@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Imagens do Antroplantæ (`feature/character-sheet`)
+- `assets/lineages/`: arboreo.webp e floral.webp (90 e 115 KB), no enquadramento padrão.
+
 ## 2026-10-30 — Imagens dos Construtos (`feature/character-sheet`)
 - `assets/lineages/`: brutal.webp, emissario.webp e ligeiro.webp (100 a 180 KB cada), no enquadramento padrão.
 
