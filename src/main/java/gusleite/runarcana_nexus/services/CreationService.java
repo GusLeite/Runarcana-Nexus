@@ -897,6 +897,7 @@ public class CreationService {
 
     // O que é fixo numa concessão (1ª passada; e as condicionais, depois das escolhas).
     private void applyFixed(Build b, Source s, Grant g) {
+        if (g.minLevel() != null && b.level < g.minLevel()) return;
         switch (g.type()) {
             case ATTRIBUTE -> {
                 b.bonus.merge(g.attribute(), valueAt(g, g.amount(), b.scale(s.label())), Integer::sum);
@@ -948,7 +949,8 @@ public class CreationService {
             // Com options: escolha (2ª passada). expertise: "caso já tenha, imunidade", decidido no fim (damageUpgrades).
             case RESISTANCE -> {
                 if (g.hasOptions()) break;
-                if (Boolean.TRUE.equals(g.expertise())) b.resistanceUpgrades.add(g.value());
+                // amount 1 com expertise: "um avanço na resistência" (resistência → imunidade → absorção).
+                if (Boolean.TRUE.equals(g.expertise())) b.resistanceUpgrades.add(g.amount() != null && g.amount() > 0 ? "+" + g.value() : g.value());
                 else b.resistances.add(g.value());
             }
             case ABSORPTION -> {
@@ -1829,11 +1831,20 @@ public class CreationService {
             if (b.crafts.contains(c.value())) b.craftExpertise.add(c.value());
             else addCraft(b, c.value(), c.source());
         }
-        for (String type : b.resistanceUpgrades) {
-            if (b.immunities.contains(type)) continue;
+        for (String up : b.resistanceUpgrades) {
+            boolean step = up.startsWith("+");
+            String type = step ? up.substring(1) : up;
+            if (b.immunities.contains(type)) {
+                if (step && b.immunities.remove(type)) b.absorptions.add(type);
+                continue;
+            }
             if (b.resistances.remove(type)) b.immunities.add(type);
             else b.resistances.add(type);
         }
+        // O degrau maior vence: absorção > imunidade > resistência (Resistência Lendária, Absorção da Runinata).
+        b.immunities.removeAll(b.absorptions);
+        b.resistances.removeAll(b.immunities);
+        b.resistances.removeAll(b.absorptions);
     }
 
     // Concessão de escolha (perícia, magia, ofício... à escolha), que pode depender de uma opção ("when").

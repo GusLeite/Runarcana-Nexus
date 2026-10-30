@@ -118,6 +118,17 @@
         {
           "type": "CONDITION_IMMUNITY",
           "value": "Envenenado"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "trovejante",
+          "minLevel": 2
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "radiante",
+          "expertise": true,
+          "amount": 1
         }
       ]
     },

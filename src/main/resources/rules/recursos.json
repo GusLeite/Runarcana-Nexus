@@ -4511,7 +4511,15 @@
         "resources": [
           "urso-da-tempestade"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "RESISTANCE",
+          "value": "glacial",
+          "expertise": true,
+          "amount": 1
+        }
+      ]
     },
     {
       "id": "bencao-do-vorme",
@@ -4526,7 +4534,15 @@
         "resources": [
           "vorme-espectral"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "RESISTANCE",
+          "value": "vibracional",
+          "expertise": true,
+          "amount": 1
+        }
+      ]
     },
     {
       "id": "observacao-natural",

@@ -222,8 +222,9 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.character.situational[0].source").value("Herança: Perícia Teste"))
                 // "Caso já tenha, imunidade": venenoso já era resistência → imunidade; ígneo não era → resistência.
                 .andExpect(jsonPath("$.character.resistances").value(org.hamcrest.Matchers.contains("ígneo")))
-                .andExpect(jsonPath("$.character.immunities").value(org.hamcrest.Matchers.containsInAnyOrder("venenoso", "radiante")))
-                .andExpect(jsonPath("$.character.absorptions").value(org.hamcrest.Matchers.contains("ácido")))
+                .andExpect(jsonPath("$.character.immunities").value(org.hamcrest.Matchers.contains("venenoso")))
+                // Radiante: imunidade + "um avanço" → absorção. Trovejante só a partir do 2º nível (minLevel).
+                .andExpect(jsonPath("$.character.absorptions").value(org.hamcrest.Matchers.containsInAnyOrder("ácido", "radiante")))
                 .andExpect(jsonPath("$.character.conditionImmunities").value(org.hamcrest.Matchers.contains("Envenenado")))
                 // Ofício "caso já tenha, especialidade": Ferraria vem da origem.
                 .andExpect(jsonPath("$.character.craftExpertise").value(org.hamcrest.Matchers.contains("Ferraria")))

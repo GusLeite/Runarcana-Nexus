@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento B3/B4: resistência por nível e "um avanço" (`feature/character-sheet`)
+- `minLevel` em concessão fixa: Gases (versão mágica no 11º) e a cadeia da Runinata (Resistência Natural escolhida → Mágica 12º → Lendária 16º → Absorção 18º).
+- "Um avanço na resistência" (Bênção do Urso e do Vorme); o degrau maior apaga os menores na ficha.
+
 ## 2026-10-29 — Mapeamento B2: imunidade a condições e doenças (`feature/character-sheet`)
 - Concessão `CONDITION_IMMUNITY`; ficha com `conditionImmunities` (`character_condition_immunities`) em chips "Imune a ...".
 - Ressurgido Espectral, Limiar Tecnológico, Construto, Trolls, Bodisatva 10º, Atirador 11º, Desperado e Guardião 20º, Ninhada Aranha, Essência Etílica, Experimento Zaunita, Glacinata, Feéricos, Construído.

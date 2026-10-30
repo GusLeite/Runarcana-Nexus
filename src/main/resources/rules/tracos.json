@@ -730,6 +730,134 @@
       "description": "Ao alcançar o nível 16, sua Resistência Mágica se torna imunidade.",
       "requires": [
         "resistencia-magica"
+      ],
+      "grants": [
+        {
+          "type": "IMMUNITY",
+          "value": "cortante",
+          "when": "Resistência Natural:Cortante",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "cortante mágico",
+          "when": "Resistência Natural:Cortante",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "perfurante",
+          "when": "Resistência Natural:Perfurante",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "perfurante mágico",
+          "when": "Resistência Natural:Perfurante",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "contundente",
+          "when": "Resistência Natural:Contundente",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "contundente mágico",
+          "when": "Resistência Natural:Contundente",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "ácido",
+          "when": "Resistência Natural:Ácido",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "antimônico",
+          "when": "Resistência Natural:Ácido",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "elétrico",
+          "when": "Resistência Natural:Elétrico",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "plásmico",
+          "when": "Resistência Natural:Elétrico",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "ígneo",
+          "when": "Resistência Natural:Ígneo",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "incinerante",
+          "when": "Resistência Natural:Ígneo",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "gélido",
+          "when": "Resistência Natural:Gélido",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "glacial",
+          "when": "Resistência Natural:Gélido",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "trovejante",
+          "when": "Resistência Natural:Trovejante",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "vibracional",
+          "when": "Resistência Natural:Trovejante",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "venenoso",
+          "when": "Resistência Natural:Venenoso",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "energético",
+          "when": "Resistência Natural:Energético",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "necrótico",
+          "when": "Resistência Natural:Necrótico",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "psíquico",
+          "when": "Resistência Natural:Psíquico",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "radiante",
+          "when": "Resistência Natural:Radiante",
+          "minLevel": 16
+        }
       ]
     },
     {
@@ -739,6 +867,56 @@
       "description": "Ao alcançar o nível 12, sua Resistência Natural passa a afetar o tipo de dano mágico.",
       "requires": [
         "resistencia-natural"
+      ],
+      "grants": [
+        {
+          "type": "RESISTANCE",
+          "value": "cortante mágico",
+          "when": "Resistência Natural:Cortante",
+          "minLevel": 12
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "perfurante mágico",
+          "when": "Resistência Natural:Perfurante",
+          "minLevel": 12
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "contundente mágico",
+          "when": "Resistência Natural:Contundente",
+          "minLevel": 12
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "antimônico",
+          "when": "Resistência Natural:Ácido",
+          "minLevel": 12
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "plásmico",
+          "when": "Resistência Natural:Elétrico",
+          "minLevel": 12
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "incinerante",
+          "when": "Resistência Natural:Ígneo",
+          "minLevel": 12
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "glacial",
+          "when": "Resistência Natural:Gélido",
+          "minLevel": 12
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "vibracional",
+          "when": "Resistência Natural:Trovejante",
+          "minLevel": 12
+        }
       ]
     },
     {
@@ -749,24 +927,92 @@
       "detail": "Qual tipo de dano? (físico simples, elemental simples ou espiritual)",
       "grants": [
         {
-          "type": "RESISTANCE",
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Resistência Natural",
           "count": 1,
           "options": [
-            "cortante",
-            "perfurante",
-            "contundente",
-            "ácido",
-            "elétrico",
-            "ígneo",
-            "gélido",
-            "trovejante",
-            "venenoso",
-            "energético",
-            "necrótico",
-            "psíquico",
-            "radiante"
+            "Cortante",
+            "Perfurante",
+            "Contundente",
+            "Ácido",
+            "Elétrico",
+            "Ígneo",
+            "Gélido",
+            "Trovejante",
+            "Venenoso",
+            "Energético",
+            "Necrótico",
+            "Psíquico",
+            "Radiante"
           ],
-          "label": "Resistência Natural: um tipo de dano"
+          "label": "Resistência Natural: o tipo de dano",
+          "description": "O tipo de dano ao qual seu corpo é naturalmente resistente."
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "cortante",
+          "when": "Resistência Natural:Cortante"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "perfurante",
+          "when": "Resistência Natural:Perfurante"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "contundente",
+          "when": "Resistência Natural:Contundente"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "ácido",
+          "when": "Resistência Natural:Ácido"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "elétrico",
+          "when": "Resistência Natural:Elétrico"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "ígneo",
+          "when": "Resistência Natural:Ígneo"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "gélido",
+          "when": "Resistência Natural:Gélido"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "trovejante",
+          "when": "Resistência Natural:Trovejante"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "venenoso",
+          "when": "Resistência Natural:Venenoso"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "energético",
+          "when": "Resistência Natural:Energético"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "necrótico",
+          "when": "Resistência Natural:Necrótico"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "psíquico",
+          "when": "Resistência Natural:Psíquico"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "radiante",
+          "when": "Resistência Natural:Radiante"
         }
       ]
     },
@@ -798,6 +1044,134 @@
       "description": "Caso você tenha o traço maior Resistência Lendária, ao alcançar o nível 18, sua imunidade se torna absorção.",
       "requires": [
         "resistencia-lendaria"
+      ],
+      "grants": [
+        {
+          "type": "ABSORPTION",
+          "value": "cortante",
+          "when": "Resistência Natural:Cortante",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "cortante mágico",
+          "when": "Resistência Natural:Cortante",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "perfurante",
+          "when": "Resistência Natural:Perfurante",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "perfurante mágico",
+          "when": "Resistência Natural:Perfurante",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "contundente",
+          "when": "Resistência Natural:Contundente",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "contundente mágico",
+          "when": "Resistência Natural:Contundente",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "ácido",
+          "when": "Resistência Natural:Ácido",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "antimônico",
+          "when": "Resistência Natural:Ácido",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "elétrico",
+          "when": "Resistência Natural:Elétrico",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "plásmico",
+          "when": "Resistência Natural:Elétrico",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "ígneo",
+          "when": "Resistência Natural:Ígneo",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "incinerante",
+          "when": "Resistência Natural:Ígneo",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "gélido",
+          "when": "Resistência Natural:Gélido",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "glacial",
+          "when": "Resistência Natural:Gélido",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "trovejante",
+          "when": "Resistência Natural:Trovejante",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "vibracional",
+          "when": "Resistência Natural:Trovejante",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "venenoso",
+          "when": "Resistência Natural:Venenoso",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "energético",
+          "when": "Resistência Natural:Energético",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "necrótico",
+          "when": "Resistência Natural:Necrótico",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "psíquico",
+          "when": "Resistência Natural:Psíquico",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "radiante",
+          "when": "Resistência Natural:Radiante",
+          "minLevel": 18
+        }
       ]
     },
     {

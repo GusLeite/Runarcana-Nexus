@@ -5702,6 +5702,11 @@
         {
           "type": "RESISTANCE",
           "value": "ácido"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "antimônico",
+          "minLevel": 11
         }
       ]
     },
@@ -5721,6 +5726,11 @@
         {
           "type": "RESISTANCE",
           "value": "elétrico"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "plásmico",
+          "minLevel": 11
         }
       ]
     },
@@ -5740,6 +5750,11 @@
         {
           "type": "RESISTANCE",
           "value": "ígneo"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "incinerante",
+          "minLevel": 11
         }
       ]
     },
