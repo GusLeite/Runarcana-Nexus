@@ -88,6 +88,8 @@ export default function HeritageStep({ heritages, preview, picks, onChange }) {
           const chosen = times > 0
           const canAdd = s?.available && left > 0 && times < max
           const option = picks.find(p => p.id === h.id)?.option ?? null
+          // Escolhas de antes (na subida de nível, as da criação): a prévia conta todas.
+          const before = Math.max(0, (preview?.heritages?.find(l => l.id === h.id)?.times ?? times) - times)
           const expanded = open === h.id
           return (
             <article key={h.id} className={'her' + (chosen ? ' on' : '') + (s?.available ? '' : ' locked')} style={{ '--n': Math.min(n, 12) }}>
@@ -105,11 +107,11 @@ export default function HeritageStep({ heritages, preview, picks, onChange }) {
               {chosen && h.options?.length > 0 && (h.optionPerPick ? heritageOptions(picks, h.id) : [option]).map((current, i, all) => (
                 <div className="her-options" key={i}>
                   <span className="her-options-label">
-                    {all.length > 1 ? `${i + 1}ª escolha: ` : ''}{current ? 'Opção:' : 'Escolha uma opção:'}
+                    {all.length > 1 || before > 0 ? `${before + i + 1}ª escolha: ` : ''}{current ? 'Opção:' : 'Escolha uma opção:'}
                   </span>
                   <div className="to-pick">
                     {/* repeatOptions ("Aprimorar Fonte"): só da 2ª escolha em diante. */}
-                    {h.options.filter(o => i > 0 || !h.repeatOptions?.includes(o)).map(o => (
+                    {h.options.filter(o => before + i > 0 || !h.repeatOptions?.includes(o)).map(o => (
                       <button key={o} type="button" className={'to-chip' + (o === current ? ' on' : '')} aria-pressed={o === current}
                         onClick={() => onChange(setHeritageOption(picks, h.id, o, h.optionPerPick ? i : null))}>{o}</button>
                     ))}

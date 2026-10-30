@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Progressão Tecnológica na subida de nível (`feature/character-sheet`)
+- `HeritageStep` conta as escolhas da criação (pela prévia): "Aprimorar Fonte" aparece na 2ª escolha feita ao subir de nível.
+- Subida de nível mostra a escolha da Fonte Dominante ainda não feita (`dominantChoices` em `rules.js`).
+- Testes: `segundaFonteNaSubidaPedeADominante` e `dominantChoices`.
+
 ## 2026-10-29 — Vulnerabilidades, Fontes da Progressão Tecnológica e Adaptação Tecnológica (`feature/character-sheet`)
 - Concessão `VULNERABILITY` (`amount: -1` tira): Ressurgido; a ficha guarda `vulnerabilities` (`character_vulnerabilities`) e mostra em chips vermelhos.
 - Progressão Tecnológica: a mesma Fonte duas vezes dá as Vantagens de novo; "Aprimorar Fonte" (`repeatOptions`, só da 2ª escolha); escolha da **Fonte Dominante** (`threshold.dominant`) com as duas fontes.

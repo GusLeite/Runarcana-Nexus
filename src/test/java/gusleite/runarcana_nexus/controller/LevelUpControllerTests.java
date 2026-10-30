@@ -143,6 +143,27 @@ class LevelUpControllerTests {
                 .andExpect(jsonPath("$.intel").value(19));
     }
 
+    // 2ª escolha da Herança no 5º nível: opção só da 2ª escolha (Reforço) e a forma dominante pedida na subida.
+    @Test
+    void segundaFonteNaSubidaPedeADominante() throws Exception {
+        long id = create("gaudron", NYX.replace("{\"id\":\"teste-geral\"}", "{\"id\":\"teste-formas\",\"option\":\"Lobo\"}"));
+        String master = login("mestre");
+        levelUp(master, id, "{\"levels\":[{\"hpRoll\":3},{\"hpRoll\":3},"
+                + "{\"hpRoll\":3,\"choices\":{\"level:4:class:ARCANIST:0\":[\"aprimoramento-oficio\"]}}]}").andExpect(status().isOk());
+        levelUpPreview(master, id, "{\"levels\":[{\"hpRoll\":3,\"heritages\":[{\"id\":\"teste-formas\",\"option\":\"Reforço\"}]}]}")
+                .andExpect(jsonPath("$.preview.errors", not(hasItem("Formas Teste: Reforço só a partir da 2ª escolha."))));
+        String urso = "{\"levels\":[{\"hpRoll\":3,\"heritages\":[{\"id\":\"teste-formas\",\"option\":\"Urso\"}],"
+                + "\"choices\":{\"heritage:teste-formas:0\":[\"Direita\"]";
+        levelUpPreview(master, id, urso + "}}]}")
+                .andExpect(jsonPath("$.preview.complete").value(false))
+                .andExpect(jsonPath("$.preview.choices[?(@.key == 'dominant:Forma Dominante:0')].options[1]").value("Urso"));
+        String done = urso + ",\"dominant:Forma Dominante:0\":[\"Urso\"]}}]}";
+        levelUpPreview(master, id, done)
+                .andExpect(jsonPath("$.preview.complete").value(true))
+                .andExpect(jsonPath("$.preview.features[?(@.name == 'Limiar Urso')].source").value("Limiar Tecnológico"));
+        levelUp(master, id, done).andExpect(jsonPath("$.level").value(5));
+    }
+
     @Test
     void oficioGuardaONivelEmQueFoiAprendido() throws Exception {
         long id = createNyx();

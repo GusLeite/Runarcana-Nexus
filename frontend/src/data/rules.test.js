@@ -3,7 +3,7 @@ import {
   addHeritage, heritageOptions, carryCapacity, choiceOptionName, critDice, deathSaveResult, situationalFor, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
   addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
-  resourceCost, togglePick, levelChoices, keepChoices, rollDie, applyHp,
+  resourceCost, togglePick, levelChoices, keepChoices, dominantChoices, rollDie, applyHp,
 } from './rules.js'
 
 describe('modificadores', () => {
@@ -257,6 +257,14 @@ describe('subida de nível', () => {
     const shuffled = [choices[2], { key: 'level:4:class:ARCANIST:1' }, choices[1]]
     expect(levelChoices(shuffled, 4).map(c => c.key)).toEqual([
       'level:4:class:ARCANIST:1', 'level:4:class:ARCANIST:0', 'resource:aumento-atributo-2@level:4:class:ARCANIST:0:1'])
+  })
+
+  it('mostra a fonte dominante ainda não escolhida, ou a que está sendo escolhida agora', () => {
+    const dom = [{ key: 'dominant:Fonte Dominante:0', selected: [] }, { key: 'level:4:class:ARCANIST:0' }]
+    expect(dominantChoices(dom, {}).map(c => c.key)).toEqual(['dominant:Fonte Dominante:0'])
+    const done = [{ key: 'dominant:Fonte Dominante:0', selected: ['Fonte Estável'] }]
+    expect(dominantChoices(done, {})).toEqual([])
+    expect(dominantChoices(done, { 'dominant:Fonte Dominante:0': ['Fonte Estável'] })).toHaveLength(1)
   })
 
   it('tira as escolhas que sumiram da prévia', () => {

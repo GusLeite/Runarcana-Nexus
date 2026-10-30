@@ -462,6 +462,12 @@ function defaultRandom() {
   return Math.random()
 }
 
+// Escolha da fonte dominante (chave "dominant:...", Progressão Tecnológica com as duas Fontes) que ainda não foi feita
+// (ou que está sendo feita agora, em draftChoices): na subida de nível, quando a 2ª Fonte chega.
+export function dominantChoices(choices, draftChoices) {
+  return (choices ?? []).filter(c => c.key.startsWith('dominant:') && (!c.selected?.length || c.key in (draftChoices ?? {})))
+}
+
 // Escolhas que vêm das Heranças (chave "heritage:<id>:<índice>"), só das que estão em picks ([{ id }]).
 export function heritageChoices(choices, picks) {
   const ids = new Set((picks ?? []).map(p => p.id))
