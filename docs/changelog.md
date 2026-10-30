@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Alistar: volta ao vídeo, com enquadramento corrigido (`feature/character-sheet`)
+- O Minotauro voltou ao vídeo do Alistar (saiu a chave `living` da entrada) com `show: 0.62`: o painel mostra a cabeça inteira em vez de um close do rosto.
+
 ## 2026-10-30 — Arte do Alistar animada na origem Minotauro (`feature/character-sheet`)
 - `LivingArt.jsx` e `data/scenes/minotauro.js`: a imagem ganha vida com um shader WebGL (respiração, juba, correntes, poeira, olhos, areia, lascas, sangue).
 - `living` tem prioridade sobre `video` em `originArt.js`; o vídeo do Alistar continua lá, sem aparecer.
