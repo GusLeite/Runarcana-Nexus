@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Efeito exclusivo do Proto: juramento do escudeiro (`feature/character-sheet`)
+- `effects/ShieldOath.jsx` (`fx: 'oath'`): visor de máquina, bússola-radar que procura o mestre sem resposta, escudo que bate e se enche de hexágonos, registro digitado no topo. Some em 4,5 s; fica só a poeira.
+- Login em azul (`.login.oath`). Conferido no preview, pausando a animação em cada etapa.
+
 ## 2026-10-30 — Proto ganha vídeo na tela inicial (`feature/character-sheet`)
 - `assets/characters/proto.mp4` (H.264 1080p sem áudio, 9,6 MB, 10,75 s) e `proto.jpg` (poster), ligados em `data/characters.js`.
 - Vídeo editado: respiração em câmera lenta no início e transição de 1,1 s de volta ao 1º quadro para o loop. Nenhum personagem usa mais placeholder.

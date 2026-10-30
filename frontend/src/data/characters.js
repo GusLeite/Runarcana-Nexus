@@ -12,7 +12,7 @@ import logeVid from '../assets/characters/loge.mp4'
 // - img: arte real (import de src/assets) ou placeholder gerado por hue/variant
 // - vid: vídeo MP4 sem áudio em loop; `img` vira o poster
 // - pos: enquadramento (background-position / object-position)
-// - fx: efeito de partículas ('embers' = brasas do Gaudron, 'blood' = magia de sangue do Rudo, 'haunt' = assombração do Loge)
+// - fx: efeito de partículas ('embers' = brasas do Gaudron, 'blood' = magia de sangue do Rudo, 'haunt' = assombração do Loge, 'oath' = juramento do Proto)
 // - impact: onda de choque + tremor ao receber o mouse
 // - burst: pulso vermelho ao receber o mouse
 const BASE = [
@@ -21,7 +21,7 @@ const BASE = [
   { id: 'gaudron', name: 'GAUDRON', role: 'Guardião', hue: 42, variant: 1, lore: 'Guarda os portões e as promessas feitas.',
     img: gaudronImg, vid: gaudronVid, pos: '57% 25%', fx: 'embers', impact: true },
   { id: 'proto', name: 'PROTO', role: 'Arcanista', hue: 190, variant: 2, lore: 'Dobra a magia antiga em novas formas.',
-    img: protoImg, vid: protoVid, pos: '58% 25%' },
+    img: protoImg, vid: protoVid, pos: '58% 25%', fx: 'oath' },
   { id: 'loge', name: 'LOGE', role: 'Espreitador', hue: 348, variant: 4, lore: 'Some nas sombras e volta com o que falta.',
     img: logeImg, vid: logeVid, pos: '50% 25%', fx: 'haunt' },
 ]

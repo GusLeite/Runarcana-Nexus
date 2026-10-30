@@ -2,6 +2,7 @@ import { forwardRef } from 'react'
 import Embers from './effects/Embers.jsx'
 import BloodMagic from './effects/BloodMagic.jsx'
 import Haunting from './effects/Haunting.jsx'
+import ShieldOath from './effects/ShieldOath.jsx'
 
 // Força o play mudo: alguns navegadores ignoram autoPlay sem `muted` setado via propriedade.
 const playMuted = video => {
@@ -19,6 +20,7 @@ const CharacterPanel = forwardRef(function CharacterPanel(
     + (c.burst ? ' burst' : '')
     + (c.impact ? ' impact' : '')
     + (c.fx === 'haunt' ? ' haunted' : '')
+    + (c.fx === 'oath' ? ' oath' : '')
     + (hot ? ' hot' : '')
     + (selected ? ' sel' : '')
     + (gone ? ' gone' : '')
@@ -61,6 +63,7 @@ const CharacterPanel = forwardRef(function CharacterPanel(
       {c.fx === 'embers' && <Embers />}
       {c.fx === 'blood' && <BloodMagic />}
       {c.fx === 'haunt' && <Haunting img={c.img} pos={c.pos} />}
+      {c.fx === 'oath' && <ShieldOath />}
       {c.impact && <div className="ring" />}
       {c.impact && <div className="ring r2" />}
       <div className="cap">
