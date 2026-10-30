@@ -47,7 +47,12 @@ function FocusVideo({ clip }) {
       const bh = holder.clientHeight
       if (!video.videoWidth || !bh) return
       const aspect = video.videoWidth / video.videoHeight
-      const width = Math.max(bh * aspect, bw, clip.show ? bw / clip.show : 0)
+      // show limita o quanto o vídeo cresce (nunca mais largo que bw / show), mas só nos painéis largos: do estreito (≤ 0,3 de
+      // largura por altura) ao largo (≥ 0,6) a mudança é gradual, para o painel não dar um salto ao se expandir.
+      const cover = bh * aspect
+      const shown = clip.show ? Math.min(cover, bw / clip.show) : cover
+      const wide = Math.min(1, Math.max(0, (bw / bh - 0.3) / 0.3))
+      const width = Math.max(bw, cover + (shown - cover) * wide)
       const height = width / aspect
       const clamp = (v, min, max) => Math.min(max, Math.max(min, v))
       setBox({
