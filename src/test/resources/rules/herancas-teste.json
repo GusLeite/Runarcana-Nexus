@@ -143,6 +143,11 @@
           "type": "SAVING_THROW",
           "attribute": "INTELLIGENCE",
           "expertise": true
+        },
+        {
+          "type": "DAMAGE_REDUCTION",
+          "value": "gélido",
+          "usesFormula": "PROFICIENCY"
         }
       ]
     },

@@ -6599,6 +6599,11 @@
           "type": "SPEED",
           "value": "FLY",
           "feet": 30
+        },
+        {
+          "type": "DAMAGE_REDUCTION",
+          "value": "sombrio",
+          "amount": 2
         }
       ]
     },

@@ -228,6 +228,8 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.character.conditionImmunities").value(org.hamcrest.Matchers.contains("Envenenado")))
                 // Salvaguarda de INT já vem da classe: especialidade.
                 .andExpect(jsonPath("$.character.savingThrowExpertise").value(org.hamcrest.Matchers.contains("INTELLIGENCE")))
+                // RD contra gélido = bônus de proficiência (2).
+                .andExpect(jsonPath("$.character.typedReductions['gélido']").value(2))
                 // Ofício "caso já tenha, especialidade": Ferraria vem da origem.
                 .andExpect(jsonPath("$.character.craftExpertise").value(org.hamcrest.Matchers.contains("Ferraria")))
                 // Vulnerável a radiante e ao tipo escolhido; a necrótica foi tirada por outra concessão (amount -1).

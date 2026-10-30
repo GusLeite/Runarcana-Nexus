@@ -75,7 +75,7 @@ Protetor (proficiências), Estudioso (duas perícias) e Obreiro (truque espiritu
 - ✅ **B4. "Um avanço na resistência"** (`RESISTANCE` com `expertise` e `amount: 1`) (degraus: resistência → imunidade → absorção): Bênção do Urso e do Vorme (Invocações).
 - ✅ **B5. Especialidade em salvaguarda**: Graciosidade ("caso já tenha proficiência").
 - ✅ **B6. Tamanho +1 categoria** (`SIZE` `UP` na 2ª escolha; o +1 de dano e o custo maior ficam no texto): Variante Colosso.
-- **B7. RD contra um tipo de dano**: Variante Glacinata (gélido = proficiência), Adaptação Selvagem (ácido e ígneo), Ascensão Feérica (sombrio 2), Domínio Azakana (radiante 2).
+- ✅ **B7. RD contra um tipo de dano** (`DAMAGE_REDUCTION`; a do Domínio Azakana é temporária, durante a Ascensão Azakana, e ficou com o mestre): Variante Glacinata (gélido = proficiência), Adaptação Selvagem (ácido e ígneo), Ascensão Feérica (sombrio 2), Domínio Azakana (radiante 2).
 - **B8. Ki e Energia extras**: Cultivo de Ki, Conjurador Natural, Alianças Espirituais (Ki); Bioenergia, Experimento Reconhecido, Chireano (Energia).
 
 ## C. Sistema novo de verdade

@@ -82,7 +82,9 @@ public record CharacterResponse(
         List<String> absorptions,
         List<String> conditionImmunities,
         // Salvaguardas com especialidade (proficiência em dobro).
-        List<Attribute> savingThrowExpertise
+        List<Attribute> savingThrowExpertise,
+        // RD contra um tipo de dano (tipo → valor).
+        java.util.Map<String, Integer> typedReductions
 ) {
     public record Situational(String target, String note, String source) {}
 
@@ -153,7 +155,8 @@ public record CharacterResponse(
                 List.copyOf(character.getImmunities()),
                 List.copyOf(character.getAbsorptions()),
                 List.copyOf(character.getConditionImmunities()),
-                character.getSavingThrowExpertise().stream().sorted().toList()
+                character.getSavingThrowExpertise().stream().sorted().toList(),
+                new java.util.TreeMap<>(character.getTypedReductions())
         );
     }
 }

@@ -81,6 +81,12 @@ public class Character {
     @CollectionTable(name = "character_condition_immunities", joinColumns = @JoinColumn(name = "character_id"))
     @Column(name = "name")
     private Set<String> conditionImmunities = new LinkedHashSet<>();
+    // RD contra um tipo de dano (Glacinata: gélido = bônus de proficiência), recalculada a cada criação/subida.
+    @ElementCollection
+    @CollectionTable(name = "character_typed_reductions", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "damage_type")
+    @Column(name = "amount")
+    private Map<String, Integer> typedReductions = new HashMap<>();
     private Integer passivePerceptionBonus;
     private Integer passiveInsightBonus;
     // Bônus na iniciativa (Atento: +5), das concessões INITIATIVE. Nulo = 0.

@@ -962,6 +962,11 @@ public class CreationService {
             }
             case IMMUNITY -> b.immunities.add(g.value());
             case CONDITION_IMMUNITY -> b.conditionImmunities.add(g.value());
+            case DAMAGE_REDUCTION -> {
+                int n = g.usesFormula() == UsesFormula.PROFICIENCY ? b.proficiency()
+                        : g.usesFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : g.amount();
+                b.typedReductions.merge(g.value(), n, Integer::sum);
+            }
             // amount -1: a 2ª escolha tira a vulnerabilidade (Meio-Azakana deixa de ser vulnerável a radiante).
             case VULNERABILITY -> {
                 if (g.hasOptions()) break;
@@ -1791,6 +1796,8 @@ public class CreationService {
         c.getAbsorptions().addAll(b.absorptions);
         c.getConditionImmunities().clear();
         c.getConditionImmunities().addAll(b.conditionImmunities);
+        c.getTypedReductions().clear();
+        c.getTypedReductions().putAll(b.typedReductions);
         c.getSavingThrowExpertise().clear();
         c.getSavingThrowExpertise().addAll(b.saveExpertise);
         c.setPassivePerceptionBonus(b.passivePerception);
@@ -2425,6 +2432,7 @@ public class CreationService {
         final Set<String> immunities = new LinkedHashSet<>();
         final Set<String> absorptions = new LinkedHashSet<>();
         final Set<String> conditionImmunities = new LinkedHashSet<>();
+        final Map<String, Integer> typedReductions = new LinkedHashMap<>();
         final List<Sourced<Attribute>> saveUpgrades = new ArrayList<>();
         final Set<Attribute> saveExpertise = new LinkedHashSet<>();
         // Categorias de tamanho acima da escolhida (SIZE "UP").

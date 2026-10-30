@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento B7: RD contra um tipo de dano (`feature/character-sheet`)
+- Concessão `DAMAGE_REDUCTION`; ficha com `typedReductions` (`character_typed_reductions`) em chips "RD N: tipo".
+- Variante Glacinata (gélido = proficiência), Adaptação Selvagem (ácido e ígneo), Ascensão Feérica (sombrio 2).
+
 ## 2026-10-29 — Mapeamento B6: tamanho da Variante Colosso (`feature/character-sheet`)
 - `SIZE` `UP` (uma categoria acima, no fim) e `repeatGrants` com chave `"*"` para Herança sem opção; a 2ª escolha do Colosso aumenta o tamanho.
 - Teste: `segundaEscolhaSemOpcaoAumentaOTamanho`.

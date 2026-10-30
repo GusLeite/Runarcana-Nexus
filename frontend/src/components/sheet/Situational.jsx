@@ -13,6 +13,8 @@ const DAMAGE = [
 // de CA e iniciativa, das Heranças e Aprimoramentos.
 export default function Situational({ sheet }) {
   const damage = DAMAGE.flatMap(([field, label, cls]) => (sheet[field] ?? []).map(t => ({ key: field + t, text: label + (label.endsWith(' a') ? ' ' : ': ') + t, cls })))
+    // RD contra um tipo de dano (Glacinata: "RD 2: gélido").
+    .concat(Object.entries(sheet.typedReductions ?? {}).map(([t, n]) => ({ key: 'rd' + t, text: 'RD ' + n + ': ' + t, cls: 'res' })))
   const ac = situationalFor(sheet, 'AC')
   const init = situationalFor(sheet, 'INITIATIVE')
   if (!damage.length && !ac.length && !init.length) return null

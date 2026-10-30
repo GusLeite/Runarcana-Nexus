@@ -3146,6 +3146,11 @@
         {
           "type": "CONDITION_IMMUNITY",
           "value": "Frio Extremo"
+        },
+        {
+          "type": "DAMAGE_REDUCTION",
+          "value": "gélido",
+          "usesFormula": "PROFICIENCY"
         }
       ]
     },
@@ -4715,6 +4720,16 @@
           "type": "SITUATIONAL",
           "value": "SKILL:STEALTH",
           "description": "Quando em sua região, você recebe proficiência com Furtividade, caso já tenha, recebe especialidade e, caso também já tenha especialidade, faz essas jogadas com vantagem."
+        },
+        {
+          "type": "DAMAGE_REDUCTION",
+          "value": "ácido",
+          "usesFormula": "PROFICIENCY"
+        },
+        {
+          "type": "DAMAGE_REDUCTION",
+          "value": "ígneo",
+          "usesFormula": "PROFICIENCY"
         }
       ]
     },
