@@ -222,6 +222,16 @@
           "spellLevel": 1,
           "count": 1,
           "minLevel": 2
+        },
+        {
+          "type": "CRAFT_INCOME",
+          "value": "ALL",
+          "usesFormula": "PROFICIENCY"
+        },
+        {
+          "type": "CRAFT_MASTERWORK",
+          "value": "ferraria",
+          "amount": 1
         }
       ]
     },

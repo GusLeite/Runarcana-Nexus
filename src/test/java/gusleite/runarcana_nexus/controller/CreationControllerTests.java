@@ -242,6 +242,9 @@ class CreationControllerTests {
                 // Ofício: +1 nível escolhido (Ferraria 1 → 2) e 3 fórmulas a mais (INT 17: 3 × 2 + 3).
                 .andExpect(jsonPath("$.crafts[?(@.name == 'Ferraria')].level").value(2))
                 .andExpect(jsonPath("$.crafts[?(@.name == 'Ferraria')].formulaLimit").value(9))
+                // Produção: +proficiência (2) PO/dia em todos os ofícios; Obra-Prima com 1 a menos na Ferraria.
+                .andExpect(jsonPath("$.crafts[?(@.name == 'Ferraria')].income").value(2))
+                .andExpect(jsonPath("$.crafts[?(@.name == 'Ferraria')].masterwork").value(1))
                 .andExpect(jsonPath("$.character.senses['DARKVISION|submerso']").value(30))
                 // Usos a mais: soma na habilidade que existe (Inspirado 1 → 2) e cria a que falta (Ki Teste com 2).
                 .andExpect(jsonPath("$.abilities[?(@.name == 'Inspirado')].maxUses").value(2))

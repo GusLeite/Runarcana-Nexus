@@ -647,7 +647,7 @@ public class RuleCatalogService {
                 p.add(at + ": when é \"Habilidade:Opção\" e não vale em RESOURCE_CHOICE nem em FEATURE com opções");
             }
             if (g.valueByLevel() != null) {
-                if (!Set.of(GrantType.ATTRIBUTE, GrantType.AC_BONUS, GrantType.SPEED, GrantType.SENSE, GrantType.CRAFT_LEVEL).contains(g.type())) {
+                if (!Set.of(GrantType.ATTRIBUTE, GrantType.AC_BONUS, GrantType.SPEED, GrantType.SENSE, GrantType.CRAFT_LEVEL, GrantType.CRAFT_INCOME).contains(g.type())) {
                     p.add(at + ": valueByLevel só vale em ATTRIBUTE, AC_BONUS, SPEED e SENSE");
                 }
                 g.valueByLevel().forEach((lv, n) -> {
@@ -724,6 +724,11 @@ public class RuleCatalogService {
                 case CRAFT_LEVEL -> {
                     if (g.amount() == null && (g.valueByLevel() == null || g.valueByLevel().isEmpty())) p.add(at + " (CRAFT_LEVEL): precisa de amount ou valueByLevel");
                 }
+                case CRAFT_INCOME -> {
+                    if (blank(g.value())) p.add(at + " (CRAFT_INCOME): falta value (ofício, ALL ou CHOSEN)");
+                    if (g.amount() == null && g.usesFormula() == null && (g.valueByLevel() == null || g.valueByLevel().isEmpty())) p.add(at + " (CRAFT_INCOME): precisa de amount, usesFormula ou valueByLevel");
+                }
+                case CRAFT_MASTERWORK -> {}
                 case CRAFT_FORMULAS -> {
                     if (blank(g.value())) p.add(at + " (CRAFT_FORMULAS): falta value (ofício ou CHOSEN)");
                     if (g.amount() == null && g.usesFormula() == null) p.add(at + " (CRAFT_FORMULAS): precisa de amount ou usesFormula");

@@ -190,6 +190,8 @@ public class CreationService {
         replaceCraftMap(c.getCraftLevelBonus(), b.craftBonus, craftNames);
         replaceCraftMap(c.getCraftMinLevel(), b.craftFloor, craftNames);
         replaceCraftMap(c.getCraftFormulaBonus(), b.craftFormulas, craftNames);
+        replaceCraftMap(c.getCraftIncome(), b.craftIncome, craftNames);
+        replaceCraftMap(c.getCraftMasterwork(), b.craftMasterwork, craftNames);
         // Os pontos da criação são gastos no assistente; a ficha guarda o que sobrou (normalmente 0).
         c.setHeritagePoints(b.heritagePoints - b.heritagesSpent());
         b.heritages.forEach(h -> c.getHeritages().add(displayName(h)));
@@ -289,6 +291,8 @@ public class CreationService {
         replaceCraftMap(c.getCraftLevelBonus(), b.craftBonus, craftNames);
         replaceCraftMap(c.getCraftMinLevel(), b.craftFloor, craftNames);
         replaceCraftMap(c.getCraftFormulaBonus(), b.craftFormulas, craftNames);
+        replaceCraftMap(c.getCraftIncome(), b.craftIncome, craftNames);
+        replaceCraftMap(c.getCraftMasterwork(), b.craftMasterwork, craftNames);
         c.setHeritagePoints(b.heritagePoints - b.heritagesSpent());
         replace(c.getHeritages(), b.heritages.stream().map(CreationService::displayName).toList());
         replace(c.getSavingThrows(), b.saves.keySet());
@@ -591,6 +595,15 @@ public class CreationService {
                 // Escolha que só aparece a partir de um nível do personagem (Magia Inata: magia de 1º nível no 5º).
                 if (g.minLevel() != null && b.level < g.minLevel()) continue;
                 switch (g.type()) {
+                    case CRAFT_MASTERWORK -> {
+                        // Sem value: o ofício escolhido entre os que ele tem (Artífice: "para um de seus ofícios").
+                        if (g.value() != null || b.crafts.isEmpty()) break;
+                        List<String> options = List.copyOf(b.crafts);
+                        String label = orLabel(g, "Escolha o ofício da margem de Obra-Prima");
+                        List<String> selected = choose(picked, options, 1, label, b.errors);
+                        selected.forEach(o -> b.craftMasterwork.merge(o, g.amount() == null ? 1 : g.amount(), Integer::sum));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, 1, options, selected, s.label(), null));
+                    }
                     case CRAFT_LEVEL -> {
                         // Sem value: +amount num ofício maior que ele tem, diferente dos que outra fonte já aumentou.
                         if (g.value() != null) break;
@@ -1036,7 +1049,7 @@ public class CreationService {
             case FORM -> b.forms.add(formLine(g));
             case ATTRIBUTE_SWAP -> b.attributeSwaps.put(g.value(), g.attribute().name()
                     + (g.usesFormula() == UsesFormula.HALF_ATTRIBUTE_MODIFIER ? "/2" : ""));
-            case CRAFT_LEVEL, CRAFT_FORMULAS -> {
+            case CRAFT_LEVEL, CRAFT_FORMULAS, CRAFT_INCOME, CRAFT_MASTERWORK -> {
                 if (g.value() != null) b.craftGrants.add(new Sourced<>(g, s.key() + "|" + s.label()));
             }
             case DAMAGE_BONUS -> b.damageBonuses.add(new Sourced<>(g, s.key() + "|" + s.label()));
@@ -1984,8 +1997,19 @@ public class CreationService {
         for (Sourced<Grant> c : b.craftGrants) {
             Grant g = c.value();
             String[] src = c.source().split("\\|", 2);
-            List<String> ids = "CHOSEN".equals(g.value()) ? b.chosenCrafts.getOrDefault(src[0], List.of()) : List.of(g.value());
+            List<String> ids = "CHOSEN".equals(g.value()) ? b.chosenCrafts.getOrDefault(src[0], List.of())
+                    : "ALL".equals(g.value()) ? List.of("*") : List.of(g.value());
             for (String id : ids) {
+                if (g.type() == GrantType.CRAFT_INCOME) {
+                    int n = g.valueByLevel() != null && !g.valueByLevel().isEmpty() ? valueAt(g, 0, b.scale(src[1]))
+                            : g.amount() != null ? g.amount() : usesFor(g, b.proficiency(), b.level, b.roundUp, b::modifier);
+                    if (n > 0) b.craftIncome.merge(id, n, Integer::sum);
+                    continue;
+                }
+                if (g.type() == GrantType.CRAFT_MASTERWORK) {
+                    b.craftMasterwork.merge(id, g.amount() == null ? 1 : g.amount(), Integer::sum);
+                    continue;
+                }
                 if (g.type() == GrantType.CRAFT_FORMULAS) {
                     int n = g.amount() != null ? g.amount()
                             : usesFor(g, b.proficiency(), b.level, b.roundUp, b::modifier) * (g.count() == null ? 1 : g.count());
@@ -2629,6 +2653,8 @@ public class CreationService {
         final List<CharacterForm> forms = new ArrayList<>();
         final Map<String, Integer> craftFloor = new LinkedHashMap<>();
         final Map<String, Integer> craftFormulas = new LinkedHashMap<>();
+        final Map<String, Integer> craftIncome = new LinkedHashMap<>();
+        final Map<String, Integer> craftMasterwork = new LinkedHashMap<>();
         final List<Sourced<Grant>> craftGrants = new ArrayList<>();
         final Map<String, List<String>> chosenCrafts = new LinkedHashMap<>();
         // Mistérios escolhidos em cada fonte (SPELL_CHOICE "MYSTERY:CHOSEN": Acólito Arcanista).

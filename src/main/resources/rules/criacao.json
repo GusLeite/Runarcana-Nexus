@@ -3341,6 +3341,16 @@
                   "type": "SITUATIONAL",
                   "value": "SAVE",
                   "description": "Forja Viva: vantagem em salvaguardas contra Frio."
+                },
+                {
+                  "type": "CRAFT_INCOME",
+                  "value": "ALL",
+                  "valueByLevel": {
+                    "5": 1,
+                    "10": 2,
+                    "15": 3,
+                    "20": 4
+                  }
                 }
               ]
             },

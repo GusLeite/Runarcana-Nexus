@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento M: produção de ofício (`feature/character-sheet`)
+- Concessões `CRAFT_INCOME` (PO/dia a mais) e `CRAFT_MASTERWORK` (margem de Obra-Prima); a ficha guarda e o cartão de Ofícios mostra.
+- Artífice, Operário, Coletivo Forte, Mestre Artesão, Hospitaleiro e o Forjador do Acólito da Forja.
+
 ## 2026-10-29 — Mapeamento C6: Magia Inata e magias por nível (`feature/character-sheet`)
 - Escolhas com `minLevel` (só aparecem a partir do nível); `SPELL_CHOICE` `ORIGIN` (lista da origem) e `MYSTERY:CHOSEN` (Mistério escolhido na mesma fonte).
 - Magia Inata (truque; 1º no 5º; 2º no 11º; 3º no 17º) e Acólito Arcanista (uma magia do Mistério a cada novo nível de magia).

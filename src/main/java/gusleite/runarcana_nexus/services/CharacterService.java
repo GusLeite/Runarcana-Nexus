@@ -232,7 +232,9 @@ public class CharacterService {
                     .toList();
             int limit = Math.max(1, character.getModifier(Attribute.INTELLIGENCE)) * (level == null ? 1 : level)
                     + character.getCraftFormulaBonus().getOrDefault(name, 0);
-            return new CraftResponse(k == null ? null : k.id(), name, k == null ? null : k.kind(), attribute, level, learnedAt, expert, bonus, known, limit);
+            int income = character.getCraftIncome().getOrDefault(name, 0) + character.getCraftIncome().getOrDefault("*", 0);
+            return new CraftResponse(k == null ? null : k.id(), name, k == null ? null : k.kind(), attribute, level, learnedAt, expert, bonus, known, limit,
+                    income, character.getCraftMasterwork().getOrDefault(name, 0));
         }).toList();
     }
 

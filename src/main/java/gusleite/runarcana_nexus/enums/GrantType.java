@@ -48,6 +48,9 @@ public enum GrantType {
     CRAFT_LEVEL,        // nível de ofício: value = id do ofício ou CHOSEN (o da CRAFT_CHOICE da mesma fonte); amount = +níveis,
                         // valueByLevel = nível mínimo (Maestria: 6º; Atirador: pelo nível na classe). Sem value: escolha entre os
                         // ofícios maiores que ele tem (sem repetir um que outra fonte já aumentou)
+    CRAFT_INCOME,       // PO por dia a mais na produção: value = id do ofício, ALL (todos) ou CHOSEN; amount, usesFormula
+                        // (PROFICIENCY/HALF_PROFICIENCY) ou valueByLevel (pelo nível da classe)
+    CRAFT_MASTERWORK,   // margem de Obra-Prima diminui em amount: value = id ou CHOSEN; sem value, escolha entre os ofícios dele
     CRAFT_FORMULAS,     // fórmulas a mais no limite de um ofício: value (id ou CHOSEN), amount ou usesFormula (× count)
     DAMAGE_BONUS,       // bônus no dano dos ataques: value = alvo (ATTACK, ATTACK:MELEE..., UNARMED, TWO_HANDED, WEAPON:<nome>,
                         // CHOSEN = a arma escolhida na PROFICIENCY_CHOICE da mesma fonte); amount, damage ("1d4") ou usesFormula

@@ -1326,6 +1326,11 @@
           "count": 1,
           "value": "EXPERTISE",
           "label": "Mestre Artesão: um ofício (com especialidade)"
+        },
+        {
+          "type": "CRAFT_INCOME",
+          "value": "CHOSEN",
+          "amount": 1
         }
       ]
     },
@@ -2188,7 +2193,19 @@
         "NOXUS"
       ],
       "prerequisite": "Noxiano",
-      "description": "Você atuou como ou foi instruído pelos Artífices Noxianos, criando armas para os guerreiros e construindo fortalezas nas cidades conquistadas, abastecendo-os e provendo segurança em momentos de necessidade. Você recebe os seguintes benefícios:\n\nVocê adiciona metade do seu Bônus de Proficiência ao valor de PO que você pode produzir por dia.\nVocê adiciona seu Bônus de Proficiência, em vez de metade, ao valor de PO que pode produzir por dia ao construir um item que seja de grande necessidade para a equipe. Apenas um item pode ser beneficiado por este efeito por vez.\nA margem para a criação de Obras-Primas diminui em 1 para um de seus ofícios."
+      "description": "Você atuou como ou foi instruído pelos Artífices Noxianos, criando armas para os guerreiros e construindo fortalezas nas cidades conquistadas, abastecendo-os e provendo segurança em momentos de necessidade. Você recebe os seguintes benefícios:\n\nVocê adiciona metade do seu Bônus de Proficiência ao valor de PO que você pode produzir por dia.\nVocê adiciona seu Bônus de Proficiência, em vez de metade, ao valor de PO que pode produzir por dia ao construir um item que seja de grande necessidade para a equipe. Apenas um item pode ser beneficiado por este efeito por vez.\nA margem para a criação de Obras-Primas diminui em 1 para um de seus ofícios.",
+      "grants": [
+        {
+          "type": "CRAFT_INCOME",
+          "value": "ALL",
+          "usesFormula": "HALF_PROFICIENCY"
+        },
+        {
+          "type": "CRAFT_MASTERWORK",
+          "amount": 1,
+          "label": "Artífice: o ofício com a margem de Obra-Prima menor"
+        }
+      ]
     },
     {
       "id": "autoridade-alfa",
@@ -2593,6 +2610,11 @@
           "type": "CRAFT_LEVEL",
           "amount": 1,
           "label": "Operário: o ofício que sobe um nível"
+        },
+        {
+          "type": "CRAFT_INCOME",
+          "value": "ALL",
+          "usesFormula": "HALF_PROFICIENCY"
         }
       ]
     },
@@ -4159,6 +4181,11 @@
         {
           "type": "SPELL",
           "value": "bom-fruto"
+        },
+        {
+          "type": "CRAFT_MASTERWORK",
+          "value": "cozinheiro",
+          "amount": 1
         }
       ]
     },
@@ -4655,7 +4682,14 @@
         "chireano"
       ],
       "prerequisite": "Chireano",
-      "description": "Os Chireanos sabem extrair o máximo da força proporcionada pela união e têm facilidade em trabalhar em equipe, mas você se destaca ainda mais entre eles. Você recebe os seguintes benefícios:\n\nAo criar objetos em um dia de tempo livre, adicione seu bônus de proficiência ao valor do que pode produzir. Cada Chireano adicional envolvido no trabalho adiciona além de seu bônus de proficiência, metade de seu modificador de inteligência a esse valor.\nVocê pode usar a ação de Ajuda como uma ação bônus. Além disso, quando você usa a ação de Ajuda para auxiliar um aliado a atacar uma criatura, o alvo desse ataque pode estar a 30 pés de você, em vez de 5, caso o alvo possa ver ou ouvir você."
+      "description": "Os Chireanos sabem extrair o máximo da força proporcionada pela união e têm facilidade em trabalhar em equipe, mas você se destaca ainda mais entre eles. Você recebe os seguintes benefícios:\n\nAo criar objetos em um dia de tempo livre, adicione seu bônus de proficiência ao valor do que pode produzir. Cada Chireano adicional envolvido no trabalho adiciona além de seu bônus de proficiência, metade de seu modificador de inteligência a esse valor.\nVocê pode usar a ação de Ajuda como uma ação bônus. Além disso, quando você usa a ação de Ajuda para auxiliar um aliado a atacar uma criatura, o alvo desse ataque pode estar a 30 pés de você, em vez de 5, caso o alvo possa ver ou ouvir você.",
+      "grants": [
+        {
+          "type": "CRAFT_INCOME",
+          "value": "ALL",
+          "usesFormula": "PROFICIENCY"
+        }
+      ]
     },
     {
       "id": "pteropus",

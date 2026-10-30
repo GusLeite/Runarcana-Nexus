@@ -221,6 +221,17 @@ public class Character {
     @MapKeyColumn(name = "craft")
     @Column(name = "formulas")
     private Map<String, Integer> craftFormulaBonus = new HashMap<>();
+    // Produção: PO por dia a mais por ofício ("*" = todos) e quanto a margem de Obra-Prima diminui.
+    @ElementCollection
+    @CollectionTable(name = "character_craft_income", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "craft")
+    @Column(name = "gold")
+    private Map<String, Integer> craftIncome = new HashMap<>();
+    @ElementCollection
+    @CollectionTable(name = "character_craft_masterwork", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "craft")
+    @Column(name = "margin")
+    private Map<String, Integer> craftMasterwork = new HashMap<>();
     // Atributo alternativo por alvo ("SKILL:INTIMIDATION" → "STRENGTH"; "AC" → "CONSTITUTION/2" = metade): vale o maior.
     @ElementCollection
     @CollectionTable(name = "character_attribute_swaps", joinColumns = @JoinColumn(name = "character_id"))
