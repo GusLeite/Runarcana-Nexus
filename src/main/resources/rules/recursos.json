@@ -6404,6 +6404,11 @@
           "type": "IMMUNITY",
           "value": "venenoso",
           "when": "Ninhada:Cobra"
+        },
+        {
+          "type": "CONDITION_IMMUNITY",
+          "value": "Amedrontado",
+          "when": "Ninhada:Aranha"
         }
       ]
     },

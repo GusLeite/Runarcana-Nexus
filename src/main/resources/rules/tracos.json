@@ -601,6 +601,14 @@
         {
           "type": "RESISTANCE",
           "value": "venenoso"
+        },
+        {
+          "type": "CONDITION_IMMUNITY",
+          "value": "doenças não mágicas"
+        },
+        {
+          "type": "CONDITION_IMMUNITY",
+          "value": "magia de sono"
         }
       ]
     },

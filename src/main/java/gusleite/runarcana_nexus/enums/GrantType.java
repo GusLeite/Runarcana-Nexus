@@ -41,6 +41,7 @@ public enum GrantType {
                         // options + count = à escolha (vale para VULNERABILITY e ABSORPTION; a mesma fonte não repete o tipo)
     ABSORPTION,         // absorção de um tipo de dano: value = o tipo ("necrótico")
     IMMUNITY,           // imunidade a um tipo de dano: value = o tipo ("venenoso")
+    CONDITION_IMMUNITY, // imunidade a condição, doença ou efeito: value = o texto ("Envenenado", "doenças mundanas")
     VULNERABILITY,      // vulnerabilidade a um tipo de dano (value = "radiante", "armas de ouro e de prata"); amount -1 = deixa de ter
     PASSIVE_BONUS,      // bônus na percepção ou intuição passiva: value PERCEPTION ou INSIGHT, amount ou usesFormula HALF_PROFICIENCY
     ABILITY_USES,       // muda os usos de outra habilidade (value = nome): usesFormula/maxUses/usesPlus trocam a fórmula,

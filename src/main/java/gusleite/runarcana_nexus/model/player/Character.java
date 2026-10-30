@@ -77,6 +77,10 @@ public class Character {
     @CollectionTable(name = "character_absorptions", joinColumns = @JoinColumn(name = "character_id"))
     @Column(name = "damage_type")
     private Set<String> absorptions = new LinkedHashSet<>();
+    @ElementCollection
+    @CollectionTable(name = "character_condition_immunities", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "name")
+    private Set<String> conditionImmunities = new LinkedHashSet<>();
     private Integer passivePerceptionBonus;
     private Integer passiveInsightBonus;
     // Bônus na iniciativa (Atento: +5), das concessões INITIATIVE. Nulo = 0.

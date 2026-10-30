@@ -70,7 +70,7 @@ Protetor (proficiências), Estudioso (duas perícias) e Obreiro (truque espiritu
 ## B. Algo pequeno e novo no sistema
 
 - ✅ **B1. Imunidade a dano fixa** (`IMMUNITY`, feito junto com o A4): Troll da Selva (venenoso), Vel Escamas do Dragão (ígneo e cortante), Precursor do Gelo Sombrio (gélido e ígneo), Nascimento da Ninhada (venenoso), Hakensai 20º, e as imunidades de classe listadas em A4.
-- **B2. Imunidade a condições e doenças** (lista na ficha, como as de dano): Ressurgido Espectral, Limiar Tecnológico, Construto Vivo, Bodisatva 10º, Nascimento da Ninhada (Amedrontado), Essência Etílica (Intoxicado por álcool), Lendário Guardião, Experimento Zaunita (Cinza de Zaun).
+- ✅ **B2. Imunidade a condições e doenças** (`CONDITION_IMMUNITY`; também Trolls da Areia/Gelo, Glacinata, Atirador 11º, Desperado 20º, sono mágico do Feérico/Linhagem Vastaya/Toque Feérico) (lista na ficha, como as de dano): Ressurgido Espectral, Limiar Tecnológico, Construto Vivo, Bodisatva 10º, Nascimento da Ninhada (Amedrontado), Essência Etílica (Intoxicado por álcool), Lendário Guardião, Experimento Zaunita (Cinza de Zaun).
 - **B3. Resistência que muda com o nível**: Gás Corrosivo/Ionizado/Termiônico (outro tipo no 11º), Resistência Natural da Runinata (versão mágica no 12º, imunidade no 16º, absorção no 18º).
 - **B4. "Um avanço na resistência"** (degraus: resistência → imunidade → absorção): Bênção do Urso e do Vorme (Invocações).
 - **B5. Especialidade em salvaguarda**: Graciosidade ("caso já tenha proficiência").

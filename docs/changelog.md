@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento B2: imunidade a condições e doenças (`feature/character-sheet`)
+- Concessão `CONDITION_IMMUNITY`; ficha com `conditionImmunities` (`character_condition_immunities`) em chips "Imune a ...".
+- Ressurgido Espectral, Limiar Tecnológico, Construto, Trolls, Bodisatva 10º, Atirador 11º, Desperado e Guardião 20º, Ninhada Aranha, Essência Etílica, Experimento Zaunita, Glacinata, Feéricos, Construído.
+
 ## 2026-10-29 — Mapeamento: sobras do bloco A (`feature/character-sheet`)
 - Princípio Elemental (Mistério terciário/de transição), Chamado Sagrado Estudioso e Obreiro (escolhas com `when`), traço Habilidoso (`SITUATIONAL` à escolha), Ninhada Aranha/Cobra (imunidade a venenoso), Mestre Tático (`anyClass`).
 - Teste: escolha com `when` e nota à escolha no Inspira Teste. Conferido no sandbox.

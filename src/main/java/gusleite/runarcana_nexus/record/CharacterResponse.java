@@ -73,12 +73,14 @@ public record CharacterResponse(
         int initiative,
         // Fórmulas de Ofício conhecidas ("<ofício>:<fórmula>").
         List<String> formulas,
-        // Efeitos situacionais ({ target, note, source }); resistências, vulnerabilidades, imunidades e absorções a dano.
+        // Efeitos situacionais ({ target, note, source }); resistências, vulnerabilidades, imunidades e absorções a dano;
+        // imunidades a condições, doenças e efeitos.
         List<Situational> situational,
         List<String> resistances,
         List<String> vulnerabilities,
         List<String> immunities,
-        List<String> absorptions
+        List<String> absorptions,
+        List<String> conditionImmunities
 ) {
     public record Situational(String target, String note, String source) {}
 
@@ -147,7 +149,8 @@ public record CharacterResponse(
                 List.copyOf(character.getResistances()),
                 List.copyOf(character.getVulnerabilities()),
                 List.copyOf(character.getImmunities()),
-                List.copyOf(character.getAbsorptions())
+                List.copyOf(character.getAbsorptions()),
+                List.copyOf(character.getConditionImmunities())
         );
     }
 }

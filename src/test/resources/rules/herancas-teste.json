@@ -114,6 +114,10 @@
           "value": "MYSTERY:agua",
           "spellLevel": 1,
           "count": 1
+        },
+        {
+          "type": "CONDITION_IMMUNITY",
+          "value": "Envenenado"
         }
       ]
     },

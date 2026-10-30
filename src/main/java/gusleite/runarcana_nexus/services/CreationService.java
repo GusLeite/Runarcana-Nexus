@@ -955,6 +955,7 @@ public class CreationService {
                 if (!g.hasOptions()) b.absorptions.add(g.value());
             }
             case IMMUNITY -> b.immunities.add(g.value());
+            case CONDITION_IMMUNITY -> b.conditionImmunities.add(g.value());
             // amount -1: a 2ª escolha tira a vulnerabilidade (Meio-Azakana deixa de ser vulnerável a radiante).
             case VULNERABILITY -> {
                 if (g.hasOptions()) break;
@@ -1777,6 +1778,8 @@ public class CreationService {
         c.getImmunities().addAll(b.immunities);
         c.getAbsorptions().clear();
         c.getAbsorptions().addAll(b.absorptions);
+        c.getConditionImmunities().clear();
+        c.getConditionImmunities().addAll(b.conditionImmunities);
         c.setPassivePerceptionBonus(b.passivePerception);
         c.setPassiveInsightBonus(b.passiveInsight);
     }
@@ -2389,6 +2392,7 @@ public class CreationService {
         final Set<String> vulnerabilities = new LinkedHashSet<>();
         final Set<String> immunities = new LinkedHashSet<>();
         final Set<String> absorptions = new LinkedHashSet<>();
+        final Set<String> conditionImmunities = new LinkedHashSet<>();
         // Resistências "caso já tenha, imunidade" (Meio-Azakana), decididas depois de todas as outras.
         final List<String> resistanceUpgrades = new ArrayList<>();
         final Set<String> knownSpellIds = new LinkedHashSet<>();

@@ -224,6 +224,7 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.character.resistances").value(org.hamcrest.Matchers.contains("ígneo")))
                 .andExpect(jsonPath("$.character.immunities").value(org.hamcrest.Matchers.containsInAnyOrder("venenoso", "radiante")))
                 .andExpect(jsonPath("$.character.absorptions").value(org.hamcrest.Matchers.contains("ácido")))
+                .andExpect(jsonPath("$.character.conditionImmunities").value(org.hamcrest.Matchers.contains("Envenenado")))
                 // Ofício "caso já tenha, especialidade": Ferraria vem da origem.
                 .andExpect(jsonPath("$.character.craftExpertise").value(org.hamcrest.Matchers.contains("Ferraria")))
                 // Vulnerável a radiante e ao tipo escolhido; a necrótica foi tirada por outra concessão (amount -1).

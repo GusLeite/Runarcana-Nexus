@@ -540,6 +540,10 @@
           "type": "SITUATIONAL",
           "value": "SAVE",
           "description": "Desvantagem em salvaguardas contra climas hostis (frio, deserto) sem equipamento adequado."
+        },
+        {
+          "type": "CONDITION_IMMUNITY",
+          "value": "doenças mundanas"
         }
       ],
       "lineages": [
@@ -1856,6 +1860,10 @@
               "abilityType": "PASSIVE",
               "name": "Mestres Elusivos",
               "description": "Apesar de seu tamanho, Trolls da Areia são extremamente ágeis e se escondem facilmente devido ao tom de pele arenoso. Você possui proficiência em Furtividade e vantagem nesses testes se estiver em uma região arenosa."
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "Calor Extremo"
             }
           ]
         },
@@ -1879,6 +1887,10 @@
               "duration": "1 minuto",
               "usesFormula": "PROFICIENCY",
               "recharge": "LONG_REST"
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "Frio Extremo"
             }
           ]
         },
@@ -1902,6 +1914,10 @@
             {
               "type": "IMMUNITY",
               "value": "venenoso"
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "Envenenado"
             }
           ]
         }
@@ -2401,6 +2417,10 @@
               "type": "SITUATIONAL",
               "value": "SAVE",
               "description": "Vantagem contra Enfeitiçado; magias não podem colocá-lo para dormir."
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "sono mágico"
             }
           ]
         },
@@ -5788,6 +5808,10 @@
               "type": "SITUATIONAL",
               "value": "SKILL:STEALTH",
               "description": "Talismã Pessoal: vantagem em Furtividade."
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "Cego"
             }
           ]
         },
@@ -6076,6 +6100,10 @@
                   "abilityType": "PASSIVE",
                   "name": "Diablero",
                   "description": "Armas Curtas: quatro ataques por turno. Akimbo: imune a lentidão e, num 20 natural, repete a ação de ataque (uma vez por rodada)."
+                },
+                {
+                  "type": "CONDITION_IMMUNITY",
+                  "value": "Lentidão"
                 }
               ]
             }
@@ -6997,6 +7025,18 @@
                 "Escola Umbral",
                 "Escola Noctígena"
               ]
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "doenças mundanas"
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "Envenenado"
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "Intoxicado"
             }
           ]
         },
@@ -10211,6 +10251,26 @@
                   "attribute": "CONSTITUTION",
                   "amount": 2,
                   "value": "22"
+                },
+                {
+                  "type": "CONDITION_IMMUNITY",
+                  "value": "Calor Extremo"
+                },
+                {
+                  "type": "CONDITION_IMMUNITY",
+                  "value": "Frio Extremo"
+                },
+                {
+                  "type": "CONDITION_IMMUNITY",
+                  "value": "Altura Extrema"
+                },
+                {
+                  "type": "CONDITION_IMMUNITY",
+                  "value": "doenças"
+                },
+                {
+                  "type": "CONDITION_IMMUNITY",
+                  "value": "envelhecimento mágico"
                 }
               ]
             }

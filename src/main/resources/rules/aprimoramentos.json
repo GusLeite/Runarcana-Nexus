@@ -199,6 +199,18 @@
               "abilityType": "PASSIVE",
               "name": "Construto Vivo",
               "description": "- Habilidades que afetam Construtos passam a afetar você\n- Resistência a venenos e a dano venenoso\n- Imunidade a doenças não mágicas\n- Não precisa comer, beber ou respirar\n- Não precisa dormir, não sofre efeito de exaustão por falta de descanso e não sofre efeitos de magia de sono\n- Cura apenas metade da vida com magias e efeitos de cura. A magia reparar dano cura normalmente."
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "doenças não mágicas"
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "magia de sono"
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "exaustão por falta de descanso"
             }
           ]
         },
@@ -450,6 +462,14 @@
               "abilityType": "PASSIVE",
               "name": "Mutante",
               "description": "- Você passa a ser considerado uma Mutação\n- Resistência a venenos e a dano venenoso\n- Imunidade a doenças não mágicas\n- Sua necessidade diária de comer e beber é reduzida pela metade\n- Não sofre efeitos da magia sono"
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "doenças não mágicas"
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "magia de sono"
             }
           ]
         },

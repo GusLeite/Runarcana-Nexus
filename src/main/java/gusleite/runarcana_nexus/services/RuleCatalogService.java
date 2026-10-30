@@ -713,6 +713,9 @@ public class RuleCatalogService {
                     else targets.stream().filter(t -> !t.matches(target)).forEach(t -> p.add(at + " (SITUATIONAL): alvo inválido " + t));
                 }
                 // Tipo de dano fixo (value) ou à escolha (options).
+                case CONDITION_IMMUNITY -> {
+                    if (blank(g.value())) p.add(at + " (CONDITION_IMMUNITY): falta value (a condição)");
+                }
                 case RESISTANCE, VULNERABILITY, ABSORPTION, IMMUNITY -> {
                     if (blank(g.value()) && !g.hasOptions()) p.add(at + " (" + g.type() + "): falta value ou options (tipo de dano)");
                 }

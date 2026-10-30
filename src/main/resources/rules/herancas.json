@@ -594,6 +594,10 @@
           "name": "Gole",
           "castingTime": "Ação bônus",
           "description": "Gole: Utilizando uma ação bônus você pode ingerir um gole (aproximadamente 200 ml) de sua bebida, você adiciona metade do seu bônus de Proficiência ao dano de seus ataques desarmados até o início de seu próximo turno."
+        },
+        {
+          "type": "CONDITION_IMMUNITY",
+          "value": "Intoxicado (por bebidas alcoólicas)"
         }
       ]
     },
@@ -1586,6 +1590,10 @@
         {
           "type": "SPELL",
           "value": "ilusao-menor"
+        },
+        {
+          "type": "CONDITION_IMMUNITY",
+          "value": "sono mágico"
         }
       ],
       "uses": {
@@ -1757,6 +1765,10 @@
           "type": "SITUATIONAL",
           "value": "SAVE",
           "description": "Você soma metade do seu bônus de proficiência em salvaguardas para resistir a Doenças Mágicas."
+        },
+        {
+          "type": "CONDITION_IMMUNITY",
+          "value": "sono mágico"
         }
       ]
     },
@@ -2929,6 +2941,10 @@
           "value": "SKILL:STEALTH",
           "description": "Vantagem em Furtividade para se ocultar; sem armadura e parado, pode se esconder sem cobertura.",
           "when": "Vantagem Tecnológica:Epiderme Cromática"
+        },
+        {
+          "type": "CONDITION_IMMUNITY",
+          "value": "Cinza de Zaun"
         }
       ]
     },
@@ -3115,6 +3131,12 @@
           "featureOptions": [
             "Flor Gélida"
           ]
+        }
+      ],
+      "grants": [
+        {
+          "type": "CONDITION_IMMUNITY",
+          "value": "Frio Extremo"
         }
       ]
     },
@@ -3587,6 +3609,18 @@
               "abilityType": "PASSIVE",
               "name": "Construto Vivo",
               "description": "- Habilidades que afetam Construtos passam a afetar você\n- Resistência a venenos e a dano venenoso\n- Imunidade a doenças não mágicas\n- Não precisa comer, beber ou respirar\n- Não precisa dormir, não sofre efeito de exaustão por falta de descanso e não sofre efeitos de magia de sono\n- Cura apenas metade da vida com magias e efeitos de cura. A magia reparar dano cura normalmente."
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "doenças não mágicas"
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "magia de sono"
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "exaustão por falta de descanso"
             }
           ],
           "Fonte Instável": [
@@ -3599,6 +3633,14 @@
               "abilityType": "PASSIVE",
               "name": "Mutante",
               "description": "- Você passa a ser considerado uma Mutação\n- Resistência a venenos e a dano venenoso\n- Imunidade a doenças não mágicas\n- Sua necessidade diária de comer e beber é reduzida pela metade\n- Não sofre efeitos da magia sono"
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "doenças não mágicas"
+            },
+            {
+              "type": "CONDITION_IMMUNITY",
+              "value": "magia de sono"
             }
           ]
         },
@@ -3648,6 +3690,14 @@
           {
             "type": "VULNERABILITY",
             "value": "armas de ouro e de prata"
+          },
+          {
+            "type": "CONDITION_IMMUNITY",
+            "value": "doenças mundanas"
+          },
+          {
+            "type": "CONDITION_IMMUNITY",
+            "value": "Envenenado"
           }
         ],
         "Meio-Azakana": [
