@@ -53,10 +53,12 @@ function FocusVideo({ clip }) {
       const shown = clip.show ? Math.min(cover, bw / clip.show) : cover
       const wide = Math.min(1, Math.max(0, (bw / bh - 0.3) / 0.3))
       const width = Math.max(bw, cover + (shown - cover) * wide)
+      // Painel estreito mostra só uma faixa: centra no rosto (focusNarrow); o largo, no conjunto (focus).
+      const focus = (clip.focusNarrow ?? clip.focus ?? 0.5) + ((clip.focus ?? 0.5) - (clip.focusNarrow ?? clip.focus ?? 0.5)) * wide
       const height = width / aspect
       const clamp = (v, min, max) => Math.min(max, Math.max(min, v))
       setBox({
-        left: clamp(bw / 2 - (clip.focus ?? 0.5) * width, bw - width, 0),
+        left: clamp(bw / 2 - focus * width, bw - width, 0),
         top: height > bh ? clamp(bh / 2 - (clip.focusY ?? 0.5) * height, bh - height, 0) : 0,
         width,
         height,

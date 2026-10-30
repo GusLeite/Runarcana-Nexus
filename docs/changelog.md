@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Construto: rosto da Orianna no painel em repouso (`feature/character-sheet`)
+- `focusNarrow` no vídeo: nos painéis estreitos o foco vai para o rosto (0,86), e conforme o painel se alarga volta para o conjunto (0,66). Antes a faixa caía entre a bola e a Orianna.
+
 ## 2026-10-30 — Vídeo da Orianna no Construto; `show` corrigido (`feature/character-sheet`)
 - `assets/origins/construto.mp4` (Orianna Winterwonder, 720p, 1,5 MB, 5 s) com foco em 0,66 e `show: 0.62`.
 - Correção do `FocusVideo`: o `show` escolhia o maior tamanho em vez do menor e nunca valia; agora limita a largura e só age nos painéis largos, com transição gradual (antes encolhia o vídeo numa faixa no topo dos painéis estreitos). Isso também corrige o Alistar, que ainda aparecia em close.

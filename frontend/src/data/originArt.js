@@ -2,7 +2,7 @@
 // tagline: a descrição breve do cartão. hue: matiz da cor da origem. motes: partículas do destaque
 // (spark, petal, feather, snow, hex). img/vid/pos: arte definitiva (como em characters.js); sem elas, entra o sigilo provisório.
 // video: vídeo de fundo, levemente escurecido, com os símbolos da origem por cima: src, focus (x do personagem no quadro, 0 a 1,
-// para centralizá-lo em qualquer formato de painel), focusY (opcional), show (opcional: fração mínima da largura do quadro que
+// para centralizá-lo em qualquer formato de painel), focusNarrow (opcional: x do rosto, usado nos painéis estreitos, que mostram só uma faixa), focusY (opcional), show (opcional: fração mínima da largura do quadro que
 // deve aparecer; sem ela o vídeo cobre o painel, o que num painel em pé vira um close) e start (segundo inicial, para pular uma abertura preta;
 // o vídeo volta a ele ao terminar).
 // living (hoje sem uso): imagem animada por um shader; tem prioridade sobre o video: src, width, height, scene (data/scenes) e focus/focusY, como no vídeo.
@@ -16,7 +16,7 @@ export const ORIGIN_ART = {
   minotauro: { tagline: 'Povos tribais de grande vigor, vindos das montanhas da Grande Barreira.', hue: 14, motes: 'spark',
     video: { src: minotauro, focus: 0.7, show: 0.62 } },
   construto: { tagline: 'Máquinas que despertaram para a vida e ainda tentam entender o que sentem.', hue: 198, motes: 'hex',
-    video: { src: construto, focus: 0.66, show: 0.62 } },
+    video: { src: construto, focus: 0.66, focusNarrow: 0.86, show: 0.62 } },
   antroplantae: { tagline: 'Plantas sencientes e raras, ligadas à terra, às flores e aos espinhos.', hue: 118, motes: 'petal' },
   chireano: { tagline: 'Gente-morcego de Zaun: curiosa, ágil, apaixonada por maquinário.', hue: 158, motes: 'hex' },
   'meio-dragao': { tagline: 'Herdeiros raríssimos dos dragões elementais, que despertam a cada nível.', hue: 352, motes: 'spark' },
