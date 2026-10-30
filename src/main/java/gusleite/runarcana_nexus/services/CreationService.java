@@ -1370,18 +1370,26 @@ public class CreationService {
 
     // A lista de origem/linhagem (Yordle, Fauhwoon, Ottrani) vale como a lista da classe para quem é dela.
     // "LIST:ACOLYTE,FIGHTER" (Arcanista Iniciante, Grão-Conjurador): magias da lista de uma dessas classes (FIGHTER = a do
-    // Combatente Arcano); "+ATTACK" no fim: só as que pedem ataque mágico.
+    // Combatente Arcano); "+ATTACK" no fim: só as que pedem ataque mágico; "+RITUAL": só rituais (Ritualista).
+    // "MYSTERY:som,luz": magias desses Mistérios (Musicista Prodígio); "ANY": qualquer magia (Benefício Colateral).
     static final String LIST = "LIST:";
     private static final java.util.regex.Pattern SPELL_ATTACK = java.util.regex.Pattern.compile("ataque (mágico|de magia|com magia)",
             java.util.regex.Pattern.CASE_INSENSITIVE);
 
     private static boolean inList(RuleMagic.Spell sp, String from, String classId, Set<String> mysteries, Set<String> origins) {
+        if ("ANY".equals(from)) return true;
+        if (from.startsWith("MYSTERY:")) {
+            List<String> ids = List.of(from.substring(8).split(","));
+            return sp.mysteriesOrEmpty().stream().anyMatch(ids::contains);
+        }
         if (from.startsWith(LIST)) {
             String spec = from.substring(LIST.length());
-            boolean attack = spec.endsWith("+ATTACK");
-            List<String> classes = List.of(spec.replace("+ATTACK", "").split(","));
+            boolean attack = spec.contains("+ATTACK");
+            boolean ritual = spec.contains("+RITUAL");
+            List<String> classes = List.of(spec.replace("+ATTACK", "").replace("+RITUAL", "").split(","));
             return sp.classesOrEmpty().stream().anyMatch(classes::contains)
-                    && (!attack || (sp.description() != null && SPELL_ATTACK.matcher(sp.description()).find()));
+                    && (!attack || (sp.description() != null && SPELL_ATTACK.matcher(sp.description()).find()))
+                    && (!ritual || Boolean.TRUE.equals(sp.ritual()));
         }
         boolean fromClass = !"MYSTERIES".equals(from) && ((classId != null && sp.classesOrEmpty().contains(classId))
                 || sp.originsOrEmpty().stream().anyMatch(origins::contains));

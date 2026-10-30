@@ -506,6 +506,20 @@
           "type": "ATTRIBUTE",
           "attribute": "WISDOM",
           "amount": 1
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:adivinhacao,encantamento,etermancia,hemomancia,ilusao,invocacao,necromancia,oniromancia,transmutacao,umbramancia",
+          "spellLevel": 1,
+          "count": 2,
+          "label": "Adepto Shugenja: duas magias de 1º nível"
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:adivinhacao,encantamento,etermancia,hemomancia,ilusao,invocacao,necromancia,oniromancia,transmutacao,umbramancia",
+          "spellLevel": 2,
+          "count": 2,
+          "label": "Adepto Shugenja: duas magias de 2º nível"
         }
       ]
     },
@@ -1937,6 +1951,20 @@
           "type": "ATTRIBUTE",
           "attribute": "WISDOM",
           "amount": 1
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:adivinhacao,encantamento,etermancia,hemomancia,ilusao,invocacao,necromancia,oniromancia,transmutacao,umbramancia",
+          "spellLevel": 0,
+          "count": 2,
+          "label": "Iniciado Shugenja: dois truques"
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:adivinhacao,encantamento,etermancia,hemomancia,ilusao,invocacao,necromancia,oniromancia,transmutacao,umbramancia",
+          "spellLevel": 1,
+          "count": 2,
+          "label": "Iniciado Shugenja: duas magias de 1º nível"
         }
       ]
     },

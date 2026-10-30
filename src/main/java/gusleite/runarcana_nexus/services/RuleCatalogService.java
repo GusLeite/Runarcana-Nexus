@@ -795,11 +795,11 @@ public class RuleCatalogService {
                     if (g.count() == null || g.count() < 1) p.add(at + " (SPELL_CHOICE): precisa de count");
                     if (g.spellLevel() == null || g.spellLevel() < 0 || g.spellLevel() > 9) p.add(at + " (SPELL_CHOICE): spellLevel deve ir de 0 a 9");
                     if (g.value() != null && g.value().startsWith("LIST:")) {
-                        for (String k : g.value().substring(5).replace("+ATTACK", "").split(",")) {
+                        for (String k : g.value().substring(5).replace("+ATTACK", "").replace("+RITUAL", "").split(",")) {
                             if (Arrays.stream(CharacterClassType.values()).noneMatch(t -> t.name().equals(k))) p.add(at + " (SPELL_CHOICE): classe desconhecida em LIST: " + k);
                         }
-                    } else if (g.value() != null && !SPELL_SOURCES.contains(g.value())) {
-                        p.add(at + " (SPELL_CHOICE): value deve ser um destes: " + SPELL_SOURCES + " ou LIST:<classes>");
+                    } else if (g.value() != null && !SPELL_SOURCES.contains(g.value()) && !"ANY".equals(g.value()) && !g.value().startsWith("MYSTERY:")) {
+                        p.add(at + " (SPELL_CHOICE): value deve ser um destes: " + SPELL_SOURCES + ", ANY, MYSTERY:<ids> ou LIST:<classes>");
                     }
                 }
                 // Os itens citados são conferidos em validateEquipment (precisa do catálogo de itens).

@@ -205,7 +205,10 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-pericia:12')].options[0]").value("gélido"));
         String done = body.replace("\"class:ARCANIST:1\"", "\"heritage:teste-pericia:1\":[\"STEALTH\"],"
                 + "\"heritage:teste-pericia:11\":[\"ácido\"],\"heritage:teste-pericia:12\":[\"gélido\"],"
-                + "\"heritage:teste-pericia:13\":[\"agua\"],\"class:ARCANIST:1\"");
+                + "\"heritage:teste-pericia:13\":[\"agua\"],\"heritage:teste-pericia:16\":[\"t-onda\"],\"class:ARCANIST:1\"");
+        // Magia à escolha só dos Mistérios dados (MYSTERY:agua, até o 1º nível): a Onda, não o Escudo Arcano.
+        preview(token, damage)
+                .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-pericia:16')].options", hasItem(List.of("t-onda"))));
         preview(token, done)
                 .andExpect(jsonPath("$.complete").value(true))
                 // Mistério à escolha (sem virar habilidade), com o nome de cada opção.

@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento A3: magias das Heranças (`feature/character-sheet`)
+- 22 magias fixas de Heranças (`SPELL`) e 11 escolhas (Benefício Colateral, Musicista, Incentivo Celeste, Conjurador Natural, Vislumbre, Ritualista, Essência Elemental, Shugenja).
+- `SPELL_CHOICE`: `MYSTERY:<ids>`, `ANY` e `+RITUAL`.
+
 ## 2026-10-29 — Mapeamento A2: proficiências, Mistérios e recursos (`feature/character-sheet`)
 - Ofícios (Mestre Artesão, Nazumitas, Tecnomaníaco, Musicista, Hospitaleiro, Pastor, Forja), armas à escolha (Armas Avançadas, Enxofre, Ferromante, Disciplina é Força, Estudioso das Armas, Bélico, Ceifador, Explorador), perícias (Habilidoso, Nebulon, runas).
 - 16 Mistérios à escolha/pela opção (Manifestação Primordial e Vislumbre Estelar ganharam opção); recursos à escolha (Mestre Tático, Fluência Espiritual, Desbravador do Ki, Modularidade, Mais Inimigos).

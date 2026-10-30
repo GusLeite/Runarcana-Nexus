@@ -284,6 +284,13 @@
           "value": "SKILL:STEALTH",
           "description": "Vantagem em Furtividade para se ocultar; sem armadura e parado, pode se esconder sem cobertura.",
           "when": "Vantagem Tecnológica:Epiderme Cromática"
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "ANY",
+          "spellLevel": 0,
+          "count": 1,
+          "label": "Benefício Colateral: um truque"
         }
       ]
     },
@@ -399,7 +406,16 @@
         "SHAMAN"
       ],
       "prerequisite": "Xamã",
-      "description": "A energia espiritual flui facilmente por você, fazendo com que consiga invocar magias espirituais com mais facilidade. Você recebe os seguintes benefícios:\n\nVocê recebe uma quantidade de pontos de Ki adicionais para Conjuração igual ao seu bônus de proficiência.\nEscolha uma magia da lista de Xamã, você pode conjurá-la. Ao adquirir níveis de Xamã, esta magia pode ser trocada por outra magia da lista de Xamã, desde que o nível da magia escolhida seja igual ou inferior à metade de seu bônus de proficiência."
+      "description": "A energia espiritual flui facilmente por você, fazendo com que consiga invocar magias espirituais com mais facilidade. Você recebe os seguintes benefícios:\n\nVocê recebe uma quantidade de pontos de Ki adicionais para Conjuração igual ao seu bônus de proficiência.\nEscolha uma magia da lista de Xamã, você pode conjurá-la. Ao adquirir níveis de Xamã, esta magia pode ser trocada por outra magia da lista de Xamã, desde que o nível da magia escolhida seja igual ou inferior à metade de seu bônus de proficiência.",
+      "grants": [
+        {
+          "type": "SPELL_CHOICE",
+          "value": "LIST:SHAMAN",
+          "spellLevel": 1,
+          "count": 1,
+          "label": "Conjurador Natural: uma magia da lista de Xamã"
+        }
+      ]
     },
     {
       "id": "convocar-auxilio",
@@ -409,7 +425,13 @@
       "uses": {
         "usesFormula": "HALF_PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "SPELL",
+          "value": "convocar-familiar"
+        }
+      ]
     },
     {
       "id": "cultivo-de-ki",
@@ -431,6 +453,10 @@
         {
           "type": "MYSTERY",
           "value": "agua"
+        },
+        {
+          "type": "SPELL",
+          "value": "palavra-curativa"
         }
       ],
       "uses": {
@@ -1031,6 +1057,10 @@
         {
           "type": "MYSTERY",
           "value": "flora"
+        },
+        {
+          "type": "SPELL",
+          "value": "constricao"
         }
       ],
       "uses": {
@@ -1160,6 +1190,13 @@
           "type": "CRAFT",
           "value": "artista",
           "expertise": true
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:som",
+          "spellLevel": 0,
+          "count": 1,
+          "label": "Musicista Prodígio: um truque do Som"
         }
       ]
     },
@@ -1261,7 +1298,16 @@
         "CHARISMA": 13
       },
       "prerequisite": "Carisma 13 e Proficiência com Arcanismo ou Natureza ou Religião",
-      "description": "Você tem facilidade com Rituais, fazendo com que a cerimônia para eles sejam comuns para você, mesmo que você não seja um conjurador, você aprendeu como conjurar uma magia através de um ritual e possui um livro com instruções para Rituais, talvez ele tenha sido passado de geração a geração em sua família, talvez você o tenha escrito enquanto oficiante em algum templo, entre outras opções. Você ganha os seguintes benefícios:\n\nAo escolher essa Herança, você recebe a característica Ritualista.\nEscolha uma magia de 1º nível entre as magias do Combatente Arcano, do Acólito ou do Xamã, com o descritor Ritual. A Classe que você escolheu também determina o atributo ou a perícia com a qual você conjura essas magias através de Conjuração Ritual ou de Conjuração caso você tenha essa Característica: Inteligência ou Arcanismo para magias Arcanas e Sabedoria ou Religião para magias de Acólito ou de Xamã.\nVocê também pode copiar Rituais para o seu livro na metade do tempo necessário."
+      "description": "Você tem facilidade com Rituais, fazendo com que a cerimônia para eles sejam comuns para você, mesmo que você não seja um conjurador, você aprendeu como conjurar uma magia através de um ritual e possui um livro com instruções para Rituais, talvez ele tenha sido passado de geração a geração em sua família, talvez você o tenha escrito enquanto oficiante em algum templo, entre outras opções. Você ganha os seguintes benefícios:\n\nAo escolher essa Herança, você recebe a característica Ritualista.\nEscolha uma magia de 1º nível entre as magias do Combatente Arcano, do Acólito ou do Xamã, com o descritor Ritual. A Classe que você escolheu também determina o atributo ou a perícia com a qual você conjura essas magias através de Conjuração Ritual ou de Conjuração caso você tenha essa Característica: Inteligência ou Arcanismo para magias Arcanas e Sabedoria ou Religião para magias de Acólito ou de Xamã.\nVocê também pode copiar Rituais para o seu livro na metade do tempo necessário.",
+      "grants": [
+        {
+          "type": "SPELL_CHOICE",
+          "value": "LIST:ACOLYTE,FIGHTER,SHAMAN+RITUAL",
+          "spellLevel": 1,
+          "count": 1,
+          "label": "Ritualista: uma magia de 1º nível com Ritual"
+        }
+      ]
     },
     {
       "id": "sangue-arcano",
@@ -1418,7 +1464,13 @@
       "uses": {
         "usesFormula": "PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "SPELL",
+          "value": "chama-sagrada"
+        }
+      ]
     },
     {
       "id": "vida-marinha",
@@ -1490,6 +1542,10 @@
           "type": "SITUATIONAL",
           "value": "SAVE",
           "description": "Você possui vantagem em salvaguardas para resistir à condição Enfeitiçado e não pode ser colocado para dormir por magias."
+        },
+        {
+          "type": "SPELL",
+          "value": "ilusao-menor"
         }
       ],
       "uses": {
@@ -1668,6 +1724,10 @@
           "type": "SKILL",
           "skill": "MEDICINE",
           "expertise": true
+        },
+        {
+          "type": "SPELL",
+          "value": "curar-ferimentos"
         }
       ],
       "uses": {
@@ -1778,7 +1838,13 @@
       "uses": {
         "usesFormula": "PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "SPELL",
+          "value": "raio-elemental"
+        }
+      ]
     },
     {
       "id": "artesao-nazumita",
@@ -2144,6 +2210,10 @@
           "type": "SITUATIONAL",
           "value": "SKILL:PERSUASION",
           "description": "Desde que você esteja usando roupas finas, você tem vantagem em testes de Persuasão e Intimidação."
+        },
+        {
+          "type": "SPELL",
+          "value": "taumaturgia"
         }
       ],
       "uses": {
@@ -2439,6 +2509,13 @@
           "maxUses": 1,
           "recharge": "LONG_REST",
           "description": "Uma vez por Descanso Pleno você pode utilizar um Truque de qualquer Mistério Celestial de maneira não mágica. Escolha entre Inteligência, Sabedoria ou Carisma como seu atributo de conjuração para esse Truque."
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:cronomancia,espacomancia,gravitomancia,runomancia",
+          "spellLevel": 0,
+          "count": 1,
+          "label": "Incentivo Celeste: um truque de Mistério Celestial"
         }
       ]
     },
@@ -2800,7 +2877,17 @@
       "uses": {
         "usesFormula": "PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "SPELL",
+          "value": "mensagem"
+        },
+        {
+          "type": "SPELL",
+          "value": "zombaria-viciosa"
+        }
+      ]
     },
     {
       "id": "inspirar-aliados",
@@ -3656,6 +3743,10 @@
         {
           "type": "CRAFT",
           "value": "cozinheiro"
+        },
+        {
+          "type": "SPELL",
+          "value": "bom-fruto"
         }
       ]
     },
@@ -3702,7 +3793,16 @@
             "value": "oniromancia"
           }
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:adivinhacao,oniromancia",
+          "spellLevel": 1,
+          "count": 1,
+          "label": "Vislumbre Estelar: uma magia de 1º nível (Adivinhação ou Oniromancia)"
+        }
+      ]
     },
     {
       "id": "construcao-primorosa",
@@ -3988,6 +4088,10 @@
         {
           "type": "MYSTERY",
           "value": "flora"
+        },
+        {
+          "type": "SPELL",
+          "value": "bom-fruto"
         }
       ],
       "uses": {
@@ -4090,6 +4194,10 @@
         {
           "type": "MYSTERY",
           "value": "umbramancia"
+        },
+        {
+          "type": "SPELL",
+          "value": "passos-sem-pegadas"
         }
       ],
       "uses": {
@@ -4308,6 +4416,13 @@
           "usesFormula": "PROFICIENCY",
           "recharge": "LONG_REST",
           "description": "Você recebe um truque de um mistério baseado em seu tipo elemental de meio-dragão. Seu Atributo de Conjuração para essa magia é Constituição ou seu Atributo de Conjuração, caso você seja um conjurador (o que for maior). Você pode utilizar esse truque um número de vezes igual a seu bônus de Proficiência por Descanso Pleno."
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:gelo,inferno,terra,vento,agua",
+          "spellLevel": 0,
+          "count": 1,
+          "label": "Essência Elemental: um truque do Mistério da sua essência dracônica"
         }
       ]
     },
@@ -4322,7 +4437,13 @@
         "nuvens"
       ],
       "prerequisite": "Meio-Dragão das Nuvens",
-      "description": "Seu corpo possui a leveza das nuvens. Você recebe os seguintes benefícios:\n\nDesde que não esteja Incapacitado você pode prender sua respiração indefinidamente.\nVocê possui vantagens em Salvaguardas contra venenos e substâncias que ajam através da respiração.\nVocê está sempre sob efeito da magia queda suave."
+      "description": "Seu corpo possui a leveza das nuvens. Você recebe os seguintes benefícios:\n\nDesde que não esteja Incapacitado você pode prender sua respiração indefinidamente.\nVocê possui vantagens em Salvaguardas contra venenos e substâncias que ajam através da respiração.\nVocê está sempre sob efeito da magia queda suave.",
+      "grants": [
+        {
+          "type": "SPELL",
+          "value": "queda-suave"
+        }
+      ]
     },
     {
       "id": "presente-incandescente",
@@ -4482,6 +4603,10 @@
         {
           "type": "MYSTERY",
           "value": "veneno"
+        },
+        {
+          "type": "SPELL",
+          "value": "borrifo-venenoso"
         }
       ],
       "uses": {
@@ -4669,6 +4794,10 @@
         {
           "type": "MYSTERY",
           "value": "agua"
+        },
+        {
+          "type": "SPELL",
+          "value": "criar-ou-destruir-agua"
         }
       ],
       "uses": {
@@ -4829,7 +4958,13 @@
       "uses": {
         "usesFormula": "HALF_PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "SPELL",
+          "value": "enfeiticar-pessoa"
+        }
+      ]
     },
     {
       "id": "estilo-do-mar",
@@ -5182,6 +5317,10 @@
         {
           "type": "MYSTERY",
           "value": "oniromancia"
+        },
+        {
+          "type": "SPELL",
+          "value": "sono"
         }
       ],
       "uses": {
@@ -5249,7 +5388,13 @@
       "uses": {
         "usesFormula": "HALF_PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "SPELL",
+          "value": "bencao"
+        }
+      ]
     },
     {
       "id": "magia-inata",
@@ -5327,6 +5472,10 @@
         {
           "type": "LANGUAGE_CHOICE",
           "count": 1
+        },
+        {
+          "type": "SPELL",
+          "value": "reparar"
         }
       ],
       "uses": {
@@ -5346,7 +5495,13 @@
       "uses": {
         "usesFormula": "PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "SPELL",
+          "value": "passo-nebuloso"
+        }
+      ]
     },
     {
       "id": "truque-da-mare",
@@ -5364,6 +5519,10 @@
         {
           "type": "MYSTERY",
           "value": "agua"
+        },
+        {
+          "type": "SPELL",
+          "value": "jato-d-agua"
         }
       ],
       "uses": {

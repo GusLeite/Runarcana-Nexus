@@ -108,6 +108,12 @@
           "type": "CRAFT",
           "value": "ferraria",
           "expertise": true
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:agua",
+          "spellLevel": 1,
+          "count": 1
         }
       ]
     },

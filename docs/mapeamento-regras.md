@@ -35,7 +35,9 @@ Ficou de fora: Princípio Elemental (a lista de elementos terciários/de transi�
 - Recursos à escolha: Mestre Tático (Técnica de Combate), Fluência Espiritual (Grande Espírito), Desbravador do Ki (2 Sutras), Modularidade (Vantagem Tecnológica), Mais Inimigos (Inimigo Favorito).
 - Atributo: Líder da Ninhada (runa: CON +2, máximo 22).
 
-### A3. Magias fixas das Heranças
+### A3. Magias fixas das Heranças ✅
+Filho da Escuridão, Castelo de Areia e Dupliventos já tinham a magia como habilidade (não duplicadas). Shugenja: "a que tem acesso" virou os Mistérios Espirituais; o de 2º nível aceita também de 1º.
+
 Viram a magia na ficha (concessão `SPELL`), com os usos que a Herança já tem: Convocar Auxílio (convocar familiar), Curandeiro Abençoado (palavra curativa), Filho da Escuridão (escuridão), Magia da Floresta (constrição), Medicina Natural (curar ferimentos), Sinergia Elemental (raio elemental), Autoridade Justa (taumaturgia), Sangue Buhru (chama sagrada), Toque Feérico (ilusão menor), Ladrão de Segredos (mensagem, zombaria viciosa), Arbusto Frutífero e Hospitaleiro (bom fruto), Sombra da Folha (passos sem pegadas), Conjurador Marai (criar ou destruir água), Proficiência Onírica (sono), Salva-IIP-guarda (bênção), Teleporte das Fadas (passo nebuloso), Truque da Maré (jato d'água), Encanto Vulpino (enfeitiçar pessoa), Extrovertido (reparar), Conhecimentos Venéficos (borrifo venenoso), Dupliventos (leque de vento), Castelo de Areia (aumentar/reduzir), Leveza das Nuvens (queda suave).
 - À escolha: Benefício Colateral (truque), Musicista Prodígio (truque do Som), Incentivo Celeste (truque celestial), Conjurador Natural (magia de Xamã), Vislumbre Estelar (1º nível de Adivinhação/Oniromancia), Ritualista (ritual de 1º), Adepto e Iniciado Shugenja.
 
