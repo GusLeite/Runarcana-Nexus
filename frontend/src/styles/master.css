@@ -113,7 +113,13 @@ font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:13px;letter-spacing
 .rules-option-facts{font-size:12px;letter-spacing:.06em;color:var(--teal)}
 .rules-option-desc{font-size:13px;line-height:1.45;color:#cfc7b2}
 
-/* Fichas: subida de nível (MasterSheets) */
+/* Fichas: liberar o nível (MasterSheets) */
+.char-pending{color:var(--teal);font-weight:600}
+.lvl-release-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.lvl-release-actions .btn{flex:1 1 220px}
+
+/* Subida de nível do jogador (creation/LevelUp.jsx, na ficha) */
+.lvl-cancel{margin-top:10px;width:100%}
 .lvl-select{width:100%;max-width:420px;padding:10px;background:#050b14;border:1px solid rgba(200,162,74,.4);color:var(--text);font:inherit;font-size:15px}
 .lvl-select:focus{outline:2px solid var(--teal);border-color:var(--teal)}
 .lvl-card label{display:block;margin:14px 0 6px;font-size:14px;color:var(--teal);letter-spacing:.06em}

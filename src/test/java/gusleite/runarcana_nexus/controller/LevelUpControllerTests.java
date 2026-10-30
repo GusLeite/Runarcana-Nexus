@@ -9,6 +9,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import tools.jackson.databind.json.JsonMapper;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-// Subida de nível pelo mestre, com o catálogo de teste (criacao-teste.json e aprimoramentos-teste.json).
+// Subida de nível (o mestre libera, o jogador escolhe), com o catálogo de teste (criacao-teste.json e aprimoramentos-teste.json).
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -42,29 +46,52 @@ class LevelUpControllerTests {
             + "\"heritages\":[{\"id\":\"teste-geral\"},{\"id\":\"teste-targon\"}]}";
     private static final String LEVEL_2 = "{\"levels\":[{\"hpRoll\":4}]}";
 
+    private static final JsonMapper JSON = JsonMapper.builder().build();
+
     @Autowired
     private MockMvc mvc;
 
+    // Dono de cada ficha criada (quem sobe de nível é o jogador).
+    private final Map<Long, String> owners = new HashMap<>();
+
     @Test
-    void soOMestreSobeDeNivel() throws Exception {
+    void mestreLiberaEJogadorEscolhe() throws Exception {
         long id = createNyx();
         String player = login("gaudron");
-        mvc.perform(post("/character/" + id + "/level-up/preview").header("Authorization", "Bearer " + player)
+        String master = login("mestre");
+        // Sem o mestre liberar, o jogador não sobe; e só o mestre libera.
+        mvc.perform(post("/character/me/level-up/preview").header("Authorization", "Bearer " + player)
                         .contentType(MediaType.APPLICATION_JSON).content(LEVEL_2))
                 .andExpect(status().isForbidden());
-        mvc.perform(post("/character/" + id + "/level-up").header("Authorization", "Bearer " + player)
-                        .contentType(MediaType.APPLICATION_JSON).content(LEVEL_2))
+        pendingLevels(player, id, 1).andExpect(status().isForbidden());
+        pendingLevels(master, 999, 1).andExpect(status().isNotFound());
+        pendingLevels(master, id, 20).andExpect(status().isBadRequest());
+        pendingLevels(master, id, 1)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pendingLevels").value(1));
+        // Um nível liberado: dois de uma vez não dá; um sobe e zera o que estava liberado.
+        mvc.perform(post("/character/me/level-up").header("Authorization", "Bearer " + player)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"levels\":[{\"hpRoll\":4},{\"hpRoll\":4}]}"))
                 .andExpect(status().isForbidden());
-        mvc.perform(post("/character/999/level-up/preview").header("Authorization", "Bearer " + login("mestre"))
+        mvc.perform(post("/character/me/level-up").header("Authorization", "Bearer " + player)
                         .contentType(MediaType.APPLICATION_JSON).content(LEVEL_2))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.level").value(2))
+                .andExpect(jsonPath("$.pendingLevels").value(0));
+        // Com erro na escolha, nada muda (continua liberado).
+        pendingLevels(master, id, 1).andExpect(status().isOk());
+        mvc.perform(post("/character/me/level-up").header("Authorization", "Bearer " + player)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"levels\":[{}]}"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + player))
+                .andExpect(jsonPath("$.character.level").value(2))
+                .andExpect(jsonPath("$.character.pendingLevels").value(1));
     }
 
     @Test
     void previaMostraPvEOQueFalta() throws Exception {
         long id = createNyx();
-        String master = login("mestre");
-        levelUpPreview(master, id, LEVEL_2)
+        levelUpPreview(id, LEVEL_2)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.currentLevel").value(1))
                 .andExpect(jsonPath("$.newLevel").value(2))
@@ -74,11 +101,11 @@ class LevelUpControllerTests {
                 .andExpect(jsonPath("$.preview.complete").value(true))
                 .andExpect(jsonPath("$.preview.classLevels[0].level").value(2));
         // Sem o dado de vida, ou acima do dado da classe (d6), não dá.
-        levelUpPreview(master, id, "{\"levels\":[{}]}")
+        levelUpPreview(id, "{\"levels\":[{}]}")
                 .andExpect(jsonPath("$.preview.errors", hasItem("2º nível: informe o dado de vida (1d6).")));
-        levelUpPreview(master, id, "{\"levels\":[{\"hpRoll\":7}]}")
+        levelUpPreview(id, "{\"levels\":[{\"hpRoll\":7}]}")
                 .andExpect(jsonPath("$.preview.errors", hasItem("2º nível: informe o dado de vida (1d6).")));
-        levelUp(master, id, "{\"levels\":[{}]}")
+        levelUp(id, "{\"levels\":[{}]}")
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("2º nível: informe o dado de vida (1d6)."));
     }
@@ -100,7 +127,7 @@ class LevelUpControllerTests {
                         .contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"Bênção do Mestre\",\"type\":\"PASSIVE\"}"))
                 .andExpect(status().isCreated());
 
-        levelUp(master, id, LEVEL_2)
+        levelUp(id, LEVEL_2)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.level").value(2))
                 .andExpect(jsonPath("$.maxHp").value(17))
@@ -113,7 +140,7 @@ class LevelUpControllerTests {
                 .andExpect(jsonPath("$.abilities[?(@.name == 'Bênção do Mestre')].type").value("PASSIVE"));
 
         // 3º nível: a habilidade com usos pelo nível da classe passa de 1 para 2 usos.
-        levelUp(master, id, "{\"levels\":[{\"hpRoll\":1}]}")
+        levelUp(id, "{\"levels\":[{\"hpRoll\":1}]}")
                 .andExpect(jsonPath("$.level").value(3))
                 .andExpect(jsonPath("$.maxHp").value(21));
         mvc.perform(get("/character/me").header("Authorization", "Bearer " + player))
@@ -124,21 +151,20 @@ class LevelUpControllerTests {
     @Test
     void aprimoramentoDoQuartoNivel() throws Exception {
         long id = createNyx();
-        String master = login("mestre");
-        levelUp(master, id, "{\"levels\":[{\"hpRoll\":3},{\"hpRoll\":3}]}").andExpect(status().isOk());
+        levelUp(id, "{\"levels\":[{\"hpRoll\":3},{\"hpRoll\":3}]}").andExpect(status().isOk());
         String key = "level:4:class:ARCANIST:0";
         // Sem escolher: falta o Aprimoramento; o "Arcanista 8" fica bloqueado.
-        levelUpPreview(master, id, "{\"levels\":[{\"hpRoll\":3}]}")
+        levelUpPreview(id, "{\"levels\":[{\"hpRoll\":3}]}")
                 .andExpect(jsonPath("$.preview.errors", hasItem("Faltam escolhas: Aprimoramento: aumento de atributo ou um Aprimoramento.")))
                 .andExpect(jsonPath("$.preview.choices[?(@.key == '" + key + "')].options[*]", hasItem("aumento-atributo-2")))
                 .andExpect(jsonPath("$.preview.choices[?(@.key == '" + key + "')].options[*]", not(hasItem("aprimoramento-mestre-arcano"))));
         // +2 em Inteligência (17 → 19). A escolha interna é a concessão 1 do recurso (a 0 é a habilidade com o texto).
         String asi = "{\"levels\":[{\"hpRoll\":3,\"choices\":{\"" + key + "\":[\"aumento-atributo-2\"],"
                 + "\"resource:aumento-atributo-2@" + key + ":1\":[\"INTELLIGENCE\"]}}]}";
-        levelUpPreview(master, id, asi)
+        levelUpPreview(id, asi)
                 .andExpect(jsonPath("$.preview.complete").value(true))
                 .andExpect(jsonPath("$.attributeChanges[0]").value("INT 17 → 19"));
-        levelUp(master, id, asi)
+        levelUp(id, asi)
                 .andExpect(jsonPath("$.level").value(4))
                 .andExpect(jsonPath("$.intel").value(19));
     }
@@ -147,29 +173,27 @@ class LevelUpControllerTests {
     @Test
     void segundaFonteNaSubidaPedeADominante() throws Exception {
         long id = create("gaudron", NYX.replace("{\"id\":\"teste-geral\"}", "{\"id\":\"teste-formas\",\"option\":\"Lobo\"}"));
-        String master = login("mestre");
-        levelUp(master, id, "{\"levels\":[{\"hpRoll\":3},{\"hpRoll\":3},"
+        levelUp(id, "{\"levels\":[{\"hpRoll\":3},{\"hpRoll\":3},"
                 + "{\"hpRoll\":3,\"choices\":{\"level:4:class:ARCANIST:0\":[\"aprimoramento-oficio\"]}}]}").andExpect(status().isOk());
-        levelUpPreview(master, id, "{\"levels\":[{\"hpRoll\":3,\"heritages\":[{\"id\":\"teste-formas\",\"option\":\"Reforço\"}]}]}")
+        levelUpPreview(id, "{\"levels\":[{\"hpRoll\":3,\"heritages\":[{\"id\":\"teste-formas\",\"option\":\"Reforço\"}]}]}")
                 .andExpect(jsonPath("$.preview.errors", not(hasItem("Formas Teste: Reforço só a partir da 2ª escolha."))));
         String urso = "{\"levels\":[{\"hpRoll\":3,\"heritages\":[{\"id\":\"teste-formas\",\"option\":\"Urso\"}],"
                 + "\"choices\":{\"heritage:teste-formas:0\":[\"Direita\"]";
-        levelUpPreview(master, id, urso + "}}]}")
+        levelUpPreview(id, urso + "}}]}")
                 .andExpect(jsonPath("$.preview.complete").value(false))
                 .andExpect(jsonPath("$.preview.choices[?(@.key == 'dominant:Forma Dominante:0')].options[1]").value("Urso"));
         String done = urso + ",\"dominant:Forma Dominante:0\":[\"Urso\"]}}]}";
-        levelUpPreview(master, id, done)
+        levelUpPreview(id, done)
                 .andExpect(jsonPath("$.preview.complete").value(true))
                 .andExpect(jsonPath("$.preview.features[?(@.name == 'Limiar Urso')].source").value("Limiar Tecnológico"));
-        levelUp(master, id, done).andExpect(jsonPath("$.level").value(5));
+        levelUp(id, done).andExpect(jsonPath("$.level").value(5));
     }
 
     @Test
     void oficioGuardaONivelEmQueFoiAprendido() throws Exception {
         long id = createNyx();
-        String master = login("mestre");
-        levelUp(master, id, "{\"levels\":[{\"hpRoll\":3},{\"hpRoll\":3}]}").andExpect(status().isOk());
-        levelUp(master, id, "{\"levels\":[{\"hpRoll\":3,\"choices\":{\"level:4:class:ARCANIST:0\":[\"aprimoramento-oficio\"]}}]}")
+        levelUp(id, "{\"levels\":[{\"hpRoll\":3},{\"hpRoll\":3}]}").andExpect(status().isOk());
+        levelUp(id, "{\"levels\":[{\"hpRoll\":3,\"choices\":{\"level:4:class:ARCANIST:0\":[\"aprimoramento-oficio\"]}}]}")
                 .andExpect(jsonPath("$.level").value(4));
         mvc.perform(get("/character/me").header("Authorization", "Bearer " + login("gaudron")))
                 .andExpect(jsonPath("$.crafts[?(@.name == 'Ferraria')].learnedAt").value(1))
@@ -181,11 +205,10 @@ class LevelUpControllerTests {
     @Test
     void multiclasseComProficienciasReduzidasEPreRequisito() throws Exception {
         long id = createNyx();
-        String master = login("mestre");
         // Mercurial de teste: DES 13 (Nyx tem 15) e só armadura leve de multiclasse; a subclasse é obrigatória.
-        levelUpPreview(master, id, "{\"levels\":[{\"classId\":\"MERCURIAL\",\"hpRoll\":5}]}")
+        levelUpPreview(id, "{\"levels\":[{\"classId\":\"MERCURIAL\",\"hpRoll\":5}]}")
                 .andExpect(jsonPath("$.preview.errors", hasItem("2º nível: escolha Cabala de Mercurial Teste.")));
-        levelUpPreview(master, id, "{\"levels\":[{\"classId\":\"MERCURIAL\",\"subclassId\":\"sombra\",\"hpRoll\":5}]}")
+        levelUpPreview(id, "{\"levels\":[{\"classId\":\"MERCURIAL\",\"subclassId\":\"sombra\",\"hpRoll\":5}]}")
                 .andExpect(jsonPath("$.preview.classLevels[0].classId").value("ARCANIST"))
                 .andExpect(jsonPath("$.preview.classLevels[1].classId").value("MERCURIAL"))
                 .andExpect(jsonPath("$.preview.classLevels[1].level").value(1))
@@ -199,7 +222,7 @@ class LevelUpControllerTests {
                 .replace("\"origin:teste-origem:10\":[\"STRENGTH\"]", "\"origin:teste-origem:10\":[\"DEXTERITY\"]")
                 .replace("\"DEXTERITY\":14", "\"DEXTERITY\":8").replace("\"WISDOM\":10", "\"WISDOM\":14").replace("\"CHARISMA\":8", "\"CHARISMA\":10");
         long other = create("rudo", clumsy);
-        levelUpPreview(master, other, "{\"levels\":[{\"classId\":\"MERCURIAL\",\"subclassId\":\"sombra\",\"hpRoll\":5}]}")
+        levelUpPreview(other, "{\"levels\":[{\"classId\":\"MERCURIAL\",\"subclassId\":\"sombra\",\"hpRoll\":5}]}")
                 .andExpect(jsonPath("$.preview.errors", hasItem("Multiclasse com Mercurial Teste: pré-requisito Destreza 13.")));
     }
 
@@ -233,7 +256,7 @@ class LevelUpControllerTests {
                 .andExpect(jsonPath("$[?(@.name == 'Escudo Arcano Teste')].prepared").value(true));
 
         // A subida de nível mantém as preparadas; no 3º nível, as de 2º entram nas opções.
-        levelUp(login("mestre"), id, "{\"levels\":[{\"hpRoll\":3},{\"hpRoll\":3}]}").andExpect(status().isOk());
+        levelUp(id, "{\"levels\":[{\"hpRoll\":3},{\"hpRoll\":3}]}").andExpect(status().isOk());
         mvc.perform(get("/character/me/preparation").header("Authorization", "Bearer " + player))
                 .andExpect(jsonPath("$.classes[0].limit").value(6))
                 .andExpect(jsonPath("$.classes[0].maxSpellLevel").value(2))
@@ -248,7 +271,7 @@ class LevelUpControllerTests {
     void manaSomadaNaMulticlasse() throws Exception {
         long id = createNyx();
         // Arcanista 2 (3 de Mana) + Mercurial 1 (4, pela tabela dele): uma habilidade só, com a soma.
-        levelUpPreview(login("mestre"), id, "{\"levels\":[{\"hpRoll\":3},{\"classId\":\"MERCURIAL\",\"subclassId\":\"sombra\",\"hpRoll\":5}]}")
+        levelUpPreview(id, "{\"levels\":[{\"hpRoll\":3},{\"classId\":\"MERCURIAL\",\"subclassId\":\"sombra\",\"hpRoll\":5}]}")
                 .andExpect(jsonPath("$.preview.features[?(@.name == 'Pontos de Mana')]", hasSize(1)))
                 .andExpect(jsonPath("$.preview.features[?(@.name == 'Pontos de Mana')].uses").value(7));
     }
@@ -256,35 +279,33 @@ class LevelUpControllerTests {
     @Test
     void trocaDeMagiaConhecidaAoSubir() throws Exception {
         long id = createNyx();
-        String master = login("mestre");
         // Arcanista 2, Mercurial 1, Mercurial 2 (aprende Sombra A), Mercurial 3 (troca Sombra A por Sombra B).
         String base = "{\"levels\":[{\"hpRoll\":3},{\"classId\":\"MERCURIAL\",\"subclassId\":\"sombra\",\"hpRoll\":5},"
                 + "{\"classId\":\"MERCURIAL\",\"hpRoll\":5,\"choices\":{\"level:4:class:MERCURIAL:0\":[\"t-sombra-a\"]}},"
                 + "{\"classId\":\"MERCURIAL\",\"hpRoll\":5,\"choices\":{%s}}]}";
-        levelUpPreview(master, id, base.formatted("\"level:5:spell-swap:out\":[\"t-sombra-a\"],\"level:5:spell-swap:in\":[\"t-sombra-b\"]"))
+        levelUpPreview(id, base.formatted("\"level:5:spell-swap:out\":[\"t-sombra-a\"],\"level:5:spell-swap:in\":[\"t-sombra-b\"]"))
                 .andExpect(jsonPath("$.preview.choices[?(@.key == 'level:5:spell-swap:out')].options[*]", hasItem("t-sombra-a")))
                 .andExpect(jsonPath("$.preview.choices[?(@.key == 'level:5:spell-swap:in')].options[*]", hasItem("t-sombra-b")))
                 .andExpect(jsonPath("$.preview.features[?(@.name == 'Sombra B Teste')].source").value("Troca de magia (5º nível)"))
                 .andExpect(jsonPath("$.preview.features[?(@.name == 'Sombra A Teste')]").isEmpty());
         // Sem trocar, Sombra A continua; só a que sai, sem a que entra, é erro.
-        levelUpPreview(master, id, base.formatted(""))
+        levelUpPreview(id, base.formatted(""))
                 .andExpect(jsonPath("$.preview.features[?(@.name == 'Sombra A Teste')]", hasSize(1)));
-        levelUpPreview(master, id, base.formatted("\"level:5:spell-swap:out\":[\"t-sombra-a\"]"))
+        levelUpPreview(id, base.formatted("\"level:5:spell-swap:out\":[\"t-sombra-a\"]"))
                 .andExpect(jsonPath("$.preview.errors", hasItem("Troca de magia do 5º nível: escolha a que sai e a que entra (ou nenhuma).")));
     }
 
     @Test
     void recursoComGanhosPeloNivelDaClasse() throws Exception {
         long id = createNyx();
-        String master = login("mestre");
-        levelUp(master, id, "{\"levels\":[{\"hpRoll\":3},{\"hpRoll\":3}]}").andExpect(status().isOk());
+        levelUp(id, "{\"levels\":[{\"hpRoll\":3},{\"hpRoll\":3}]}").andExpect(status().isOk());
         String pick = "{\"hpRoll\":3,\"choices\":{\"level:4:class:ARCANIST:0\":[\"aprimoramento-progressivo\"]}}";
         // Escolhido no 4º nível de Arcanista: o ganho do 4º entra junto; o do 5º, só no 5º. Robusto de teste: +3 (metade do d6).
-        levelUpPreview(master, id, "{\"levels\":[" + pick + "]}")
+        levelUpPreview(id, "{\"levels\":[" + pick + "]}")
                 .andExpect(jsonPath("$.preview.features[?(@.name == 'Progresso 4')]", hasSize(1)))
                 .andExpect(jsonPath("$.preview.features[?(@.name == 'Progresso 5')]").isEmpty())
                 .andExpect(jsonPath("$.hpGain").value(9));
-        levelUpPreview(master, id, "{\"levels\":[" + pick + ",{\"hpRoll\":3}]}")
+        levelUpPreview(id, "{\"levels\":[" + pick + ",{\"hpRoll\":3}]}")
                 .andExpect(jsonPath("$.preview.features[?(@.name == 'Progresso 5')].source").value("Aprimoramento: Progressivo (5º nível)"));
     }
 
@@ -304,17 +325,29 @@ class LevelUpControllerTests {
                 .andReturn().getResponse().getContentAsString();
         Matcher m = Pattern.compile("^\\{\"id\":(\\d+)").matcher(created);
         assertThat(m.find()).isTrue();
+        owners.put(Long.parseLong(m.group(1)), username);
         return Long.parseLong(m.group(1));
     }
 
-    private ResultActions levelUpPreview(String token, long id, String body) throws Exception {
-        return mvc.perform(post("/character/" + id + "/level-up/preview").header("Authorization", "Bearer " + token)
+    // O mestre libera os níveis do corpo e o dono da ficha faz a prévia (ou aplica).
+    private ResultActions levelUpPreview(long id, String body) throws Exception {
+        return mvc.perform(post("/character/me/level-up/preview").header("Authorization", "Bearer " + released(id, body))
                 .contentType(MediaType.APPLICATION_JSON).content(body));
     }
 
-    private ResultActions levelUp(String token, long id, String body) throws Exception {
-        return mvc.perform(post("/character/" + id + "/level-up").header("Authorization", "Bearer " + token)
+    private ResultActions levelUp(long id, String body) throws Exception {
+        return mvc.perform(post("/character/me/level-up").header("Authorization", "Bearer " + released(id, body))
                 .contentType(MediaType.APPLICATION_JSON).content(body));
+    }
+
+    private String released(long id, String body) throws Exception {
+        pendingLevels(login("mestre"), id, JSON.readTree(body).path("levels").size()).andExpect(status().isOk());
+        return login(owners.get(id));
+    }
+
+    private ResultActions pendingLevels(String token, long id, int pending) throws Exception {
+        return mvc.perform(patch("/character/" + id + "/pending-levels").header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON).content("{\"pendingLevels\":" + pending + "}"));
     }
 
     // Contas do seed: senha inicial igual ao nome do usuário.

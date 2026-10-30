@@ -43,3 +43,10 @@ export const fetchConditions = token => request('/conditions', { token })
 export const spendGold = (token, amount) => request('/character/me/gold/spend', { method: 'POST', token, body: { amount } })
 
 export const spendInspiration = (token) => request('/character/me/inspiration/use', { method: 'POST', token })
+
+// Subida de nível liberada pelo mestre (character.pendingLevels): levels = [{ classId, subclassId, hpRoll, choices, heritages }].
+// A prévia não salva; aplicar devolve a ficha (CharacterResponse).
+export const previewLevelUp = (token, levels) =>
+  request('/character/me/level-up/preview', { method: 'POST', token, body: { levels } })
+
+export const applyLevelUp = (token, levels) => request('/character/me/level-up', { method: 'POST', token, body: { levels } })

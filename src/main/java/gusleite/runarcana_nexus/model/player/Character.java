@@ -99,6 +99,8 @@ public class Character {
     private Integer initiativeBonus;
     // Bônus nos PV máximos dado pelo mestre (item, maldição, bênção); fica fora da conta da subida de nível. Nulo = 0.
     private Integer maxHpBonus;
+    // Níveis que o mestre liberou e o jogador ainda não subiu (as escolhas são do jogador). Nulo = 0.
+    private Integer pendingLevels;
     // Testes contra a morte (0–3 cada) com 0 PV; zerados ao ganhar PV ou descansar. Nulos nas fichas antigas = 0.
     private Integer deathSuccesses;
     private Integer deathFailures;

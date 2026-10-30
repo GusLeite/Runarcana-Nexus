@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { castSpell, fetchConditions, setDeathSaves as setDeathSavesApi, chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, chooseForm as chooseFormApi, toggleEffect as toggleEffectApi, consumeItem, fetchPreparation, fetchSheet, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
+import { applyLevelUp, castSpell, fetchConditions, setDeathSaves as setDeathSavesApi, chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, chooseForm as chooseFormApi, toggleEffect as toggleEffectApi, consumeItem, fetchPreparation, fetchSheet, previewLevelUp, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
 import { deathSaveResult, rollCheck, rollD20, rollDice } from '../../data/rules.js'
@@ -15,10 +15,13 @@ import BookTab from './BookTab.jsx'
 import DiceRoll from './DiceRoll.jsx'
 import TabBar from './TabBar.jsx'
 import CreationWizard from '../creation/CreationWizard.jsx'
+import LevelUp from '../creation/LevelUp.jsx'
+import { fetchCatalog } from '../../api/creation.js'
 import { ExitIcon, KeyIcon } from './icons.jsx'
 import '../../styles/sheet.css'
 
 const MAX_LOG = 8
+const PENDING_POLL = 10000
 const TABS = [
   { id: 'sheet', label: 'FICHA' },
   { id: 'abilities', label: 'MAGIAS' },
@@ -47,6 +50,9 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const [mode, setMode] = useState('normal')
   const [busy, setBusy] = useState(false)
   const [creating, setCreating] = useState(false)
+  // Subida de nível liberada pelo mestre: o formulário ocupa o lugar das abas; o catálogo vem quando abre.
+  const [leveling, setLeveling] = useState(false)
+  const [catalog, setCatalog] = useState(null)
   const [toast, setToast] = useState(notice)
   // Em ref para as buscas não repetirem a cada render do App (o callback muda de identidade).
   const expired = useRef(onExpired)
@@ -280,6 +286,36 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   }, [])
 
   const sheet = state.status === 'ready' ? state.sheet.character : null
+  const canLevel = !!sheet?.canLevelUp && sheet.pendingLevels > 0
+
+  const openLevelUp = () => {
+    setLeveling(true)
+    if (!catalog) fetchCatalog(token).then(setCatalog).catch(err => { setLeveling(false); fail(err) })
+  }
+  const levelUpPreview = useCallback(levels => previewLevelUp(token, levels), [token])
+  const levelUpApply = useCallback(levels => applyLevelUp(token, levels), [token])
+
+  // O mestre libera a subida no painel: a cada 10 s (com a aba visível) confere se mudou o que está liberado.
+  const pendingNow = sheet?.pendingLevels
+  useEffect(() => {
+    if (pendingNow == null) return
+    const t = setInterval(() => {
+      if (document.hidden) return
+      fetchSheet(token)
+        .then(s => {
+          if (s.character.pendingLevels !== pendingNow) {
+            setState(st => (st.status === 'ready'
+              ? { ...st, sheet: { ...st.sheet, character: { ...st.sheet.character, pendingLevels: s.character.pendingLevels } } } : st))
+          }
+        })
+        .catch(() => {})
+    }, PENDING_POLL)
+    return () => clearInterval(t)
+  }, [token, pendingNow])
+  // Se o mestre cancelar enquanto o jogador escolhe, o formulário fecha.
+  useEffect(() => {
+    if (leveling && sheet && !canLevel) setLeveling(false)
+  }, [leveling, sheet, canLevel])
   const unread = documents.filter(d => !d.read).length
   const badges = {
     abilities: abilities.length,
@@ -309,8 +345,13 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             <span>ROLAR D20{MODE_SHORT[mode] && <i className={'play-mode ' + mode}>{MODE_SHORT[mode]}</i>}</span>
           </button>
         </div>
-        <TabBar tabs={TABS} active={tab} onChange={setTab} badges={badges} alertId="documents" label="Seções" />
+        <TabBar tabs={TABS} active={tab} onChange={t => { setLeveling(false); setTab(t) }} badges={badges} alertId="documents" label="Seções" />
         <div className="topbar-right">
+          {canLevel && !leveling && (
+            <button className="lvl-ready" type="button" onClick={openLevelUp} title={'O mestre liberou o ' + (sheet.level + 1) + 'º nível'}>
+              SUBIR DE NÍVEL{sheet.pendingLevels > 1 && <span className="lvl-ready-n">{sheet.pendingLevels}</span>}
+            </button>
+          )}
           {sheet && (
             <Purse gold={sheet.gold} onSpend={spendGold} />
           )}
@@ -327,7 +368,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
         </div>
       </header>
 
-      <main className={'sheet-body tab-' + tab}>
+      <main className={'sheet-body tab-' + (leveling ? 'levelup' : tab)}>
         <SheetHero character={character} sheet={sheet} armorClass={state.status === 'ready' ? state.sheet.armorClass : null}
           onDefense={chooseDefense} onShield={chooseShield} onHp={setHp}
           onDeathSaves={setDeathSaves} onDeathRoll={rollDeathSave} conditionCatalog={conditionCatalog} />
@@ -364,8 +405,30 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             />
           </div>
         )}
+        {sheet && leveling && (
+          <div className="sheet-col wide">
+            {catalog ? (
+              <LevelUp
+                key={sheet.level}
+                character={sheet}
+                catalog={catalog}
+                onPreview={levelUpPreview}
+                onApply={levelUpApply}
+                onApplied={updated => {
+                  setLeveling(false)
+                  setToast(updated.characterName + ' subiu para o ' + updated.level + 'º nível!')
+                  load()
+                }}
+                onCancel={() => setLeveling(false)}
+                onError={fail}
+              />
+            ) : (
+              <div className="sheet-state" role="status"><div className="hex-spinner" />Abrindo a subida de nível…</div>
+            )}
+          </div>
+        )}
 
-        {sheet && tab === 'sheet' && (
+        {sheet && !leveling && tab === 'sheet' && (
           <OverviewTab
             sheet={sheet}
             attacks={state.sheet.attacks ?? []}
@@ -385,7 +448,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
           />
         )}
 
-        {sheet && tab !== 'sheet' && (
+        {sheet && !leveling && tab !== 'sheet' && (
           <div className="sheet-col wide" key={tab}>
             <section className="card" style={{ '--i': 1 }}>
               {tab === 'abilities' && (

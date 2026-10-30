@@ -47,12 +47,9 @@ export const updateTableSettings = (token, settings) => request('/creation/setti
 
 export { fetchCatalog } from './creation.js'
 
-// Subida de nível: levels = [{ classId, subclassId, hpRoll, choices, heritages }] (os níveis novos).
-export const previewLevelUp = (token, characterId, levels) =>
-  request('/character/' + characterId + '/level-up/preview', { method: 'POST', token, body: { levels } })
-
-export const applyLevelUp = (token, characterId, levels) =>
-  request('/character/' + characterId + '/level-up', { method: 'POST', token, body: { levels } })
+// Subida de nível: quantos níveis a ficha pode subir (0 cancela); as escolhas ficam com o jogador. Devolve a ficha.
+export const setPendingLevels = (token, characterId, pendingLevels) =>
+  request('/character/' + characterId + '/pending-levels', { method: 'PATCH', token, body: { pendingLevels } })
 
 // Inventário, ouro e inspiração de uma ficha: { characterId, characterName, gold, inspiration, items }.
 export const fetchInventory = (token, characterId) => request('/character/' + characterId + '/items', { token })

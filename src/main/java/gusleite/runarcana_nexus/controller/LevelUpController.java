@@ -4,39 +4,48 @@ import gusleite.runarcana_nexus.record.CharacterResponse;
 import gusleite.runarcana_nexus.record.LevelUpPreview;
 import gusleite.runarcana_nexus.record.LevelUpRequest;
 import gusleite.runarcana_nexus.services.AuthService;
-import gusleite.runarcana_nexus.services.CreationService;
+import gusleite.runarcana_nexus.services.LevelUpService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-// Subida de nível: só o mestre. A prévia não salva; a aplicação atualiza a ficha.
+// Subida de nível: o mestre libera os níveis; o jogador escolhe o que ganha e aplica na própria ficha.
+// A prévia não salva; a aplicação atualiza a ficha.
 @RestController
-@RequestMapping("/character/{characterId}/level-up")
+@RequestMapping("/character")
 public class LevelUpController {
 
-    private final CreationService creation;
+    private final LevelUpService levelUp;
     private final AuthService auth;
 
-    public LevelUpController(CreationService creation, AuthService auth) {
-        this.creation = creation;
+    public LevelUpController(LevelUpService levelUp, AuthService auth) {
+        this.levelUp = levelUp;
         this.auth = auth;
     }
 
-    @PostMapping("/preview")
-    public ResponseEntity<LevelUpPreview> preview(
+    // Mestre: quantos níveis a ficha pode subir (0 cancela).
+    @PatchMapping("/{characterId}/pending-levels")
+    public ResponseEntity<CharacterResponse> setPending(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
             @PathVariable Long characterId,
-            @RequestBody LevelUpRequest request) {
+            @RequestBody PendingLevelsRequest request) {
         auth.requireMaster(authorization);
-        return ResponseEntity.ok(creation.levelUpPreview(characterId, request));
+        return ResponseEntity.ok(levelUp.setPending(characterId, request.pendingLevels()));
     }
 
-    @PostMapping
+    public record PendingLevelsRequest(int pendingLevels) {}
+
+    @PostMapping("/me/level-up/preview")
+    public ResponseEntity<LevelUpPreview> preview(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @RequestBody LevelUpRequest request) {
+        return ResponseEntity.ok(levelUp.preview(auth.authenticate(authorization), request));
+    }
+
+    @PostMapping("/me/level-up")
     public ResponseEntity<CharacterResponse> apply(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
-            @PathVariable Long characterId,
             @RequestBody LevelUpRequest request) {
-        auth.requireMaster(authorization);
-        return ResponseEntity.ok(creation.levelUp(characterId, request));
+        return ResponseEntity.ok(levelUp.apply(auth.authenticate(authorization), request));
     }
 }

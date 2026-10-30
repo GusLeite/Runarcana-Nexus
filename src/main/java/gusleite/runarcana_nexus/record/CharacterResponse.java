@@ -59,9 +59,11 @@ public record CharacterResponse(
         List<String> weaponProficiencies,
         List<String> craftExpertise,
         // Níveis em cada classe (multiclasse); vazio nas fichas antigas. canLevelUp: a ficha tem as escolhas guardadas
-        // (criada pelo assistente) e ainda não está no 20º nível.
+        // (criada pelo assistente) e ainda não está no 20º nível. pendingLevels: níveis liberados pelo mestre que o
+        // jogador ainda não subiu.
         List<ClassLevelResponse> classLevels,
         boolean canLevelUp,
+        int pendingLevels,
         // Testes contra a morte (0–3), condições (ids do rules/condicoes.json; o texto vem de GET /conditions) e Exaustão.
         int deathSuccesses,
         int deathFailures,
@@ -152,6 +154,7 @@ public record CharacterResponse(
                 character.getClassLevels().stream()
                         .map(l -> new ClassLevelResponse(l.getClassId(), l.getClassName(), l.getLevel(), l.getSubclass())).toList(),
                 character.getBuild() != null && character.getLevel() < 20,
+                character.getPendingLevels() == null ? 0 : character.getPendingLevels(),
                 character.getDeathSuccesses() == null ? 0 : character.getDeathSuccesses(),
                 character.getDeathFailures() == null ? 0 : character.getDeathFailures(),
                 // Em ordem alfabética, como no livro.

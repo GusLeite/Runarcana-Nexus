@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Subida de nível: o mestre libera, o jogador escolhe (`feature/character-sheet`)
+- `Character.pendingLevels` + `PATCH /character/{id}/pending-levels` (mestre); as rotas de subida viram `/character/me/level-up[/preview]` (jogador, só nos níveis liberados). `LevelUpService` desconta ao aplicar, na mesma transação.
+- Front: o formulário saiu do `MasterSheets` para `creation/LevelUp.jsx`, aberto pelo botão **SUBIR DE NÍVEL** no topo da ficha; o mestre só tem o card "Subida de nível" (liberar/cancelar). A ficha confere a cada 10 s.
+- Testes: `LevelUpControllerTests` liberam pelo mestre e sobem pelo dono. Conferido no sandbox (Rudo 1 → 2).
+
 ## 2026-10-29 — Mapeamento: aproximações corrigidas (`feature/character-sheet`)
 - Armas regionais pela região do personagem ("regional (...)" no catálogo de itens, como na wiki): Estudioso de Armas e Ferromante (só marciais).
 - "Mistério a que você tenha acesso" só com os acessíveis (`MYSTERY` `value: ACCESS`, `MagicRules.accessibleElements`).

@@ -50,6 +50,13 @@ clip-path:polygon(9px 0,calc(100% - 9px) 0,100% 50%,calc(100% - 9px) 100%,9px 10
 .purse:hover{border-color:var(--gold)}
 .purse:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .purse-wrap{position:relative}
+/* Subida de nível liberada pelo mestre (abre o creation/LevelUp.jsx no lugar das abas) */
+.lvl-ready{display:flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--teal);background:rgba(47,211,192,.12);color:var(--teal);font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:13px;letter-spacing:.14em;cursor:pointer;animation:lvl-glow 2.4s ease-in-out infinite}
+.lvl-ready:hover{background:rgba(47,211,192,.2)}
+.lvl-ready:focus-visible{outline:2px solid var(--gold-hi);outline-offset:2px}
+.lvl-ready-n{display:grid;place-items:center;min-width:20px;height:20px;padding:0 5px;background:var(--teal);color:#02060c;font-size:12px;letter-spacing:0}
+@keyframes lvl-glow{50%{box-shadow:0 0 18px rgba(47,211,192,.45)}}
+@media (prefers-reduced-motion:reduce){.lvl-ready{animation:none}}
 .purse-pop{position:absolute;top:calc(100% + 8px);right:0;z-index:30;display:flex;flex-direction:column;gap:6px;width:220px;padding:12px;border:1px solid var(--gold-soft);background:var(--panel);box-shadow:0 10px 30px rgba(0,0,0,.55);animation:purse-in .18s ease}
 @keyframes purse-in{from{opacity:0;transform:translateY(-4px)}}
 .purse-pop label{font-family:'Cinzel',Georgia,serif;font-size:12px;letter-spacing:.12em;color:var(--gold-hi)}

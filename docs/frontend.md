@@ -46,7 +46,7 @@ frontend/
     ├── styles/sheet.css       visual da ficha
     ├── styles/master.css      botão, portal e painel do mestre
     ├── styles/motion.css      animações de polimento (importado por último no main.jsx)
-    ├── api/master.js          rotas do mestre (personagens, habilidades, documentos, destinatários, subida de nível)
+    ├── api/master.js          rotas do mestre (personagens, habilidades, documentos, destinatários, liberar a subida de nível)
     ├── validation.js (+ .test.js)
     └── assets/characters/     rudo.jpg/.mp4, gaudron.jpg/.mp4
 ```

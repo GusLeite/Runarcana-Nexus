@@ -57,8 +57,9 @@
 | GET | `/compendium/rituals` | – (Bearer) | `{ rituals, tables }`: a Lista de Rituais e as tabelas do Capítulo 10 (Conjuração Ritual, Trespassando, Rituais, Magia Púrpura, Magia Descontrolada Yordle, Essência, Golem) |
 | POST | `/creation/preview` | `CreationRequest` (Bearer) | Ficha em construção calculada (não salva). `errors` vazio = pode criar |
 | POST | `/creation` | `CreationRequest` (Bearer) | Cria a ficha da conta logada. 201; 400 com o 1º erro da prévia; 409 se a conta já tem ficha; 403 para o mestre |
-| POST | `/character/{id}/level-up/preview` | `LevelUpRequest { levels: LevelPick[] }` (Bearer **mestre**) | Prévia da subida de nível (não salva): `LevelUpPreview` com a prévia completa, nível e PV antes/depois, `attributeChanges` e `newFeatures`. 404 sem ficha; 400 se a ficha não tem `build` |
-| POST | `/character/{id}/level-up` | `LevelUpRequest` (Bearer **mestre**) | Aplica os níveis: devolve `CharacterResponse`. 400 com o 1º erro da prévia |
+| PATCH | `/character/{id}/pending-levels` | `{ pendingLevels }` (Bearer **mestre**) | Libera a subida de nível: quantos níveis a ficha pode subir (0 cancela). Devolve `CharacterResponse`. 404 sem ficha; 400 sem `build` ou se passar do 20º nível |
+| POST | `/character/me/level-up/preview` | `LevelUpRequest { levels: LevelPick[] }` (Bearer) | Jogador: prévia dos níveis liberados (não salva): `LevelUpPreview` com a prévia completa, nível e PV antes/depois, `attributeChanges` e `newFeatures`. 403 se o mestre não liberou ou se pedir mais níveis que os liberados |
+| POST | `/character/me/level-up` | `LevelUpRequest` (Bearer) | Jogador: aplica e desconta de `pendingLevels`; devolve `CharacterResponse`. 400 com o 1º erro da prévia (nada muda); 403 como na prévia |
 | DELETE | `/documents/{id}` | – (Bearer **mestre**) | Apaga (e as marcas de lido). 204 |
 | POST | `/auth/login` | `LoginRequest { username, password }` | Entra; devolve `{ token, expiresAt, account: { username, mustChangePassword, master } }`. 401 se errar |
 | GET | `/auth/me` | – (Bearer) | Conta do token. 401 se o token for inválido ou expirado |
