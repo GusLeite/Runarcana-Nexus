@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Etapa Região vira carrossel em tela cheia (`feature/character-sheet`)
+- `RegionStep.jsx` e `styles/region.css`: região em tamanho grande, com setas, teclado, toque e miniaturas; a escolha é confirmada num botão.
+- `assets/regions/`: 12 vídeos comprimidos de 112 MB para ~23 MB (loops de até 10 s, sem áudio) e imagens de Nazumah e do Vazio. `data/regionArt.js` traz as descrições breves, provisórias.
+- `useHallTop.js` sai do `OriginStep` para os dois salões usarem.
+
 ## 2026-10-30 — Imagens do Yordle: as 29 linhagens ilustradas (`feature/character-sheet`)
 - `assets/lineages/`: aquatico, feerico e felpudo (.webp, 90 a 225 KB), no enquadramento padrão. Com elas, todas as linhagens têm imagem (~4,4 MB no total).
 

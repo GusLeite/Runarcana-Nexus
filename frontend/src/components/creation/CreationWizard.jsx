@@ -4,6 +4,7 @@ import { ATTRIBUTES, heritageChoices } from '../../data/rules.js'
 import { replay } from '../../utils/motion.js'
 import OptionStep from './OptionStep.jsx'
 import OriginStep from './OriginStep.jsx'
+import RegionStep from './RegionStep.jsx'
 import AttributeStep from './AttributeStep.jsx'
 import ChoiceStep from './ChoiceStep.jsx'
 import HeritageStep from './HeritageStep.jsx'
@@ -150,8 +151,8 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
             <TraitStep system={catalog.traits} preview={preview} draft={draft} onChange={set} />
           )}
           {current === 'region' && (
-            <OptionStep kind="region" title="Escolha a região" hint="Onde o personagem cresceu. Libera as Heranças de Região."
-              items={catalog.regions} crafts={catalog.crafts} selected={draft.regionId} onPick={id => set('regionId', id)} />
+            <RegionStep regions={catalog.regions} crafts={catalog.crafts} equipment={catalog.equipment?.items} regionId={draft.regionId}
+              onPick={id => set('regionId', id)} onBack={() => setStep(s => s - 1)} onNext={() => setStep(s => s + 1)} />
           )}
           {current === 'class' && (
             <>

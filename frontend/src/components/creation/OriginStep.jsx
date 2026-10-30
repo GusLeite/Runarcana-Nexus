@@ -1,8 +1,9 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { originArt } from '../../data/originArt.js'
 import OriginArt from './OriginArt.jsx'
 import OriginStage from './OriginStage.jsx'
+import useHallTop from './useHallTop.js'
 import '../../styles/origin.css'
 
 // Etapa Origem: um salão que cobre a tela abaixo da barra do topo, com um painel vertical por origem, como a
@@ -10,16 +11,8 @@ import '../../styles/origin.css'
 // detalhes e onde a escolha é confirmada.
 export default function OriginStep({ origins, crafts, equipment, originId, lineageId, onPick, onNext }) {
   const [openId, setOpenId] = useState(null)
-  const [top, setTop] = useState(0)
+  const top = useHallTop()
   const hall = useRef()
-
-  // O salão começa logo abaixo da barra do topo, seja qual for a altura dela (muda no celular).
-  useLayoutEffect(() => {
-    const measure = () => setTop(document.querySelector('header.topbar')?.getBoundingClientRect().bottom ?? 0)
-    measure()
-    window.addEventListener('resize', measure)
-    return () => window.removeEventListener('resize', measure)
-  }, [])
 
   if (!origins?.length) {
     return <p className="muted-note">Nenhuma opção cadastrada ainda nas regras de criação.</p>

@@ -1,6 +1,6 @@
 import { grantLabel } from '../../data/rules.js'
 
-// Cartões para escolher região, classe, subclasse ou passado, cada um com os detalhes do livro
+// Cartões para escolher classe, subclasse ou passado, cada um com os detalhes do livro
 // (ex.: Idade, Tamanho) e a lista do que concede.
 export default function OptionStep({ kind, title, hint, items, selected, onPick, crafts, equipment = [] }) {
   if (!items?.length) {
@@ -10,7 +10,7 @@ export default function OptionStep({ kind, title, hint, items, selected, onPick,
     <>
       <h4 className="step-title">{title}</h4>
       {hint && <p className="step-hint">{hint}</p>}
-      <div className={'options' + (kind === 'region' ? ' compact' : '')} role="radiogroup" aria-label={title}>
+      <div className="options" role="radiogroup" aria-label={title}>
         {items.map((item, n) => {
           const grants = item.grants ?? []
           const on = item.id === selected
