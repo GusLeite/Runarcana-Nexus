@@ -221,6 +221,12 @@ public class Character {
     @MapKeyColumn(name = "craft")
     @Column(name = "formulas")
     private Map<String, Integer> craftFormulaBonus = new HashMap<>();
+    // Atributo alternativo por alvo ("SKILL:INTIMIDATION" → "STRENGTH"; "AC" → "CONSTITUTION/2" = metade): vale o maior.
+    @ElementCollection
+    @CollectionTable(name = "character_attribute_swaps", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "target")
+    @Column(name = "attribute")
+    private Map<String, String> attributeSwaps = new HashMap<>();
 
     // Pontos de Herança ainda não gastos (os da criação são gastos no assistente).
     private Integer heritagePoints;
@@ -318,8 +324,26 @@ public class Character {
     }
 
     // Bônus de um teste de perícia: modificador do atributo base + proficiência, se tiver (duas vezes com especialidade).
+    // Modificador para um alvo: o do atributo normal, ou o do alternativo (attributeSwaps), o que for maior.
+    public int swapModifier(String target, Attribute base) {
+        int normal = getModifier(base);
+        String alt = attributeSwaps.get(target);
+        if (alt == null) return normal;
+        boolean half = alt.endsWith("/2");
+        int other = getModifier(Attribute.valueOf(half ? alt.substring(0, alt.length() - 2) : alt));
+        return Math.max(normal, half ? Math.floorDiv(other, 2) : other);
+    }
+
+    // O atributo que vale na perícia (o alternativo, se for maior: Comandante usa Força em Intimidação).
+    public Attribute getSkillAttribute(SkillType skill) {
+        String alt = attributeSwaps.get("SKILL:" + skill.name());
+        if (alt == null || alt.endsWith("/2")) return skill.getBaseAttribute();
+        Attribute other = Attribute.valueOf(alt);
+        return getModifier(other) > getModifier(skill.getBaseAttribute()) ? other : skill.getBaseAttribute();
+    }
+
     public int getSkillModifier(SkillType skill) {
-        int modifier = getModifier(skill.getBaseAttribute());
+        int modifier = swapModifier("SKILL:" + skill.name(), skill.getBaseAttribute());
 
         if (isProficient(skill)) {
             modifier += getProficiencyBonus();

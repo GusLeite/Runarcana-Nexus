@@ -65,6 +65,11 @@
         {
           "type": "MYSTERY",
           "value": "som"
+        },
+        {
+          "type": "ATTRIBUTE_SWAP",
+          "value": "SPELLCASTING",
+          "attribute": "CHARISMA"
         }
       ],
       "execution": "Ação bônus"
@@ -396,6 +401,11 @@
             "PERSUASION"
           ],
           "expertise": true
+        },
+        {
+          "type": "ATTRIBUTE_SWAP",
+          "value": "SKILL:INTIMIDATION",
+          "attribute": "STRENGTH"
         }
       ],
       "execution": "Ação bônus",
@@ -511,6 +521,13 @@
           "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
           "attribute": "INTELLIGENCE",
           "when": "Detectar Fraquezas:Dano (metade da Inteligência)"
+        },
+        {
+          "type": "ATTRIBUTE_SWAP",
+          "value": "ATTACK",
+          "attribute": "INTELLIGENCE",
+          "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+          "when": "Detectar Fraquezas:Ataque (metade da Inteligência no lugar da Força)"
         }
       ]
     },
@@ -1214,6 +1231,16 @@
             "INSIGHT"
           ],
           "expertise": true
+        },
+        {
+          "type": "ATTRIBUTE_SWAP",
+          "value": "SKILL:INVESTIGATION",
+          "attribute": "WISDOM"
+        },
+        {
+          "type": "ATTRIBUTE_SWAP",
+          "value": "SKILL:INSIGHT",
+          "attribute": "INTELLIGENCE"
         }
       ]
     },
@@ -1313,6 +1340,13 @@
           "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
           "attribute": "WISDOM",
           "when": "Perceber Fraquezas:Dano (metade da Sabedoria)"
+        },
+        {
+          "type": "ATTRIBUTE_SWAP",
+          "value": "ATTACK",
+          "attribute": "WISDOM",
+          "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+          "when": "Perceber Fraquezas:Ataque (metade da Sabedoria no lugar da Força)"
         }
       ]
     },
@@ -1409,7 +1443,21 @@
       "id": "resiliencia-adaptativa",
       "name": "Resiliência Adaptativa",
       "category": "GENERAL",
-      "description": "Acostumado às mais diversas situações, você foi forçado a criar uma versatilidade para se proteger. Quando você escolhe essa Herança você deve escolher entre velocidade ou rigidez, recebendo um dos dois benefícios:\n\nVelocidade. Ao invés de adicionar seu modificador de Constituição aos seus Pontos de Vida, você pode usar metade do seu modificador de Destreza.\nRigidez. Ao invés de adicionar seu modificador de Destreza à sua CA (respeitando os limites estabelecidos) adicione metade do seu modificador de Constituição."
+      "description": "Acostumado às mais diversas situações, você foi forçado a criar uma versatilidade para se proteger. Quando você escolhe essa Herança você deve escolher entre velocidade ou rigidez, recebendo um dos dois benefícios:\n\nVelocidade. Ao invés de adicionar seu modificador de Constituição aos seus Pontos de Vida, você pode usar metade do seu modificador de Destreza.\nRigidez. Ao invés de adicionar seu modificador de Destreza à sua CA (respeitando os limites estabelecidos) adicione metade do seu modificador de Constituição.",
+      "grants": [
+        {
+          "type": "ATTRIBUTE_SWAP",
+          "value": "HP",
+          "attribute": "DEXTERITY",
+          "usesFormula": "HALF_ATTRIBUTE_MODIFIER"
+        },
+        {
+          "type": "ATTRIBUTE_SWAP",
+          "value": "AC",
+          "attribute": "CONSTITUTION",
+          "usesFormula": "HALF_ATTRIBUTE_MODIFIER"
+        }
+      ]
     },
     {
       "id": "ritualista",

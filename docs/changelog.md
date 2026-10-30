@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento C4: troca de atributo (`feature/character-sheet`)
+- Concessão `ATTRIBUTE_SWAP` (vale o maior): perícias (Comandante, Mente Intuitiva), PV e CA (Resiliência Adaptativa), conjuração (Acordes de Poder) e Força nos ataques (Detectar/Perceber Fraquezas, 2ª opção).
+- A perícia mostra o atributo que está valendo. Teste: Atletismo do Nyx pela INT.
+
 ## 2026-10-29 — Mapeamento C3: níveis de ofício (`feature/character-sheet`)
 - Concessões `CRAFT_LEVEL` (+níveis ou nível mínimo) e `CRAFT_FORMULAS`; a ficha guarda por ofício e soma no nível e no limite de fórmulas.
 - Minucioso, Operário e Privilegiado (+1 nível), Hábil (opção de nível), Maestria (6º nível, especialidade e fórmulas), Praticante Dedicado (ofício ou +1 nível, 5 fórmulas), Atirador 3º (Armeiro pelo nível da classe).

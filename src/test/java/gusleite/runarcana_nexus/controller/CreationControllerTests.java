@@ -232,6 +232,9 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.character.typedReductions['gélido']").value(2))
                 // Sentidos: vale o maior (60) e a fonte "ou +15" soma 15; submerso é outro sentido.
                 .andExpect(jsonPath("$.character.senses.DARKVISION").value(75))
+                // Atletismo pode usar INT (17 → +3) no lugar da FOR (9 → −1): vale o maior.
+                .andExpect(jsonPath("$.character.skills[?(@.skill == 'ATHLETICS')].modifier").value(3))
+                .andExpect(jsonPath("$.character.skills[?(@.skill == 'ATHLETICS')].attribute").value("INTELLIGENCE"))
                 // Ofício: +1 nível escolhido (Ferraria 1 → 2) e 3 fórmulas a mais (INT 17: 3 × 2 + 3).
                 .andExpect(jsonPath("$.crafts[?(@.name == 'Ferraria')].level").value(2))
                 .andExpect(jsonPath("$.crafts[?(@.name == 'Ferraria')].formulaLimit").value(9))

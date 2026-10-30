@@ -196,6 +196,11 @@
           "type": "CRAFT_FORMULAS",
           "value": "ferraria",
           "amount": 3
+        },
+        {
+          "type": "ATTRIBUTE_SWAP",
+          "value": "SKILL:ATHLETICS",
+          "attribute": "INTELLIGENCE"
         }
       ]
     },

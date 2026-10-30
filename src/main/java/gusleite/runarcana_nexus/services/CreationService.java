@@ -1028,6 +1028,8 @@ public class CreationService {
             }
             case IMMUNITY -> b.immunities.add(g.value());
             case CONDITION_IMMUNITY -> b.conditionImmunities.add(g.value());
+            case ATTRIBUTE_SWAP -> b.attributeSwaps.put(g.value(), g.attribute().name()
+                    + (g.usesFormula() == UsesFormula.HALF_ATTRIBUTE_MODIFIER ? "/2" : ""));
             case CRAFT_LEVEL, CRAFT_FORMULAS -> {
                 if (g.value() != null) b.craftGrants.add(new Sourced<>(g, s.key() + "|" + s.label()));
             }
@@ -1879,6 +1881,8 @@ public class CreationService {
         c.getTypedReductions().putAll(b.typedReductions);
         c.getSenses().clear();
         c.getSenses().putAll(b.senses);
+        c.getAttributeSwaps().clear();
+        c.getAttributeSwaps().putAll(b.attributeSwaps);
         c.getSavingThrowExpertise().clear();
         c.getSavingThrowExpertise().addAll(b.saveExpertise);
         c.setPassivePerceptionBonus(b.passivePerception);
@@ -2594,6 +2598,7 @@ public class CreationService {
         final Map<String, List<String>> chosenWeapons = new LinkedHashMap<>();
         // Níveis de ofício: +níveis, nível mínimo e fórmulas a mais (por id); as concessões fixas e os ofícios escolhidos por fonte.
         final Map<String, Integer> craftBonus = new LinkedHashMap<>();
+        final Map<String, String> attributeSwaps = new LinkedHashMap<>();
         final Map<String, Integer> craftFloor = new LinkedHashMap<>();
         final Map<String, Integer> craftFormulas = new LinkedHashMap<>();
         final List<Sourced<Grant>> craftGrants = new ArrayList<>();
@@ -2643,6 +2648,13 @@ public class CreationService {
         int maxHp() {
             if (klass == null) return 0;
             int con = modifier(Attribute.CONSTITUTION);
+            // Resiliência Adaptativa: metade da DES no lugar da CON, se for maior.
+            String alt = attributeSwaps.get("HP");
+            if (alt != null) {
+                boolean half = alt.endsWith("/2");
+                int other = modifier(Attribute.valueOf(half ? alt.substring(0, alt.length() - 2) : alt));
+                con = Math.max(con, half ? Math.floorDiv(other, 2) : other);
+            }
             // HP_BONUS com perLevel soma em cada nível (Pacto Carmesim); sem, uma vez só.
             // HALF_HIT_DIE (Robusto): metade do dado de vida da primeira classe, uma vez.
             int bonus = hpGrants.stream().mapToInt(g -> HALF_HIT_DIE.equals(g.value()) ? klass.hitDie() / 2 : hpBonusFor(g, proficiency(), roundUp, this::modifier)

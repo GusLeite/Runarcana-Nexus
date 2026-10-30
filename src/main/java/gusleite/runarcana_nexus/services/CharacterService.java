@@ -257,7 +257,9 @@ public class CharacterService {
         // "+1 nos níveis 8 e 16": pelo nível de Combatente (ou do personagem, sem a classe).
         int level = character.getClassLevels().stream().filter(l -> "FIGHTER".equals(l.getClassId())).mapToInt(ClassLevel::getLevel)
                 .findFirst().orElse(character.getLevel());
-        List<AttackResponse> attacks = AttackCalculator.calculate(character::getModifier, character.getProficiencyBonus(),
+        // Perceber/Detectar Fraquezas: metade da INT/SAB no lugar da Força nos ataques, se for maior.
+        List<AttackResponse> attacks = AttackCalculator.calculate(a -> a == Attribute.STRENGTH ? character.swapModifier("ATTACK", a) : character.getModifier(a),
+                character.getProficiencyBonus(),
                 character.getWeaponProficiencies(), weapons, styles, level);
         // Bônus de dano ("DAMAGE:<alvo>", "+2" ou "+1d4"): somados no dano de cada ataque que eles valem, com a nota.
         List<gusleite.runarcana_nexus.model.player.SituationalNote> damageNotes = character.getSituational().stream()
@@ -299,7 +301,9 @@ public class CharacterService {
                             a.getModifierAttribute(), a.getArmorWeight(), a.getDamageReduction());
                 })
                 .toList();
-        return ArmorClassCalculator.calculate(character::getModifier, character.getProficiencyBonus(),
+        // Resiliência Adaptativa: metade da CON no lugar da DES na CA, se for maior.
+        return ArmorClassCalculator.calculate(a -> a == Attribute.DEXTERITY ? character.swapModifier("AC", a) : character.getModifier(a),
+                character.getProficiencyBonus(),
                 character.getArmorRules(), character.getArmorProficiencies(), armors, character.getDefense(),
                 shieldsOf(items), character.getShield(), abilities.contains(MEDIUM_EXPERT), abilities.contains(HEAVY_EXPERT));
     }

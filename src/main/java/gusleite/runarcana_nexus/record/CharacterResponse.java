@@ -113,7 +113,7 @@ public record CharacterResponse(
                 character.getCon(),
                 // Todas as perícias do sistema, não só as proficientes, para a ficha mostrar cada bônus.
                 Arrays.stream(SkillType.values())
-                        .map(type -> new SkillResponse(type, type.getBaseAttribute(),
+                        .map(type -> new SkillResponse(type, character.getSkillAttribute(type),
                                 character.isProficient(type), character.isExpert(type), character.getSkillModifier(type)))
                         .toList(),
                 character.getRegion(),

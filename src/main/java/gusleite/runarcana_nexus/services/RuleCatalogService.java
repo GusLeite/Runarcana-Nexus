@@ -713,6 +713,10 @@ public class RuleCatalogService {
                     else targets.stream().filter(t -> !t.matches(target)).forEach(t -> p.add(at + " (SITUATIONAL): alvo inválido " + t));
                 }
                 // Tipo de dano fixo (value) ou à escolha (options).
+                case ATTRIBUTE_SWAP -> {
+                    if (blank(g.value()) || !g.value().matches("SKILL:[A-Z_]+|AC|HP|SPELLCASTING|ATTACK")) p.add(at + " (ATTRIBUTE_SWAP): alvo inválido " + g.value());
+                    if (g.attribute() == null) p.add(at + " (ATTRIBUTE_SWAP): falta attribute");
+                }
                 case CRAFT_LEVEL -> {
                     if (g.amount() == null && (g.valueByLevel() == null || g.valueByLevel().isEmpty())) p.add(at + " (CRAFT_LEVEL): precisa de amount ou valueByLevel");
                 }

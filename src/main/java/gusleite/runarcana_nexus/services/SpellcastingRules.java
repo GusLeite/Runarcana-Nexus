@@ -53,7 +53,8 @@ public final class SpellcastingRules {
             if (attribute == null) continue;
             ClassLevel klass = classOf(c, a.getSource());
             int classLevel = klass != null ? klass.getLevel() : c.getLevel();
-            int mod = c.getModifier(attribute);
+            // Acordes de Poder: Carisma no lugar do atributo de conjuração, se for maior.
+            int mod = c.swapModifier("SPELLCASTING", attribute);
             String table = a.getDescription();
             int cut = table.indexOf(IMPROVED_ROWS);
             if (!improved && cut >= 0) table = table.substring(0, cut);
