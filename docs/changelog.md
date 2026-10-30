@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Juramento do Proto 1,35x mais rápido (`feature/character-sheet`)
+- A sequência caiu de 4,5 s para 3,33 s, com todos os tempos na mesma proporção; a poeira não mudou.
+
 ## 2026-10-30 — Efeito exclusivo do Proto: juramento do escudeiro (`feature/character-sheet`)
 - `effects/ShieldOath.jsx` (`fx: 'oath'`): visor de máquina, bússola-radar que procura o mestre sem resposta, escudo que bate e se enche de hexágonos, registro digitado no topo. Some em 4,5 s; fica só a poeira.
 - Login em azul (`.login.oath`). Conferido no preview, pausando a animação em cada etapa.

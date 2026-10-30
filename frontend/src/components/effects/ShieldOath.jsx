@@ -20,7 +20,7 @@ for (let q = -8; q <= 8; q++) {
       const a = (i * 60 - 90) * (Math.PI / 180)
       return (100 + x + R * .9 * Math.cos(a)).toFixed(1) + ',' + (100 + y + R * .9 * Math.sin(a)).toFixed(1)
     }).join(' ')
-    HEXES.push({ points, delay: (2.1 + dist / 80 * .5).toFixed(2) + 's' })
+    HEXES.push({ points, delay: (1.56 + dist / 80 * .37).toFixed(2) + 's' })
   }
 }
 

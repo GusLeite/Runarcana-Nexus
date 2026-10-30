@@ -190,74 +190,74 @@ background:radial-gradient(circle,rgba(255,210,210,.9),rgba(230,20,50,.55) 35%,t
 .login.haunt{border-color:#7d1530;box-shadow:0 0 60px rgba(0,0,0,.8),0 0 0 4px rgba(125,21,48,.18),0 0 44px rgba(150,20,60,.35)}
 .login.haunt h2{color:#ff8592;text-shadow:2px 0 rgba(224,32,63,.55),-2px 0 rgba(150,40,190,.4)}
 /* Proto: juramento do escudeiro no hover (components/effects/ShieldOath.jsx). Sem hover, tudo invisível.
-   Sequência: visão de máquina e bússola-radar procurando o mestre (0-2 s) > "sem resposta" e o radar falha (1.5 s) >
-   o escudo fecha, bate e se enche de hexágonos (2.1 s) > tudo some aos 4.5 s; fica só a poeira da estrada. */
+   Sequência: visão de máquina e bússola-radar procurando o mestre (0-1.5 s) > "sem resposta" e o radar falha (1.07 s) >
+   o escudo fecha, bate e se enche de hexágonos (1.56 s) > tudo some aos 3.33 s; fica só a poeira da estrada. */
 .oath .role{color:#6fdcff}
 .oath .rule{background:linear-gradient(90deg,transparent,#3fc4ff,transparent)}
 .oath .name{text-shadow:0 0 calc(var(--t,0)*12px) rgba(70,190,255,.7)}
 .oath .cap{z-index:3}
-.p.oath.hot .bg{animation:shake .5s linear 2.15s}
+.p.oath.hot .bg{animation:shake .37s linear 1.59s}
 .pt-oath{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .pt-dust{position:absolute;left:-10px;top:var(--y);width:var(--s);height:var(--s);border-radius:50%;opacity:0;background:#bfeaff;box-shadow:0 0 6px 1px rgba(90,200,255,.7);animation:pt-dust var(--d) linear var(--dl) infinite}
 @keyframes pt-dust{0%{transform:translate(0,0);opacity:0}15%{opacity:.6}85%{opacity:.5}100%{transform:translate(110vw,-40px);opacity:0}}
 /* Visão de máquina: uma varredura de cima a baixo e a moldura do visor. */
 .pt-scan{position:absolute;left:0;right:0;top:0;height:90px;opacity:0;mix-blend-mode:screen;border-bottom:1px solid rgba(140,225,255,.95);background:linear-gradient(to bottom,transparent,rgba(60,180,255,.32))}
-.p.hot .pt-scan{animation:pt-scan 1.2s .05s cubic-bezier(.4,0,.6,1) forwards}
+.p.hot .pt-scan{animation:pt-scan .89s .04s cubic-bezier(.4,0,.6,1) forwards}
 @keyframes pt-scan{0%{opacity:0;transform:translateY(-90px)}12%,85%{opacity:1}100%{opacity:0;transform:translateY(100vh)}}
 .pt-frame{position:absolute;inset:14px;opacity:0;--c:rgba(120,220,255,.9);--l:26px;background:
 linear-gradient(var(--c),var(--c)) 0 0/var(--l) 1.5px,linear-gradient(var(--c),var(--c)) 0 0/1.5px var(--l),
 linear-gradient(var(--c),var(--c)) 100% 0/var(--l) 1.5px,linear-gradient(var(--c),var(--c)) 100% 0/1.5px var(--l),
 linear-gradient(var(--c),var(--c)) 0 100%/var(--l) 1.5px,linear-gradient(var(--c),var(--c)) 0 100%/1.5px var(--l),
 linear-gradient(var(--c),var(--c)) 100% 100%/var(--l) 1.5px,linear-gradient(var(--c),var(--c)) 100% 100%/1.5px var(--l);background-repeat:no-repeat}
-.p.hot .pt-frame{animation:pt-frame 4.5s ease-out forwards}
+.p.hot .pt-frame{animation:pt-frame 3.33s ease-out forwards}
 @keyframes pt-frame{0%{opacity:0;transform:scale(1.04)}6%{opacity:1;transform:scale(1)}88%{opacity:1}100%{opacity:0}}
-/* O escudo: entra leve, recua antes da batida (2.0 s), bate e some. */
+/* O escudo: entra leve, recua antes da batida (1.48 s), bate e some. */
 .pt-shield{position:absolute;left:50%;top:44%;height:min(84%,800px);aspect-ratio:1;overflow:visible;opacity:0;mix-blend-mode:screen;transform:translate(-50%,-50%);filter:drop-shadow(0 0 4px rgba(70,190,255,.9)) drop-shadow(0 0 16px rgba(30,130,255,.6))}
-.p.hot .pt-shield{animation:pt-shield 4.5s linear forwards}
+.p.hot .pt-shield{animation:pt-shield 3.33s linear forwards}
 @keyframes pt-shield{0%{opacity:0;transform:translate(-50%,-50%) scale(.82)}8%{opacity:1;transform:translate(-50%,-50%) scale(1)}42%{transform:translate(-50%,-50%) scale(1)}46%{transform:translate(-50%,-50%) scale(1.14)}50%{transform:translate(-50%,-50%) scale(.95)}56%{transform:translate(-50%,-50%) scale(1)}80%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.06)}}
 .pt-line{fill:none;stroke:#7fdcff;stroke-width:.9;stroke-linecap:round}
 .pt-line.thin{stroke-width:.5;stroke:rgba(150,225,255,.8)}
 .pt-radar{opacity:0;transform-box:view-box;transform-origin:50% 50%}
-.p.hot .pt-radar{animation:pt-radar 2.05s linear forwards}
+.p.hot .pt-radar{animation:pt-radar 1.52s linear forwards}
 @keyframes pt-radar{0%{opacity:0}10%,70%{opacity:1}74%{opacity:.15}78%{opacity:.85}83%{opacity:.1}88%{opacity:.6}100%{opacity:0}}
 .pt-sweep{fill:rgba(90,210,255,.24);transform-box:view-box;transform-origin:50% 50%}
-.p.hot .pt-sweep{animation:bl-spin .95s linear infinite}
+.p.hot .pt-sweep{animation:bl-spin .7s linear infinite}
 .pt-ping{fill:none;stroke:#a8e8ff;stroke-width:.8;opacity:0;transform-box:view-box;transform-origin:50% 50%}
-.p.hot .pt-ping{animation:pt-ping 1s .2s ease-out forwards}
-.p.hot .pt-ping.p2{animation-delay:.85s}
+.p.hot .pt-ping{animation:pt-ping .74s .15s ease-out forwards}
+.p.hot .pt-ping.p2{animation-delay:.63s}
 @keyframes pt-ping{0%{opacity:.95;transform:scale(.08)}100%{opacity:0;transform:scale(1)}}
 /* A agulha gira procurando, hesita e nunca encontra. */
 .pt-needle{transform-box:view-box;transform-origin:50% 50%}
 .pt-needle .north{fill:rgba(255,196,84,.9)}
 .pt-needle .south{fill:rgba(170,220,255,.55)}
-.p.hot .pt-needle{animation:pt-needle 2s cubic-bezier(.2,.6,.3,1) forwards}
+.p.hot .pt-needle{animation:pt-needle 1.48s cubic-bezier(.2,.6,.3,1) forwards}
 @keyframes pt-needle{0%{transform:rotate(0)}40%{transform:rotate(720deg)}58%{transform:rotate(800deg)}70%{transform:rotate(752deg)}82%{transform:rotate(778deg)}100%{transform:rotate(765deg)}}
 .pt-hexes polygon{fill:rgba(60,170,255,.2);stroke:#9fe6ff;stroke-width:.5;opacity:0}
-.p.hot .pt-hexes polygon{animation:pt-hex 2.3s ease-out forwards}
+.p.hot .pt-hexes polygon{animation:pt-hex 1.7s ease-out forwards}
 @keyframes pt-hex{0%{opacity:0}8%{opacity:1;fill:rgba(190,240,255,.75)}30%{opacity:.75;fill:rgba(60,170,255,.22)}70%{opacity:.5}100%{opacity:0}}
 /* A borda é azul na busca e fica dourada quando o juramento fecha. */
 .pt-rim{fill:none;stroke:#7fdcff;stroke-width:1.6;stroke-dasharray:100 100;stroke-dashoffset:100;transform-box:view-box;transform-origin:50% 50%;rotate:-90deg}
 .pt-rim.inner{stroke-width:.6}
-.p.hot .pt-rim{animation:pt-rim 2.1s cubic-bezier(.6,0,.3,1) forwards,pt-gold .35s 2.05s ease-out forwards}
+.p.hot .pt-rim{animation:pt-rim 1.56s cubic-bezier(.6,0,.3,1) forwards,pt-gold .26s 1.52s ease-out forwards}
 @keyframes pt-rim{to{stroke-dashoffset:0}}
 @keyframes pt-gold{to{stroke:#ffd77a}}
 .pt-rivet{fill:#ffd77a;opacity:0}
-.p.hot .pt-rivet{animation:pt-rivet 2.4s 2.05s ease-out forwards}
+.p.hot .pt-rivet{animation:pt-rivet 1.78s 1.52s ease-out forwards}
 @keyframes pt-rivet{0%{opacity:0}10%,70%{opacity:1}100%{opacity:0}}
 .pt-shock{position:absolute;left:50%;top:44%;width:80px;height:80px;margin:-40px 0 0 -40px;border-radius:50%;opacity:0;border:3px solid #ffe2a0;box-shadow:0 0 18px rgba(255,205,110,.85),inset 0 0 14px rgba(90,200,255,.6)}
-.p.hot .pt-shock{animation:ring 1.1s 2.1s cubic-bezier(.1,.7,.3,1) forwards}
+.p.hot .pt-shock{animation:ring .81s 1.56s cubic-bezier(.1,.7,.3,1) forwards}
 .pt-flash{position:absolute;inset:0;opacity:0;mix-blend-mode:screen;background:radial-gradient(circle at 50% 44%,rgba(235,250,255,.9),rgba(60,170,255,.45) 34%,transparent 68%)}
-.p.hot .pt-flash{animation:pt-flash .7s 2.08s ease-out forwards}
+.p.hot .pt-flash{animation:pt-flash .52s 1.54s ease-out forwards}
 @keyframes pt-flash{0%{opacity:0}18%{opacity:1}100%{opacity:0}}
 /* Registro do robô, digitado letra a letra no topo do visor. */
 .pt-log{position:absolute;left:30px;top:30px;width:0;overflow:hidden;white-space:nowrap;opacity:0;font-family:Consolas,'Courier New',monospace;font-size:15px;letter-spacing:0;color:#a8e8ff;text-shadow:0 0 8px rgba(60,180,255,.95),0 1px 2px #000}
 .pt-log.l1{color:#ffb26a;text-shadow:0 0 8px rgba(255,120,40,.9),0 1px 2px #000}
 .pt-log.l2{color:#ffd77a;text-shadow:0 0 8px rgba(255,190,70,.9),0 1px 2px #000}
-.p.hot .pt-log{animation:pt-type .45s steps(var(--n)) forwards,pt-log 1.15s linear forwards}
-.p.hot .pt-log.l0{animation-delay:.1s;animation-duration:.5s,1.35s}
-.p.hot .pt-log.l1{animation-delay:1.45s;animation-duration:.35s,.75s}
-.p.hot .pt-log.l2{animation-delay:2.2s;animation-duration:.4s,1s}
-.p.hot .pt-log.l3{animation-delay:3.2s;animation-duration:.4s,1.25s}
+.p.hot .pt-log{animation:pt-type .33s steps(var(--n)) forwards,pt-log .85s linear forwards}
+.p.hot .pt-log.l0{animation-delay:.07s;animation-duration:.37s,1s}
+.p.hot .pt-log.l1{animation-delay:1.07s;animation-duration:.26s,.56s}
+.p.hot .pt-log.l2{animation-delay:1.63s;animation-duration:.3s,.74s}
+.p.hot .pt-log.l3{animation-delay:2.37s;animation-duration:.3s,.93s}
 @keyframes pt-type{to{width:calc(var(--n)*1ch)}}
 @keyframes pt-log{0%,90%{opacity:1}100%{opacity:0}}
 /* Painel de login do Proto. */
