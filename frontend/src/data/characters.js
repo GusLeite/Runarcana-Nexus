@@ -3,6 +3,8 @@ import rudoImg from '../assets/characters/rudo.jpg'
 import rudoVid from '../assets/characters/rudo.mp4'
 import gaudronImg from '../assets/characters/gaudron.jpg'
 import gaudronVid from '../assets/characters/gaudron.mp4'
+import protoImg from '../assets/characters/proto.jpg'
+import protoVid from '../assets/characters/proto.mp4'
 import logeImg from '../assets/characters/loge.jpg'
 import logeVid from '../assets/characters/loge.mp4'
 
@@ -18,7 +20,8 @@ const BASE = [
     img: rudoImg, vid: rudoVid, pos: '60% 30%', fx: 'blood', burst: true },
   { id: 'gaudron', name: 'GAUDRON', role: 'Guardião', hue: 42, variant: 1, lore: 'Guarda os portões e as promessas feitas.',
     img: gaudronImg, vid: gaudronVid, pos: '57% 25%', fx: 'embers', impact: true },
-  { id: 'proto', name: 'PROTO', role: 'Arcanista', hue: 190, variant: 2, lore: 'Dobra a magia antiga em novas formas.' },
+  { id: 'proto', name: 'PROTO', role: 'Arcanista', hue: 190, variant: 2, lore: 'Dobra a magia antiga em novas formas.',
+    img: protoImg, vid: protoVid, pos: '58% 25%' },
   { id: 'loge', name: 'LOGE', role: 'Espreitador', hue: 348, variant: 4, lore: 'Some nas sombras e volta com o que falta.',
     img: logeImg, vid: logeVid, pos: '50% 25%', fx: 'haunt' },
 ]
