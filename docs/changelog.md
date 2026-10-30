@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Efeito exclusivo do Loge: assombração (`feature/character-sheet`)
+- `effects/Haunting.jsx` (`fx: 'haunt'`): visão dupla e cambaleio de bêbado, facada que parte a arte, escuridão, rosto da princesa com sussurros e olhos que ficam acesos.
+- Brilho do painel de verde para vermelho (`hue: 348`) e login no mesmo tom (`.login.haunt`). Conferido no preview.
+
 ## 2026-10-30 — Loge ganha vídeo na tela inicial (`feature/character-sheet`)
 - `assets/characters/loge.mp4` (H.264 1080p sem áudio, comprimido de 22,8 MB para 8,2 MB) e `loge.jpg` (poster, 1600×900), ligados em `data/characters.js`.
 - Só o Proto segue com placeholder.

@@ -1,6 +1,7 @@
 import { forwardRef } from 'react'
 import Embers from './effects/Embers.jsx'
 import BloodMagic from './effects/BloodMagic.jsx'
+import Haunting from './effects/Haunting.jsx'
 
 // Força o play mudo: alguns navegadores ignoram autoPlay sem `muted` setado via propriedade.
 const playMuted = video => {
@@ -17,6 +18,7 @@ const CharacterPanel = forwardRef(function CharacterPanel(
   const className = 'p'
     + (c.burst ? ' burst' : '')
     + (c.impact ? ' impact' : '')
+    + (c.fx === 'haunt' ? ' haunted' : '')
     + (hot ? ' hot' : '')
     + (selected ? ' sel' : '')
     + (gone ? ' gone' : '')
@@ -58,6 +60,7 @@ const CharacterPanel = forwardRef(function CharacterPanel(
       <div className="shade" />
       {c.fx === 'embers' && <Embers />}
       {c.fx === 'blood' && <BloodMagic />}
+      {c.fx === 'haunt' && <Haunting img={c.img} pos={c.pos} />}
       {c.impact && <div className="ring" />}
       {c.impact && <div className="ring r2" />}
       <div className="cap">

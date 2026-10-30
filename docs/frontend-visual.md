@@ -37,10 +37,11 @@ Definidos em `src/data/characters.js`:
 | `pos` | enquadramento da arte (`background-position`/`object-position`) |
 | `fx: 'embers'` | brasas subindo e calor no chão (`Embers.jsx`) |
 | `fx: 'blood'` | ritual de sangue (`BloodMagic.jsx`): ao ganhar `.hot`, um símbolo de ritual (anéis com runas, hexagrama com círculos nas pontas, gota central) aparece **de frente, cobrindo o painel inteiro**, se desenha (`stroke-dashoffset` com `pathLength=100`, em ondas), gira (anel e hexagrama em sentidos opostos), cresce junto com a expansão do painel, solta um pulso de luz no centro e **some sozinho** em ~2 s (`.bl-sigil`, `mix-blend-mode: screen`). Fora do `.fx`, então não depende do `--t`; sem hover fica invisível. O painel de login do personagem ganha borda e título em vermelho-sangue (`.login.blood`) |
+| `fx: 'haunt'` | assombração (`Haunting.jsx`, CSS `.lg-*`, classe `.haunted` no painel): com `.hot`, a arte cambaleia e ganha visão dupla vermelha (contínuas) com fumaça subindo; aos 0,2 s uma **facada** diagonal parte o pôster em duas metades que se afastam sobre um vão escuro; o painel escurece e o **rosto da princesa** (recorte do `img`, ajustado à arte atual em `background-size/position`) surge e se desfaz em ~4 s, com três sussurros em sequência; os olhos dela ficam acesos, piscando, enquanto o mouse estiver em cima. Login com borda e título assombrados (`.login.haunt`) |
 | `impact` | ondas de choque, explosão laranja e tremor da arte ao entrar |
 | `burst` | pulso radial vermelho ao entrar |
 
-Estado atual: **Rudo** (vídeo + burst vermelho + magia de sangue) e **Gaudron** (vídeo + brasas + impacto) e **Loge** (vídeo) têm arte real; **Proto** usa placeholder.
+Estado atual: **Rudo** (vídeo + burst vermelho + magia de sangue) e **Gaudron** (vídeo + brasas + impacto) e **Loge** (vídeo + assombração) têm arte real; **Proto** usa placeholder.
 
 ### Adicionar ou trocar a arte de um personagem
 1. Coloque o arquivo em `src/assets/characters/` (JPG para a imagem; MP4 H.264 sem áudio para o vídeo).
