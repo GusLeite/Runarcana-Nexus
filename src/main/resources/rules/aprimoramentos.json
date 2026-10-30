@@ -769,6 +769,11 @@
         {
           "type": "RESISTANCE",
           "value": "venenoso"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SAVE",
+          "description": "Vantagem contra Envenenado e Intoxicado."
         }
       ]
     },
@@ -1407,7 +1412,14 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Seu treinamento árduo fez você dominar o combate com duas armas, ganhando os seguintes benefícios:\n\n- Enquanto estiver empunhando uma arma corpo a corpo em cada mão, você ganha +1 de bônus de CA.\n- Você recebe um grau em Combate com Duas Armas\n- Ao realizar um ataque de oportunidade, você pode rolar um segundo ataque com sua outra mão com desvantagem."
+      "description": "Seu treinamento árduo fez você dominar o combate com duas armas, ganhando os seguintes benefícios:\n\n- Enquanto estiver empunhando uma arma corpo a corpo em cada mão, você ganha +1 de bônus de CA.\n- Você recebe um grau em Combate com Duas Armas\n- Ao realizar um ataque de oportunidade, você pode rolar um segundo ataque com sua outra mão com desvantagem.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "AC",
+          "description": "+1 de CA empunhando uma arma corpo a corpo em cada mão."
+        }
+      ]
     },
     {
       "id": "aprimoramento-empunhadura-primata",

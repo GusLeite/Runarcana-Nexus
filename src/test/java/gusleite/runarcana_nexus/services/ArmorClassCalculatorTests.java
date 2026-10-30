@@ -25,4 +25,17 @@ class ArmorClassCalculatorTests {
         assertThat(with(true).value()).isEqualTo(19);
         assertThat(with(true).reduction()).isEqualTo(2);
     }
+
+    // Especialista em Armadura Pesada: +1 de RD só na pesada (a Destreza não soma nela).
+    @Test
+    void especialistaEmPesadaSomaRd() {
+        var placas = new ArmorClassCalculator.ArmorItem("ITEM:2", "Placas", 18, null, ArmorWeight.HEAVY, 3);
+        var semAprimoramento = ArmorClassCalculator.calculate(a -> a == Attribute.DEXTERITY ? 4 : 0, 2, List.of(), List.of("HEAVY"),
+                List.of(placas), "ITEM:2", List.of(), null, false, false);
+        var comAprimoramento = ArmorClassCalculator.calculate(a -> a == Attribute.DEXTERITY ? 4 : 0, 2, List.of(), List.of("HEAVY"),
+                List.of(placas), "ITEM:2", List.of(), null, false, true);
+        assertThat(semAprimoramento.value()).isEqualTo(18);
+        assertThat(semAprimoramento.reduction()).isEqualTo(3);
+        assertThat(comAprimoramento.reduction()).isEqualTo(4);
+    }
 }

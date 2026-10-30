@@ -50,17 +50,21 @@ Meio-Dragão: a "fraqueza" vale para o tipo simples e o mágico. Hakensai 15º/2
 - Runas: Força de Statikk (elétrico), Fúria de Statikk (plásmico).
 - Runinata: Resistência Natural (à escolha), Construído (venenoso), Consistência Gelatinosa (físicos).
 
-### A5. Notas situacionais (vantagens)
+### A5. Notas situacionais (vantagens) ✅
+Ficou de fora o traço Habilidoso da Runinata (a perícia é escolhida em texto livre).
+
 - Origens: Construto (desvantagem contra clima hostil), Emissário (vantagem contra clima), Aelus (iniciativa e Percepção contra surpresa), Alnuk (frio extremo), Arbóreo (movimento forçado), Chireano (audição), Nocti (desvantagem: luz forte, Intoxicado respiratório), Kiilash (Percepção por olfato/audição), Yordle Feérico (Enfeitiçado).
 - Classes: Bruto 2º (salvaguarda de DES) e 7º (iniciativa), Caçador 1º (iniciativa) e 6º (salvaguardas contra Inimigos Favoritos), Arcanista Zhonya (iniciativa), Púrpura (venenos, controle mental, Percepção), Atirador 11º (Furtividade), Desperado 17º (iniciativa), Acólito da Forja (frio), Mercurial Explorador 13º (Envenenado/Intoxicado).
 - Heranças: Valor da Justiceira (detectar mentiras), Quebra Gelo (ártico), Medicina Natural (aflições), Linhagem Vastaya (doença mágica), Caçador Nazumita (+1 CA e ataque contra a presa), Mestre de Vinhas (+1 com chicote de espinhos).
 - Aprimoramentos: Ars Veneficius (Envenenado/Intoxicado), Empunhadura Dupla (+1 CA com duas armas).
 - Runinata: Sentidos Aguçados e Habilidoso (Percepção / perícia escolhida).
 
-### A6. CA, RD e deslocamento
+### A6. CA, RD e deslocamento ✅
 - Guerreiro Primal (CA 10 + CON sem armadura), Alnuk (RD de metade da proficiência; o tipo já existe, da Carapaça), Especialista em Armadura Pesada (+1 RD com pesada, como a média), Constituição Anfíbia (natação 35), Ascensão Feérica (runa: voo 30), Constituição Montanhosa (+metade da proficiência em PV por nível, como o Minotauro).
 
-### A7. Opções que hoje não fazem nada
+### A7. Opções que hoje não fazem nada ✅ (parcial)
+Protetor feito. Estudioso (duas perícias) e Obreiro (truque) pedem uma escolha que depende da opção; o sistema só tem efeitos fixos pela opção (`when`), então ficam no texto.
+
 - Chamado Sagrado (Acólito 2º): Protetor (armas marciais e armadura pesada) e Estudioso (2 perícias) viram efeito pela opção.
 
 ## B. Algo pequeno e novo no sistema

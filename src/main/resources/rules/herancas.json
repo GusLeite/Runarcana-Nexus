@@ -880,6 +880,15 @@
           "type": "SITUATIONAL",
           "value": "ATTACK:MELEE",
           "description": "Quando atingir com um ataque corpo a corpo uma criatura que ainda não tenha recebido dano nessa rodada, você causa 1d4 + seu bônus de proficiência de dano adicional."
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Guerreiro Primal",
+          "armor": {
+            "base": 10,
+            "dex": false,
+            "attribute": "CONSTITUTION"
+          }
         }
       ]
     },
@@ -1643,6 +1652,11 @@
           "type": "SKILL",
           "skill": "INVESTIGATION",
           "expertise": true
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:INSIGHT",
+          "description": "Vantagem em testes para detectar mentiras."
         }
       ]
     },
@@ -1676,6 +1690,11 @@
           "type": "SKILL",
           "skill": "SURVIVAL",
           "expertise": true
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SAVE",
+          "description": "Vantagem em salvaguardas e testes ligados a um ambiente ártico."
         }
       ],
       "execution": "Reação",
@@ -1741,6 +1760,11 @@
         {
           "type": "SPELL",
           "value": "curar-ferimentos"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:MEDICINE",
+          "description": "Vantagem para identificar aflições mundanas (e o tratamento das nativas de Ionia)."
         }
       ],
       "uses": {
@@ -1893,7 +1917,19 @@
         "NAZUMAH"
       ],
       "prerequisite": "Nazumita",
-      "description": "Sua capacidade de observação para a caça é memorável até mesmo em Nazumah. Se você puder estudar uma criatura ou monstro por pelo menos 5 minutos, você recebe os seguintes benefícios contra essa criatura ou monstro:\n\nSua CA e suas jogadas de ataque aumentam em 1 contra essa criatura\nCaso a criatura seja ao menos 1 categoria maior que você, esse bônus é dobrado e você adiciona 1d4 às suas jogadas de dano contra essa criatura\nCaso a criatura seja um Baccai, esse bônus é dobrado e você adiciona 2d4 às suas jogadas de dano contra essa criatura"
+      "description": "Sua capacidade de observação para a caça é memorável até mesmo em Nazumah. Se você puder estudar uma criatura ou monstro por pelo menos 5 minutos, você recebe os seguintes benefícios contra essa criatura ou monstro:\n\nSua CA e suas jogadas de ataque aumentam em 1 contra essa criatura\nCaso a criatura seja ao menos 1 categoria maior que você, esse bônus é dobrado e você adiciona 1d4 às suas jogadas de dano contra essa criatura\nCaso a criatura seja um Baccai, esse bônus é dobrado e você adiciona 2d4 às suas jogadas de dano contra essa criatura",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "AC",
+          "description": "+1 de CA contra a criatura escolhida (dobro se ela for ao menos uma categoria maior ou um Baccai)."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK",
+          "description": "+1 no ataque contra a criatura escolhida (dobro se maior ou Baccai), com +1d4 (ou 2d4) de dano."
+        }
+      ]
     },
     {
       "id": "coletor-nazumita",
@@ -4206,7 +4242,14 @@
         "floral"
       ],
       "prerequisite": "Floral",
-      "description": "Você dominou a habilidade de criar Vinhas Espinhosas com seu corpo, fazendo com que elas sejam mais perigosas e resistentes. Você ganha os seguintes benefícios:\n\nVocê ganha um bônus de +1 nas jogadas de ataque feitas com um Chicote de Espinhos.\nQuando utilizado por você, seu Chicote de Espinhos tem seu dado de dano aumentado em uma categoria e passa a funcionar como a arma marcial Chicote, tendo as propriedades captura, desarme, extensão 2.\nEnquanto você está empunhando um Chicote de Espinhos, outras criaturas provocam um ataque de oportunidade quando entram no alcance de seu Chicote de Espinhos.\nSeus Ramos Florais (ou chicote de espinhos) perdem a vulnerabilidade a dano ígneo. Cada vez que você cria um chicote de espinhos, você consome 6 pés de sua capacidade de criar ramo floral. Como alternativa, você passa a poder receber 1d4 de dano voluntário (não mitigável) e criar 2 metros de ramo (como ramo floral ou chicote de espinhos) instantaneamente."
+      "description": "Você dominou a habilidade de criar Vinhas Espinhosas com seu corpo, fazendo com que elas sejam mais perigosas e resistentes. Você ganha os seguintes benefícios:\n\nVocê ganha um bônus de +1 nas jogadas de ataque feitas com um Chicote de Espinhos.\nQuando utilizado por você, seu Chicote de Espinhos tem seu dado de dano aumentado em uma categoria e passa a funcionar como a arma marcial Chicote, tendo as propriedades captura, desarme, extensão 2.\nEnquanto você está empunhando um Chicote de Espinhos, outras criaturas provocam um ataque de oportunidade quando entram no alcance de seu Chicote de Espinhos.\nSeus Ramos Florais (ou chicote de espinhos) perdem a vulnerabilidade a dano ígneo. Cada vez que você cria um chicote de espinhos, você consome 6 pés de sua capacidade de criar ramo floral. Como alternativa, você passa a poder receber 1d4 de dano voluntário (não mitigável) e criar 2 metros de ramo (como ramo floral ou chicote de espinhos) instantaneamente.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK",
+          "description": "+1 no ataque com Chicote de Espinhos."
+        }
+      ]
     },
     {
       "id": "sombra-da-folha",
@@ -4350,7 +4393,14 @@
       "uses": {
         "usesFormula": "HALF_PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "SPEED",
+          "value": "SWIM",
+          "feet": 35
+        }
+      ]
     },
     {
       "id": "constituicao-glacial",
@@ -4383,7 +4433,15 @@
         "montanha"
       ],
       "prerequisite": "Meio-Dragão da Montanha",
-      "description": "Sua solidez é uma clara manifestação de sua essência elemental das Montanhas. Você recebe os seguintes benefícios:\n\nVocê adiciona metade do seu bônus de proficiência aos seus pontos de vida permanente para cada nível de personagem que você tenha. No nível 1 terá +1 de vida, já no nível 10 terá +12 e assim por diante. Adicionalmente, ao se transformar em sua Forma Dracônica você adiciona seu bônus de Proficiência ao invés de apenas metade por nível."
+      "description": "Sua solidez é uma clara manifestação de sua essência elemental das Montanhas. Você recebe os seguintes benefícios:\n\nVocê adiciona metade do seu bônus de proficiência aos seus pontos de vida permanente para cada nível de personagem que você tenha. No nível 1 terá +1 de vida, já no nível 10 terá +12 e assim por diante. Adicionalmente, ao se transformar em sua Forma Dracônica você adiciona seu bônus de Proficiência ao invés de apenas metade por nível.",
+      "grants": [
+        {
+          "type": "HP_BONUS",
+          "usesFormula": "HALF_PROFICIENCY",
+          "perLevel": true,
+          "label": "+½ do bônus de proficiência em PV por nível"
+        }
+      ]
     },
     {
       "id": "dupliventos",

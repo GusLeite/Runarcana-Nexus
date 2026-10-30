@@ -339,6 +339,16 @@
               "usesFormula": "HALF_PROFICIENCY",
               "recharge": "LONG_REST",
               "description": "Aelus podem fazer uma reação adicional durante uma rodada. Eles podem fazer isso um número de vezes igual a metade de seu bônus de proficiência por descanso pleno."
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "INITIATIVE",
+              "description": "Vantagem na iniciativa (Armadura da Percepção)."
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "SKILL:PERCEPTION",
+              "description": "Vantagem em Percepção contra surpresa."
             }
           ]
         },
@@ -362,6 +372,19 @@
               "usesFormula": "PROFICIENCY",
               "recharge": "LONG_REST",
               "description": "Os Alnuk são capazes de confortar outros seres vivos graças ao tom de sua voz. Utilizando uma ação, você pode falar com uma criatura que esteja Amedrontada ou Enfeitiçada a até 30 pés de você, encerrando uma dessas condições na criatura, a criatura deve poder ouví-lo para que esse traço tenha efeito. Você pode fazer isso um número de vezes igual ao seu bônus de proficiência por descanso longo."
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "SAVE",
+              "description": "Vantagem em salvaguardas contra Frio Extremo."
+            },
+            {
+              "type": "AC_BONUS",
+              "name": "Armadura Muscular",
+              "amount": 0,
+              "armor": {
+                "halfProficiencyReduction": true
+              }
             }
           ]
         },
@@ -512,6 +535,11 @@
         {
           "type": "RESISTANCE",
           "value": "venenoso"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SAVE",
+          "description": "Desvantagem em salvaguardas contra climas hostis (frio, deserto) sem equipamento adequado."
         }
       ],
       "lineages": [
@@ -629,6 +657,11 @@
                 "blocksArmor": true,
                 "requiresArmor": "HEAVY"
               }
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "SAVE",
+              "description": "Vantagem em salvaguardas contra climas hostis."
             }
           ]
         },
@@ -798,6 +831,11 @@
                   "recharge": "LONG_REST"
                 }
               }
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "SAVE",
+              "description": "Vantagem em salvaguardas para resistir a movimento forçado."
             }
           ]
         },
@@ -946,6 +984,11 @@
           "description": "Você recebe a característica Energia, recebendo metade de seu bônus de proficiência em pontos de Energia por descanso longo.",
           "usesFormula": "HALF_PROFICIENCY",
           "recharge": "LONG_REST"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERCEPTION",
+          "description": "Vantagem em jogadas relacionadas à audição (Quirosenso)."
         }
       ],
       "lineages": [
@@ -1005,6 +1048,11 @@
               "abilityType": "PASSIVE",
               "name": "Improvisadores",
               "description": "Chireanos não são particularmente hábeis com armas comuns, mas extraem um grande potencial de ferramentas comuns (chaves, martelos, etc.) usadas como armas improvisadas. Você tem proficiência em ataques feitos com ferramentas comuns, e o dano causado por armas improvisadas aumenta em um na escala de dano, aplicando normalmente o modificador do atributo apropriado ao dano além de seu bônus de proficiência."
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "SAVE",
+              "description": "Desvantagem em salvaguardas contra luz forte e clarões, e contra Intoxicado de fontes respiratórias."
             }
           ]
         },
@@ -2143,6 +2191,11 @@
               "abilityType": "PASSIVE",
               "name": "Caçador Nato",
               "description": "Seu olfato e audição são excepcionalmente bons a qualquer momento do dia: você tem vantagem em jogadas de Percepção que envolvam esses dois sentidos. Você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "SKILL:PERCEPTION",
+              "description": "Vantagem em Percepção pelo olfato ou pela audição."
             }
           ]
         },
@@ -2343,6 +2396,11 @@
               "name": "Essência Feérica",
               "description": "Você toca um alvo e entende seu estado emocional atual. Se a criatura falhar em uma salvaguarda de Carisma CD 8 + bônus de proficiência + modificador de Carisma, você também saberá suas intenções. Além disso, você possui pequenas asas nas costas, recebendo 30 pés de deslocamento de voo.",
               "range": "Toque"
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "SAVE",
+              "description": "Vantagem contra Enfeitiçado; magias não podem colocá-lo para dormir."
             }
           ]
         },
@@ -2613,6 +2671,16 @@
                 "Estudioso",
                 "Obreiro"
               ]
+            },
+            {
+              "type": "WEAPON_PROFICIENCY",
+              "value": "Armas marciais",
+              "when": "Chamado Sagrado:Protetor"
+            },
+            {
+              "type": "ARMOR_PROFICIENCY",
+              "value": "HEAVY",
+              "when": "Chamado Sagrado:Protetor"
             }
           ]
         },
@@ -3113,6 +3181,11 @@
                 {
                   "type": "RESISTANCE",
                   "value": "ígneo"
+                },
+                {
+                  "type": "SITUATIONAL",
+                  "value": "SAVE",
+                  "description": "Forja Viva: vantagem em salvaguardas contra Frio."
                 }
               ]
             },
@@ -5146,6 +5219,21 @@
             {
               "type": "RESISTANCE",
               "value": "venenoso"
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "SAVE",
+              "description": "Vantagem contra magias que alterem ou controlem seus pensamentos."
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "SAVE",
+              "description": "Vantagem contra venenos."
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "SKILL:PERCEPTION",
+              "description": "Vantagem em testes de Percepção."
             }
           ],
           "levels": [
@@ -5368,6 +5456,11 @@
             {
               "type": "MYSTERY",
               "value": "cronomancia"
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "INITIATIVE",
+              "description": "Tempo Engarrafado: vantagem na iniciativa e não pode ser surpreendido (consciente)."
             }
           ],
           "levels": [
@@ -5663,6 +5756,11 @@
                 "Ramboleira",
                 "Sobretudo Confortável"
               ]
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "SKILL:STEALTH",
+              "description": "Talismã Pessoal: vantagem em Furtividade."
             }
           ]
         },
@@ -5935,6 +6033,11 @@
                   "abilityType": "PASSIVE",
                   "name": "Saque Rápido Aprimorado",
                   "description": "Vantagem em iniciativa e não pode ser surpreendido consciente. A Sobrecarga não altera a arma."
+                },
+                {
+                  "type": "SITUATIONAL",
+                  "value": "INITIATIVE",
+                  "description": "Saque Rápido Aprimorado: vantagem na iniciativa e não pode ser surpreendido consciente."
                 }
               ]
             },
@@ -7906,6 +8009,11 @@
               "abilityType": "PASSIVE",
               "name": "Sentido de Perigo",
               "description": "Vantagem em salvaguardas de Destreza contra efeitos que possa ver (não Cego, Surdo ou Incapacitado). No 11º nível, sem armadura pesada, ataques contra você não têm vantagem."
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "SAVE:DEXTERITY",
+              "description": "Sentido de Perigo: vantagem contra efeitos que você possa ver (não Cego, Surdo nem Incapacitado)."
             }
           ]
         },
@@ -7965,6 +8073,11 @@
               "abilityType": "PASSIVE",
               "name": "Instinto Selvagem",
               "description": "Vantagem em iniciativa; surpreso e não Incapacitado, você age no primeiro turno se entrar em Fúria antes de tudo."
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "INITIATIVE",
+              "description": "Instinto Selvagem: vantagem na iniciativa."
             }
           ]
         },
@@ -8637,6 +8750,11 @@
         {
           "type": "EQUIPMENT",
           "value": "arco-longo+aljava+flechas"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "INITIATIVE",
+          "description": "Explorador Natural: vantagem na iniciativa."
         }
       ],
       "levels": [
@@ -8710,6 +8828,11 @@
                 "Plantas",
                 "Vastinatas"
               ]
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "SAVE",
+              "description": "Vantagem em salvaguardas contra seus Inimigos Favoritos."
             }
           ]
         },
@@ -11288,6 +11411,11 @@
                 {
                   "type": "RESISTANCE",
                   "value": "venenoso"
+                },
+                {
+                  "type": "SITUATIONAL",
+                  "value": "SAVE:CONSTITUTION",
+                  "description": "Vantagem contra Envenenado e Intoxicado."
                 }
               ]
             },

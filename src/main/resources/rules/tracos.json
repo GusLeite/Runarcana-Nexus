@@ -412,6 +412,11 @@
             "Olfato",
             "Visão"
           ]
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERCEPTION",
+          "description": "Vantagem em Percepção ligada ao sentido escolhido."
         }
       ]
     },

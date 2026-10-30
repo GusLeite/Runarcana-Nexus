@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento A5–A7: notas, CA/RD e Chamado Sagrado (`feature/character-sheet`)
+- 30 notas situacionais em origens, linhagens, classes (Bruto, Caçador, Zhonya, Púrpura, Atirador, Desperado, Forja, Explorador), Heranças e Aprimoramentos.
+- CA do Guerreiro Primal, RD do Alnuk, +1 RD do Especialista em Armadura Pesada, natação da Constituição Anfíbia, voo da Ascensão Feérica, PV da Constituição Montanhosa; Chamado Sagrado Protetor com as proficiências.
+- Teste: `especialistaEmPesadaSomaRd`. Conferido no sandbox pela prévia.
+
 ## 2026-10-29 — Mapeamento A4/B1: defesas contra dano (`feature/character-sheet`)
 - Resistências, vulnerabilidades e imunidades de Heranças (Pele Rígida, Construção Primorosa), origens (Construto, Brutal pela opção, Meio-Dragão por linhagem e no 15º, Yordle Aquático, Troll da Selva), subclasses (Forja, Sepultura, Tempestade, Púrpura, Arqueiro Rúnico, Explorador, Hakensai), runas, Vel e traços da Runinata.
 - Resistência à escolha com `expertise` (caso já tenha, imunidade).

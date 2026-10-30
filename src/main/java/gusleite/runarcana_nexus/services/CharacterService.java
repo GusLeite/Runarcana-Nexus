@@ -230,6 +230,7 @@ public class CharacterService {
     }
 
     private static final String MEDIUM_EXPERT = "Especialista em Armadura Média";
+    private static final String HEAVY_EXPERT = "Especialista em Armadura Pesada";
     private static final Pattern STYLE = Pattern.compile("Estilo de Luta(?: adicional)? \\((.+)\\)");
 
     // Ataques: as armas do inventário (pelo catálogo, ou pela linha de Weapon no item sem catálogo) + desarmado.
@@ -266,6 +267,8 @@ public class CharacterService {
 
     // CA da ficha: as regras da criação (Character.armorRules), as armaduras e os escudos do inventário.
     private ArmorClassResponse armorClassOf(Character character, List<PlayerItems> items) {
+        Set<String> abilities = abilityRepository.findByCharacterOrderByIdAsc(character).stream()
+                .map(a -> a.getName()).collect(java.util.stream.Collectors.toSet());
         List<ArmorClassCalculator.ArmorItem> armors = items.stream()
                 .filter(e -> Hibernate.unproxy(e.getItem()) instanceof Armor)
                 .map(e -> {
@@ -276,8 +279,7 @@ public class CharacterService {
                 .toList();
         return ArmorClassCalculator.calculate(character::getModifier, character.getProficiencyBonus(),
                 character.getArmorRules(), character.getArmorProficiencies(), armors, character.getDefense(),
-                shieldsOf(items), character.getShield(),
-                abilityRepository.findByCharacterOrderByIdAsc(character).stream().anyMatch(a -> MEDIUM_EXPERT.equals(a.getName())));
+                shieldsOf(items), character.getShield(), abilities.contains(MEDIUM_EXPERT), abilities.contains(HEAVY_EXPERT));
     }
 
     @Transactional

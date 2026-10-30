@@ -47,10 +47,17 @@ public final class ArmorClassCalculator {
         return calculate(modifier, proficiency, rules, armorProficiencies, items, selected, shields, selectedShield, false);
     }
 
-    // mediumExpert: Aprimoramento Especialista em Armadura Média (sem limite de Destreza na média e +1 de RD nela).
     public static ArmorClassResponse calculate(ToIntFunction<Attribute> modifier, int proficiency, List<ArmorRule> rules,
                                                Collection<String> armorProficiencies, List<ArmorItem> items, String selected,
                                                List<ShieldItem> shields, String selectedShield, boolean mediumExpert) {
+        return calculate(modifier, proficiency, rules, armorProficiencies, items, selected, shields, selectedShield, mediumExpert, false);
+    }
+
+    // mediumExpert: Aprimoramento Especialista em Armadura Média (sem limite de Destreza na média e +1 de RD nela);
+    // heavyExpert: Especialista em Armadura Pesada (+1 de RD na pesada).
+    public static ArmorClassResponse calculate(ToIntFunction<Attribute> modifier, int proficiency, List<ArmorRule> rules,
+                                               Collection<String> armorProficiencies, List<ArmorItem> items, String selected,
+                                               List<ShieldItem> shields, String selectedShield, boolean mediumExpert, boolean heavyExpert) {
         int dex = modifier.applyAsInt(Attribute.DEXTERITY);
         List<DefenseOption> base = new ArrayList<>();
         base.add(new DefenseOption(UNARMORED, "Sem armadura", "UNARMORED", 10 + dex, 0));
@@ -75,7 +82,8 @@ public final class ArmorClassCalculator {
                         : modifier.applyAsInt(item.modifierAttribute());
                 boolean medium = item.weight() == ArmorWeight.MEDIUM;
                 if (medium && !mediumExpert) mod = Math.min(mod, 2);
-                int reduction = (item.reduction() == null ? 0 : item.reduction()) + (medium && mediumExpert ? 1 : 0);
+                boolean heavy = item.weight() == ArmorWeight.HEAVY;
+                int reduction = (item.reduction() == null ? 0 : item.reduction()) + (medium && mediumExpert ? 1 : 0) + (heavy && heavyExpert ? 1 : 0);
                 base.add(new DefenseOption(item.key(), item.name(), "ITEM", item.armorClass() + mod, reduction));
             }
         }
