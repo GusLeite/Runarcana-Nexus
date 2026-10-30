@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Nova imagem do dragão da Montanha (`feature/character-sheet`)
+- `assets/lineages/montanha.jpeg` (1100×550, 126 KB) no lugar da faixa baixa de 737×192; continua em `LINEAGE_CONTAIN`, então o dragão aparece inteiro.
+
 ## 2026-10-30 — Montanha: imagem inteira, sem cortar (`feature/character-sheet`)
 - `LINEAGE_CONTAIN` em `data/lineageArt.js`: a imagem da Montanha (faixa 737×192) aparece inteira no cartão, com o espaço que sobra preenchido por uma versão desfocada dela; o `LINEAGE_POS` dela saiu.
 
