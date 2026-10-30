@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento: sobras do bloco A (`feature/character-sheet`)
+- Princípio Elemental (Mistério terciário/de transição), Chamado Sagrado Estudioso e Obreiro (escolhas com `when`), traço Habilidoso (`SITUATIONAL` à escolha), Ninhada Aranha/Cobra (imunidade a venenoso), Mestre Tático (`anyClass`).
+- Teste: escolha com `when` e nota à escolha no Inspira Teste. Conferido no sandbox.
+
 ## 2026-10-29 — Mapeamento A5–A7: notas, CA/RD e Chamado Sagrado (`feature/character-sheet`)
 - 30 notas situacionais em origens, linhagens, classes (Bruto, Caçador, Zhonya, Púrpura, Atirador, Desperado, Forja, Explorador), Heranças e Aprimoramentos.
 - CA do Guerreiro Primal, RD do Alnuk, +1 RD do Especialista em Armadura Pesada, natação da Constituição Anfíbia, voo da Ascensão Feérica, PV da Constituição Montanhosa; Chamado Sagrado Protetor com as proficiências.
