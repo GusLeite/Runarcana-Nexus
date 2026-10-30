@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Criação de personagem em tela própria (`feature/character-sheet`)
+- Conta sem ficha abre direto `creation/CreationScreen.jsx`, sem o herói, as abas e as rolagens da ficha; saiu o aviso "Ficha em branco".
+
 ## 2026-10-30 — Juramento do Proto 1,35x mais rápido (`feature/character-sheet`)
 - A sequência caiu de 4,5 s para 3,33 s, com todos os tempos na mesma proporção; a poeira não mudou.
 

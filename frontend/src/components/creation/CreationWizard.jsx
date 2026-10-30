@@ -125,7 +125,6 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
     <div className="creation">
       <section className="card wizard" style={{ '--i': 1 }} ref={panel}>
         <div className="wizard-head">
-          <h3 className="card-title">Criação de personagem</h3>
           <ol className="stepper">
             {steps.map((s, i) => (
               <li key={s.id}>

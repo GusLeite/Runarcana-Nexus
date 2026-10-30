@@ -39,7 +39,7 @@ Responsivo: abaixo de 760px os painéis empilham na vertical e a lore some. Com 
 
 ## Criação de personagem (assistente)
 
-Conta sem ficha: a ficha mostra "Ficha em branco" com **CRIAR PERSONAGEM**, que abre o `CreationWizard` (`components/creation/`) no lugar do conteúdo (o herói continua à esquerda). Ao criar, a ficha recarrega já pronta.
+Conta sem ficha: em vez da ficha, abre direto a **tela exclusiva da criação** (`creation/CreationScreen.jsx`, decidida pelo `CharacterSheet` quando o back responde 404): só a barra do topo (logo, título, conta, alterar senha, sair) e o `CreationWizard`, sem herói, abas ou rolagens. Ao criar, a ficha carrega já pronta.
 
 - **Etapas** (barra no topo, com losango ✓ quando a etapa está completa; dá para pular entre elas): Origem → Traços (só na Runinata) → Região → Classe → Passado (Região e Passado somem se o catálogo não tiver) → Atributos → Escolhas → Heranças → Detalhes. Atributos só fica ✓ depois de gastar algum ponto; Escolhas, depois de origem e classe definidas. O botão final é **CRIAR PERSONAGEM**, ativo só quando a prévia não tem erros.
 - **Origem/Região/Classe/Passado** (`OptionStep.jsx`): cartões com descrição, `details` do livro (Idade, Tamanho…), fatos (dado de vida, deslocamento em pés, ouro), a lista do que concede (`grantLabel` em `rules.js`, cor por tipo) e etiqueta **EXEMPLO** nos itens provisórios. Origem e linhagem com `levels` ganham o bloco **Ao subir de nível** ("2º nível. Habilidade: Sopro Gélido").

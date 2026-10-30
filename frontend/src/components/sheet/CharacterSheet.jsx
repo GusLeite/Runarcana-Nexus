@@ -14,7 +14,7 @@ import NotesTab from './NotesTab.jsx'
 import BookTab from './BookTab.jsx'
 import DiceRoll from './DiceRoll.jsx'
 import TabBar from './TabBar.jsx'
-import CreationWizard from '../creation/CreationWizard.jsx'
+import CreationScreen from '../creation/CreationScreen.jsx'
 import LevelUp from '../creation/LevelUp.jsx'
 import { fetchCatalog } from '../../api/creation.js'
 import { ExitIcon, KeyIcon } from './icons.jsx'
@@ -49,7 +49,6 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const [current, setCurrent] = useState(null)
   const [mode, setMode] = useState('normal')
   const [busy, setBusy] = useState(false)
-  const [creating, setCreating] = useState(false)
   // Subida de nível liberada pelo mestre: o formulário ocupa o lugar das abas; o catálogo vem quando abre.
   const [leveling, setLeveling] = useState(false)
   const [catalog, setCatalog] = useState(null)
@@ -331,6 +330,24 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     '--s': 2 + (i % 3) + 'px',
   })), [])
 
+  // Conta sem ficha: em vez da ficha, a tela exclusiva da criação.
+  if (state.status === 'empty') {
+    return (
+      <CreationScreen
+        character={character}
+        session={session}
+        toast={toast}
+        onError={fail}
+        onCreated={created => {
+          setToast(created.characterName + ' foi criado!')
+          load()
+        }}
+        onChangePassword={onChangePassword}
+        onLogout={onLogout}
+      />
+    )
+  }
+
   return (
     <div className="sheet" style={{ '--h': character.hue }}>
       <div className="sheet-bg" style={{ backgroundImage: `url("${character.img}")` }} aria-hidden="true" />
@@ -381,28 +398,6 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             <h3>Algo deu errado</h3>
             <p>{state.message}</p>
             <button className="ghost-btn" type="button" onClick={load}>Tentar de novo</button>
-          </div>
-        )}
-        {/* Sem ficha: convite para criar e, depois, o assistente de criação. */}
-        {state.status === 'empty' && !creating && (
-          <div className="sheet-state card empty-cta">
-            <h3>Ficha em branco</h3>
-            <p>Seu personagem ainda não existe. Escolha origem, classe e antecedente e veja a ficha se montar.</p>
-            <button className="btn" type="button" onClick={() => setCreating(true)}>CRIAR PERSONAGEM</button>
-          </div>
-        )}
-        {state.status === 'empty' && creating && (
-          <div className="sheet-col wide">
-            <CreationWizard
-              token={token}
-              defaultPlayer={session.username}
-              onError={fail}
-              onCreated={created => {
-                setCreating(false)
-                setToast(created.characterName + ' foi criado!')
-                load()
-              }}
-            />
           </div>
         )}
         {sheet && leveling && (

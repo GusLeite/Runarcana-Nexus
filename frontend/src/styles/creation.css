@@ -1,5 +1,12 @@
 /* Assistente de criação de personagem. Usa os tokens de global.css e as peças de sheet.css (card, seg, chips). */
 
+/* Tela exclusiva da criação (CreationScreen.jsx). */
+.creation-heading{margin:0;text-align:center;font-family:'Cinzel',Georgia,serif;font-size:17px;font-weight:700;letter-spacing:.14em;color:var(--gold-hi);white-space:nowrap}
+.creation-page{max-width:1500px;margin:0 auto;padding:24px 28px 48px}
+@media (max-width:860px){
+ .creation-heading{font-size:13px;letter-spacing:.08em;white-space:normal}
+ .creation-page{padding:16px 16px 40px}
+}
 .creation{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,360px);gap:20px;align-items:start}
 .creation>*{min-width:0}
 .wizard-loading{display:flex;align-items:center;gap:14px;color:var(--muted)}
@@ -123,8 +130,6 @@ animation:slide-in .35s ease backwards;animation-delay:calc(var(--n,0)*40ms)}
 .build-ready{margin-top:14px;padding:10px 12px;border:1px solid rgba(47,211,192,.45);background:rgba(47,211,192,.08);color:#bfeee8;font-size:14px;animation:rise-in .35s ease}
 
 /* ---------- chamada na ficha vazia ---------- */
-.empty-cta{display:flex;flex-direction:column;align-items:center;gap:12px}
-.empty-cta .btn{width:auto;padding:13px 36px}
 
 @container (max-width:900px){
  .creation{grid-template-columns:1fr}
