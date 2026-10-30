@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento M: notas gerais (`feature/character-sheet`)
+- Notas situacionais com alvo `GENERAL` (terreno, clima, queda, salto, carga) e `SPELL` (efeitos nas magias), mostradas no herói da ficha.
+- Cerca de 30 notas em Heranças, Aprimoramentos, linhagens, Caçador e traços.
+
 ## 2026-10-29 — Mapeamento M: produção de ofício (`feature/character-sheet`)
 - Concessões `CRAFT_INCOME` (PO/dia a mais) e `CRAFT_MASTERWORK` (margem de Obra-Prima); a ficha guarda e o cartão de Ofícios mostra.
 - Artífice, Operário, Coletivo Forte, Mestre Artesão, Hospitaleiro e o Forjador do Acólito da Forja.

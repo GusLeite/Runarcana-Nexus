@@ -35,7 +35,8 @@ public enum GrantType {
     SPELL_CHOICE,       // count magias à escolha: spellLevel 0 = truques, N = do 1º ao Nº nível; value = de onde vêm
                         // (CLASS = lista da classe, MYSTERIES = Mistérios do personagem, CLASS_OR_MYSTERIES = as duas)
     INITIATIVE,         // +amount na iniciativa (Atento: +5)
-    SITUATIONAL,        // efeito que depende da situação, mostrado ao lado do que afeta: value = alvo (SKILL:STEALTH, SAVE,
+    SITUATIONAL,        // efeito que depende da situação, mostrado ao lado do que afeta: value = alvo (GENERAL = nota geral do herói,
+                        // SPELL = nas magias, SKILL:STEALTH, SAVE,
                         // SAVE:DEXTERITY, INITIATIVE, AC, ATTACK, ATTACK:MELEE|RANGED|BOW|CROSSBOW|THROWN|FIREARM), description = a nota
     RESISTANCE,         // resistência a um tipo de dano: value = o tipo ("venenoso"); expertise = "caso já tenha, imunidade";
                         // options + count = à escolha (vale para VULNERABILITY e ABSORPTION; a mesma fonte não repete o tipo)

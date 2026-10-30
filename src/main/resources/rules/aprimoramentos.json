@@ -990,6 +990,11 @@
         {
           "type": "SPEED",
           "feet": 5
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Levantar-se custa 5 pés; salta com corrida após só 5 pés."
         }
       ]
     },

@@ -222,6 +222,7 @@ class CreationControllerTests {
         mvc.perform(post("/creation").header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON).content(done))
                 .andExpect(status().isCreated());
         mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
+                .andExpect(jsonPath("$.character.situational[?(@.target == 'GENERAL')].note").value("Ignora terreno difícil de teste."))
                 .andExpect(jsonPath("$.character.situational[0].target").value("SKILL:STEALTH"))
                 .andExpect(jsonPath("$.character.situational[0].source").value("Herança: Perícia Teste"))
                 // "Caso já tenha, imunidade": venenoso já era resistência → imunidade; ígneo não era → resistência.

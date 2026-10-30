@@ -155,6 +155,11 @@
           "type": "SITUATIONAL",
           "value": "SAVE",
           "description": "Qualquer rolagem para resistir às condições Agarrado ou Caído são feitas com vantagem."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Levantar-se de Caído custa só 5 pés."
         }
       ]
     },
@@ -768,6 +773,11 @@
             "WEAPON:Martelo Meteoro"
           ],
           "label": "Estudioso de Armas: uma arma regional"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "+metade da proficiência nos níveis de ofício para criar a arma escolhida."
         }
       ]
     },
@@ -981,6 +991,11 @@
             "WEAPON:Martelo Meteoro"
           ],
           "label": "Ferromante: uma arma marcial regional"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SPELL",
+          "description": "Magias do Mistério do Metal custam 1 Mana a menos (mínimo 1)."
         }
       ]
     },
@@ -1285,6 +1300,11 @@
             "oniromancia"
           ],
           "label": "Meditação Profunda: um Mistério"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "No descanso curto, dados de vida adicionais iguais à metade da proficiência."
         }
       ]
     },
@@ -1370,6 +1390,11 @@
           "spellLevel": 0,
           "count": 1,
           "label": "Musicista Prodígio: um truque do Som"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "CD de execução das suas músicas −1; CD para resistir a elas +1."
         }
       ]
     },
@@ -1598,6 +1623,11 @@
             "umbramancia"
           ],
           "label": "Sangue Arcano: um Mistério"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SPELL",
+          "description": "Magia que acerta um alvo uma vez: +2 × proficiência de dano; que acerta mais vezes ou vários alvos: +proficiência."
         }
       ]
     },
@@ -1609,7 +1639,14 @@
         "MARKSMAN"
       ],
       "prerequisite": "Atirador",
-      "description": "O mecanismo por trás de uma arma de fogo é alvo de grande estudo e entendimento em sua jornada. Você recebe os seguintes benefícios:\n\nAprimoramentos de Armas de Fogo em sua Astra custam metade do valor original.\nA força necessária para utilizar armas de fogo diminui em 1."
+      "description": "O mecanismo por trás de uma arma de fogo é alvo de grande estudo e entendimento em sua jornada. Você recebe os seguintes benefícios:\n\nAprimoramentos de Armas de Fogo em sua Astra custam metade do valor original.\nA força necessária para utilizar armas de fogo diminui em 1.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK:FIREARM",
+          "description": "Força necessária das armas de fogo −1."
+        }
+      ]
     },
     {
       "id": "sono-leve",
@@ -1621,6 +1658,11 @@
           "type": "SITUATIONAL",
           "value": "SAVE",
           "description": "Você possui vantagem em Salvaguardas para resistir à efeitos que o deixariam Inconsciente"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Dormindo naturalmente, ataques contra você não têm vantagem nem viram crítico."
         }
       ]
     },
@@ -1840,6 +1882,11 @@
           "type": "SITUATIONAL",
           "value": "SAVE",
           "description": "Você tem vantagem em salvaguardas para resistir a efeitos mágicos."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Incapaz de aprender magia."
         }
       ]
     },
@@ -1950,6 +1997,11 @@
           "type": "SITUATIONAL",
           "value": "SAVE",
           "description": "Você tem vantagem em salvaguardas relacionadas ao clima gélido e em rolagens contra magias que causem dano gélido."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "+10 pés de deslocamento na neve e ignora terreno difícil de neve."
         }
       ]
     },
@@ -2093,6 +2145,11 @@
           "type": "SKILL",
           "skill": "ARCANA",
           "expertise": true
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SPELL",
+          "description": "Reduz o custo de Mana de uma magia no mod. de conjuração (proficiência vezes por descanso pleno)."
         }
       ],
       "uses": {
@@ -2418,7 +2475,14 @@
         "NOXUS"
       ],
       "prerequisite": "Noxiano",
-      "description": "Ser treinado por uma instituição mágica aprimorou o seu domínio de magia de uma maneira que não seria possível treinando por conta própria, expandindo seu potencial. Você recebe os seguintes benefícios:\n\nVocê adiciona seu Bônus de Proficiência aos efeitos causados por suas magias (dano, cura, escudo, etc). Efeitos que afetem atributos e rolagens não recebem esse adicional.\nEscolha entre Ataque ou Classe de Dificuldade. Suas magias possuem a característica escolhida aumentada em um valor igual metade do seu Bônus de Proficiência.\nCaso tenha escolhido Ataque, a Margem de Crítico para suas magias diminui em 1.\nCaso tenha escolhido Classe de Dificuldade, alvos que rolarem 1 na Salvaguarda de suas magias a receberão como um efeito crítico.\nFluidez de Ki\nPré-requisito: Bodisatva\n\nVocê possui uma naturalidade em lidar com sua plenitude, seja em seus estudos ou em suas práticas. Você recebe os seguintes benefícios:\n\nVocê recebe seu nível de Bodisatva em pontos de Ki.\nVocê pode escolher um Sutra adicional no 1º e no 4º nível de Bodisatva."
+      "description": "Ser treinado por uma instituição mágica aprimorou o seu domínio de magia de uma maneira que não seria possível treinando por conta própria, expandindo seu potencial. Você recebe os seguintes benefícios:\n\nVocê adiciona seu Bônus de Proficiência aos efeitos causados por suas magias (dano, cura, escudo, etc). Efeitos que afetem atributos e rolagens não recebem esse adicional.\nEscolha entre Ataque ou Classe de Dificuldade. Suas magias possuem a característica escolhida aumentada em um valor igual metade do seu Bônus de Proficiência.\nCaso tenha escolhido Ataque, a Margem de Crítico para suas magias diminui em 1.\nCaso tenha escolhido Classe de Dificuldade, alvos que rolarem 1 na Salvaguarda de suas magias a receberão como um efeito crítico.\nFluidez de Ki\nPré-requisito: Bodisatva\n\nVocê possui uma naturalidade em lidar com sua plenitude, seja em seus estudos ou em suas práticas. Você recebe os seguintes benefícios:\n\nVocê recebe seu nível de Bodisatva em pontos de Ki.\nVocê pode escolher um Sutra adicional no 1º e no 4º nível de Bodisatva.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "SPELL",
+          "description": "+proficiência nos efeitos das magias (dano, cura, escudo...)."
+        }
+      ]
     },
     {
       "id": "lider-carmesim",
@@ -2532,7 +2596,14 @@
         "PILTOVER"
       ],
       "prerequisite": "Piltovense",
-      "description": "Você cresceu no meio de feiras e lojas, observando diversos tipos de interação entre mercadores e seus clientes, desenvolvendo ótimas habilidades de comunicação quando se trata de vender seu peixe. Você recebe os seguintes benefícios:\n\nVocê recebe vantagem nas rolagens de perícia de Carisma ao negociar uma venda. A vantagem também se aplica a outras perícias relacionadas ao produto a ser vendido, caso precise delas durante a argumentação, como Tecnologia caso esteja vendendo um eletrônico, ou Medicina caso esteja vendendo um remédio.\nAo concluir uma venda, você recebe um extra igual a 5x seu Bônus de Proficiência como PO adicional. Este extra não pode ser maior que metade do valor total da venda.\nAo conseguir um 20 natural durante uma negociação bem-sucedida, seu cliente se torna um Contato. Você adquire acesso para contatar este cliente caso tenha novos produtos que sejam da linha de interesse dele e vice-versa."
+      "description": "Você cresceu no meio de feiras e lojas, observando diversos tipos de interação entre mercadores e seus clientes, desenvolvendo ótimas habilidades de comunicação quando se trata de vender seu peixe. Você recebe os seguintes benefícios:\n\nVocê recebe vantagem nas rolagens de perícia de Carisma ao negociar uma venda. A vantagem também se aplica a outras perícias relacionadas ao produto a ser vendido, caso precise delas durante a argumentação, como Tecnologia caso esteja vendendo um eletrônico, ou Medicina caso esteja vendendo um remédio.\nAo concluir uma venda, você recebe um extra igual a 5x seu Bônus de Proficiência como PO adicional. Este extra não pode ser maior que metade do valor total da venda.\nAo conseguir um 20 natural durante uma negociação bem-sucedida, seu cliente se torna um Contato. Você adquire acesso para contatar este cliente caso tenha novos produtos que sejam da linha de interesse dele e vice-versa.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Vantagem em Carisma ao negociar uma venda; +5 × proficiência PO por venda concluída."
+        }
+      ]
     },
     {
       "id": "inventor-renomado",
@@ -2688,6 +2759,11 @@
           "type": "SITUATIONAL",
           "value": "SAVE",
           "description": "Você tem vantagem em salvaguardas relacionadas ao clima desértico e em rolagens contra magias que causem dano ígneo."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "+10 pés de deslocamento na areia e ignora terreno difícil de areia."
         }
       ]
     },
@@ -2859,6 +2935,11 @@
           "type": "SITUATIONAL",
           "value": "SAVE",
           "description": "Você possui Vantagem em Salvaguardas contra Frio Extremo."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Dados de vida adicionais iguais à proficiência nos descansos; resistência a Calor Extremo."
         }
       ]
     },
@@ -3389,6 +3470,11 @@
           "type": "DAMAGE_BONUS",
           "value": "ATTACK:MELEE",
           "amount": 1
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Conta uma categoria acima para carga; roupas, armaduras e armas custam 50% a mais."
         }
       ]
     },
@@ -4614,7 +4700,14 @@
         "antroplantae"
       ],
       "prerequisite": "Antroplantæ",
-      "description": "A potência floral de seu corpo é extremamente ativa, permitindo feitos impressionantes com seu corpo. Você recebe os seguintes benefícios:\n\nDurante a luz solar, você recupera 1 ponto de vida a cada 10 - seu bônus de Proficiência minutos.\nDurante um descanso pleno, você é capaz de regenerar um membro perdido."
+      "description": "A potência floral de seu corpo é extremamente ativa, permitindo feitos impressionantes com seu corpo. Você recebe os seguintes benefícios:\n\nDurante a luz solar, você recupera 1 ponto de vida a cada 10 - seu bônus de Proficiência minutos.\nDurante um descanso pleno, você é capaz de regenerar um membro perdido.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Sob luz solar, recupera 1 PV a cada (10 − proficiência) minutos."
+        }
+      ]
     },
     {
       "id": "madeira-de-lei",
@@ -4933,6 +5026,11 @@
         {
           "type": "SPELL",
           "value": "queda-suave"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Sempre sob o efeito de queda suave."
         }
       ]
     },
@@ -5403,6 +5501,11 @@
           "type": "SKILL",
           "skill": "MEDICINE",
           "expertise": true
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SPELL",
+          "description": "+proficiência na cura de habilidades, magias e runas."
         }
       ]
     },
@@ -5881,7 +5984,14 @@
         "kiilash"
       ],
       "prerequisite": "Kiilashi",
-      "description": "Seus reflexos e incrível agilidade furtiva melhoraram. Você ganha os seguintes benefícios:\n\nVocê não recebe os primeiros 10 + (5 × seu bônus de proficiência) pés de dano de queda, a não ser que você esteja incapacitado.\nCaso esteja furtivo, você pode se mover de uma cobertura para outra sem perder sua furtividade, desde que termine seu deslocamento dentro de outra cobertura.\nO dano de suas armas naturais aumenta em uma categoria."
+      "description": "Seus reflexos e incrível agilidade furtiva melhoraram. Você ganha os seguintes benefícios:\n\nVocê não recebe os primeiros 10 + (5 × seu bônus de proficiência) pés de dano de queda, a não ser que você esteja incapacitado.\nCaso esteja furtivo, você pode se mover de uma cobertura para outra sem perder sua furtividade, desde que termine seu deslocamento dentro de outra cobertura.\nO dano de suas armas naturais aumenta em uma categoria.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Ignora os primeiros 10 + 5 × proficiência pés de dano de queda (sem estar Incapacitado); furtivo, passa de uma cobertura a outra sem perder a furtividade."
+        }
+      ]
     },
     {
       "id": "guardiao-de-essencia",
@@ -5925,6 +6035,11 @@
           "type": "SITUATIONAL",
           "value": "SKILL:ACROBATICS",
           "description": "Enquanto você está fazendo um teste de agarrão contra uma criatura, você pode utilizar Acrobacia ao invés de Atletismo e você possui vantagem nesse teste."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Descalço, terreno difícil não custa deslocamento extra."
         }
       ]
     },
@@ -5944,6 +6059,11 @@
         {
           "type": "SKILL",
           "skill": "ATHLETICS"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Escalando, usa todo o deslocamento de caminhada."
         }
       ],
       "execution": "Reação",
@@ -5963,7 +6083,14 @@
         "kiilash"
       ],
       "prerequisite": "Kiilashi",
-      "description": "Você se tornou adepto aos altos galhos das florestas mais profundas. Você ganha os seguintes benefícios:\n\nVocê pode usar Acrobacia para fazer testes de escalada e salto.\nVocê dobra o número de pés que você cobre para qualquer salto.\nVocê anda ou corre por galhos, copas de árvores e cipós como se fossem terreno sólido."
+      "description": "Você se tornou adepto aos altos galhos das florestas mais profundas. Você ganha os seguintes benefícios:\n\nVocê pode usar Acrobacia para fazer testes de escalada e salto.\nVocê dobra o número de pés que você cobre para qualquer salto.\nVocê anda ou corre por galhos, copas de árvores e cipós como se fossem terreno sólido.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Dobra a distância de qualquer salto."
+        }
+      ]
     },
     {
       "id": "potencia-da-cura",
@@ -6010,7 +6137,14 @@
         "vastaya"
       ],
       "prerequisite": "Vastaya",
-      "description": "Você tem uma mira fora do comum. Você ganha os seguintes benefícios:\n\nQuando você tem vantagem em um teste de ataque, você rola três d20s em vez de dois, e usa o maior dos três testes."
+      "description": "Você tem uma mira fora do comum. Você ganha os seguintes benefícios:\n\nQuando você tem vantagem em um teste de ataque, você rola três d20s em vez de dois, e usa o maior dos três testes.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK",
+          "description": "Com vantagem, rola 3d20 e usa o maior."
+        }
+      ]
     },
     {
       "id": "procurador-da-verdade",

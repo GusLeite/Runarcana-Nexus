@@ -232,6 +232,11 @@
           "type": "CRAFT_MASTERWORK",
           "value": "ferraria",
           "amount": 1
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Ignora terreno difícil de teste."
         }
       ]
     },

@@ -666,6 +666,11 @@
               "type": "SITUATIONAL",
               "value": "SAVE",
               "description": "Vantagem em salvaguardas contra climas hostis."
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "GENERAL",
+              "description": "Ignora terreno difícil de lama, gelo ou areia."
             }
           ]
         },
@@ -840,6 +845,11 @@
               "type": "SITUATIONAL",
               "value": "SAVE",
               "description": "Vantagem em salvaguardas para resistir a movimento forçado."
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "GENERAL",
+              "description": "Conta uma categoria acima para carga e pesa 50% a mais."
             }
           ]
         },
@@ -1945,6 +1955,11 @@
             {
               "type": "CONDITION_IMMUNITY",
               "value": "Calor Extremo"
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "GENERAL",
+              "description": "Ignora terreno difícil de areia."
             }
           ]
         },
@@ -1972,6 +1987,11 @@
             {
               "type": "CONDITION_IMMUNITY",
               "value": "Frio Extremo"
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "GENERAL",
+              "description": "Ignora terreno difícil de gelo."
             }
           ]
         },
@@ -2004,6 +2024,11 @@
               "type": "SENSE",
               "value": "DARKVISION",
               "feet": 120
+            },
+            {
+              "type": "SITUATIONAL",
+              "value": "GENERAL",
+              "description": "Ignora terreno difícil de vegetação."
             }
           ]
         }
@@ -9008,6 +9033,11 @@
           "type": "SITUATIONAL",
           "value": "INITIATIVE",
           "description": "Explorador Natural: vantagem na iniciativa."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Explorador Natural: ignora terreno difícil natural."
         }
       ],
       "levels": [

@@ -18,7 +18,10 @@ export default function Situational({ sheet }) {
   const senses = Object.entries(sheet.senses ?? {}).map(([k, n]) => ({ key: 'sense' + k, text: senseLabel(k, n) }))
   const ac = situationalFor(sheet, 'AC')
   const init = situationalFor(sheet, 'INITIATIVE')
-  if (!senses.length && !damage.length && !ac.length && !init.length) return null
+  // Notas gerais (terreno, queda, carga...) e as das magias.
+  const general = situationalFor(sheet, 'GENERAL')
+  const spells = situationalFor(sheet, 'SPELL')
+  if (!senses.length && !damage.length && !ac.length && !init.length && !general.length && !spells.length) return null
   return (
     <div className="situational">
       {senses.length > 0 && (
@@ -31,7 +34,7 @@ export default function Situational({ sheet }) {
           {damage.map(d => <li key={d.key} className={'cond-chip ' + d.cls}>{d.text}</li>)}
         </ul>
       )}
-      {[...ac.map(t => ['CA', t]), ...init.map(t => ['Iniciativa', t])].map(([k, t]) => (
+      {[...ac.map(t => ['CA', t]), ...init.map(t => ['Iniciativa', t]), ...spells.map(t => ['Magias', t]), ...general.map(t => ['Geral', t])].map(([k, t]) => (
         <p key={k + t} className="sit-line"><b>{k}</b> ✦ {t}</p>
       ))}
     </div>

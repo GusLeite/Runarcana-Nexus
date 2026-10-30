@@ -707,7 +707,7 @@ public class RuleCatalogService {
                 }
                 case SITUATIONAL -> {
                     // Alvo fixo (value) ou à escolha (options: os alvos possíveis).
-                    String target = "(SKILL:[A-Z_]+|SAVE(:[A-Z]+)?|INITIATIVE|AC|ATTACK(:(MELEE|RANGED|BOW|CROSSBOW|THROWN|FIREARM))?)";
+                    String target = "(GENERAL|SPELL|SKILL:[A-Z_]+|SAVE(:[A-Z]+)?|INITIATIVE|AC|ATTACK(:(MELEE|RANGED|BOW|CROSSBOW|THROWN|FIREARM))?)";
                     List<String> targets = g.hasOptions() ? g.options() : blank(g.value()) ? List.of() : List.of(g.value());
                     if (targets.isEmpty() || blank(g.description())) p.add(at + " (SITUATIONAL): precisa de value (alvo) ou options, e description");
                     else targets.stream().filter(t -> !t.matches(target)).forEach(t -> p.add(at + " (SITUATIONAL): alvo inválido " + t));

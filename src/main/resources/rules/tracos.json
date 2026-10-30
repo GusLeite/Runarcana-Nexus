@@ -591,7 +591,14 @@
       "id": "composicao-taurica",
       "name": "Composição Táurica",
       "tier": "MAJOR",
-      "description": "A parte de baixo de seu tronco é a de uma criatura quadrúpede, possuindo cascos ou patas ao invés de pés.\n\nVocê conta como uma criatura de uma categoria de tamanho maior que a sua para determinar o peso que pode carregar, empurrar ou puxar. Escaladas que requeiram mãos e pés são especialmente difíceis: cada 1 pé custa 4 a mais para você. Uma criatura Média ou menor pode montá-lo, caso você permita; nessa situação, você mantém sua ordem no turno e age independentemente, e a criatura montada perde a movimentação até que desmonte."
+      "description": "A parte de baixo de seu tronco é a de uma criatura quadrúpede, possuindo cascos ou patas ao invés de pés.\n\nVocê conta como uma criatura de uma categoria de tamanho maior que a sua para determinar o peso que pode carregar, empurrar ou puxar. Escaladas que requeiram mãos e pés são especialmente difíceis: cada 1 pé custa 4 a mais para você. Uma criatura Média ou menor pode montá-lo, caso você permita; nessa situação, você mantém sua ordem no turno e age independentemente, e a criatura montada perde a movimentação até que desmonte.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Conta uma categoria acima para carga; escalada com mãos e pés custa 4 pés a mais por pé."
+        }
+      ]
     },
     {
       "id": "comunicacao-ancestral",

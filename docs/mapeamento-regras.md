@@ -92,7 +92,7 @@ Protetor (proficiências), Estudioso (duas perícias) e Obreiro (truque espiritu
 - Habilidades ativas com duração, reações e efeitos em área (a maioria das Iras, Sutras, Técnicas, Runas, Invocações e das partes ativas das Heranças): já são habilidades com tempo e usos.
 - Efeitos contra um alvo específico (presa, Foco de Caça, criatura agarrada), margens e multiplicadores de crítico, ignorar RD/cobertura.
 - ✅ Produção de ofício (`CRAFT_INCOME`/`CRAFT_MASTERWORK`): PO por dia a mais (Artífice, Operário, Coletivo Forte, Mestre Artesão, Forjador do Acólito da Forja) e margem de Obra-Prima (Artífice à escolha, Hospitaleiro no Cozinheiro), no cartão de Ofícios. Pertences e contatos ficam no texto.
-- Terreno, clima e queda (neve, areia, saltos, terreno difícil).
+- ✅ Terreno, clima, queda, salto e carga viram notas gerais no herói (`SITUATIONAL` com `GENERAL`), e efeitos em magias, notas `SPELL` (Sangue Arcano, Floricorvus, Ferromante, Cura Ottrani, Tocado pela Mana).
 - Idiomas (desligados por decisão sua).
 
 ## A conferir antes de implementar
