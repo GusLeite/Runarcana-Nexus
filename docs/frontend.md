@@ -1,70 +1,59 @@
 # Front-end
 
-> Código em `frontend/`, branch `feature/frontend-react-login`. React 18 + Vite 8, CSS puro, JavaScript (sem TypeScript).
+> Código em `frontend/`, já em `main`. React 18 + Vite 8, CSS puro, JavaScript (sem TypeScript).
 
-## Tela atual: seleção de personagem + login
+## Onde está cada assunto
 
-1. O topo mostra o logo **RUNARCANA** e uma dica ("Escolha seu personagem para entrar").
-2. Cinco painéis verticais (Rudo, Gaudron, Proto, Titan, Loge), separados por divisórias douradas com losangos.
-3. **Hover/foco** em um painel: ele se expande com uma mola, ganha zoom e brilho, mostra papel, nome, linha dourada e lore; os vizinhos encolhem e a divisória ao lado acende. Um feixe de luz cruza o painel.
-4. **Clique, Enter ou Espaço**: o personagem ocupa a tela, os outros somem e aparece o formulário de login com o nome dele.
-5. **Login**: valida usuário e senha (`src/validation.js`); a autenticação real ainda **não está conectada** (há um `TODO` em `LoginForm.jsx`).
-6. "Trocar de personagem" volta para a seleção.
+Leia este arquivo e **só** o subdocumento da área da tarefa:
 
-Responsivo: abaixo de 760px os painéis empilham na vertical e a lore some. Com `prefers-reduced-motion` as animações e partículas são desligadas.
+| Documento | Conteúdo |
+|---|---|
+| [frontend-telas.md](frontend-telas.md) | Login e seleção, painel do mestre, assistente de criação, ficha do personagem |
+| [frontend-visual.md](frontend-visual.md) | Animações, efeitos, artes dos personagens e como trocar/adicionar |
 
 ## Estrutura
 
 ```
 frontend/
 ├── index.html                 carrega as fontes Cinzel/Spectral (Google Fonts) e src/main.jsx
-├── vite.config.js             plugin React
+├── vite.config.js             plugin React + proxy /runarcana → http://localhost:8080
 └── src/
     ├── main.jsx               monta <App/> e importa o CSS global
-    ├── App.jsx                estado (hovered, selected), cabeçalho, fileira de painéis, login
+    ├── App.jsx                estado (hovered, selected, sessão), cabeçalho, painéis e qual formulário mostrar
+    ├── api/auth.js (+ .test.js)  chamadas /auth (login, me, logout, senha), sessão no localStorage e o `request` compartilhado
+    ├── api/character.js       ficha do logado, usos de habilidade e descanso
+    ├── api/documents.js       documentos do mestre (listar, marcar lido)
+    ├── api/notes.js           anotações (listar, criar, salvar, apagar)
     ├── data/characters.js     lista de personagens + imports das artes
+    ├── data/rules.js (+ .test.js)  rótulos em PT, formatação e regras derivadas dos atributos
     ├── components/
     │   ├── CharacterPanel.jsx painel de um personagem (imagem/vídeo, sombra, legenda, efeitos)
     │   ├── Separator.jsx      divisória dourada entre painéis
     │   ├── LoginForm.jsx      formulário de login do personagem escolhido
-    │   └── effects/Embers.jsx brasas e calor (Gaudron)
+    │   ├── PasswordForm.jsx   troca de senha (senha atual, nova, confirmação)
+    │   ├── effects/Embers.jsx brasas e calor (Gaudron)
+    │   ├── effects/BloodMagic.jsx magia de sangue (Rudo)
+    │   └── sheet/             ficha pós-login: CharacterSheet (abas e estado), SheetHero, OverviewTab, AttributeGrid,
+    │                          SkillList, AbilitiesTab, AbilityIcon, Inventory, DocumentsTab, NotesTab, DiceRoll,
+    │                          TabBar (abas com sublinhado deslizante), Num (número que conta), icons
+    │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities, MasterSheets, MasterRules
     ├── hooks/usePanelSprings.js  animação por mola (requestAnimationFrame)
+    ├── hooks/useCountUp.js (+ .test.js)  número que conta até o valor; prefersReducedMotion
+    ├── utils/motion.js        replay (reinicia animação de classe) e afterLeave (espera a saída)
     ├── utils/placeholderArt.js   gera um retrato SVG para quem ainda não tem arte
-    ├── styles/global.css      todo o visual (tokens em :root)
+    ├── utils/iconImage.js (+ .test.js)  valida e reduz a imagem do ícone de habilidade para 128x128
+    ├── styles/global.css      visual da seleção e do login (tokens em :root)
+    ├── styles/sheet.css       visual da ficha
+    ├── styles/master.css      botão, portal e painel do mestre
+    ├── styles/motion.css      animações de polimento (importado por último no main.jsx)
+    ├── api/master.js          rotas do mestre (personagens, habilidades, documentos, destinatários, liberar a subida de nível)
     ├── validation.js (+ .test.js)
     └── assets/characters/     rudo.jpg/.mp4, gaudron.jpg/.mp4
 ```
 
-## Como a animação funciona
+## Conexão com a API
 
-`usePanelSprings` roda um loop de `requestAnimationFrame` que, para cada painel, simula três molas (rigidez `w = 4`, amortecimento crítico):
-- `g`: `flex-grow` (1 normal, 3.4 em hover, 0.65 nos vizinhos, 10 no selecionado, 0 nos que somem)
-- `t`: progresso visual 0→1, exposto como a variável CSS `--t`
-- `o`: opacidade
-
-Os valores são escritos **direto no DOM** (`style.flexGrow`, `--t`, `opacity`) para não re-renderizar o React a cada frame. No CSS, zoom, saturação, brilho, legenda, linha e lore são `calc()` em cima de `--t`, por isso tudo anda no mesmo compasso. O hover tem um atraso de 90 ms (`App.jsx`) para o mouse poder atravessar a fileira sem acender todos os painéis.
-
-## Personagens e efeitos
-
-Definidos em `src/data/characters.js`:
-
-| Campo | Uso |
-|---|---|
-| `id, name, role, lore` | textos |
-| `hue` | cor do brilho do painel (`--h`); com `variant` (0–4), gera o placeholder |
-| `img` | arte real importada de `assets/`; se não existir, usa `placeholderArt(hue, variant)` |
-| `vid` | MP4 mudo em loop sobre a imagem (`img` vira o poster) |
-| `pos` | enquadramento da arte (`background-position`/`object-position`) |
-| `fx: 'embers'` | brasas subindo e calor no chão (`Embers.jsx`) |
-| `impact` | ondas de choque, explosão laranja e tremor da arte ao entrar |
-| `burst` | pulso radial vermelho ao entrar |
-
-Estado atual: **Rudo** (vídeo + burst vermelho) e **Gaudron** (vídeo + brasas + impacto) têm arte real; **Proto, Titan e Loge** usam placeholders.
-
-### Adicionar ou trocar a arte de um personagem
-1. Coloque o arquivo em `src/assets/characters/` (JPG para a imagem; MP4 H.264 sem áudio para o vídeo).
-2. Importe em `characters.js` e preencha `img` / `vid` / `pos` no item do personagem.
-3. Para um efeito novo, crie o componente em `components/effects/`, renderize em `CharacterPanel.jsx` e adicione o CSS em `global.css`.
+`src/api/auth.js` chama `VITE_API_URL` (padrão `/runarcana`). Em `npm run dev`, o Vite repassa `/runarcana` para o Spring em `localhost:8080`, então **o back-end precisa estar rodando** para o login funcionar. Os erros mostrados vêm do campo `message` da API; sem servidor, aparece "Não foi possível falar com o servidor". As regras de senha são repetidas em `validation.js` (`validatePasswordChange`) só para avisar antes de enviar; quem decide é o back-end.
 
 ## Identidade visual
 
@@ -73,12 +62,10 @@ Tokens em `:root` (`global.css`): fundo `--bg #050b14`, painel `--panel #0a1626`
 ## Origem
 
 A tela foi prototipada num `index.html` único (React via CDN, imagens e vídeo em base64, cerca de 12 MB) numa sessão anterior do Claude e depois portada para este projeto Vite. Ficaram de fora do porte:
-- um efeito de "sangue escorrendo" (`BloodFx`) para o Rudo que estava no protótipo, mas não era usado (`fx: 'blood'` não estava ativo);
+- um efeito de "sangue escorrendo" (`BloodFx`) para o Rudo que estava no protótipo, mas não era usado. Depois o Rudo ganhou um efeito novo, a magia de sangue (`BloodMagic.jsx`, `fx: 'blood'`);
 - o fallback que convertia vídeo base64 em Blob (não é necessário com arquivos de verdade).
 
 ## Pendências / problemas conhecidos
 
-- Conectar `LoginForm` à API de autenticação (o endpoint ainda não existe no back-end).
-- Artes reais para Proto, Titan e Loge.
-- Vídeos pesados (cerca de 8,5 MB e 7,2 MB) estão versionados no Git; vale comprimir ou passar para Git LFS/CDN.
-- Ainda não há roteamento (react-router) nem tela pós-login.
+- Ainda não há roteamento (react-router): as abas da ficha são estado local e não mudam a URL (recarregar volta para "FICHA").
+- O token fica no `localStorage` (simples, mas acessível a scripts da página); se o projeto crescer, considerar cookie `HttpOnly`.

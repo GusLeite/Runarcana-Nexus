@@ -1,0 +1,533 @@
+{
+  "heritages": [
+    {
+      "id": "teste-geral",
+      "name": "Geral Teste",
+      "category": "GENERAL",
+      "description": "Vale para todos.",
+      "maxTimes": 2,
+      "repeatGrants": {
+        "*": [
+          {
+            "type": "SIZE",
+            "value": "UP"
+          }
+        ]
+      }
+    },
+    {
+      "id": "teste-forte",
+      "name": "Força Teste",
+      "category": "GENERAL",
+      "minAttributes": {
+        "STRENGTH": 18
+      },
+      "prerequisite": "Força 18",
+      "description": "Só para os fortes."
+    },
+    {
+      "id": "teste-pericia",
+      "name": "Perícia Teste",
+      "category": "GENERAL",
+      "description": "Arcanismo (especialidade se já tiver) e Atletismo ou Furtividade.",
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "ARCANA",
+          "expertise": true
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "ATHLETICS",
+            "STEALTH"
+          ]
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Vantagem no escuro."
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK:MELEE",
+          "description": "+1 contra lobos."
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "venenoso"
+        },
+        {
+          "type": "PASSIVE_BONUS",
+          "value": "PERCEPTION",
+          "amount": 2
+        },
+        {
+          "type": "VULNERABILITY",
+          "value": "radiante"
+        },
+        {
+          "type": "VULNERABILITY",
+          "value": "necrótico"
+        },
+        {
+          "type": "VULNERABILITY",
+          "value": "necrótico",
+          "amount": -1
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "venenoso",
+          "expertise": true
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "ígneo",
+          "expertise": true
+        },
+        {
+          "type": "ABSORPTION",
+          "count": 1,
+          "options": [
+            "ácido",
+            "gélido"
+          ]
+        },
+        {
+          "type": "VULNERABILITY",
+          "count": 1,
+          "options": [
+            "ácido",
+            "gélido"
+          ]
+        },
+        {
+          "type": "MYSTERY",
+          "count": 1,
+          "options": [
+            "agua"
+          ]
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "radiante"
+        },
+        {
+          "type": "CRAFT",
+          "value": "ferraria",
+          "expertise": true
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:agua",
+          "spellLevel": 1,
+          "count": 1
+        },
+        {
+          "type": "CONDITION_IMMUNITY",
+          "value": "Envenenado"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "trovejante",
+          "minLevel": 2
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "radiante",
+          "expertise": true,
+          "amount": 1
+        },
+        {
+          "type": "SAVING_THROW",
+          "attribute": "INTELLIGENCE",
+          "expertise": true
+        },
+        {
+          "type": "DAMAGE_REDUCTION",
+          "value": "gélido",
+          "usesFormula": "PROFICIENCY"
+        },
+        {
+          "type": "EXTRA_USES",
+          "value": "Inspirado",
+          "amount": 1
+        },
+        {
+          "type": "EXTRA_USES",
+          "value": "Ki Teste",
+          "amount": 1,
+          "maxUses": 2,
+          "description": "Ki de teste."
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 15,
+          "amount": 15
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 60
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "description": "submerso"
+        },
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "UNARMED",
+          "damage": "1d4"
+        },
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "ATTACK:MELEE",
+          "amount": 2
+        },
+        {
+          "type": "CRAFT_LEVEL",
+          "amount": 1
+        },
+        {
+          "type": "CRAFT_FORMULAS",
+          "value": "ferraria",
+          "amount": 3
+        },
+        {
+          "type": "ATTRIBUTE_SWAP",
+          "value": "SKILL:ATHLETICS",
+          "attribute": "INTELLIGENCE"
+        },
+        {
+          "type": "FORM",
+          "name": "Forma Teste",
+          "description": "Vira um bicho.",
+          "form": {
+            "attributes": {
+              "STRENGTH": 4
+            },
+            "speeds": {
+              "FLY": 30
+            },
+            "size": "UP"
+          }
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "value": "MYSTERY:CHOSEN",
+          "spellLevel": 1,
+          "count": 1,
+          "minLevel": 2
+        },
+        {
+          "type": "CRAFT_INCOME",
+          "value": "ALL",
+          "usesFormula": "PROFICIENCY"
+        },
+        {
+          "type": "CRAFT_MASTERWORK",
+          "value": "ferraria",
+          "amount": 1
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Ignora terreno difícil de teste."
+        },
+        {
+          "type": "CRIT_BONUS",
+          "value": "UNARMED",
+          "amount": 1,
+          "count": 1
+        },
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "ATTACK",
+          "usesFormula": "PROFICIENCY",
+          "description": "contra lobos"
+        },
+        {
+          "type": "EFFECT",
+          "name": "Efeito Teste",
+          "description": "Fica forte.",
+          "form": {
+            "acFormula": "PROFICIENCY",
+            "resistances": [
+              "cortante"
+            ],
+            "speedBonus": 10,
+            "reductionFormula": "PROFICIENCY",
+            "initiative": 3
+          },
+          "value": "UNARMED",
+          "damage": "1d6"
+        }
+      ]
+    },
+    {
+      "id": "teste-targon",
+      "name": "Targon Teste",
+      "category": "REGION",
+      "regions": [
+        "TARGON"
+      ],
+      "excludes": [
+        "teste-rival"
+      ],
+      "prerequisite": "Targonense, não ter Rival Teste",
+      "description": "Do monte."
+    },
+    {
+      "id": "teste-rival",
+      "name": "Rival Teste",
+      "category": "REGION",
+      "regions": [
+        "TARGON"
+      ],
+      "excludes": [
+        "teste-targon"
+      ],
+      "description": "Rival do monte."
+    },
+    {
+      "id": "teste-tribo",
+      "name": "Tribo Teste",
+      "category": "REGION",
+      "regions": [
+        "TARGON"
+      ],
+      "maxTimes": 2,
+      "options": [
+        "Sol",
+        "Lua"
+      ],
+      "description": "Escolha uma tribo.",
+      "repeatGrants": {
+        "Sol": [
+          {
+            "type": "FEATURE",
+            "abilityType": "ABILITY",
+            "name": "Raio de Sol",
+            "usesFormula": "PROFICIENCY",
+            "recharge": "LONG_REST",
+            "description": "Só na 2ª escolha."
+          }
+        ]
+      }
+    },
+    {
+      "id": "teste-noxus",
+      "name": "Noxus Teste",
+      "category": "REGION",
+      "regions": [
+        "NOXUS"
+      ],
+      "prerequisite": "Noxiano",
+      "description": "De Noxus."
+    },
+    {
+      "id": "teste-origem-heranca",
+      "name": "Origem Teste Herança",
+      "category": "ORIGIN",
+      "origins": [
+        "teste-origem"
+      ],
+      "description": "Só com pontos de Origem."
+    },
+    {
+      "id": "teste-sol",
+      "name": "Sol Teste",
+      "category": "ORIGIN",
+      "origins": [
+        "teste-tribal"
+      ],
+      "lineages": [
+        "sol"
+      ],
+      "prerequisite": "Tribal Sol",
+      "description": "Só para a linhagem Sol."
+    },
+    {
+      "id": "teste-requer",
+      "name": "Requer Teste",
+      "category": "GENERAL",
+      "requires": [
+        "teste-targon"
+      ],
+      "prerequisite": "Targon Teste",
+      "description": "Precisa da Targon Teste."
+    },
+    {
+      "id": "teste-alternativa",
+      "name": "Alternativa Teste",
+      "category": "ORIGIN",
+      "prerequisite": "Tribal Lua ou Resistente (Gélido)",
+      "description": "Dois caminhos.",
+      "anyOf": [
+        {
+          "lineages": [
+            "lua"
+          ]
+        },
+        {
+          "feature": "Resistente",
+          "featureOptions": [
+            "Gélido"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "teste-ativa",
+      "name": "Ativa Teste",
+      "category": "GENERAL",
+      "execution": "Reação",
+      "uses": {
+        "usesFormula": "PROFICIENCY",
+        "recharge": "LONG_REST"
+      },
+      "description": "Com sua reação, um número de vezes igual ao seu bônus de proficiência por descanso pleno.",
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Golpe Ativo",
+          "castingTime": "Ação bônus",
+          "usesFormula": "FIXED",
+          "maxUses": 1,
+          "recharge": "SHORT_REST",
+          "description": "Uma vez por descanso curto."
+        }
+      ]
+    },
+    {
+      "id": "teste-formas",
+      "name": "Formas Teste",
+      "category": "GENERAL",
+      "maxTimes": 3,
+      "optionPerPick": true,
+      "options": [
+        "Lobo",
+        "Urso",
+        "Reforço"
+      ],
+      "repeatOptions": [
+        "Reforço"
+      ],
+      "description": "Uma forma a cada escolha.",
+      "optionTexts": {
+        "Lobo": "Uiva para a lua.",
+        "Urso": "Hiberna no inverno."
+      },
+      "optionUses": {
+        "Lobo": {
+          "usesFormula": "FIXED",
+          "maxUses": 1,
+          "recharge": "LONG_REST"
+        }
+      },
+      "optionExecution": {
+        "Lobo": "Ação"
+      },
+      "optionGrants": {
+        "Urso": [
+          {
+            "type": "FEATURE",
+            "abilityType": "PASSIVE",
+            "name": "Garra de Urso",
+            "count": 1,
+            "options": [
+              "Esquerda",
+              "Direita"
+            ],
+            "optionTexts": {
+              "Esquerda": "Garra esquerda afiada.",
+              "Direita": "Garra direita forte."
+            }
+          }
+        ]
+      },
+      "threshold": {
+        "feature": "Garra de Urso",
+        "count": 1,
+        "grants": {
+          "Lobo": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Limiar Teste",
+              "description": "Passou do limiar."
+            }
+          ],
+          "Urso": [
+            {
+              "type": "FEATURE",
+              "abilityType": "PASSIVE",
+              "name": "Limiar Urso",
+              "description": "Limiar pela forma de urso."
+            }
+          ]
+        },
+        "dominant": "Forma Dominante"
+      }
+    },
+    {
+      "id": "teste-inspira",
+      "name": "Inspira Teste",
+      "category": "GENERAL",
+      "description": "Mexe em outra habilidade.",
+      "grants": [
+        {
+          "type": "ABILITY_USES",
+          "value": "Inspirado",
+          "usesFormula": "PROFICIENCY"
+        },
+        {
+          "type": "SPEED",
+          "value": "SWIM",
+          "walkFraction": 1
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Peça",
+          "count": 1,
+          "options": [
+            "Casco",
+            "Nada"
+          ]
+        },
+        {
+          "type": "AC_BONUS",
+          "name": "Casco",
+          "amount": 0,
+          "armor": {
+            "halfProficiencyReduction": true
+          },
+          "when": "Peça:Casco"
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "ATHLETICS",
+            "STEALTH"
+          ],
+          "when": "Peça:Casco"
+        },
+        {
+          "type": "SITUATIONAL",
+          "options": [
+            "SKILL:ATHLETICS",
+            "SKILL:STEALTH"
+          ],
+          "description": "Vantagem de teste."
+        }
+      ]
+    }
+  ]
+}

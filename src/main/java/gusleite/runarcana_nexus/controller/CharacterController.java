@@ -1,12 +1,18 @@
 package gusleite.runarcana_nexus.controller;
 
-import gusleite.runarcana_nexus.model.player.Character;
+import gusleite.runarcana_nexus.record.ArmorClassResponse;
+import gusleite.runarcana_nexus.record.CharacterResponse;
+import gusleite.runarcana_nexus.record.CharacterSheetResponse;
+import gusleite.runarcana_nexus.record.CreateCharacterRequest;
+import gusleite.runarcana_nexus.record.TableCardResponse;
+import gusleite.runarcana_nexus.services.AuthService;
 import gusleite.runarcana_nexus.services.CharacterService;
-import org.springframework.beans.factory.annotation.Autowired;
+import gusleite.runarcana_nexus.services.ConditionService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,18 +20,137 @@ import java.util.List;
 @RequestMapping("/character")
 public class CharacterController {
 
-    @Autowired
-    private CharacterService charService;
+    private final CharacterService charService;
+    private final AuthService authService;
 
-    private ResponseEntity<List<Character>> getAllCharacters(){
+    private final ConditionService conditions;
+
+    public CharacterController(CharacterService charService, AuthService authService, ConditionService conditions) {
+        this.charService = charService;
+        this.authService = authService;
+        this.conditions = conditions;
+    }
+
+    // Mestre: todas as fichas.
+    @GetMapping
+    public ResponseEntity<List<CharacterResponse>> getAllCharacters(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        authService.requireMaster(authorization);
         return ResponseEntity.ok(charService.getAllCharacters());
     }
 
-    private ResponseEntity<Character> createCharacter(Character character){
-        Character charCreated = charService.createCharacter(character);
+    // Mestre: visão da mesa (cada ficha com CA e Mana), consultada a cada poucos segundos pelo painel.
+    @GetMapping("/table")
+    public ResponseEntity<List<TableCardResponse>> table(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        authService.requireMaster(authorization);
+        return ResponseEntity.ok(charService.table());
+    }
 
+    // Ficha do personagem da conta logada (tela pós-login).
+    @GetMapping("/me")
+    public ResponseEntity<CharacterSheetResponse> getMySheet(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        return ResponseEntity.ok(charService.getSheet(authService.authenticate(authorization)));
+    }
+
+    // Defesa em uso na ficha (sem armadura, uma CA alternativa ou uma armadura do inventário).
+    @PatchMapping("/me/defense")
+    public ResponseEntity<ArmorClassResponse> chooseDefense(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @RequestBody DefenseRequest request) {
+        return ResponseEntity.ok(charService.chooseDefense(authService.authenticate(authorization), request.key()));
+    }
+
+    public record DefenseRequest(String key) {}
+
+    // Forma temporária ativa (nome de uma das formas da ficha; nulo = forma normal). Devolve a ficha recalculada.
+    @PatchMapping("/me/form")
+    public ResponseEntity<CharacterSheetResponse> chooseForm(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @RequestBody DefenseRequest request) {
+        return ResponseEntity.ok(charService.chooseForm(authService.authenticate(authorization), request.key()));
+    }
+
+    // Liga ou desliga um efeito ativo da ficha (Fúria, Iras, Sutras...). Devolve a ficha recalculada.
+    @PatchMapping("/me/effect")
+    public ResponseEntity<CharacterSheetResponse> toggleEffect(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @RequestBody DefenseRequest request) {
+        return ResponseEntity.ok(charService.toggleEffect(authService.authenticate(authorization), request.key()));
+    }
+
+    // Escudo em uso ("NONE" = sem escudo, ou "ITEM:<id>" de um escudo do inventário).
+    @PatchMapping("/me/shield")
+    public ResponseEntity<ArmorClassResponse> chooseShield(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @RequestBody DefenseRequest request) {
+        return ResponseEntity.ok(charService.chooseShield(authService.authenticate(authorization), request.key()));
+    }
+
+    // Jogador: PV atual (0 até o máximo) e PV temporários (0 ou mais) da própria ficha.
+    @PatchMapping("/me/hp")
+    public ResponseEntity<CharacterResponse> setHp(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @RequestBody HpRequest request) {
+        return ResponseEntity.ok(charService.setHp(authService.authenticate(authorization), request.currentHp(), request.tempHp()));
+    }
+
+    // Mestre: PV de qualquer ficha.
+    @PatchMapping("/{id}/hp")
+    public ResponseEntity<CharacterResponse> setHpFor(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @PathVariable long id,
+            @RequestBody HpRequest request) {
+        authService.requireMaster(authorization);
+        CharacterResponse out = null;
+        if (request.maxHpBonus() != null) out = charService.setMaxHpBonus(id, request.maxHpBonus());
+        if (request.currentHp() != null) out = charService.setHpFor(id, request.currentHp(), request.tempHp());
+        if (out == null) throw gusleite.runarcana_nexus.exception.ApiException.badRequest("Informe os PV atuais ou o bônus de PV máximos.");
+        return ResponseEntity.ok(out);
+    }
+
+    // tempHp nulo = mantém o que já tem.
+    // maxHpBonus: só o mestre (PATCH /character/{id}/hp).
+    public record HpRequest(Integer currentHp, Integer tempHp, Integer maxHpBonus) {}
+
+    // Jogador: marca os próprios testes contra a morte (0–3 sucessos e falhas).
+    @PatchMapping("/me/death-saves")
+    public ResponseEntity<CharacterResponse> setMyDeathSaves(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @RequestBody DeathSavesRequest request) {
+        return ResponseEntity.ok(conditions.setDeathSaves(charService.characterOf(authService.authenticate(authorization)),
+                request.successes(), request.failures()));
+    }
+
+    // Mestre: ajusta os testes contra a morte de qualquer ficha.
+    @PatchMapping("/{id}/death-saves")
+    public ResponseEntity<CharacterResponse> setDeathSaves(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @PathVariable long id,
+            @RequestBody DeathSavesRequest request) {
+        authService.requireMaster(authorization);
+        return ResponseEntity.ok(conditions.setDeathSaves(id, request.successes(), request.failures()));
+    }
+
+    public record DeathSavesRequest(Integer successes, Integer failures) {}
+
+    // Mestre: condições (ids do rules/condicoes.json; a lista substitui a atual) e Exaustão (0–10). Nulos = mantém.
+    @PatchMapping("/{id}/conditions")
+    public ResponseEntity<CharacterResponse> setConditions(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @PathVariable long id,
+            @RequestBody ConditionsRequest request) {
+        authService.requireMaster(authorization);
+        return ResponseEntity.ok(conditions.setConditions(id, request.conditions(), request.exhaustion()));
+    }
+
+    public record ConditionsRequest(List<String> conditions, Integer exhaustion) {}
+
+    @PostMapping
+    public ResponseEntity<CharacterResponse> createCharacter(@Valid @RequestBody CreateCharacterRequest request) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(charCreated);
+                .body(charService.createCharacter(request));
     }
 }

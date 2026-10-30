@@ -16,4 +16,6 @@ public class CharacterSkill {
     private Character character;
     private SkillType skillType;
     private boolean proficient;
+    // Especialidade: soma o bônus de proficiência duas vezes.
+    private boolean expertise;
 }

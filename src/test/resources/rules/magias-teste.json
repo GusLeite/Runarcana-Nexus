@@ -1,0 +1,139 @@
+{
+  "manaCost": {
+    "0": 0,
+    "1": 2,
+    "2": 3
+  },
+  "elements": [
+    {
+      "id": "agua",
+      "name": "Água",
+      "tier": "PRIMARY",
+      "damage": "Perfurante",
+      "material": "Aquamarine",
+      "description": "Primário."
+    },
+    {
+      "id": "gelo",
+      "name": "Gelo",
+      "tier": "SECONDARY",
+      "damage": "Gélido",
+      "material": "Lápis-Lazúli",
+      "description": "Secundário.",
+      "access": [
+        [
+          "agua"
+        ]
+      ]
+    }
+  ],
+  "mysteries": [
+    {
+      "id": "agua",
+      "name": "Água",
+      "source": "ELEMENTAL",
+      "element": "agua",
+      "description": "Mistério da Água."
+    }
+  ],
+  "damageEffects": [],
+  "spells": [
+    {
+      "id": "t-raio",
+      "name": "Raio Teste",
+      "level": 0,
+      "mysteries": [
+        "agua"
+      ],
+      "classes": [
+        "ARCANIST"
+      ],
+      "castingTime": "1 ação",
+      "range": "60 pés",
+      "components": "V, S",
+      "duration": "Instantânea",
+      "concentration": false,
+      "ritual": false,
+      "description": "Truque de teste."
+    },
+    {
+      "id": "t-onda",
+      "name": "Onda Teste",
+      "level": 1,
+      "mysteries": [
+        "agua"
+      ],
+      "castingTime": "1 ação",
+      "range": "30 pés",
+      "components": "V",
+      "duration": "Instantânea",
+      "concentration": false,
+      "ritual": false,
+      "description": "Magia de 1º nível."
+    },
+    {
+      "id": "t-escudo-arcano",
+      "name": "Escudo Arcano Teste",
+      "level": 1,
+      "mysteries": [],
+      "castingTime": "1 ação",
+      "range": "30 pés",
+      "components": "V",
+      "duration": "Instantânea",
+      "concentration": false,
+      "ritual": false,
+      "description": "Um escudo de força.",
+      "classes": [
+        "ARCANIST"
+      ]
+    },
+    {
+      "id": "t-misseis",
+      "name": "Mísseis Teste",
+      "level": 2,
+      "mysteries": [],
+      "castingTime": "1 ação",
+      "range": "30 pés",
+      "components": "V",
+      "duration": "Instantânea",
+      "concentration": false,
+      "ritual": false,
+      "description": "Dardos de luz.",
+      "classes": [
+        "ARCANIST"
+      ]
+    },
+    {
+      "id": "t-sombra-a",
+      "name": "Sombra A Teste",
+      "level": 1,
+      "mysteries": [],
+      "castingTime": "1 ação",
+      "range": "30 pés",
+      "components": "V",
+      "duration": "Instantânea",
+      "concentration": false,
+      "ritual": false,
+      "description": "Magia de teste do Mercurial.",
+      "classes": [
+        "MERCURIAL"
+      ]
+    },
+    {
+      "id": "t-sombra-b",
+      "name": "Sombra B Teste",
+      "level": 1,
+      "mysteries": [],
+      "castingTime": "1 ação",
+      "range": "30 pés",
+      "components": "V",
+      "duration": "Instantânea",
+      "concentration": false,
+      "ritual": false,
+      "description": "Magia de teste do Mercurial.",
+      "classes": [
+        "MERCURIAL"
+      ]
+    }
+  ]
+}

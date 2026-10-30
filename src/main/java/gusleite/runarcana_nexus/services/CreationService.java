@@ -1,0 +1,2912 @@
+package gusleite.runarcana_nexus.services;
+
+import gusleite.runarcana_nexus.enums.AbilityType;
+import gusleite.runarcana_nexus.enums.Attribute;
+import gusleite.runarcana_nexus.enums.CharacterClassType;
+import gusleite.runarcana_nexus.enums.CreatureSize;
+import gusleite.runarcana_nexus.enums.GrantType;
+import gusleite.runarcana_nexus.enums.HeritageCategory;
+import gusleite.runarcana_nexus.enums.MovementType;
+import gusleite.runarcana_nexus.enums.Recharge;
+import gusleite.runarcana_nexus.enums.Region;
+import gusleite.runarcana_nexus.enums.SkillType;
+import gusleite.runarcana_nexus.enums.UsesFormula;
+import gusleite.runarcana_nexus.exception.ApiException;
+import gusleite.runarcana_nexus.model.auth.Account;
+import gusleite.runarcana_nexus.model.player.ArmorRule;
+import gusleite.runarcana_nexus.model.player.Background;
+import gusleite.runarcana_nexus.model.player.Character;
+import gusleite.runarcana_nexus.model.player.CharacterAbility;
+import gusleite.runarcana_nexus.model.player.CharacterSkill;
+import gusleite.runarcana_nexus.model.player.ClassLevel;
+import gusleite.runarcana_nexus.model.player.SituationalNote;
+import gusleite.runarcana_nexus.model.roles.CharacterClass;
+import gusleite.runarcana_nexus.record.CharacterResponse;
+import gusleite.runarcana_nexus.record.CreationPreview;
+import gusleite.runarcana_nexus.record.CreationPreview.AttributeLine;
+import gusleite.runarcana_nexus.record.CreationPreview.ChoiceLine;
+import gusleite.runarcana_nexus.record.CreationPreview.ClassLevelLine;
+import gusleite.runarcana_nexus.record.CreationPreview.EquipmentLine;
+import gusleite.runarcana_nexus.record.CreationPreview.FeatureLine;
+import gusleite.runarcana_nexus.record.CreationPreview.HeritageLine;
+import gusleite.runarcana_nexus.record.CreationPreview.HeritagePool;
+import gusleite.runarcana_nexus.record.CreationPreview.HeritageStatus;
+import gusleite.runarcana_nexus.record.CreationPreview.PointBuyStatus;
+import gusleite.runarcana_nexus.record.CreationPreview.SaveLine;
+import gusleite.runarcana_nexus.record.CreationPreview.SkillLine;
+import gusleite.runarcana_nexus.record.CreationPreview.StartingWealth;
+import gusleite.runarcana_nexus.record.CreationPreview.TraitBudgetStatus;
+import gusleite.runarcana_nexus.record.CreationPreview.TraitLine;
+import gusleite.runarcana_nexus.record.CreationPreview.TraitStatus;
+import gusleite.runarcana_nexus.record.CreationRequest;
+import gusleite.runarcana_nexus.record.CreationRequest.LevelPick;
+import gusleite.runarcana_nexus.record.LevelUpPreview;
+import gusleite.runarcana_nexus.record.LevelUpRequest;
+import gusleite.runarcana_nexus.record.PreparationResponse;
+import gusleite.runarcana_nexus.record.SpeedLine;
+import gusleite.runarcana_nexus.record.CreationRequest.HeritagePick;
+import gusleite.runarcana_nexus.record.CreationRequest.TraitPick;
+import gusleite.runarcana_nexus.repository.BackGroundRepository;
+import gusleite.runarcana_nexus.repository.CharacterAbilityRepository;
+import gusleite.runarcana_nexus.repository.CharacterClassRepository;
+import gusleite.runarcana_nexus.repository.CharacterRepository;
+import gusleite.runarcana_nexus.rules.ArmorFormula;
+import gusleite.runarcana_nexus.rules.AttributeMethods;
+import gusleite.runarcana_nexus.rules.Grant;
+import gusleite.runarcana_nexus.rules.HeritageCondition;
+import gusleite.runarcana_nexus.rules.RuleCatalog;
+import gusleite.runarcana_nexus.rules.RuleItem;
+import gusleite.runarcana_nexus.rules.RuleMagic;
+import gusleite.runarcana_nexus.rules.RuleClass;
+import gusleite.runarcana_nexus.rules.RuleHeritage;
+import gusleite.runarcana_nexus.rules.RuleLevel;
+import gusleite.runarcana_nexus.rules.RuleLineage;
+import gusleite.runarcana_nexus.rules.RuleOption;
+import gusleite.runarcana_nexus.rules.RuleResource;
+import gusleite.runarcana_nexus.rules.RuleTrait;
+import gusleite.runarcana_nexus.rules.RuleTraits;
+import gusleite.runarcana_nexus.rules.UsesRule;
+import gusleite.runarcana_nexus.rules.FormRule;
+import gusleite.runarcana_nexus.model.player.CharacterForm;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.ToIntFunction;
+import java.util.regex.Matcher;
+import java.util.random.RandomGenerator;
+import java.util.regex.Pattern;
+
+// Criação de personagem pelo assistente. evaluate() aplica as concessões do catálogo às escolhas
+// e é usado tanto na prévia (ficha em construção) quanto na criação, para as duas nunca divergirem.
+@Service
+public class CreationService {
+
+    private static final JsonMapper JSON = JsonMapper.builder().build();
+    private static final RandomGenerator RANDOM = new SecureRandom();
+    // Bônus de proficiência no 1º nível (a ficha nasce no nível 1).
+    private static final int LEVEL_ONE_PROFICIENCY = 2;
+    // Nível do personagem na criação (tabelas usesByLevel, diceByLevel e valueByLevel).
+    static final int CREATION_LEVEL = 1;
+    private static final double DEFAULT_SPEED_FEET = 30;
+    private static final Pattern DICE_WITH_BONUS = Pattern.compile("^(\\d+d\\d+)([+-]\\d+)?$");
+
+    private final RuleCatalogService rules;
+    private final CharacterService characterService;
+    private final CharacterRepository characters;
+    private final CharacterClassRepository classes;
+    private final BackGroundRepository backgrounds;
+    private final CharacterAbilityRepository abilities;
+    private final TableSettingsService settings;
+    private final StartingEquipmentService startingEquipment;
+
+    public CreationService(RuleCatalogService rules, CharacterService characterService, CharacterRepository characters,
+                           CharacterClassRepository classes, BackGroundRepository backgrounds,
+                           CharacterAbilityRepository abilities, TableSettingsService settings,
+                           StartingEquipmentService startingEquipment) {
+        this.rules = rules;
+        this.characterService = characterService;
+        this.characters = characters;
+        this.classes = classes;
+        this.backgrounds = backgrounds;
+        this.abilities = abilities;
+        this.settings = settings;
+        this.startingEquipment = startingEquipment;
+    }
+
+    public CreationPreview preview(CreationRequest request) {
+        return evaluate(request).toPreview();
+    }
+
+    @Transactional
+    public CharacterResponse create(Account account, CreationRequest request) {
+        if (account.isMaster()) {
+            throw ApiException.forbidden("O mestre não tem ficha própria.");
+        }
+        if (characterService.findCharacterOf(account).isPresent()) {
+            throw new ApiException(HttpStatus.CONFLICT, "Você já tem uma ficha.");
+        }
+        Build b = evaluate(request);
+        if (!b.errors.isEmpty()) {
+            throw ApiException.badRequest(b.errors.getFirst());
+        }
+
+        CharacterClassType type = CharacterClassType.valueOf(b.klass.id());
+        CharacterClass characterClass = classes.findByClassName(type).orElseGet(CharacterClass::new);
+        characterClass.setClassName(type);
+        characterClass.setHitHpDice(b.klass.hitDie());
+        classes.save(characterClass);
+
+        Character c = new Character();
+        c.setAccount(account);
+        c.setCharacterName(request.characterName().trim());
+        c.setPlayerName(blank(request.playerName()) ? account.getUsername() : request.playerName().trim());
+        c.setLevel(1);
+        c.setAge(request.age());
+        c.setHeight(request.height());
+        c.setAlignment(request.alignment());
+        c.setRegion(b.region == null ? null : Region.valueOf(b.region.id()));
+        c.setCharacterClass(characterClass);
+        c.setBackground(b.background == null ? null : backgroundEntity(b.background));
+        c.setOrigin(b.origin.name());
+        c.setLineage(b.lineage == null ? null : b.lineage.name());
+        c.setSubclass(b.subclass == null ? null : b.subclass.name());
+        c.getArmorProficiencies().addAll(b.armorProficiencies);
+        c.getWeaponProficiencies().addAll(b.weaponProficiencies);
+        c.setStr(b.total(Attribute.STRENGTH));
+        c.setDex(b.total(Attribute.DEXTERITY));
+        c.setCon(b.total(Attribute.CONSTITUTION));
+        c.setIntel(b.total(Attribute.INTELLIGENCE));
+        c.setWis(b.total(Attribute.WISDOM));
+        c.setCha(b.total(Attribute.CHARISMA));
+        c.setMaxHp(b.maxHp());
+        c.setCurrentHp(b.maxHp());
+        c.setSpeed(b.speed());
+        c.setInitiativeBonus(b.initiativeBonus);
+        applyEffects(c, b);
+        c.getOtherSpeeds().putAll(b.otherSpeedsTotal());
+        c.getArmorRules().addAll(b.armorRules);
+        c.setSize(b.size);
+        c.getLanguages().addAll(b.languages);
+        // A ficha guarda o nome do ofício (não o id do catálogo), para mostrar sem depender do catálogo.
+        Map<String, String> craftNames = new LinkedHashMap<>();
+        rules.catalog().craftsOrEmpty().forEach(k -> craftNames.put(k.id(), k.name()));
+        b.crafts.forEach(id -> c.getCrafts().add(craftNames.getOrDefault(id, id)));
+        b.craftLevels.forEach((id, lv) -> c.getCraftLevels().put(craftNames.getOrDefault(id, id), lv));
+        b.craftExpertise.forEach(id -> c.getCraftExpertise().add(craftNames.getOrDefault(id, id)));
+        replaceCraftMap(c.getCraftLevelBonus(), b.craftBonus, craftNames);
+        replaceCraftMap(c.getCraftMinLevel(), b.craftFloor, craftNames);
+        replaceCraftMap(c.getCraftFormulaBonus(), b.craftFormulas, craftNames);
+        replaceCraftMap(c.getCraftIncome(), b.craftIncome, craftNames);
+        replaceCraftMap(c.getCraftMasterwork(), b.craftMasterwork, craftNames);
+        // Os pontos da criação são gastos no assistente; a ficha guarda o que sobrou (normalmente 0).
+        c.setHeritagePoints(b.heritagePoints - b.heritagesSpent());
+        b.heritages.forEach(h -> c.getHeritages().add(displayName(h)));
+        // Riqueza inicial: os dados da classe são rolados agora, no lugar do equipamento.
+        c.setGold(b.gold + (b.wealth ? EquipmentRules.rollWealth(b.wealthFormula, RANDOM) : 0));
+        c.setInspiration(0);
+        c.getSavingThrows().addAll(b.saves.keySet());
+        c.setBuild(JSON.writeValueAsString(request));
+        for (SkillType skill : b.skills.keySet()) {
+            CharacterSkill s = new CharacterSkill();
+            s.setCharacter(c);
+            s.setSkillType(skill);
+            s.setProficient(true);
+            s.setExpertise(b.expertise.contains(skill));
+            c.getSkills().add(s);
+        }
+        c.getClassLevels().addAll(classLevelsOf(b));
+        characters.save(c);
+
+        for (Sourced<Grant> f : b.features) {
+            CharacterAbility a = abilityFrom(c, f.value(), b.proficiency(), b.scale(f.source()));
+            a.setSource(f.source());
+            markPreparable(a, f, b);
+            abilities.save(a);
+        }
+        startingEquipment.give(c, b.equipment);
+        return CharacterResponse.of(c);
+    }
+
+    // ---------- Subida de nível (rota do mestre) ----------
+
+    // A ficha recalculada com os níveis novos, sem salvar.
+    public LevelUpPreview levelUpPreview(Long characterId, LevelUpRequest request) {
+        Character c = leveled(characterId);
+        CreationRequest base = buildOf(c);
+        Build before = evaluate(base);
+        Build after = evaluate(withLevels(base, request));
+        Map<String, Integer> had = new LinkedHashMap<>();
+        before.features.forEach(f -> had.merge(f.value().name() + "|" + f.source(), 1, Integer::sum));
+        List<FeatureLine> lines = after.toPreview().features();
+        List<FeatureLine> fresh = new ArrayList<>();
+        for (FeatureLine f : lines) {
+            String k = f.name() + "|" + f.source();
+            if (had.getOrDefault(k, 0) > 0) had.merge(k, -1, Integer::sum);
+            else fresh.add(f);
+        }
+        List<String> changes = new ArrayList<>();
+        for (Attribute a : Attribute.values()) {
+            int now = attributeOf(c, a);
+            if (after.total(a) != now) changes.add(ATTRIBUTE_ABBREVIATIONS.get(a) + " " + now + " → " + after.total(a));
+        }
+        int newMax = after.klass == null ? c.getMaxHp() : after.maxHp();
+        return new LevelUpPreview(after.toPreview(), c.getLevel(), after.level, c.getMaxHp(), newMax, newMax - c.getMaxHp(),
+                List.copyOf(changes), List.copyOf(fresh));
+    }
+
+    // Aplica os níveis novos: refaz atributos, PV (a diferença também no PV atual), perícias, proficiências e as
+    // habilidades do assistente. Não mexe em ouro, inventário, inspiração, defesa escolhida nem nas habilidades
+    // que o mestre cadastrou à mão; os usos gastos continuam gastos.
+    @Transactional
+    public CharacterResponse levelUp(Long characterId, LevelUpRequest request) {
+        Character c = leveled(characterId);
+        CreationRequest next = withLevels(buildOf(c), request);
+        Build b = evaluate(next);
+        if (!b.errors.isEmpty()) {
+            throw ApiException.badRequest(b.errors.getFirst());
+        }
+        int oldMax = c.getMaxHp();
+        int newMax = b.maxHp();
+        c.setLevel(b.level);
+        c.setMaxHp(newMax);
+        c.setCurrentHp(Math.max(0, Math.min(c.getMaxHpTotal(), c.getCurrentHp() + newMax - oldMax)));
+        c.setStr(b.total(Attribute.STRENGTH));
+        c.setDex(b.total(Attribute.DEXTERITY));
+        c.setCon(b.total(Attribute.CONSTITUTION));
+        c.setIntel(b.total(Attribute.INTELLIGENCE));
+        c.setWis(b.total(Attribute.WISDOM));
+        c.setCha(b.total(Attribute.CHARISMA));
+        c.setSubclass(b.subclass == null ? null : b.subclass.name());
+        c.setSpeed(b.speed());
+        c.setInitiativeBonus(b.initiativeBonus);
+        applyEffects(c, b);
+        c.getOtherSpeeds().clear();
+        c.getOtherSpeeds().putAll(b.otherSpeedsTotal());
+        c.getArmorRules().clear();
+        c.getArmorRules().addAll(b.armorRules);
+        c.setSize(b.size);
+        replace(c.getArmorProficiencies(), b.armorProficiencies);
+        replace(c.getWeaponProficiencies(), b.weaponProficiencies);
+        replace(c.getLanguages(), b.languages);
+        Map<String, String> craftNames = new LinkedHashMap<>();
+        rules.catalog().craftsOrEmpty().forEach(k -> craftNames.put(k.id(), k.name()));
+        replace(c.getCrafts(), b.crafts.stream().map(id -> craftNames.getOrDefault(id, id)).toList());
+        c.getCraftLevels().clear();
+        b.craftLevels.forEach((id, lv) -> c.getCraftLevels().put(craftNames.getOrDefault(id, id), lv));
+        replace(c.getCraftExpertise(), b.craftExpertise.stream().map(id -> craftNames.getOrDefault(id, id)).toList());
+        replaceCraftMap(c.getCraftLevelBonus(), b.craftBonus, craftNames);
+        replaceCraftMap(c.getCraftMinLevel(), b.craftFloor, craftNames);
+        replaceCraftMap(c.getCraftFormulaBonus(), b.craftFormulas, craftNames);
+        replaceCraftMap(c.getCraftIncome(), b.craftIncome, craftNames);
+        replaceCraftMap(c.getCraftMasterwork(), b.craftMasterwork, craftNames);
+        c.setHeritagePoints(b.heritagePoints - b.heritagesSpent());
+        replace(c.getHeritages(), b.heritages.stream().map(CreationService::displayName).toList());
+        replace(c.getSavingThrows(), b.saves.keySet());
+        // Perícias: as linhas que já existem são atualizadas (sem apagar), as novas entram.
+        for (CharacterSkill s : c.getSkills()) {
+            s.setProficient(b.skills.containsKey(s.getSkillType()));
+            s.setExpertise(b.expertise.contains(s.getSkillType()));
+        }
+        for (SkillType skill : b.skills.keySet()) {
+            if (c.getSkills().stream().anyMatch(s -> s.getSkillType() == skill)) continue;
+            CharacterSkill s = new CharacterSkill();
+            s.setCharacter(c);
+            s.setSkillType(skill);
+            s.setProficient(true);
+            s.setExpertise(b.expertise.contains(skill));
+            c.getSkills().add(s);
+        }
+        c.getClassLevels().clear();
+        c.getClassLevels().addAll(classLevelsOf(b));
+        c.setBuild(JSON.writeValueAsString(next));
+        characters.save(c);
+        syncAbilities(c, b);
+        return CharacterResponse.of(c);
+    }
+
+    private static final Map<Attribute, String> ATTRIBUTE_ABBREVIATIONS = Map.of(Attribute.STRENGTH, "FOR",
+            Attribute.DEXTERITY, "DES", Attribute.CONSTITUTION, "CON", Attribute.INTELLIGENCE, "INT", Attribute.WISDOM, "SAB",
+            Attribute.CHARISMA, "CAR");
+
+    private Character leveled(Long characterId) {
+        return characters.findById(characterId).orElseThrow(() -> ApiException.notFound("Personagem não encontrado."));
+    }
+
+    // As escolhas guardadas na criação (e nos níveis anteriores).
+    private CreationRequest buildOf(Character c) {
+        if (c.getBuild() == null) {
+            throw ApiException.badRequest("Esta ficha não foi criada pelo assistente: a subida de nível precisa das escolhas da criação.");
+        }
+        return JSON.readValue(c.getBuild(), CreationRequest.class);
+    }
+
+    private static CreationRequest withLevels(CreationRequest base, LevelUpRequest request) {
+        if (request == null || request.levelsOrEmpty().isEmpty()) throw ApiException.badRequest("Informe o nível novo.");
+        if (1 + base.levelsOrEmpty().size() + request.levelsOrEmpty().size() > MAX_LEVEL) {
+            throw ApiException.badRequest("O nível máximo é o " + MAX_LEVEL + "º.");
+        }
+        CreationRequest next = base;
+        for (LevelPick pick : request.levelsOrEmpty()) next = next.withLevel(pick);
+        return next;
+    }
+
+    private static int attributeOf(Character c, Attribute a) {
+        return switch (a) {
+            case STRENGTH -> c.getStr();
+            case DEXTERITY -> c.getDex();
+            case CONSTITUTION -> c.getCon();
+            case INTELLIGENCE -> c.getIntel();
+            case WISDOM -> c.getWis();
+            case CHARISMA -> c.getCha();
+        };
+    }
+
+    private static <T> void replace(java.util.Collection<T> target, java.util.Collection<T> values) {
+        target.clear();
+        target.addAll(values);
+    }
+
+    private static List<ClassLevel> classLevelsOf(Build b) {
+        return b.classLevelLines().stream().map(l -> new ClassLevel(l.classId(), l.name(), l.level(), l.subclass())).toList();
+    }
+
+    // Habilidades do assistente refeitas no nível novo. Cada uma acha a antiga pelo nome (a de mesma fonte primeiro;
+    // fichas de antes desta mudança não têm fonte) e é atualizada no lugar, mantendo ícone e usos gastos. As antigas
+    // com fonte que não existem mais saem; as sem fonte que sobraram são do mestre e ficam.
+    private void syncAbilities(Character c, Build b) {
+        List<CharacterAbility> existing = new ArrayList<>(abilities.findByCharacterOrderByIdAsc(c));
+        for (Sourced<Grant> f : b.features) {
+            CharacterAbility fresh = abilityFrom(c, f.value(), b.proficiency(), b.scale(f.source()));
+            CharacterAbility old = existing.stream().filter(a -> a.getName().equals(fresh.getName()) && f.source().equals(a.getSource()))
+                    .findFirst()
+                    .orElseGet(() -> existing.stream().filter(a -> a.getName().equals(fresh.getName()) && a.getSource() == null)
+                            .findFirst().orElse(null));
+            if (old == null) {
+                fresh.setSource(f.source());
+                markPreparable(fresh, f, b);
+                abilities.save(fresh);
+                continue;
+            }
+            existing.remove(old);
+            Integer spent = old.getMaxUses() == null || old.getUsesLeft() == null ? null : old.getMaxUses() - old.getUsesLeft();
+            old.setType(fresh.getType());
+            old.setSpellLevel(fresh.getSpellLevel());
+            old.setCastingTime(fresh.getCastingTime());
+            old.setAbilityRange(fresh.getAbilityRange());
+            old.setDuration(fresh.getDuration());
+            old.setComponents(fresh.getComponents());
+            old.setDamage(fresh.getDamage());
+            old.setDescription(fresh.getDescription());
+            old.setRecharge(fresh.getRecharge());
+            old.setMaxUses(fresh.getMaxUses());
+            old.setUsesLeft(fresh.getMaxUses() == null ? null : Math.max(0, fresh.getMaxUses() - (spent == null ? 0 : spent)));
+            old.setSource(f.source());
+            abilities.save(old);
+        }
+        // As magias preparadas do Acólito não vêm do assistente: ficam até o próximo descanso longo.
+        existing.stream().filter(a -> a.getSource() != null && !a.getSource().startsWith(PREPARED)).forEach(abilities::delete);
+    }
+
+    // ---------- Magias preparadas (Acólito, Xamã) ----------
+
+    // Fonte das magias preparadas da lista da classe ("Magias preparadas: Acólito").
+    static final String PREPARED = "Magias preparadas: ";
+
+    // Feitiço conhecido (1º nível ou mais) de uma classe que prepara entre os conhecidos (Xamã): nasce não preparado.
+    private static void markPreparable(CharacterAbility a, Sourced<Grant> f, Build b) {
+        if (a.getType() != AbilityType.SPELL || a.getSpellLevel() == null || a.getSpellLevel() < 1) return;
+        RuleClass k = b.classById.get(b.sourceClass.get(f.source()));
+        if (k != null && k.preparation() != null && RuleClass.Preparation.KNOWN.equals(k.preparation().from())) a.setPrepared(false);
+    }
+
+    // O que o jogador pode preparar agora, por classe que prepara.
+    @Transactional(readOnly = true)
+    public PreparationResponse preparation(Account account) {
+        return preparationOf(characterService.characterOf(account));
+    }
+
+    // Troca as preparadas (só no descanso longo). picks: classe → chaves das opções; classe fora de picks não muda.
+    @Transactional
+    public void prepare(Account account, Map<String, List<String>> picks) {
+        Character c = characterService.characterOf(account);
+        PreparationResponse now = preparationOf(c);
+        Map<String, RuleMagic.Spell> spells = new LinkedHashMap<>();
+        if (rules.catalog().magic() != null) rules.catalog().magic().spellsOrEmpty().forEach(sp -> spells.put(sp.id(), sp));
+        List<CharacterAbility> mine = abilities.findByCharacterOrderByIdAsc(c);
+        for (Map.Entry<String, List<String>> e : picks.entrySet()) {
+            PreparationResponse.PreparingClass pc = now.classes().stream().filter(x -> x.classId().equalsIgnoreCase(e.getKey()))
+                    .findFirst().orElseThrow(() -> ApiException.badRequest("Sua ficha não prepara magias dessa classe."));
+            List<String> chosen = List.copyOf(new LinkedHashSet<>(e.getValue() == null ? List.<String>of() : e.getValue()));
+            if (chosen.size() > pc.limit()) {
+                throw ApiException.badRequest("Você prepara no máximo " + pc.limit() + " magia(s) de " + pc.name() + ".");
+            }
+            Set<String> valid = new LinkedHashSet<>();
+            pc.options().forEach(o -> valid.add(o.key()));
+            if (!valid.containsAll(chosen)) throw ApiException.badRequest("Há magia que " + pc.name() + " não pode preparar agora.");
+            if (pc.maxSpellLevel() == null) {
+                // Entre os conhecidos: só a marca muda.
+                for (CharacterAbility a : mine) {
+                    if (!valid.contains("ability:" + a.getId())) continue;
+                    a.setPrepared(chosen.contains("ability:" + a.getId()));
+                    abilities.save(a);
+                }
+                continue;
+            }
+            String label = PREPARED + pc.name();
+            mine.stream().filter(a -> label.equals(a.getSource())).forEach(abilities::delete);
+            int level = c.getClassLevels().stream().filter(l -> l.getClassId().equals(pc.classId())).mapToInt(ClassLevel::getLevel)
+                    .findFirst().orElse(c.getLevel());
+            for (String key : chosen) {
+                RuleMagic.Spell sp = spells.get(key.substring("spell:".length()));
+                CharacterAbility a = abilityFrom(c, Grant.spell(sp), c.getProficiencyBonus(), level);
+                a.setSource(label);
+                a.setPrepared(true);
+                a.setSpellId(sp.id());
+                abilities.save(a);
+            }
+        }
+    }
+
+    private PreparationResponse preparationOf(Character c) {
+        Build b = c.getBuild() == null ? null : evaluate(buildOf(c));
+        Map<String, Integer> levels = new LinkedHashMap<>();
+        if (b != null) levels.putAll(b.classLevels);
+        else levels.put(c.getCharacterClass().getClassName().name(), c.getLevel());
+        List<CharacterAbility> mine = abilities.findByCharacterOrderByIdAsc(c);
+        RuleMagic magic = rules.catalog().magic();
+        List<PreparationResponse.PreparingClass> out = new ArrayList<>();
+        levels.forEach((id, lvl) -> {
+            RuleClass k = rules.characterClass(id).orElse(null);
+            if (k == null || k.preparation() == null) return;
+            RuleClass.Preparation p = k.preparation();
+            int limit = Math.max(1, c.getModifier(p.attribute()) + (RuleClass.Preparation.HALF.equals(p.levels()) ? lvl / 2 : lvl));
+            List<PreparationResponse.Option> options = new ArrayList<>();
+            List<String> prepared = new ArrayList<>();
+            Integer max = null;
+            if (RuleClass.Preparation.KNOWN.equals(p.from())) {
+                for (CharacterAbility a : mine) {
+                    if (a.getPrepared() == null || b == null || !id.equals(b.sourceClass.get(a.getSource()))) continue;
+                    options.add(new PreparationResponse.Option("ability:" + a.getId(), a.getName(), a.getSpellLevel() == null ? 1 : a.getSpellLevel()));
+                    if (a.getPrepared()) prepared.add("ability:" + a.getId());
+                }
+            } else {
+                int top = 0;
+                if (p.maxSpellLevel() != null) {
+                    for (Map.Entry<String, Integer> e : p.maxSpellLevel().entrySet()) {
+                        if (Integer.parseInt(e.getKey()) <= lvl) top = Math.max(top, e.getValue());
+                    }
+                }
+                max = top;
+                Set<String> mysteries = b == null ? Set.of() : b.mysteries;
+                for (RuleMagic.Spell sp : magic == null ? List.<RuleMagic.Spell>of() : magic.spellsOrEmpty()) {
+                    if (sp.level() == null || sp.level() < 1 || sp.level() > top) continue;
+                    if (!sp.classesOrEmpty().contains(id) && sp.mysteriesOrEmpty().stream().noneMatch(mysteries::contains)) continue;
+                    options.add(new PreparationResponse.Option("spell:" + sp.id(), sp.name(), sp.level()));
+                }
+                options.sort(java.util.Comparator.comparingInt(PreparationResponse.Option::level).thenComparing(PreparationResponse.Option::name));
+                String label = PREPARED + k.name();
+                mine.stream().filter(a -> label.equals(a.getSource()) && a.getSpellId() != null).forEach(a -> prepared.add("spell:" + a.getSpellId()));
+            }
+            out.add(new PreparationResponse.PreparingClass(id, k.name(), limit, max, List.copyOf(options), List.copyOf(prepared)));
+        });
+        return new PreparationResponse(List.copyOf(out));
+    }
+
+    // ---------- cálculo ----------
+
+    private Build evaluate(CreationRequest r) {
+        RuleCatalog catalog = rules.catalog();
+        Build b = new Build();
+        b.roundUp = rules.roundsUp();
+        b.wealth = r.startingWealth();
+        Map<String, List<String>> picks = r.choices() == null ? Map.of() : r.choices();
+        b.level = 1 + r.levelsOrEmpty().size();
+
+        b.origin = pick(r.originId(), rules::origin, "Escolha uma origem.", "Origem desconhecida.", b.errors);
+        if (b.origin != null && !b.origin.lineagesOrEmpty().isEmpty()) {
+            List<RuleLineage> lineages = b.origin.lineagesOrEmpty();
+            b.lineage = pick(r.lineageId(), id -> lineages.stream().filter(l -> l.id().equalsIgnoreCase(id)).findFirst(),
+                    "Escolha a linhagem.", "Linhagem desconhecida.", b.errors);
+        }
+        boolean traitOrigin = b.origin != null && b.origin.usesTraitsOrFalse();
+        if (traitOrigin) traits(r, b);
+        if (catalog.regions() != null && !catalog.regions().isEmpty()) {
+            b.region = pick(r.regionId(), rules::region, "Escolha uma região.", "Região desconhecida.", b.errors);
+        }
+        b.klass = pick(r.classId(), rules::characterClass, "Escolha uma classe.", "Classe desconhecida.", b.errors);
+        if (b.klass != null && !b.klass.subclassesOrEmpty().isEmpty()) {
+            List<RuleLineage> subs = b.klass.subclassesOrEmpty();
+            b.subclass = pick(r.subclassId(), id -> subs.stream().filter(x -> x.id().equalsIgnoreCase(id)).findFirst(),
+                    "Escolha: " + subclassLabel(b.klass) + ".", "Subclasse desconhecida.", b.errors);
+        }
+        if (catalog.backgrounds() != null && !catalog.backgrounds().isEmpty()) {
+            // Runinata só tem Passado com um traço que libera (Antecedente).
+            if (traitOrigin && !b.traitBackground) {
+                if (!blank(r.backgroundId())) b.errors.add("Sem o traço Antecedente, a Runinata não tem Passado.");
+            } else {
+                b.background = pick(r.backgroundId(), rules::background, "Escolha um passado.", "Passado desconhecido.", b.errors);
+            }
+        }
+
+        // Fontes na ordem do assistente; a chave de cada escolha nasce daqui.
+        List<Source> sources = new ArrayList<>();
+        if (b.origin != null) sources.add(new Source("origin:" + b.origin.id(), "Origem: " + b.origin.name(), b.origin.grantsOrEmpty()));
+        if (b.lineage != null) sources.add(new Source("lineage:" + b.lineage.id(), "Linhagem: " + b.lineage.name(), b.lineage.grantsOrEmpty()));
+        sources.addAll(b.traitSources);
+        if (b.region != null) sources.add(new Source("region:" + b.region.id(), "Região: " + b.region.name(), b.region.grantsOrEmpty()));
+        if (b.klass != null) sources.add(new Source("class:" + b.klass.id(), "Classe: " + b.klass.name(), b.klass.grantsOrEmpty()));
+        if (b.subclass != null) sources.add(new Source("subclass:" + b.subclass.id(), subclassLabel(b.klass) + ": " + b.subclass.name(), b.subclass.grantsOrEmpty()));
+        if (b.background != null) sources.add(new Source("background:" + b.background.id(), "Passado: " + b.background.name(), b.background.grantsOrEmpty()));
+        if (!catalog.runicNatureOrEmpty().isEmpty()) sources.add(new Source("runic-nature", "Natureza Rúnica", catalog.runicNatureOrEmpty()));
+        sources.addAll(heritageSources(r, b));
+        if (b.klass != null) {
+            b.classLevels.put(b.klass.id(), 1);
+            b.classLevelAt.computeIfAbsent(b.klass.id(), x -> new ArrayList<>()).add(1);
+            b.classById.put(b.klass.id(), b.klass);
+            if (b.subclass != null) b.subclassByClass.put(b.klass.id(), b.subclass);
+            b.sourceClass.put("Classe: " + b.klass.name(), b.klass.id());
+            if (b.subclass != null) b.sourceClass.put(subclassLabel(b.klass) + ": " + b.subclass.name(), b.klass.id());
+        }
+        Map<String, List<String>> allPicks = new LinkedHashMap<>(picks);
+        levelSources(r, b, sources, allPicks);
+        picks = allPicks;
+
+        resourceSources(sources, picks, b);
+        dominantSources(sources, b);
+        baseAttributes(r, catalog.attributeMethods(), b);
+
+        // 1ª passada: o que é fixo. 2ª: as escolhas (que não podem repetir algo já ganho).
+        // Concessão com "when" (só com a opção escolhida): decidida depois das escolhas (conditionalGrants).
+        for (Source s : sources) {
+            for (Grant g : s.grants()) {
+                // Escolha com "when" é feita na 2ª passada, se a opção já foi escolhida (Chamado Sagrado: Estudioso).
+                if (g.when() != null) {
+                    if (!isChoice(g)) b.conditional.add(new Sourced<>(g, s.key() + "|" + s.label()));
+                }
+                else applyFixed(b, s, g);
+            }
+        }
+        List<String> allCrafts = catalog.craftsOrEmpty().stream().map(RuleCatalog.Craft::id).toList();
+        for (Source s : sources) {
+            List<Grant> grants = s.grants();
+            // "+2 em um atributo e +1 em outro": escolhas de atributo da mesma fonte não repetem atributo.
+            Set<String> sourceAttributes = new LinkedHashSet<>();
+            // Tipos de dano escolhidos na fonte (Essência Volátil: absorção de um, vulnerabilidade a outro).
+            Set<String> sourceDamage = new LinkedHashSet<>();
+            for (int i = 0; i < grants.size(); i++) {
+                Grant g = grants.get(i);
+                String key = s.key() + ":" + i;
+                List<String> picked = picks.get(key);
+                if (g.when() != null && !(isChoice(g) && whenMet(b, g.when()))) continue;
+                // Escolha que só aparece a partir de um nível do personagem (Magia Inata: magia de 1º nível no 5º).
+                if (g.minLevel() != null && b.level < g.minLevel()) continue;
+                // "+CASTER:ACOLYTE": magia de um nível só quando essa classe já conjura esse nível (Acólito Arcanista).
+                if (g.type() == GrantType.SPELL_CHOICE && g.value() != null && g.value().contains(CASTER)
+                        && casterLevel(b, g.value().substring(g.value().indexOf(CASTER) + CASTER.length()).split("\\+")[0]) < (g.spellLevel() == null ? 0 : g.spellLevel())) continue;
+                switch (g.type()) {
+                    case CRAFT_MASTERWORK -> {
+                        // Sem value: o ofício escolhido entre os que ele tem (Artífice: "para um de seus ofícios").
+                        if (g.value() != null || b.crafts.isEmpty()) break;
+                        List<String> options = List.copyOf(b.crafts);
+                        String label = orLabel(g, "Escolha o ofício da margem de Obra-Prima");
+                        List<String> selected = choose(picked, options, 1, label, b.errors);
+                        selected.forEach(o -> b.craftMasterwork.merge(o, g.amount() == null ? 1 : g.amount(), Integer::sum));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, 1, options, selected, s.label(), null));
+                    }
+                    case CRAFT_LEVEL -> {
+                        // Sem value: +amount num ofício maior que ele tem, diferente dos que outra fonte já aumentou.
+                        if (g.value() != null) break;
+                        List<String> options = catalog.craftsOrEmpty().stream()
+                                .filter(k -> "MAJOR".equals(k.kind()) && b.crafts.contains(k.id()) && !b.craftBonus.containsKey(k.id()))
+                                .map(RuleCatalog.Craft::id).toList();
+                        // Sem ofício maior para subir: não há o que escolher (fica para quando tiver).
+                        if (options.isEmpty()) break;
+                        String label = orLabel(g, "Escolha o ofício que sobe de nível");
+                        List<String> selected = choose(picked, options, 1, label, b.errors);
+                        selected.forEach(o -> b.craftBonus.merge(o, g.amount() == null ? 1 : g.amount(), Integer::sum));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, 1, options, selected, s.label(), null));
+                    }
+                    case SENSE -> {
+                        // Com options: o sentido é escolhido (traço Sentidos Especiais: Percepção às Cegas ou Sentido Sísmico).
+                        if (!g.hasOptions()) break;
+                        String label = orLabel(g, "Escolha o sentido");
+                        List<String> selected = choose(picked, g.options(), 1, label, b.errors);
+                        selected.forEach(t -> addSense(b, t, g, b.scale(s.label())));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, 1, g.options(), selected, s.label(), null));
+                    }
+                    case SITUATIONAL -> {
+                        // Com options: a nota vale para o alvo escolhido (traço Habilidoso: a perícia).
+                        if (!g.hasOptions()) break;
+                        String label = orLabel(g, "Escolha onde vale: " + g.description());
+                        List<String> selected = choose(picked, g.options(), 1, label, b.errors);
+                        selected.forEach(t -> b.situational.add(new SituationalNote(t, g.description(), s.label())));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, 1, g.options(), selected, s.label(), null));
+                    }
+                    case ATTRIBUTE_CHOICE -> {
+                        List<String> options = orAll(g.options(), Attribute.values()).stream()
+                                .filter(o -> !sourceAttributes.contains(o)).toList();
+                        String label = orLabel(g, "Escolha " + g.count() + " atributo(s) para +" + g.amount());
+                        List<String> selected = choose(picked, options, g.count(), label, b.errors);
+                        selected.forEach(a -> b.bonus.merge(Attribute.valueOf(a), g.amount(), Integer::sum));
+                        // "Até o máximo de 22" (Conjurador Eficiente): o atributo escolhido passa a ter outro limite.
+                        if (g.value() != null) selected.forEach(a -> b.attributeCap.merge(Attribute.valueOf(a), Integer.parseInt(g.value()), Math::max));
+                        sourceAttributes.addAll(selected);
+                        b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, selected, s.label(), null));
+                    }
+                    case EXPERTISE_CHOICE -> b.deferred.add(new Deferred(key, g, s.label()));
+                    case MYSTERY -> {
+                        // Com options: o Mistério de value, ou um das options se ele já tiver (Glifo Ígneo: Fogo, ou Magma/Infernal).
+                        if (!g.hasOptions()) break;
+                        // Sem value: Mistério(s) à escolha entre as options (ids), sem virar habilidade (Sangue Arcano).
+                        // value ACCESS: só os que ele alcança ("um Mistério a que você tenha acesso").
+                        if (g.value() == null || ACCESS.equals(g.value())) {
+                            int count = g.count() == null ? 1 : g.count();
+                            Set<String> reachable = ACCESS.equals(g.value()) ? accessibleMysteries(b) : null;
+                            List<String> options = g.options().stream().filter(o -> !b.mysteries.contains(o))
+                                    .filter(o -> reachable == null || reachable.contains(o)).toList();
+                            String label = orLabel(g, "Escolha " + count + " Mistério(s)");
+                            List<String> selected = choose(picked, options, count, label, b.errors);
+                            b.mysteries.addAll(selected);
+                            b.chosenMysteries.computeIfAbsent(s.key(), k -> new ArrayList<>()).addAll(selected);
+                            b.choices.add(new ChoiceLine(key, g.type(), label, count, options, selected, s.label(), null, mysteryNames(options)));
+                            break;
+                        }
+                        if (!b.mysteries.contains(g.value())) {
+                            b.mysteries.add(g.value());
+                            break;
+                        }
+                        List<String> options = g.options().stream().filter(o -> !b.mysteries.contains(o)).toList();
+                        String label = orLabel(g, "Você já tem o Mistério " + g.value() + ": escolha outro");
+                        List<String> selected = choose(picked, options, 1, label, b.errors);
+                        b.mysteries.addAll(selected);
+                        b.choices.add(new ChoiceLine(key, g.type(), label, 1, options, selected, s.label(), null));
+                    }
+                    case SAVING_THROW_CHOICE -> {
+                        List<String> options = orAll(g.options(), Attribute.values()).stream()
+                                .filter(o -> !b.saves.containsKey(Attribute.valueOf(o))).toList();
+                        String label = orLabel(g, "Escolha " + g.count() + " resistência(s)");
+                        List<String> selected = choose(picked, options, g.count(), label, b.errors);
+                        selected.forEach(a -> b.saves.put(Attribute.valueOf(a), s.label()));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, selected, s.label(), null));
+                    }
+                    case RESISTANCE, VULNERABILITY, ABSORPTION -> {
+                        if (!g.hasOptions()) break;
+                        List<String> options = g.options().stream().filter(o -> !sourceDamage.contains(o)).toList();
+                        String label = orLabel(g, "Escolha " + g.count() + " tipo(s) de dano");
+                        List<String> selected = choose(picked, options, g.count() == null ? 1 : g.count(), label, b.errors);
+                        // Resistência à escolha com expertise: "caso já tenha, imunidade" (Pele Rígida).
+                        if (g.type() == GrantType.RESISTANCE && Boolean.TRUE.equals(g.expertise())) b.resistanceUpgrades.addAll(selected);
+                        else (g.type() == GrantType.RESISTANCE ? b.resistances : g.type() == GrantType.VULNERABILITY ? b.vulnerabilities : b.absorptions).addAll(selected);
+                        sourceDamage.addAll(selected);
+                        b.choices.add(new ChoiceLine(key, g.type(), label, g.count() == null ? 1 : g.count(), options, selected, s.label(), null));
+                    }
+                    case SKILL_CHOICE -> {
+                        if (Boolean.TRUE.equals(g.expertise())) {
+                            b.deferred.add(new Deferred(key, g, s.label()));
+                            break;
+                        }
+                        List<String> options = orAll(g.options(), SkillType.values()).stream()
+                                .filter(o -> !b.skills.containsKey(SkillType.valueOf(o))).toList();
+                        String label = orLabel(g, "Escolha " + g.count() + " perícia(s)");
+                        List<String> selected = choose(picked, options, g.count(), label, b.errors);
+                        selected.forEach(o -> b.skills.put(SkillType.valueOf(o), s.label()));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, selected, s.label(), null));
+                    }
+                    case FEATURE -> {
+                        if (!g.hasOptions()) break;
+                        // count > 1: escolhe várias opções ("Perturbações (A, B)").
+                        int count = g.count() == null ? 1 : g.count();
+                        String label = orLabel(g, g.name() + (count == 1 ? ": escolha uma opção" : ": escolha " + count + " opções"));
+                        List<String> selected = choose(picked, g.options(), count, label, b.errors);
+                        String name = selected.isEmpty() ? g.name() : g.name() + " (" + String.join(", ", selected) + ")";
+                        Grant chosen = g.withName(name);
+                        // Opção com usos próprios (ex.: Charme Sobrenatural = metade do mod. de Carisma).
+                        if (selected.size() == 1 && g.optionUses() != null && g.optionUses().containsKey(selected.getFirst())) {
+                            chosen = chosen.withUses(g.optionUses().get(selected.getFirst()));
+                        }
+                        // Texto de cada opção (Vantagens Tecnológicas): a habilidade leva o das escolhidas.
+                        if (g.optionTexts() != null && !selected.isEmpty()) {
+                            String texts = selected.stream().map(o -> g.optionTexts().getOrDefault(o, "")).filter(t -> !t.isBlank())
+                                    .collect(java.util.stream.Collectors.joining("\n\n"));
+                            chosen = chosen.withText(g.description() == null ? texts : g.description() + "\n\n" + texts, g.castingTime());
+                        }
+                        // Duas habilidades com o mesmo nome (duas Vantagens Tecnológicas): as opções se somam.
+                        if (!selected.isEmpty()) b.featureOptions.computeIfAbsent(g.name(), k -> new ArrayList<>()).addAll(selected);
+                        // Opções que são Mistérios ("Água (Elemental)"): viram Mistérios do personagem.
+                        if (MYSTERY.equals(g.value())) selected.forEach(o -> mysteryByName(o).ifPresent(b.mysteries::add));
+                        b.features.add(new Sourced<>(chosen, s.label()));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, count, g.options(), selected, s.label(), null));
+                    }
+                    case PROFICIENCY_CHOICE -> {
+                        List<String> kinds = g.hasOptions() ? g.options() : List.of("SKILL", "CRAFT", "MARTIAL_WEAPON");
+                        List<String> options = new ArrayList<>();
+                        if (kinds.contains("SKILL")) {
+                            Arrays.stream(SkillType.values()).filter(k -> !b.skills.containsKey(k)).forEach(k -> options.add("SKILL:" + k.name()));
+                        }
+                        if (kinds.contains("CRAFT")) {
+                            allCrafts.stream().filter(k -> !b.crafts.contains(k)).forEach(k -> options.add("CRAFT:" + k));
+                        }
+                        if (kinds.contains("MARTIAL_WEAPON")) options.add("MARTIAL_WEAPON");
+                        // Armas regionais da região do personagem ("regional (Ionia)" nas propriedades do catálogo de itens);
+                        // REGIONAL_MARTIAL: só as marciais (Ferromante).
+                        if (kinds.contains("REGIONAL_WEAPON") || kinds.contains("REGIONAL_MARTIAL")) {
+                            boolean martial = !kinds.contains("REGIONAL_WEAPON");
+                            regionalWeapons(catalog, b, martial).stream().filter(w -> !b.weaponProficiencies.contains(w)).forEach(w -> options.add("WEAPON:" + w));
+                        }
+                        if (kinds.contains("CRAFT_LEVEL")) catalog.craftsOrEmpty().stream()
+                                .filter(k -> "MAJOR".equals(k.kind()) && b.crafts.contains(k.id())).forEach(k -> options.add("CRAFT_LEVEL:" + k.id()));
+                        // Proficiências literais: "ARMOR:LIGHT" (armadura) e "WEAPON:Armas de fogo leves" (arma pelo nome).
+                        kinds.stream().filter(k -> k.startsWith("ARMOR:") && !b.armorProficiencies.contains(k.substring(6))).forEach(options::add);
+                        kinds.stream().filter(k -> k.startsWith("WEAPON:") && !b.weaponProficiencies.contains(k.substring(7))).forEach(options::add);
+                        String label = orLabel(g, "Escolha " + g.count() + " proficiência(s)");
+                        if (options.isEmpty() && (kinds.contains("REGIONAL_WEAPON") || kinds.contains("REGIONAL_MARTIAL"))) {
+                            b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, List.of(), s.label(), "Não há armas regionais desse tipo para a sua região; combine com o mestre."));
+                            break;
+                        }
+                        List<String> selected = choose(picked, options, g.count(), label, b.errors);
+                        for (String o : selected) {
+                            if (o.startsWith("SKILL:")) b.skills.put(SkillType.valueOf(o.substring(6)), s.label());
+                            else if (o.startsWith("CRAFT:")) addCraft(b, o.substring(6), key);
+                            else if (o.startsWith("CRAFT_LEVEL:")) b.craftBonus.merge(o.substring(12), 1, Integer::sum);
+                            else if (o.startsWith("ARMOR:")) b.armorProficiencies.add(o.substring(6));
+                            else if (o.startsWith("WEAPON:")) {
+                                b.weaponProficiencies.add(o.substring(7));
+                                b.chosenWeapons.computeIfAbsent(s.key(), k -> new ArrayList<>()).add(o.substring(7));
+                            }
+                            else {
+                                b.weaponProficiencies.add("Uma arma marcial à escolha");
+                                b.features.add(new Sourced<>(Grant.feature(AbilityType.PASSIVE, "Proficiência em arma marcial",
+                                        "Proficiência em uma arma marcial à escolha (combine qual com o mestre)."), s.label()));
+                            }
+                        }
+                        b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, selected, s.label(), null));
+                    }
+                    case ARMOR_CLASS -> {
+                        // CA com atributo à escolha (Armadura Natural da Runinata): options = atributos.
+                        if (!g.hasOptions()) break;
+                        String label = orLabel(g, g.name() + ": escolha o atributo");
+                        List<String> selected = choose(picked, g.options(), 1, label, b.errors);
+                        b.armorRules.add(armorRule(g, selected.isEmpty() ? null : Attribute.valueOf(selected.getFirst())));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, 1, g.options(), selected, s.label(), null));
+                    }
+                    case SIZE_CHOICE -> {
+                        // Tamanho fixo de outra fonte (ex.: traço Chaveirinho) vence a escolha.
+                        if (b.sizeFixed) break;
+                        String label = orLabel(g, "Escolha o tamanho");
+                        List<String> selected = choose(picked, g.options(), 1, label, b.errors);
+                        if (!selected.isEmpty()) b.size = CreatureSize.valueOf(selected.getFirst());
+                        b.choices.add(new ChoiceLine(key, g.type(), label, 1, g.options(), selected, s.label(), null));
+                    }
+                    // Decidida no fim (spellChoices), quando os Mistérios já são conhecidos.
+                    case SPELL_CHOICE -> b.spellChoices.add(new SpellChoice(key, g, s.label(), picked == null ? List.of() : picked));
+                    case EQUIPMENT_CHOICE -> {
+                        // Trocando pela riqueza inicial, as escolhas de equipamento somem.
+                        if (b.wealth) break;
+                        int count = g.count() == null ? 1 : g.count();
+                        List<String> options = EquipmentRules.expand(catalog.equipment(), g.options());
+                        String label = orLabel(g, "Equipamento: escolha " + (count == 1 ? "um" : count));
+                        List<String> selected = choose(picked, options, count, label, b.errors);
+                        selected.forEach(o -> addEquipment(b, o, s.label()));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, count, options, selected, s.label(), null));
+                    }
+                    case CRAFT_CHOICE -> {
+                        // expertise: os que ele já tem continuam e dão especialidade (Artesão Nazumita);
+                        // value EXPERTISE: o escolhido vem com especialidade (Mestre Artesão).
+                        boolean upgrade = Boolean.TRUE.equals(g.expertise()) || "LEVEL".equals(g.value());
+                        List<String> options = (g.options() == null || g.options().isEmpty() ? allCrafts : g.options()).stream()
+                                .filter(o -> upgrade || !b.crafts.contains(o)).toList();
+                        String label = orLabel(g, "Escolha " + g.count() + " ofício(s)");
+                        b.choices.add(optionalChoice(key, g, label, options, picked, s.label(), b,
+                                "A lista de ofícios ainda não foi cadastrada nas regras.", o -> {
+                                    b.chosenCrafts.computeIfAbsent(s.key(), k -> new ArrayList<>()).add(o);
+                                    // value LEVEL: o que ele já tem ganha um nível (Praticante Dedicado).
+                                    if ("LEVEL".equals(g.value()) && b.crafts.contains(o)) {
+                                        b.craftBonus.merge(o, 1, Integer::sum);
+                                        return;
+                                    }
+                                    if (upgrade && b.crafts.contains(o)) b.craftExpertise.add(o);
+                                    else addCraft(b, o, key);
+                                    if ("EXPERTISE".equals(g.value())) b.craftExpertise.add(o);
+                                }));
+                    }
+                    case LANGUAGE_CHOICE -> {
+                        List<String> source = g.options() != null && !g.options().isEmpty() ? g.options()
+                                : Boolean.TRUE.equals(g.fromRegion()) && b.region != null ? b.region.languagesOrEmpty()
+                                : List.of();
+                        List<String> options = source.stream().filter(o -> !b.languages.contains(o)).toList();
+                        String label = orLabel(g, Boolean.TRUE.equals(g.fromRegion())
+                                ? "Escolha " + g.count() + " idioma(s) da região" : "Escolha " + g.count() + " idioma(s)");
+                        String note = Boolean.TRUE.equals(g.fromRegion()) && b.region == null
+                                ? "Escolha a região para ver os idiomas."
+                                : "Os idiomas desta região ainda não foram cadastrados nas regras.";
+                        b.choices.add(optionalChoice(key, g, label, options, picked, s.label(), b, note, b.languages::add));
+                    }
+                    default -> { }
+                }
+            }
+        }
+
+        expertise(b, picks);
+        b.features.addAll(b.traitFeatures);
+        heritages(r, b);
+
+        if (b.origin != null) b.baseSpeed = b.origin.speed() != null ? b.origin.speed()
+                : catalog.baseSpeed() != null ? catalog.baseSpeed() : DEFAULT_SPEED_FEET;
+        if (b.klass != null && catalog.equipment() != null && catalog.equipment().startingWealth() != null) {
+            b.wealthFormula = catalog.equipment().startingWealth().get(b.klass.id());
+        }
+        if (b.wealth && b.wealthFormula == null && b.klass != null) b.errors.add("A classe não tem riqueza inicial cadastrada.");
+        // O ouro da classe e do passado faz parte do equipamento ("algibeira contendo 10 PO"): com a riqueza inicial, não vem.
+        if (!b.wealth && b.klass != null && b.klass.startingGold() != null) b.gold += b.klass.startingGold();
+        if (!b.wealth && b.background != null && b.background.startingGold() != null) b.gold += b.background.startingGold();
+        if (b.origin != null && b.origin.startingGold() != null) b.gold += b.origin.startingGold();
+
+        for (Grant g : b.optionArmor) {
+            List<String> chosen = b.featureOptions.get(g.armor().feature());
+            if (chosen != null && chosen.contains(g.armor().featureOption())) b.armorRules.add(armorRule(g, null));
+        }
+        // Concessões que só valem com a opção escolhida ("when": "Vantagem Tecnológica:Carapaça"). A mesma concessão
+        // em duas fontes (Progressão Tecnológica e Benefício Colateral) vale uma vez.
+        Set<Grant> applied = new java.util.HashSet<>();
+        for (Sourced<Grant> c : b.conditional) {
+            String[] when = c.value().when().split(":", 2);
+            List<String> chosen = b.featureOptions.get(when[0]);
+            if (chosen == null || when.length < 2 || !chosen.contains(when[1]) || !applied.add(c.value())) continue;
+            String[] src = c.source().split("\\|", 2);
+            applyFixed(b, new Source(src[0], src[1], List.of()), c.value());
+        }
+        // Limiar: uma vez por habilidade contada, pela fonte dominante (a escolhida, ou a primeira).
+        Set<String> crossed = new java.util.HashSet<>();
+        for (Sourced<RuleHeritage.Threshold> t : b.thresholds) {
+            RuleHeritage.Threshold th = t.value();
+            List<String> chosen = b.featureOptions.getOrDefault(th.feature(), List.of());
+            if (chosen.size() < th.count() || !crossed.add(th.feature())) continue;
+            List<String> dominant = th.dominant() == null ? List.of() : b.featureOptions.getOrDefault(th.dominant(), List.of());
+            String fonte = dominant.isEmpty() ? t.source() : dominant.getFirst();
+            for (Grant g : th.grants().getOrDefault(fonte, List.of())) applyFixed(b, new Source("threshold", "Limiar Tecnológico", List.of()), g);
+        }
+        damageUpgrades(b);
+        spellChoices(b, picks);
+        resourceChoices(b);
+        mergeMana(b);
+        abilityUses(b);
+        multiclassChecks(b);
+
+        if (blank(r.characterName())) b.errors.add("Dê um nome ao personagem.");
+        if (r.age() == null || r.age() < 1) b.errors.add("Informe a idade (1 ou mais).");
+        if (r.height() == null || r.height() <= 0) b.errors.add("Informe a altura em metros.");
+        return b;
+    }
+
+    // ---------- Especialidade ----------
+
+    // Por último, com todas as perícias já ganhas: "proficiência; caso já tenha, especialidade" (SKILL e SKILL_CHOICE
+    // com expertise) e a escolha de especialidade entre as perícias que o personagem tem (EXPERTISE_CHOICE).
+    private static void expertise(Build b, Map<String, List<String>> picks) {
+        for (Deferred d : b.deferred) {
+            Grant g = d.grant();
+            switch (g.type()) {
+                case SKILL -> gainOrExpert(b, g.skill(), d.source());
+                case SKILL_CHOICE -> {
+                    // As que ele já tem continuam nas opções: escolhê-las dá especialidade.
+                    List<String> options = orAll(g.options(), SkillType.values()).stream()
+                            .filter(o -> !b.expertise.contains(SkillType.valueOf(o))).toList();
+                    String label = orLabel(g, "Escolha " + g.count() + " perícia(s) (especialidade se já tiver)");
+                    List<String> selected = choose(picks.get(d.key()), options, g.count(), label, b.errors);
+                    selected.forEach(o -> gainOrExpert(b, SkillType.valueOf(o), d.source()));
+                    b.choices.add(new ChoiceLine(d.key(), g.type(), label, g.count(), options, selected, d.source(), null));
+                }
+                case EXPERTISE_CHOICE -> {
+                    if ("WITH_CRAFTS".equals(g.value())) {
+                        // Perícias ou ofícios que ele tem: opções "SKILL:..." e "CRAFT:..." (Especialização do Mercurial).
+                        List<String> options = new ArrayList<>();
+                        orAll(g.options(), SkillType.values()).stream()
+                                .filter(o -> b.skills.containsKey(SkillType.valueOf(o)) && !b.expertise.contains(SkillType.valueOf(o)))
+                                .forEach(o -> options.add("SKILL:" + o));
+                        b.crafts.stream().filter(k -> !b.craftExpertise.contains(k)).forEach(k -> options.add("CRAFT:" + k));
+                        String label = orLabel(g, "Escolha " + g.count() + " perícia(s) ou ofício(s) para especialidade");
+                        b.choices.add(optionalChoice(d.key(), g, label, options, picks.get(d.key()), d.source(), b,
+                                "Escolha primeiro as perícias e os ofícios do personagem.",
+                                o -> {
+                                    if (o.startsWith("SKILL:")) b.expertise.add(SkillType.valueOf(o.substring(6)));
+                                    else b.craftExpertise.add(o.substring(6));
+                                }));
+                        break;
+                    }
+                    List<String> options = orAll(g.options(), SkillType.values()).stream()
+                            .filter(o -> b.skills.containsKey(SkillType.valueOf(o)) && !b.expertise.contains(SkillType.valueOf(o)))
+                            .toList();
+                    String label = orLabel(g, "Escolha " + g.count() + " perícia(s) para especialidade");
+                    b.choices.add(optionalChoice(d.key(), g, label, options, picks.get(d.key()), d.source(), b,
+                            "Escolha primeiro as perícias em que o personagem é proficiente.",
+                            o -> b.expertise.add(SkillType.valueOf(o))));
+                }
+                default -> { }
+            }
+        }
+    }
+
+    private static void gainOrExpert(Build b, SkillType skill, String source) {
+        if (b.skills.containsKey(skill)) b.expertise.add(skill);
+        else b.skills.put(skill, source);
+    }
+
+    private record Deferred(String key, Grant grant, String source) {}
+
+    // ABILITY_USES: muda os usos de outra habilidade pelo nome (value). Com usesFormula/maxUses troca a fórmula
+    // (Inspirar Aliados: Inspirado = proficiência); com amount soma usos (Adepto Espiritual: Liturgia +1).
+    private static void abilityUses(Build b) {
+        for (Grant change : b.usesChanges) {
+            if (change.type() == GrantType.EXTRA_USES) {
+                extraUses(b, change);
+                continue;
+            }
+            for (int i = 0; i < b.features.size(); i++) {
+                Sourced<Grant> f = b.features.get(i);
+                Grant g = f.value();
+                if (!change.value().equals(g.name())) continue;
+                Grant changed;
+                if (change.usesFormula() != null || change.maxUses() != null) {
+                    changed = g.withUses(new UsesRule(change.usesFormula(), change.maxUses(), change.attribute(), change.usesPlus(), change.recharge()));
+                } else if (g.usesFormula() == null || g.usesFormula() == UsesFormula.FIXED) {
+                    changed = g.withUses(new UsesRule(UsesFormula.FIXED, (g.maxUses() == null ? 0 : g.maxUses()) + change.amount(), g.attribute(), null, null));
+                } else {
+                    changed = g.withUses(new UsesRule(g.usesFormula(), g.maxUses(), g.attribute(), (g.usesPlus() == null ? 0 : g.usesPlus()) + change.amount(), null));
+                }
+                b.features.set(i, new Sourced<>(changed, f.source()));
+            }
+        }
+    }
+
+    // Usos a mais numa habilidade (Ki do Cultivo de Ki, do Conjurador Natural, das Alianças Espirituais): soma ao que ela
+    // tem (tabela, fórmula ou fixo); sem a habilidade, cria uma com o texto e os usos da concessão.
+    private static void extraUses(Build b, Grant change) {
+        int add = change.amount() != null ? change.amount()
+                : usesFor(change.withUses(new UsesRule(change.usesFormula(), null, change.attribute(), null, null)), b.proficiency(), b.level, b.roundUp, b::modifier);
+        boolean found = false;
+        for (int i = 0; i < b.features.size(); i++) {
+            Sourced<Grant> f = b.features.get(i);
+            Grant g = f.value();
+            if (!change.value().equals(g.name())) continue;
+            found = true;
+            boolean fixed = (g.usesByLevel() == null || g.usesByLevel().isEmpty()) && (g.usesFormula() == null || g.usesFormula() == UsesFormula.FIXED);
+            Grant changed = fixed
+                    ? g.withUses(new UsesRule(UsesFormula.FIXED, (g.maxUses() == null ? 0 : g.maxUses()) + add, g.attribute(), null, null))
+                    : g.withUses(new UsesRule(g.usesFormula(), g.maxUses(), g.attribute(), (g.usesPlus() == null ? 0 : g.usesPlus()) + add, null));
+            b.features.set(i, new Sourced<>(changed, f.source()));
+        }
+        if (found || change.description() == null) return;
+        UsesRule uses = change.maxUses() != null ? new UsesRule(UsesFormula.FIXED, change.maxUses(), null, null, Recharge.LONG_REST)
+                : new UsesRule(change.usesFormula(), null, change.attribute(), null, Recharge.LONG_REST);
+        b.features.add(new Sourced<>(Grant.feature(AbilityType.ABILITY, change.value(), change.description()).withUses(uses), change.label() == null ? change.value() : change.label()));
+    }
+
+    // O que é fixo numa concessão (1ª passada; e as condicionais, depois das escolhas).
+    private void applyFixed(Build b, Source s, Grant g) {
+        if (g.minLevel() != null && b.level < g.minLevel()) return;
+        switch (g.type()) {
+            case ATTRIBUTE -> {
+                b.bonus.merge(g.attribute(), valueAt(g, g.amount(), b.scale(s.label())), Integer::sum);
+                // value: novo limite do atributo ("Constituição +2, máximo 22").
+                if (g.value() != null) b.attributeCap.merge(g.attribute(), Integer.parseInt(g.value()), Math::max);
+            }
+            case SKILL -> {
+                // "Caso já tenha, especialidade": decide no fim, depois de todas as perícias.
+                if (Boolean.TRUE.equals(g.expertise())) b.deferred.add(new Deferred(null, g, s.label()));
+                else b.skills.putIfAbsent(g.skill(), s.label());
+            }
+            // expertise: "caso já tenha proficiência, especialidade" (decidido no fim, em damageUpgrades).
+            case SAVING_THROW -> {
+                if (Boolean.TRUE.equals(g.expertise())) b.saveUpgrades.add(new Sourced<>(g.attribute(), s.label()));
+                else b.saves.putIfAbsent(g.attribute(), s.label());
+            }
+            case FEATURE -> {
+                if (!g.hasOptions()) b.features.add(new Sourced<>(g, s.label()));
+            }
+            // PV calculado no fim (maxHp), quando os atributos já estão definidos.
+            case HP_BONUS -> b.hpGrants.add(g);
+            case ARMOR_PROFICIENCY -> b.armorProficiencies.add(g.value());
+            case WEAPON_PROFICIENCY -> b.weaponProficiencies.add(g.value());
+            case SPEED -> {
+                // walkFraction: fração da caminhada final (Vida Marinha: natação igual à caminhada), calculada no fim.
+                if (g.walkFraction() != null) {
+                    b.relativeSpeeds.merge(MovementType.valueOf(g.value()), g.walkFraction(), Math::max);
+                    return;
+                }
+                // value: tipo de deslocamento (sem value = caminhada; ALL = todos os que o personagem tiver).
+                // usesFormula PROFICIENCY: feet × bônus de proficiência (Brisa de Impulso: 5 pés × bônus).
+                // valueByLevel: pés pelo nível (Aspecto Feral: Natação 30 → 35 no 6º...); o aumento "se já tiver" cresce junto.
+                double base = valueAt(g, g.feet() == null ? null : g.feet().intValue(), b.scale(s.label()));
+                double feet = g.usesFormula() == UsesFormula.PROFICIENCY ? base * b.proficiency() : base;
+                String mode = g.value() == null ? "WALK" : g.value();
+                switch (mode) {
+                    case "WALK" -> b.speedBonus += feet;
+                    case "ALL" -> b.allSpeedBonus += feet;
+                    default -> {
+                        // amount: aumento quando ele já tem esse deslocamento (Aptidão Marinha: natação 30, ou +15).
+                        MovementType type = MovementType.valueOf(mode);
+                        double gain = g.amount() != null && b.otherSpeeds.containsKey(type) ? g.amount() + (base - g.feet()) : feet;
+                        b.otherSpeeds.merge(type, gain, Double::sum);
+                    }
+                }
+            }
+            case GOLD -> b.gold += g.amount();
+            case ABILITY_USES, EXTRA_USES -> b.usesChanges.add(g);
+            case INITIATIVE -> b.initiativeBonus += g.amount();
+            case SITUATIONAL -> {
+                if (!g.hasOptions()) b.situational.add(new SituationalNote(g.value(), g.description(), s.label()));
+            }
+            // Com options: escolha (2ª passada). expertise: "caso já tenha, imunidade", decidido no fim (damageUpgrades).
+            case RESISTANCE -> {
+                if (g.hasOptions()) break;
+                // amount 1 com expertise: "um avanço na resistência" (resistência → imunidade → absorção).
+                if (Boolean.TRUE.equals(g.expertise())) b.resistanceUpgrades.add(g.amount() != null && g.amount() > 0 ? "+" + g.value() : g.value());
+                else b.resistances.add(g.value());
+            }
+            case ABSORPTION -> {
+                if (!g.hasOptions()) b.absorptions.add(g.value());
+            }
+            case IMMUNITY -> b.immunities.add(g.value());
+            case CONDITION_IMMUNITY -> b.conditionImmunities.add(g.value());
+            case FORM -> b.forms.add(formLine(g));
+            case EFFECT -> b.forms.add(effectLine(g, b, b.scale(s.label())));
+            case ATTRIBUTE_SWAP -> b.attributeSwaps.put(g.value(), g.attribute().name()
+                    + (g.usesFormula() == UsesFormula.HALF_ATTRIBUTE_MODIFIER ? "/2" : ""));
+            case CRAFT_LEVEL, CRAFT_FORMULAS, CRAFT_INCOME, CRAFT_MASTERWORK -> {
+                if (g.value() != null) b.craftGrants.add(new Sourced<>(g, s.key() + "|" + s.label()));
+            }
+            case DAMAGE_BONUS, CRIT_BONUS -> b.damageBonuses.add(new Sourced<>(g, s.key() + "|" + s.label()));
+            case SENSE -> {
+                if (!g.hasOptions()) addSense(b, g.value(), g, b.scale(s.label()));
+            }
+            case DAMAGE_REDUCTION -> {
+                int n = g.usesFormula() == UsesFormula.PROFICIENCY ? b.proficiency()
+                        : g.usesFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : g.amount();
+                b.typedReductions.merge(g.value(), n, Integer::sum);
+            }
+            // amount -1: a 2ª escolha tira a vulnerabilidade (Meio-Azakana deixa de ser vulnerável a radiante).
+            case VULNERABILITY -> {
+                if (g.hasOptions()) break;
+                if (g.amount() != null && g.amount() < 0) b.vulnerabilities.remove(g.value());
+                else b.vulnerabilities.add(g.value());
+            }
+            case PASSIVE_BONUS -> {
+                int n = g.usesFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : g.amount();
+                if ("PERCEPTION".equals(g.value())) b.passivePerception += n;
+                else b.passiveInsight += n;
+            }
+            case MYSTERY -> {
+                if (!g.hasOptions()) b.mysteries.add(g.value());
+            }
+            case SPELL -> b.fixedSpells.putIfAbsent(g.value(), s.label());
+            case EQUIPMENT -> {
+                if (!b.wealth) addEquipment(b, g.value(), s.label());
+            }
+            // value UP: uma categoria acima do tamanho final (Variante Colosso, 2ª escolha).
+            case SIZE -> {
+                if ("UP".equals(g.value())) {
+                    b.sizeSteps++;
+                    return;
+                }
+                b.size = CreatureSize.valueOf(g.value());
+                b.sizeFixed = true;
+            }
+            // expertise: "caso já tenha, especialidade", decidido no fim (damageUpgrades), depois dos outros ofícios.
+            case CRAFT -> {
+                if (Boolean.TRUE.equals(g.expertise())) b.craftUpgrades.add(new Sourced<>(g.value(), s.key()));
+                else addCraft(b, g.value(), s.key());
+            }
+            case LANGUAGE -> b.languages.add(g.value());
+            case ARMOR_CLASS -> {
+                // Com feature: decide depois das escolhas (vale só se a opção foi escolhida).
+                if (g.armor() != null && g.armor().feature() != null) b.optionArmor.add(g);
+                else if (!g.hasOptions()) b.armorRules.add(armorRule(g, null));
+            }
+            case AC_BONUS -> b.armorRules.add(armorBonus(g, b.scale(s.label())));
+            case HERITAGE_POINTS -> {
+                b.heritagePoints += g.amount();
+                b.pools.merge(g.value() == null ? "ANY" : g.value(), g.amount(), Integer::sum);
+            }
+            default -> { }
+        }
+    }
+
+    // Ofício ganho: guarda o nível do personagem em que entrou (o nível do ofício maior conta dali).
+    // Mapa por ofício (id → nome do catálogo), refeito a cada criação/subida.
+    private static void replaceCraftMap(Map<String, Integer> target, Map<String, Integer> byId, Map<String, String> craftNames) {
+        target.clear();
+        byId.forEach((id, n) -> target.put(craftNames.getOrDefault(id, id), n));
+    }
+
+    private static void addCraft(Build b, String id, String key) {
+        if (!b.crafts.add(id)) return;
+        int at = key.startsWith("heritage:") ? b.heritageLevel.getOrDefault(key.replaceFirst("^(heritage:[^:]+).*$", "$1"), 1) : levelOfKey(key);
+        b.craftLevels.put(id, at);
+    }
+
+    // ---------- Classe de Armadura ----------
+
+    // Opção de defesa (ARMOR_CLASS). chosen: atributo escolhido quando a concessão tem options.
+    static ArmorRule armorRule(Grant g, Attribute chosen) {
+        ArmorFormula f = g.armor() == null ? new ArmorFormula(null, null, null, null, null, null, null, null, null, null, null, null, null) : g.armor();
+        ArmorRule r = new ArmorRule();
+        r.setName(ArmorClassCalculator.withAttribute(g.name() != null ? g.name() : g.label(), chosen));
+        r.setBase(f.base());
+        r.setDex(f.dexOrTrue());
+        r.setDexMax(f.dexMax());
+        r.setAttribute(chosen != null ? chosen : f.attribute());
+        r.setSecondAttribute(f.secondAttribute());
+        r.setProficiency(Boolean.TRUE.equals(f.proficiency()));
+        r.setReduction(f.reduction());
+        r.setBlocksArmor(Boolean.TRUE.equals(f.blocksArmor()));
+        r.setRequiresArmor(f.requiresArmor());
+        return r;
+    }
+
+    // Bônus de CA (AC_BONUS): amount e/ou o bônus de proficiência (usesFormula PROFICIENCY).
+    static ArmorRule armorBonus(Grant g) {
+        return armorBonus(g, CREATION_LEVEL);
+    }
+
+    static ArmorRule armorBonus(Grant g, int level) {
+        ArmorFormula f = g.armor();
+        ArmorRule r = new ArmorRule();
+        r.setName(g.name() != null ? g.name() : g.label() != null ? g.label() : "Bônus de CA");
+        r.setBonus(true);
+        r.setAmount(valueAt(g, g.amount(), level));
+        r.setProficiency(g.usesFormula() == UsesFormula.PROFICIENCY || (f != null && Boolean.TRUE.equals(f.proficiency())));
+        r.setUnarmoredOnly(f != null && Boolean.TRUE.equals(f.unarmoredOnly()));
+        r.setBlocksArmor(f != null && Boolean.TRUE.equals(f.blocksArmor()));
+        if (f != null) r.setReduction(f.reduction());
+        if (f != null && Boolean.TRUE.equals(f.halfProficiencyReduction())) r.setHalfProficiencyReduction(true);
+        return r;
+    }
+
+    // ---------- Traços (Runinata) ----------
+
+    // A Runinata monta a origem com traços: o modo (combinado com o mestre) dá Traços Menores e Maiores;
+    // desvantagens e a conversão de até um traço de cada tipo dão pontos de Origem, que compram mais traços
+    // (os Superiores só assim). A conversão é escolhida sozinha: a que cobre os traços escolhidos com menos sobra.
+    private void traits(CreationRequest r, Build b) {
+        RuleTraits system = rules.catalog().traits();
+        if (system == null) {
+            b.errors.add("O sistema de traços não está cadastrado.");
+            return;
+        }
+        // Modo travado pelo mestre vence o que o jogador mandou.
+        String locked = settings.lockedTraitBudget();
+        RuleTraits.Budget budget = pick(locked != null ? locked : r.traitBudget(),
+                id -> system.budgetsOrEmpty().stream().filter(x -> x.id().equalsIgnoreCase(id)).findFirst(),
+                "Escolha o modo de traços combinado com o mestre.", "Modo de traços desconhecido.", b.errors);
+        Map<String, Picked> traits = collectTraits(r.traits(), rules::trait, "Traço desconhecido.", b);
+        Map<String, Picked> drawbacks = collectTraits(r.drawbacks(), rules::drawback, "Desvantagem desconhecida.", b);
+
+        int minor = 0, major = 0, superior = 0;
+        double drawbackPoints = 0;
+        for (Picked p : traits.values()) {
+            RuleTrait t = p.trait();
+            if (!t.requiresOrEmpty().isEmpty() && t.requiresOrEmpty().stream().noneMatch(traits::containsKey)) {
+                b.errors.add("O traço " + t.name() + " precisa de: " + traitNames(t.requiresOrEmpty()) + ".");
+            }
+            int n = p.details().size();
+            switch (t.tier()) {
+                case "MINOR" -> minor += n;
+                case "MAJOR" -> major += n;
+                default -> superior += n;
+            }
+            if (Boolean.TRUE.equals(t.background())) b.traitBackground = true;
+        }
+        for (Picked p : drawbacks.values()) drawbackPoints += p.trait().points() * p.details().size();
+
+        for (Map.Entry<String, Picked> e : traits.entrySet()) addTraitSources(e.getValue(), "trait", "Traço", "TRAIT", b);
+        for (Map.Entry<String, Picked> e : drawbacks.entrySet()) addTraitSources(e.getValue(), "drawback", "Desvantagem", "DRAWBACK", b);
+
+        for (RuleTrait t : system.traitsOrEmpty()) {
+            int times = traits.containsKey(t.id()) ? traits.get(t.id()).details().size() : 0;
+            String reason = null;
+            if (!t.requiresOrEmpty().isEmpty() && t.requiresOrEmpty().stream().noneMatch(traits::containsKey)) {
+                reason = "precisa de " + traitNames(t.requiresOrEmpty());
+            } else if (times >= t.maxTimesOrOne()) {
+                reason = t.maxTimesOrOne() == 1 ? "já escolhido" : "já escolhido " + times + " vezes (máximo)";
+            }
+            b.traitOptions.add(new TraitStatus(t.id(), reason == null, reason, times));
+        }
+        for (RuleTrait t : system.drawbacksOrEmpty()) {
+            int times = drawbacks.containsKey(t.id()) ? drawbacks.get(t.id()).details().size() : 0;
+            String reason = times >= t.maxTimesOrOne() ? (t.maxTimesOrOne() == 1 ? "já escolhida" : "já escolhida " + times + " vezes (máximo)") : null;
+            b.traitOptions.add(new TraitStatus(t.id(), reason == null, reason, times));
+        }
+
+        if (budget == null) return;
+        int budgetMinor = budget.minor(), budgetMajor = budget.major();
+        int[] best = null;
+        double bestWaste = Double.MAX_VALUE;
+        for (int cm = 0; cm <= Math.min(1, budgetMinor); cm++) {
+            for (int cj = 0; cj <= Math.min(1, budgetMajor); cj++) {
+                int slotsMinor = budgetMinor - cm, slotsMajor = budgetMajor - cj;
+                double points = drawbackPoints + cm * system.conversionOf("MINOR") + cj * system.conversionOf("MAJOR");
+                int cost = traitCost(system, minor - slotsMinor, major - slotsMajor, superior);
+                if (cost > points) continue;
+                double waste = Math.max(0, slotsMinor - minor) + Math.max(0, slotsMajor - major) + Math.floor(points - cost);
+                if (waste < bestWaste) {
+                    bestWaste = waste;
+                    best = new int[] {cm, cj};
+                }
+            }
+        }
+        int cm = best == null ? 0 : best[0], cj = best == null ? 0 : best[1];
+        int slotsMinor = budgetMinor - cm, slotsMajor = budgetMajor - cj;
+        double points = drawbackPoints + cm * system.conversionOf("MINOR") + cj * system.conversionOf("MAJOR");
+        int cost = traitCost(system, minor - slotsMinor, major - slotsMajor, superior);
+        b.traitBudget = new TraitBudgetStatus(budget.id(), slotsMinor, slotsMajor, Math.min(minor, slotsMinor),
+                Math.min(major, slotsMajor), cm == 1, cj == 1, drawbackPoints, points, cost, locked != null);
+        if (best == null) {
+            b.errors.add("Os traços escolhidos passam do que o modo " + budget.name() + " e as desvantagens permitem.");
+        } else if (bestWaste > 0) {
+            b.errors.add("Ainda sobram traços ou pontos de Origem para escolher.");
+        }
+    }
+
+    // Pontos de Origem para os traços além dos do modo: menores e maiores excedentes e todos os superiores.
+    private static int traitCost(RuleTraits system, int extraMinor, int extraMajor, int superior) {
+        return Math.max(0, extraMinor) * system.costOf("MINOR") + Math.max(0, extraMajor) * system.costOf("MAJOR")
+                + superior * system.costOf("SUPERIOR");
+    }
+
+    // Junta as escolhas por id (na ordem), com a resposta de cada vez; confere máximo e resposta obrigatória.
+    private Map<String, Picked> collectTraits(List<TraitPick> picks, Function<String, Optional<RuleTrait>> find, String unknown, Build b) {
+        Map<String, Picked> out = new LinkedHashMap<>();
+        for (TraitPick pick : picks == null ? List.<TraitPick>of() : picks) {
+            if (pick == null) continue;
+            Optional<RuleTrait> found = find.apply(pick.id());
+            if (found.isEmpty()) {
+                b.errors.add(unknown);
+                continue;
+            }
+            RuleTrait t = found.get();
+            out.computeIfAbsent(t.id(), k -> new Picked(t, new ArrayList<>()))
+                    .details().add(blank(pick.detail()) ? null : pick.detail().trim());
+        }
+        for (Picked p : out.values()) {
+            RuleTrait t = p.trait();
+            if (p.details().size() > t.maxTimesOrOne()) {
+                b.errors.add(t.maxTimesOrOne() == 1 ? t.name() + " só pode ser escolhido uma vez."
+                        : t.name() + " pode ser escolhido no máximo " + t.maxTimesOrOne() + " vezes.");
+            }
+            if (t.detail() != null && p.details().stream().anyMatch(d -> d == null)) {
+                b.errors.add("Responda em " + t.name() + ": " + t.detail());
+            }
+        }
+        return out;
+    }
+
+    // Cada escolha vira uma fonte de concessões ("Traço: Garras"); o texto vira uma passiva (uma por traço).
+    private static void addTraitSources(Picked p, String key, String label, String kind, Build b) {
+        RuleTrait t = p.trait();
+        for (int n = 0; n < p.details().size(); n++) {
+            List<Grant> grants = t.grantsOrEmpty();
+            // Deslocamento que cresce a cada escolha (Aquático: 15, 15, 10…): a n-ésima escolha usa o n-ésimo passo.
+            if (t.speedSteps() != null && !t.speedSteps().isEmpty()) {
+                Double step = t.speedSteps().get(Math.min(n, t.speedSteps().size() - 1));
+                grants = grants.stream().map(g -> g.type() == GrantType.SPEED ? g.withFeet(step) : g).toList();
+            }
+            b.traitSources.add(new Source(key + ":" + t.id() + ":" + n, label + ": " + t.name(), grants));
+        }
+        List<String> details = p.details().stream().filter(d -> d != null).toList();
+        int times = p.details().size();
+        b.traitLines.add(new TraitLine(t.id(), t.name(), kind, t.tier(), details, times));
+        if (Boolean.TRUE.equals(t.silent())) return;
+        String name = t.name() + (details.isEmpty() ? "" : " (" + String.join(", ", details) + ")") + (times > 1 ? " (" + times + "×)" : "");
+        b.traitFeatures.add(new Sourced<>(Grant.feature(AbilityType.PASSIVE, name, t.description()), label));
+    }
+
+    private String traitNames(List<String> ids) {
+        return String.join(" ou ", ids.stream().map(id -> rules.trait(id).map(RuleTrait::name).orElse(id)).toList());
+    }
+
+    private record Picked(RuleTrait trait, List<String> details) {}
+
+    // ---------- Recursos de classe (Capítulo 5) ----------
+
+    private static final Map<String, String> RESOURCE_KINDS = Map.ofEntries(
+            Map.entry("IRA", "Ira"), Map.entry("SUTRA", "Sutra"), Map.entry("VEL", "Vel"), Map.entry("TECNICA", "Técnica de Combate"),
+            Map.entry("INVOCACAO", "Invocação"), Map.entry("GRANDE_ESPIRITO", "Grande Espírito"),
+            Map.entry("ASPECTO_TERRESTRE", "Aspecto Terrestre"), Map.entry("ASPECTO_AQUATICO", "Aspecto Aquático"),
+            Map.entry("ASPECTO_ALADO", "Aspecto Alado"), Map.entry("RUNA", "Runa"), Map.entry("APRIMORAMENTO", "Aprimoramento"));
+
+    static String resourceKindLabel(String kind) {
+        return RESOURCE_KINDS.getOrDefault(kind, kind);
+    }
+
+    // ---------- Subida de nível ----------
+
+    // Níveis do personagem acima do 20º não existem.
+    static final int MAX_LEVEL = 20;
+    // Níveis do personagem que dão 1 ponto de Herança (de Origem ou Geral).
+    static final Set<Integer> HERITAGE_LEVELS = Set.of(5, 9, 13, 17);
+    // O que a classe NÃO dá quando entra por multiclasse (proficiências, perícias, salvaguardas, equipamento e ouro).
+    private static final Set<GrantType> NOT_ON_MULTICLASS = Set.of(GrantType.SAVING_THROW, GrantType.SAVING_THROW_CHOICE,
+            GrantType.SKILL, GrantType.SKILL_CHOICE, GrantType.ARMOR_PROFICIENCY, GrantType.WEAPON_PROFICIENCY, GrantType.CRAFT,
+            GrantType.CRAFT_CHOICE, GrantType.EQUIPMENT, GrantType.EQUIPMENT_CHOICE, GrantType.GOLD, GrantType.LANGUAGE,
+            GrantType.LANGUAGE_CHOICE);
+
+    // Cada nível ganho vira fontes "level:N:...": os ganhos daquele nível da classe e da subclasse (ou, numa classe
+    // nova, o 1º nível dela sem as proficiências iniciais + as de multiclasse), os ganhos da origem e da linhagem no
+    // nível do personagem e o ponto de Herança dos níveis 5, 9, 13 e 17. As escolhas do nível entram nos picks.
+    private void levelSources(CreationRequest r, Build b, List<Source> sources, Map<String, List<String>> picks) {
+        List<LevelPick> levels = r.levelsOrEmpty();
+        if (levels.isEmpty()) return;
+        if (b.klass == null) return;
+        if (1 + levels.size() > MAX_LEVEL) b.errors.add("O nível máximo é o " + MAX_LEVEL + "º.");
+        for (int i = 0; i < levels.size(); i++) {
+            LevelPick lp = levels.get(i);
+            int charLevel = i + 2;
+            String prefix = "level:" + charLevel + ":";
+            if (lp == null) {
+                b.errors.add("Falta o " + charLevel + "º nível.");
+                continue;
+            }
+            if (lp.choices() != null) lp.choices().forEach(picks::put);
+            RuleClass k = blank(lp.classId()) ? b.klass : rules.characterClass(lp.classId()).orElse(null);
+            if (k == null) {
+                b.errors.add(charLevel + "º nível: classe desconhecida.");
+                continue;
+            }
+            int n = b.classLevels.merge(k.id(), 1, Integer::sum);
+            b.classLevelAt.computeIfAbsent(k.id(), x -> new ArrayList<>()).add(charLevel);
+            b.classById.put(k.id(), k);
+            String classLabel = "Classe: " + k.name() + " (" + n + "º nível)";
+            b.sourceClass.put(classLabel, k.id());
+            if (n == 1) {
+                // Classe nova (multiclasse): 1º nível sem o que é só de quem começa nela, mais as proficiências da tabela.
+                b.multiclassed.add(k);
+                List<Grant> grants = new ArrayList<>(k.grantsOrEmpty().stream().filter(g -> !NOT_ON_MULTICLASS.contains(g.type())).toList());
+                if (k.multiclass() != null) grants.addAll(k.multiclass().grantsOrEmpty());
+                sources.add(new Source(prefix + "class:" + k.id(), classLabel, grants));
+                if (!k.subclassesOrEmpty().isEmpty()) {
+                    RuleLineage sub = k.subclassesOrEmpty().stream().filter(x -> x.id().equalsIgnoreCase(String.valueOf(lp.subclassId()))).findFirst().orElse(null);
+                    if (sub == null) {
+                        b.errors.add(charLevel + "º nível: escolha " + subclassLabel(k) + " de " + k.name() + ".");
+                    } else {
+                        b.subclassByClass.put(k.id(), sub);
+                        String subLabel = subclassLabel(k) + ": " + sub.name();
+                        b.sourceClass.put(subLabel, k.id());
+                        sources.add(new Source(prefix + "subclass:" + sub.id(), subLabel,
+                                sub.grantsOrEmpty().stream().filter(g -> !NOT_ON_MULTICLASS.contains(g.type())).toList()));
+                    }
+                }
+            } else {
+                k.levelsOrEmpty().stream().filter(l -> l.level() != null && l.level() == n).findFirst()
+                        .ifPresent(l -> sources.add(new Source(prefix + "class:" + k.id(), classLabel, l.grants() == null ? List.of() : l.grants())));
+                RuleLineage sub = b.subclassByClass.get(k.id());
+                if (sub != null) {
+                    String subLabel = subclassLabel(k) + ": " + sub.name() + " (" + n + "º nível)";
+                    b.sourceClass.put(subLabel, k.id());
+                    sub.levelsOrEmpty().stream().filter(l -> l.level() != null && l.level() == n).findFirst()
+                            .ifPresent(l -> sources.add(new Source(prefix + "subclass:" + sub.id(), subLabel, l.grants() == null ? List.of() : l.grants())));
+                }
+            }
+            if (b.origin != null) b.origin.levelsOrEmpty().stream().filter(l -> l.level() != null && l.level() == charLevel).findFirst()
+                    .ifPresent(l -> sources.add(new Source(prefix + "origin:" + b.origin.id(), "Origem: " + b.origin.name() + " (" + charLevel + "º nível)",
+                            l.grants() == null ? List.of() : l.grants())));
+            if (b.lineage != null) b.lineage.levelsOrEmpty().stream().filter(l -> l.level() != null && l.level() == charLevel).findFirst()
+                    .ifPresent(l -> sources.add(new Source(prefix + "lineage:" + b.lineage.id(), "Linhagem: " + b.lineage.name() + " (" + charLevel + "º nível)",
+                            l.grants() == null ? List.of() : l.grants())));
+            if (HERITAGE_LEVELS.contains(charLevel)) {
+                sources.add(new Source(prefix + "heritage", "Herança do " + charLevel + "º nível",
+                        List.of(new Grant(GrantType.HERITAGE_POINTS, null, 1, null, null, null, "ORIGIN", null, null, null, null,
+                                null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+                                null, null, null, null, null, null, null))));
+            }
+            // Dado de vida: rolado no app ou na mesa; vale de 1 até o lado do dado da classe do nível.
+            int die = k.hitDie() == null ? 0 : k.hitDie();
+            if (lp.hpRoll() == null || lp.hpRoll() < 1 || lp.hpRoll() > die) {
+                b.errors.add(charLevel + "º nível: informe o dado de vida (1d" + die + ").");
+                b.hpRolls.add(0);
+            } else {
+                b.hpRolls.add(lp.hpRoll());
+            }
+        }
+    }
+
+    // Multiclasse: o pré-requisito vale para cada classe nova e para as que o personagem já tinha (com os atributos
+    // finais). Nenhum atributo passa de 20 (ou do limite que um Aprimoramento deu a ele).
+    private void multiclassChecks(Build b) {
+        if (!b.multiclassed.isEmpty()) {
+            for (RuleClass k : b.classById.values()) {
+                String reason = multiclassBlock(k, b);
+                if (reason != null) b.errors.add("Multiclasse com " + k.name() + ": " + reason + ".");
+            }
+        }
+        for (Attribute a : Attribute.values()) {
+            int cap = b.attributeCap.getOrDefault(a, 20);
+            if (b.total(a) > cap) b.errors.add(a.name() + " passa de " + cap + ".");
+        }
+    }
+
+    static String multiclassBlock(RuleClass k, Build b) {
+        RuleClass.Multiclass m = k.multiclass();
+        if (m == null) return null;
+        String reason = "pré-requisito " + (m.prerequisite() == null ? "não atendido" : m.prerequisite());
+        if (m.attributes() != null && m.attributes().entrySet().stream().anyMatch(e -> b.total(e.getKey()) < e.getValue())) return reason;
+        if (m.anyAttributes() != null && !m.anyAttributes().isEmpty()
+                && m.anyAttributes().entrySet().stream().noneMatch(e -> b.total(e.getKey()) >= e.getValue())) return reason;
+        if (m.anotherAttribute() != null) {
+            Set<Attribute> used = m.attributes() == null ? Set.of() : m.attributes().keySet();
+            boolean other = Arrays.stream(Attribute.values()).anyMatch(a -> !used.contains(a) && b.total(a) >= m.anotherAttribute());
+            if (!other) return reason;
+        }
+        return null;
+    }
+
+    // ---------- Magias ----------
+
+    // Valor de FEATURE.value cujas opções são Mistérios.
+    static final String MYSTERY = "MYSTERY";
+
+    // "Água (Elemental)", "Infernal" → id do Mistério, pelo nome (sem acento nem maiúscula; Infernal = Inferno).
+    static final String ACCESS = "ACCESS";
+
+    // Mistérios a que o personagem tem acesso: os Espirituais e Celestiais sempre; os Elementais pelo elemento
+    // (primários sempre; os outros quando um caminho de elementos ou Herança se cumpre, MagicRules.accessibleElements).
+    private Set<String> accessibleMysteries(Build b) {
+        RuleMagic magic = rules.catalog().magic();
+        if (magic == null) return Set.of();
+        Set<String> heritageIds = new LinkedHashSet<>();
+        b.heritages.forEach(h -> heritageIds.add(h.id()));
+        Set<String> elements = MagicRules.accessibleElements(magic, new LinkedHashSet<>(b.mysteries), heritageIds, new LinkedHashSet<>(b.mysteries), false);
+        Set<String> out = new LinkedHashSet<>();
+        for (RuleMagic.Mystery m : magic.mysteriesOrEmpty()) {
+            if (!"ELEMENTAL".equals(m.source()) || (m.element() != null ? elements.contains(m.element()) : elements.contains(m.id()))) out.add(m.id());
+        }
+        return out;
+    }
+
+    // Nome de cada Mistério (id → "Água") para as opções de escolha.
+    private Map<String, String> mysteryNames(List<String> ids) {
+        RuleMagic magic = rules.catalog().magic();
+        Map<String, String> names = new LinkedHashMap<>();
+        if (magic != null) magic.mysteriesOrEmpty().stream().filter(m -> ids.contains(m.id())).forEach(m -> names.put(m.id(), m.name()));
+        return names;
+    }
+
+    private Optional<String> mysteryByName(String option) {
+        RuleMagic magic = rules.catalog().magic();
+        if (magic == null) return Optional.empty();
+        String name = normalize(option.replaceAll("\\s*\\(.*\\)$", "")).replace("infernal", "inferno");
+        Optional<String> found = magic.mysteriesOrEmpty().stream().filter(m -> normalize(m.name()).equals(name)).map(RuleMagic.Mystery::id).findFirst();
+        if (found.isPresent()) return found;
+        // "Charme (Encantamento)" (Janela da Mente do Vítreo): o Mistério é o que está entre parênteses.
+        java.util.regex.Matcher inner = java.util.regex.Pattern.compile("\\(([^)]+)\\)$").matcher(option.trim());
+        if (!inner.find()) return Optional.empty();
+        String innerName = normalize(inner.group(1));
+        return magic.mysteriesOrEmpty().stream().filter(m -> normalize(m.name()).equals(innerName)).map(RuleMagic.Mystery::id).findFirst();
+    }
+
+    private static String normalize(String s) {
+        return java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase().trim();
+    }
+
+    // Magias conhecidas: as fixas (SPELL) e as escolhas (SPELL_CHOICE), com as opções da lista da classe e/ou dos Mistérios
+    // do personagem (o Elemental Geral vem com o primeiro Mistério Elemental). Uma magia escolhida não aparece de novo.
+    // Cada magia vira uma habilidade SPELL com a fonte da escolha.
+    private void spellChoices(Build b, Map<String, List<String>> picks) {
+        RuleMagic magic = rules.catalog().magic();
+        if (magic == null) return;
+        Set<String> mysteries = new LinkedHashSet<>(b.mysteries);
+        boolean elemental = magic.mysteriesOrEmpty().stream().anyMatch(m -> "ELEMENTAL".equals(m.source()) && mysteries.contains(m.id()));
+        if (elemental) mysteries.add("elemental-geral");
+        b.mysteries.clear();
+        b.mysteries.addAll(mysteries);
+        Map<String, RuleMagic.Spell> byId = new LinkedHashMap<>();
+        magic.spellsOrEmpty().forEach(sp -> byId.put(sp.id(), sp));
+        // As magias conhecidas ficam no build (pré-requisito de recurso: Rajada Etérea → rajada mística).
+        b.knownSpellIds.addAll(b.fixedSpells.keySet());
+        Set<String> taken = b.knownSpellIds;
+        b.fixedSpells.forEach((id, source) -> {
+            RuleMagic.Spell sp = byId.get(id);
+            if (sp != null) b.features.add(new Sourced<>(Grant.spell(sp), source));
+        });
+        // Nível a nível: as escolhas do nível e, do 2º em diante, a troca opcional de uma magia conhecida.
+        List<Known> known = new ArrayList<>();
+        int last = b.spellChoices.stream().mapToInt(c -> levelOfKey(c.key())).max().orElse(1);
+        for (int lv = 1; lv <= Math.max(b.level, last); lv++) {
+            for (SpellChoice c : b.spellChoices) {
+                if (levelOfKey(c.key()) == lv) spellChoice(c, b, magic, mysteries, byId, taken, known);
+            }
+            if (lv > 1) spellSwap(lv, picks, b, magic, mysteries, byId, taken, known);
+        }
+    }
+
+    // Magia escolhida numa SPELL_CHOICE: a fonte e a classe dela e de onde podia vir (para a troca ao subir de nível).
+    private record Known(String spellId, String source, String classId, String from) {}
+
+    // A lista de origem/linhagem (Yordle, Fauhwoon, Ottrani) vale como a lista da classe para quem é dela.
+    // "LIST:ACOLYTE,FIGHTER" (Arcanista Iniciante, Grão-Conjurador): magias da lista de uma dessas classes (FIGHTER = a do
+    // Combatente Arcano); "+ATTACK" no fim: só as que pedem ataque mágico; "+RITUAL": só rituais (Ritualista).
+    // "MYSTERY:som,luz": magias desses Mistérios (Musicista Prodígio); "ANY": qualquer magia (Benefício Colateral);
+    // "ORIGIN": a lista da origem e da linhagem (Magia Inata).
+    static final String LIST = "LIST:";
+    private static final java.util.regex.Pattern SPELL_ATTACK = java.util.regex.Pattern.compile("ataque (mágico|de magia|com magia)",
+            java.util.regex.Pattern.CASE_INSENSITIVE);
+
+    private static boolean inList(RuleMagic.Spell sp, String from, String classId, Set<String> mysteries, Set<String> origins) {
+        if ("ANY".equals(from)) return true;
+        // Lista da origem/linhagem (Magia Inata).
+        if ("ORIGIN".equals(from)) return sp.originsOrEmpty().stream().anyMatch(origins::contains);
+        if (from.startsWith("MYSTERY:")) {
+            List<String> ids = List.of(from.substring(8).split(","));
+            return sp.mysteriesOrEmpty().stream().anyMatch(ids::contains);
+        }
+        if (from.startsWith(LIST)) {
+            String spec = from.substring(LIST.length());
+            boolean attack = spec.contains("+ATTACK");
+            boolean ritual = spec.contains("+RITUAL");
+            List<String> classes = List.of(spec.replace("+ATTACK", "").replace("+RITUAL", "").split(","));
+            return sp.classesOrEmpty().stream().anyMatch(classes::contains)
+                    && (!attack || (sp.description() != null && SPELL_ATTACK.matcher(sp.description()).find()))
+                    && (!ritual || Boolean.TRUE.equals(sp.ritual()));
+        }
+        boolean fromClass = !"MYSTERIES".equals(from) && ((classId != null && sp.classesOrEmpty().contains(classId))
+                || sp.originsOrEmpty().stream().anyMatch(origins::contains));
+        boolean fromMystery = !"CLASS".equals(from) && sp.mysteriesOrEmpty().stream().anyMatch(mysteries::contains);
+        return fromClass || fromMystery;
+    }
+
+    private static String spellName(RuleMagic.Spell sp) {
+        return sp.name() + (sp.level() == 0 ? "" : " (" + sp.level() + "º)");
+    }
+
+    private void spellChoice(SpellChoice c, Build b, RuleMagic magic, Set<String> mysteries, Map<String, RuleMagic.Spell> byId,
+                             Set<String> taken, List<Known> known) {
+        Grant g = c.grant();
+        int level = g.spellLevel() == null ? 0 : g.spellLevel();
+        String raw = g.value() == null ? "CLASS_OR_MYSTERIES" : g.value();
+        // "+EXACT": só magias desse nível (Magia Inata: "uma de 2º"), não as de nível menor; "+CASTER:<classe>" já foi conferido.
+        boolean exact = raw.contains("+EXACT");
+        String given = raw.replace("+EXACT", "").replaceAll("\\+CASTER:[A-Z]+", "");
+        // "MYSTERY:CHOSEN": o(s) Mistério(s) escolhido(s) na mesma fonte (a chave sem o índice da concessão).
+        List<String> chosenIds = b.chosenMysteries.getOrDefault(c.key().replaceFirst(":\\d+$", ""), List.of());
+        String from = !"MYSTERY:CHOSEN".equals(given) ? given : chosenIds.isEmpty() ? "MYSTERY:-" : "MYSTERY:" + String.join(",", chosenIds);
+        // Lista da classe de onde vem a escolha (multiclasse: a da outra classe).
+        String classId = b.sourceClass.getOrDefault(c.source(), b.klass == null ? null : b.klass.id());
+        List<String> options = new ArrayList<>();
+        Map<String, String> names = new LinkedHashMap<>();
+        for (RuleMagic.Spell sp : magic.spellsOrEmpty()) {
+            if (sp.level() == null || (level == 0 ? sp.level() != 0 : sp.level() < 1 || sp.level() > level)) continue;
+            if (exact && sp.level() != level) continue;
+            if (!inList(sp, from, classId, mysteries, b.originIds())) continue;
+            if (taken.contains(sp.id()) && !c.picked().contains(sp.id())) continue;
+            options.add(sp.id());
+            names.put(sp.id(), spellName(sp));
+        }
+        int count = g.count() == null ? 1 : g.count();
+        String label = orLabel(g, level == 0 ? "Truques: escolha " + count : "Magias até o " + level + "º nível: escolha " + count);
+        String note = null;
+        List<String> selected;
+        if (options.isEmpty()) {
+            // Sem Mistério ainda (Arcanista) ou sem lista: avisa, sem bloquear com "faltam escolhas".
+            note = "MYSTERIES".equals(from) ? "Escolha um Mistério para ver as magias." : "Nenhuma magia disponível nesta lista.";
+            selected = List.of();
+            if (!c.picked().isEmpty()) b.errors.add("Opção inválida em \"" + label + "\".");
+        } else {
+            selected = choose(c.picked(), options, count, label, b.errors);
+        }
+        taken.addAll(selected);
+        selected.forEach(id -> {
+            b.features.add(new Sourced<>(Grant.spell(byId.get(id)), c.source()));
+            known.add(new Known(id, c.source(), classId, from));
+        });
+        b.choices.add(new ChoiceLine(c.key(), g.type(), label, count, options, selected, c.source(), note, names));
+    }
+
+    // Chaves da troca de magia conhecida do nível N: a que sai e a que entra.
+    static final String SWAP_OUT = "spell-swap:out", SWAP_IN = "spell-swap:in";
+
+    // Ao ganhar um nível numa classe que conhece magias, pode trocar uma magia conhecida dela (1º nível ou mais, escolhida
+    // numa SPELL_CHOICE) por outra da mesma lista, até o maior nível de magia que a classe já escolhe. Opcional.
+    private void spellSwap(int lv, Map<String, List<String>> picks, Build b, RuleMagic magic, Set<String> mysteries,
+                           Map<String, RuleMagic.Spell> byId, Set<String> taken, List<Known> known) {
+        String classId = b.classLevelAt.entrySet().stream().filter(e -> e.getValue().contains(lv)).map(Map.Entry::getKey).findFirst().orElse(null);
+        if (classId == null) return;
+        List<Known> swappable = known.stream()
+                .filter(k -> classId.equals(k.classId()) && byId.get(k.spellId()) != null && byId.get(k.spellId()).level() != null && byId.get(k.spellId()).level() >= 1)
+                .toList();
+        if (swappable.isEmpty()) return;
+        int maxLevel = b.spellChoices.stream()
+                .filter(c -> levelOfKey(c.key()) <= lv && classId.equals(b.sourceClass.getOrDefault(c.source(), b.klass == null ? null : b.klass.id())))
+                .mapToInt(c -> c.grant().spellLevel() == null ? 0 : c.grant().spellLevel()).max().orElse(0);
+        Set<String> froms = new LinkedHashSet<>();
+        swappable.forEach(k -> froms.add(k.from()));
+        List<String> inOptions = new ArrayList<>();
+        Map<String, String> inNames = new LinkedHashMap<>();
+        for (RuleMagic.Spell sp : magic.spellsOrEmpty()) {
+            if (sp.level() == null || sp.level() < 1 || sp.level() > maxLevel || taken.contains(sp.id())) continue;
+            if (froms.stream().noneMatch(f -> inList(sp, f, classId, mysteries, b.originIds()))) continue;
+            inOptions.add(sp.id());
+            inNames.put(sp.id(), spellName(sp));
+        }
+        List<String> outOptions = swappable.stream().map(Known::spellId).toList();
+        Map<String, String> outNames = new LinkedHashMap<>();
+        outOptions.forEach(id -> outNames.put(id, spellName(byId.get(id))));
+        String prefix = "level:" + lv + ":";
+        String source = "Troca de magia (" + lv + "º nível)";
+        RuleClass k = b.classById.get(classId);
+        String className = k == null ? classId : k.name();
+        List<String> out = picks.getOrDefault(prefix + SWAP_OUT, List.of()).stream().filter(outOptions::contains).distinct().toList();
+        List<String> in = picks.getOrDefault(prefix + SWAP_IN, List.of()).stream().filter(inOptions::contains).distinct().toList();
+        String outLabel = "Trocar uma magia de " + className + " (opcional): a que sai";
+        String inLabel = "Trocar uma magia de " + className + " (opcional): a que entra";
+        if (out.size() != picks.getOrDefault(prefix + SWAP_OUT, List.of()).size() || out.size() > 1) b.errors.add("Opção inválida em \"" + outLabel + "\".");
+        else if (in.size() != picks.getOrDefault(prefix + SWAP_IN, List.of()).size() || in.size() > 1) b.errors.add("Opção inválida em \"" + inLabel + "\".");
+        else if (out.size() != in.size()) b.errors.add("Troca de magia do " + lv + "º nível: escolha a que sai e a que entra (ou nenhuma).");
+        else if (out.size() == 1) {
+            Known old = swappable.stream().filter(x -> x.spellId().equals(out.getFirst())).findFirst().orElseThrow();
+            String oldName = byId.get(old.spellId()).name();
+            b.features.removeIf(f -> f.source().equals(old.source()) && oldName.equals(f.value().name()) && f.value().abilityType() == AbilityType.SPELL);
+            known.remove(old);
+            taken.remove(old.spellId());
+            b.sourceClass.put(source, classId);
+            b.features.add(new Sourced<>(Grant.spell(byId.get(in.getFirst())), source));
+            known.add(new Known(in.getFirst(), source, classId, old.from()));
+            taken.add(in.getFirst());
+        }
+        String note = "Ao subir de nível, pode trocar uma magia conhecida por outra da mesma lista.";
+        b.choices.add(new ChoiceLine(prefix + SWAP_OUT, GrantType.SPELL_CHOICE, outLabel, 1, outOptions, out, source, note, outNames));
+        b.choices.add(new ChoiceLine(prefix + SWAP_IN, GrantType.SPELL_CHOICE, inLabel, 1, inOptions, in, source, note, inNames));
+    }
+
+    // Itens de uma opção de equipamento ("besta-leve+virotes-de-besta") na lista do equipamento inicial.
+    private void addEquipment(Build b, String option, String source) {
+        for (EquipmentRules.Entry e : EquipmentRules.parse(option)) {
+            String name = EquipmentRules.item(rules.catalog().equipment(), e.item()).map(RuleItem::name).orElse(e.item());
+            b.equipment.add(new EquipmentLine(e.item(), name, e.quantity(), source));
+        }
+    }
+
+    // Os recursos escolhidos (RESOURCE_CHOICE) viram fontes como as outras, antes das passadas: as concessões
+    // deles (CA do Sutra do Vento, +2 de Força da Potência do Búfalo, escolhas internas...) seguem o fluxo normal.
+    // A lista cresce enquanto percorre: um recurso pode trazer outra escolha (Combatente Monástico → Sutra).
+    private void resourceSources(List<Source> sources, Map<String, List<String>> picks, Build b) {
+        for (int s = 0; s < sources.size(); s++) {
+            Source src = sources.get(s);
+            List<Grant> grants = src.grants();
+            for (int i = 0; i < grants.size(); i++) {
+                Grant g = grants.get(i);
+                if (g.type() != GrantType.RESOURCE_CHOICE) continue;
+                String key = src.key() + ":" + i;
+                List<String> picked = List.copyOf(new LinkedHashSet<>(picks.getOrDefault(key, List.of())));
+                b.resourceChoices.add(new ResourceChoice(key, g, src.label(), picked));
+                for (String id : picked) {
+                    Optional<RuleResource> found = rules.resource(id);
+                    if (found.isEmpty() || !found.get().kind().equals(g.value())) continue;
+                    RuleResource res = found.get();
+                    // Repetível (o aumento de atributo de cada Aprimoramento): uma fonte por escolha, com a chave dela.
+                    // Escolhido num nível ganho: a chave também leva o nível, para as escolhas internas serem
+                    // "level:N:..." como as outras daquele nível.
+                    boolean keyed = res.repeats() || key.startsWith("level:") || key.contains("@level:");
+                    if (!b.resourceIds.add(res.id()) && !res.repeats()) continue;
+                    String label = resourceKindLabel(res.kind()) + ": " + res.name();
+                    sources.add(new Source("resource:" + res.id() + (keyed ? "@" + key : ""), label, resourceGrants(res)));
+                    if (res.threshold() != null) res.threshold().grants().keySet().forEach(o -> b.thresholds.add(new Sourced<>(res.threshold(), o)));
+                    // Recurso escolhido pela classe (Técnica do Combatente): as tabelas dele usam o nível nessa classe,
+                    // as magias dele vêm da lista dela e os levels dele entram pelo nível nela.
+                    String classId = b.sourceClass.get(src.label());
+                    if (classId == null) continue;
+                    b.sourceClass.put(label, classId);
+                    resourceLevelSources(res, label, classId, levelOfKey(key), sources, b);
+                }
+            }
+        }
+    }
+
+    // Ganhos do recurso pelo nível na classe já alcançado. Cada um vale no nível do personagem em que a classe chegou
+    // lá, ou no da escolha do recurso, se veio depois (a chave "level:N:..." põe as escolhas internas naquele nível).
+    private static void resourceLevelSources(RuleResource res, String label, String classId, int chosenAt, List<Source> sources, Build b) {
+        List<Integer> at = b.classLevelAt.getOrDefault(classId, List.of());
+        for (RuleLevel l : res.levelsOrEmpty()) {
+            if (l.level() == null || l.level() > at.size()) continue;
+            int charLevel = Math.max(at.get(l.level() - 1), chosenAt);
+            String levelLabel = label + " (" + l.level() + "º nível)";
+            b.sourceClass.put(levelLabel, classId);
+            sources.add(new Source((charLevel > 1 ? "level:" + charLevel + ":" : "") + "resource:" + res.id() + ":" + l.level(),
+                    levelLabel, l.grants() == null ? List.of() : l.grants()));
+        }
+    }
+
+    // Nível do personagem de uma chave de escolha ("level:5:..." ou "resource:x@level:5:..."); 1 = criação.
+    private static final Pattern LEVEL_KEY = Pattern.compile("(?:^|@)level:(\\d+):");
+
+    static int levelOfKey(String key) {
+        Matcher m = LEVEL_KEY.matcher(key);
+        return m.find() ? Integer.parseInt(m.group(1)) : 1;
+    }
+
+    // A habilidade com o texto do recurso (pré-requisito, execução e componentes no topo) + as concessões dele.
+    static List<Grant> resourceGrants(RuleResource res) {
+        StringBuilder text = new StringBuilder();
+        if (res.prerequisite() != null) text.append("Pré-requisito: ").append(res.prerequisite()).append('\n');
+        if (res.execution() != null) text.append("Execução: ").append(res.execution()).append('\n');
+        if (res.components() != null) text.append("Componentes: ").append(res.components()).append('\n');
+        if (res.cost() != null) text.append("Vel: ").append("◆".repeat(res.cost())).append('\n');
+        if (!text.isEmpty()) text.append('\n');
+        text.append(res.description() == null ? "" : res.description());
+        AbilityType type = res.execution() != null || res.uses() != null ? AbilityType.ABILITY : AbilityType.PASSIVE;
+        List<Grant> grants = new ArrayList<>();
+        Grant feature = Grant.feature(type, res.name(), text.toString());
+        grants.add(res.uses() == null ? feature : feature.withUses(res.uses()));
+        grants.addAll(res.grantsOrEmpty());
+        return grants;
+    }
+
+    // Depois de tudo (atributos, heranças, opções): o que cada escolha aceita, o que foi escolhido e os erros.
+    private void resourceChoices(Build b) {
+        for (ResourceChoice c : b.resourceChoices) {
+            Grant g = c.grant();
+            boolean vel = "VEL".equals(g.value());
+            List<RuleResource> pool = rules.resources(g.value()).stream()
+                    .filter(r -> !g.hasOptions() || r.groupsOrEmpty().stream().anyMatch(g.options()::contains))
+                    .toList();
+            List<String> options = new ArrayList<>();
+            List<String> selected = new ArrayList<>();
+            int locked = 0;
+            for (RuleResource r : pool) {
+                boolean mine = c.picked().contains(r.id());
+                // Escolhido em outra escolha: não aparece de novo (a não ser que possa repetir).
+                if (!mine && !r.repeats() && b.resourceIds.contains(r.id())) continue;
+                String reason = resourceBlock(r, b, mine, Boolean.TRUE.equals(g.anyClass()));
+                if (reason == null) options.add(r.id());
+                else locked++;
+                if (mine) {
+                    if (reason == null) selected.add(r.id());
+                    else b.errors.add(r.name() + ": " + reason + ".");
+                }
+            }
+            for (String id : c.picked()) {
+                if (pool.stream().noneMatch(r -> r.id().equals(id))) b.errors.add("Opção inválida em \"" + resourceLabel(g) + "\".");
+            }
+            int count = vel ? (g.amount() == null ? 0 : g.amount()) : (g.count() == null ? 1 : g.count());
+            if (vel) {
+                int used = selected.stream().mapToInt(id -> rules.resource(id).map(RuleResource::costOrOne).orElse(1)).sum();
+                if (used > count) b.errors.add("Vel: os escolhidos ocupam " + used + " pontos, mas há " + count + ".");
+            } else if (selected.size() > count) {
+                b.errors.add("Escolha só " + count + " em \"" + resourceLabel(g) + "\".");
+            } else if (selected.size() < count && options.size() > selected.size()) {
+                b.errors.add("Faltam escolhas: " + resourceLabel(g) + ".");
+            }
+            String note = locked == 0 ? null
+                    : locked == 1 ? "1 opção ainda bloqueada por pré-requisito." : locked + " opções ainda bloqueadas por pré-requisito.";
+            if (options.isEmpty() && !vel) note = "Nenhuma opção disponível ainda: confira os pré-requisitos com o mestre.";
+            b.choices.add(new ChoiceLine(c.key(), g.type(), resourceLabel(g), count, options, List.copyOf(selected), c.source(), note));
+        }
+        inactivateKi(b);
+    }
+
+    // Habilidade com a reserva de Ki da classe (Bodisatva, Combatente Monástico).
+    static final String KI = "Ki";
+
+    private static Optional<Sourced<Grant>> kiFeature(Build b) {
+        return b.features.stream().filter(f -> KI.equals(f.value().name())).findFirst();
+    }
+
+    // Pontos de Ki do personagem na criação (0 sem a habilidade Ki).
+    private static int kiTotal(Build b) {
+        return kiFeature(b).map(f -> usesFor(f.value(), b.proficiency(), b.scale(f.source()), b.roundUp, b::modifier))
+                .map(n -> n == null ? 0 : n).orElse(0);
+    }
+
+    // Os Vel com "N pontos de Ki" inativam esses pontos: saem do total de Ki (em todos os níveis da tabela).
+    private void inactivateKi(Build b) {
+        int inactive = b.resourceIds.stream().map(rules::resource).flatMap(Optional::stream)
+                .mapToInt(r -> r.ki() == null ? 0 : r.ki()).sum();
+        if (inactive == 0) return;
+        Optional<Sourced<Grant>> ki = kiFeature(b);
+        int total = kiTotal(b);
+        if (ki.isEmpty() || total < inactive) {
+            b.errors.add("Os Vel escolhidos inativam " + inactive + " ponto(s) de Ki, mas o personagem tem " + total + ".");
+            return;
+        }
+        Grant g = ki.get().value();
+        if (g.usesByLevel() == null || g.usesByLevel().isEmpty()) return;
+        Map<String, Integer> table = new LinkedHashMap<>();
+        g.usesByLevel().forEach((lv, n) -> table.put(lv, n == null ? null : Math.max(0, n - inactive)));
+        Grant reduced = g.withUsesByLevel(table, g.description() + "\n\nKi inativado pelos Vel: " + inactive + " ponto(s).");
+        b.features.set(b.features.indexOf(ki.get()), new Sourced<>(reduced, ki.get().source()));
+    }
+
+    // Habilidade com a Mana de cada classe conjuradora (Acólito, Arcanista, subclasses, Técnica Combatente Arcano).
+    static final String MANA = "Pontos de Mana";
+
+    // Multiclasse (Capítulo 3): a Mana é a soma da Mana de cada classe conjuradora, cada uma pela própria tabela e pelo
+    // nível nela. Duas na mesma classe (Combatente Arcano e o Aprimorado) valem a maior. Fica uma habilidade só.
+    private static void mergeMana(Build b) {
+        Map<String, Sourced<Grant>> best = new LinkedHashMap<>();
+        Map<String, Integer> points = new LinkedHashMap<>();
+        for (Sourced<Grant> f : b.features) {
+            if (!MANA.equals(f.value().name())) continue;
+            String group = b.sourceClass.getOrDefault(f.source(), f.source());
+            Integer n = usesFor(f.value(), b.proficiency(), b.scale(f.source()), b.roundUp, b::modifier);
+            int value = n == null ? 0 : n;
+            if (!points.containsKey(group) || value > points.get(group)) {
+                best.put(group, f);
+                points.put(group, value);
+            }
+        }
+        if (best.isEmpty()) return;
+        Sourced<Grant> first = best.values().iterator().next();
+        Grant merged = first.value();
+        if (best.size() > 1) {
+            int total = points.values().stream().mapToInt(Integer::intValue).sum();
+            List<String> parts = new ArrayList<>();
+            points.forEach((group, n) -> {
+                RuleClass k = b.classById.get(group);
+                parts.add((k == null ? group : k.name()) + " " + n);
+            });
+            merged = merged.withUsesByLevel(Map.of("1", total), merged.description()
+                    + "\n\nMulticlasse: a Mana é a soma da de cada classe conjuradora (" + String.join(" + ", parts) + " = " + total + ").");
+        }
+        int at = b.features.indexOf(first);
+        b.features.removeIf(f -> MANA.equals(f.value().name()));
+        b.features.add(Math.min(at, b.features.size()), new Sourced<>(merged, first.source()));
+    }
+
+    static String resourceLabel(Grant g) {
+        if (g.label() != null) return g.label();
+        if ("VEL".equals(g.value())) return "Vel (opcional, até " + g.amount() + " ◆)";
+        int count = g.count() == null ? 1 : g.count();
+        return resourceKindLabel(g.value()) + (count == 1 ? ": escolha um" : ": escolha " + count);
+    }
+
+    // Por que o recurso não pode ser escolhido agora (null = pode). Na criação o personagem é de 1º nível.
+    // anyClass: ignora classe, subclasse e nível de classe ("exceto o de Classe": Mestre Tático).
+    private static String resourceBlock(RuleResource r, Build b, boolean mine, boolean anyClass) {
+        String pre = "pré-requisito: " + (r.prerequisite() == null ? "não atendido" : r.prerequisite());
+        // Vel que inativa Ki: o personagem precisa ter esse Ki.
+        if (r.ki() != null && r.ki() > kiTotal(b)) return pre;
+        RuleResource.Requirements q = r.requires();
+        if (q == null) return null;
+        if (q.level() != null && q.level() > b.level) return "a partir do " + q.level() + "º nível";
+        // Sem contar o que o próprio recurso dá (Potência do Búfalo: +2 de Força não paga a Força 15 dele).
+        ToIntFunction<Attribute> value = a -> b.total(a) - (mine ? r.grantsOrEmpty().stream()
+                .filter(x -> x.type() == GrantType.ATTRIBUTE && x.attribute() == a).mapToInt(x -> x.amount() == null ? 0 : x.amount()).sum() : 0);
+        if (q.attributes() != null && q.attributes().entrySet().stream().anyMatch(e -> value.applyAsInt(e.getKey()) < e.getValue())) return pre;
+        if (q.anyAttributes() != null && !q.anyAttributes().isEmpty()
+                && q.anyAttributes().entrySet().stream().noneMatch(e -> value.applyAsInt(e.getKey()) >= e.getValue())) return pre;
+        // Classe (e nível nela, "Caçador 8"): qualquer uma das classes do personagem; subclasse de qualquer classe.
+        if (!anyClass && q.classes() != null && !q.classes().isEmpty()) {
+            int need = q.classLevel() == null ? 1 : q.classLevel();
+            boolean has = b.classLevels.isEmpty()
+                    ? b.klass != null && need <= 1 && q.classes().stream().anyMatch(x -> x.equalsIgnoreCase(b.klass.id()))
+                    : b.classLevels.entrySet().stream().anyMatch(e -> e.getValue() >= need
+                            && q.classes().stream().anyMatch(x -> x.equalsIgnoreCase(e.getKey())));
+            if (!has) return pre;
+        }
+        if (!anyClass && q.subclasses() != null && !q.subclasses().isEmpty() && b.subclassByClass.values().stream()
+                .noneMatch(s -> q.subclasses().stream().anyMatch(x -> x.equalsIgnoreCase(s.id())))
+                && (b.subclass == null || q.subclasses().stream().noneMatch(x -> x.equalsIgnoreCase(b.subclass.id())))) return pre;
+        // Origem e Herança juntas: basta uma ("Construto ou Variante Progressão Tecnológica").
+        boolean byHeritage = q.heritages() != null && b.heritages.stream().anyMatch(h -> q.heritages().stream().anyMatch(x -> x.equalsIgnoreCase(h.id())));
+        if (q.origins() != null && !q.origins().isEmpty() && !byHeritage
+                && (b.origin == null || q.origins().stream().noneMatch(x -> x.equalsIgnoreCase(b.origin.id())))) return pre;
+        if (q.lineages() != null && !q.lineages().isEmpty()
+                && (b.lineage == null || q.lineages().stream().noneMatch(x -> x.equalsIgnoreCase(b.lineage.id())))) return pre;
+        if (q.regions() != null && !q.regions().isEmpty()
+                && (b.region == null || q.regions().stream().noneMatch(x -> x.equalsIgnoreCase(b.region.id())))) return pre;
+        if (q.skills() != null && q.skills().stream().anyMatch(x -> !b.skills.containsKey(SkillType.valueOf(x)))) return pre;
+        if (q.heritages() != null && !q.heritages().isEmpty() && (q.origins() == null || q.origins().isEmpty())
+                && b.heritages.stream().noneMatch(h -> q.heritages().stream().anyMatch(x -> x.equalsIgnoreCase(h.id())))) return pre;
+        if (q.resources() != null && q.resources().stream().anyMatch(x -> !b.resourceIds.contains(x))) return pre;
+        if (q.spells() != null && !b.knownSpellIds.containsAll(q.spells())) return pre;
+        if (q.weapons() != null && !q.weapons().isEmpty()
+                && b.weaponProficiencies.stream().noneMatch(w -> q.weapons().stream().anyMatch(w::equalsIgnoreCase))) return pre;
+        if (q.armor() != null && !b.armorProficiencies.containsAll(q.armor())) return pre;
+        if (q.feature() != null) {
+            List<String> chosen = b.featureOptions.get(q.feature());
+            if (chosen == null || (q.featureOptions() != null && !q.featureOptions().isEmpty()
+                    && chosen.stream().noneMatch(q.featureOptions()::contains))) return pre;
+        }
+        return null;
+    }
+
+    // ---------- Heranças ----------
+
+    // Compra das Heranças com os pontos de Herança. Cada escolha custa 1 ponto do tipo certo:
+    // ponto de Região compra Heranças de Região e Gerais; de Origem, de Origem e Gerais; ANY, qualquer uma.
+    // Efeitos situacionais, resistências, vulnerabilidades e bônus nas passivas (Heranças, Aprimoramentos...): refeitos a cada vez.
+    private static void applyEffects(Character c, Build b) {
+        c.getSituational().clear();
+        c.getSituational().addAll(b.situational);
+        c.getResistances().clear();
+        c.getResistances().addAll(b.resistances);
+        c.getVulnerabilities().clear();
+        c.getVulnerabilities().addAll(b.vulnerabilities);
+        c.getImmunities().clear();
+        c.getImmunities().addAll(b.immunities);
+        c.getAbsorptions().clear();
+        c.getAbsorptions().addAll(b.absorptions);
+        c.getConditionImmunities().clear();
+        c.getConditionImmunities().addAll(b.conditionImmunities);
+        c.getTypedReductions().clear();
+        c.getTypedReductions().putAll(b.typedReductions);
+        c.getSenses().clear();
+        c.getSenses().putAll(b.senses);
+        c.getAttributeSwaps().clear();
+        c.getAttributeSwaps().putAll(b.attributeSwaps);
+        c.getForms().clear();
+        c.getForms().addAll(b.forms);
+        // A forma ativa some se ele não a tiver mais.
+        if (c.getActiveForm() != null && b.forms.stream().noneMatch(f -> f.getName().equals(c.getActiveForm()))) c.setActiveForm(null);
+        c.getActiveEffects().removeIf(n -> b.forms.stream().noneMatch(f -> f.isEffect() && f.getName().equals(n)));
+        c.getSavingThrowExpertise().clear();
+        c.getSavingThrowExpertise().addAll(b.saveExpertise);
+        c.setPassivePerceptionBonus(b.passivePerception);
+        c.setPassiveInsightBonus(b.passiveInsight);
+    }
+
+    // Efeitos das Heranças escolhidas (criação e níveis), uma fonte por Herança, mesmo escolhida duas vezes.
+    // A compra (pontos, pré-requisitos) é conferida depois, em heritages().
+    // O nível em que cada uma foi escolhida fica em b.heritageLevel (para o ofício que ela ensina).
+    private List<Source> heritageSources(CreationRequest r, Build b) {
+        // id → opções escolhidas (a primeira, ou uma por escolha nas Heranças optionPerPick).
+        Map<String, List<String>> picks = new LinkedHashMap<>();
+        int[] level = {1};
+        java.util.function.Consumer<HeritagePick> take = p -> {
+            if (p == null) return;
+            List<String> chosen = picks.computeIfAbsent(p.id(), k -> new ArrayList<>());
+            b.heritageLevel.putIfAbsent("heritage:" + p.id(), level[0]);
+            boolean perPick = rules.heritage(p.id()).map(RuleHeritage::optionPerPickOrFalse).orElse(false);
+            if (!blank(p.option()) && (perPick || chosen.isEmpty())) chosen.add(p.option());
+        };
+        if (r.heritages() != null) r.heritages().forEach(take);
+        for (LevelPick lp : r.levelsOrEmpty()) {
+            level[0]++;
+            if (lp.heritages() != null) lp.heritages().forEach(take);
+        }
+        List<Source> out = new ArrayList<>();
+        Map<String, Integer> times = new LinkedHashMap<>();
+        if (r.heritages() != null) r.heritages().stream().filter(java.util.Objects::nonNull).forEach(p -> times.merge(p.id(), 1, Integer::sum));
+        for (LevelPick lp : r.levelsOrEmpty()) {
+            if (lp.heritages() != null) lp.heritages().stream().filter(java.util.Objects::nonNull).forEach(p -> times.merge(p.id(), 1, Integer::sum));
+        }
+        picks.forEach((id, chosen) -> rules.heritage(id).ifPresent(h -> {
+            List<Grant> grants = new ArrayList<>(h.grantsFor(chosen));
+            // Escolhida de novo: os efeitos da 2ª vez (pela opção), depois dos outros (as chaves das escolhas não mudam).
+            // Herança sem opção: a chave "*" (Variante Colosso).
+            if (times.getOrDefault(id, 0) >= 2 && h.repeatGrants() != null) {
+                grants.addAll(h.repeatGrants().getOrDefault(chosen.isEmpty() ? "*" : chosen.getFirst(), List.of()));
+            }
+            // Limiar: decidido depois das escolhas (quantas opções a habilidade tem); cada fonte escolhida é candidata.
+            if (h.threshold() != null) chosen.stream().distinct().filter(h.threshold().grants()::containsKey)
+                    .forEach(o -> b.thresholds.add(new Sourced<>(h.threshold(), o)));
+            if (!grants.isEmpty()) out.add(new Source("heritage:" + h.id(), "Herança: " + h.name(), grants));
+        }));
+        return out;
+    }
+
+    // Decidido depois de tudo: tamanho acima (Colosso); "caso já tenha": salvaguarda e ofício → especialidade;
+    // resistência → imunidade (Meio-Azakana, Meio-Kanmei).
+    private static void damageUpgrades(Build b) {
+        resolveSenses(b);
+        resolveCraftGrants(b);
+        resolveDamageBonuses(b);
+        if (b.sizeSteps > 0 && b.size != null) {
+            CreatureSize[] all = CreatureSize.values();
+            b.size = all[Math.min(all.length - 1, b.size.ordinal() + b.sizeSteps)];
+        }
+        for (Sourced<Attribute> sv : b.saveUpgrades) {
+            if (b.saves.containsKey(sv.value())) b.saveExpertise.add(sv.value());
+            else b.saves.put(sv.value(), sv.source());
+        }
+        for (Sourced<String> c : b.craftUpgrades) {
+            if (b.crafts.contains(c.value())) b.craftExpertise.add(c.value());
+            else addCraft(b, c.value(), c.source());
+        }
+        for (String up : b.resistanceUpgrades) {
+            boolean step = up.startsWith("+");
+            String type = step ? up.substring(1) : up;
+            if (b.immunities.contains(type)) {
+                if (step && b.immunities.remove(type)) b.absorptions.add(type);
+                continue;
+            }
+            if (b.resistances.remove(type)) b.immunities.add(type);
+            else b.resistances.add(type);
+        }
+        // O degrau maior vence: absorção > imunidade > resistência (Resistência Lendária, Absorção da Runinata).
+        b.immunities.removeAll(b.absorptions);
+        b.resistances.removeAll(b.immunities);
+        b.resistances.removeAll(b.absorptions);
+    }
+
+    // Níveis e fórmulas de ofício das concessões fixas (value = id ou CHOSEN), com o nível da classe para a tabela.
+    private static void resolveCraftGrants(Build b) {
+        for (Sourced<Grant> c : b.craftGrants) {
+            Grant g = c.value();
+            String[] src = c.source().split("\\|", 2);
+            List<String> ids = "CHOSEN".equals(g.value()) ? b.chosenCrafts.getOrDefault(src[0], List.of())
+                    : "ALL".equals(g.value()) ? List.of("*") : List.of(g.value());
+            for (String id : ids) {
+                if (g.type() == GrantType.CRAFT_INCOME) {
+                    int n = g.valueByLevel() != null && !g.valueByLevel().isEmpty() ? valueAt(g, 0, b.scale(src[1]))
+                            : g.amount() != null ? g.amount() : usesFor(g, b.proficiency(), b.level, b.roundUp, b::modifier);
+                    if (n > 0) b.craftIncome.merge(id, n, Integer::sum);
+                    continue;
+                }
+                if (g.type() == GrantType.CRAFT_MASTERWORK) {
+                    b.craftMasterwork.merge(id, g.amount() == null ? 1 : g.amount(), Integer::sum);
+                    continue;
+                }
+                if (g.type() == GrantType.CRAFT_FORMULAS) {
+                    int n = g.amount() != null ? g.amount()
+                            : usesFor(g, b.proficiency(), b.level, b.roundUp, b::modifier) * (g.count() == null ? 1 : g.count());
+                    b.craftFormulas.merge(id, n, Integer::sum);
+                } else if (g.valueByLevel() != null && !g.valueByLevel().isEmpty()) {
+                    Integer floor = valueAt(g, null, b.scale(src[1]));
+                    if (floor != null) b.craftFloor.merge(id, floor, Math::max);
+                } else if (g.amount() != null) {
+                    b.craftBonus.merge(id, g.amount(), Integer::sum);
+                }
+            }
+        }
+    }
+
+    // Bônus de dano viram notas "DAMAGE:<alvo>" ("+2", "+1d4"), somadas no dano dos ataques da ficha.
+    private static void resolveDamageBonuses(Build b) {
+        for (Sourced<Grant> d : b.damageBonuses) {
+            Grant g = d.value();
+            String[] src = d.source().split("\\|", 2);
+            List<String> targets = "CHOSEN".equals(g.value())
+                    ? b.chosenWeapons.getOrDefault(src[0], List.of()).stream().map(w -> "WEAPON:" + w).toList() : List.of(g.value());
+            // Crítico: "margem/multiplicador" ("1/0" = margem −1).
+            if (g.type() == GrantType.CRIT_BONUS) {
+                String crit = (g.amount() == null ? 0 : g.amount()) + "/" + (g.count() == null ? 0 : g.count());
+                targets.forEach(t -> b.situational.add(new SituationalNote("CRIT:" + t, crit, src[1])));
+                continue;
+            }
+            String text;
+            String dice = g.diceByLevel() != null && !g.diceByLevel().isEmpty() ? byLevel(g.diceByLevel(), b.level) : g.damage();
+            if (dice != null) text = "+" + dice;
+            else if (g.valueByLevel() != null && !g.valueByLevel().isEmpty()) text = "+" + valueAt(g, 0, b.level);
+            else {
+                int n = g.usesFormula() == UsesFormula.PROFICIENCY ? b.proficiency()
+                        : g.usesFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2
+                        : g.usesFormula() == UsesFormula.HALF_ATTRIBUTE_MODIFIER ? Math.max(0, b.modifier(g.attribute()) / 2)
+                        : g.amount() == null ? 0 : g.amount();
+                if (n == 0) continue;
+                text = "+" + n;
+            }
+            // Com description: só vale numa situação (contra o Inimigo Favorito): vira nota no ataque, sem somar no dano.
+            if (g.description() != null) {
+                targets.forEach(t -> b.situational.add(new SituationalNote(t.startsWith("ATTACK") ? t : "ATTACK", text + " no dano " + g.description(), src[1])));
+                continue;
+            }
+            targets.forEach(t -> b.situational.add(new SituationalNote("DAMAGE:" + t, text, src[1])));
+        }
+    }
+
+    // Forma temporária em texto curto para a ficha (ver CharacterForm).
+    static CharacterForm formLine(Grant g) {
+        FormRule f = g.form();
+        List<String> attrs = new ArrayList<>();
+        if (f != null && f.attributes() != null) f.attributes().forEach((a, n) -> attrs.add(a.name() + ":" + n));
+        if (f != null && f.halfProficiency() != null) f.halfProficiency().forEach(a -> attrs.add(a.name() + ":P"));
+        List<String> speeds = new ArrayList<>();
+        if (f != null && f.speeds() != null) f.speeds().forEach((t, v) -> speeds.add(t.name() + ":" + v));
+        return new CharacterForm(g.name(), g.description(), String.join(",", attrs), String.join(",", speeds), f == null ? null : f.size());
+    }
+
+    // Efeito ativo com os números do nível atual: CA (fixa ou pela proficiência), resistências, imunidades, deslocamento
+    // e o bônus de dano (value = alvo; dado pela tabela do nível da classe, fórmula ou valor).
+    static CharacterForm effectLine(Grant g, Build b, int level) {
+        CharacterForm line = formLine(g);
+        line.setKind("EFFECT");
+        FormRule f = g.form();
+        if (f != null) {
+            int ac = f.ac() != null ? f.ac() : f.acFormula() == UsesFormula.PROFICIENCY ? b.proficiency()
+                    : f.acFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : 0;
+            line.setAc(ac == 0 ? null : ac);
+            line.setSpeedBonus(f.speedBonus());
+            if (f.resistances() != null) line.setResistances(String.join(",", f.resistances()));
+            if (f.immunities() != null) line.setImmunities(String.join(",", f.immunities()));
+            int red = f.reduction() != null ? f.reduction() : f.reductionFormula() == UsesFormula.PROFICIENCY ? b.proficiency()
+                    : f.reductionFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : 0;
+            line.setReduction(red == 0 ? null : red);
+            int init = f.initiative() != null ? f.initiative() : f.initiativeFormula() == UsesFormula.PROFICIENCY ? b.proficiency()
+                    : f.initiativeFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : 0;
+            line.setInitiative(init == 0 ? null : init);
+        }
+        if (g.value() != null) {
+            String dice = g.diceByLevel() != null && !g.diceByLevel().isEmpty() ? byLevel(g.diceByLevel(), level) : g.damage();
+            int n = g.usesFormula() == UsesFormula.PROFICIENCY ? b.proficiency()
+                    : g.usesFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : g.amount() == null ? 0 : g.amount();
+            String bonus = dice != null ? "+" + dice : n > 0 ? "+" + n : null;
+            if (bonus != null) line.setDamage(g.value() + "|" + bonus);
+        }
+        return line;
+    }
+
+    // Um sentido ganho; a chave leva onde vale ("DARKVISION|debaixo d'água").
+    private static void addSense(Build b, String type, Grant g, int level) {
+        Integer feet = valueAt(g, g.feet() == null ? null : g.feet().intValue(), level);
+        String key = type + (g.description() == null ? "" : "|" + g.description());
+        b.senseGains.add(new SenseGain(key, feet == null ? 0 : feet, g.amount()));
+    }
+
+    // Sem depender da ordem das fontes: vale o maior alcance, e cada outra fonte com "ou +N" soma N.
+    private static void resolveSenses(Build b) {
+        b.senses.clear();
+        Map<String, List<SenseGain>> byKey = new LinkedHashMap<>();
+        b.senseGains.forEach(s -> byKey.computeIfAbsent(s.key(), k -> new ArrayList<>()).add(s));
+        byKey.forEach((key, gains) -> {
+            List<SenseGain> sorted = new ArrayList<>(gains);
+            sorted.sort((x, y) -> Integer.compare(y.feet(), x.feet()));
+            int total = sorted.getFirst().feet();
+            for (SenseGain s : sorted.subList(1, sorted.size())) total += s.plus() == null ? 0 : s.plus();
+            if (total > 0) b.senses.put(key, total);
+        });
+    }
+
+    static final String CASTER = "+CASTER:";
+
+    // Armas com "regional (...)" que citam a região do personagem (pelo nome dela: "Águas de Sentina", "Ionia").
+    private static List<String> regionalWeapons(RuleCatalog catalog, Build b, boolean martialOnly) {
+        if (b.region == null || catalog.equipment() == null || catalog.equipment().items() == null) return List.of();
+        String region = AttackCalculator.normalize(b.region.name());
+        return catalog.equipment().items().stream()
+                .filter(i -> "WEAPON".equals(i.kind()) && i.properties() != null)
+                .filter(i -> !martialOnly || (i.groups() != null && i.groups().contains("arma-marcial")))
+                .filter(i -> {
+                    java.util.regex.Matcher m = java.util.regex.Pattern.compile("regional \\(([^)]*)\\)").matcher(AttackCalculator.normalize(i.properties()));
+                    return m.find() && java.util.Arrays.stream(m.group(1).split(",")).map(String::trim).anyMatch(region::equals);
+                })
+                .map(RuleItem::name).toList();
+    }
+
+    // Nível máximo de magia que a classe conjura agora, pela tabela do texto da Conjuração dela (0 = nenhum).
+    private static int casterLevel(Build b, String classId) {
+        int classLevel = b.classLevels.getOrDefault(classId, 0);
+        if (classLevel == 0) return 0;
+        return b.features.stream()
+                .filter(f -> "Conjuração".equals(f.value().name()) && classId.equals(b.sourceClass.get(f.source())))
+                .mapToInt(f -> SpellcastingRules.maxSpellLevel(f.value().description() == null ? "" : f.value().description(), classLevel))
+                .max().orElse(0);
+    }
+
+    // Concessão de escolha (perícia, magia, ofício... à escolha), que pode depender de uma opção ("when").
+    private static boolean isChoice(Grant g) {
+        return g.type().name().endsWith("_CHOICE") || (g.type() == GrantType.SITUATIONAL && g.hasOptions());
+    }
+
+    // "Chamado Sagrado:Estudioso": a opção foi escolhida na habilidade.
+    private static boolean whenMet(Build b, String when) {
+        String[] w = when.split(":", 2);
+        List<String> chosen = b.featureOptions.get(w[0]);
+        return w.length == 2 && chosen != null && chosen.contains(w[1]);
+    }
+
+    // Quem tem mais de uma fonte para o mesmo Limiar (Fonte Estável e Instável) escolhe a dominante ("Fonte Dominante").
+    private static void dominantSources(List<Source> sources, Build b) {
+        Map<String, Set<String>> byDominant = new LinkedHashMap<>();
+        for (Sourced<RuleHeritage.Threshold> t : b.thresholds) {
+            if (t.value().dominant() != null) byDominant.computeIfAbsent(t.value().dominant(), k -> new LinkedHashSet<>()).add(t.source());
+        }
+        byDominant.forEach((name, fontes) -> {
+            if (fontes.size() < 2) return;
+            Grant choice = new Grant(GrantType.FEATURE, null, null, 1, List.copyOf(fontes), null, null,
+                    name + ": escolha qual fonte é a dominante (irreversível)", name,
+                    "Com as duas fontes de energia, a dominante decide o Limiar Tecnológico.", AbilityType.PASSIVE, null, null, null,
+                    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+            sources.add(new Source("dominant:" + name, "Limiar Tecnológico", List.of(choice)));
+        });
+    }
+
+    // A habilidade da Herança: o texto (com o das opções escolhidas) e, quando ela tem parte ativa, o tempo e os usos
+    // (os da opção, se só uma foi escolhida e ela tem os seus).
+    static Grant heritageAbility(RuleHeritage h, String name, List<String> chosen) {
+        Grant g = Grant.heritage(name, h.textFor(chosen));
+        String only = chosen.size() == 1 ? chosen.getFirst() : null;
+        UsesRule uses = only != null && h.optionUses() != null && h.optionUses().containsKey(only) ? h.optionUses().get(only) : h.uses();
+        String execution = only != null && h.optionExecution() != null && h.optionExecution().containsKey(only)
+                ? h.optionExecution().get(only) : h.execution();
+        if (execution != null) g = g.withText(g.description(), execution);
+        return uses == null ? g : g.withUses(uses);
+    }
+
+    private void heritages(CreationRequest r, Build b) {
+        Map<String, Integer> times = new LinkedHashMap<>();
+        Map<String, String> options = new LinkedHashMap<>();
+        // Todas as opções escolhidas, na ordem (Heranças com uma opção por escolha); nulo = escolha sem opção.
+        Map<String, List<String>> allOptions = new LinkedHashMap<>();
+        Map<String, RuleHeritage> byId = new LinkedHashMap<>();
+        List<HeritagePick> all = new ArrayList<>(r.heritages() == null ? List.<HeritagePick>of() : r.heritages());
+        for (LevelPick lp : r.levelsOrEmpty()) {
+            for (HeritagePick pick : lp.heritages() == null ? List.<HeritagePick>of() : lp.heritages()) {
+                if (pick == null) continue;
+                rules.heritage(pick.id()).ifPresent(h -> {
+                    if (h.category() == HeritageCategory.REGION || Boolean.TRUE.equals(h.initial())) {
+                        b.errors.add("Herança " + h.name() + ": só na criação do personagem.");
+                    }
+                });
+                all.add(pick);
+            }
+        }
+        for (HeritagePick pick : all) {
+            if (pick == null) continue;
+            Optional<RuleHeritage> found = rules.heritage(pick.id());
+            if (found.isEmpty()) {
+                b.errors.add("Herança desconhecida.");
+                continue;
+            }
+            RuleHeritage h = found.get();
+            byId.put(h.id(), h);
+            times.merge(h.id(), 1, Integer::sum);
+            if (!blank(pick.option())) options.putIfAbsent(h.id(), pick.option());
+            allOptions.computeIfAbsent(h.id(), k -> new ArrayList<>()).add(blank(pick.option()) ? null : pick.option());
+        }
+
+        b.pools.keySet().forEach(scope -> b.spent.put(scope, 0));
+        int generals = 0;
+        boolean overflow = false;
+        for (Map.Entry<String, Integer> e : times.entrySet()) {
+            RuleHeritage h = byId.get(e.getKey());
+            int t = e.getValue();
+            String reason = blockReason(h, b, times.keySet(), options);
+            if (reason != null) b.errors.add("Herança " + h.name() + ": " + reason + ".");
+            if (t > h.maxTimesOrOne()) {
+                b.errors.add(h.maxTimesOrOne() == 1 ? h.name() + " só pode ser escolhida uma vez."
+                        : h.name() + " pode ser escolhida no máximo " + h.maxTimesOrOne() + " vezes.");
+            }
+            String option = options.get(h.id());
+            List<String> chosen = new ArrayList<>();
+            if (h.optionsOrEmpty().isEmpty()) {
+                option = null;
+            } else if (h.optionPerPickOrFalse()) {
+                List<String> each = allOptions.get(h.id());
+                if (each.stream().anyMatch(o -> o == null || !h.optionsOrEmpty().contains(o))) b.errors.add("Escolha a opção de " + h.name() + ".");
+                each.stream().filter(o -> o != null && h.optionsOrEmpty().contains(o)).distinct().forEach(chosen::add);
+                // "Aprimorar Fonte": só depois da 1ª escolha.
+                if (!each.isEmpty() && h.repeatOptionsOrEmpty().contains(each.getFirst())) {
+                    b.errors.add(h.name() + ": " + each.getFirst() + " só a partir da 2ª escolha.");
+                }
+                option = chosen.isEmpty() ? null : String.join(", ", chosen);
+            } else if (option == null || !h.optionsOrEmpty().contains(option)) {
+                b.errors.add("Escolha a opção de " + h.name() + ".");
+                option = null;
+            } else {
+                chosen.add(option);
+            }
+            for (int i = 0; i < t; i++) {
+                if (h.category() == HeritageCategory.GENERAL) generals++;
+                else if (!b.spend(h.category() == HeritageCategory.REGION ? "REGION" : "ORIGIN", "ANY")) overflow = true;
+            }
+            HeritageLine line = new HeritageLine(h.id(), h.name(), h.category(), option, t);
+            b.heritages.add(line);
+            b.features.add(new Sourced<>(heritageAbility(h, displayName(line), chosen), "Herança"));
+        }
+        // As Gerais por último: usam primeiro os pontos só de Gerais, depois o que sobrar, de qualquer tipo.
+        for (int i = 0; i < generals; i++) {
+            if (!b.spend("GENERAL", "REGION", "ORIGIN", "ANY")) overflow = true;
+        }
+        if (overflow) b.errors.add("Você escolheu mais Heranças do que tem pontos.");
+
+        boolean canBuy = false;
+        for (RuleHeritage h : rules.catalog().heritagesOrEmpty()) {
+            String reason = blockReason(h, b, times.keySet(), options);
+            int t = times.getOrDefault(h.id(), 0);
+            if (reason == null && t < h.maxTimesOrOne()) canBuy = true;
+            b.heritageOptions.add(new HeritageStatus(h.id(), reason == null, reason, t));
+        }
+        int left = b.heritagePoints - b.heritagesSpent();
+        if (left > 0 && canBuy) {
+            b.errors.add(left == 1 ? "Gaste o ponto de Herança que falta." : "Gaste os " + left + " pontos de Herança que faltam.");
+        }
+    }
+
+    // Por que a Herança não pode ser escolhida agora (null = pode). Na criação vale tudo que é "Inicial".
+    private String blockReason(RuleHeritage h, Build b, Set<String> chosen, Map<String, String> chosenOptions) {
+        if (h.category() == null) return "sem tipo";
+        if (b.pools.keySet().stream().noneMatch(scope -> allows(scope, h.category()))) {
+            if (b.pools.isEmpty()) return "você não tem pontos de Herança";
+            return h.category() == HeritageCategory.REGION ? "seus pontos não compram Heranças de Região"
+                    : h.category() == HeritageCategory.ORIGIN ? "seus pontos não compram Heranças de Origem"
+                    : "seus pontos não compram Heranças Gerais";
+        }
+        String pre = "pré-requisito: " + (h.prerequisite() == null ? "não atendido" : h.prerequisite());
+        if (!h.anyOfOrEmpty().isEmpty()) {
+            // Caminhos alternativos: basta cumprir um (substitui origins/lineages).
+            if (h.anyOfOrEmpty().stream().noneMatch(cond -> meets(cond, b, chosen, chosenOptions))) return pre;
+        } else {
+            if (!h.originsOrEmpty().isEmpty()
+                    && (b.origin == null || h.originsOrEmpty().stream().noneMatch(o -> o.equalsIgnoreCase(b.origin.id())))) {
+                return pre;
+            }
+            if (!h.lineagesOrEmpty().isEmpty()
+                    && (b.lineage == null || h.lineagesOrEmpty().stream().noneMatch(o -> o.equalsIgnoreCase(b.lineage.id())))) {
+                return pre;
+            }
+        }
+        if (!h.regionsOrEmpty().isEmpty()
+                && (b.region == null || h.regionsOrEmpty().stream().noneMatch(o -> o.equalsIgnoreCase(b.region.id())))) {
+            return pre;
+        }
+        if (!h.classesOrEmpty().isEmpty()
+                && (b.klass == null || h.classesOrEmpty().stream().noneMatch(o -> o.equalsIgnoreCase(b.klass.id())))) {
+            return pre;
+        }
+        if (h.minAttributes() != null && h.minAttributes().entrySet().stream().anyMatch(e -> b.total(e.getKey()) < e.getValue())) {
+            return pre;
+        }
+        if (!h.requiresOrEmpty().isEmpty()
+                && h.requiresOrEmpty().stream().noneMatch(req -> chosen.stream().anyMatch(c -> c.equalsIgnoreCase(req)))) {
+            return pre;
+        }
+        for (String other : h.excludesOrEmpty()) {
+            if (chosen.stream().anyMatch(c -> c.equalsIgnoreCase(other))) {
+                return "não pode junto com " + rules.heritage(other).map(RuleHeritage::name).orElse(other);
+            }
+        }
+        return null;
+    }
+
+    // Um caminho do anyOf: todos os campos preenchidos precisam bater.
+    private static boolean meets(HeritageCondition c, Build b, Set<String> chosen, Map<String, String> chosenOptions) {
+        if (!c.originsOrEmpty().isEmpty()
+                && (b.origin == null || c.originsOrEmpty().stream().noneMatch(o -> o.equalsIgnoreCase(b.origin.id())))) {
+            return false;
+        }
+        if (!c.lineagesOrEmpty().isEmpty()
+                && (b.lineage == null || c.lineagesOrEmpty().stream().noneMatch(l -> l.equalsIgnoreCase(b.lineage.id())))) {
+            return false;
+        }
+        if (c.heritage() != null) {
+            String id = chosen.stream().filter(x -> x.equalsIgnoreCase(c.heritage())).findFirst().orElse(null);
+            if (id == null) return false;
+            if (!c.heritageOptionsOrEmpty().isEmpty() && !c.heritageOptionsOrEmpty().contains(chosenOptions.get(id))) return false;
+        }
+        if (c.feature() != null) {
+            List<String> chosenFeature = b.featureOptions.get(c.feature());
+            if (chosenFeature == null || (!c.featureOptionsOrEmpty().isEmpty()
+                    && chosenFeature.stream().noneMatch(c.featureOptionsOrEmpty()::contains))) return false;
+        }
+        return true;
+    }
+
+    static boolean allows(String scope, HeritageCategory category) {
+        return switch (scope) {
+            case "REGION" -> category == HeritageCategory.REGION || category == HeritageCategory.GENERAL;
+            case "ORIGIN" -> category == HeritageCategory.ORIGIN || category == HeritageCategory.GENERAL;
+            case "GENERAL" -> category == HeritageCategory.GENERAL;
+            default -> true;
+        };
+    }
+
+    // "Variante Meio-Vastaya (Marai)", "Variante Colosso (2×)".
+    static String displayName(HeritageLine h) {
+        String name = h.name();
+        if (h.option() != null) name += " (" + h.option() + ")";
+        if (h.times() > 1) name += " (" + h.times() + "×)";
+        return name;
+    }
+
+    // Escolha que só vale quando há opções: sem opções cadastradas, mostra o aviso (note) e não bloqueia a criação.
+    private static ChoiceLine optionalChoice(String key, Grant g, String label, List<String> options, List<String> picked,
+                                             String source, Build b, String note, Consumer<String> apply) {
+        if (options.isEmpty()) {
+            return new ChoiceLine(key, g.type(), label, g.count(), options, List.of(), source, note);
+        }
+        int count = Math.min(g.count(), options.size());
+        List<String> selected = choose(picked, options, count, label, b.errors);
+        selected.forEach(apply);
+        return new ChoiceLine(key, g.type(), label, count, options, selected, source, null);
+    }
+
+    // Valida os atributos base de acordo com o método (compra de pontos, arranjo padrão ou manual).
+    private static void baseAttributes(CreationRequest r, AttributeMethods methods, Build b) {
+        Map<Attribute, Integer> given = r.baseAttributes() == null ? Map.of() : r.baseAttributes();
+        for (Attribute a : Attribute.values()) b.base.put(a, given.get(a));
+        boolean missing = b.base.values().stream().anyMatch(v -> v == null);
+        String method = r.attributeMethod();
+
+        if (method == null) {
+            b.errors.add("Defina os atributos.");
+            return;
+        }
+        if (missing) b.errors.add("Defina todos os seis atributos.");
+        switch (method) {
+            case "POINT_BUY" -> {
+                AttributeMethods.PointBuy pb = methods.pointBuy();
+                if (pb == null) {
+                    b.errors.add("A compra de pontos está desligada.");
+                    return;
+                }
+                int spent = 0;
+                boolean outOfRange = false;
+                for (Integer v : b.base.values()) {
+                    if (v == null) continue;
+                    if (v < pb.min() || v > pb.max()) outOfRange = true;
+                    else spent += pb.costs().get(String.valueOf(v));
+                }
+                b.pointBuy = new PointBuyStatus(spent, pb.points());
+                if (outOfRange) b.errors.add("Na compra de pontos, cada atributo vai de " + pb.min() + " a " + pb.max() + ".");
+                if (spent > pb.points()) b.errors.add("Você gastou " + spent + " de " + pb.points() + " pontos.");
+            }
+            case "STANDARD_ARRAY" -> {
+                List<Integer> array = methods.standardArray();
+                if (array == null) {
+                    b.errors.add("O arranjo padrão está desligado.");
+                    return;
+                }
+                List<Integer> used = b.base.values().stream().filter(v -> v != null).sorted().toList();
+                if (!missing && !used.equals(array.stream().sorted().toList())) {
+                    b.errors.add("Use cada valor do arranjo padrão uma vez: " + array + ".");
+                }
+            }
+            case "MANUAL" -> {
+                AttributeMethods.Range range = methods.manual();
+                if (range == null) {
+                    b.errors.add("Atributos manuais estão desligados.");
+                    return;
+                }
+                if (b.base.values().stream().anyMatch(v -> v != null && (v < range.min() || v > range.max()))) {
+                    b.errors.add("Cada atributo vai de " + range.min() + " a " + range.max() + ".");
+                }
+            }
+            default -> b.errors.add("Método de atributos desconhecido.");
+        }
+    }
+
+    // Limpa as opções escolhidas: tira repetidas e inválidas; avisa se faltou ou sobrou.
+    private static List<String> choose(List<String> picked, List<String> options, int count, String label, List<String> errors) {
+        List<String> clean = new ArrayList<>(new LinkedHashSet<>(picked == null ? List.of() : picked));
+        if (clean.removeIf(o -> !options.contains(o))) errors.add("Opção inválida em \"" + label + "\".");
+        if (clean.size() > count) {
+            errors.add("Escolha só " + count + " em \"" + label + "\".");
+            clean = clean.subList(0, count);
+        }
+        if (clean.size() < count) errors.add("Faltam escolhas: " + label + ".");
+        return List.copyOf(clean);
+    }
+
+    private static <T> T pick(String id, Function<String, Optional<T>> find, String missing, String unknown, List<String> errors) {
+        if (blank(id)) {
+            errors.add(missing);
+            return null;
+        }
+        Optional<T> found = find.apply(id);
+        if (found.isEmpty()) errors.add(unknown);
+        return found.orElse(null);
+    }
+
+    private static List<String> orAll(List<String> options, Enum<?>[] all) {
+        if (options != null && !options.isEmpty()) return options;
+        return Arrays.stream(all).map(Enum::name).toList();
+    }
+
+    private static String orLabel(Grant g, String fallback) {
+        return g.label() != null ? g.label() : fallback;
+    }
+
+    // Usos de uma habilidade no bônus de proficiência dado (mínimo 1 quando escala).
+    static Integer usesFor(Grant g, int proficiency, boolean roundUp) {
+        return usesFor(g, proficiency, roundUp, a -> 0);
+    }
+
+    // Na criação o personagem é de 1º nível.
+    static Integer usesFor(Grant g, int proficiency, boolean roundUp, ToIntFunction<Attribute> modifier) {
+        return usesFor(g, proficiency, 1, roundUp, modifier);
+    }
+
+    // usesPlus soma um valor fixo à fórmula (Plumadagas = 3 + bônus de proficiência).
+    static Integer usesFor(Grant g, int proficiency, int level, boolean roundUp, ToIntFunction<Attribute> modifier) {
+        // Tabela por nível do personagem (Mana do Arcanista, Carga Rúnica...) vence a fórmula.
+        // Valor nulo na tabela = sem limite a partir desse nível (Fúria do Bruto no 20º): sem contador.
+        // usesPlus também soma na tabela (Ki + Cultivo de Ki).
+        if (g.usesByLevel() != null && !g.usesByLevel().isEmpty()) {
+            Integer v = byLevel(g.usesByLevel(), level);
+            if (v == null || g.usesPlus() == null) return v;
+            return v + g.usesPlus();
+        }
+        UsesFormula formula = g.usesFormula() == null ? UsesFormula.FIXED : g.usesFormula();
+        // Fixo pode ser nulo (sem usos): fora do switch, que é numérico.
+        if (formula == UsesFormula.FIXED) return g.maxUses();
+        int uses = switch (formula) {
+            case FIXED, PROFICIENCY -> proficiency;
+            case HALF_PROFICIENCY -> Math.max(1, half(proficiency, roundUp));
+            case ATTRIBUTE_MODIFIER -> Math.max(1, modifier.applyAsInt(g.attribute()));
+            case DOUBLE_PROFICIENCY -> proficiency * 2;
+            case HALF_LEVEL -> Math.max(1, half(level, roundUp));
+            case HALF_ATTRIBUTE_MODIFIER -> Math.max(1, half(modifier.applyAsInt(g.attribute()), roundUp));
+            case LEVEL_PLUS_ATTRIBUTE -> Math.max(1, level + modifier.applyAsInt(g.attribute()));
+            case PROFICIENCY_PLUS_ATTRIBUTE -> Math.max(1, proficiency + modifier.applyAsInt(g.attribute()));
+            case TWO_ATTRIBUTES -> Math.max(1, modifier.applyAsInt(g.attribute()) + modifier.applyAsInt(Attribute.valueOf(g.value())));
+        };
+        return g.usesPlus() == null ? uses : uses + g.usesPlus();
+    }
+
+    // Dado da habilidade: o da tabela por proficiência (maior bônus <= o atual) ou o "damage" fixo.
+    // PV de uma concessão HP_BONUS em um nível: amount fixo ou a fórmula (ex.: metade do bônus de proficiência).
+    static int hpBonusFor(Grant g, int proficiency, boolean roundUp) {
+        return hpBonusFor(g, proficiency, roundUp, a -> 0);
+    }
+
+    // Com atributo: Pacto Carmesim = metade do mod. de Inteligência por nível (mínimo 0).
+    static int hpBonusFor(Grant g, int proficiency, boolean roundUp, ToIntFunction<Attribute> modifier) {
+        if (g.usesFormula() == UsesFormula.ATTRIBUTE_MODIFIER) return Math.max(0, modifier.applyAsInt(g.attribute()));
+        if (g.usesFormula() == UsesFormula.HALF_ATTRIBUTE_MODIFIER) return Math.max(0, half(modifier.applyAsInt(g.attribute()), roundUp));
+        if (g.usesFormula() == null || g.usesFormula() == UsesFormula.FIXED) return g.amount() == null ? 0 : g.amount();
+        return g.usesFormula() == UsesFormula.PROFICIENCY ? proficiency : half(proficiency, roundUp);
+    }
+
+    // HP_BONUS com value HALF_HIT_DIE: metade do dado de vida (Aprimoramento Robusto).
+    static final String HALF_HIT_DIE = "HALF_HIT_DIE";
+
+    static int half(int value, boolean roundUp) {
+        return roundUp ? (value + 1) / 2 : value / 2;
+    }
+
+    // Dado com os bônus de damageBonus já somados: "1d6" + proficiência (2) + Força (+3) = "1d6+5".
+    static String damageFor(Grant g, int proficiency, boolean roundUp, ToIntFunction<Attribute> modifier) {
+        return damageFor(g, proficiency, CREATION_LEVEL, roundUp, modifier);
+    }
+
+    static String damageFor(Grant g, int proficiency, int level, boolean roundUp, ToIntFunction<Attribute> modifier) {
+        String dice = diceFor(g, proficiency, level);
+        if (dice == null || g.damageBonus() == null || g.damageBonus().isEmpty()) return dice;
+        Matcher m = DICE_WITH_BONUS.matcher(dice);
+        if (!m.matches()) return dice;
+        int bonus = m.group(2) == null ? 0 : Integer.parseInt(m.group(2));
+        for (String token : g.damageBonus()) {
+            bonus += switch (token) {
+                case "PROFICIENCY" -> proficiency;
+                case "HALF_PROFICIENCY" -> half(proficiency, roundUp);
+                // "Força ou Destreza": vale o maior dos dois (como uma arma com acuidade).
+                case "STRENGTH_OR_DEXTERITY" -> Math.max(modifier.applyAsInt(Attribute.STRENGTH), modifier.applyAsInt(Attribute.DEXTERITY));
+                default -> modifier.applyAsInt(Attribute.valueOf(token));
+            };
+        }
+        return m.group(1) + (bonus == 0 ? "" : bonus > 0 ? "+" + bonus : String.valueOf(bonus));
+    }
+
+    // amount/pés da concessão no nível: a tabela valueByLevel, se houver, senão o valor fixo.
+    static Integer valueAt(Grant g, Integer fixed, int level) {
+        if (g.valueByLevel() == null || g.valueByLevel().isEmpty()) return fixed;
+        Integer v = byLevel(g.valueByLevel(), level);
+        return v == null ? fixed : v;
+    }
+
+    // Valor da tabela no maior nível <= o atual (null se a tabela só começa depois).
+    static <T> T byLevel(Map<String, T> table, int level) {
+        return table.entrySet().stream()
+                .filter(e -> Integer.parseInt(e.getKey()) <= level)
+                .max(Map.Entry.comparingByKey((a, c) -> Integer.compare(Integer.parseInt(a), Integer.parseInt(c))))
+                .map(Map.Entry::getValue)
+                .orElse(null);
+    }
+
+    static String diceFor(Grant g, int proficiency) {
+        return diceFor(g, proficiency, CREATION_LEVEL);
+    }
+
+    static String diceFor(Grant g, int proficiency, int level) {
+        // Dado pelo nível (Ataque Furtivo 1d6 → 10d6).
+        if (g.diceByLevel() != null && !g.diceByLevel().isEmpty()) {
+            String d = byLevel(g.diceByLevel(), level);
+            return d == null ? null : d.replace(" ", "");
+        }
+        if (g.diceByProficiency() == null || g.diceByProficiency().isEmpty()) {
+            return g.damage() == null ? null : g.damage().replace(" ", "");
+        }
+        return g.diceByProficiency().entrySet().stream()
+                .filter(e -> Integer.parseInt(e.getKey()) <= proficiency)
+                .max(Map.Entry.comparingByKey((a, c) -> Integer.compare(Integer.parseInt(a), Integer.parseInt(c))))
+                .map(e -> e.getValue().replace(" ", ""))
+                .orElse(null);
+    }
+
+    private Background backgroundEntity(RuleOption option) {
+        return backgrounds.findByNameIgnoreCase(option.name()).orElseGet(() -> {
+            Background bg = new Background();
+            bg.setName(option.name());
+            option.grantsOrEmpty().stream()
+                    .filter(g -> g.type() == GrantType.SKILL)
+                    .forEach(g -> bg.getSkills().add(g.skill()));
+            return backgrounds.save(bg);
+        });
+    }
+
+    CharacterAbility abilityFrom(Character c, Grant g, int proficiency, int level) {
+        AbilityType type = g.abilityType() == null ? AbilityType.PASSIVE : g.abilityType();
+        Integer uses = usesFor(g, proficiency, level, rules.roundsUp(), c::getModifier);
+        CharacterAbility a = new CharacterAbility();
+        a.setCharacter(c);
+        a.setName(g.name());
+        a.setType(type);
+        a.setSpellLevel(type == AbilityType.SPELL ? (g.spellLevel() == null ? 0 : g.spellLevel()) : null);
+        a.setCastingTime(g.castingTime());
+        a.setAbilityRange(g.range());
+        a.setDuration(g.duration());
+        a.setComponents(g.components());
+        a.setDamage(damageFor(g, proficiency, level, rules.roundsUp(), c::getModifier));
+        a.setDescription(g.description());
+        a.setMaxUses(uses);
+        a.setUsesLeft(uses);
+        a.setRecharge(uses == null ? Recharge.NONE : g.recharge() == null ? Recharge.LONG_REST : g.recharge());
+        return a;
+    }
+
+    // Como o livro chama a subclasse da classe ("Glifo", "Cabala"); sem nome, "Subclasse".
+    static String subclassLabel(RuleClass klass) {
+        return klass == null || klass.subclassLabel() == null ? "Subclasse" : klass.subclassLabel();
+    }
+
+    private static boolean blank(String s) {
+        return s == null || s.isBlank();
+    }
+
+    private record Source(String key, String label, List<Grant> grants) {}
+
+    private record ResourceChoice(String key, Grant grant, String source, List<String> picked) {}
+
+    private record SpellChoice(String key, Grant grant, String source, List<String> picked) {}
+
+    private record Sourced<T>(T value, String source) {}
+
+    private record SenseGain(String key, int feet, Integer plus) {}
+
+    // Resultado do cálculo (rascunho da ficha).
+    private static final class Build {
+        RuleOption origin;
+        RuleLineage lineage;
+        RuleOption region;
+        RuleClass klass;
+        RuleOption background;
+        boolean roundUp;
+        final Map<Attribute, Integer> base = new EnumMap<>(Attribute.class);
+        final Map<Attribute, Integer> bonus = new EnumMap<>(Attribute.class);
+        // Limite de cada atributo acima de 20 (ATTRIBUTE_CHOICE com value: Conjurador Eficiente, até 22).
+        final Map<Attribute, Integer> attributeCap = new EnumMap<>(Attribute.class);
+        PointBuyStatus pointBuy;
+        final Map<SkillType, String> skills = new LinkedHashMap<>();
+        // Perícias com especialidade (sempre entre as de skills) e as concessões decididas no fim (ver expertise()).
+        final Set<SkillType> expertise = new LinkedHashSet<>();
+        final List<Deferred> deferred = new ArrayList<>();
+        // Recursos de classe: as escolhas (para conferir no fim) e os ids já escolhidos.
+        final List<ResourceChoice> resourceChoices = new ArrayList<>();
+        final Set<String> resourceIds = new LinkedHashSet<>();
+        // Mistérios de magia (MYSTERY e opções de FEATURE com value MYSTERY), magias fixas (id → fonte) e escolhas de magia.
+        final Set<String> mysteries = new LinkedHashSet<>();
+        final Map<String, String> fixedSpells = new LinkedHashMap<>();
+        final List<SpellChoice> spellChoices = new ArrayList<>();
+        // CAs que dependem de uma opção escolhida numa habilidade (ArmorFormula.feature).
+        final List<Grant> optionArmor = new ArrayList<>();
+        // Concessões com "when" (fonte = "chave|rótulo"), deslocamentos relativos à caminhada e mudanças de usos.
+        final List<Sourced<Grant>> conditional = new ArrayList<>();
+        final Map<MovementType, Double> relativeSpeeds = new EnumMap<>(MovementType.class);
+        final List<Grant> usesChanges = new ArrayList<>();
+        // Limiares das Heranças escolhidas, com a opção (a primeira) que decide os efeitos.
+        final List<Sourced<RuleHeritage.Threshold>> thresholds = new ArrayList<>();
+        final Map<Attribute, String> saves = new LinkedHashMap<>();
+        final List<Sourced<Grant>> features = new ArrayList<>();
+        // Opção escolhida em cada habilidade com escolha (nome da habilidade → opção), para pré-requisitos de Herança.
+        final Map<String, List<String>> featureOptions = new LinkedHashMap<>();
+        RuleLineage subclass;
+        final Set<String> armorProficiencies = new LinkedHashSet<>();
+        final Set<String> weaponProficiencies = new LinkedHashSet<>();
+        // Ofícios (ids) com especialidade.
+        final Set<String> craftExpertise = new LinkedHashSet<>();
+        // Ofícios "caso já tenha, especialidade" (id, chave da fonte), decididos no fim.
+        final List<Sourced<String>> craftUpgrades = new ArrayList<>();
+        final List<Grant> hpGrants = new ArrayList<>();
+        final List<ChoiceLine> choices = new ArrayList<>();
+        final Set<String> languages = new LinkedHashSet<>();
+        final Set<String> crafts = new LinkedHashSet<>();
+        // Nível do personagem em que cada ofício (id) foi aprendido e em que cada Herança ("heritage:<id>") foi escolhida.
+        final Map<String, Integer> craftLevels = new LinkedHashMap<>();
+        final Map<String, Integer> heritageLevel = new LinkedHashMap<>();
+        final List<String> errors = new ArrayList<>();
+        // Pontos de Herança por tipo (REGION/ORIGIN/ANY) e quantos já foram gastos de cada.
+        final Map<String, Integer> pools = new LinkedHashMap<>();
+        final Map<String, Integer> spent = new LinkedHashMap<>();
+        final List<HeritageLine> heritages = new ArrayList<>();
+        final List<HeritageStatus> heritageOptions = new ArrayList<>();
+        // Runinata: fontes e passivas dos traços/desvantagens, a conta e o que dá para escolher.
+        final List<Source> traitSources = new ArrayList<>();
+        final List<Sourced<Grant>> traitFeatures = new ArrayList<>();
+        final List<TraitLine> traitLines = new ArrayList<>();
+        final List<TraitStatus> traitOptions = new ArrayList<>();
+        TraitBudgetStatus traitBudget;
+        boolean traitBackground;
+        CreatureSize size;
+        boolean sizeFixed;
+        int heritagePoints;
+        double baseSpeed;
+        double speedBonus;
+        // Bônus (ou redução) que vale para todos os deslocamentos ("Reduz 5 pés de todos os deslocamentos base").
+        double allSpeedBonus;
+        final Map<MovementType, Double> otherSpeeds = new EnumMap<>(MovementType.class);
+        // CAs alternativas e bônus de CA (viram Character.armorRules).
+        final List<ArmorRule> armorRules = new ArrayList<>();
+        int gold;
+        int initiativeBonus;
+        int passivePerception;
+        int passiveInsight;
+        final List<SituationalNote> situational = new ArrayList<>();
+        final Set<String> resistances = new LinkedHashSet<>();
+        final Set<String> vulnerabilities = new LinkedHashSet<>();
+        final Set<String> immunities = new LinkedHashSet<>();
+        final Set<String> absorptions = new LinkedHashSet<>();
+        final Set<String> conditionImmunities = new LinkedHashSet<>();
+        final Map<String, Integer> typedReductions = new LinkedHashMap<>();
+        // Sentidos ganhos (chave, pés da fonte, quanto soma se já tiver), resolvidos no fim (senses).
+        final List<SenseGain> senseGains = new ArrayList<>();
+        // Bônus de dano (decididos no fim, com os atributos prontos) e as armas escolhidas em cada fonte (DAMAGE_BONUS CHOSEN).
+        final List<Sourced<Grant>> damageBonuses = new ArrayList<>();
+        final Map<String, List<String>> chosenWeapons = new LinkedHashMap<>();
+        // Níveis de ofício: +níveis, nível mínimo e fórmulas a mais (por id); as concessões fixas e os ofícios escolhidos por fonte.
+        final Map<String, Integer> craftBonus = new LinkedHashMap<>();
+        final Map<String, String> attributeSwaps = new LinkedHashMap<>();
+        final List<CharacterForm> forms = new ArrayList<>();
+        final Map<String, Integer> craftFloor = new LinkedHashMap<>();
+        final Map<String, Integer> craftFormulas = new LinkedHashMap<>();
+        final Map<String, Integer> craftIncome = new LinkedHashMap<>();
+        final Map<String, Integer> craftMasterwork = new LinkedHashMap<>();
+        final List<Sourced<Grant>> craftGrants = new ArrayList<>();
+        final Map<String, List<String>> chosenCrafts = new LinkedHashMap<>();
+        // Mistérios escolhidos em cada fonte (SPELL_CHOICE "MYSTERY:CHOSEN": Acólito Arcanista).
+        final Map<String, List<String>> chosenMysteries = new LinkedHashMap<>();
+        final Map<String, Integer> senses = new LinkedHashMap<>();
+        final List<Sourced<Attribute>> saveUpgrades = new ArrayList<>();
+        final Set<Attribute> saveExpertise = new LinkedHashSet<>();
+        // Categorias de tamanho acima da escolhida (SIZE "UP").
+        int sizeSteps;
+        // Resistências "caso já tenha, imunidade" (Meio-Azakana), decididas depois de todas as outras.
+        final List<String> resistanceUpgrades = new ArrayList<>();
+        final Set<String> knownSpellIds = new LinkedHashSet<>();
+
+        // Ids da origem e da linhagem, para as listas de magia de origem.
+        Set<String> originIds() {
+            Set<String> ids = new LinkedHashSet<>();
+            if (origin != null) ids.add(origin.id());
+            if (lineage != null) ids.add(lineage.id());
+            return ids;
+        }
+        // Nível do personagem, níveis por classe (na ordem em que entraram), classes e subclasses, de que classe é cada
+        // fonte (pelo rótulo) e os dados de vida rolados do 2º nível em diante.
+        int level = 1;
+        final Map<String, Integer> classLevels = new LinkedHashMap<>();
+        final Map<String, RuleClass> classById = new LinkedHashMap<>();
+        final Map<String, RuleLineage> subclassByClass = new LinkedHashMap<>();
+        final Map<String, String> sourceClass = new LinkedHashMap<>();
+        // Em que nível do personagem cada nível de classe entrou (classe → [nível do personagem no 1º, no 2º...]).
+        final Map<String, List<Integer>> classLevelAt = new LinkedHashMap<>();
+        final List<Integer> hpRolls = new ArrayList<>();
+        // Classes que entraram por multiclasse (conferir o pré-requisito no fim, com os atributos prontos).
+        final List<RuleClass> multiclassed = new ArrayList<>();
+        // Equipamento inicial (EQUIPMENT/EQUIPMENT_CHOICE) ou, com wealth, a riqueza inicial da classe no lugar dele.
+        final List<EquipmentLine> equipment = new ArrayList<>();
+        boolean wealth;
+        String wealthFormula;
+
+        // Atributo sem valor base conta como 10 só para a prévia (a criação exige os seis).
+        int total(Attribute a) {
+            return (base.get(a) == null ? 10 : base.get(a)) + bonus.getOrDefault(a, 0);
+        }
+
+        int modifier(Attribute a) {
+            return Math.floorDiv(total(a) - 10, 2);
+        }
+
+        int maxHp() {
+            if (klass == null) return 0;
+            int con = modifier(Attribute.CONSTITUTION);
+            // Resiliência Adaptativa: metade da DES no lugar da CON, se for maior.
+            String alt = attributeSwaps.get("HP");
+            if (alt != null) {
+                boolean half = alt.endsWith("/2");
+                int other = modifier(Attribute.valueOf(half ? alt.substring(0, alt.length() - 2) : alt));
+                con = Math.max(con, half ? Math.floorDiv(other, 2) : other);
+            }
+            // HP_BONUS com perLevel soma em cada nível (Pacto Carmesim); sem, uma vez só.
+            // HALF_HIT_DIE (Robusto): metade do dado de vida da primeira classe, uma vez.
+            int bonus = hpGrants.stream().mapToInt(g -> HALF_HIT_DIE.equals(g.value()) ? klass.hitDie() / 2 : hpBonusFor(g, proficiency(), roundUp, this::modifier)
+                    * (Boolean.TRUE.equals(g.perLevel()) ? level : 1)).sum();
+            int hp = Math.max(1, klass.hitDie() + con);
+            for (int roll : hpRolls) hp += Math.max(1, roll + con);
+            return hp + bonus;
+        }
+
+        // Bônus de proficiência pelo nível do personagem (2 no 1º, 3 no 5º, 4 no 9º, 5 no 13º, 6 no 17º).
+        int proficiency() {
+            return 2 + (level - 1) / 4;
+        }
+
+        // Nível que vale para as tabelas de uma fonte: o da classe (fontes de classe e subclasse) ou o do personagem.
+        int scale(String sourceLabel) {
+            String classId = sourceClass.get(sourceLabel);
+            return classId == null ? level : classLevels.getOrDefault(classId, level);
+        }
+
+        List<ClassLevelLine> classLevelLines() {
+            List<ClassLevelLine> out = new ArrayList<>();
+            classLevels.forEach((id, n) -> {
+                RuleClass k = classById.get(id);
+                RuleLineage sub = subclassByClass.get(id);
+                out.add(new ClassLevelLine(id, k == null ? id : k.name(), n, k == null || k.hitDie() == null ? 0 : k.hitDie(),
+                        sub == null ? null : sub.name()));
+            });
+            return out;
+        }
+
+        double speed() {
+            return baseSpeed + speedBonus + allSpeedBonus;
+        }
+
+        // Natação, escalada, voo e escavação, com o bônus de "todos os deslocamentos"; sem os que zeraram.
+        Map<MovementType, Double> otherSpeedsTotal() {
+            Map<MovementType, Double> out = new EnumMap<>(MovementType.class);
+            otherSpeeds.forEach((type, feet) -> {
+                double total = feet + allSpeedBonus;
+                if (total > 0) out.put(type, total);
+            });
+            // "Igual (ou metade) ao seu deslocamento de caminhada": vale o maior entre esse e o que ele já tem.
+            relativeSpeeds.forEach((type, fraction) -> out.merge(type, speed() * fraction, Math::max));
+            return out;
+        }
+
+        // Gasta 1 ponto do primeiro tipo (na ordem dada) que ainda tiver saldo.
+        boolean spend(String... scopes) {
+            for (String scope : scopes) {
+                if (spent.getOrDefault(scope, 0) < pools.getOrDefault(scope, 0)) {
+                    spent.merge(scope, 1, Integer::sum);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        int heritagesSpent() {
+            return spent.values().stream().mapToInt(Integer::intValue).sum();
+        }
+
+        CreationPreview toPreview() {
+            List<AttributeLine> attrs = Arrays.stream(Attribute.values())
+                    .map(a -> new AttributeLine(a, base.get(a), bonus.getOrDefault(a, 0), total(a), modifier(a)))
+                    .toList();
+            List<SkillLine> skillLines = skills.entrySet().stream().map(e -> new SkillLine(e.getKey(), e.getValue(), expertise.contains(e.getKey()))).toList();
+            List<SaveLine> saveLines = saves.entrySet().stream().map(e -> new SaveLine(e.getKey(), e.getValue())).toList();
+            List<FeatureLine> featureLines = features.stream()
+                    .map(f -> new FeatureLine(f.value().name(), f.value().description(),
+                            f.value().abilityType() == null ? AbilityType.PASSIVE : f.value().abilityType(),
+                            damageFor(f.value(), proficiency(), scale(f.source()), roundUp, this::modifier), usesFor(f.value(), proficiency(), scale(f.source()), roundUp, this::modifier),
+                            f.source()))
+                    .toList();
+            return new CreationPreview(attrs, pointBuy, skillLines, saveLines, featureLines, List.copyOf(choices),
+                    maxHp(), klass == null ? 0 : klass.hitDie(), speed(),
+                    origin == null ? List.of() : SpeedLine.of(speed(), otherSpeedsTotal()),
+                    origin == null ? null : ArmorClassCalculator.calculate(this::modifier, proficiency(), armorRules, armorProficiencies, List.of(), null),
+                    gold, size, List.copyOf(languages),
+                    List.copyOf(crafts), List.copyOf(craftExpertise), List.copyOf(armorProficiencies), List.copyOf(weaponProficiencies),
+                    heritagePoints,
+                    pools.entrySet().stream()
+                            .map(e -> new HeritagePool(e.getKey(), e.getValue(), spent.getOrDefault(e.getKey(), 0)))
+                            .toList(),
+                    List.copyOf(heritages), List.copyOf(heritageOptions), traitBudget, List.copyOf(traitLines),
+                    List.copyOf(traitOptions), List.copyOf(equipment), new StartingWealth(wealthFormula, wealth),
+                    level, proficiency(), classLevelLines(),
+                    List.copyOf(errors), errors.isEmpty());
+        }
+    }
+}

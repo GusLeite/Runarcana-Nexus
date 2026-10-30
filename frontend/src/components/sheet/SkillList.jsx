@@ -1,0 +1,47 @@
+import { useState } from 'react'
+import { SKILL_NAMES, formatModifier, groupSkills, situationalFor } from '../../data/rules.js'
+
+// Todas as perícias agrupadas pelo atributo; o losango aceso marca proficiência e o duplo, especialidade.
+export default function SkillList({ skills, onRoll, sheet }) {
+  const [onlyProficient, setOnlyProficient] = useState(false)
+  const visible = onlyProficient ? skills.filter(s => s.proficient) : skills
+  const best = Math.max(...skills.map(s => s.modifier))
+
+  return (
+    <>
+      <div className="card-title skills-title">
+        <h3>Perícias</h3>
+        <div className="seg" role="group" aria-label="Filtro de perícias">
+          <button type="button" className={onlyProficient ? '' : 'on'} aria-pressed={!onlyProficient} onClick={() => setOnlyProficient(false)}>Todas</button>
+          <button type="button" className={onlyProficient ? 'on' : ''} aria-pressed={onlyProficient} onClick={() => setOnlyProficient(true)}>Proficientes</button>
+        </div>
+      </div>
+      <div className="skills">
+        {groupSkills(visible).map(({ attr, skills: group }) => (
+          <div className="skill-group" key={attr.id}>
+            <div className="skill-group-name">{attr.name}</div>
+            {group.map((s, n) => {
+              const name = SKILL_NAMES[s.skill] ?? s.skill
+              const notes = situationalFor(sheet, 'SKILL:' + s.skill)
+              return (
+                <button
+                  key={s.skill}
+                  type="button"
+                  className={'skill' + (s.proficient ? ' prof' : '') + (s.expertise ? ' expert' : '') + (s.modifier === best ? ' best' : '')}
+                  style={{ '--n': n }}
+                  onClick={() => onRoll(name, s.modifier)}
+                  aria-label={`${name}${s.expertise ? ', especialista' : s.proficient ? ', proficiente' : ''}, ${formatModifier(s.modifier)}. Rolar.`}
+                  title={[s.expertise && 'Especialidade: bônus de proficiência em dobro', ...notes].filter(Boolean).join('\n') || undefined}
+                >
+                  <span className="pip" aria-hidden="true" />
+                  <span className="skill-name">{name}{notes.length > 0 && <i className="sit-mark" aria-label={notes.join('. ')}>✦</i>}</span>
+                  <span className="skill-mod">{formatModifier(s.modifier)}</span>
+                </button>
+              )
+            })}
+          </div>
+        ))}
+      </div>
+    </>
+  )
+}

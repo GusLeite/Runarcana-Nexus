@@ -1,0 +1,205 @@
+{
+  "budgets": [
+    {
+      "id": "TESTE",
+      "name": "Teste",
+      "minor": 1,
+      "major": 1
+    }
+  ],
+  "conversion": {
+    "MINOR": 1,
+    "MAJOR": 2
+  },
+  "costs": {
+    "MINOR": 1,
+    "MAJOR": 3,
+    "SUPERIOR": 6
+  },
+  "traits": [
+    {
+      "id": "t-escalador",
+      "name": "Escalador Teste",
+      "tier": "MINOR",
+      "description": "Escala.",
+      "maxTimes": 2
+    },
+    {
+      "id": "t-aranha",
+      "name": "Aranha Teste",
+      "tier": "MINOR",
+      "description": "Escala no teto.",
+      "requires": [
+        "t-escalador"
+      ]
+    },
+    {
+      "id": "t-antecedente",
+      "name": "Antecedente Teste",
+      "tier": "MINOR",
+      "description": "Libera o Passado.",
+      "background": true
+    },
+    {
+      "id": "t-chaveiro",
+      "name": "Chaveiro Teste",
+      "tier": "MINOR",
+      "description": "Miúdo.",
+      "grants": [
+        {
+          "type": "SIZE",
+          "value": "TINY"
+        },
+        {
+          "type": "SPEED",
+          "feet": -5
+        }
+      ]
+    },
+    {
+      "id": "t-garras",
+      "name": "Garras Teste",
+      "tier": "MAJOR",
+      "description": "Garras.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Garras",
+          "description": "1d4.",
+          "options": [
+            "Cortante",
+            "Perfurante"
+          ],
+          "damage": "1d4",
+          "damageBonus": [
+            "STRENGTH"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t-heranca",
+      "name": "Herança Teste",
+      "tier": "MAJOR",
+      "description": "2 pontos Gerais.",
+      "grants": [
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 2,
+          "value": "GENERAL"
+        }
+      ]
+    },
+    {
+      "id": "t-super",
+      "name": "Super Teste",
+      "tier": "SUPERIOR",
+      "description": "Superior.",
+      "detail": "Qual?"
+    },
+    {
+      "id": "t-nadador",
+      "name": "Nadador Teste",
+      "tier": "MINOR",
+      "description": "Nada.",
+      "maxTimes": 3,
+      "grants": [
+        {
+          "type": "SPEED",
+          "feet": 15,
+          "value": "SWIM"
+        }
+      ],
+      "speedSteps": [
+        15,
+        15,
+        10
+      ]
+    },
+    {
+      "id": "t-casca",
+      "name": "Casca Teste",
+      "tier": "MAJOR",
+      "description": "CA 10 + DES + atributo.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Casca",
+          "options": [
+            "STRENGTH",
+            "CONSTITUTION"
+          ],
+          "armor": {
+            "base": 10,
+            "blocksArmor": true
+          }
+        },
+        {
+          "type": "AC_BONUS",
+          "name": "Couro",
+          "amount": 1,
+          "armor": {
+            "unarmoredOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "t-especialista",
+      "name": "Especialista Teste",
+      "tier": "MINOR",
+      "description": "Especialidade.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "EXPERTISE_CHOICE",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "t-tecnico",
+      "name": "Técnico Teste",
+      "tier": "MINOR",
+      "description": "Arcanismo ou especialidade.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "ARCANA",
+          "expertise": true
+        }
+      ]
+    }
+  ],
+  "drawbacks": [
+    {
+      "id": "d-lento",
+      "name": "Lento Teste",
+      "group": "Deslocamento",
+      "points": 0.5,
+      "description": "-5 pés.",
+      "maxTimes": 4,
+      "silent": true,
+      "grants": [
+        {
+          "type": "SPEED",
+          "feet": -5,
+          "value": "ALL"
+        }
+      ]
+    },
+    {
+      "id": "d-fraco",
+      "name": "Fraco Teste",
+      "group": "Fraqueza",
+      "points": 1,
+      "description": "Fraqueza.",
+      "maxTimes": 5,
+      "detail": "Qual dano?"
+    }
+  ]
+}
