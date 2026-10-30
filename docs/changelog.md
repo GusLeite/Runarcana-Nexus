@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Faixa de ilustração nas linhagens (`feature/character-sheet`)
+- Os cartões da aba Linhagens ganharam uma faixa 16:9 no topo com o nome da linhagem por cima; a imagem é lida de `assets/lineages/<id>.webp` (`data/lineageArt.js`, automático) e, enquanto não existe, aparece o símbolo da origem com "Arte provisória".
+
 ## 2026-10-30 — Vídeos das origens cortados em loops de até 10 s (`feature/character-sheet`)
 - Os 10 vídeos passaram de ~178 MB para ~12 MB: cada um virou um loop de 3 a 10 s, sem áudio, até 1080p/30 fps, com o trecho escolhido pelo melhor encaixe entre fim e começo e o último segundo fundido com o começo.
 - `start`/`end` saíram das entradas (os cortes estão nos arquivos) e o `<video>` usa o `loop` nativo; as opções continuam suportadas.

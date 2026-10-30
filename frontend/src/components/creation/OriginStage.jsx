@@ -2,8 +2,9 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { createPortal } from 'react-dom'
 import { ABILITY_TYPES, RECHARGES, formatFeet, grantLabel, groupGrants } from '../../data/rules.js'
 import { originArt } from '../../data/originArt.js'
+import { lineageImage, lineagePos } from '../../data/lineageArt.js'
 import TabBar from '../sheet/TabBar.jsx'
-import OriginArt from './OriginArt.jsx'
+import OriginArt, { OriginSigil } from './OriginArt.jsx'
 
 const OPEN_MS = 620
 const CLOSE_MS = 380
@@ -56,12 +57,18 @@ function AbilityCard({ grant: g, source, n }) {
   )
 }
 
-function LineageCard({ lineage: l, on, onPick, crafts, equipment, n }) {
+// Cartão de uma linhagem: faixa de ilustração (imagem de data/lineageArt.js, ou o símbolo da origem enquanto não há) e,
+// embaixo, o texto e os ganhos.
+function LineageCard({ lineage: l, originId, hue, on, onPick, crafts, equipment, n }) {
   const levels = [...(l.levels ?? [])].sort((a, b) => a.level - b.level)
+  const img = lineageImage(l.id)
   return (
-    <button type="button" role="radio" aria-checked={on} className={'option olineage' + (on ? ' on' : '')} style={{ '--n': n }} onClick={onPick}>
-      <span className="option-head">
-        <span className="option-name">{l.name}</span>
+    <button type="button" role="radio" aria-checked={on} className={'option olineage' + (on ? ' on' : '')} style={{ '--n': n, '--h': hue }} onClick={onPick}>
+      <span className="olineage-art">
+        {img
+          ? <img src={img} alt="" loading="lazy" style={{ objectPosition: lineagePos(l.id) }} />
+          : <><OriginSigil id={originId} /><span className="olineage-placeholder">Arte provisória</span></>}
+        <span className="olineage-name">{l.name}</span>
         {on && <span className="olineage-check">✓</span>}
       </span>
       {l.description && <span className="option-desc">{l.description}</span>}
@@ -265,7 +272,7 @@ export default function OriginStage({ origins, startId, crafts, equipment, origi
             {tab === 'lineages' && (
               <div className="olineages" role="radiogroup" aria-label={'Linhagens de ' + origin.name}>
                 {lineages.map((l, i) => (
-                  <LineageCard key={l.id} lineage={l} on={l.id === lineageIdHere} n={i} crafts={crafts} equipment={equipment} onPick={() => setLineageIdHere(l.id)} />
+                  <LineageCard key={l.id} lineage={l} originId={origin.id} hue={art.hue} on={l.id === lineageIdHere} n={i} crafts={crafts} equipment={equipment} onPick={() => setLineageIdHere(l.id)} />
                 ))}
               </div>
             )}
