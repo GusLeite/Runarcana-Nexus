@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Imagens dos Construtos (`feature/character-sheet`)
+- `assets/lineages/`: brutal.webp, emissario.webp e ligeiro.webp (100 a 180 KB cada), no enquadramento padrão.
+
 ## 2026-10-30 — Imagens dos Minotauros (`feature/character-sheet`)
 - `assets/lineages/`: aelus.webp, alnuk.jpg e auroque.webp (100 a 440 KB cada). A do Alnuk é quadrada e usa `LINEAGE_POS` (50% 12%) para não cortar os chifres.
 
