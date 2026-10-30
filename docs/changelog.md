@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Imagens da Vastaya (`feature/character-sheet`)
+- `assets/lineages/`: oovi-kat, marai, shimon, fauhwoon, ottrani, kiilash, lhotlan e vesani (.webp, 100 a 235 KB cada), no enquadramento padrão. Conferidas com as descrições de cada linhagem (Neeko, Nami, Wukong, Lillia, Rengar, Xayah e Rakan, Ahri).
+
 ## 2026-10-30 — Imagens dos Trolls (`feature/character-sheet`)
 - `assets/lineages/`: troll-areia.webp, troll-gelo.webp e troll-selva.webp (190 a 300 KB), no enquadramento padrão.
 
