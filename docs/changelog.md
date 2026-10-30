@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Imagens do Yordle: as 29 linhagens ilustradas (`feature/character-sheet`)
+- `assets/lineages/`: aquatico, feerico e felpudo (.webp, 90 a 225 KB), no enquadramento padrão. Com elas, todas as linhagens têm imagem (~4,4 MB no total).
+
 ## 2026-10-30 — Imagens da Vastaya (`feature/character-sheet`)
 - `assets/lineages/`: oovi-kat, marai, shimon, fauhwoon, ottrani, kiilash, lhotlan e vesani (.webp, 100 a 235 KB cada), no enquadramento padrão. Conferidas com as descrições de cada linhagem (Neeko, Nami, Wukong, Lillia, Rengar, Xayah e Rakan, Ahri).
 

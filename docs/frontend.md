@@ -67,7 +67,7 @@ A tela foi prototipada num `index.html` único (React via CDN, imagens e vídeo 
 
 ## Pendências / problemas conhecidos
 
-- Faltam imagens de 3 das 29 linhagens (só o espaço provisório): as do Yordle — aquatico, feerico, felpudo.
+- As 29 linhagens têm imagem. Vale trocar a do fulgor, que é pequena (507×594). Linhagem nova no catálogo: basta soltar `<id>.webp` em `src/assets/lineages/` (sem imagem, o cartão mostra o espaço provisório).
 - Vídeos das origens (`assets/origins/`, ~12 MB no total): para trocar um, corte o original num loop de até 10 s e recomprima, por exemplo `ffmpeg -ss INICIO -t DURACAO -i orig.mp4 -ss FIM_DO_TRECHO -t 1 -i orig.mp4 -filter_complex "[0:v]scale=-2:'min(1080,ih)'[a];[1:v]scale=-2:'min(1080,ih)',format=yuva420p,fade=t=out:st=0:d=1:alpha=1[b];[a][b]overlay=0:0:eof_action=pass,format=yuv420p[v]" -map "[v]" -an -c:v libx264 -preset slow -crf 24 -movflags +faststart saida.mp4` (o segundo `-ss` é INICIO+DURACAO: o último segundo é fundido com o começo para o loop emendar). O ffmpeg não está instalado na máquina; foi usado o pacote npm `ffmpeg-static` numa pasta temporária.
 - Ainda não há roteamento (react-router): as abas da ficha são estado local e não mudam a URL (recarregar volta para "FICHA").
 - O token fica no `localStorage` (simples, mas acessível a scripts da página); se o projeto crescer, considerar cookie `HttpOnly`.
