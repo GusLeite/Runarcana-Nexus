@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { createPortal } from 'react-dom'
 import { ABILITY_TYPES, RECHARGES, formatFeet, grantLabel, groupGrants } from '../../data/rules.js'
 import { originArt } from '../../data/originArt.js'
-import { lineageImage, lineagePos } from '../../data/lineageArt.js'
+import { lineageContain, lineageImage, lineagePos } from '../../data/lineageArt.js'
 import TabBar from '../sheet/TabBar.jsx'
 import OriginArt, { OriginSigil } from './OriginArt.jsx'
 
@@ -66,7 +66,10 @@ function LineageCard({ lineage: l, originId, hue, on, onPick, crafts, equipment,
     <button type="button" role="radio" aria-checked={on} className={'option olineage' + (on ? ' on' : '')} style={{ '--n': n, '--h': hue }} onClick={onPick}>
       <span className="olineage-art">
         {img
-          ? <img src={img} alt="" loading="lazy" style={{ objectPosition: lineagePos(l.id) }} />
+          ? <>
+              {lineageContain(l.id) && <img className="olineage-bg" src={img} alt="" aria-hidden="true" loading="lazy" />}
+              <img src={img} alt="" loading="lazy" style={{ objectPosition: lineagePos(l.id), objectFit: lineageContain(l.id) ? 'contain' : undefined }} />
+            </>
           : <><OriginSigil id={originId} /><span className="olineage-placeholder">Arte provisória</span></>}
         <span className="olineage-name">{l.name}</span>
         {on && <span className="olineage-check">✓</span>}

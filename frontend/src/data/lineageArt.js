@@ -11,8 +11,12 @@ export const LINEAGE_IMAGES = Object.fromEntries(
 export const LINEAGE_POS = {
   alnuk: '50% 12%', // imagem quadrada: sobe o recorte para não cortar os chifres
   fulgor: '50% 6%', // imagem vertical: o rosto fica no topo
-  montanha: '40% 50%', // faixa muito larga (737×192): mostra o trecho em que o dragão está
 }
+
+// Imagens que devem aparecer inteiras (sem cortar), como faixas muito largas: o espaço que sobra é preenchido por uma
+// versão desfocada da própria imagem.
+export const LINEAGE_CONTAIN = new Set(['montanha'])
 
 export const lineageImage = id => LINEAGE_IMAGES[id] ?? null
 export const lineagePos = id => LINEAGE_POS[id] ?? '50% 30%'
+export const lineageContain = id => LINEAGE_CONTAIN.has(id)

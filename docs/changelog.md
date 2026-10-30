@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Montanha: imagem inteira, sem cortar (`feature/character-sheet`)
+- `LINEAGE_CONTAIN` em `data/lineageArt.js`: a imagem da Montanha (faixa 737×192) aparece inteira no cartão, com o espaço que sobra preenchido por uma versão desfocada dela; o `LINEAGE_POS` dela saiu.
+
 ## 2026-10-30 — Imagens dos Meios-Dragões (`feature/character-sheet`)
 - `assets/lineages/`: glacial.webp, infernal.webp, montanha.png, nuvens.webp e oceano.webp (45 a 215 KB). A da Montanha é uma faixa de 737×192, provisória: `LINEAGE_POS` (40% 50%) mostra o trecho do dragão; falta trocar por uma imagem melhor.
 
