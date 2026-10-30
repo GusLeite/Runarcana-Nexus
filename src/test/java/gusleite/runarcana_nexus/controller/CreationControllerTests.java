@@ -280,6 +280,22 @@ class CreationControllerTests {
                         .content("{\"key\":null}"))
                 .andExpect(jsonPath("$.character.str").value(9))
                 .andExpect(jsonPath("$.character.size").value("SMALL"));
+        // Efeito ativo: +proficiência (2) na CA, resistência a cortante, +10 pés e +1d6 no desarmado; desligar volta.
+        String before = mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
+                .andReturn().getResponse().getContentAsString();
+        int ac = com.jayway.jsonpath.JsonPath.read(before, "$.armorClass.value");
+        mvc.perform(patch("/character/me/effect").header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"key\":\"Efeito Teste\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.character.activeEffects[0]").value("Efeito Teste"))
+                .andExpect(jsonPath("$.armorClass.value").value(ac + 2))
+                .andExpect(jsonPath("$.character.resistances", hasItem("cortante")))
+                .andExpect(jsonPath("$.character.speeds[?(@.type == 'WALK')].feet").value(45.0))
+                .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].damage").value("1+1d4+1d6+2"));
+        mvc.perform(patch("/character/me/effect").header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"key\":\"Efeito Teste\"}"))
+                .andExpect(jsonPath("$.character.activeEffects").isEmpty())
+                .andExpect(jsonPath("$.armorClass.value").value(ac));
     }
 
     // 2ª escolha de uma Herança sem opção (chave "*"): uma categoria de tamanho acima (Variante Colosso).

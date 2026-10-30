@@ -20,7 +20,7 @@ const MODES = [
 
 // Aba principal: atributos, estatísticas e perícias no centro; à direita, rolagens e atalhos
 // para as outras abas (habilidades, documentos novos e a anotação fixada).
-export default function OverviewTab({ sheet, attacks = [], crafts = [], abilities, documents, notes, rolls, mode, onMode, onRoll, onRollDice, onGo, onInspiration, onForm }) {
+export default function OverviewTab({ sheet, attacks = [], crafts = [], abilities, documents, notes, rolls, mode, onMode, onRoll, onRollDice, onGo, onInspiration, onForm, onEffect }) {
   const initiative = sheet.initiative ?? modifier(sheet.dex)
   const conMod = modifier(sheet.con)
   const quick = abilities.filter(a => a.type !== 'PASSIVE').slice(0, 5)
@@ -52,7 +52,7 @@ export default function OverviewTab({ sheet, attacks = [], crafts = [], abilitie
         </section>
         {(sheet.forms ?? []).length > 0 && onForm && (
           <section className="card" style={{ '--i': 3 }}>
-            <Forms sheet={sheet} onForm={onForm} />
+            <Forms sheet={sheet} onForm={onForm} onEffect={onEffect} />
           </section>
         )}
         {attacks.length > 0 && (

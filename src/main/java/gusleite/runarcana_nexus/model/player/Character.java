@@ -244,6 +244,11 @@ public class Character {
     @OrderColumn(name = "position")
     private List<CharacterForm> forms = new ArrayList<>();
     private String activeForm;
+    // Efeitos ativos ligados (vários ao mesmo tempo).
+    @ElementCollection
+    @CollectionTable(name = "character_active_effects", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "name")
+    private Set<String> activeEffects = new LinkedHashSet<>();
 
     // Pontos de Herança ainda não gastos (os da criação são gastos no assistente).
     private Integer heritagePoints;
@@ -307,40 +312,84 @@ public class Character {
 
     public CharacterForm getActiveFormLine() {
         if (activeForm == null) return null;
-        return forms.stream().filter(f -> activeForm.equals(f.getName())).findFirst().orElse(null);
+        return forms.stream().filter(f -> !f.isEffect() && activeForm.equals(f.getName())).findFirst().orElse(null);
+    }
+
+    // A forma ativa e os efeitos ligados (Fúria, Iras, Sutras...).
+    public List<CharacterForm> getActiveLines() {
+        List<CharacterForm> out = new ArrayList<>();
+        CharacterForm form = getActiveFormLine();
+        if (form != null) out.add(form);
+        forms.stream().filter(f -> f.isEffect() && activeEffects.contains(f.getName())).forEach(out::add);
+        return out;
     }
 
     private int formBonus(Attribute attribute) {
-        CharacterForm f = getActiveFormLine();
-        if (f == null || f.getAttributes() == null || f.getAttributes().isBlank()) return 0;
         int total = 0;
-        for (String part : f.getAttributes().split(",")) {
-            String[] kv = part.split(":");
-            if (kv.length != 2 || !kv[0].equals(attribute.name())) continue;
-            total += "P".equals(kv[1]) ? getProficiencyBonus() / 2 : Integer.parseInt(kv[1]);
+        for (CharacterForm f : getActiveLines()) {
+            if (f.getAttributes() == null || f.getAttributes().isBlank()) continue;
+            for (String part : f.getAttributes().split(",")) {
+                String[] kv = part.split(":");
+                if (kv.length != 2 || !kv[0].equals(attribute.name())) continue;
+                total += "P".equals(kv[1]) ? getProficiencyBonus() / 2 : Integer.parseInt(kv[1]);
+            }
         }
         return total;
     }
 
-    // Deslocamentos da forma ativa (tipo → pés).
+    // Deslocamentos da forma e dos efeitos ativos (tipo → pés; vale o maior) e o que eles somam na caminhada.
     public Map<MovementType, Double> getFormSpeeds() {
-        CharacterForm f = getActiveFormLine();
         Map<MovementType, Double> out = new HashMap<>();
-        if (f == null || f.getSpeeds() == null || f.getSpeeds().isBlank()) return out;
-        for (String part : f.getSpeeds().split(",")) {
-            String[] kv = part.split(":");
-            if (kv.length == 2) out.put(MovementType.valueOf(kv[0]), Double.parseDouble(kv[1]));
+        for (CharacterForm f : getActiveLines()) {
+            if (f.getSpeeds() == null || f.getSpeeds().isBlank()) continue;
+            for (String part : f.getSpeeds().split(",")) {
+                String[] kv = part.split(":");
+                if (kv.length == 2) out.merge(MovementType.valueOf(kv[0]), Double.parseDouble(kv[1]), Math::max);
+            }
         }
         return out;
     }
 
-    // Tamanho com a forma ativa ("UP" = uma categoria acima).
+    public double getFormSpeedBonus() {
+        return getActiveLines().stream().mapToDouble(f -> f.getSpeedBonus() == null ? 0 : f.getSpeedBonus()).sum();
+    }
+
+    // Bônus de CA dos efeitos ativos (Coragem: +proficiência; Defesa Espiritual: +5).
+    public int getEffectAc() {
+        return getActiveLines().stream().mapToInt(f -> f.getAc() == null ? 0 : f.getAc()).sum();
+    }
+
+    // Resistências e imunidades com as dos efeitos ativos.
+    public List<String> getEffectiveResistances() {
+        return withActive(resistances, CharacterForm::getResistances);
+    }
+
+    public List<String> getEffectiveImmunities() {
+        return withActive(immunities, CharacterForm::getImmunities);
+    }
+
+    private List<String> withActive(Set<String> base, java.util.function.Function<CharacterForm, String> field) {
+        Set<String> out = new LinkedHashSet<>(base);
+        for (CharacterForm f : getActiveLines()) {
+            String v = field.apply(f);
+            if (v != null && !v.isBlank()) out.addAll(List.of(v.split(",")));
+        }
+        return List.copyOf(out);
+    }
+
+    // Tamanho com a forma (ou efeito) ativa ("UP" = uma categoria acima).
     public CreatureSize getEffectiveSize() {
-        CharacterForm f = getActiveFormLine();
-        if (f == null || f.getSize() == null || size == null) return size;
-        if (!"UP".equals(f.getSize())) return CreatureSize.valueOf(f.getSize());
-        CreatureSize[] all = CreatureSize.values();
-        return all[Math.min(all.length - 1, size.ordinal() + 1)];
+        CreatureSize current = size;
+        if (current == null) return null;
+        for (CharacterForm f : getActiveLines()) {
+            if (f.getSize() == null) continue;
+            if (!"UP".equals(f.getSize())) current = CreatureSize.valueOf(f.getSize());
+            else {
+                CreatureSize[] all = CreatureSize.values();
+                current = all[Math.min(all.length - 1, current.ordinal() + 1)];
+            }
+        }
+        return current;
     }
 
     public int getProficiencyBonus() {

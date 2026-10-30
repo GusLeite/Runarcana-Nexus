@@ -3625,6 +3625,24 @@
                   "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
                   "attribute": "WISDOM",
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "EFFECT",
+                  "name": "Aura Protetora",
+                  "description": "Aura de 15 pés: vantagem em salvaguardas de Sabedoria e resistência a danos simples.",
+                  "form": {
+                    "resistances": [
+                      "cortante",
+                      "perfurante",
+                      "contundente",
+                      "ácido",
+                      "elétrico",
+                      "ígneo",
+                      "gélido",
+                      "trovejante",
+                      "venenoso"
+                    ]
+                  }
                 }
               ]
             },
@@ -7494,6 +7512,18 @@
               "name": "Meditação Wuju",
               "description": "Ação e 1 Ki: estado meditativo até o início do próximo turno (+1 turno por Ki extra), com resistência a danos físicos simples; no início do turno, cura o dado Marcial. Fora de combate, 1 Ki por 1 minuto: sente os arredores espirituais e espíritos podem lhe dar informações do lugar.",
               "castingTime": "Ação"
+            },
+            {
+              "type": "EFFECT",
+              "name": "Meditação Wuju",
+              "description": "Estado meditativo: resistência a danos físicos simples.",
+              "form": {
+                "resistances": [
+                  "cortante",
+                  "perfurante",
+                  "contundente"
+                ]
+              }
             }
           ],
           "levels": [
@@ -7609,6 +7639,28 @@
                   "name": "Dança Desafiadora",
                   "description": "Até 2 lâminas. Reação e 3 Ki (ou ação e 2 Ki): até o início do próximo turno, 2 × nível de Bodisatva em PV temporários e resistência a todos os danos (exceto verdadeiro); metade do dano recebido volta numa linha de 10 pés (15 no 12º, 20 no 18º), salvaguarda de Destreza para metade.",
                   "castingTime": "Reação"
+                },
+                {
+                  "type": "EFFECT",
+                  "name": "Dança Desafiadora",
+                  "description": "Até o início do próximo turno: PV temporários e resistência a todos os danos (exceto verdadeiro).",
+                  "form": {
+                    "resistances": [
+                      "cortante",
+                      "perfurante",
+                      "contundente",
+                      "ácido",
+                      "elétrico",
+                      "ígneo",
+                      "gélido",
+                      "trovejante",
+                      "venenoso",
+                      "necrótico",
+                      "radiante",
+                      "psíquico",
+                      "energético"
+                    ]
+                  }
                 }
               ]
             },
@@ -8270,6 +8322,27 @@
         {
           "type": "EQUIPMENT",
           "value": "conjunto-de-aventureiro+azagaia*4"
+        },
+        {
+          "type": "EFFECT",
+          "name": "Fúria",
+          "description": "Vantagem em testes e salvaguardas de Força; Dano de Fúria nos corpo a corpo com Força; resistência a danos físicos simples.",
+          "form": {
+            "resistances": [
+              "cortante",
+              "perfurante",
+              "contundente"
+            ]
+          },
+          "value": "ATTACK:MELEE",
+          "diceByLevel": {
+            "1": "1d4",
+            "4": "1d6",
+            "8": "1d8",
+            "12": "1d10",
+            "16": "2d6",
+            "20": "3d6"
+          }
         }
       ],
       "levels": [
@@ -9216,6 +9289,14 @@
               "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
               "attribute": "WISDOM",
               "recharge": "LONG_REST"
+            },
+            {
+              "type": "EFFECT",
+              "name": "Trunfo",
+              "description": "Por 1 minuto, +2 de CA e o dobro de ataques corpo a corpo, mas ataques contra você têm vantagem.",
+              "form": {
+                "ac": 2
+              }
             }
           ]
         },
@@ -10393,6 +10474,24 @@
                   "description": "Ação bônus, 1 minuto: resistência a todos os danos (exceto disruptivo e espirituais); atingido, salvaguarda de Destreza ou Inteligência (CD 8 + metade do acerto) para ignorar o dano; +1 acumulativo no acerto e no dano a cada troca no turno; após Agilidade de Combate, contra-ataque na mesma reação. Proficiência com armas exóticas, impróprias e improvisadas e Maestria em 4 armas a mais.",
                   "castingTime": "Ação bônus",
                   "duration": "1 minuto"
+                },
+                {
+                  "type": "EFFECT",
+                  "name": "Postura do Grão-mestre",
+                  "description": "1 minuto: resistência a todos os danos (exceto disruptivo e espirituais).",
+                  "form": {
+                    "resistances": [
+                      "cortante",
+                      "perfurante",
+                      "contundente",
+                      "ácido",
+                      "elétrico",
+                      "ígneo",
+                      "gélido",
+                      "trovejante",
+                      "venenoso"
+                    ]
+                  }
                 }
               ]
             }
@@ -10596,6 +10695,17 @@
                   "duration": "10 minutos",
                   "maxUses": 1,
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "EFFECT",
+                  "name": "Perfeição em Combate",
+                  "description": "10 minutos: 25 PV temporários, +2 de CA, +10 pés, vantagem em salvaguardas de FOR e CON e nos ataques, +1d10 de dano.",
+                  "form": {
+                    "ac": 2,
+                    "speedBonus": 10
+                  },
+                  "value": "ATTACK",
+                  "damage": "1d10"
                 }
               ]
             }

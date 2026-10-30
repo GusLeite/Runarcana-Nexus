@@ -723,7 +723,21 @@
       "id": "placas-protetoras",
       "name": "Placas Protetoras",
       "tier": "MAJOR",
-      "description": "Você possui placas em seu corpo extremamente resistentes. Utilizando uma ação bônus, você pode se encolher (ou voltar ao normal), encobrindo-se por suas placas; ao fazer isso você não pode realizar nenhuma ação e seu deslocamento cai pela metade, porém você recebe resistência a todos os danos físicos simples."
+      "description": "Você possui placas em seu corpo extremamente resistentes. Utilizando uma ação bônus, você pode se encolher (ou voltar ao normal), encobrindo-se por suas placas; ao fazer isso você não pode realizar nenhuma ação e seu deslocamento cai pela metade, porém você recebe resistência a todos os danos físicos simples.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Encolhido nas placas",
+          "description": "Encolhido: sem ações, metade do deslocamento, resistência a danos físicos simples.",
+          "form": {
+            "resistances": [
+              "cortante",
+              "perfurante",
+              "contundente"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "presas",

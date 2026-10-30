@@ -118,10 +118,22 @@ public class CharacterService {
     }
 
     // Forma temporária ativa (uma das formas da ficha; nulo = forma normal): a ficha volta recalculada.
+    // Liga ou desliga um efeito ativo (vários podem ficar ligados): a ficha volta recalculada.
+    @Transactional
+    public CharacterSheetResponse toggleEffect(Account account, String name) {
+        Character character = characterOf(account);
+        if (name == null || character.getForms().stream().noneMatch(f -> f.isEffect() && f.getName().equals(name))) {
+            throw ApiException.badRequest("Esse efeito não está disponível para a sua ficha.");
+        }
+        if (!character.getActiveEffects().remove(name)) character.getActiveEffects().add(name);
+        charRepository.save(character);
+        return getSheet(account);
+    }
+
     @Transactional
     public CharacterSheetResponse chooseForm(Account account, String name) {
         Character character = characterOf(account);
-        if (name != null && character.getForms().stream().noneMatch(f -> f.getName().equals(name))) {
+        if (name != null && character.getForms().stream().noneMatch(f -> !f.isEffect() && f.getName().equals(name))) {
             throw ApiException.badRequest("Essa forma não está disponível para a sua ficha.");
         }
         character.setActiveForm(name);
@@ -276,8 +288,16 @@ public class CharacterService {
                 character.getProficiencyBonus(),
                 character.getWeaponProficiencies(), weapons, styles, level);
         // Bônus de dano ("DAMAGE:<alvo>", "+2" ou "+1d4"): somados no dano de cada ataque que eles valem, com a nota.
-        List<gusleite.runarcana_nexus.model.player.SituationalNote> damageNotes = character.getSituational().stream()
-                .filter(n -> n.getTarget() != null && n.getTarget().startsWith("DAMAGE:")).toList();
+        List<gusleite.runarcana_nexus.model.player.SituationalNote> damageNotes = new ArrayList<>(character.getSituational().stream()
+                .filter(n -> n.getTarget() != null && n.getTarget().startsWith("DAMAGE:")).toList());
+        // Dano dos efeitos ativos (Fúria: o Dano de Fúria nos corpo a corpo).
+        for (gusleite.runarcana_nexus.model.player.CharacterForm f : character.getActiveLines()) {
+            if (f.getDamage() == null || f.getDamage().isBlank()) continue;
+            for (String part : f.getDamage().split(";")) {
+                String[] kv = part.split("\\|", 2);
+                if (kv.length == 2) damageNotes.add(new gusleite.runarcana_nexus.model.player.SituationalNote("DAMAGE:" + kv[0], kv[1], "Efeito: " + f.getName()));
+            }
+        }
         if (!damageNotes.isEmpty()) attacks = attacks.stream().map(a -> {
             AttackCalculator.WeaponInput w = weapons.stream().filter(x -> x.key().equals(a.key())).findFirst().orElse(null);
             List<gusleite.runarcana_nexus.model.player.SituationalNote> mine = damageNotes.stream()
@@ -319,6 +339,19 @@ public class CharacterService {
         }).toList();
     }
 
+    // Regras de CA com o bônus dos efeitos ativos (Coragem, Defesa Espiritual...), como um bônus somado à defesa.
+    private static List<gusleite.runarcana_nexus.model.player.ArmorRule> withEffectAc(Character character) {
+        int ac = character.getEffectAc();
+        if (ac == 0) return character.getArmorRules();
+        List<gusleite.runarcana_nexus.model.player.ArmorRule> rules = new ArrayList<>(character.getArmorRules());
+        gusleite.runarcana_nexus.model.player.ArmorRule bonus = new gusleite.runarcana_nexus.model.player.ArmorRule();
+        bonus.setName("Efeitos ativos");
+        bonus.setBonus(true);
+        bonus.setAmount(ac);
+        rules.add(bonus);
+        return rules;
+    }
+
     // CA da ficha: as regras da criação (Character.armorRules), as armaduras e os escudos do inventário.
     private ArmorClassResponse armorClassOf(Character character, List<PlayerItems> items) {
         Set<String> abilities = abilityRepository.findByCharacterOrderByIdAsc(character).stream()
@@ -334,7 +367,7 @@ public class CharacterService {
         // Resiliência Adaptativa: metade da CON no lugar da DES na CA, se for maior.
         return ArmorClassCalculator.calculate(a -> a == Attribute.DEXTERITY ? character.swapModifier("AC", a) : character.getModifier(a),
                 character.getProficiencyBonus(),
-                character.getArmorRules(), character.getArmorProficiencies(), armors, character.getDefense(),
+                withEffectAc(character), character.getArmorProficiencies(), armors, character.getDefense(),
                 shieldsOf(items), character.getShield(), abilities.contains(MEDIUM_EXPERT), abilities.contains(HEAVY_EXPERT));
     }
 

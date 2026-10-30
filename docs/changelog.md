@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento M: efeitos ativos (`feature/character-sheet`)
+- Concessão `EFFECT`: efeitos temporários com números do nível (CA, resistências, imunidades, deslocamento, dano) que o jogador liga e desliga na ficha (`PATCH /character/me/effect`, `activeEffects`).
+- ~35 efeitos: Fúria do Bruto (Dano de Fúria pelo nível), Iras, Técnicas, Sutras, Vel, Caçador, Combatente, Bodisatva, Acólito das Marés, Heranças, Runinata e runas.
+- Front: Efeitos ativos no cartão de Formas. Teste: efeito ligado/desligado (CA, resistência, deslocamento e dano). Conferido no navegador com a Fúria.
+
 ## 2026-10-29 — Mapeamento M: crítico e bônus contra alvo (`feature/character-sheet`)
 - Concessão `CRIT_BONUS` (nota `CRIT:<alvo>`, aplicada na margem e no multiplicador dos ataques): Fúria de Warmog e Brutalizador.
 - `DAMAGE_BONUS` com `description` vira nota no ataque com o número (Inimigo Favorito, presa, Atacante Brutal, Feridas Abertas); com `diceByLevel` (Rocha Bruta).

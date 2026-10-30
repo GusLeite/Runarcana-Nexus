@@ -218,7 +218,27 @@
         "subclasses": [
           "berserker"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Escudo da Fúria",
+          "description": "Resistência a todos os danos simples por 1 minuto.",
+          "form": {
+            "resistances": [
+              "cortante",
+              "perfurante",
+              "contundente",
+              "ácido",
+              "elétrico",
+              "ígneo",
+              "gélido",
+              "trovejante",
+              "venenoso"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "face-da-natureza",
@@ -253,7 +273,22 @@
         "subclasses": [
           "cicatrizes-runicas"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Fortalecer a Mente",
+          "description": "Resistência a danos espirituais.",
+          "form": {
+            "resistances": [
+              "necrótico",
+              "radiante",
+              "psíquico",
+              "energético"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "forca-do-raio",
@@ -397,6 +432,15 @@
           "armor": {
             "unarmoredOnly": true
           }
+        },
+        {
+          "type": "EFFECT",
+          "name": "Movimento Relampejante",
+          "description": "+15 pés sem armadura pesada, sem ataques de oportunidade; sem armadura, +1 de CA.",
+          "form": {
+            "speedBonus": 15,
+            "ac": 1
+          }
         }
       ]
     },
@@ -533,7 +577,27 @@
         "subclasses": [
           "berserker"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Resistência Plena",
+          "description": "Resistência a danos físicos e elementais por 1 minuto.",
+          "form": {
+            "resistances": [
+              "cortante",
+              "perfurante",
+              "contundente",
+              "ácido",
+              "elétrico",
+              "ígneo",
+              "gélido",
+              "trovejante",
+              "venenoso"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "resposta-de-zefiro",
@@ -1135,7 +1199,30 @@
       "description": "Mão Amiga: quando um aliado a 60 pés cair a 0 PV, reação e 1 Ki para ele recuperar 2d10 (+2d10 a cada 2 Ki extras, até o mod. de Sabedoria em Ki extra).\nForma de Ki: ação e 4 Ki para ficar Invisível por 1 minuto com resistência a todos os danos (exceto energético e verdadeiro); com 8 Ki, projeção astral sem Mana nem componentes, só você.",
       "requires": {
         "level": 18
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Forma de Ki",
+          "description": "Invisível por 1 minuto com resistência a todos os danos (exceto energético e verdadeiro).",
+          "form": {
+            "resistances": [
+              "cortante",
+              "perfurante",
+              "contundente",
+              "ácido",
+              "elétrico",
+              "ígneo",
+              "gélido",
+              "trovejante",
+              "venenoso",
+              "necrótico",
+              "radiante",
+              "psíquico"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "toque-de-areia",
@@ -1402,7 +1489,29 @@
         "subclasses": [
           "shojin"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Enrijecer",
+          "description": "Resistência a danos físicos simples por rodadas iguais ao mod.",
+          "form": {
+            "resistances": [
+              "cortante",
+              "perfurante",
+              "contundente"
+            ]
+          }
+        },
+        {
+          "type": "EFFECT",
+          "name": "Proteger",
+          "description": "+2 de CA para você e o aliado protegido.",
+          "form": {
+            "ac": 2
+          }
+        }
+      ]
     },
     {
       "id": "desafio-do-dragao",
@@ -1768,7 +1877,22 @@
         "featureOptions": [
           "Escola Espiritual"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Proteção Espiritual",
+          "description": "A até 15 pés da arma espiritual, resistência a danos espirituais.",
+          "form": {
+            "resistances": [
+              "necrótico",
+              "radiante",
+              "psíquico",
+              "energético"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "harmonizacao-espiritual",
@@ -1839,7 +1963,17 @@
         "featureOptions": [
           "Escola da Proteção"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Escudo Espiritual",
+          "description": "+5 de CA até o seu próximo turno e nenhum dano de projéteis.",
+          "form": {
+            "ac": 5
+          }
+        }
+      ]
     },
     {
       "id": "armadura-sutra",
@@ -2153,7 +2287,19 @@
           "Escola Umbral",
           "Escola Noctígena"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Desvio de Luz",
+          "description": "Resistência a dano radiante.",
+          "form": {
+            "resistances": [
+              "radiante"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "tecitura-das-sombras",
@@ -3045,7 +3191,17 @@
           "STRENGTH": 18,
           "DEXTERITY": 18
         }
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Graça de Shojin",
+          "description": "Armadura dourada por 5 rodadas: +3 de CA.",
+          "form": {
+            "ac": 3
+          }
+        }
+      ]
     },
     {
       "id": "lampejo-de-foco",
@@ -3769,7 +3925,21 @@
         "attributes": {
           "CONSTITUTION": 13
         }
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Coragem",
+          "description": "Até o fim do próximo turno: +proficiência na CA e resistência a cortante e perfurante.",
+          "form": {
+            "acFormula": "PROFICIENCY",
+            "resistances": [
+              "cortante",
+              "perfurante"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "corte-crescente",
@@ -4153,7 +4323,21 @@
         "subclasses": [
           "guardiao"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Bate Igual Carneirinho",
+          "description": "Imune a danos físicos, sem atacar e movendo só 5 pés por rodada.",
+          "form": {
+            "immunities": [
+              "cortante",
+              "perfurante",
+              "contundente"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "se-atacar-eu-vou-atacar",
@@ -5525,7 +5709,27 @@
       "uses": {
         "usesFormula": "HALF_PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Barreira Rúnica",
+          "description": "Com os PV temporários da barreira: resistência a danos simples.",
+          "form": {
+            "resistances": [
+              "cortante",
+              "perfurante",
+              "contundente",
+              "ácido",
+              "elétrico",
+              "ígneo",
+              "gélido",
+              "trovejante",
+              "venenoso"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "runa-bencao-do-anciao-carmesim",
@@ -5723,7 +5927,17 @@
       "uses": {
         "usesFormula": "HALF_PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Runa: Escudo",
+          "description": "+metade da proficiência na CA (ou na salvaguarda) por rodadas iguais à proficiência.",
+          "form": {
+            "acFormula": "HALF_PROFICIENCY"
+          }
+        }
+      ]
     },
     {
       "id": "runa-forca-adamantina",
@@ -5757,7 +5971,17 @@
       },
       "requires": {
         "level": 15
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Fôlego de Guerra",
+          "description": "1 minuto: PV máximos e atuais + 2 dados de Pulso, +4 de CA e RD 5 / verdadeiro.",
+          "form": {
+            "ac": 4
+          }
+        }
+      ]
     },
     {
       "id": "runa-incitar",
@@ -5945,7 +6169,32 @@
       },
       "requires": {
         "level": 15
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Temerário",
+          "description": "Até o próximo turno: +10 pés e imune a todos os danos (exceto verdadeiro).",
+          "form": {
+            "speedBonus": 10,
+            "immunities": [
+              "cortante",
+              "perfurante",
+              "contundente",
+              "ácido",
+              "elétrico",
+              "ígneo",
+              "gélido",
+              "trovejante",
+              "venenoso",
+              "necrótico",
+              "radiante",
+              "psíquico",
+              "energético"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "runa-trunfo-do-crepusculo",
@@ -6363,7 +6612,32 @@
         "resources": [
           "runa-essencia-imortal"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Explosão da Fúria",
+          "description": "Imune a todos os danos (exceto verdadeiro), +10 pés, crítico com margem e multiplicador +1.",
+          "form": {
+            "speedBonus": 10,
+            "immunities": [
+              "cortante",
+              "perfurante",
+              "contundente",
+              "ácido",
+              "elétrico",
+              "ígneo",
+              "gélido",
+              "trovejante",
+              "venenoso",
+              "necrótico",
+              "radiante",
+              "psíquico",
+              "energético"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "runa-bencao-de-statikk",

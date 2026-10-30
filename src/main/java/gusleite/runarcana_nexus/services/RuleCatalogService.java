@@ -713,6 +713,9 @@ public class RuleCatalogService {
                     else targets.stream().filter(t -> !t.matches(target)).forEach(t -> p.add(at + " (SITUATIONAL): alvo inválido " + t));
                 }
                 // Tipo de dano fixo (value) ou à escolha (options).
+                case EFFECT -> {
+                    if (blank(g.name())) p.add(at + " (EFFECT): falta name");
+                }
                 case FORM -> {
                     if (blank(g.name())) p.add(at + " (FORM): falta name");
                     if (g.form() != null && g.form().size() != null && !"UP".equals(g.form().size()) && !SIZES.contains(g.form().size())) p.add(at + " (FORM): size inválido");

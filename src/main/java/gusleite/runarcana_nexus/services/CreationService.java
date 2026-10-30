@@ -1047,6 +1047,7 @@ public class CreationService {
             case IMMUNITY -> b.immunities.add(g.value());
             case CONDITION_IMMUNITY -> b.conditionImmunities.add(g.value());
             case FORM -> b.forms.add(formLine(g));
+            case EFFECT -> b.forms.add(effectLine(g, b, b.scale(s.label())));
             case ATTRIBUTE_SWAP -> b.attributeSwaps.put(g.value(), g.attribute().name()
                     + (g.usesFormula() == UsesFormula.HALF_ATTRIBUTE_MODIFIER ? "/2" : ""));
             case CRAFT_LEVEL, CRAFT_FORMULAS, CRAFT_INCOME, CRAFT_MASTERWORK -> {
@@ -1912,6 +1913,7 @@ public class CreationService {
         c.getForms().addAll(b.forms);
         // A forma ativa some se ele não a tiver mais.
         if (c.getActiveForm() != null && b.forms.stream().noneMatch(f -> f.getName().equals(c.getActiveForm()))) c.setActiveForm(null);
+        c.getActiveEffects().removeIf(n -> b.forms.stream().noneMatch(f -> f.isEffect() && f.getName().equals(n)));
         c.getSavingThrowExpertise().clear();
         c.getSavingThrowExpertise().addAll(b.saveExpertise);
         c.setPassivePerceptionBonus(b.passivePerception);
@@ -2067,6 +2069,30 @@ public class CreationService {
         List<String> speeds = new ArrayList<>();
         if (f != null && f.speeds() != null) f.speeds().forEach((t, v) -> speeds.add(t.name() + ":" + v));
         return new CharacterForm(g.name(), g.description(), String.join(",", attrs), String.join(",", speeds), f == null ? null : f.size());
+    }
+
+    // Efeito ativo com os números do nível atual: CA (fixa ou pela proficiência), resistências, imunidades, deslocamento
+    // e o bônus de dano (value = alvo; dado pela tabela do nível da classe, fórmula ou valor).
+    static CharacterForm effectLine(Grant g, Build b, int level) {
+        CharacterForm line = formLine(g);
+        line.setKind("EFFECT");
+        FormRule f = g.form();
+        if (f != null) {
+            int ac = f.ac() != null ? f.ac() : f.acFormula() == UsesFormula.PROFICIENCY ? b.proficiency()
+                    : f.acFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : 0;
+            line.setAc(ac == 0 ? null : ac);
+            line.setSpeedBonus(f.speedBonus());
+            if (f.resistances() != null) line.setResistances(String.join(",", f.resistances()));
+            if (f.immunities() != null) line.setImmunities(String.join(",", f.immunities()));
+        }
+        if (g.value() != null) {
+            String dice = g.diceByLevel() != null && !g.diceByLevel().isEmpty() ? byLevel(g.diceByLevel(), level) : g.damage();
+            int n = g.usesFormula() == UsesFormula.PROFICIENCY ? b.proficiency()
+                    : g.usesFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : g.amount() == null ? 0 : g.amount();
+            String bonus = dice != null ? "+" + dice : n > 0 ? "+" + n : null;
+            if (bonus != null) line.setDamage(g.value() + "|" + bonus);
+        }
+        return line;
     }
 
     // Um sentido ganho; a chave leva onde vale ("DARKVISION|debaixo d'água").

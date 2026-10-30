@@ -72,6 +72,14 @@ public class CharacterController {
         return ResponseEntity.ok(charService.chooseForm(authService.authenticate(authorization), request.key()));
     }
 
+    // Liga ou desliga um efeito ativo da ficha (Fúria, Iras, Sutras...). Devolve a ficha recalculada.
+    @PatchMapping("/me/effect")
+    public ResponseEntity<CharacterSheetResponse> toggleEffect(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @RequestBody DefenseRequest request) {
+        return ResponseEntity.ok(charService.toggleEffect(authService.authenticate(authorization), request.key()));
+    }
+
     // Escudo em uso ("NONE" = sem escudo, ou "ITEM:<id>" de um escudo do inventário).
     @PatchMapping("/me/shield")
     public ResponseEntity<ArmorClassResponse> chooseShield(

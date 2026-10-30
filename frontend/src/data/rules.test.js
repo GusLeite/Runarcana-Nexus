@@ -341,6 +341,8 @@ describe('formEffects', () => {
     expect(formEffects({ attributes: 'STRENGTH:2,DEXTERITY:4', speeds: 'WALK:50.0', size: 'UP' })).toBe('FOR +2, DES +4 · caminhada 50 pés · tamanho +1')
     expect(formEffects({ attributes: 'CONSTITUTION:P', speeds: 'FLY:60.0' })).toBe('CON +½ prof. · voo 60 pés')
     expect(formEffects({})).toBe('')
+    expect(formEffects({ ac: 2, speedBonus: 15, resistances: 'cortante,perfurante', damage: 'ATTACK:MELEE|+1d4' }))
+      .toBe('CA +2 · +15 pés · resistência: cortante, perfurante · +1d4 no dano')
   })
 })
 

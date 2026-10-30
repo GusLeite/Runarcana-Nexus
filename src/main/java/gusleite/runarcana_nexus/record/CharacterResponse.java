@@ -89,11 +89,14 @@ public record CharacterResponse(
         java.util.Map<String, Integer> senses,
         // Formas temporárias (nome, texto, efeitos) e a ativa (nula = forma normal).
         List<Form> forms,
-        String activeForm
+        String activeForm,
+        // Efeitos ativos ligados (vários ao mesmo tempo).
+        List<String> activeEffects
 ) {
     public record Situational(String target, String note, String source) {}
 
-    public record Form(String name, String description, String attributes, String speeds, String size) {}
+    public record Form(String name, String description, String attributes, String speeds, String size, String kind, Double speedBonus,
+                       Integer ac, String resistances, String immunities, String damage) {}
 
     public record ClassLevelResponse(String classId, String name, int level, String subclass) {}
 
@@ -158,16 +161,18 @@ public record CharacterResponse(
                 character.getModifier(Attribute.DEXTERITY) + (character.getInitiativeBonus() == null ? 0 : character.getInitiativeBonus()),
                 character.getFormulas().stream().sorted().toList(),
                 character.getSituational().stream().map(n -> new Situational(n.getTarget(), n.getNote(), n.getSource())).toList(),
-                List.copyOf(character.getResistances()),
+                character.getEffectiveResistances(),
                 List.copyOf(character.getVulnerabilities()),
-                List.copyOf(character.getImmunities()),
+                character.getEffectiveImmunities(),
                 List.copyOf(character.getAbsorptions()),
                 List.copyOf(character.getConditionImmunities()),
                 character.getSavingThrowExpertise().stream().sorted().toList(),
                 new java.util.TreeMap<>(character.getTypedReductions()),
                 new java.util.TreeMap<>(character.getSenses()),
-                character.getForms().stream().map(fm -> new Form(fm.getName(), fm.getDescription(), fm.getAttributes(), fm.getSpeeds(), fm.getSize())).toList(),
-                character.getActiveForm()
+                character.getForms().stream().map(fm -> new Form(fm.getName(), fm.getDescription(), fm.getAttributes(), fm.getSpeeds(), fm.getSize(),
+                        fm.isEffect() ? "EFFECT" : "FORM", fm.getSpeedBonus(), fm.getAc(), fm.getResistances(), fm.getImmunities(), fm.getDamage())).toList(),
+                character.getActiveForm(),
+                List.copyOf(character.getActiveEffects())
         );
     }
 }

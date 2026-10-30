@@ -249,6 +249,20 @@
           "value": "ATTACK",
           "usesFormula": "PROFICIENCY",
           "description": "contra lobos"
+        },
+        {
+          "type": "EFFECT",
+          "name": "Efeito Teste",
+          "description": "Fica forte.",
+          "form": {
+            "acFormula": "PROFICIENCY",
+            "resistances": [
+              "cortante"
+            ],
+            "speedBonus": 10
+          },
+          "value": "UNARMED",
+          "damage": "1d6"
         }
       ]
     },

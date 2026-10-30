@@ -558,5 +558,11 @@ export function formEffects(form) {
     .map(p => p.split(':')).map(([t, v]) => (FORM_SPEEDS[t] ?? t) + ' ' + Number(v) + ' pés')
   if (speeds.length) parts.push(speeds.join(', '))
   if (form.size) parts.push(form.size === 'UP' ? 'tamanho +1' : 'tamanho ' + form.size)
+  // Efeitos ativos: CA, deslocamento a mais, resistências, imunidades e dano.
+  if (form.ac) parts.push('CA +' + form.ac)
+  if (form.speedBonus) parts.push('+' + Number(form.speedBonus) + ' pés')
+  if (form.resistances) parts.push('resistência: ' + form.resistances.split(',').join(', '))
+  if (form.immunities) parts.push('imune: ' + form.immunities.split(',').join(', '))
+  if (form.damage) parts.push(form.damage.split(';').map(d => d.split('|')[1] + ' no dano').join(', '))
   return parts.join(' · ')
 }

@@ -24,8 +24,11 @@ public record SpeedLine(MovementType type, double feet) {
     // Com a forma ativa: vale o maior entre o deslocamento da forma e o normal.
     public static List<SpeedLine> of(Character c) {
         Map<MovementType, Double> form = c.getFormSpeeds();
-        if (form.isEmpty()) return of(c.getSpeed(), c.getOtherSpeeds());
+        double bonus = c.getFormSpeedBonus();
+        if (form.isEmpty() && bonus == 0) return of(c.getSpeed(), c.getOtherSpeeds());
         Double walk = c.getSpeed() == null ? form.get(MovementType.WALK) : Math.max(c.getSpeed(), form.getOrDefault(MovementType.WALK, 0.0));
+        // Efeito que soma na caminhada (Movimento Relampejante: +15 pés).
+        if (walk != null) walk += bonus;
         Map<MovementType, Double> others = new java.util.HashMap<>(c.getOtherSpeeds());
         form.forEach((t, v) -> { if (t != MovementType.WALK) others.merge(t, v, Math::max); });
         return of(walk, others);

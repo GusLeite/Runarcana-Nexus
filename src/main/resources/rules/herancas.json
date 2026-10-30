@@ -735,6 +735,14 @@
         {
           "type": "CONDITION_IMMUNITY",
           "value": "Intoxicado (por bebidas alcoólicas)"
+        },
+        {
+          "type": "EFFECT",
+          "name": "Gole",
+          "description": "Um gole: metade da proficiência no dano desarmado até o próximo turno.",
+          "form": {},
+          "value": "UNARMED",
+          "usesFormula": "HALF_PROFICIENCY"
         }
       ]
     },
@@ -2852,6 +2860,19 @@
           "type": "SITUATIONAL",
           "value": "ATTACK",
           "description": "Seus ataques surpresa causam seu bônus de proficiência como dano adicional"
+        },
+        {
+          "type": "EFFECT",
+          "name": "Sob a lua",
+          "description": "Sob a bênção da lua: Furtividade, vantagem contra Enfeitiçado e exaustão, resistência a radiante e necrótico, dano extra com armas.",
+          "form": {
+            "resistances": [
+              "radiante",
+              "necrótico"
+            ]
+          },
+          "value": "ATTACK",
+          "usesFormula": "HALF_PROFICIENCY"
         }
       ]
     },
@@ -4744,7 +4765,19 @@
       ],
       "prerequisite": "Antroplantæ",
       "description": "A densidade de seu corpo é maior que a normal, fazendo com que ele possua características diferentes. Você recebe os seguintes benefícios:\n\nVocê recebe resistência a ataques contundentes.\nTodos os seus ataques desarmados ou causados por armas naturais têm sua categoria de dano aumentado em 1.\nUsando uma ação, você pode se enraizar no calor da batalha, caso o chão permita. Ao fazer isso, sua velocidade cai para 0, mas você se torna imune a quedas e a movimentos forçados. Você pode se desenraizar usando uma ação bônus.",
-      "execution": "Ação bônus"
+      "execution": "Ação bônus",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Enraizado",
+          "description": "Enraizado: resistência a contundente, deslocamento 0, imune a quedas e movimento forçado.",
+          "form": {
+            "resistances": [
+              "contundente"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "mestre-de-vinhas",
@@ -4859,6 +4892,14 @@
           "type": "SITUATIONAL",
           "value": "ATTACK:MELEE",
           "description": "Utilizando uma ação bônus e gastando 1 ponto de Ki, você pode aumentar sua CA em +1 ou adicionar o seu modificador de Sabedoria ao dano de seus ataques corpo a corpo."
+        },
+        {
+          "type": "EFFECT",
+          "name": "Alma Fluida",
+          "description": "1 Ki: +1 de CA (ou o mod. de Sabedoria no dano corpo a corpo).",
+          "form": {
+            "ac": 1
+          }
         }
       ],
       "execution": "Ação bônus"
@@ -5217,6 +5258,14 @@
           "name": "Desfazer Aumentar",
           "castingTime": "Reação",
           "description": "Enquanto estiver sob o efeito de Aumentar da magia aumentar/ reduzir, conjurado por você através dessa Herança, ao ser atingido por um ataque, você pode utilizar sua reação para desfazer a magia e fazer com que o ataque seja considerado uma falha crítica."
+        },
+        {
+          "type": "EFFECT",
+          "name": "Aumentar",
+          "description": "Sob Aumentar (aumentar/reduzir): uma categoria acima.",
+          "form": {
+            "size": "UP"
+          }
         }
       ]
     },
@@ -6262,6 +6311,14 @@
           "type": "SITUATIONAL",
           "value": "ATTACK",
           "description": "Usando sua ação bônus, você pode adicionar 1d6 + seu bônus de proficiência de dano energético aos seus ataques até o final do seu turno."
+        },
+        {
+          "type": "EFFECT",
+          "name": "Propulsão",
+          "description": "Ação bônus: 1d6 + proficiência de dano energético nos ataques até o fim do turno.",
+          "form": {},
+          "value": "ATTACK",
+          "damage": "1d6"
         }
       ],
       "optionGrants": {

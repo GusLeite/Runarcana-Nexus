@@ -42,6 +42,8 @@ public enum GrantType {
                         // options + count = à escolha (vale para VULNERABILITY e ABSORPTION; a mesma fonte não repete o tipo)
     ABSORPTION,         // absorção de um tipo de dano: value = o tipo ("necrótico")
     IMMUNITY,           // imunidade a um tipo de dano: value = o tipo ("venenoso")
+    EFFECT,             // efeito ativo (Fúria, Iras, Sutras...): name, description, form (CA, resistências, imunidades, atributos,
+                        // deslocamento); value + damage/diceByLevel/usesFormula/amount = bônus de dano no alvo. A ficha liga e desliga
     FORM,               // forma temporária (name, description, form: atributos, deslocamentos, tamanho); a ficha liga e desliga
     ATTRIBUTE_SWAP,     // outro atributo pode valer no lugar do normal (vale o maior): value = alvo (SKILL:<perícia>, AC = a DES
                         // da CA, HP = a CON dos PV, SPELLCASTING, ATTACK = a FOR dos ataques); attribute; usesFormula
