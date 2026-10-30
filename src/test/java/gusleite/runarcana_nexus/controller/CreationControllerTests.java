@@ -259,6 +259,10 @@ class CreationControllerTests {
                 // Bônus de dano: +1d4 desarmado e +2 corpo a corpo (o desarmado conta como corpo a corpo), com a nota.
                 .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].damage").value("1+1d4+2"))
                 .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].notes[*]", hasItem("Perícia Teste: +1d4 no dano")))
+                // Crítico do desarmado: margem 20 → 19 e multiplicador 2 → 3; bônus só contra um alvo vira nota, sem somar.
+                .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].critRange").value(19))
+                .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].critMultiplier").value(3))
+                .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].notes[*]", hasItem("Perícia Teste: +2 no dano contra lobos")))
                 .andExpect(jsonPath("$.character.forms[0].name").value("Forma Teste"))
                 .andExpect(jsonPath("$.character.activeForm").doesNotExist());
         // Forma ativa: FOR 9 + 4 = 13, uma categoria acima (Pequeno → Médio) e voo 30; desligar volta ao normal.

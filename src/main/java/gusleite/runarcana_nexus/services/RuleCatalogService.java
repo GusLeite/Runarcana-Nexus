@@ -647,7 +647,7 @@ public class RuleCatalogService {
                 p.add(at + ": when é \"Habilidade:Opção\" e não vale em RESOURCE_CHOICE nem em FEATURE com opções");
             }
             if (g.valueByLevel() != null) {
-                if (!Set.of(GrantType.ATTRIBUTE, GrantType.AC_BONUS, GrantType.SPEED, GrantType.SENSE, GrantType.CRAFT_LEVEL, GrantType.CRAFT_INCOME).contains(g.type())) {
+                if (!Set.of(GrantType.ATTRIBUTE, GrantType.AC_BONUS, GrantType.SPEED, GrantType.SENSE, GrantType.CRAFT_LEVEL, GrantType.CRAFT_INCOME, GrantType.DAMAGE_BONUS).contains(g.type())) {
                     p.add(at + ": valueByLevel só vale em ATTRIBUTE, AC_BONUS, SPEED e SENSE");
                 }
                 g.valueByLevel().forEach((lv, n) -> {
@@ -733,11 +733,14 @@ public class RuleCatalogService {
                     if (blank(g.value())) p.add(at + " (CRAFT_FORMULAS): falta value (ofício ou CHOSEN)");
                     if (g.amount() == null && g.usesFormula() == null) p.add(at + " (CRAFT_FORMULAS): precisa de amount ou usesFormula");
                 }
+                case CRIT_BONUS -> {
+                    if (blank(g.value()) || !g.value().matches("ATTACK(:(MELEE|RANGED|BOW|CROSSBOW|THROWN|FIREARM))?|UNARMED|TWO_HANDED|CHOSEN|WEAPON:.+")) p.add(at + " (CRIT_BONUS): alvo inválido " + g.value());
+                }
                 case DAMAGE_BONUS -> {
                     if (blank(g.value()) || !g.value().matches("ATTACK(:(MELEE|RANGED|BOW|CROSSBOW|THROWN|FIREARM))?|UNARMED|TWO_HANDED|CHOSEN|WEAPON:.+")) {
                         p.add(at + " (DAMAGE_BONUS): alvo inválido " + g.value());
                     }
-                    if (g.amount() == null && g.damage() == null && g.usesFormula() == null) p.add(at + " (DAMAGE_BONUS): precisa de amount, damage ou usesFormula");
+                    if (g.amount() == null && g.damage() == null && g.usesFormula() == null && g.valueByLevel() == null && g.diceByLevel() == null) p.add(at + " (DAMAGE_BONUS): precisa de amount, damage, usesFormula, valueByLevel ou diceByLevel");
                 }
                 case SENSE -> {
                     java.util.Set<String> kinds = java.util.Set.of("DARKVISION", "BLINDSIGHT", "TREMORSENSE", "TELEPATHY");

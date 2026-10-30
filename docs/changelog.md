@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento M: crítico e bônus contra alvo (`feature/character-sheet`)
+- Concessão `CRIT_BONUS` (nota `CRIT:<alvo>`, aplicada na margem e no multiplicador dos ataques): Fúria de Warmog e Brutalizador.
+- `DAMAGE_BONUS` com `description` vira nota no ataque com o número (Inimigo Favorito, presa, Atacante Brutal, Feridas Abertas); com `diceByLevel` (Rocha Bruta).
+- Notas para os críticos e alvos sem número. Teste: crítico e nota de alvo no desarmado do Nyx.
+
 ## 2026-10-29 — Mapeamento M: notas gerais (`feature/character-sheet`)
 - Notas situacionais com alvo `GENERAL` (terreno, clima, queda, salto, carga) e `SPELL` (efeitos nas magias), mostradas no herói da ficha.
 - Cerca de 30 notas em Heranças, Aprimoramentos, linhagens, Caçador e traços.

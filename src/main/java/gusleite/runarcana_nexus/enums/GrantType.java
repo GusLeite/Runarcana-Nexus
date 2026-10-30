@@ -53,6 +53,7 @@ public enum GrantType {
                         // (PROFICIENCY/HALF_PROFICIENCY) ou valueByLevel (pelo nível da classe)
     CRAFT_MASTERWORK,   // margem de Obra-Prima diminui em amount: value = id ou CHOSEN; sem value, escolha entre os ofícios dele
     CRAFT_FORMULAS,     // fórmulas a mais no limite de um ofício: value (id ou CHOSEN), amount ou usesFormula (× count)
+    CRIT_BONUS,         // crítico nos ataques do alvo (mesmos alvos do DAMAGE_BONUS): amount = margem −N, count = multiplicador +N
     DAMAGE_BONUS,       // bônus no dano dos ataques: value = alvo (ATTACK, ATTACK:MELEE..., UNARMED, TWO_HANDED, WEAPON:<nome>,
                         // CHOSEN = a arma escolhida na PROFICIENCY_CHOICE da mesma fonte); amount, damage ("1d4") ou usesFormula
                         // (PROFICIENCY, HALF_PROFICIENCY, HALF_ATTRIBUTE_MODIFIER com attribute)

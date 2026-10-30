@@ -237,6 +237,18 @@
           "type": "SITUATIONAL",
           "value": "GENERAL",
           "description": "Ignora terreno difícil de teste."
+        },
+        {
+          "type": "CRIT_BONUS",
+          "value": "UNARMED",
+          "amount": 1,
+          "count": 1
+        },
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "ATTACK",
+          "usesFormula": "PROFICIENCY",
+          "description": "contra lobos"
         }
       ]
     },

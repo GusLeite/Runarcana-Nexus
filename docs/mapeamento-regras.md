@@ -90,7 +90,7 @@ Protetor (proficiências), Estudioso (duas perícias) e Obreiro (truque espiritu
 ## M. Fica com o mestre (não precisa decidir item a item)
 
 - Habilidades ativas com duração, reações e efeitos em área (a maioria das Iras, Sutras, Técnicas, Runas, Invocações e das partes ativas das Heranças): já são habilidades com tempo e usos.
-- Efeitos contra um alvo específico (presa, Foco de Caça, criatura agarrada), margens e multiplicadores de crítico, ignorar RD/cobertura.
+- ✅ Crítico e alvo: `CRIT_BONUS` muda margem/multiplicador nos ataques (Fúria de Warmog, Brutalizador); bônus de dano só contra um alvo viram nota no ataque com o número (Inimigo Favorito 1,5 × proficiência, presa +1d6, Atacante Brutal, Feridas Abertas); Rocha Bruta soma no desarmado pelo nível. Críticos e alvos sem número (Táticas de Guerrilha, Lâmina Sanguinária, Até o Fim, Anatomista Perito, Ódio Profundo) viram nota. Ignorar RD/cobertura continua nas notas que já existiam.
 - ✅ Produção de ofício (`CRAFT_INCOME`/`CRAFT_MASTERWORK`): PO por dia a mais (Artífice, Operário, Coletivo Forte, Mestre Artesão, Forjador do Acólito da Forja) e margem de Obra-Prima (Artífice à escolha, Hospitaleiro no Cozinheiro), no cartão de Ofícios. Pertences e contatos ficam no texto.
 - ✅ Terreno, clima, queda, salto e carga viram notas gerais no herói (`SITUATIONAL` com `GENERAL`), e efeitos em magias, notas `SPELL` (Sangue Arcano, Floricorvus, Ferromante, Cura Ottrani, Tocado pela Mana).
 - Idiomas (desligados por decisão sua).

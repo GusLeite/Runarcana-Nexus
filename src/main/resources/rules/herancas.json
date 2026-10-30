@@ -1190,7 +1190,14 @@
       "id": "lamina-sanguinaria",
       "name": "Lâmina Sanguinária",
       "category": "GENERAL",
-      "description": "“Violência é elegância”. Você ganha os seguintes benefícios:\n\nQuando você acertar um ataque crítico com uma arma de dano cortante, você pode fazer um novo ataque contra o mesmo alvo, esse efeito só pode ser utilizado uma vez por rodada."
+      "description": "“Violência é elegância”. Você ganha os seguintes benefícios:\n\nQuando você acertar um ataque crítico com uma arma de dano cortante, você pode fazer um novo ataque contra o mesmo alvo, esse efeito só pode ser utilizado uma vez por rodada.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK",
+          "description": "Crítico com arma cortante: um novo ataque contra o mesmo alvo (uma vez por rodada)."
+        }
+      ]
     },
     {
       "id": "lutador-evasivo",
@@ -2775,7 +2782,14 @@
         "SHURIMA"
       ],
       "prerequisite": "Shurimane",
-      "description": "Você vive nas areias, aprendeu a emboscar para sobreviver, seja para obter alimento, seja para atacar uma caravana desavisada, você recebe os seguintes benefícios:\n\nSeu primeiro ataque em um combate contra qualquer criatura tem sua margem de crítico reduzida em 1.\nCaso você ataque uma criatura surpresa, sua margem de crítico diminui em 1 e o multiplicador de dados de um acerto crítico aumenta em 1."
+      "description": "Você vive nas areias, aprendeu a emboscar para sobreviver, seja para obter alimento, seja para atacar uma caravana desavisada, você recebe os seguintes benefícios:\n\nSeu primeiro ataque em um combate contra qualquer criatura tem sua margem de crítico reduzida em 1.\nCaso você ataque uma criatura surpresa, sua margem de crítico diminui em 1 e o multiplicador de dados de um acerto crítico aumenta em 1.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK",
+          "description": "Primeiro ataque do combate contra cada criatura: margem de crítico −1; contra surpresa, margem −1 e multiplicador +1."
+        }
+      ]
     },
     {
       "id": "vida-nomade",
@@ -4197,7 +4211,19 @@
         "auroque"
       ],
       "prerequisite": "Minotauro Auroque",
-      "description": "Quando você entra em combate, seu corpo é a arma mais perigosa que você tem a sua disposição, você recebe os seguintes benefícios:\n\nO dano de seus ataques desarmados e com chifres aumenta em 1 na escala de dano.\nSeus ataques desarmados e com chifres tem sua margem de crítico reduzida em 1."
+      "description": "Quando você entra em combate, seu corpo é a arma mais perigosa que você tem a sua disposição, você recebe os seguintes benefícios:\n\nO dano de seus ataques desarmados e com chifres aumenta em 1 na escala de dano.\nSeus ataques desarmados e com chifres tem sua margem de crítico reduzida em 1.",
+      "grants": [
+        {
+          "type": "CRIT_BONUS",
+          "value": "UNARMED",
+          "amount": 1
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK:MELEE",
+          "description": "Ataques desarmados e com chifres: dano +1 na escala."
+        }
+      ]
     },
     {
       "id": "brutalidade-de-combate",
@@ -5109,7 +5135,19 @@
       "uses": {
         "usesFormula": "PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "UNARMED",
+          "diceByLevel": {
+            "1": "1d4",
+            "6": "1d6",
+            "12": "1d8",
+            "18": "1d10"
+          }
+        }
+      ]
     },
     {
       "id": "sopro-precoce",
@@ -5249,6 +5287,11 @@
           "type": "DAMAGE_BONUS",
           "value": "TWO_HANDED",
           "usesFormula": "PROFICIENCY"
+        },
+        {
+          "type": "CRIT_BONUS",
+          "value": "TWO_HANDED",
+          "amount": 1
         }
       ]
     },

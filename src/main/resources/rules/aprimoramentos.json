@@ -641,6 +641,11 @@
           "type": "ATTRIBUTE",
           "attribute": "DEXTERITY",
           "amount": 1
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK",
+          "description": "Crítico contra as criaturas escolhidas: +mod. de Sabedoria no dano; ignora RD igual à proficiência delas."
         }
       ]
     },
@@ -930,7 +935,15 @@
       "groups": [
         "Aprimoramento"
       ],
-      "description": "Você possui um estilo de combate violento e brutal, focando acima de tudo em potencializar o efeito dos seus ataques contra seus inimigos. Você adquire os seguintes benefícios:\n\n- Uma vez por turno, você pode adicionar seu bônus de proficiência a uma rolagem de dano causado por você.\n- Ao obter 1 na rolagem do dado de dano de um ataque corpo a corpo, você pode jogar novamente o dado de dano, ficando com o novo resultado."
+      "description": "Você possui um estilo de combate violento e brutal, focando acima de tudo em potencializar o efeito dos seus ataques contra seus inimigos. Você adquire os seguintes benefícios:\n\n- Uma vez por turno, você pode adicionar seu bônus de proficiência a uma rolagem de dano causado por você.\n- Ao obter 1 na rolagem do dado de dano de um ataque corpo a corpo, você pode jogar novamente o dado de dano, ficando com o novo resultado.",
+      "grants": [
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "ATTACK",
+          "usesFormula": "PROFICIENCY",
+          "description": "uma vez por turno"
+        }
+      ]
     },
     {
       "id": "aprimoramento-atento",
@@ -1022,6 +1035,11 @@
           "count": 1,
           "amount": 1,
           "label": "+1 em um atributo à escolha"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "ATTACK",
+          "description": "Contra o Foco de Caça: margem e multiplicador de crítico +1; no crítico, o dano do Inimigo Favorito dobra."
         }
       ]
     },
@@ -1829,6 +1847,12 @@
           "type": "ATTRIBUTE",
           "attribute": "INTELLIGENCE",
           "amount": 1
+        },
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "ATTACK",
+          "usesFormula": "PROFICIENCY",
+          "description": "contra quem recebeu seu ataque furtivo, até o fim do combate"
         }
       ]
     },
@@ -2961,6 +2985,11 @@
           "type": "SITUATIONAL",
           "value": "AC",
           "description": "Você recebe Redução de Dano igual a metade do seu bônus de proficiência contra qualquer ataque causado por seu Foco de Caça"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "AC",
+          "description": "RD igual à metade da proficiência contra ataques do seu Foco de Caça."
         }
       ]
     }

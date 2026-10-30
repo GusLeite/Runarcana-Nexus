@@ -290,6 +290,22 @@ public class CharacterService {
             return a.withDamage(AttackCalculator.addDamage(a.damage(), flat, dice), AttackCalculator.addDamage(a.versatileDamage(), flat, dice))
                     .withNotes(notes);
         }).toList();
+        // Crítico ("CRIT:<alvo>", "margem/multiplicador"): Fúria de Warmog, Brutalizador.
+        List<gusleite.runarcana_nexus.model.player.SituationalNote> critNotes = character.getSituational().stream()
+                .filter(n -> n.getTarget() != null && n.getTarget().startsWith("CRIT:")).toList();
+        if (!critNotes.isEmpty()) attacks = attacks.stream().map(a -> {
+            AttackCalculator.WeaponInput w = weapons.stream().filter(x -> x.key().equals(a.key())).findFirst().orElse(null);
+            List<gusleite.runarcana_nexus.model.player.SituationalNote> mine = critNotes.stream()
+                    .filter(n -> AttackCalculator.matchesDamage(n.getTarget().substring(5), w)).toList();
+            if (mine.isEmpty()) return a;
+            int margin = mine.stream().mapToInt(n -> Integer.parseInt(n.getNote().split("/")[0])).sum();
+            int mult = mine.stream().mapToInt(n -> Integer.parseInt(n.getNote().split("/")[1])).sum();
+            List<String> notes = new ArrayList<>(a.notes());
+            mine.forEach(n -> notes.add(n.getSource().replaceFirst("^[^:]+: ", "") + ": crítico"
+                    + (Integer.parseInt(n.getNote().split("/")[0]) > 0 ? " com margem −" + n.getNote().split("/")[0] : "")
+                    + (Integer.parseInt(n.getNote().split("/")[1]) > 0 ? " e multiplicador +" + n.getNote().split("/")[1] : "")));
+            return a.withCrit(a.critRange() - margin, a.critMultiplier() + mult).withNotes(notes);
+        }).toList();
         // Notas situacionais de ataque (Arqueiro, Balestreiro, Sagaz...) em cada arma que elas valem.
         List<gusleite.runarcana_nexus.model.player.SituationalNote> attackNotes = character.getSituational().stream()
                 .filter(n -> n.getTarget() != null && n.getTarget().startsWith("ATTACK")).toList();

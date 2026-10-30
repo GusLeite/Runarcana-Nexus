@@ -1052,7 +1052,7 @@ public class CreationService {
             case CRAFT_LEVEL, CRAFT_FORMULAS, CRAFT_INCOME, CRAFT_MASTERWORK -> {
                 if (g.value() != null) b.craftGrants.add(new Sourced<>(g, s.key() + "|" + s.label()));
             }
-            case DAMAGE_BONUS -> b.damageBonuses.add(new Sourced<>(g, s.key() + "|" + s.label()));
+            case DAMAGE_BONUS, CRIT_BONUS -> b.damageBonuses.add(new Sourced<>(g, s.key() + "|" + s.label()));
             case SENSE -> {
                 if (!g.hasOptions()) addSense(b, g.value(), g, b.scale(s.label()));
             }
@@ -2029,8 +2029,18 @@ public class CreationService {
         for (Sourced<Grant> d : b.damageBonuses) {
             Grant g = d.value();
             String[] src = d.source().split("\\|", 2);
+            List<String> targets = "CHOSEN".equals(g.value())
+                    ? b.chosenWeapons.getOrDefault(src[0], List.of()).stream().map(w -> "WEAPON:" + w).toList() : List.of(g.value());
+            // Crítico: "margem/multiplicador" ("1/0" = margem −1).
+            if (g.type() == GrantType.CRIT_BONUS) {
+                String crit = (g.amount() == null ? 0 : g.amount()) + "/" + (g.count() == null ? 0 : g.count());
+                targets.forEach(t -> b.situational.add(new SituationalNote("CRIT:" + t, crit, src[1])));
+                continue;
+            }
             String text;
-            if (g.damage() != null) text = "+" + g.damage();
+            String dice = g.diceByLevel() != null && !g.diceByLevel().isEmpty() ? byLevel(g.diceByLevel(), b.level) : g.damage();
+            if (dice != null) text = "+" + dice;
+            else if (g.valueByLevel() != null && !g.valueByLevel().isEmpty()) text = "+" + valueAt(g, 0, b.level);
             else {
                 int n = g.usesFormula() == UsesFormula.PROFICIENCY ? b.proficiency()
                         : g.usesFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2
@@ -2039,8 +2049,11 @@ public class CreationService {
                 if (n == 0) continue;
                 text = "+" + n;
             }
-            List<String> targets = "CHOSEN".equals(g.value())
-                    ? b.chosenWeapons.getOrDefault(src[0], List.of()).stream().map(w -> "WEAPON:" + w).toList() : List.of(g.value());
+            // Com description: só vale numa situação (contra o Inimigo Favorito): vira nota no ataque, sem somar no dano.
+            if (g.description() != null) {
+                targets.forEach(t -> b.situational.add(new SituationalNote(t.startsWith("ATTACK") ? t : "ATTACK", text + " no dano " + g.description(), src[1])));
+                continue;
+            }
             targets.forEach(t -> b.situational.add(new SituationalNote("DAMAGE:" + t, text, src[1])));
         }
     }

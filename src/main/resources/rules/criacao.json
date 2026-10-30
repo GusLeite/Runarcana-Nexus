@@ -9038,6 +9038,18 @@
           "type": "SITUATIONAL",
           "value": "GENERAL",
           "description": "Explorador Natural: ignora terreno difícil natural."
+        },
+        {
+          "type": "DAMAGE_BONUS",
+          "value": "ATTACK",
+          "valueByLevel": {
+            "1": 3,
+            "5": 4,
+            "9": 6,
+            "13": 7,
+            "17": 9
+          },
+          "description": "contra seus Inimigos Favoritos (1,5 × proficiência)"
         }
       ],
       "levels": [
@@ -9056,6 +9068,12 @@
               "usesFormula": "ATTRIBUTE_MODIFIER",
               "attribute": "WISDOM",
               "recharge": "LONG_REST"
+            },
+            {
+              "type": "DAMAGE_BONUS",
+              "value": "ATTACK",
+              "damage": "1d6",
+              "description": "contra a presa marcada (Consciência Primitiva)"
             }
           ]
         },

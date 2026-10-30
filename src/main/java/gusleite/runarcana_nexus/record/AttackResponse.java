@@ -35,6 +35,12 @@ public record AttackResponse(
                 critMultiplier, range, mastery, properties, styles, newNotes);
     }
 
+    // Margem e multiplicador de crítico com as Heranças (Fúria de Warmog, Brutalizador).
+    public AttackResponse withCrit(int newRange, int newMultiplier) {
+        return new AttackResponse(key, name, attribute, proficient, attackBonus, damage, versatileDamage, damageType, newRange,
+                newMultiplier, range, mastery, properties, styles, notes);
+    }
+
     // Dano com os bônus de Heranças e Aprimoramentos (Fúria de Warmog, Briguento...).
     public AttackResponse withDamage(String newDamage, String newVersatile) {
         return new AttackResponse(key, name, attribute, proficient, attackBonus, newDamage, newVersatile, damageType, critRange,
