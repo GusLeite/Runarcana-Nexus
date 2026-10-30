@@ -6,6 +6,12 @@ Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 - `effects/Embers.jsx` ganhou a sequência: carga, golpe aos 0,5 s (rachaduras de lava, pedras, fagulhas, poeira) e torcida gritando "GAU! DRON! GAUDRON!" com tochas e panos vermelhos. Some em ~3,6 s; ficam as brasas.
 - Tremor, explosão e ondas de choque sincronizados com o golpe; login em laranja (`.login.embers`). Conferido no preview, pausando em cada etapa, no computador e no celular.
 
+## 2026-10-30 — Galeria e destaque na escolha de origem (`feature/character-sheet`)
+- A etapa Origem virou galeria de painéis expansíveis (`OriginStep.jsx`) com descrição breve; os detalhes só aparecem ao clicar.
+- O cartão cresce até o centro (`OriginStage.jsx`), com abas Ganhos, Habilidades, Linhagens e Sobre, setas entre origens e selo ao confirmar.
+- Sigilos e partículas provisórios por origem; a arte real entra em `data/originArt.js`.
+- `grantLabel` agora nomeia resistências, imunidades, vulnerabilidades, sentidos, situacionais e formas, que apareciam como o tipo cru.
+
 ## 2026-10-30 — Criação de personagem em tela própria (`feature/character-sheet`)
 - Conta sem ficha abre direto `creation/CreationScreen.jsx`, sem o herói, as abas e as rolagens da ficha; saiu o aviso "Ficha em branco".
 

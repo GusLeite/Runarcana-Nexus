@@ -1,6 +1,6 @@
-import { formatFeet, grantLabel } from '../../data/rules.js'
+import { grantLabel } from '../../data/rules.js'
 
-// Cartões para escolher origem, região, classe ou passado, cada um com os detalhes do livro
+// Cartões para escolher região, classe, subclasse ou passado, cada um com os detalhes do livro
 // (ex.: Idade, Tamanho) e a lista do que concede.
 export default function OptionStep({ kind, title, hint, items, selected, onPick, crafts, equipment = [] }) {
   if (!items?.length) {
@@ -36,7 +36,6 @@ export default function OptionStep({ kind, title, hint, items, selected, onPick,
               )}
               <span className="option-facts">
                 {kind === 'class' && <span className="fact-chip hp">Dado de vida d{item.hitDie}</span>}
-                {kind === 'origin' && item.speed != null && <span className="fact-chip">Deslocamento {formatFeet(item.speed)}</span>}
                 {item.startingGold != null && <span className="fact-chip gold">{item.startingGold} de ouro</span>}
               </span>
               {grants.length > 0 && (

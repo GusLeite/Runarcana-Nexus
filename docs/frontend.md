@@ -67,5 +67,6 @@ A tela foi prototipada num `index.html` único (React via CDN, imagens e vídeo 
 
 ## Pendências / problemas conhecidos
 
+- As origens da criação usam sigilos provisórios: falta a arte definitiva (imagem ou vídeo em `data/originArt.js`).
 - Ainda não há roteamento (react-router): as abas da ficha são estado local e não mudam a URL (recarregar volta para "FICHA").
 - O token fica no `localStorage` (simples, mas acessível a scripts da página); se o projeto crescer, considerar cookie `HttpOnly`.

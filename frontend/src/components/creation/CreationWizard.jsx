@@ -3,6 +3,7 @@ import { createCharacter, fetchCatalog, previewCreation } from '../../api/creati
 import { ATTRIBUTES, heritageChoices } from '../../data/rules.js'
 import { replay } from '../../utils/motion.js'
 import OptionStep from './OptionStep.jsx'
+import OriginStep from './OriginStep.jsx'
 import AttributeStep from './AttributeStep.jsx'
 import ChoiceStep from './ChoiceStep.jsx'
 import HeritageStep from './HeritageStep.jsx'
@@ -140,17 +141,9 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
 
         <div className="wizard-body" key={current}>
           {current === 'origin' && (
-            <>
-              <OptionStep kind="origin" title="Escolha a origem" items={catalog.origins} crafts={catalog.crafts}
-                selected={draft.originId}
-                onPick={id => setDraft(d => (d.originId === id ? d : { ...d, originId: id, lineageId: null }))} />
-              {lineages.length > 0 && (
-                <div className="lineage-step" key={draft.originId}>
-                  <OptionStep kind="lineage" title={'Escolha a linhagem (' + origin.name + ')'} items={lineages} crafts={catalog.crafts}
-                    selected={draft.lineageId} onPick={id => set('lineageId', id)} />
-                </div>
-              )}
-            </>
+            <OriginStep origins={catalog.origins} crafts={catalog.crafts} equipment={catalog.equipment?.items}
+              originId={draft.originId} lineageId={draft.lineageId}
+              onPick={(originId, lineageId) => setDraft(d => ({ ...d, originId, lineageId }))} />
           )}
           {current === 'traits' && (
             <TraitStep system={catalog.traits} preview={preview} draft={draft} onChange={set} />

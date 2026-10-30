@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   addHeritage, heritageOptions, carryCapacity, choiceOptionName, critDice, deathSaveResult, situationalFor, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
-  addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
+  addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupGrants, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
   resourceCost, togglePick, levelChoices, keepChoices, dominantChoices, pendingChoices, senseLabel, formEffects, rollDie, applyHp,
 } from './rules.js'
@@ -352,5 +352,36 @@ describe('pendingChoices', () => {
       { key: 'level:5:class:A:0', options: ['c'], selected: [] }, { key: 'heritage:y:0', options: ['d'], selected: [] }]
     expect(pendingChoices(all, {}, [all[3]]).map(c => c.key)).toEqual(['heritage:magia-inata:1'])
     expect(pendingChoices(all, { 'heritage:x:0': ['b'] }).map(c => c.key)).toEqual(['heritage:magia-inata:1', 'heritage:x:0', 'heritage:y:0'])
+  })
+})
+
+describe('groupGrants', () => {
+  it('separa habilidades e agrupa o resto pela natureza do ganho', () => {
+    const { groups, abilities } = groupGrants([
+      { type: 'ATTRIBUTE_CHOICE', amount: 2, count: 1 },
+      { type: 'FEATURE', name: 'Chifres' },
+      { type: 'FORM', name: 'Forma Dracônica' },
+      { type: 'RESISTANCE', value: 'venenoso' },
+      { type: 'VULNERABILITY', value: 'ígneo' },
+    ])
+    expect(abilities.map(a => a.name)).toEqual(['Chifres', 'Forma Dracônica'])
+    expect(groups.map(g => g.id)).toEqual(['attributes', 'defenses'])
+    expect(groups[1].grants).toHaveLength(2)
+  })
+
+  it('não perde tipo desconhecido e aceita lista vazia', () => {
+    expect(groupGrants([{ type: 'GOLD', amount: 5 }]).groups[0]).toMatchObject({ id: 'other' })
+    expect(groupGrants(undefined)).toEqual({ groups: [], abilities: [] })
+    expect(groupGrants(null)).toEqual({ groups: [], abilities: [] })
+  })
+})
+
+describe('grantLabel de origens', () => {
+  it('nomeia defesas, sentidos e formas em vez de mostrar o tipo cru', () => {
+    expect(grantLabel({ type: 'RESISTANCE', value: 'venenoso' })).toBe('Resistência a dano venenoso')
+    expect(grantLabel({ type: 'VULNERABILITY', value: 'ígneo' })).toBe('Vulnerabilidade a dano ígneo')
+    expect(grantLabel({ type: 'CONDITION_IMMUNITY', value: 'doenças mundanas' })).toBe('Imune a doenças mundanas')
+    expect(grantLabel({ type: 'SENSE', value: 'DARKVISION', feet: 60 })).toBe('Visão no escuro 60 pés')
+    expect(grantLabel({ type: 'FORM', name: 'Forma Dracônica' })).toBe('Forma: Forma Dracônica')
   })
 })

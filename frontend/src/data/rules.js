@@ -294,8 +294,38 @@ export function grantLabel(g, crafts = [], equipment = []) {
     case 'SPELL_CHOICE': return g.label ?? (g.spellLevel ? plural(g.count, 'magia', 'magias') + ' até o ' + g.spellLevel + 'º nível' : plural(g.count, 'truque', 'truques')) + ' à escolha'
     case 'MYSTERY': return 'Mistério: ' + idName(g.value)
     case 'SPELL': return 'Magia: ' + idName(g.value)
+    case 'RESISTANCE': return 'Resistência a dano ' + g.value
+    case 'IMMUNITY': return 'Imunidade a dano ' + g.value
+    case 'VULNERABILITY': return 'Vulnerabilidade a dano ' + g.value
+    case 'CONDITION_IMMUNITY': return 'Imune a ' + g.value
+    case 'SENSE': return senseLabel(g.value, g.feet)
+    case 'SITUATIONAL': return g.description ?? g.value
+    case 'FORM': return 'Forma: ' + g.name
     default: return g.type
   }
+}
+
+// Como o destaque da origem organiza as concessões: FEATURE e FORM viram cartões de habilidade; o resto,
+// grupos pela natureza do ganho. Tipo fora da lista cai em "Outros", para nada sumir.
+const GRANT_GROUPS = [
+  { id: 'attributes', title: 'Atributos', types: ['ATTRIBUTE', 'ATTRIBUTE_CHOICE'] },
+  { id: 'body', title: 'Corpo', types: ['SIZE', 'SIZE_CHOICE', 'SPEED', 'HP_BONUS', 'ARMOR_CLASS', 'AC_BONUS', 'SENSE'] },
+  { id: 'defenses', title: 'Defesas e fraquezas', types: ['RESISTANCE', 'IMMUNITY', 'CONDITION_IMMUNITY', 'VULNERABILITY', 'SAVING_THROW', 'SAVING_THROW_CHOICE'] },
+  { id: 'training', title: 'Treinamento', types: ['SKILL', 'SKILL_CHOICE', 'EXPERTISE_CHOICE', 'CRAFT', 'CRAFT_CHOICE', 'PROFICIENCY_CHOICE', 'ARMOR_PROFICIENCY', 'WEAPON_PROFICIENCY', 'LANGUAGE', 'LANGUAGE_CHOICE'] },
+  { id: 'heritage', title: 'Heranças', types: ['HERITAGE_POINTS'] },
+  { id: 'situational', title: 'Em certas situações', types: ['SITUATIONAL'] },
+]
+
+export function groupGrants(grants = []) {
+  const list = grants ?? []
+  const abilities = list.filter(g => g.type === 'FEATURE' || g.type === 'FORM')
+  const rest = list.filter(g => !abilities.includes(g))
+  const known = GRANT_GROUPS.flatMap(g => g.types)
+  const groups = [
+    ...GRANT_GROUPS.map(({ id, title, types }) => ({ id, title, grants: rest.filter(g => types.includes(g.type)) })),
+    { id: 'other', title: 'Outros', grants: rest.filter(g => !known.includes(g.type)) },
+  ].filter(g => g.grants.length > 0)
+  return { groups, abilities }
 }
 
 // Nome em PT de uma opção de escolha (atributo, perícia, tamanho, ofício ou idioma).
