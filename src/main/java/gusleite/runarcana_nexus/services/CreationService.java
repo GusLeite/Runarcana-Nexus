@@ -570,6 +570,8 @@ public class CreationService {
             List<Grant> grants = s.grants();
             // "+2 em um atributo e +1 em outro": escolhas de atributo da mesma fonte não repetem atributo.
             Set<String> sourceAttributes = new LinkedHashSet<>();
+            // Tipos de dano escolhidos na fonte (Essência Volátil: absorção de um, vulnerabilidade a outro).
+            Set<String> sourceDamage = new LinkedHashSet<>();
             for (int i = 0; i < grants.size(); i++) {
                 Grant g = grants.get(i);
                 String key = s.key() + ":" + i;
@@ -607,6 +609,15 @@ public class CreationService {
                         List<String> selected = choose(picked, options, g.count(), label, b.errors);
                         selected.forEach(a -> b.saves.put(Attribute.valueOf(a), s.label()));
                         b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, selected, s.label(), null));
+                    }
+                    case RESISTANCE, VULNERABILITY, ABSORPTION -> {
+                        if (!g.hasOptions()) break;
+                        List<String> options = g.options().stream().filter(o -> !sourceDamage.contains(o)).toList();
+                        String label = orLabel(g, "Escolha " + g.count() + " tipo(s) de dano");
+                        List<String> selected = choose(picked, options, g.count() == null ? 1 : g.count(), label, b.errors);
+                        (g.type() == GrantType.RESISTANCE ? b.resistances : g.type() == GrantType.VULNERABILITY ? b.vulnerabilities : b.absorptions).addAll(selected);
+                        sourceDamage.addAll(selected);
+                        b.choices.add(new ChoiceLine(key, g.type(), label, g.count() == null ? 1 : g.count(), options, selected, s.label(), null));
                     }
                     case SKILL_CHOICE -> {
                         if (Boolean.TRUE.equals(g.expertise())) {
@@ -764,6 +775,7 @@ public class CreationService {
             String fonte = dominant.isEmpty() ? t.source() : dominant.getFirst();
             for (Grant g : th.grants().getOrDefault(fonte, List.of())) applyFixed(b, new Source("threshold", "Limiar Tecnológico", List.of()), g);
         }
+        damageUpgrades(b);
         spellChoices(b, picks);
         resourceChoices(b);
         mergeMana(b);
@@ -896,9 +908,18 @@ public class CreationService {
             case ABILITY_USES -> b.usesChanges.add(g);
             case INITIATIVE -> b.initiativeBonus += g.amount();
             case SITUATIONAL -> b.situational.add(new SituationalNote(g.value(), g.description(), s.label()));
-            case RESISTANCE -> b.resistances.add(g.value());
+            // Com options: escolha (2ª passada). expertise: "caso já tenha, imunidade", decidido no fim (damageUpgrades).
+            case RESISTANCE -> {
+                if (g.hasOptions()) break;
+                if (Boolean.TRUE.equals(g.expertise())) b.resistanceUpgrades.add(g.value());
+                else b.resistances.add(g.value());
+            }
+            case ABSORPTION -> {
+                if (!g.hasOptions()) b.absorptions.add(g.value());
+            }
             // amount -1: a 2ª escolha tira a vulnerabilidade (Meio-Azakana deixa de ser vulnerável a radiante).
             case VULNERABILITY -> {
+                if (g.hasOptions()) break;
                 if (g.amount() != null && g.amount() < 0) b.vulnerabilities.remove(g.value());
                 else b.vulnerabilities.add(g.value());
             }
@@ -1693,6 +1714,10 @@ public class CreationService {
         c.getResistances().addAll(b.resistances);
         c.getVulnerabilities().clear();
         c.getVulnerabilities().addAll(b.vulnerabilities);
+        c.getImmunities().clear();
+        c.getImmunities().addAll(b.immunities);
+        c.getAbsorptions().clear();
+        c.getAbsorptions().addAll(b.absorptions);
         c.setPassivePerceptionBonus(b.passivePerception);
         c.setPassiveInsightBonus(b.passiveInsight);
     }
@@ -1734,6 +1759,15 @@ public class CreationService {
             if (!grants.isEmpty()) out.add(new Source("heritage:" + h.id(), "Herança: " + h.name(), grants));
         }));
         return out;
+    }
+
+    // "Resistência; caso já tenha, imunidade" (Meio-Azakana, Meio-Kanmei): depois de todas as resistências.
+    private static void damageUpgrades(Build b) {
+        for (String type : b.resistanceUpgrades) {
+            if (b.immunities.contains(type)) continue;
+            if (b.resistances.remove(type)) b.immunities.add(type);
+            else b.resistances.add(type);
+        }
     }
 
     // Quem tem mais de uma fonte para o mesmo Limiar (Fonte Estável e Instável) escolhe a dominante ("Fonte Dominante").
@@ -2276,6 +2310,10 @@ public class CreationService {
         final List<SituationalNote> situational = new ArrayList<>();
         final Set<String> resistances = new LinkedHashSet<>();
         final Set<String> vulnerabilities = new LinkedHashSet<>();
+        final Set<String> immunities = new LinkedHashSet<>();
+        final Set<String> absorptions = new LinkedHashSet<>();
+        // Resistências "caso já tenha, imunidade" (Meio-Azakana), decididas depois de todas as outras.
+        final List<String> resistanceUpgrades = new ArrayList<>();
         final Set<String> knownSpellIds = new LinkedHashSet<>();
 
         // Ids da origem e da linhagem, para as listas de magia de origem.

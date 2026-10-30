@@ -73,10 +73,12 @@ public record CharacterResponse(
         int initiative,
         // Fórmulas de Ofício conhecidas ("<ofício>:<fórmula>").
         List<String> formulas,
-        // Efeitos situacionais ({ target, note, source }), resistências e vulnerabilidades a dano.
+        // Efeitos situacionais ({ target, note, source }); resistências, vulnerabilidades, imunidades e absorções a dano.
         List<Situational> situational,
         List<String> resistances,
-        List<String> vulnerabilities
+        List<String> vulnerabilities,
+        List<String> immunities,
+        List<String> absorptions
 ) {
     public record Situational(String target, String note, String source) {}
 
@@ -143,7 +145,9 @@ public record CharacterResponse(
                 character.getFormulas().stream().sorted().toList(),
                 character.getSituational().stream().map(n -> new Situational(n.getTarget(), n.getNote(), n.getSource())).toList(),
                 List.copyOf(character.getResistances()),
-                List.copyOf(character.getVulnerabilities())
+                List.copyOf(character.getVulnerabilities()),
+                List.copyOf(character.getImmunities()),
+                List.copyOf(character.getAbsorptions())
         );
     }
 }

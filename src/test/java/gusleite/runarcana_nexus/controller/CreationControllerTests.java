@@ -199,19 +199,27 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.complete").value(false))
                 .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-pericia:1')].options[0]").value("ATHLETICS"))
                 .andExpect(jsonPath("$.skills[?(@.skill == 'ARCANA')].expertise").value(true));
-        String done = body.replace("\"class:ARCANIST:1\"", "\"heritage:teste-pericia:1\":[\"STEALTH\"],\"class:ARCANIST:1\"");
+        // Absorção e vulnerabilidade à escolha na mesma fonte: a 2ª não oferece o tipo já escolhido.
+        String damage = body.replace("\"class:ARCANIST:1\"", "\"heritage:teste-pericia:11\":[\"ácido\"],\"class:ARCANIST:1\"");
+        preview(token, damage)
+                .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-pericia:12')].options[0]").value("gélido"));
+        String done = body.replace("\"class:ARCANIST:1\"", "\"heritage:teste-pericia:1\":[\"STEALTH\"],"
+                + "\"heritage:teste-pericia:11\":[\"ácido\"],\"heritage:teste-pericia:12\":[\"gélido\"],\"class:ARCANIST:1\"");
         preview(token, done)
                 .andExpect(jsonPath("$.complete").value(true))
                 .andExpect(jsonPath("$.skills[?(@.skill == 'STEALTH')].source").value("Herança: Perícia Teste"));
-        // Na ficha: nota situacional, resistência e +2 na Percepção passiva (Nyx: SAB 10, sem Percepção → 10 + 2).
+        // Na ficha: nota situacional, resistências e +2 na Percepção passiva (Nyx: SAB 10, sem Percepção → 10 + 2).
         mvc.perform(post("/creation").header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON).content(done))
                 .andExpect(status().isCreated());
         mvc.perform(get("/character/me").header("Authorization", "Bearer " + token))
                 .andExpect(jsonPath("$.character.situational[0].target").value("SKILL:STEALTH"))
                 .andExpect(jsonPath("$.character.situational[0].source").value("Herança: Perícia Teste"))
-                .andExpect(jsonPath("$.character.resistances[0]").value("venenoso"))
-                // Vulnerável a radiante; a necrótica foi tirada por outra concessão (amount -1).
-                .andExpect(jsonPath("$.character.vulnerabilities").value(org.hamcrest.Matchers.contains("radiante")))
+                // "Caso já tenha, imunidade": venenoso já era resistência → imunidade; ígneo não era → resistência.
+                .andExpect(jsonPath("$.character.resistances").value(org.hamcrest.Matchers.contains("ígneo")))
+                .andExpect(jsonPath("$.character.immunities").value(org.hamcrest.Matchers.contains("venenoso")))
+                .andExpect(jsonPath("$.character.absorptions").value(org.hamcrest.Matchers.contains("ácido")))
+                // Vulnerável a radiante e ao tipo escolhido; a necrótica foi tirada por outra concessão (amount -1).
+                .andExpect(jsonPath("$.character.vulnerabilities").value(org.hamcrest.Matchers.containsInAnyOrder("radiante", "gélido")))
                 .andExpect(jsonPath("$.character.passivePerception").value(12))
                 .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].notes[0]").value("Perícia Teste: +1 contra lobos."));
     }

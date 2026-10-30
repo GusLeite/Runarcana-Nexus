@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Absorção, imunidade, Essência Volátil e Experimentos (`feature/character-sheet`)
+- `ABSORPTION`; resistência/vulnerabilidade/absorção à escolha (Essência Volátil, tipos diferentes); `RESISTANCE.expertise` = caso já tenha, imunidade (Meio-Azakana, Meio-Kanmei).
+- Ficha: `immunities` e `absorptions` (tabelas novas) em chips.
+- Experimentos Reconhecido, Bem-Sucedido e Zaunita: Vantagem Tecnológica com efeitos `when` (sem a Variante); Zaunita com perícia e ofício.
+
 ## 2026-10-29 — Progressão Tecnológica na subida de nível (`feature/character-sheet`)
 - `HeritageStep` conta as escolhas da criação (pela prévia): "Aprimorar Fonte" aparece na 2ª escolha feita ao subir de nível.
 - Subida de nível mostra a escolha da Fonte Dominante ainda não feita (`dominantChoices` em `rules.js`).

@@ -448,7 +448,103 @@
       "uses": {
         "usesFormula": "HALF_PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Vantagem Tecnológica",
+          "label": "Experimento Reconhecido: escolha uma Vantagem Tecnológica",
+          "count": 1,
+          "options": [
+            "Adaptação de Escalada",
+            "Adaptação Subaquática",
+            "Arma Integrada",
+            "Armas Naturais",
+            "Bolsa de Tinta",
+            "Carapaça",
+            "Defesa Adaptativa",
+            "Epiderme Cromática",
+            "Gancho de Manobras",
+            "Idade Congelada",
+            "Membro Robótico",
+            "Patagia",
+            "Pele Intoxicante",
+            "Proteção Metálica",
+            "Sentido Superior",
+            "Visão no Escuro"
+          ],
+          "optionTexts": {
+            "Adaptação de Escalada": "Você recebe deslocamento de escalada igual a metade do seu deslocamento de caminhada.",
+            "Adaptação Subaquática": "Você pode respirar tanto ar quanto água e recebe deslocamento de natação igual a metade do seu deslocamento de caminhada.",
+            "Arma Integrada": "Criaturas aprimoradas por tecnologia podem substituir um membro do seu corpo por uma arma corpo a corpo ou à distância que esteja em seu equipamento inicial, você utiliza essa arma normalmente. Essa vantagem pode ser escolhida mais de uma vez.",
+            "Armas Naturais": "Você possui garras que podem causar 1d8 + seu modificador de Força de dano cortante, e presas que podem causar 1d6 + seu modificador de Força de dano perfurante.",
+            "Bolsa de Tinta": "Você pode usar um ataque para fazer um ataque à distância especial para cegar uma criatura em sua linha de visão a até 15 pés de você caso a mesma falhe em uma Salvaguarda de Destreza CD 12. Criaturas que não precisem da visão não são afetadas por esse ataque e criaturas afetadas precisam usar uma ação para limpar a tinta. Essa habilidade funciona de forma diferente debaixo da água: com uma ação bônus você pode criar uma área de obscurecimento pesada em um raio de 5 pés a partir de você. Você pode utilizar essa habilidade um número de vezes igual a metade do seu bônus de Proficiência por descanso longo. Você pode escolher essa habilidade mais de uma vez.",
+            "Carapaça": "Sua pele tem uma cobertura adicional. Você recebe Redução de Dano igual a metade do seu bônus de proficiência, exceto a dano verdadeiro e espiritual. Você não diminui o dano recebido através de condições.",
+            "Defesa Adaptativa": "Utilizando uma ação bônus, você envia um comando para sua fonte de energia, fazendo com que ela emita um campo que te protege de ataques por 1 minuto. Ao enviar o comando você deve direcioná-lo para ataques físicos ou magia, ataques do tipo escolhido possuem desvantagem contra você (caso o ataque exija salvaguarda, você faz a mesma com vantagem). Você pode utilizar essa característica um número de vezes igual a metade do seu bônus de proficiência por Descanso Pleno.",
+            "Epiderme Cromática": "Você tem vantagens em testes de Furtividade que você faz para se ocultar. Adicionalmente, enquanto estiver sem armadura, você pode tentar se esconder mesmo sem estar com cobertura leve ou pesada, contanto que permaneça parado.",
+            "Gancho de Manobras": "Você possui um gancho atrelado a uma linha metálica com 60 pés de comprimento. Utilizando uma ação, você pode disparar o gancho em uma superfície dentro do alcance, se prendendo na mesma. Adicionalmente, utilizando uma ação bônus, você pode se soltar e saltar em um alvo a até 15 pés de você, podendo realizar um ataque corpo a corpo contra o mesmo.",
+            "Idade Congelada": "Sua idade física pode não corresponder aos anos que você viveu, diferente de um humano normal.",
+            "Membro Robótico": "Você possui 1 membro mecânico superior em alguma parte do seu corpo e tem controle sobre ele normalmente. Essa vantagem pode ser escolhida mais de uma vez para membros adicionais. Consulte o Capítulo 9 - Membros Múltiplos para as regras de combate com membros adicionais",
+            "Patagia": "Você tem membranas que atuam como barbatanas e podem ser usadas como asas para desacelerar sua queda ou permitir que você plane. Se você sofrer uma queda e não estiver Incapacitado, você pode subtrair até 100 pés do cálculo de dano da queda, você pode também se mover 2 pés para a frente para cada 1 pé que você esteja em queda.",
+            "Pele Intoxicante": "Qualquer criatura que agarre você ou entre em contato direto com sua pele deve passar em uma salvaguarda de Constituição de CD 12 ou é Intoxicada por 1 minuto. Uma criatura Intoxicada que não esteja mais em contato com sua pele pode repetir a salvaguarda no fim de seu turno, encerrando o efeito em caso de sucesso.",
+            "Proteção Metálica": "Você revestiu sua pele com um liga metálica que concede à você uma proteção natural. Desde que não esteja utilizando nenhuma armadura, sua CA é igual a 13 + seu modificador de Destreza.",
+            "Sentido Superior": "Criaturas aprimoradas por tecnologia possuem vantagem em testes de Percepção através da audição, olfato ou visão.",
+            "Visão no Escuro": "Seus olhos foram substituídos por câmeras com a capacidade de se adaptar à escuridão. Você enxerga na penumbra a até 30 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+          },
+          "optionUses": {
+            "Bolsa de Tinta": {
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            },
+            "Defesa Adaptativa": {
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            }
+          }
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Proteção Metálica",
+          "armor": {
+            "base": 13
+          },
+          "when": "Vantagem Tecnológica:Proteção Metálica"
+        },
+        {
+          "type": "AC_BONUS",
+          "name": "Carapaça",
+          "amount": 0,
+          "armor": {
+            "halfProficiencyReduction": true
+          },
+          "when": "Vantagem Tecnológica:Carapaça"
+        },
+        {
+          "type": "SPEED",
+          "value": "CLIMB",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação de Escalada"
+        },
+        {
+          "type": "SPEED",
+          "value": "SWIM",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação Subaquática"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERCEPTION",
+          "description": "Vantagem em Percepção pela audição, olfato ou visão.",
+          "when": "Vantagem Tecnológica:Sentido Superior"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Vantagem em Furtividade para se ocultar; sem armadura e parado, pode se esconder sem cobertura.",
+          "when": "Vantagem Tecnológica:Epiderme Cromática"
+        }
+      ]
     },
     {
       "id": "filho-da-escuridao",
@@ -1876,7 +1972,103 @@
       "uses": {
         "usesFormula": "PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Vantagem Tecnológica",
+          "label": "Experimento Bem-Sucedido: escolha uma Vantagem Tecnológica",
+          "count": 1,
+          "options": [
+            "Adaptação de Escalada",
+            "Adaptação Subaquática",
+            "Arma Integrada",
+            "Armas Naturais",
+            "Bolsa de Tinta",
+            "Carapaça",
+            "Defesa Adaptativa",
+            "Epiderme Cromática",
+            "Gancho de Manobras",
+            "Idade Congelada",
+            "Membro Robótico",
+            "Patagia",
+            "Pele Intoxicante",
+            "Proteção Metálica",
+            "Sentido Superior",
+            "Visão no Escuro"
+          ],
+          "optionTexts": {
+            "Adaptação de Escalada": "Você recebe deslocamento de escalada igual a metade do seu deslocamento de caminhada.",
+            "Adaptação Subaquática": "Você pode respirar tanto ar quanto água e recebe deslocamento de natação igual a metade do seu deslocamento de caminhada.",
+            "Arma Integrada": "Criaturas aprimoradas por tecnologia podem substituir um membro do seu corpo por uma arma corpo a corpo ou à distância que esteja em seu equipamento inicial, você utiliza essa arma normalmente. Essa vantagem pode ser escolhida mais de uma vez.",
+            "Armas Naturais": "Você possui garras que podem causar 1d8 + seu modificador de Força de dano cortante, e presas que podem causar 1d6 + seu modificador de Força de dano perfurante.",
+            "Bolsa de Tinta": "Você pode usar um ataque para fazer um ataque à distância especial para cegar uma criatura em sua linha de visão a até 15 pés de você caso a mesma falhe em uma Salvaguarda de Destreza CD 12. Criaturas que não precisem da visão não são afetadas por esse ataque e criaturas afetadas precisam usar uma ação para limpar a tinta. Essa habilidade funciona de forma diferente debaixo da água: com uma ação bônus você pode criar uma área de obscurecimento pesada em um raio de 5 pés a partir de você. Você pode utilizar essa habilidade um número de vezes igual a metade do seu bônus de Proficiência por descanso longo. Você pode escolher essa habilidade mais de uma vez.",
+            "Carapaça": "Sua pele tem uma cobertura adicional. Você recebe Redução de Dano igual a metade do seu bônus de proficiência, exceto a dano verdadeiro e espiritual. Você não diminui o dano recebido através de condições.",
+            "Defesa Adaptativa": "Utilizando uma ação bônus, você envia um comando para sua fonte de energia, fazendo com que ela emita um campo que te protege de ataques por 1 minuto. Ao enviar o comando você deve direcioná-lo para ataques físicos ou magia, ataques do tipo escolhido possuem desvantagem contra você (caso o ataque exija salvaguarda, você faz a mesma com vantagem). Você pode utilizar essa característica um número de vezes igual a metade do seu bônus de proficiência por Descanso Pleno.",
+            "Epiderme Cromática": "Você tem vantagens em testes de Furtividade que você faz para se ocultar. Adicionalmente, enquanto estiver sem armadura, você pode tentar se esconder mesmo sem estar com cobertura leve ou pesada, contanto que permaneça parado.",
+            "Gancho de Manobras": "Você possui um gancho atrelado a uma linha metálica com 60 pés de comprimento. Utilizando uma ação, você pode disparar o gancho em uma superfície dentro do alcance, se prendendo na mesma. Adicionalmente, utilizando uma ação bônus, você pode se soltar e saltar em um alvo a até 15 pés de você, podendo realizar um ataque corpo a corpo contra o mesmo.",
+            "Idade Congelada": "Sua idade física pode não corresponder aos anos que você viveu, diferente de um humano normal.",
+            "Membro Robótico": "Você possui 1 membro mecânico superior em alguma parte do seu corpo e tem controle sobre ele normalmente. Essa vantagem pode ser escolhida mais de uma vez para membros adicionais. Consulte o Capítulo 9 - Membros Múltiplos para as regras de combate com membros adicionais",
+            "Patagia": "Você tem membranas que atuam como barbatanas e podem ser usadas como asas para desacelerar sua queda ou permitir que você plane. Se você sofrer uma queda e não estiver Incapacitado, você pode subtrair até 100 pés do cálculo de dano da queda, você pode também se mover 2 pés para a frente para cada 1 pé que você esteja em queda.",
+            "Pele Intoxicante": "Qualquer criatura que agarre você ou entre em contato direto com sua pele deve passar em uma salvaguarda de Constituição de CD 12 ou é Intoxicada por 1 minuto. Uma criatura Intoxicada que não esteja mais em contato com sua pele pode repetir a salvaguarda no fim de seu turno, encerrando o efeito em caso de sucesso.",
+            "Proteção Metálica": "Você revestiu sua pele com um liga metálica que concede à você uma proteção natural. Desde que não esteja utilizando nenhuma armadura, sua CA é igual a 13 + seu modificador de Destreza.",
+            "Sentido Superior": "Criaturas aprimoradas por tecnologia possuem vantagem em testes de Percepção através da audição, olfato ou visão.",
+            "Visão no Escuro": "Seus olhos foram substituídos por câmeras com a capacidade de se adaptar à escuridão. Você enxerga na penumbra a até 30 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+          },
+          "optionUses": {
+            "Bolsa de Tinta": {
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            },
+            "Defesa Adaptativa": {
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            }
+          }
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Proteção Metálica",
+          "armor": {
+            "base": 13
+          },
+          "when": "Vantagem Tecnológica:Proteção Metálica"
+        },
+        {
+          "type": "AC_BONUS",
+          "name": "Carapaça",
+          "amount": 0,
+          "armor": {
+            "halfProficiencyReduction": true
+          },
+          "when": "Vantagem Tecnológica:Carapaça"
+        },
+        {
+          "type": "SPEED",
+          "value": "CLIMB",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação de Escalada"
+        },
+        {
+          "type": "SPEED",
+          "value": "SWIM",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação Subaquática"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERCEPTION",
+          "description": "Vantagem em Percepção pela audição, olfato ou visão.",
+          "when": "Vantagem Tecnológica:Sentido Superior"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Vantagem em Furtividade para se ocultar; sem armadura e parado, pode se esconder sem cobertura.",
+          "when": "Vantagem Tecnológica:Epiderme Cromática"
+        }
+      ]
     },
     {
       "id": "experimento-zaunita",
@@ -1886,7 +2078,113 @@
         "ZAUN"
       ],
       "prerequisite": "Zaunita",
-      "description": "Experimentos foram feitos em você em Zaun. Você recebe os seguintes benefícios:\n\nEscolha uma Vantagem Tecnológica da Herança Variante Progressão Tecnológica.\nEscolha uma Perícia e um Ofício, você recebe proficiência com os dois.\nVocê possui imunidade à Cinza de Zaun\nCaso você possua 5 ou mais Vantagens Tecnológicas, você recebe os traços de Limiar Tecnológico ligados à sua fonte de energia."
+      "description": "Experimentos foram feitos em você em Zaun. Você recebe os seguintes benefícios:\n\nEscolha uma Vantagem Tecnológica da Herança Variante Progressão Tecnológica.\nEscolha uma Perícia e um Ofício, você recebe proficiência com os dois.\nVocê possui imunidade à Cinza de Zaun\nCaso você possua 5 ou mais Vantagens Tecnológicas, você recebe os traços de Limiar Tecnológico ligados à sua fonte de energia.",
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Vantagem Tecnológica",
+          "label": "Experimento Zaunita: escolha uma Vantagem Tecnológica",
+          "count": 1,
+          "options": [
+            "Adaptação de Escalada",
+            "Adaptação Subaquática",
+            "Arma Integrada",
+            "Armas Naturais",
+            "Bolsa de Tinta",
+            "Carapaça",
+            "Defesa Adaptativa",
+            "Epiderme Cromática",
+            "Gancho de Manobras",
+            "Idade Congelada",
+            "Membro Robótico",
+            "Patagia",
+            "Pele Intoxicante",
+            "Proteção Metálica",
+            "Sentido Superior",
+            "Visão no Escuro"
+          ],
+          "optionTexts": {
+            "Adaptação de Escalada": "Você recebe deslocamento de escalada igual a metade do seu deslocamento de caminhada.",
+            "Adaptação Subaquática": "Você pode respirar tanto ar quanto água e recebe deslocamento de natação igual a metade do seu deslocamento de caminhada.",
+            "Arma Integrada": "Criaturas aprimoradas por tecnologia podem substituir um membro do seu corpo por uma arma corpo a corpo ou à distância que esteja em seu equipamento inicial, você utiliza essa arma normalmente. Essa vantagem pode ser escolhida mais de uma vez.",
+            "Armas Naturais": "Você possui garras que podem causar 1d8 + seu modificador de Força de dano cortante, e presas que podem causar 1d6 + seu modificador de Força de dano perfurante.",
+            "Bolsa de Tinta": "Você pode usar um ataque para fazer um ataque à distância especial para cegar uma criatura em sua linha de visão a até 15 pés de você caso a mesma falhe em uma Salvaguarda de Destreza CD 12. Criaturas que não precisem da visão não são afetadas por esse ataque e criaturas afetadas precisam usar uma ação para limpar a tinta. Essa habilidade funciona de forma diferente debaixo da água: com uma ação bônus você pode criar uma área de obscurecimento pesada em um raio de 5 pés a partir de você. Você pode utilizar essa habilidade um número de vezes igual a metade do seu bônus de Proficiência por descanso longo. Você pode escolher essa habilidade mais de uma vez.",
+            "Carapaça": "Sua pele tem uma cobertura adicional. Você recebe Redução de Dano igual a metade do seu bônus de proficiência, exceto a dano verdadeiro e espiritual. Você não diminui o dano recebido através de condições.",
+            "Defesa Adaptativa": "Utilizando uma ação bônus, você envia um comando para sua fonte de energia, fazendo com que ela emita um campo que te protege de ataques por 1 minuto. Ao enviar o comando você deve direcioná-lo para ataques físicos ou magia, ataques do tipo escolhido possuem desvantagem contra você (caso o ataque exija salvaguarda, você faz a mesma com vantagem). Você pode utilizar essa característica um número de vezes igual a metade do seu bônus de proficiência por Descanso Pleno.",
+            "Epiderme Cromática": "Você tem vantagens em testes de Furtividade que você faz para se ocultar. Adicionalmente, enquanto estiver sem armadura, você pode tentar se esconder mesmo sem estar com cobertura leve ou pesada, contanto que permaneça parado.",
+            "Gancho de Manobras": "Você possui um gancho atrelado a uma linha metálica com 60 pés de comprimento. Utilizando uma ação, você pode disparar o gancho em uma superfície dentro do alcance, se prendendo na mesma. Adicionalmente, utilizando uma ação bônus, você pode se soltar e saltar em um alvo a até 15 pés de você, podendo realizar um ataque corpo a corpo contra o mesmo.",
+            "Idade Congelada": "Sua idade física pode não corresponder aos anos que você viveu, diferente de um humano normal.",
+            "Membro Robótico": "Você possui 1 membro mecânico superior em alguma parte do seu corpo e tem controle sobre ele normalmente. Essa vantagem pode ser escolhida mais de uma vez para membros adicionais. Consulte o Capítulo 9 - Membros Múltiplos para as regras de combate com membros adicionais",
+            "Patagia": "Você tem membranas que atuam como barbatanas e podem ser usadas como asas para desacelerar sua queda ou permitir que você plane. Se você sofrer uma queda e não estiver Incapacitado, você pode subtrair até 100 pés do cálculo de dano da queda, você pode também se mover 2 pés para a frente para cada 1 pé que você esteja em queda.",
+            "Pele Intoxicante": "Qualquer criatura que agarre você ou entre em contato direto com sua pele deve passar em uma salvaguarda de Constituição de CD 12 ou é Intoxicada por 1 minuto. Uma criatura Intoxicada que não esteja mais em contato com sua pele pode repetir a salvaguarda no fim de seu turno, encerrando o efeito em caso de sucesso.",
+            "Proteção Metálica": "Você revestiu sua pele com um liga metálica que concede à você uma proteção natural. Desde que não esteja utilizando nenhuma armadura, sua CA é igual a 13 + seu modificador de Destreza.",
+            "Sentido Superior": "Criaturas aprimoradas por tecnologia possuem vantagem em testes de Percepção através da audição, olfato ou visão.",
+            "Visão no Escuro": "Seus olhos foram substituídos por câmeras com a capacidade de se adaptar à escuridão. Você enxerga na penumbra a até 30 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+          },
+          "optionUses": {
+            "Bolsa de Tinta": {
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            },
+            "Defesa Adaptativa": {
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            }
+          }
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "label": "Experimento Zaunita: uma perícia"
+        },
+        {
+          "type": "CRAFT_CHOICE",
+          "count": 1,
+          "label": "Experimento Zaunita: um ofício"
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Proteção Metálica",
+          "armor": {
+            "base": 13
+          },
+          "when": "Vantagem Tecnológica:Proteção Metálica"
+        },
+        {
+          "type": "AC_BONUS",
+          "name": "Carapaça",
+          "amount": 0,
+          "armor": {
+            "halfProficiencyReduction": true
+          },
+          "when": "Vantagem Tecnológica:Carapaça"
+        },
+        {
+          "type": "SPEED",
+          "value": "CLIMB",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação de Escalada"
+        },
+        {
+          "type": "SPEED",
+          "value": "SWIM",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação Subaquática"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERCEPTION",
+          "description": "Vantagem em Percepção pela audição, olfato ou visão.",
+          "when": "Vantagem Tecnológica:Sentido Superior"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Vantagem em Furtividade para se ocultar; sem armadura e parado, pode se esconder sem cobertura.",
+          "when": "Vantagem Tecnológica:Epiderme Cromática"
+        }
+      ]
     },
     {
       "id": "ladrao-de-segredos",
@@ -2550,6 +2848,10 @@
             "value": "venenoso"
           },
           {
+            "type": "ABSORPTION",
+            "value": "necrótico"
+          },
+          {
             "type": "VULNERABILITY",
             "value": "radiante"
           },
@@ -2561,11 +2863,13 @@
         "Meio-Azakana": [
           {
             "type": "RESISTANCE",
-            "value": "ígneo"
+            "value": "ígneo",
+            "expertise": true
           },
           {
             "type": "RESISTANCE",
-            "value": "necrótico"
+            "value": "necrótico",
+            "expertise": true
           },
           {
             "type": "VULNERABILITY",
@@ -2579,7 +2883,8 @@
         "Meio-Kanmei": [
           {
             "type": "RESISTANCE",
-            "value": "radiante"
+            "value": "radiante",
+            "expertise": true
           },
           {
             "type": "SITUATIONAL",
@@ -2792,7 +3097,35 @@
         "construto"
       ],
       "prerequisite": "Construto",
-      "description": "Seu processo de construção envolveu alguma sinergia especial com uma fonte de energia, dando a você uma particularidade de interação com a mesma. Isso se reflete em sua aparência. Você ganha os seguintes benefícios:\n\nEscolha dois entre os seguintes tipos de danos: ácido, elétrico, ígneo, gélido, trovejante ou venenoso, você recebe absorção de um e vulnerabilidade ao outro."
+      "description": "Seu processo de construção envolveu alguma sinergia especial com uma fonte de energia, dando a você uma particularidade de interação com a mesma. Isso se reflete em sua aparência. Você ganha os seguintes benefícios:\n\nEscolha dois entre os seguintes tipos de danos: ácido, elétrico, ígneo, gélido, trovejante ou venenoso, você recebe absorção de um e vulnerabilidade ao outro.",
+      "grants": [
+        {
+          "type": "ABSORPTION",
+          "count": 1,
+          "options": [
+            "ácido",
+            "elétrico",
+            "ígneo",
+            "gélido",
+            "trovejante",
+            "venenoso"
+          ],
+          "label": "Essência Volátil: absorção de um tipo de dano"
+        },
+        {
+          "type": "VULNERABILITY",
+          "count": 1,
+          "options": [
+            "ácido",
+            "elétrico",
+            "ígneo",
+            "gélido",
+            "trovejante",
+            "venenoso"
+          ],
+          "label": "Essência Volátil: vulnerabilidade a outro tipo de dano"
+        }
+      ]
     },
     {
       "id": "forca-pneumatica",

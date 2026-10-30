@@ -1,18 +1,25 @@
 import { situationalFor } from '../../data/rules.js'
 
-// No herói: resistências e vulnerabilidades a dano (chips) e os efeitos situacionais de CA e iniciativa, das Heranças e Aprimoramentos.
+// Defesas contra tipos de dano, na ordem dos chips: [campo da ficha, rótulo, classe do chip].
+const DAMAGE = [
+  ['immunities', 'Imunidade', 'imm'],
+  ['absorptions', 'Absorção', 'abs'],
+  ['resistances', 'Resistência', 'res'],
+  ['vulnerabilities', 'Vulnerabilidade', 'vul'],
+]
+
+// No herói: imunidades, absorções, resistências e vulnerabilidades a dano (chips) e os efeitos situacionais
+// de CA e iniciativa, das Heranças e Aprimoramentos.
 export default function Situational({ sheet }) {
-  const resistances = sheet.resistances ?? []
-  const vulnerabilities = sheet.vulnerabilities ?? []
+  const damage = DAMAGE.flatMap(([field, label, cls]) => (sheet[field] ?? []).map(t => ({ key: cls + t, text: label + ': ' + t, cls })))
   const ac = situationalFor(sheet, 'AC')
   const init = situationalFor(sheet, 'INITIATIVE')
-  if (!resistances.length && !vulnerabilities.length && !ac.length && !init.length) return null
+  if (!damage.length && !ac.length && !init.length) return null
   return (
     <div className="situational">
-      {(resistances.length > 0 || vulnerabilities.length > 0) && (
-        <ul className="cond-chips resist" aria-label="Resistências e vulnerabilidades a dano">
-          {resistances.map(r => <li key={'r' + r} className="cond-chip res">Resistência: {r}</li>)}
-          {vulnerabilities.map(v => <li key={'v' + v} className="cond-chip vul">Vulnerabilidade: {v}</li>)}
+      {damage.length > 0 && (
+        <ul className="cond-chips resist" aria-label="Defesas contra tipos de dano">
+          {damage.map(d => <li key={d.key} className={'cond-chip ' + d.cls}>{d.text}</li>)}
         </ul>
       )}
       {[...ac.map(t => ['CA', t]), ...init.map(t => ['Iniciativa', t])].map(([k, t]) => (

@@ -66,6 +66,32 @@
           "type": "VULNERABILITY",
           "value": "necrótico",
           "amount": -1
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "venenoso",
+          "expertise": true
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "ígneo",
+          "expertise": true
+        },
+        {
+          "type": "ABSORPTION",
+          "count": 1,
+          "options": [
+            "ácido",
+            "gélido"
+          ]
+        },
+        {
+          "type": "VULNERABILITY",
+          "count": 1,
+          "options": [
+            "ácido",
+            "gélido"
+          ]
         }
       ]
     },

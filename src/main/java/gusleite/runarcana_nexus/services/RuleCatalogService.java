@@ -707,11 +707,9 @@ public class RuleCatalogService {
                         p.add(at + " (SITUATIONAL): alvo inválido " + g.value());
                     }
                 }
-                case RESISTANCE -> {
-                    if (blank(g.value())) p.add(at + " (RESISTANCE): falta value (tipo de dano)");
-                }
-                case VULNERABILITY -> {
-                    if (blank(g.value())) p.add(at + " (VULNERABILITY): falta value (tipo de dano)");
+                // Tipo de dano fixo (value) ou à escolha (options).
+                case RESISTANCE, VULNERABILITY, ABSORPTION -> {
+                    if (blank(g.value()) && !g.hasOptions()) p.add(at + " (" + g.type() + "): falta value ou options (tipo de dano)");
                 }
                 case PASSIVE_BONUS -> {
                     if (!"PERCEPTION".equals(g.value()) && !"INSIGHT".equals(g.value())) p.add(at + " (PASSIVE_BONUS): value é PERCEPTION ou INSIGHT");
