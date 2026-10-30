@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react'
+import LivingArt from './LivingArt.jsx'
 
 // Traços do sigilo provisório de cada origem (viewBox 100×100).
 const SIGILS = {
@@ -31,29 +32,40 @@ const playMuted = video => {
   if (p) p.catch(() => {})
 }
 
-// Vídeo que mantém o personagem no centro do painel: object-fit cover corta as laterais, então a posição é
-// calculada a partir do formato do painel e de onde o personagem está no quadro (focus, 0 a 1).
+// Vídeo que mantém o personagem no centro do painel. Em vez de object-fit, a posição e o tamanho são calculados a
+// partir do formato do painel e de onde o personagem está no quadro (focus/focusY, 0 a 1). Por padrão o vídeo cobre o
+// painel (cortando as laterais); com show (fração mínima da largura do quadro que deve aparecer) ele encolhe o quanto
+// precisar, encosta no topo e a base esmaece no escuro.
 function FocusVideo({ clip }) {
   const ref = useRef()
-  const [pos, setPos] = useState('50% 50%')
+  const [box, setBox] = useState({ left: 0, top: 0, width: '100%', height: '100%' })
   useLayoutEffect(() => {
     const video = ref.current
-    const box = video.parentElement
+    const holder = video.parentElement
     const place = () => {
-      if (!video.videoWidth || !box.clientHeight) return
-      const axis = (focus, shown) => (shown >= 1 ? 50 : Math.min(100, Math.max(0, ((focus - shown / 2) / (1 - shown)) * 100)))
-      const ratio = box.clientWidth / box.clientHeight / (video.videoWidth / video.videoHeight)
-      // Painel mais estreito que o vídeo corta nos lados (x); mais largo, em cima e embaixo (y).
-      setPos(ratio < 1 ? axis(clip.focus ?? 0.5, ratio) + '% 50%' : '50% ' + axis(clip.focusY ?? 0.5, 1 / ratio) + '%')
+      const bw = holder.clientWidth
+      const bh = holder.clientHeight
+      if (!video.videoWidth || !bh) return
+      const aspect = video.videoWidth / video.videoHeight
+      const width = Math.max(bh * aspect, bw, clip.show ? bw / clip.show : 0)
+      const height = width / aspect
+      const clamp = (v, min, max) => Math.min(max, Math.max(min, v))
+      setBox({
+        left: clamp(bw / 2 - (clip.focus ?? 0.5) * width, bw - width, 0),
+        top: height > bh ? clamp(bh / 2 - (clip.focusY ?? 0.5) * height, bh - height, 0) : 0,
+        width,
+        height,
+        fades: height < bh - 1,
+      })
     }
-    place()
     const begin = () => {
       if (clip.start) video.currentTime = clip.start
     }
+    place()
     video.addEventListener('loadedmetadata', place)
     video.addEventListener('loadedmetadata', begin)
     const watch = new ResizeObserver(place)
-    watch.observe(box)
+    watch.observe(holder)
     return () => {
       video.removeEventListener('loadedmetadata', place)
       video.removeEventListener('loadedmetadata', begin)
@@ -65,7 +77,10 @@ function FocusVideo({ clip }) {
     e.currentTarget.currentTime = clip.start ?? 0
     playMuted(e.currentTarget)
   }
-  return <video className="oart-img oart-clip" src={clip.src} autoPlay muted playsInline onEnded={restart} ref={el => { ref.current = el; playMuted(el) }} style={{ objectPosition: pos }} />
+  const { fades, ...place } = box
+  const style = { ...place, right: 'auto', bottom: 'auto', objectFit: 'fill' }
+  if (fades) style.maskImage = 'linear-gradient(#000 72%, transparent)'
+  return <video className="oart-img oart-clip" src={clip.src} autoPlay muted playsInline onEnded={restart} ref={el => { ref.current = el; playMuted(el) }} style={style} />
 }
 
 // Só o sigilo da origem, com os traços desenhados (ver .oart-sigil em origin.css).
@@ -82,11 +97,11 @@ export function OriginSigil({ id }) {
 // Fundo de uma origem: vídeo ou imagem, se houver (mesma ideia do CharacterPanel), com o sigilo da origem por cima.
 // large: versão do destaque, com anéis girando e partículas.
 export default function OriginArt({ id, art, large }) {
-  const hasMedia = !!(art.img || art.video)
+  const hasMedia = !!(art.img || art.video || art.living)
   return (
     <div className={'oart' + (large ? ' large' : '') + (hasMedia ? ' has-media' : '')} aria-hidden="true">
       {art.img && <div className="oart-img" style={{ backgroundImage: `url("${art.img}")`, backgroundPosition: art.pos }} />}
-      {art.video && <FocusVideo clip={art.video} />}
+      {art.living ? <LivingArt clip={art.living} /> : art.video && <FocusVideo clip={art.video} />}
       <div className="oart-holder">
         {large && <span className="oart-ring" />}
         {large && <span className="oart-ring r2" />}

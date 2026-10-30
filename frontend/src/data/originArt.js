@@ -2,16 +2,21 @@
 // tagline: a descrição breve do cartão. hue: matiz da cor da origem. motes: partículas do destaque
 // (spark, petal, feather, snow, hex). img/vid/pos: arte definitiva (como em characters.js); sem elas, entra o sigilo provisório.
 // video: vídeo de fundo, levemente escurecido, com os símbolos da origem por cima: src, focus (x do personagem no quadro, 0 a 1,
-// para centralizá-lo em qualquer formato de painel), focusY (opcional) e start (segundo inicial, para pular uma abertura preta;
+// para centralizá-lo em qualquer formato de painel), focusY (opcional), show (opcional: fração mínima da largura do quadro que
+// deve aparecer; sem ela o vídeo cobre o painel, o que num painel em pé vira um close) e start (segundo inicial, para pular uma abertura preta;
 // o vídeo volta a ele ao terminar).
+// living: imagem animada por um shader; tem prioridade sobre o video: src, width, height, scene (data/scenes) e focus/focusY, como no vídeo.
 import humano from '../assets/origins/humano.mp4'
 import minotauro from '../assets/origins/minotauro.mp4'
+import minotauroImg from '../assets/origins/minotauro.webp'
+import { MINOTAURO_SCENE } from './scenes/minotauro.js'
 
 export const ORIGIN_ART = {
   humano: { tagline: 'A espécie mais numerosa de Runeterra, moldada por cada cultura que a cerca.', hue: 42, motes: 'spark',
     video: { src: humano, focus: 0.71, start: 1 } },
   minotauro: { tagline: 'Povos tribais de grande vigor, vindos das montanhas da Grande Barreira.', hue: 14, motes: 'spark',
-    video: { src: minotauro, focus: 0.68 } },
+    video: { src: minotauro, focus: 0.7, show: 0.62 },
+    living: { src: minotauroImg, width: 1215, height: 717, scene: MINOTAURO_SCENE, focus: 0.62 } },
   construto: { tagline: 'Máquinas que despertaram para a vida e ainda tentam entender o que sentem.', hue: 198, motes: 'hex' },
   antroplantae: { tagline: 'Plantas sencientes e raras, ligadas à terra, às flores e aos espinhos.', hue: 118, motes: 'petal' },
   chireano: { tagline: 'Gente-morcego de Zaun: curiosa, ágil, apaixonada por maquinário.', hue: 158, motes: 'hex' },

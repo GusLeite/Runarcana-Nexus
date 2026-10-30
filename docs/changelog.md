@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Arte do Alistar animada na origem Minotauro (`feature/character-sheet`)
+- `LivingArt.jsx` e `data/scenes/minotauro.js`: a imagem ganha vida com um shader WebGL (respiração, juba, correntes, poeira, olhos, areia, lascas, sangue).
+- `living` tem prioridade sobre `video` em `originArt.js`; o vídeo do Alistar continua lá, sem aparecer.
+- `FocusVideo` aceita `show`, a fração mínima da largura do quadro que deve aparecer.
+
 ## 2026-10-30 — Martelada do Gaudron mais leve (`feature/character-sheet`)
 - Saíram `mix-blend-mode`, os `drop-shadow` e o redesenho das rachaduras a cada quadro; agora elas crescem por `scale` e somem por `opacity`. Menos pedras, fagulhas e panos.
 - No preview: de ~21 para 65–74 quadros/s. A medição antiga pode ter sido afetada pelo painel oculto.

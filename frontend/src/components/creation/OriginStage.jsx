@@ -208,7 +208,7 @@ export default function OriginStage({ origins, startId, crafts, equipment, origi
         <div className="ostage-hero" key={origin.id}>
           <OriginArt id={origin.id} art={art} large />
           <div className="ostage-shade" />
-          {!(art.img || art.video) && <span className="ostage-placeholder">Arte provisória</span>}
+          {!(art.img || art.video || art.living) &&<span className="ostage-placeholder">Arte provisória</span>}
           <div className="ostage-cap">
             {lineage && <div className="ostage-lineage">Linhagem {lineage.name}</div>}
             <h3 className="ostage-name">{origin.name}</h3>

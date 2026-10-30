@@ -49,6 +49,9 @@ Estado atual: **Rudo** (vídeo + burst vermelho + magia de sangue) e **Gaudron**
 2. Importe em `characters.js` e preencha `img` / `vid` / `pos` no item do personagem.
 3. Para um efeito novo, crie o componente em `components/effects/`, renderize em `CharacterPanel.jsx` e adicione o CSS em `global.css`. Anime só `transform`/`scale`/`translate`/`opacity`: sobre o vídeo, `mix-blend-mode`, `filter` e `stroke-*` animado derrubam os quadros (foi o que travou a martelada do Gaudron).
 
+### Imagem viva nas origens
+`LivingArt.jsx` anima uma imagem em tempo real com WebGL, a cerca de 30 quadros/s; sai do ar fora da tela e fica parada com `prefers-reduced-motion` ou sem WebGL. A cena é um fragment shader em `data/scenes/`, com máscaras em fração da imagem para cada área que se mexe (na do Alistar: respiração, juba, correntes, poeira, olhos, areia, lascas, sangue). Para usar em outra origem, crie a cena e preencha `living` em `originArt.js`; `living` tem prioridade sobre `video`.
+
 
 ## Pendências / problemas conhecidos
 
