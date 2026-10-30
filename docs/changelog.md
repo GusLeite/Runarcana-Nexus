@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Vídeo do Trundle no Troll (`feature/character-sheet`)
+- `assets/origins/troll.mp4` (720p, 13 MB, 65 s; login animado feito por fã): a interface de login do jogo aparece por cima a partir de ~15,5 s, então o novo `end: 14.8` faz o vídeo voltar ao início antes disso. Foco 0,65 (0,6 no rosto), `show: 0.62`.
+
 ## 2026-10-30 — Vídeo da Shyvana no Meio-Dragão (`feature/character-sheet`)
 - `assets/origins/meio-dragao.mp4` (1280×576, 19 MB, 215 s da mesma cena): ela fica no centro (0,58), `show: 0.5` porque o quadro é ultra-largo.
 
