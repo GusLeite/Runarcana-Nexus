@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 
 // Traços do sigilo provisório de cada origem (viewBox 100×100).
 const SIGILS = {
@@ -60,23 +60,12 @@ function FocusVideo({ clip }) {
       watch.disconnect()
     }
   }, [clip])
-  return <video className="oart-img oart-clip" src={clip.src} autoPlay muted loop playsInline ref={el => { ref.current = el; playMuted(el) }} style={{ objectPosition: pos }} />
-}
-
-// Alterna os vídeos: o próximo entra por cima com fusão e o anterior sai depois.
-function CycleVideo({ vids }) {
-  const [now, setNow] = useState({ cur: 0, prev: null })
-  useEffect(() => {
-    if (vids.length < 2) return
-    const t = setTimeout(() => setNow(s => ({ cur: (s.cur + 1) % vids.length, prev: s.cur })), vids[now.cur].hold * 1000)
-    return () => clearTimeout(t)
-  }, [now.cur, vids])
-  useEffect(() => {
-    if (now.prev == null) return
-    const t = setTimeout(() => setNow(s => ({ ...s, prev: null })), 1200)
-    return () => clearTimeout(t)
-  }, [now.prev])
-  return [now.prev, now.cur].filter(i => i != null).map(i => <FocusVideo key={i} clip={vids[i]} />)
+  // Em vez de loop, volta ao start: o recomeço do arquivo pode ter uma abertura preta.
+  const restart = e => {
+    e.currentTarget.currentTime = clip.start ?? 0
+    playMuted(e.currentTarget)
+  }
+  return <video className="oart-img oart-clip" src={clip.src} autoPlay muted playsInline onEnded={restart} ref={el => { ref.current = el; playMuted(el) }} style={{ objectPosition: pos }} />
 }
 
 // Só o sigilo da origem, com os traços desenhados (ver .oart-sigil em origin.css).
@@ -90,22 +79,19 @@ export function OriginSigil({ id }) {
   )
 }
 
-// Fundo de uma origem: vídeo ou imagem, se houver (mesma ideia do CharacterPanel), ou o sigilo provisório.
+// Fundo de uma origem: vídeo ou imagem, se houver (mesma ideia do CharacterPanel), com o sigilo da origem por cima.
 // large: versão do destaque, com anéis girando e partículas.
 export default function OriginArt({ id, art, large }) {
-  const hasMedia = !!(art.img || art.vid || art.vids?.length)
+  const hasMedia = !!(art.img || art.video)
   return (
-    <div className={'oart' + (large ? ' large' : '')} aria-hidden="true">
+    <div className={'oart' + (large ? ' large' : '') + (hasMedia ? ' has-media' : '')} aria-hidden="true">
       {art.img && <div className="oart-img" style={{ backgroundImage: `url("${art.img}")`, backgroundPosition: art.pos }} />}
-      {art.vid && <video className="oart-img" src={art.vid} poster={art.img} autoPlay muted loop playsInline ref={playMuted} style={{ objectPosition: art.pos }} />}
-      {art.vids?.length > 0 && <CycleVideo vids={art.vids} />}
-      {!hasMedia && (
-        <div className="oart-holder">
-          {large && <span className="oart-ring" />}
-          {large && <span className="oart-ring r2" />}
-          <OriginSigil id={id} />
-        </div>
-      )}
+      {art.video && <FocusVideo clip={art.video} />}
+      <div className="oart-holder">
+        {large && <span className="oart-ring" />}
+        {large && <span className="oart-ring r2" />}
+        <OriginSigil id={id} />
+      </div>
       {large && (
         <div className={'oart-motes m-' + art.motes}>
           {MOTES.map((m, i) => (

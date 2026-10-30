@@ -67,6 +67,6 @@ A tela foi prototipada num `index.html` único (React via CDN, imagens e vídeo 
 
 ## Pendências / problemas conhecidos
 
-- As origens da criação, menos o Humano (vídeos), usam sigilos provisórios: falta a arte definitiva (imagem ou vídeo em `data/originArt.js`). Os vídeos do Humano são pesados (o do Yasuo tem 13 MB e 93 s, 720p, e só os primeiros segundos tocam): se o carregamento pesar, cortar e comprimir. A nitidez depende da fonte: o Yasuo é 720p e fica mais macio que os outros (1080p); trocar por uma versão 1080p melhora de verdade.
+- As origens da criação, menos o Humano (vídeo do Yasuo), ainda só têm o sigilo: falta a arte definitiva (um `video` ou `img` por origem em `data/originArt.js`). O vídeo do Humano é pesado (31 MB, 2110×1440, 77 s, com uns 1,5 s de preto no início): se o carregamento pesar, cortar e comprimir.
 - Ainda não há roteamento (react-router): as abas da ficha são estado local e não mudam a URL (recarregar volta para "FICHA").
 - O token fica no `localStorage` (simples, mas acessível a scripts da página); se o projeto crescer, considerar cookie `HttpOnly`.

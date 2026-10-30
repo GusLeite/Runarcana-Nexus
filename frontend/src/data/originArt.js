@@ -1,19 +1,14 @@
 // Apresentação de cada origem na galeria da criação; as regras continuam vindo do catálogo do back.
 // tagline: a descrição breve do cartão. hue: matiz da cor da origem. motes: partículas do destaque
 // (spark, petal, feather, snow, hex). img/vid/pos: arte definitiva (como em characters.js); sem elas, entra o sigilo provisório.
-// vids: vários vídeos que se alternam com fusão; cada um com focus (x do personagem no quadro, 0 a 1, para centralizá-lo
-// em qualquer formato de painel), focusY (opcional), start (segundo em que o vídeo começa, para pular uma abertura preta) e hold (segundos em cena).
-import yasuo from '../assets/origins/humano-yasuo.mp4'
-import garen from '../assets/origins/humano-garen.mp4'
-import caitlyn from '../assets/origins/humano-caitlyn.mp4'
+// video: vídeo de fundo, levemente escurecido, com os símbolos da origem por cima: src, focus (x do personagem no quadro, 0 a 1,
+// para centralizá-lo em qualquer formato de painel), focusY (opcional) e start (segundo inicial, para pular uma abertura preta;
+// o vídeo volta a ele ao terminar).
+import humano from '../assets/origins/humano.mp4'
 
 export const ORIGIN_ART = {
   humano: { tagline: 'A espécie mais numerosa de Runeterra, moldada por cada cultura que a cerca.', hue: 42, motes: 'spark',
-    vids: [
-      { src: yasuo, focus: 0.785, start: 2, hold: 5 },
-      { src: garen, focus: 0.74, hold: 5 },
-      { src: caitlyn, focus: 0.46, hold: 5 },
-    ] },
+    video: { src: humano, focus: 0.71, start: 1 } },
   minotauro: { tagline: 'Povos tribais de grande vigor, vindos das montanhas da Grande Barreira.', hue: 14, motes: 'spark' },
   construto: { tagline: 'Máquinas que despertaram para a vida e ainda tentam entender o que sentem.', hue: 198, motes: 'hex' },
   antroplantae: { tagline: 'Plantas sencientes e raras, ligadas à terra, às flores e aos espinhos.', hue: 118, motes: 'petal' },

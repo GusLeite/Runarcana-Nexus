@@ -10,6 +10,10 @@ Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 - `effects/Embers.jsx` ganhou a sequência: carga, golpe aos 0,5 s (rachaduras de lava, pedras, fagulhas, poeira) e torcida gritando "GAU! DRON! GAUDRON!" com tochas e panos vermelhos. Some em ~3,6 s; ficam as brasas.
 - Tremor, explosão e ondas de choque sincronizados com o golpe; login em laranja (`.login.embers`). Conferido no preview, pausando em cada etapa, no computador e no celular.
 
+## 2026-10-30 — Um vídeo por origem, com os símbolos por cima (`feature/character-sheet`)
+- Saiu a alternância de personagens: cada origem tem um `video` de fundo, levemente escurecido; o Humano usa o Yasuo velho (1440p). Os clipes do Garen, Caitlyn e do outro Yasuo foram removidos.
+- O sigilo da origem voltou a aparecer sempre; com vídeo, desce para acima do texto para não cobrir o rosto.
+
 ## 2026-10-30 — Humano: troca a cada 5 s e personagens mais centrados (`feature/character-sheet`)
 - `hold` de 5 s em cada vídeo; `start` pula a abertura preta do Yasuo; focos remedidos nos quadros (Yasuo .785, Garen .74, Caitlyn .46); vídeo não ganha mais zoom no hover.
 
