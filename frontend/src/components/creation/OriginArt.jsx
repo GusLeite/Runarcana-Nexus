@@ -47,11 +47,16 @@ function FocusVideo({ clip }) {
       setPos(ratio < 1 ? axis(clip.focus ?? 0.5, ratio) + '% 50%' : '50% ' + axis(clip.focusY ?? 0.5, 1 / ratio) + '%')
     }
     place()
+    const begin = () => {
+      if (clip.start) video.currentTime = clip.start
+    }
     video.addEventListener('loadedmetadata', place)
+    video.addEventListener('loadedmetadata', begin)
     const watch = new ResizeObserver(place)
     watch.observe(box)
     return () => {
       video.removeEventListener('loadedmetadata', place)
+      video.removeEventListener('loadedmetadata', begin)
       watch.disconnect()
     }
   }, [clip])

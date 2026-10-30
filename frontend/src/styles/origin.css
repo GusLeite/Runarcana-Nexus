@@ -54,6 +54,8 @@
 .origin-row:has(.ocard:hover) .ocard:not(:hover) .ocard-cap{padding:0 3px}
 .origin-row:has(.ocard:hover) .ocard:not(:hover),.origin-row:has(.ocard:focus-visible) .ocard:not(:focus-visible){flex:.7}
 .ocard:hover .oart,.ocard:focus-visible .oart{filter:saturate(1.15) brightness(1.05) contrast(1.05);transform:scale(1.12)}
+/* Vídeo não ganha zoom: ampliar um quadro já ampliado só o deixa mais borrado. */
+.ocard .oart:has(.oart-clip){transform:none}
 .ocard:hover::after,.ocard:focus-visible::after,.ocard.on::after{opacity:1}
 .ocard:hover::before,.ocard:focus-visible::before{animation:sweep 1.5s cubic-bezier(.22,1,.36,1) forwards}
 .ocard:hover .ocard-cap,.ocard:focus-visible .ocard-cap{transform:translateY(-10px)}
