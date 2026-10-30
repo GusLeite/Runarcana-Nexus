@@ -11,6 +11,7 @@ export const LINEAGE_IMAGES = Object.fromEntries(
 export const LINEAGE_POS = {
   alnuk: '50% 12%', // imagem quadrada: sobe o recorte para não cortar os chifres
   fulgor: '50% 6%', // imagem vertical: o rosto fica no topo
+  montanha: '40% 50%', // faixa muito larga (737×192): mostra o trecho em que o dragão está
 }
 
 export const lineageImage = id => LINEAGE_IMAGES[id] ?? null

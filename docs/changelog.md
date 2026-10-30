@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Imagens dos Meios-Dragões (`feature/character-sheet`)
+- `assets/lineages/`: glacial.webp, infernal.webp, montanha.png, nuvens.webp e oceano.webp (45 a 215 KB). A da Montanha é uma faixa de 737×192, provisória: `LINEAGE_POS` (40% 50%) mostra o trecho do dragão; falta trocar por uma imagem melhor.
+
 ## 2026-10-30 — Imagens dos Chireanos (`feature/character-sheet`)
 - `assets/lineages/`: nocti.webp e fulgor.png (180 e 240 KB). A do Fulgor é vertical e pequena (507×594): `LINEAGE_POS` sobe o recorte (50% 6%) para o rosto aparecer.
 
