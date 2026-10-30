@@ -2407,7 +2407,21 @@
         "featureOptions": [
           "Escola Umbral"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "PROFICIENCY_CHOICE",
+          "count": 1,
+          "options": [
+            "WEAPON:Maça Estrela",
+            "WEAPON:Malho",
+            "WEAPON:Mangual",
+            "WEAPON:Martelo de Guerra",
+            "WEAPON:Picareta de Guerra"
+          ],
+          "label": "Instrumentos da Ceifa: uma arma marcial corpo a corpo cortante"
+        }
+      ]
     },
     {
       "id": "lamina-umbral",
@@ -6380,7 +6394,20 @@
         "resources": [
           "runa-essencia-da-ninhada"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "INTIMIDATION",
+          "expertise": true
+        },
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "CONSTITUTION",
+          "amount": 2,
+          "value": "22"
+        }
+      ]
     },
     {
       "id": "runa-pacto-mistico",
@@ -6437,7 +6464,20 @@
         "resources": [
           "runa-mao-da-corrupcao"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "options": [
+            "ARCANA",
+            "HISTORY",
+            "ANIMAL_HANDLING",
+            "NATURE",
+            "SURVIVAL"
+          ]
+        }
+      ]
     },
     {
       "id": "runa-escudo-das-fadas",

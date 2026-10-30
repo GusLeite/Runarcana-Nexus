@@ -651,6 +651,45 @@
           "count": 1,
           "amount": 1,
           "label": "+1 em um atributo à escolha"
+        },
+        {
+          "type": "MYSTERY",
+          "count": 1,
+          "options": [
+            "cronomancia",
+            "espacomancia",
+            "gravitomancia",
+            "runomancia",
+            "agua",
+            "fogo",
+            "terra",
+            "vento",
+            "flora",
+            "gelo",
+            "magma",
+            "tempestade",
+            "deserto",
+            "inferno",
+            "som",
+            "veneno",
+            "luz",
+            "sombrio",
+            "cristal",
+            "metal",
+            "nevasca",
+            "artico",
+            "adivinhacao",
+            "encantamento",
+            "etermancia",
+            "hemomancia",
+            "ilusao",
+            "invocacao",
+            "necromancia",
+            "oniromancia",
+            "transmutacao",
+            "umbramancia"
+          ],
+          "label": "Arcanun: um Mistério"
         }
       ]
     },
@@ -784,6 +823,45 @@
           "count": 1,
           "amount": 1,
           "label": "+1 em um atributo à escolha"
+        },
+        {
+          "type": "MYSTERY",
+          "count": 1,
+          "options": [
+            "cronomancia",
+            "espacomancia",
+            "gravitomancia",
+            "runomancia",
+            "agua",
+            "fogo",
+            "terra",
+            "vento",
+            "flora",
+            "gelo",
+            "magma",
+            "tempestade",
+            "deserto",
+            "inferno",
+            "som",
+            "veneno",
+            "luz",
+            "sombrio",
+            "cristal",
+            "metal",
+            "nevasca",
+            "artico",
+            "adivinhacao",
+            "encantamento",
+            "etermancia",
+            "hemomancia",
+            "ilusao",
+            "invocacao",
+            "necromancia",
+            "oniromancia",
+            "transmutacao",
+            "umbramancia"
+          ],
+          "label": "Assinatura Aprimorada: um Mistério"
         }
       ]
     },
@@ -1250,6 +1328,12 @@
           "count": 1,
           "amount": 1,
           "label": "+1 em um atributo à escolha"
+        },
+        {
+          "type": "RESOURCE_CHOICE",
+          "value": "SUTRA",
+          "count": 2,
+          "label": "Desbravador do Ki: dois Sutras"
         }
       ]
     },
@@ -1532,6 +1616,62 @@
             "DEXTERITY"
           ],
           "label": "+1 em um atributo"
+        },
+        {
+          "type": "PROFICIENCY_CHOICE",
+          "count": 4,
+          "options": [
+            "WEAPON:Adaga",
+            "WEAPON:Arpão",
+            "WEAPON:Azagaia",
+            "WEAPON:Bastão",
+            "WEAPON:Clava Grande",
+            "WEAPON:Foice",
+            "WEAPON:Lança",
+            "WEAPON:Maça",
+            "WEAPON:Machadinha",
+            "WEAPON:Martelo Leve",
+            "WEAPON:Porrete",
+            "WEAPON:Arco Curto",
+            "WEAPON:Besta Leve",
+            "WEAPON:Dardo",
+            "WEAPON:Estilingue",
+            "WEAPON:Funda",
+            "WEAPON:Alabarda",
+            "WEAPON:Cimitarra",
+            "WEAPON:Chakram Pequeno",
+            "WEAPON:Chakram Médio",
+            "WEAPON:Chicote",
+            "WEAPON:Espada Curta",
+            "WEAPON:Espada Grande",
+            "WEAPON:Espada Longa",
+            "WEAPON:Foice de Guerra",
+            "WEAPON:Glaive",
+            "WEAPON:Katar",
+            "WEAPON:Khopesh",
+            "WEAPON:Lança de Montaria",
+            "WEAPON:Lança Longa",
+            "WEAPON:Maça Estrela",
+            "WEAPON:Machado de Batalha",
+            "WEAPON:Machado Grande",
+            "WEAPON:Malho",
+            "WEAPON:Mangual",
+            "WEAPON:Manopla de Guerra",
+            "WEAPON:Martelo de Guerra",
+            "WEAPON:Picareta de Guerra",
+            "WEAPON:Rapieira",
+            "WEAPON:Tridente",
+            "WEAPON:Arco Longo",
+            "WEAPON:Balestra de Repetição",
+            "WEAPON:Besta de Mão",
+            "WEAPON:Besta de Repetição",
+            "WEAPON:Besta de Repetição Pesada",
+            "WEAPON:Besta Pesada",
+            "WEAPON:Boleadeira",
+            "WEAPON:Rede",
+            "WEAPON:Zarabatana"
+          ],
+          "label": "Estudioso das Armas: quatro armas"
         }
       ]
     },
@@ -1951,6 +2091,27 @@
           "count": 1,
           "amount": 1,
           "label": "+1 em um atributo à escolha"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Inimigo Favorito",
+          "description": "Contra o tipo escolhido: +1,5 × bônus de proficiência no dano com armas (arredondado para baixo; +3 com +2), vantagem em Sobrevivência para rastreá-los e em Inteligência para lembrar deles, e um idioma que eles falem. Novos inimigos no 6º e no 14º nível (de tipos já enfrentados); no 6º, vantagem em salvaguardas contra os seus Inimigos Favoritos.",
+          "label": "Mais Inimigos: um Inimigo Favorito adicional",
+          "options": [
+            "Celestiais",
+            "Construtos",
+            "Dragões",
+            "Elementais",
+            "Espíritos",
+            "Feéricos",
+            "Feras",
+            "Humanoides",
+            "Ínferos",
+            "Mortos-vivos",
+            "Plantas",
+            "Vastinatas"
+          ]
         }
       ]
     },

@@ -103,6 +103,11 @@
         {
           "type": "IMMUNITY",
           "value": "radiante"
+        },
+        {
+          "type": "CRAFT",
+          "value": "ferraria",
+          "expertise": true
         }
       ]
     },

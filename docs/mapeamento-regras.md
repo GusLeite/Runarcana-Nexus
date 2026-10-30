@@ -25,7 +25,9 @@ Legenda dos blocos:
 - **Treinamento Demaciano**: faltam as proficiências (armas marciais corpo a corpo, escudos, armaduras leves e médias).
 - **Lendário Guardião** (Combatente Guardião, 20º): falta Constituição +2 (máximo 22).
 
-### A2. Proficiências e Mistérios fixos ou à escolha
+### A2. Proficiências e Mistérios fixos ou à escolha ✅
+Ficou de fora: Princípio Elemental (a lista de elementos terciários/de transição não está no catálogo) e o truque da Essência Elemental (vai no A3). A Centelha Vesani já tinha a escolha. O Mestre Tático mostra as Técnicas com os pré-requisitos delas (o "exceto o de Classe" não é aplicado). "Armas regionais" = as Impróprias do catálogo de itens.
+
 - Ofícios: Mestre Artesão (ofício + especialidade), Artesão Nazumita (1 de 6, ou especialidade), Coletor Nazumita (Biologista e Curtidor), Tecnomaníaco e Musicista Prodígio (ou especialidade), Hospitaleiro (Cozinheiro), Pastor da Montanha (Guia-Piloto ou Apotecário), Acólito da Forja 2º (Coletor-Minerador).
 - Armas: Armas Avançadas (a escolhida), Enxofre/Salitre/Carvão (arma de fogo), Estudioso de Armas (arma regional), Ferromante (marcial regional), Disciplina é Força (uma arma), Estudioso das Armas (4 armas), Variante Anfíbio e Estilo do Mar (rede, lança, tridente), Bélico (Runinata), Sutra Estrada do Ceifador, Mercurial Explorador 3º (bestas de repetição ou armas de fogo).
 - Perícias: Habilidoso (3 entre perícia e ofício), Variante Nebulon (especialidade à escolha), Ascensão Ínfera (runa: 1 de 5), Líder da Ninhada (runa: Intimidação).

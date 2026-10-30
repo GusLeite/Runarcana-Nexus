@@ -13,6 +13,45 @@
         {
           "type": "SKILL",
           "skill": "ARCANA"
+        },
+        {
+          "type": "MYSTERY",
+          "count": 1,
+          "options": [
+            "cronomancia",
+            "espacomancia",
+            "gravitomancia",
+            "runomancia",
+            "agua",
+            "fogo",
+            "terra",
+            "vento",
+            "flora",
+            "gelo",
+            "magma",
+            "tempestade",
+            "deserto",
+            "inferno",
+            "som",
+            "veneno",
+            "luz",
+            "sombrio",
+            "cristal",
+            "metal",
+            "nevasca",
+            "artico",
+            "adivinhacao",
+            "encantamento",
+            "etermancia",
+            "hemomancia",
+            "ilusao",
+            "invocacao",
+            "necromancia",
+            "oniromancia",
+            "transmutacao",
+            "umbramancia"
+          ],
+          "label": "Acólito Arcanista: um Mistério"
         }
       ]
     },
@@ -70,7 +109,51 @@
       "name": "Armas Avançadas",
       "category": "GENERAL",
       "prerequisite": "Especial",
-      "description": "Algumas armas são contra-intuitivas, seja pela sua forma, ou mesmo como se dá o seu manejo efetivo, sendo necessário além de um treinamento para utilizá-las, uma intensificação no estudo da mesma para poder utilizá-las de forma adequada. Cada vez que você escolhe essa Herança, você deve atender aos pré-requisitos da opção que escolher. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência com a arma escolhida\nA característica “Imprópria” não se aplica ao seu uso dessa arma. Escolha uma entre:\nArma de Corrente: Adaga com Corrente - Pré-requisito: Ioniano ou proficiência com Adaga\nArma de Corrente: Cão Dragão - Pré-requisito: Noxiano ou Proficiência com Katar\nArma de Corrente: Corrente Espinhosa - Pré-requisito: Proficiência com Chicote\nArma de Corrente: Foice de Corrente - Pré-requisito: Proficiência com Foice\nArma de Corrente: Lâmina do Caos - Pré-requisito: Ioniano ou Noxiano ou proficiência com Espada Curta\nArma de Corrente: Manopla com Corrente - Pré-requisito: Proficiência com Manopla\nArma de Corrente: Martelo Meteoro - Pré-requisito: Proficiência com Maça\nBaioneta: Canhão Machado - Pré-requisito: Proficiência com Canhão e Machado\nBaioneta: Mosquete Espada - Pré-requisito: Proficiência com Mosquete e Espada Longa\nBaioneta: Pistola faca - Pré-requisito: Proficiência com Pistola e Faca\nBaioneta: Revólver laminar - Pré-requisito: Proficiência com Pistola e Espada Longa\nChakram Grande - Pré-requisito: Ixtali ou proficiência com Chakram Médio\nCutelo Crescente - Pré-requisito: Shurimane ou proficiência com Machado Grande\nDracocida - Pré-requisitos: Proficiência com Lanças\nEspada Javali - Pré-requisitos: Freljordiano ou proficiência com Espada Grande\nHan Kote - Pré-requisitos: Proficiência com Manopla\nÍdolo do Deus Ancião - Pré-requisitos: Sentinense ou proficiência com Clava Grande\nKatana- Pré-requisitos: Ionia ou proficiência com Espada Longa\nLâmina Navori- Pré-requisitos: Ionia ou proficiência com Adaga\nNodachi - Pré-requisitos: Ionia ou Proficiência com Espada Grande\nNtofo - Pré-requisitos: Nazumah ou proficiência com Tonfa\nNunchaku - Pré-requisitos: Ionia ou Proficiência com Porrete\nSai - Pré-requisitos: Ionia ou Proficiência com Espada Curta\nShuriken - Pré-requisitos: Ionia ou proficiência com dardo\nTonfa - Pré-requisitos: Ionia ou Nazumah ou Proficiência com Porrete"
+      "description": "Algumas armas são contra-intuitivas, seja pela sua forma, ou mesmo como se dá o seu manejo efetivo, sendo necessário além de um treinamento para utilizá-las, uma intensificação no estudo da mesma para poder utilizá-las de forma adequada. Cada vez que você escolhe essa Herança, você deve atender aos pré-requisitos da opção que escolher. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência com a arma escolhida\nA característica “Imprópria” não se aplica ao seu uso dessa arma. Escolha uma entre:\nArma de Corrente: Adaga com Corrente - Pré-requisito: Ioniano ou proficiência com Adaga\nArma de Corrente: Cão Dragão - Pré-requisito: Noxiano ou Proficiência com Katar\nArma de Corrente: Corrente Espinhosa - Pré-requisito: Proficiência com Chicote\nArma de Corrente: Foice de Corrente - Pré-requisito: Proficiência com Foice\nArma de Corrente: Lâmina do Caos - Pré-requisito: Ioniano ou Noxiano ou proficiência com Espada Curta\nArma de Corrente: Manopla com Corrente - Pré-requisito: Proficiência com Manopla\nArma de Corrente: Martelo Meteoro - Pré-requisito: Proficiência com Maça\nBaioneta: Canhão Machado - Pré-requisito: Proficiência com Canhão e Machado\nBaioneta: Mosquete Espada - Pré-requisito: Proficiência com Mosquete e Espada Longa\nBaioneta: Pistola faca - Pré-requisito: Proficiência com Pistola e Faca\nBaioneta: Revólver laminar - Pré-requisito: Proficiência com Pistola e Espada Longa\nChakram Grande - Pré-requisito: Ixtali ou proficiência com Chakram Médio\nCutelo Crescente - Pré-requisito: Shurimane ou proficiência com Machado Grande\nDracocida - Pré-requisitos: Proficiência com Lanças\nEspada Javali - Pré-requisitos: Freljordiano ou proficiência com Espada Grande\nHan Kote - Pré-requisitos: Proficiência com Manopla\nÍdolo do Deus Ancião - Pré-requisitos: Sentinense ou proficiência com Clava Grande\nKatana- Pré-requisitos: Ionia ou proficiência com Espada Longa\nLâmina Navori- Pré-requisitos: Ionia ou proficiência com Adaga\nNodachi - Pré-requisitos: Ionia ou Proficiência com Espada Grande\nNtofo - Pré-requisitos: Nazumah ou proficiência com Tonfa\nNunchaku - Pré-requisitos: Ionia ou Proficiência com Porrete\nSai - Pré-requisitos: Ionia ou Proficiência com Espada Curta\nShuriken - Pré-requisitos: Ionia ou proficiência com dardo\nTonfa - Pré-requisitos: Ionia ou Nazumah ou Proficiência com Porrete",
+      "grants": [
+        {
+          "type": "PROFICIENCY_CHOICE",
+          "count": 1,
+          "options": [
+            "WEAPON:Chakram Grande",
+            "WEAPON:Cutelo Crescente",
+            "WEAPON:Dracocida",
+            "WEAPON:Espada Javali",
+            "WEAPON:Han Kote",
+            "WEAPON:Ídolo do Deus Ancião",
+            "WEAPON:Katana",
+            "WEAPON:Lâmina Navori",
+            "WEAPON:Leque de Guerra",
+            "WEAPON:Nodachi",
+            "WEAPON:Ntofo",
+            "WEAPON:Nunchaku",
+            "WEAPON:Sai",
+            "WEAPON:Tonfa",
+            "WEAPON:Machado Giratório",
+            "WEAPON:Shuriken",
+            "WEAPON:Adaga com Corrente",
+            "WEAPON:Cão-Dragão",
+            "WEAPON:Corrente Espinhosa",
+            "WEAPON:Foice com Corrente",
+            "WEAPON:Lâminas do Caos",
+            "WEAPON:Manopla com Corrente",
+            "WEAPON:Martelo Meteoro",
+            "WEAPON:Adaga com Corrente",
+            "WEAPON:Cão-Dragão",
+            "WEAPON:Corrente Espinhosa",
+            "WEAPON:Foice com Corrente",
+            "WEAPON:Lâminas do Caos",
+            "WEAPON:Manopla com Corrente",
+            "WEAPON:Martelo Meteoro",
+            "WEAPON:Pistola Faca",
+            "WEAPON:Arcabuz Espada",
+            "WEAPON:Canhão Machado",
+            "WEAPON:Lança de Fogo",
+            "WEAPON:Revólver Laminar"
+          ],
+          "label": "Armas Avançadas: a arma escolhida"
+        }
+      ]
     },
     {
       "id": "ataques-debilitantes",
@@ -393,6 +476,54 @@
           "usesFormula": "PROFICIENCY",
           "recharge": "LONG_REST",
           "description": "Você é capaz de cancelar que sua arma emperre um número de vezes igual ao seu bônus de Proficiência por descanso pleno."
+        },
+        {
+          "type": "PROFICIENCY_CHOICE",
+          "count": 1,
+          "options": [
+            "WEAPON:Pistola",
+            "WEAPON:Garrucha",
+            "WEAPON:Derringer",
+            "WEAPON:Revolver",
+            "WEAPON:Pistola Semi-Automática",
+            "WEAPON:Pistola Automática",
+            "WEAPON:Pistola Rapinante",
+            "WEAPON:Carabina",
+            "WEAPON:Espingarda",
+            "WEAPON:Escopeta",
+            "WEAPON:Carabina de Tambor",
+            "WEAPON:Espingarda Automática",
+            "WEAPON:Escopeta Krug",
+            "WEAPON:Arcabuz",
+            "WEAPON:Mosquete",
+            "WEAPON:Rifle",
+            "WEAPON:Fuzil",
+            "WEAPON:Rifle de Precisão",
+            "WEAPON:Fuzil Ancião",
+            "WEAPON:Canhão de Mão",
+            "WEAPON:Canhão Médio",
+            "WEAPON:Lança-granadas Simples",
+            "WEAPON:Canhão Pesado",
+            "WEAPON:Lança-granadas Médio",
+            "WEAPON:Canhão Enorme",
+            "WEAPON:Lança-granadas Pesado",
+            "WEAPON:Bazuca Grompe",
+            "WEAPON:Bombarda Nashor",
+            "WEAPON:Lança-Chamas Unitário",
+            "WEAPON:Lança-Chamas Simples",
+            "WEAPON:Lança-Chamas Portátil",
+            "WEAPON:Lança-Chamas Reforçado",
+            "WEAPON:Lança-Chamas Compacto",
+            "WEAPON:Lança-Chamas Mecânico",
+            "WEAPON:Lança-Chamas Automático",
+            "WEAPON:Lança-Chamas Cospe-fogo",
+            "WEAPON:Pistola Faca",
+            "WEAPON:Arcabuz Espada",
+            "WEAPON:Canhão Machado",
+            "WEAPON:Lança de Fogo",
+            "WEAPON:Revólver Laminar"
+          ],
+          "label": "Enxofre, Salitre e Carvão: uma arma de fogo"
         }
       ]
     },
@@ -444,7 +575,39 @@
       "id": "estudioso-de-armas",
       "name": "Estudioso de Armas",
       "category": "GENERAL",
-      "description": "Você se interessa pelos mais diversos tipos de armas, tendo conhecido algum tipo de arma não comum em sua região e se tornando hábil com a mesma. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência em uma arma regional à sua escolha.\nVocê sabe a fórmula dessa arma, ela não conta para o máximo de fórmulas que você possui.\nAdicione metade do seu bônus de Proficiência aos níveis de ofício necessários quando criar essa arma."
+      "description": "Você se interessa pelos mais diversos tipos de armas, tendo conhecido algum tipo de arma não comum em sua região e se tornando hábil com a mesma. Você recebe os seguintes benefícios:\n\nVocê recebe proficiência em uma arma regional à sua escolha.\nVocê sabe a fórmula dessa arma, ela não conta para o máximo de fórmulas que você possui.\nAdicione metade do seu bônus de Proficiência aos níveis de ofício necessários quando criar essa arma.",
+      "grants": [
+        {
+          "type": "PROFICIENCY_CHOICE",
+          "count": 1,
+          "options": [
+            "WEAPON:Chakram Grande",
+            "WEAPON:Cutelo Crescente",
+            "WEAPON:Dracocida",
+            "WEAPON:Espada Javali",
+            "WEAPON:Han Kote",
+            "WEAPON:Ídolo do Deus Ancião",
+            "WEAPON:Katana",
+            "WEAPON:Lâmina Navori",
+            "WEAPON:Leque de Guerra",
+            "WEAPON:Nodachi",
+            "WEAPON:Ntofo",
+            "WEAPON:Nunchaku",
+            "WEAPON:Sai",
+            "WEAPON:Tonfa",
+            "WEAPON:Machado Giratório",
+            "WEAPON:Shuriken",
+            "WEAPON:Adaga com Corrente",
+            "WEAPON:Cão-Dragão",
+            "WEAPON:Corrente Espinhosa",
+            "WEAPON:Foice com Corrente",
+            "WEAPON:Lâminas do Caos",
+            "WEAPON:Manopla com Corrente",
+            "WEAPON:Martelo Meteoro"
+          ],
+          "label": "Estudioso de Armas: uma arma regional"
+        }
+      ]
     },
     {
       "id": "experimento-reconhecido",
@@ -574,6 +737,15 @@
           "usesFormula": "PROFICIENCY",
           "recharge": "LONG_REST",
           "description": "Você aprende a magia escuridão, podendo conjurá-la sem gastar pontos de mana. Você pode conjurar essa magia um número de vezes igual ao seu bônus de Proficiência por descanso pleno. Você é capaz de enxergar normalmente na área da escuridão conjurada por essa característica ou por você."
+        },
+        {
+          "type": "MYSTERY",
+          "count": 1,
+          "options": [
+            "sombrio",
+            "umbramancia"
+          ],
+          "label": "Filho da Escuridão: Sombrio ou Umbramancia"
         }
       ]
     },
@@ -590,7 +762,15 @@
         "usesFormula": "FIXED",
         "maxUses": 1,
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "RESOURCE_CHOICE",
+          "value": "GRANDE_ESPIRITO",
+          "count": 1,
+          "label": "Fluência Espiritual: outro Grande Espírito"
+        }
+      ]
     },
     {
       "id": "ferromante",
@@ -603,6 +783,36 @@
         {
           "type": "MYSTERY",
           "value": "metal"
+        },
+        {
+          "type": "PROFICIENCY_CHOICE",
+          "count": 1,
+          "options": [
+            "WEAPON:Chakram Grande",
+            "WEAPON:Cutelo Crescente",
+            "WEAPON:Dracocida",
+            "WEAPON:Espada Javali",
+            "WEAPON:Han Kote",
+            "WEAPON:Ídolo do Deus Ancião",
+            "WEAPON:Katana",
+            "WEAPON:Lâmina Navori",
+            "WEAPON:Leque de Guerra",
+            "WEAPON:Nodachi",
+            "WEAPON:Ntofo",
+            "WEAPON:Nunchaku",
+            "WEAPON:Sai",
+            "WEAPON:Tonfa",
+            "WEAPON:Machado Giratório",
+            "WEAPON:Shuriken",
+            "WEAPON:Adaga com Corrente",
+            "WEAPON:Cão-Dragão",
+            "WEAPON:Corrente Espinhosa",
+            "WEAPON:Foice com Corrente",
+            "WEAPON:Lâminas do Caos",
+            "WEAPON:Manopla com Corrente",
+            "WEAPON:Martelo Meteoro"
+          ],
+          "label": "Ferromante: uma arma marcial regional"
         }
       ]
     },
@@ -651,7 +861,18 @@
       "id": "habilidoso",
       "name": "Habilidoso",
       "category": "GENERAL",
-      "description": "Você sabe fazer de tudo um pouco, mas é ruim em tudo? Seus problemas acabaram! Você ganha os seguintes benefícios:\n\nVocê recebe 3 proficiências à sua escolha, cada uma podendo ser com uma perícias ou um ofícios."
+      "description": "Você sabe fazer de tudo um pouco, mas é ruim em tudo? Seus problemas acabaram! Você ganha os seguintes benefícios:\n\nVocê recebe 3 proficiências à sua escolha, cada uma podendo ser com uma perícias ou um ofícios.",
+      "grants": [
+        {
+          "type": "PROFICIENCY_CHOICE",
+          "count": 3,
+          "options": [
+            "SKILL",
+            "CRAFT"
+          ],
+          "label": "Habilidoso: três proficiências (perícia ou ofício)"
+        }
+      ]
     },
     {
       "id": "hiperatividade-runica",
@@ -724,7 +945,53 @@
       "uses": {
         "usesFormula": "PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "ARCANA",
+          "expertise": true
+        },
+        {
+          "type": "MYSTERY",
+          "count": 2,
+          "options": [
+            "cronomancia",
+            "espacomancia",
+            "gravitomancia",
+            "runomancia",
+            "agua",
+            "fogo",
+            "terra",
+            "vento",
+            "flora",
+            "gelo",
+            "magma",
+            "tempestade",
+            "deserto",
+            "inferno",
+            "som",
+            "veneno",
+            "luz",
+            "sombrio",
+            "cristal",
+            "metal",
+            "nevasca",
+            "artico",
+            "adivinhacao",
+            "encantamento",
+            "etermancia",
+            "hemomancia",
+            "ilusao",
+            "invocacao",
+            "necromancia",
+            "oniromancia",
+            "transmutacao",
+            "umbramancia"
+          ],
+          "label": "Iniciado nos Mistérios: dois Mistérios"
+        }
+      ]
     },
     {
       "id": "lamina-sanguinaria",
@@ -777,7 +1044,25 @@
       "category": "GENERAL",
       "initial": true,
       "prerequisite": "Inicial",
-      "description": "O elemento primordial que tocou sua existência aflorou durante o seu desenvolvimento. Ao escolher essa Herança, você deve escolher entre Luz e Sombra, você manifesta esse elemento e recebe os seguintes benefícios:\n\nVocê recebe o mistério do elemento primordial escolhido para essa Herança\nCaso tenha escolhido Luz, você recebe imunidade à condição Cego causada por magias do mistério da Luz ou luz forte, como o efeito da magia lâmina de fogo\nCaso tenha escolhido Sombra, você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza e escuridão mágica não afeta sua visão no escuro."
+      "description": "O elemento primordial que tocou sua existência aflorou durante o seu desenvolvimento. Ao escolher essa Herança, você deve escolher entre Luz e Sombra, você manifesta esse elemento e recebe os seguintes benefícios:\n\nVocê recebe o mistério do elemento primordial escolhido para essa Herança\nCaso tenha escolhido Luz, você recebe imunidade à condição Cego causada por magias do mistério da Luz ou luz forte, como o efeito da magia lâmina de fogo\nCaso tenha escolhido Sombra, você enxerga na penumbra a até 60 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza e escuridão mágica não afeta sua visão no escuro.",
+      "options": [
+        "Luz",
+        "Sombra"
+      ],
+      "optionGrants": {
+        "Luz": [
+          {
+            "type": "MYSTERY",
+            "value": "luz"
+          }
+        ],
+        "Sombra": [
+          {
+            "type": "MYSTERY",
+            "value": "sombrio"
+          }
+        ]
+      }
     },
     {
       "id": "mediador",
@@ -802,7 +1087,19 @@
       "id": "meditacao-profunda",
       "name": "Meditação Profunda",
       "category": "GENERAL",
-      "description": "Você está acostumado a manter sua mente calma e corpo relaxado. Você ganha os seguintes benefícios:\n\nDurante um Descanso Curto você pode utilizar um número de dados de vida adicionais igual a metade do seu bônus de Proficiência.\nEscolha entre um desses Mistérios para receber: Encantamento, Ilusão ou Oniromancia"
+      "description": "Você está acostumado a manter sua mente calma e corpo relaxado. Você ganha os seguintes benefícios:\n\nDurante um Descanso Curto você pode utilizar um número de dados de vida adicionais igual a metade do seu bônus de Proficiência.\nEscolha entre um desses Mistérios para receber: Encantamento, Ilusão ou Oniromancia",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "count": 1,
+          "options": [
+            "encantamento",
+            "ilusao",
+            "oniromancia"
+          ],
+          "label": "Meditação Profunda: um Mistério"
+        }
+      ]
     },
     {
       "id": "mente-intuitiva",
@@ -825,13 +1122,29 @@
       "id": "mestre-artesao",
       "name": "Mestre Artesão",
       "category": "GENERAL",
-      "description": "“Eu que fiz esse martelo, ficou tão bom que eu chamei de… Martelo”. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência com um Ofício à sua escolha, além disso, recebe também especialidade com a mesma.\nVocê recebe bônus de 1PO/dia para a criação de um item utilizando o Ofício escolhido por essa herança."
+      "description": "“Eu que fiz esse martelo, ficou tão bom que eu chamei de… Martelo”. Você ganha os seguintes benefícios:\n\nVocê recebe proficiência com um Ofício à sua escolha, além disso, recebe também especialidade com a mesma.\nVocê recebe bônus de 1PO/dia para a criação de um item utilizando o Ofício escolhido por essa herança.",
+      "grants": [
+        {
+          "type": "CRAFT_CHOICE",
+          "count": 1,
+          "value": "EXPERTISE",
+          "label": "Mestre Artesão: um ofício (com especialidade)"
+        }
+      ]
     },
     {
       "id": "mestre-tatico",
       "name": "Mestre Tático",
       "category": "GENERAL",
-      "description": "Estratégia e punho firme são as coisas que ditam o rumo em um combate, e você sabe tirar proveito de ambos. Você ganha os seguintes benefícios:\n\nEscolha uma Técnica de Combatente, à sua escolha que você preencha os requisitos (exceto o de Classe).\nO CD de suas Técnicas de Combate aumenta em 2."
+      "description": "Estratégia e punho firme são as coisas que ditam o rumo em um combate, e você sabe tirar proveito de ambos. Você ganha os seguintes benefícios:\n\nEscolha uma Técnica de Combatente, à sua escolha que você preencha os requisitos (exceto o de Classe).\nO CD de suas Técnicas de Combate aumenta em 2.",
+      "grants": [
+        {
+          "type": "RESOURCE_CHOICE",
+          "value": "TECNICA",
+          "count": 1,
+          "label": "Mestre Tático: uma Técnica de Combate"
+        }
+      ]
     },
     {
       "id": "musicista-prodigio",
@@ -841,7 +1154,14 @@
       "uses": {
         "usesFormula": "PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "CRAFT",
+          "value": "artista",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "pele-rigida",
@@ -947,7 +1267,48 @@
       "id": "sangue-arcano",
       "name": "Sangue Arcano",
       "category": "GENERAL",
-      "description": "O sangue de magos do passado correm em suas veias, criando um vínculo especial com a magia. Você ganha os seguintes benefícios:\n\nVocê pode adicionar o dobro do seu bônus de Proficiência ao dano de suas magias que acertem apenas um alvo uma única vez.\nVocê pode adicionar o seu bônus de Proficiência ao dano de suas magias que acertem um alvo mais de uma vez ou que acerte vários alvos.\nVocê recebe um Mistério, a que você tenha acesso, à sua escolha."
+      "description": "O sangue de magos do passado correm em suas veias, criando um vínculo especial com a magia. Você ganha os seguintes benefícios:\n\nVocê pode adicionar o dobro do seu bônus de Proficiência ao dano de suas magias que acertem apenas um alvo uma única vez.\nVocê pode adicionar o seu bônus de Proficiência ao dano de suas magias que acertem um alvo mais de uma vez ou que acerte vários alvos.\nVocê recebe um Mistério, a que você tenha acesso, à sua escolha.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "count": 1,
+          "options": [
+            "cronomancia",
+            "espacomancia",
+            "gravitomancia",
+            "runomancia",
+            "agua",
+            "fogo",
+            "terra",
+            "vento",
+            "flora",
+            "gelo",
+            "magma",
+            "tempestade",
+            "deserto",
+            "inferno",
+            "som",
+            "veneno",
+            "luz",
+            "sombrio",
+            "cristal",
+            "metal",
+            "nevasca",
+            "artico",
+            "adivinhacao",
+            "encantamento",
+            "etermancia",
+            "hemomancia",
+            "ilusao",
+            "invocacao",
+            "necromancia",
+            "oniromancia",
+            "transmutacao",
+            "umbramancia"
+          ],
+          "label": "Sangue Arcano: um Mistério"
+        }
+      ]
     },
     {
       "id": "segredos-da-polvora",
@@ -1326,7 +1687,26 @@
       "uses": {
         "usesFormula": "PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "count": 1,
+          "options": [
+            "adivinhacao",
+            "encantamento",
+            "etermancia",
+            "hemomancia",
+            "ilusao",
+            "invocacao",
+            "necromancia",
+            "oniromancia",
+            "transmutacao",
+            "umbramancia"
+          ],
+          "label": "Talento Mágico Ioniano: um Mistério Espiritual"
+        }
+      ]
     },
     {
       "id": "aptidao-elemental",
@@ -1336,7 +1716,34 @@
         "IXTAL"
       ],
       "prerequisite": "Ixtali, habilidade de conjuração",
-      "description": "Você possui uma habilidade nata em relação à magia elemental, sabendo alterar suas propriedades básicas. Você ganha os seguintes benefícios:\n\nVocê recebe um Mistério Elemental à sua escolha de um elemento que você tenha acesso.\nAo obter essa Herança, você deve escolher dois elementos que você tenha acesso. Você é capaz de trocar o dano das magias desses dois elementos. Ao fazer isso, você deve declarar previamente para seu mestre o novo elemento que está sendo usado, use a tabela Elementos e Tipos de Dano do Capítulo 10: Conjuração. Por exemplo, caso você escolha os elementos Água e Fogo, ao conjurar magias de fogo que causem dano, você pode mudar o tipo de dano das magias de fogo para perfurante ao invés do dano normal da magia."
+      "description": "Você possui uma habilidade nata em relação à magia elemental, sabendo alterar suas propriedades básicas. Você ganha os seguintes benefícios:\n\nVocê recebe um Mistério Elemental à sua escolha de um elemento que você tenha acesso.\nAo obter essa Herança, você deve escolher dois elementos que você tenha acesso. Você é capaz de trocar o dano das magias desses dois elementos. Ao fazer isso, você deve declarar previamente para seu mestre o novo elemento que está sendo usado, use a tabela Elementos e Tipos de Dano do Capítulo 10: Conjuração. Por exemplo, caso você escolha os elementos Água e Fogo, ao conjurar magias de fogo que causem dano, você pode mudar o tipo de dano das magias de fogo para perfurante ao invés do dano normal da magia.",
+      "grants": [
+        {
+          "type": "MYSTERY",
+          "count": 1,
+          "options": [
+            "agua",
+            "fogo",
+            "terra",
+            "vento",
+            "flora",
+            "gelo",
+            "magma",
+            "tempestade",
+            "deserto",
+            "inferno",
+            "som",
+            "veneno",
+            "luz",
+            "sombrio",
+            "cristal",
+            "metal",
+            "nevasca",
+            "artico"
+          ],
+          "label": "Aptidão Elemental: um Mistério Elemental"
+        }
+      ]
     },
     {
       "id": "tocado-pela-mana",
@@ -1381,7 +1788,23 @@
         "NAZUMAH"
       ],
       "prerequisite": "Nazumita",
-      "description": "Você conhece diversos segredos de como utilizar as partes de criatura caçadas com mais velocidade, funcionalidade e eficiência. Você recebe os seguintes benefícios:\n\nEscolha um Ofício entre Alquimista, Armoreiro, Arqueirista, Cuteleiro, Encantador ou Tecmaturgo. Caso você já possua esse Ofício, você recebe especialidade\nAo criar algum item utilizando na maioria partes coletadas por você de um monstro ou criatura você faz a jogada com vantagem e caso obtenha um 19 ou 20, adiciona dois dias de trabalho pelo custo de apenas 1 dia"
+      "description": "Você conhece diversos segredos de como utilizar as partes de criatura caçadas com mais velocidade, funcionalidade e eficiência. Você recebe os seguintes benefícios:\n\nEscolha um Ofício entre Alquimista, Armoreiro, Arqueirista, Cuteleiro, Encantador ou Tecmaturgo. Caso você já possua esse Ofício, você recebe especialidade\nAo criar algum item utilizando na maioria partes coletadas por você de um monstro ou criatura você faz a jogada com vantagem e caso obtenha um 19 ou 20, adiciona dois dias de trabalho pelo custo de apenas 1 dia",
+      "grants": [
+        {
+          "type": "CRAFT_CHOICE",
+          "count": 1,
+          "expertise": true,
+          "options": [
+            "alquimista",
+            "armoreiro",
+            "arqueirista",
+            "cuteleiro",
+            "encantador",
+            "tecmaturgo"
+          ],
+          "label": "Artesão Nazumita: um ofício (ou especialidade, se já tiver)"
+        }
+      ]
     },
     {
       "id": "cacador-nazumita",
@@ -1401,7 +1824,14 @@
         "NAZUMAH"
       ],
       "prerequisite": "Nazumita",
-      "description": "Estudar a anatomia das criaturas e monstros com foco na obtenção de recursos é algo que você faz com imensa naturalidade. Você recebe os seguintes benefícios:\n\nVocê recebe os ofícios de Coletor - Biologista e Coletor - Curtidor. Caso já tenha, você recebe Especialidade\nVocê leva apenas metade do tempo ao utilizar as fórmulas Dissecar e Curtir Couro"
+      "description": "Estudar a anatomia das criaturas e monstros com foco na obtenção de recursos é algo que você faz com imensa naturalidade. Você recebe os seguintes benefícios:\n\nVocê recebe os ofícios de Coletor - Biologista e Coletor - Curtidor. Caso já tenha, você recebe Especialidade\nVocê leva apenas metade do tempo ao utilizar as fórmulas Dissecar e Curtir Couro",
+      "grants": [
+        {
+          "type": "CRAFT",
+          "value": "coletor",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "artifice",
@@ -1446,7 +1876,129 @@
         "NOXUS"
       ],
       "prerequisite": "Noxiano",
-      "description": "Se você nasceu abraçado com essa arma ou se você se apaixonou pela mesma em seu crescimento, não importa, você se tornou perito no uso da mesma. Essa herança pode ser escolhida mais de uma vez. Você recebe os seguintes benefícios:\n\nAo escolher essa Herança você recebe proficiência com uma arma à sua escolha.\nVocê adiciona seu bônus de proficiência ao dano causado com essa arma, ao escolher essa Herança novamente, você só pode receber esse bônus ao dano de uma outra arma escolhida por essa Herança."
+      "description": "Se você nasceu abraçado com essa arma ou se você se apaixonou pela mesma em seu crescimento, não importa, você se tornou perito no uso da mesma. Essa herança pode ser escolhida mais de uma vez. Você recebe os seguintes benefícios:\n\nAo escolher essa Herança você recebe proficiência com uma arma à sua escolha.\nVocê adiciona seu bônus de proficiência ao dano causado com essa arma, ao escolher essa Herança novamente, você só pode receber esse bônus ao dano de uma outra arma escolhida por essa Herança.",
+      "grants": [
+        {
+          "type": "PROFICIENCY_CHOICE",
+          "count": 1,
+          "options": [
+            "WEAPON:Adaga",
+            "WEAPON:Arpão",
+            "WEAPON:Azagaia",
+            "WEAPON:Bastão",
+            "WEAPON:Clava Grande",
+            "WEAPON:Foice",
+            "WEAPON:Lança",
+            "WEAPON:Maça",
+            "WEAPON:Machadinha",
+            "WEAPON:Martelo Leve",
+            "WEAPON:Porrete",
+            "WEAPON:Arco Curto",
+            "WEAPON:Besta Leve",
+            "WEAPON:Dardo",
+            "WEAPON:Estilingue",
+            "WEAPON:Funda",
+            "WEAPON:Alabarda",
+            "WEAPON:Cimitarra",
+            "WEAPON:Chakram Pequeno",
+            "WEAPON:Chakram Médio",
+            "WEAPON:Chicote",
+            "WEAPON:Espada Curta",
+            "WEAPON:Espada Grande",
+            "WEAPON:Espada Longa",
+            "WEAPON:Foice de Guerra",
+            "WEAPON:Glaive",
+            "WEAPON:Katar",
+            "WEAPON:Khopesh",
+            "WEAPON:Lança de Montaria",
+            "WEAPON:Lança Longa",
+            "WEAPON:Maça Estrela",
+            "WEAPON:Machado de Batalha",
+            "WEAPON:Machado Grande",
+            "WEAPON:Malho",
+            "WEAPON:Mangual",
+            "WEAPON:Manopla de Guerra",
+            "WEAPON:Martelo de Guerra",
+            "WEAPON:Picareta de Guerra",
+            "WEAPON:Rapieira",
+            "WEAPON:Tridente",
+            "WEAPON:Arco Longo",
+            "WEAPON:Balestra de Repetição",
+            "WEAPON:Besta de Mão",
+            "WEAPON:Besta de Repetição",
+            "WEAPON:Besta de Repetição Pesada",
+            "WEAPON:Besta Pesada",
+            "WEAPON:Boleadeira",
+            "WEAPON:Rede",
+            "WEAPON:Zarabatana",
+            "WEAPON:Chakram Grande",
+            "WEAPON:Cutelo Crescente",
+            "WEAPON:Dracocida",
+            "WEAPON:Espada Javali",
+            "WEAPON:Han Kote",
+            "WEAPON:Ídolo do Deus Ancião",
+            "WEAPON:Katana",
+            "WEAPON:Lâmina Navori",
+            "WEAPON:Leque de Guerra",
+            "WEAPON:Nodachi",
+            "WEAPON:Ntofo",
+            "WEAPON:Nunchaku",
+            "WEAPON:Sai",
+            "WEAPON:Tonfa",
+            "WEAPON:Machado Giratório",
+            "WEAPON:Shuriken",
+            "WEAPON:Adaga com Corrente",
+            "WEAPON:Cão-Dragão",
+            "WEAPON:Corrente Espinhosa",
+            "WEAPON:Foice com Corrente",
+            "WEAPON:Lâminas do Caos",
+            "WEAPON:Manopla com Corrente",
+            "WEAPON:Martelo Meteoro",
+            "WEAPON:Pistola",
+            "WEAPON:Garrucha",
+            "WEAPON:Derringer",
+            "WEAPON:Revolver",
+            "WEAPON:Pistola Semi-Automática",
+            "WEAPON:Pistola Automática",
+            "WEAPON:Pistola Rapinante",
+            "WEAPON:Carabina",
+            "WEAPON:Espingarda",
+            "WEAPON:Escopeta",
+            "WEAPON:Carabina de Tambor",
+            "WEAPON:Espingarda Automática",
+            "WEAPON:Escopeta Krug",
+            "WEAPON:Arcabuz",
+            "WEAPON:Mosquete",
+            "WEAPON:Rifle",
+            "WEAPON:Fuzil",
+            "WEAPON:Rifle de Precisão",
+            "WEAPON:Fuzil Ancião",
+            "WEAPON:Canhão de Mão",
+            "WEAPON:Canhão Médio",
+            "WEAPON:Lança-granadas Simples",
+            "WEAPON:Canhão Pesado",
+            "WEAPON:Lança-granadas Médio",
+            "WEAPON:Canhão Enorme",
+            "WEAPON:Lança-granadas Pesado",
+            "WEAPON:Bazuca Grompe",
+            "WEAPON:Bombarda Nashor",
+            "WEAPON:Lança-Chamas Unitário",
+            "WEAPON:Lança-Chamas Simples",
+            "WEAPON:Lança-Chamas Portátil",
+            "WEAPON:Lança-Chamas Reforçado",
+            "WEAPON:Lança-Chamas Compacto",
+            "WEAPON:Lança-Chamas Mecânico",
+            "WEAPON:Lança-Chamas Automático",
+            "WEAPON:Lança-Chamas Cospe-fogo",
+            "WEAPON:Pistola Faca",
+            "WEAPON:Arcabuz Espada",
+            "WEAPON:Canhão Machado",
+            "WEAPON:Lança de Fogo",
+            "WEAPON:Revólver Laminar"
+          ],
+          "label": "Disciplina é Força: uma arma"
+        }
+      ]
     },
     {
       "id": "determinacao-noxiana",
@@ -1923,6 +2475,15 @@
         {
           "type": "SKILL",
           "skill": "ANIMAL_HANDLING"
+        },
+        {
+          "type": "CRAFT_CHOICE",
+          "count": 1,
+          "options": [
+            "guia",
+            "apotecario"
+          ],
+          "label": "Pastor da Montanha: Guia (Piloto de veículos terrestres) ou Apotecário"
         }
       ]
     },
@@ -2296,6 +2857,23 @@
           "type": "SITUATIONAL",
           "value": "SKILL:MEDICINE",
           "description": "Adicionalmente, você tem vantagem em testes de Medicina."
+        },
+        {
+          "type": "MYSTERY",
+          "count": 1,
+          "options": [
+            "adivinhacao",
+            "encantamento",
+            "etermancia",
+            "hemomancia",
+            "ilusao",
+            "invocacao",
+            "necromancia",
+            "oniromancia",
+            "transmutacao",
+            "umbramancia"
+          ],
+          "label": "Sangue Vastaya: um Mistério Espiritual"
         }
       ],
       "execution": "Ação",
@@ -2323,6 +2901,18 @@
           "type": "SITUATIONAL",
           "value": "SAVE:DEXTERITY",
           "description": "Você tem vantagem em salvaguardas de Destreza contra ser Agarrado ou Impedido."
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Rede"
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Lança"
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Tridente"
         }
       ]
     },
@@ -2475,6 +3065,11 @@
           "type": "SITUATIONAL",
           "value": "SAVE",
           "description": "Mente Centenária: Você faz salvaguardas contra efeitos de controle mental e condições comportamentais com vantagem."
+        },
+        {
+          "type": "EXPERTISE_CHOICE",
+          "count": 1,
+          "label": "Variante Nebulon: especialidade em uma perícia"
         }
       ]
     },
@@ -3056,7 +3651,13 @@
       "uses": {
         "usesFormula": "PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "CRAFT",
+          "value": "cozinheiro"
+        }
+      ]
     },
     {
       "id": "selvagem",
@@ -3083,6 +3684,24 @@
       "uses": {
         "usesFormula": "HALF_PROFICIENCY",
         "recharge": "LONG_REST"
+      },
+      "options": [
+        "Adivinhação",
+        "Oniromancia"
+      ],
+      "optionGrants": {
+        "Adivinhação": [
+          {
+            "type": "MYSTERY",
+            "value": "adivinhacao"
+          }
+        ],
+        "Oniromancia": [
+          {
+            "type": "MYSTERY",
+            "value": "oniromancia"
+          }
+        ]
       }
     },
     {
@@ -3191,7 +3810,103 @@
         "construto"
       ],
       "prerequisite": "Construto",
-      "description": "Seu corpo possui características bem particulares que permitem que você utilize aprimoramentos de Mechas. Você recebe os seguintes benefícios:\n\nSeu corpo permite que Aprimoramentos de Aparatos como Mecha e Armamento Aprimorado sejam instalados. O tempo necessário para isso é reduzido pela metade\nEscolha uma vantagem da Herança Variante Progressão Tecnológica. Você pode trocar essa vantagem por outra à sua escolha utilizando ferramentas de tecmaturgo durante um descanso pleno."
+      "description": "Seu corpo possui características bem particulares que permitem que você utilize aprimoramentos de Mechas. Você recebe os seguintes benefícios:\n\nSeu corpo permite que Aprimoramentos de Aparatos como Mecha e Armamento Aprimorado sejam instalados. O tempo necessário para isso é reduzido pela metade\nEscolha uma vantagem da Herança Variante Progressão Tecnológica. Você pode trocar essa vantagem por outra à sua escolha utilizando ferramentas de tecmaturgo durante um descanso pleno.",
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Vantagem Tecnológica",
+          "label": "Modularidade: escolha uma Vantagem Tecnológica",
+          "count": 1,
+          "options": [
+            "Adaptação de Escalada",
+            "Adaptação Subaquática",
+            "Arma Integrada",
+            "Armas Naturais",
+            "Bolsa de Tinta",
+            "Carapaça",
+            "Defesa Adaptativa",
+            "Epiderme Cromática",
+            "Gancho de Manobras",
+            "Idade Congelada",
+            "Membro Robótico",
+            "Patagia",
+            "Pele Intoxicante",
+            "Proteção Metálica",
+            "Sentido Superior",
+            "Visão no Escuro"
+          ],
+          "optionTexts": {
+            "Adaptação de Escalada": "Você recebe deslocamento de escalada igual a metade do seu deslocamento de caminhada.",
+            "Adaptação Subaquática": "Você pode respirar tanto ar quanto água e recebe deslocamento de natação igual a metade do seu deslocamento de caminhada.",
+            "Arma Integrada": "Criaturas aprimoradas por tecnologia podem substituir um membro do seu corpo por uma arma corpo a corpo ou à distância que esteja em seu equipamento inicial, você utiliza essa arma normalmente. Essa vantagem pode ser escolhida mais de uma vez.",
+            "Armas Naturais": "Você possui garras que podem causar 1d8 + seu modificador de Força de dano cortante, e presas que podem causar 1d6 + seu modificador de Força de dano perfurante.",
+            "Bolsa de Tinta": "Você pode usar um ataque para fazer um ataque à distância especial para cegar uma criatura em sua linha de visão a até 15 pés de você caso a mesma falhe em uma Salvaguarda de Destreza CD 12. Criaturas que não precisem da visão não são afetadas por esse ataque e criaturas afetadas precisam usar uma ação para limpar a tinta. Essa habilidade funciona de forma diferente debaixo da água: com uma ação bônus você pode criar uma área de obscurecimento pesada em um raio de 5 pés a partir de você. Você pode utilizar essa habilidade um número de vezes igual a metade do seu bônus de Proficiência por descanso longo. Você pode escolher essa habilidade mais de uma vez.",
+            "Carapaça": "Sua pele tem uma cobertura adicional. Você recebe Redução de Dano igual a metade do seu bônus de proficiência, exceto a dano verdadeiro e espiritual. Você não diminui o dano recebido através de condições.",
+            "Defesa Adaptativa": "Utilizando uma ação bônus, você envia um comando para sua fonte de energia, fazendo com que ela emita um campo que te protege de ataques por 1 minuto. Ao enviar o comando você deve direcioná-lo para ataques físicos ou magia, ataques do tipo escolhido possuem desvantagem contra você (caso o ataque exija salvaguarda, você faz a mesma com vantagem). Você pode utilizar essa característica um número de vezes igual a metade do seu bônus de proficiência por Descanso Pleno.",
+            "Epiderme Cromática": "Você tem vantagens em testes de Furtividade que você faz para se ocultar. Adicionalmente, enquanto estiver sem armadura, você pode tentar se esconder mesmo sem estar com cobertura leve ou pesada, contanto que permaneça parado.",
+            "Gancho de Manobras": "Você possui um gancho atrelado a uma linha metálica com 60 pés de comprimento. Utilizando uma ação, você pode disparar o gancho em uma superfície dentro do alcance, se prendendo na mesma. Adicionalmente, utilizando uma ação bônus, você pode se soltar e saltar em um alvo a até 15 pés de você, podendo realizar um ataque corpo a corpo contra o mesmo.",
+            "Idade Congelada": "Sua idade física pode não corresponder aos anos que você viveu, diferente de um humano normal.",
+            "Membro Robótico": "Você possui 1 membro mecânico superior em alguma parte do seu corpo e tem controle sobre ele normalmente. Essa vantagem pode ser escolhida mais de uma vez para membros adicionais. Consulte o Capítulo 9 - Membros Múltiplos para as regras de combate com membros adicionais",
+            "Patagia": "Você tem membranas que atuam como barbatanas e podem ser usadas como asas para desacelerar sua queda ou permitir que você plane. Se você sofrer uma queda e não estiver Incapacitado, você pode subtrair até 100 pés do cálculo de dano da queda, você pode também se mover 2 pés para a frente para cada 1 pé que você esteja em queda.",
+            "Pele Intoxicante": "Qualquer criatura que agarre você ou entre em contato direto com sua pele deve passar em uma salvaguarda de Constituição de CD 12 ou é Intoxicada por 1 minuto. Uma criatura Intoxicada que não esteja mais em contato com sua pele pode repetir a salvaguarda no fim de seu turno, encerrando o efeito em caso de sucesso.",
+            "Proteção Metálica": "Você revestiu sua pele com um liga metálica que concede à você uma proteção natural. Desde que não esteja utilizando nenhuma armadura, sua CA é igual a 13 + seu modificador de Destreza.",
+            "Sentido Superior": "Criaturas aprimoradas por tecnologia possuem vantagem em testes de Percepção através da audição, olfato ou visão.",
+            "Visão no Escuro": "Seus olhos foram substituídos por câmeras com a capacidade de se adaptar à escuridão. Você enxerga na penumbra a até 30 pés como se fosse luz plena e no escuro como se fosse na penumbra. Você não pode discernir cores no escuro, apenas tons de cinza."
+          },
+          "optionUses": {
+            "Bolsa de Tinta": {
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            },
+            "Defesa Adaptativa": {
+              "usesFormula": "HALF_PROFICIENCY",
+              "recharge": "LONG_REST"
+            }
+          }
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Proteção Metálica",
+          "armor": {
+            "base": 13
+          },
+          "when": "Vantagem Tecnológica:Proteção Metálica"
+        },
+        {
+          "type": "AC_BONUS",
+          "name": "Carapaça",
+          "amount": 0,
+          "armor": {
+            "halfProficiencyReduction": true
+          },
+          "when": "Vantagem Tecnológica:Carapaça"
+        },
+        {
+          "type": "SPEED",
+          "value": "CLIMB",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação de Escalada"
+        },
+        {
+          "type": "SPEED",
+          "value": "SWIM",
+          "walkFraction": 0.5,
+          "when": "Vantagem Tecnológica:Adaptação Subaquática"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERCEPTION",
+          "description": "Vantagem em Percepção pela audição, olfato ou visão.",
+          "when": "Vantagem Tecnológica:Sentido Superior"
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:STEALTH",
+          "description": "Vantagem em Furtividade para se ocultar; sem armadura e parado, pode se esconder sem cobertura.",
+          "when": "Vantagem Tecnológica:Epiderme Cromática"
+        }
+      ]
     },
     {
       "id": "puxao-bionico",
@@ -3410,7 +4125,14 @@
         "chireano"
       ],
       "prerequisite": "Chireano",
-      "description": "Os Chireanos não apenas gostam e tem facilidade em lidar com tecnologia, mas possuem uma grande habilidade quando se empenham em construir inventos. Você recebe os seguintes benefícios:\n\nVocê recebe o Ofício de Tecmaturgo ou especialidade no mesmo caso já o possua.\nVocê pode construir Inventos de Tecmaturgia na metade do tempo."
+      "description": "Os Chireanos não apenas gostam e tem facilidade em lidar com tecnologia, mas possuem uma grande habilidade quando se empenham em construir inventos. Você recebe os seguintes benefícios:\n\nVocê recebe o Ofício de Tecmaturgo ou especialidade no mesmo caso já o possua.\nVocê pode construir Inventos de Tecmaturgia na metade do tempo.",
+      "grants": [
+        {
+          "type": "CRAFT",
+          "value": "tecmaturgo",
+          "expertise": true
+        }
+      ]
     },
     {
       "id": "alma-fluida",
@@ -3618,7 +4340,27 @@
         "Inferno",
         "Magma"
       ],
-      "description": "As chamas em seu interior são manifestas através de suas mãos, você recebe os seguintes benefícios:\n\nEscolha entre um dos seguintes elementos: Fogo, Inferno ou Magma. Você recebe o Mistério do Elemento escolhido.\nQuando você causa dano ígneo ou incandescente a um alvo, você recupera 1 ponto de vida para cada dado rolado."
+      "description": "As chamas em seu interior são manifestas através de suas mãos, você recebe os seguintes benefícios:\n\nEscolha entre um dos seguintes elementos: Fogo, Inferno ou Magma. Você recebe o Mistério do Elemento escolhido.\nQuando você causa dano ígneo ou incandescente a um alvo, você recupera 1 ponto de vida para cada dado rolado.",
+      "optionGrants": {
+        "Fogo": [
+          {
+            "type": "MYSTERY",
+            "value": "fogo"
+          }
+        ],
+        "Inferno": [
+          {
+            "type": "MYSTERY",
+            "value": "inferno"
+          }
+        ],
+        "Magma": [
+          {
+            "type": "MYSTERY",
+            "value": "magma"
+          }
+        ]
+      }
     },
     {
       "id": "resiliencia-draconica",
@@ -4106,6 +4848,18 @@
           "type": "SITUATIONAL",
           "value": "SAVE",
           "description": "Você faz salvaguardas contra as condições Agarrado ou Contido com vantagem."
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Rede"
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Lança"
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Tridente"
         }
       ]
     },
@@ -4361,6 +5115,15 @@
           "type": "SITUATIONAL",
           "value": "ATTACK:MELEE",
           "description": "Enquanto em combate, ao receber cura de qualquer fonte, você pode fazer com que seu próximo ataque corpo a corpo tenha vantagem e caso você atinja poderá adicionar seu bônus de proficiência ao dano."
+        },
+        {
+          "type": "MYSTERY",
+          "count": 1,
+          "options": [
+            "etermancia",
+            "agua"
+          ],
+          "label": "Potência da Cura: Étermancia ou Água"
         }
       ],
       "uses": {

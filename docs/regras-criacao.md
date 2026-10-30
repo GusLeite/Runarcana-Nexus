@@ -80,8 +80,8 @@ Escolhas sem opções cadastradas aparecem no assistente como aviso e **não blo
 | `WEAPON_PROFICIENCY` | `value` (o nome: "Armas simples", "Rapieiras") | Proficiência com armas (ficha: `weaponProficiencies`) |
 | `SIZE` | `value` (`TINY`/`SMALL`/`MEDIUM`/`LARGE`/`HUGE`) | Tamanho fixo |
 | `SIZE_CHOICE` | `options`, `label`? | Escolhe o tamanho entre as opções |
-| `CRAFT` | `value` (id de `crafts`) | Proficiência fixa num ofício |
-| `CRAFT_CHOICE` | `count`, `options`?, `label`? | Escolhe ofícios (sem `options` = todos de `crafts`) |
+| `CRAFT` | `value` (id de `crafts`), `expertise`? | Proficiência fixa num ofício; com `expertise`, "caso já tenha, especialidade" (decidido no fim) |
+| `CRAFT_CHOICE` | `count`, `options`?, `label`?, `expertise`?, `value`? | Escolhe ofícios (sem `options` = todos de `crafts`). `expertise`: os que já tem continuam e dão especialidade; `value: EXPERTISE`: o escolhido já vem com especialidade (Mestre Artesão) |
 | `LANGUAGE` | `value` (nome) | Idioma fixo |
 | `LANGUAGE_CHOICE` | `count`, `options`? ou `fromRegion: true`, `label`? | Escolhe idiomas da lista ou da região escolhida |
 | `RESOURCE_CHOICE` | `value` (tipo: `IRA`, `SUTRA`, `VEL`, `TECNICA`, `INVOCACAO`, `GRANDE_ESPIRITO`, `ASPECTO_TERRESTRE`, `ASPECTO_AQUATICO`, `ASPECTO_ALADO`), `count`, `options`? (grupos aceitos), `label`?; Vel usa `amount` (pontos ◆) | Escolha de recurso de classe (`rules/recursos.json`). Só aparecem os que cumprem o pré-requisito; o recurso escolhido vira uma fonte ("Sutra: Rocha") com a habilidade e as concessões dele, e pode trazer outra escolha. Vel é opcional e soma o custo ◆ |

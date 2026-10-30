@@ -2952,6 +2952,20 @@
                     "Cuteleiro",
                     "Armoreiro"
                   ]
+                },
+                {
+                  "type": "CRAFT",
+                  "value": "coletor"
+                },
+                {
+                  "type": "CRAFT_CHOICE",
+                  "count": 1,
+                  "expertise": true,
+                  "options": [
+                    "cuteleiro",
+                    "armoreiro"
+                  ],
+                  "label": "A Voz da Fornalha: especialidade em Cuteleiro ou Armoreiro"
                 }
               ]
             },
@@ -10943,6 +10957,15 @@
                     "Bestas de repetição",
                     "Armas de fogo"
                   ]
+                },
+                {
+                  "type": "PROFICIENCY_CHOICE",
+                  "count": 1,
+                  "options": [
+                    "WEAPON:Bestas de repetição",
+                    "WEAPON:Armas de fogo"
+                  ],
+                  "label": "Conhecimento Avançado: bestas de repetição ou armas de fogo"
                 }
               ]
             },
@@ -10969,6 +10992,15 @@
                   "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
                   "attribute": "INTELLIGENCE",
                   "recharge": "LONG_REST"
+                },
+                {
+                  "type": "PROFICIENCY_CHOICE",
+                  "count": 1,
+                  "options": [
+                    "WEAPON:Bestas de repetição",
+                    "WEAPON:Armas de fogo"
+                  ],
+                  "label": "Conhecimento Avançado (7º): a outra"
                 }
               ]
             },

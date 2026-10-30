@@ -723,11 +723,18 @@ public class CreationService {
                         b.choices.add(new ChoiceLine(key, g.type(), label, count, options, selected, s.label(), null));
                     }
                     case CRAFT_CHOICE -> {
+                        // expertise: os que ele já tem continuam e dão especialidade (Artesão Nazumita);
+                        // value EXPERTISE: o escolhido vem com especialidade (Mestre Artesão).
+                        boolean upgrade = Boolean.TRUE.equals(g.expertise());
                         List<String> options = (g.options() == null || g.options().isEmpty() ? allCrafts : g.options()).stream()
-                                .filter(o -> !b.crafts.contains(o)).toList();
+                                .filter(o -> upgrade || !b.crafts.contains(o)).toList();
                         String label = orLabel(g, "Escolha " + g.count() + " ofício(s)");
                         b.choices.add(optionalChoice(key, g, label, options, picked, s.label(), b,
-                                "A lista de ofícios ainda não foi cadastrada nas regras.", o -> addCraft(b, o, key)));
+                                "A lista de ofícios ainda não foi cadastrada nas regras.", o -> {
+                                    if (upgrade && b.crafts.contains(o)) b.craftExpertise.add(o);
+                                    else addCraft(b, o, key);
+                                    if ("EXPERTISE".equals(g.value())) b.craftExpertise.add(o);
+                                }));
                     }
                     case LANGUAGE_CHOICE -> {
                         List<String> source = g.options() != null && !g.options().isEmpty() ? g.options()
@@ -954,7 +961,11 @@ public class CreationService {
                 b.size = CreatureSize.valueOf(g.value());
                 b.sizeFixed = true;
             }
-            case CRAFT -> addCraft(b, g.value(), s.key());
+            // expertise: "caso já tenha, especialidade", decidido no fim (damageUpgrades), depois dos outros ofícios.
+            case CRAFT -> {
+                if (Boolean.TRUE.equals(g.expertise())) b.craftUpgrades.add(new Sourced<>(g.value(), s.key()));
+                else addCraft(b, g.value(), s.key());
+            }
             case LANGUAGE -> b.languages.add(g.value());
             case ARMOR_CLASS -> {
                 // Com feature: decide depois das escolhas (vale só se a opção foi escolhida).
@@ -1784,8 +1795,12 @@ public class CreationService {
         return out;
     }
 
-    // "Resistência; caso já tenha, imunidade" (Meio-Azakana, Meio-Kanmei): depois de todas as resistências.
+    // "Caso já tenha" decidido depois de tudo: ofício → especialidade; resistência → imunidade (Meio-Azakana, Meio-Kanmei).
     private static void damageUpgrades(Build b) {
+        for (Sourced<String> c : b.craftUpgrades) {
+            if (b.crafts.contains(c.value())) b.craftExpertise.add(c.value());
+            else addCraft(b, c.value(), c.source());
+        }
         for (String type : b.resistanceUpgrades) {
             if (b.immunities.contains(type)) continue;
             if (b.resistances.remove(type)) b.immunities.add(type);
@@ -2296,6 +2311,8 @@ public class CreationService {
         final Set<String> weaponProficiencies = new LinkedHashSet<>();
         // Ofícios (ids) com especialidade.
         final Set<String> craftExpertise = new LinkedHashSet<>();
+        // Ofícios "caso já tenha, especialidade" (id, chave da fonte), decididos no fim.
+        final List<Sourced<String>> craftUpgrades = new ArrayList<>();
         final List<Grant> hpGrants = new ArrayList<>();
         final List<ChoiceLine> choices = new ArrayList<>();
         final Set<String> languages = new LinkedHashSet<>();
