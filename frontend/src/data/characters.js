@@ -17,7 +17,6 @@ const BASE = [
   { id: 'gaudron', name: 'GAUDRON', role: 'Guardião', hue: 42, variant: 1, lore: 'Guarda os portões e as promessas feitas.',
     img: gaudronImg, vid: gaudronVid, pos: '57% 25%', fx: 'embers', impact: true },
   { id: 'proto', name: 'PROTO', role: 'Arcanista', hue: 190, variant: 2, lore: 'Dobra a magia antiga em novas formas.' },
-  { id: 'titan', name: 'TITAN', role: 'Colosso', hue: 262, variant: 3, lore: 'Cada passo seu abala o campo de batalha.' },
   { id: 'loge', name: 'LOGE', role: 'Espreitador', hue: 135, variant: 4, lore: 'Some nas sombras e volta com o que falta.' },
 ]
 

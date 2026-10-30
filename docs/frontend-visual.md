@@ -40,7 +40,7 @@ Definidos em `src/data/characters.js`:
 | `impact` | ondas de choque, explosão laranja e tremor da arte ao entrar |
 | `burst` | pulso radial vermelho ao entrar |
 
-Estado atual: **Rudo** (vídeo + burst vermelho + magia de sangue) e **Gaudron** (vídeo + brasas + impacto) têm arte real; **Proto, Titan e Loge** usam placeholders.
+Estado atual: **Rudo** (vídeo + burst vermelho + magia de sangue) e **Gaudron** (vídeo + brasas + impacto) têm arte real; **Proto e Loge** usam placeholders.
 
 ### Adicionar ou trocar a arte de um personagem
 1. Coloque o arquivo em `src/assets/characters/` (JPG para a imagem; MP4 H.264 sem áudio para o vídeo).
@@ -50,6 +50,6 @@ Estado atual: **Rudo** (vídeo + burst vermelho + magia de sangue) e **Gaudron**
 
 ## Pendências / problemas conhecidos
 
-- Artes reais para Proto, Titan e Loge.
+- Artes reais para Proto e Loge.
 - Vídeos pesados (cerca de 8,5 MB e 7,2 MB) estão versionados no Git; vale comprimir ou passar para Git LFS/CDN.
 - Os itens usam ícones SVG genéricos por tipo; falta arte por item.

@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Titan sai da tela inicial (`feature/character-sheet`)
+- O jogador não joga mais: painel removido de `data/characters.js`; a seleção fica com Rudo, Gaudron, Proto e Loge.
+- A conta `titan` continua no seed do back-end (nada foi apagado do banco).
+
 ## 2026-10-30 — Subida de nível: o mestre libera, o jogador escolhe (`feature/character-sheet`)
 - `Character.pendingLevels` + `PATCH /character/{id}/pending-levels` (mestre); as rotas de subida viram `/character/me/level-up[/preview]` (jogador, só nos níveis liberados). `LevelUpService` desconta ao aplicar, na mesma transação.
 - Front: o formulário saiu do `MasterSheets` para `creation/LevelUp.jsx`, aberto pelo botão **SUBIR DE NÍVEL** no topo da ficha; o mestre só tem o card "Subida de nível" (liberar/cancelar). A ficha confere a cada 10 s.
