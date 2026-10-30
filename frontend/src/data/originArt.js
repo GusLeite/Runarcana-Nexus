@@ -31,7 +31,7 @@ export const ORIGIN_ART = {
   troll: { tagline: 'Enormes, grotescos e tribais, com presas à mostra e uma regeneração brutal.', hue: 88, motes: 'snow',
     video: { src: troll, focus: 0.65, focusNarrow: 0.6, show: 0.62, end: 14.8 } },
   vastaya: { tagline: 'Quimeras de sangue humano e magia espiritual, em sintonia com a natureza.', hue: 286, motes: 'feather',
-    video: { src: vastaya, focus: 0.52, focusNarrow: 0.57, show: 0.55, start: 2, end: 47 } },
+    video: { src: vastaya, focus: 0.5, focusNarrow: 0.49, show: 0.55, start: 2, end: 47 } },
   yordle: { tagline: 'Pequenos espíritos de Bandópolis, escondidos sob o véu mágico do Glamour.', hue: 322, motes: 'petal' },
   runinata: { tagline: 'Um ser único, nascido das Runas Globais. Cada traço é você quem monta.', hue: 258, motes: 'hex' },
 }

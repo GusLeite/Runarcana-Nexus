@@ -2,8 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Sett centralizado no painel estreito (`feature/character-sheet`)
+- O foco do Sett estava em 0,57 e o painel estreito mostrava o ombro, sem o rosto; medido num recorte igual ao do painel, rosto e esterno ficam em 0,49-0,5.
+
 ## 2026-10-30 — Vídeo do Sett na Vastaya (`feature/character-sheet`)
-- `assets/origins/vastaya.mp4` (1080p, 8 MB, 52 s): começa com ~1,5 s de preto e escurece no fim, então toca de 2 s a 47 s (`start`/`end`). Foco 0,52 (0,57 no rosto), `show: 0.55`.
+- `assets/origins/vastaya.mp4` (1080p, 8 MB, 52 s): começa com ~1,5 s de preto e escurece no fim, então toca de 2 s a 47 s (`start`/`end`). Foco 0,5 (0,49 nos painéis estreitos), `show: 0.55`.
 
 ## 2026-10-30 — Vídeo do Trundle no Troll (`feature/character-sheet`)
 - `assets/origins/troll.mp4` (720p, 13 MB, 65 s; login animado feito por fã): a interface de login do jogo aparece por cima a partir de ~15,5 s, então o novo `end: 14.8` faz o vídeo voltar ao início antes disso. Foco 0,65 (0,6 no rosto), `show: 0.62`.
