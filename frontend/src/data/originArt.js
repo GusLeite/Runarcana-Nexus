@@ -5,11 +5,13 @@
 // para centralizá-lo em qualquer formato de painel), focusY (opcional) e start (segundo inicial, para pular uma abertura preta;
 // o vídeo volta a ele ao terminar).
 import humano from '../assets/origins/humano.mp4'
+import minotauro from '../assets/origins/minotauro.mp4'
 
 export const ORIGIN_ART = {
   humano: { tagline: 'A espécie mais numerosa de Runeterra, moldada por cada cultura que a cerca.', hue: 42, motes: 'spark',
     video: { src: humano, focus: 0.71, start: 1 } },
-  minotauro: { tagline: 'Povos tribais de grande vigor, vindos das montanhas da Grande Barreira.', hue: 14, motes: 'spark' },
+  minotauro: { tagline: 'Povos tribais de grande vigor, vindos das montanhas da Grande Barreira.', hue: 14, motes: 'spark',
+    video: { src: minotauro, focus: 0.68 } },
   construto: { tagline: 'Máquinas que despertaram para a vida e ainda tentam entender o que sentem.', hue: 198, motes: 'hex' },
   antroplantae: { tagline: 'Plantas sencientes e raras, ligadas à terra, às flores e aos espinhos.', hue: 118, motes: 'petal' },
   chireano: { tagline: 'Gente-morcego de Zaun: curiosa, ágil, apaixonada por maquinário.', hue: 158, motes: 'hex' },
