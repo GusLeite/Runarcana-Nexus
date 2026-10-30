@@ -980,7 +980,12 @@ public class CreationService {
             case EQUIPMENT -> {
                 if (!b.wealth) addEquipment(b, g.value(), s.label());
             }
+            // value UP: uma categoria acima do tamanho final (Variante Colosso, 2ª escolha).
             case SIZE -> {
+                if ("UP".equals(g.value())) {
+                    b.sizeSteps++;
+                    return;
+                }
                 b.size = CreatureSize.valueOf(g.value());
                 b.sizeFixed = true;
             }
@@ -1820,8 +1825,9 @@ public class CreationService {
         picks.forEach((id, chosen) -> rules.heritage(id).ifPresent(h -> {
             List<Grant> grants = new ArrayList<>(h.grantsFor(chosen));
             // Escolhida de novo: os efeitos da 2ª vez (pela opção), depois dos outros (as chaves das escolhas não mudam).
-            if (times.getOrDefault(id, 0) >= 2 && h.repeatGrants() != null && !chosen.isEmpty()) {
-                grants.addAll(h.repeatGrants().getOrDefault(chosen.getFirst(), List.of()));
+            // Herança sem opção: a chave "*" (Variante Colosso).
+            if (times.getOrDefault(id, 0) >= 2 && h.repeatGrants() != null) {
+                grants.addAll(h.repeatGrants().getOrDefault(chosen.isEmpty() ? "*" : chosen.getFirst(), List.of()));
             }
             // Limiar: decidido depois das escolhas (quantas opções a habilidade tem); cada fonte escolhida é candidata.
             if (h.threshold() != null) chosen.stream().distinct().filter(h.threshold().grants()::containsKey)
@@ -1831,8 +1837,13 @@ public class CreationService {
         return out;
     }
 
-    // "Caso já tenha" decidido depois de tudo: ofício → especialidade; resistência → imunidade (Meio-Azakana, Meio-Kanmei).
+    // Decidido depois de tudo: tamanho acima (Colosso); "caso já tenha": salvaguarda e ofício → especialidade;
+    // resistência → imunidade (Meio-Azakana, Meio-Kanmei).
     private static void damageUpgrades(Build b) {
+        if (b.sizeSteps > 0 && b.size != null) {
+            CreatureSize[] all = CreatureSize.values();
+            b.size = all[Math.min(all.length - 1, b.size.ordinal() + b.sizeSteps)];
+        }
         for (Sourced<Attribute> sv : b.saveUpgrades) {
             if (b.saves.containsKey(sv.value())) b.saveExpertise.add(sv.value());
             else b.saves.put(sv.value(), sv.source());
@@ -2416,6 +2427,8 @@ public class CreationService {
         final Set<String> conditionImmunities = new LinkedHashSet<>();
         final List<Sourced<Attribute>> saveUpgrades = new ArrayList<>();
         final Set<Attribute> saveExpertise = new LinkedHashSet<>();
+        // Categorias de tamanho acima da escolhida (SIZE "UP").
+        int sizeSteps;
         // Resistências "caso já tenha, imunidade" (Meio-Azakana), decididas depois de todas as outras.
         final List<String> resistanceUpgrades = new ArrayList<>();
         final Set<String> knownSpellIds = new LinkedHashSet<>();

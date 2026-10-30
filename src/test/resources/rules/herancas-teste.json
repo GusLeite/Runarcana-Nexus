@@ -4,7 +4,16 @@
       "id": "teste-geral",
       "name": "Geral Teste",
       "category": "GENERAL",
-      "description": "Vale para todos."
+      "description": "Vale para todos.",
+      "maxTimes": 2,
+      "repeatGrants": {
+        "*": [
+          {
+            "type": "SIZE",
+            "value": "UP"
+          }
+        ]
+      }
     },
     {
       "id": "teste-forte",

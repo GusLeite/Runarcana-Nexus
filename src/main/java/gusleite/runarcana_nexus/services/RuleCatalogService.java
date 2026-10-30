@@ -765,7 +765,7 @@ public class RuleCatalogService {
                     if (g.amount() == null && !scales) p.add(at + " (AC_BONUS): precisa de amount ou usesFormula PROFICIENCY");
                 }
                 case SIZE -> {
-                    if (g.value() == null || !SIZES.contains(g.value())) p.add(at + " (SIZE): value deve ser um destes: " + SIZES);
+                    if (g.value() == null || !SIZES.contains(g.value()) && !"UP".equals(g.value())) p.add(at + " (SIZE): value deve ser um destes: " + SIZES + " ou UP");
                 }
                 case SIZE_CHOICE -> {
                     if (g.options() == null || g.options().isEmpty()) p.add(at + " (SIZE_CHOICE): precisa de options");

@@ -74,7 +74,7 @@ Protetor (proficiências), Estudioso (duas perícias) e Obreiro (truque espiritu
 - ✅ **B3. Resistência que muda com o nível** (`minLevel`; Runinata pela escolha "Resistência Natural". Venenoso, energético e os espirituais não têm versão mágica, então a Resistência Mágica não muda nada neles): Gás Corrosivo/Ionizado/Termiônico (outro tipo no 11º), Resistência Natural da Runinata (versão mágica no 12º, imunidade no 16º, absorção no 18º).
 - ✅ **B4. "Um avanço na resistência"** (`RESISTANCE` com `expertise` e `amount: 1`) (degraus: resistência → imunidade → absorção): Bênção do Urso e do Vorme (Invocações).
 - ✅ **B5. Especialidade em salvaguarda**: Graciosidade ("caso já tenha proficiência").
-- **B6. Tamanho +1 categoria**: Variante Colosso.
+- ✅ **B6. Tamanho +1 categoria** (`SIZE` `UP` na 2ª escolha; o +1 de dano e o custo maior ficam no texto): Variante Colosso.
 - **B7. RD contra um tipo de dano**: Variante Glacinata (gélido = proficiência), Adaptação Selvagem (ácido e ígneo), Ascensão Feérica (sombrio 2), Domínio Azakana (radiante 2).
 - **B8. Ki e Energia extras**: Cultivo de Ki, Conjurador Natural, Alianças Espirituais (Ki); Bioenergia, Experimento Reconhecido, Chireano (Energia).
 

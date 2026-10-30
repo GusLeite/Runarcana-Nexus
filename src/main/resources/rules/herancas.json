@@ -3102,7 +3102,15 @@
         "yordle"
       ],
       "maxTimes": 2,
-      "description": "Por algum motivo, talvez genes, talvez influência mágica ou apenas você foi construído assim, você tem um tamanho incomum para a sua espécie, superando a maioria daqueles ao seu redor.\n\nVocê possui um tamanho incomum a sua espécie, superando a maioria daqueles ao seu redor. Você recebe os seguintes modificadores:\n• Seu tamanho para fins de capacidade de carga e peso que você pode empurrar, arrastar ou levantar, conta como uma categoria acima\n• Seus ataques corpo a corpo causam 1 de dano adicional, em contrapartida, suas roupas, armaduras e armas custam 50% a mais arredondado para cima.\nEssa Herança pode ser escolhida uma segunda vez apenas durante a criação do personagem, concedendo os seguintes modificadores:\n• Seu tamanho aumenta em uma categoria\n• Você recebe os Ajustes de Tamanho descritos no Capítulo 9: Combate Tamanho da Criatura\n• Todas as suas roupas, armas e armaduras custam o dobro do valor.\nNota: Criaturas de tamanho Grande tem várias dificuldades sociais como entrar em estabelecimentos, encontrar roupas além de terem um maior gasto em alimentação e dificilmente encontrarem montarias."
+      "description": "Por algum motivo, talvez genes, talvez influência mágica ou apenas você foi construído assim, você tem um tamanho incomum para a sua espécie, superando a maioria daqueles ao seu redor.\n\nVocê possui um tamanho incomum a sua espécie, superando a maioria daqueles ao seu redor. Você recebe os seguintes modificadores:\n• Seu tamanho para fins de capacidade de carga e peso que você pode empurrar, arrastar ou levantar, conta como uma categoria acima\n• Seus ataques corpo a corpo causam 1 de dano adicional, em contrapartida, suas roupas, armaduras e armas custam 50% a mais arredondado para cima.\nEssa Herança pode ser escolhida uma segunda vez apenas durante a criação do personagem, concedendo os seguintes modificadores:\n• Seu tamanho aumenta em uma categoria\n• Você recebe os Ajustes de Tamanho descritos no Capítulo 9: Combate Tamanho da Criatura\n• Todas as suas roupas, armas e armaduras custam o dobro do valor.\nNota: Criaturas de tamanho Grande tem várias dificuldades sociais como entrar em estabelecimentos, encontrar roupas além de terem um maior gasto em alimentação e dificilmente encontrarem montarias.",
+      "repeatGrants": {
+        "*": [
+          {
+            "type": "SIZE",
+            "value": "UP"
+          }
+        ]
+      }
     },
     {
       "id": "variante-glacinata",

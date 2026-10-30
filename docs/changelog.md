@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento B6: tamanho da Variante Colosso (`feature/character-sheet`)
+- `SIZE` `UP` (uma categoria acima, no fim) e `repeatGrants` com chave `"*"` para Herança sem opção; a 2ª escolha do Colosso aumenta o tamanho.
+- Teste: `segundaEscolhaSemOpcaoAumentaOTamanho`.
+
 ## 2026-10-29 — Mapeamento B5: especialidade em salvaguarda (`feature/character-sheet`)
 - `SAVING_THROW` com `expertise` (Graciosidade); ficha com `savingThrowExpertise` (`character_save_expertise`); a resistência soma a proficiência em dobro e fica marcada como especialista.
 

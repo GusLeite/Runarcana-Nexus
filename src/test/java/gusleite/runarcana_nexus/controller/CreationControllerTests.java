@@ -236,6 +236,16 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.attacks[?(@.key == 'UNARMED')].notes[0]").value("Perícia Teste: +1 contra lobos."));
     }
 
+    // 2ª escolha de uma Herança sem opção (chave "*"): uma categoria de tamanho acima (Variante Colosso).
+    @Test
+    void segundaEscolhaSemOpcaoAumentaOTamanho() throws Exception {
+        String token = login("gaudron");
+        preview(token, FULL)
+                .andExpect(jsonPath("$.size").value("SMALL"));
+        preview(token, FULL.replace(HERITAGES, "\"heritages\":[{\"id\":\"teste-geral\"},{\"id\":\"teste-geral\"}]"))
+                .andExpect(jsonPath("$.size").value("MEDIUM"));
+    }
+
     @Test
     void herancaAtivaGanhaTempoEUsos() throws Exception {
         String token = login("gaudron");

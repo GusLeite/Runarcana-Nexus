@@ -79,7 +79,7 @@ Escolhas sem opções cadastradas aparecem no assistente como aviso e **não blo
 | `SAVING_THROW_CHOICE` | `count`, `options` (atributos), `label`? | Resistência à escolha (Arcanista: Sabedoria ou Carisma) |
 | `ARMOR_PROFICIENCY` | `value` (`LIGHT`, `MEDIUM`, `HEAVY`, `SHIELD`) | Proficiência com armaduras (ficha: `armorProficiencies`) |
 | `WEAPON_PROFICIENCY` | `value` (o nome: "Armas simples", "Rapieiras") | Proficiência com armas (ficha: `weaponProficiencies`) |
-| `SIZE` | `value` (`TINY`/`SMALL`/`MEDIUM`/`LARGE`/`HUGE`) | Tamanho fixo |
+| `SIZE` | `value` (`TINY`/`SMALL`/`MEDIUM`/`LARGE`/`HUGE`, ou `UP`) | Tamanho fixo; `UP` = uma categoria acima do tamanho final |
 | `SIZE_CHOICE` | `options`, `label`? | Escolhe o tamanho entre as opções |
 | `CRAFT` | `value` (id de `crafts`), `expertise`? | Proficiência fixa num ofício; com `expertise`, "caso já tenha, especialidade" (decidido no fim) |
 | `CRAFT_CHOICE` | `count`, `options`?, `label`?, `expertise`?, `value`? | Escolhe ofícios (sem `options` = todos de `crafts`). `expertise`: os que já tem continuam e dão especialidade; `value: EXPERTISE`: o escolhido já vem com especialidade (Mestre Artesão) |
@@ -151,7 +151,7 @@ Como os pontos funcionam no assistente:
 - `SITUATIONAL` com `options` (alvos) em vez de `value`: o jogador escolhe onde a nota vale (traço Habilidoso).
 - `RESOURCE_CHOICE` com `anyClass: true`: ignora classe, subclasse e nível de classe nos pré-requisitos do recurso (Mestre Tático).
 - `AC_BONUS` com `armor.halfProficiencyReduction`: RD de metade da proficiência em todas as opções de defesa (Carapaça); `armor.reduction` soma RD fixa.
-- `repeatGrants` (`{ "Espectral": [...] }`): efeitos da 2ª escolha da mesma Herança, pela opção. `repeatOptions`: opções que só valem da 2ª escolha em diante ("Aprimorar Fonte"). Com `optionPerPick`, a mesma opção escolhida duas vezes dá as concessões dela de novo. `threshold` (`{ feature, count, grants: { opção: [...] }, dominant }`): com `count` opções escolhidas em `feature`, os efeitos da opção da Herança (Limiar Tecnológico); com duas fontes candidatas, o assistente pede a escolha `dominant` ("Fonte Dominante", chave `dominant:Fonte Dominante:0`); sem ela, vale a primeira. Recursos/Aprimoramentos também aceitam `threshold` (Adaptação Tecnológica).
+- `repeatGrants` (`{ "Espectral": [...] }`): efeitos da 2ª escolha da mesma Herança, pela opção (`"*"` na Herança sem opção: Variante Colosso). `repeatOptions`: opções que só valem da 2ª escolha em diante ("Aprimorar Fonte"). Com `optionPerPick`, a mesma opção escolhida duas vezes dá as concessões dela de novo. `threshold` (`{ feature, count, grants: { opção: [...] }, dominant }`): com `count` opções escolhidas em `feature`, os efeitos da opção da Herança (Limiar Tecnológico); com duas fontes candidatas, o assistente pede a escolha `dominant` ("Fonte Dominante", chave `dominant:Fonte Dominante:0`); sem ela, vale a primeira. Recursos/Aprimoramentos também aceitam `threshold` (Adaptação Tecnológica).
 - Níveis 5, 9, 13 e 17 (Heranças de Origem e Gerais, sem as de Região nem as "Inicial") entram com a subida de nível.
 
 As Variantes do Humano levam o texto completo do capítulo "Heranças Variantes": Anfíbio, Colosso, Progressão Tecnológica e Ressurgido podem ser escolhidas 2 vezes; Meio-Vastaya, Progressão Tecnológica e Ressurgido pedem a opção. A Glacinata usa o texto da Natividade Elemental.
