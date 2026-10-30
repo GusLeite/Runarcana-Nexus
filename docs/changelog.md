@@ -10,6 +10,9 @@ Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 - `effects/Embers.jsx` ganhou a sequência: carga, golpe aos 0,5 s (rachaduras de lava, pedras, fagulhas, poeira) e torcida gritando "GAU! DRON! GAUDRON!" com tochas e panos vermelhos. Some em ~3,6 s; ficam as brasas.
 - Tremor, explosão e ondas de choque sincronizados com o golpe; login em laranja (`.login.embers`). Conferido no preview, pausando em cada etapa, no computador e no celular.
 
+## 2026-10-30 — Painéis de origem mais altos (`feature/character-sheet`)
+- Altura mínima de 700px por painel; em janela baixa o salão rola, com a barra fixa e o texto/sigilo na primeira tela.
+
 ## 2026-10-30 — Galeria e destaque na escolha de origem (`feature/character-sheet`)
 - A etapa Origem virou um salão em tela cheia (`OriginStep.jsx`), com um painel vertical por origem que se expande no hover, como a seleção de personagem; os detalhes só aparecem ao clicar.
 - O painel cresce até quase a tela toda (`OriginStage.jsx`), com abas Ganhos, Habilidades, Linhagens e Sobre, setas entre origens e selo ao confirmar.
