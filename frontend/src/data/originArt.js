@@ -19,7 +19,7 @@ import runinata from '../assets/origins/runinata.mp4'
 
 export const ORIGIN_ART = {
   humano: { tagline: 'A espécie mais numerosa de Runeterra, moldada por cada cultura que a cerca.', hue: 42, motes: 'spark',
-    video: { src: humano, focus: 0.71, start: 1 } },
+    video: { src: humano, focus: 0.71 } },
   minotauro: { tagline: 'Povos tribais de grande vigor, vindos das montanhas da Grande Barreira.', hue: 14, motes: 'spark',
     video: { src: minotauro, focus: 0.7, show: 0.62 } },
   construto: { tagline: 'Máquinas que despertaram para a vida e ainda tentam entender o que sentem.', hue: 198, motes: 'hex',
@@ -31,13 +31,13 @@ export const ORIGIN_ART = {
   'meio-dragao': { tagline: 'Herdeiros raríssimos dos dragões elementais, que despertam a cada nível.', hue: 352, motes: 'spark',
     video: { src: meioDragao, focus: 0.58, show: 0.5 } },
   troll: { tagline: 'Enormes, grotescos e tribais, com presas à mostra e uma regeneração brutal.', hue: 88, motes: 'snow',
-    video: { src: troll, focus: 0.65, focusNarrow: 0.6, show: 0.62, end: 14.8 } },
+    video: { src: troll, focus: 0.65, focusNarrow: 0.6, show: 0.62 } },
   vastaya: { tagline: 'Quimeras de sangue humano e magia espiritual, em sintonia com a natureza.', hue: 286, motes: 'feather',
-    video: { src: vastaya, focus: 0.5, focusNarrow: 0.49, show: 0.55, start: 2, end: 47 } },
+    video: { src: vastaya, focus: 0.5, focusNarrow: 0.49, show: 0.55 } },
   yordle: { tagline: 'Pequenos espíritos de Bandópolis, escondidos sob o véu mágico do Glamour.', hue: 322, motes: 'petal',
     video: { src: yordle, focus: 0.74, focusNarrow: 0.75, show: 0.45 } },
   runinata: { tagline: 'Um ser único, nascido das Runas Globais. Cada traço é você quem monta.', hue: 258, motes: 'hex',
-    video: { src: runinata, focus: 0.5, focusNarrow: 0.53, show: 0.5, start: 1.5 } },
+    video: { src: runinata, focus: 0.5, focusNarrow: 0.53, show: 0.5 } },
 }
 
 const DEFAULT_ART = { hue: 42, motes: 'spark' }

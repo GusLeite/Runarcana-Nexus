@@ -79,7 +79,8 @@ function FocusVideo({ clip }) {
       watch.disconnect()
     }
   }, [clip])
-  // Em vez de loop, volta ao start (o recomeço do arquivo pode ter uma abertura preta), ao terminar ou ao chegar em end.
+  // Sem start/end, o loop é o nativo do navegador (os arquivos já são loops emendados). Com start/end, volta ao start ao terminar
+  // ou ao chegar em end, para pular uma abertura preta ou um trecho sujo.
   const restart = e => {
     e.currentTarget.currentTime = clip.start ?? 0
     playMuted(e.currentTarget)
@@ -87,7 +88,7 @@ function FocusVideo({ clip }) {
   const { fades, ...place } = box
   const style = { ...place, right: 'auto', bottom: 'auto', objectFit: 'fill' }
   if (fades) style.maskImage = 'linear-gradient(#000 72%, transparent)'
-  return <video className="oart-img oart-clip" src={clip.src} autoPlay muted playsInline onEnded={restart} onTimeUpdate={e => { if (clip.end && e.currentTarget.currentTime >= clip.end) restart(e) }} ref={el => { ref.current = el; playMuted(el) }} style={style} />
+  return <video className="oart-img oart-clip" src={clip.src} autoPlay muted playsInline loop={!clip.start && !clip.end} onEnded={restart} onTimeUpdate={e => { if (clip.end && e.currentTarget.currentTime >= clip.end) restart(e) }} ref={el => { ref.current = el; playMuted(el) }} style={style} />
 }
 
 // Só o sigilo da origem, com os traços desenhados (ver .oart-sigil em origin.css).

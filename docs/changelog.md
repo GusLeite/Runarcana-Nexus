@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Vídeos das origens cortados em loops de até 10 s (`feature/character-sheet`)
+- Os 10 vídeos passaram de ~178 MB para ~12 MB: cada um virou um loop de 3 a 10 s, sem áudio, até 1080p/30 fps, com o trecho escolhido pelo melhor encaixe entre fim e começo e o último segundo fundido com o começo.
+- `start`/`end` saíram das entradas (os cortes estão nos arquivos) e o `<video>` usa o `loop` nativo; as opções continuam suportadas.
+
 ## 2026-10-30 — Vídeo da Briar na Runinata: as 10 origens têm vídeo (`feature/character-sheet`)
 - `assets/origins/runinata.mp4` (1080p, 91 MB, 203 s): preto até ~1 s (`start: 1.5`); foco 0,5 (0,53 nos painéis estreitos), `show: 0.5`, medido no recorte de um painel de 342×1140 px em três instantes.
 - Pendência de peso dos vídeos registrada em frontend.md.
