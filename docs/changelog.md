@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Vídeo da Briar na Runinata: as 10 origens têm vídeo (`feature/character-sheet`)
+- `assets/origins/runinata.mp4` (1080p, 91 MB, 203 s): preto até ~1 s (`start: 1.5`); foco 0,5 (0,53 nos painéis estreitos), `show: 0.5`, medido no recorte de um painel de 342×1140 px em três instantes.
+- Pendência de peso dos vídeos registrada em frontend.md.
+
 ## 2026-10-30 — Vídeo do Gnar no Yordle (`feature/character-sheet`)
 - `assets/origins/yordle.mp4` (1080p, 3,5 MB, 17 s): o Gnar é pequeno e fica à direita do quadro; foco 0,74 (0,75 nos painéis estreitos), `show: 0.45`. O Gnar se mexe: o rosto vai e volta pelo quadro, então o foco foi medido em três instantes, no recorte exato de um painel de 342×1150 px, com uma linha no centro.
 

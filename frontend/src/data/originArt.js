@@ -15,6 +15,7 @@ import meioDragao from '../assets/origins/meio-dragao.mp4'
 import troll from '../assets/origins/troll.mp4'
 import vastaya from '../assets/origins/vastaya.mp4'
 import yordle from '../assets/origins/yordle.mp4'
+import runinata from '../assets/origins/runinata.mp4'
 
 export const ORIGIN_ART = {
   humano: { tagline: 'A espécie mais numerosa de Runeterra, moldada por cada cultura que a cerca.', hue: 42, motes: 'spark',
@@ -35,7 +36,8 @@ export const ORIGIN_ART = {
     video: { src: vastaya, focus: 0.5, focusNarrow: 0.49, show: 0.55, start: 2, end: 47 } },
   yordle: { tagline: 'Pequenos espíritos de Bandópolis, escondidos sob o véu mágico do Glamour.', hue: 322, motes: 'petal',
     video: { src: yordle, focus: 0.74, focusNarrow: 0.75, show: 0.45 } },
-  runinata: { tagline: 'Um ser único, nascido das Runas Globais. Cada traço é você quem monta.', hue: 258, motes: 'hex' },
+  runinata: { tagline: 'Um ser único, nascido das Runas Globais. Cada traço é você quem monta.', hue: 258, motes: 'hex',
+    video: { src: runinata, focus: 0.5, focusNarrow: 0.53, show: 0.5, start: 1.5 } },
 }
 
 const DEFAULT_ART = { hue: 42, motes: 'spark' }

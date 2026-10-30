@@ -67,6 +67,6 @@ A tela foi prototipada num `index.html` único (React via CDN, imagens e vídeo 
 
 ## Pendências / problemas conhecidos
 
-- As origens da criação, menos Humano (Yasuo), Minotauro (Alistar), Construto (Orianna), Antroplantæ (Ivern), Chireano, Meio-Dragão (Shyvana), Troll (Trundle), Vastaya (Sett) e Yordle (Gnar), ainda só têm o sigilo: falta a arte definitiva (um `video`, `living` ou `img` por origem em `data/originArt.js`). O vídeo do Trundle (13 MB, 65 s) só usa os primeiros 14,8 s e a Shyvana também é pesada (19 MB, 3,6 min, 1280×576, é a mesma cena em repetição); o do Humano é pesado (31 MB, 2110×1440, 77 s, com uns 1,5 s de preto no início): se o carregamento pesar, cortar e comprimir.
+- **Peso dos vídeos das origens** (`assets/origins/`, ~185 MB no total): Runinata 91 MB (203 s da mesma cena), Humano 31 MB, Meio-Dragão 19 MB, Troll 13 MB (só usa os primeiros 14,8 s), Chireano 9,6 MB, Vastaya 8 MB; os outros têm menos de 7 MB. Os 10 tocam ao mesmo tempo no salão: cortar cada um em poucos segundos em loop e recomprimir (ffmpeg não está instalado aqui) reduziria o download e o uso de CPU/GPU. Antes de subir para o GitHub: o limite é 100 MB por arquivo.
 - Ainda não há roteamento (react-router): as abas da ficha são estado local e não mudam a URL (recarregar volta para "FICHA").
 - O token fica no `localStorage` (simples, mas acessível a scripts da página); se o projeto crescer, considerar cookie `HttpOnly`.
