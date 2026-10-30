@@ -1,3 +1,5 @@
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+
 // Traços do sigilo provisório de cada origem (viewBox 100×100).
 const SIGILS = {
   humano: ['M50 12 58 42 88 50 58 58 50 88 42 58 12 50 42 42Z', 'M50 30a20 20 0 1 0 .01 0'],
@@ -29,6 +31,49 @@ const playMuted = video => {
   if (p) p.catch(() => {})
 }
 
+// Vídeo que mantém o personagem no centro do painel: object-fit cover corta as laterais, então a posição é
+// calculada a partir do formato do painel e de onde o personagem está no quadro (focus, 0 a 1).
+function FocusVideo({ clip }) {
+  const ref = useRef()
+  const [pos, setPos] = useState('50% 50%')
+  useLayoutEffect(() => {
+    const video = ref.current
+    const box = video.parentElement
+    const place = () => {
+      if (!video.videoWidth || !box.clientHeight) return
+      const axis = (focus, shown) => (shown >= 1 ? 50 : Math.min(100, Math.max(0, ((focus - shown / 2) / (1 - shown)) * 100)))
+      const ratio = box.clientWidth / box.clientHeight / (video.videoWidth / video.videoHeight)
+      // Painel mais estreito que o vídeo corta nos lados (x); mais largo, em cima e embaixo (y).
+      setPos(ratio < 1 ? axis(clip.focus ?? 0.5, ratio) + '% 50%' : '50% ' + axis(clip.focusY ?? 0.5, 1 / ratio) + '%')
+    }
+    place()
+    video.addEventListener('loadedmetadata', place)
+    const watch = new ResizeObserver(place)
+    watch.observe(box)
+    return () => {
+      video.removeEventListener('loadedmetadata', place)
+      watch.disconnect()
+    }
+  }, [clip])
+  return <video className="oart-img oart-clip" src={clip.src} autoPlay muted loop playsInline ref={el => { ref.current = el; playMuted(el) }} style={{ objectPosition: pos }} />
+}
+
+// Alterna os vídeos: o próximo entra por cima com fusão e o anterior sai depois.
+function CycleVideo({ vids }) {
+  const [now, setNow] = useState({ cur: 0, prev: null })
+  useEffect(() => {
+    if (vids.length < 2) return
+    const t = setTimeout(() => setNow(s => ({ cur: (s.cur + 1) % vids.length, prev: s.cur })), vids[now.cur].hold * 1000)
+    return () => clearTimeout(t)
+  }, [now.cur, vids])
+  useEffect(() => {
+    if (now.prev == null) return
+    const t = setTimeout(() => setNow(s => ({ ...s, prev: null })), 1200)
+    return () => clearTimeout(t)
+  }, [now.prev])
+  return [now.prev, now.cur].filter(i => i != null).map(i => <FocusVideo key={i} clip={vids[i]} />)
+}
+
 // Só o sigilo da origem, com os traços desenhados (ver .oart-sigil em origin.css).
 export function OriginSigil({ id }) {
   return (
@@ -43,11 +88,12 @@ export function OriginSigil({ id }) {
 // Fundo de uma origem: vídeo ou imagem, se houver (mesma ideia do CharacterPanel), ou o sigilo provisório.
 // large: versão do destaque, com anéis girando e partículas.
 export default function OriginArt({ id, art, large }) {
-  const hasMedia = !!(art.img || art.vid)
+  const hasMedia = !!(art.img || art.vid || art.vids?.length)
   return (
     <div className={'oart' + (large ? ' large' : '')} aria-hidden="true">
       {art.img && <div className="oart-img" style={{ backgroundImage: `url("${art.img}")`, backgroundPosition: art.pos }} />}
       {art.vid && <video className="oart-img" src={art.vid} poster={art.img} autoPlay muted loop playsInline ref={playMuted} style={{ objectPosition: art.pos }} />}
+      {art.vids?.length > 0 && <CycleVideo vids={art.vids} />}
       {!hasMedia && (
         <div className="oart-holder">
           {large && <span className="oart-ring" />}

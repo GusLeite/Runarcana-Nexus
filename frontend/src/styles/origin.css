@@ -4,6 +4,8 @@
 /* ---------- arte ---------- */
 .oart{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at 50% 30%,hsl(var(--h) 55% 26%),hsl(var(--h) 45% 9%) 62%,#03070d)}
 .oart-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background-size:cover;background-position:center top}
+.oart-clip:not(:first-child){animation:oclip-in 1.1s ease}
+@keyframes oclip-in{from{opacity:0}}
 .oart-holder{position:absolute;inset:0;display:grid;place-items:center}
 .oart-holder::after{content:"";position:absolute;inset:0;opacity:.3;background-image:repeating-linear-gradient(60deg,hsla(var(--h),80%,70%,.1) 0 1px,transparent 1px 22px),repeating-linear-gradient(-60deg,hsla(var(--h),80%,70%,.1) 0 1px,transparent 1px 22px)}
 .oart-sigil{position:relative;z-index:1;width:min(68%,150px);overflow:visible;margin-bottom:34%;fill:none;stroke:hsl(var(--h) 90% 76%);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 7px hsla(var(--h),95%,62%,.75))}
