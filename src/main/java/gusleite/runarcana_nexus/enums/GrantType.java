@@ -41,6 +41,10 @@ public enum GrantType {
                         // options + count = à escolha (vale para VULNERABILITY e ABSORPTION; a mesma fonte não repete o tipo)
     ABSORPTION,         // absorção de um tipo de dano: value = o tipo ("necrótico")
     IMMUNITY,           // imunidade a um tipo de dano: value = o tipo ("venenoso")
+    CRAFT_LEVEL,        // nível de ofício: value = id do ofício ou CHOSEN (o da CRAFT_CHOICE da mesma fonte); amount = +níveis,
+                        // valueByLevel = nível mínimo (Maestria: 6º; Atirador: pelo nível na classe). Sem value: escolha entre os
+                        // ofícios maiores que ele tem (sem repetir um que outra fonte já aumentou)
+    CRAFT_FORMULAS,     // fórmulas a mais no limite de um ofício: value (id ou CHOSEN), amount ou usesFormula (× count)
     DAMAGE_BONUS,       // bônus no dano dos ataques: value = alvo (ATTACK, ATTACK:MELEE..., UNARMED, TWO_HANDED, WEAPON:<nome>,
                         // CHOSEN = a arma escolhida na PROFICIENCY_CHOICE da mesma fonte); amount, damage ("1d4") ou usesFormula
                         // (PROFICIENCY, HALF_PROFICIENCY, HALF_ATTRIBUTE_MODIFIER com attribute)

@@ -185,6 +185,9 @@ public class CreationService {
         b.crafts.forEach(id -> c.getCrafts().add(craftNames.getOrDefault(id, id)));
         b.craftLevels.forEach((id, lv) -> c.getCraftLevels().put(craftNames.getOrDefault(id, id), lv));
         b.craftExpertise.forEach(id -> c.getCraftExpertise().add(craftNames.getOrDefault(id, id)));
+        replaceCraftMap(c.getCraftLevelBonus(), b.craftBonus, craftNames);
+        replaceCraftMap(c.getCraftMinLevel(), b.craftFloor, craftNames);
+        replaceCraftMap(c.getCraftFormulaBonus(), b.craftFormulas, craftNames);
         // Os pontos da criação são gastos no assistente; a ficha guarda o que sobrou (normalmente 0).
         c.setHeritagePoints(b.heritagePoints - b.heritagesSpent());
         b.heritages.forEach(h -> c.getHeritages().add(displayName(h)));
@@ -281,6 +284,9 @@ public class CreationService {
         c.getCraftLevels().clear();
         b.craftLevels.forEach((id, lv) -> c.getCraftLevels().put(craftNames.getOrDefault(id, id), lv));
         replace(c.getCraftExpertise(), b.craftExpertise.stream().map(id -> craftNames.getOrDefault(id, id)).toList());
+        replaceCraftMap(c.getCraftLevelBonus(), b.craftBonus, craftNames);
+        replaceCraftMap(c.getCraftMinLevel(), b.craftFloor, craftNames);
+        replaceCraftMap(c.getCraftFormulaBonus(), b.craftFormulas, craftNames);
         c.setHeritagePoints(b.heritagePoints - b.heritagesSpent());
         replace(c.getHeritages(), b.heritages.stream().map(CreationService::displayName).toList());
         replace(c.getSavingThrows(), b.saves.keySet());
@@ -581,6 +587,19 @@ public class CreationService {
                 List<String> picked = picks.get(key);
                 if (g.when() != null && !(isChoice(g) && whenMet(b, g.when()))) continue;
                 switch (g.type()) {
+                    case CRAFT_LEVEL -> {
+                        // Sem value: +amount num ofício maior que ele tem, diferente dos que outra fonte já aumentou.
+                        if (g.value() != null) break;
+                        List<String> options = catalog.craftsOrEmpty().stream()
+                                .filter(k -> "MAJOR".equals(k.kind()) && b.crafts.contains(k.id()) && !b.craftBonus.containsKey(k.id()))
+                                .map(RuleCatalog.Craft::id).toList();
+                        // Sem ofício maior para subir: não há o que escolher (fica para quando tiver).
+                        if (options.isEmpty()) break;
+                        String label = orLabel(g, "Escolha o ofício que sobe de nível");
+                        List<String> selected = choose(picked, options, 1, label, b.errors);
+                        selected.forEach(o -> b.craftBonus.merge(o, g.amount() == null ? 1 : g.amount(), Integer::sum));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, 1, options, selected, s.label(), null));
+                    }
                     case SENSE -> {
                         // Com options: o sentido é escolhido (traço Sentidos Especiais: Percepção às Cegas ou Sentido Sísmico).
                         if (!g.hasOptions()) break;
@@ -698,6 +717,8 @@ public class CreationService {
                             allCrafts.stream().filter(k -> !b.crafts.contains(k)).forEach(k -> options.add("CRAFT:" + k));
                         }
                         if (kinds.contains("MARTIAL_WEAPON")) options.add("MARTIAL_WEAPON");
+                        if (kinds.contains("CRAFT_LEVEL")) catalog.craftsOrEmpty().stream()
+                                .filter(k -> "MAJOR".equals(k.kind()) && b.crafts.contains(k.id())).forEach(k -> options.add("CRAFT_LEVEL:" + k.id()));
                         // Proficiências literais: "ARMOR:LIGHT" (armadura) e "WEAPON:Armas de fogo leves" (arma pelo nome).
                         kinds.stream().filter(k -> k.startsWith("ARMOR:") && !b.armorProficiencies.contains(k.substring(6))).forEach(options::add);
                         kinds.stream().filter(k -> k.startsWith("WEAPON:") && !b.weaponProficiencies.contains(k.substring(7))).forEach(options::add);
@@ -706,6 +727,7 @@ public class CreationService {
                         for (String o : selected) {
                             if (o.startsWith("SKILL:")) b.skills.put(SkillType.valueOf(o.substring(6)), s.label());
                             else if (o.startsWith("CRAFT:")) addCraft(b, o.substring(6), key);
+                            else if (o.startsWith("CRAFT_LEVEL:")) b.craftBonus.merge(o.substring(12), 1, Integer::sum);
                             else if (o.startsWith("ARMOR:")) b.armorProficiencies.add(o.substring(6));
                             else if (o.startsWith("WEAPON:")) {
                                 b.weaponProficiencies.add(o.substring(7));
@@ -750,12 +772,18 @@ public class CreationService {
                     case CRAFT_CHOICE -> {
                         // expertise: os que ele já tem continuam e dão especialidade (Artesão Nazumita);
                         // value EXPERTISE: o escolhido vem com especialidade (Mestre Artesão).
-                        boolean upgrade = Boolean.TRUE.equals(g.expertise());
+                        boolean upgrade = Boolean.TRUE.equals(g.expertise()) || "LEVEL".equals(g.value());
                         List<String> options = (g.options() == null || g.options().isEmpty() ? allCrafts : g.options()).stream()
                                 .filter(o -> upgrade || !b.crafts.contains(o)).toList();
                         String label = orLabel(g, "Escolha " + g.count() + " ofício(s)");
                         b.choices.add(optionalChoice(key, g, label, options, picked, s.label(), b,
                                 "A lista de ofícios ainda não foi cadastrada nas regras.", o -> {
+                                    b.chosenCrafts.computeIfAbsent(s.key(), k -> new ArrayList<>()).add(o);
+                                    // value LEVEL: o que ele já tem ganha um nível (Praticante Dedicado).
+                                    if ("LEVEL".equals(g.value()) && b.crafts.contains(o)) {
+                                        b.craftBonus.merge(o, 1, Integer::sum);
+                                        return;
+                                    }
                                     if (upgrade && b.crafts.contains(o)) b.craftExpertise.add(o);
                                     else addCraft(b, o, key);
                                     if ("EXPERTISE".equals(g.value())) b.craftExpertise.add(o);
@@ -1000,6 +1028,9 @@ public class CreationService {
             }
             case IMMUNITY -> b.immunities.add(g.value());
             case CONDITION_IMMUNITY -> b.conditionImmunities.add(g.value());
+            case CRAFT_LEVEL, CRAFT_FORMULAS -> {
+                if (g.value() != null) b.craftGrants.add(new Sourced<>(g, s.key() + "|" + s.label()));
+            }
             case DAMAGE_BONUS -> b.damageBonuses.add(new Sourced<>(g, s.key() + "|" + s.label()));
             case SENSE -> {
                 if (!g.hasOptions()) addSense(b, g.value(), g, b.scale(s.label()));
@@ -1057,6 +1088,12 @@ public class CreationService {
     }
 
     // Ofício ganho: guarda o nível do personagem em que entrou (o nível do ofício maior conta dali).
+    // Mapa por ofício (id → nome do catálogo), refeito a cada criação/subida.
+    private static void replaceCraftMap(Map<String, Integer> target, Map<String, Integer> byId, Map<String, String> craftNames) {
+        target.clear();
+        byId.forEach((id, n) -> target.put(craftNames.getOrDefault(id, id), n));
+    }
+
     private static void addCraft(Build b, String id, String key) {
         if (!b.crafts.add(id)) return;
         int at = key.startsWith("heritage:") ? b.heritageLevel.getOrDefault(key.replaceFirst("^(heritage:[^:]+).*$", "$1"), 1) : levelOfKey(key);
@@ -1892,6 +1929,7 @@ public class CreationService {
     // resistência → imunidade (Meio-Azakana, Meio-Kanmei).
     private static void damageUpgrades(Build b) {
         resolveSenses(b);
+        resolveCraftGrants(b);
         resolveDamageBonuses(b);
         if (b.sizeSteps > 0 && b.size != null) {
             CreatureSize[] all = CreatureSize.values();
@@ -1919,6 +1957,27 @@ public class CreationService {
         b.immunities.removeAll(b.absorptions);
         b.resistances.removeAll(b.immunities);
         b.resistances.removeAll(b.absorptions);
+    }
+
+    // Níveis e fórmulas de ofício das concessões fixas (value = id ou CHOSEN), com o nível da classe para a tabela.
+    private static void resolveCraftGrants(Build b) {
+        for (Sourced<Grant> c : b.craftGrants) {
+            Grant g = c.value();
+            String[] src = c.source().split("\\|", 2);
+            List<String> ids = "CHOSEN".equals(g.value()) ? b.chosenCrafts.getOrDefault(src[0], List.of()) : List.of(g.value());
+            for (String id : ids) {
+                if (g.type() == GrantType.CRAFT_FORMULAS) {
+                    int n = g.amount() != null ? g.amount()
+                            : usesFor(g, b.proficiency(), b.level, b.roundUp, b::modifier) * (g.count() == null ? 1 : g.count());
+                    b.craftFormulas.merge(id, n, Integer::sum);
+                } else if (g.valueByLevel() != null && !g.valueByLevel().isEmpty()) {
+                    Integer floor = valueAt(g, null, b.scale(src[1]));
+                    if (floor != null) b.craftFloor.merge(id, floor, Math::max);
+                } else if (g.amount() != null) {
+                    b.craftBonus.merge(id, g.amount(), Integer::sum);
+                }
+            }
+        }
     }
 
     // Bônus de dano viram notas "DAMAGE:<alvo>" ("+2", "+1d4"), somadas no dano dos ataques da ficha.
@@ -2533,6 +2592,12 @@ public class CreationService {
         // Bônus de dano (decididos no fim, com os atributos prontos) e as armas escolhidas em cada fonte (DAMAGE_BONUS CHOSEN).
         final List<Sourced<Grant>> damageBonuses = new ArrayList<>();
         final Map<String, List<String>> chosenWeapons = new LinkedHashMap<>();
+        // Níveis de ofício: +níveis, nível mínimo e fórmulas a mais (por id); as concessões fixas e os ofícios escolhidos por fonte.
+        final Map<String, Integer> craftBonus = new LinkedHashMap<>();
+        final Map<String, Integer> craftFloor = new LinkedHashMap<>();
+        final Map<String, Integer> craftFormulas = new LinkedHashMap<>();
+        final List<Sourced<Grant>> craftGrants = new ArrayList<>();
+        final Map<String, List<String>> chosenCrafts = new LinkedHashMap<>();
         final Map<String, Integer> senses = new LinkedHashMap<>();
         final List<Sourced<Attribute>> saveUpgrades = new ArrayList<>();
         final Set<Attribute> saveExpertise = new LinkedHashSet<>();

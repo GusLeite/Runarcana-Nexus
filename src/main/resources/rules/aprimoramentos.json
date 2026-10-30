@@ -1932,9 +1932,10 @@
           "count": 3,
           "options": [
             "SKILL",
-            "CRAFT"
+            "CRAFT",
+            "CRAFT_LEVEL"
           ],
-          "label": "Hábil: 3 proficiências (perícia ou ofício)"
+          "label": "Hábil: 3 entre perícia, ofício ou +1 nível num Ofício Maior"
         }
       ]
     },
@@ -2120,7 +2121,54 @@
       "description": "Esse Aprimoramento pode ser escolhido mais de uma vez, a cada vez que você escolhe esse Aprimoramento, você pode escolher 1 Ofício Maior.\n\n- Você recebe o 6º nível nesse Ofício\n- Você aprende um número de fórmulas de 6º nível desse ofício igual ao seu modificador de Inteligência (mínimo de 1)\n- Você aprende um número de fórmulas igual a metade do seu modificador de Inteligência (mínimo de 1) de cada nível do 1º ao 5º desse Ofício.\n- Você recebe Especialidade com esse Ofício.",
       "requires": {
         "level": 18
-      }
+      },
+      "grants": [
+        {
+          "type": "CRAFT_CHOICE",
+          "count": 1,
+          "options": [
+            "alquimista",
+            "apotecario",
+            "armadilheiro",
+            "armeiro",
+            "armoreiro",
+            "arqueirista",
+            "chaveiro",
+            "cozinheiro",
+            "cuteleiro",
+            "encantador",
+            "encarrocador",
+            "fermentador",
+            "joalheiro",
+            "modista",
+            "pedreiro",
+            "tecmaturgo"
+          ],
+          "expertise": true,
+          "value": "EXPERTISE",
+          "label": "Maestria: um Ofício Maior (6º nível, com especialidade)"
+        },
+        {
+          "type": "CRAFT_LEVEL",
+          "value": "CHOSEN",
+          "valueByLevel": {
+            "1": 6
+          }
+        },
+        {
+          "type": "CRAFT_FORMULAS",
+          "value": "CHOSEN",
+          "usesFormula": "ATTRIBUTE_MODIFIER",
+          "attribute": "INTELLIGENCE"
+        },
+        {
+          "type": "CRAFT_FORMULAS",
+          "value": "CHOSEN",
+          "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+          "attribute": "INTELLIGENCE",
+          "count": 5
+        }
+      ]
     },
     {
       "id": "aprimoramento-magia-abencoada",
@@ -2587,6 +2635,17 @@
           "count": 1,
           "amount": 1,
           "label": "+1 em um atributo à escolha"
+        },
+        {
+          "type": "CRAFT_CHOICE",
+          "count": 1,
+          "value": "LEVEL",
+          "label": "Praticante Dedicado: um ofício novo, ou +1 nível num que você já tem"
+        },
+        {
+          "type": "CRAFT_FORMULAS",
+          "value": "CHOSEN",
+          "amount": 5
         }
       ]
     },

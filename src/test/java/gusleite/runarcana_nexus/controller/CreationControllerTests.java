@@ -205,7 +205,7 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-pericia:12')].options[0]").value("gélido"));
         String done = body.replace("\"class:ARCANIST:1\"", "\"heritage:teste-pericia:1\":[\"STEALTH\"],"
                 + "\"heritage:teste-pericia:11\":[\"ácido\"],\"heritage:teste-pericia:12\":[\"gélido\"],"
-                + "\"heritage:teste-pericia:13\":[\"agua\"],\"heritage:teste-pericia:16\":[\"t-onda\"],\"class:ARCANIST:1\"");
+                + "\"heritage:teste-pericia:13\":[\"agua\"],\"heritage:teste-pericia:16\":[\"t-onda\"],\"heritage:teste-pericia:29\":[\"ferraria\"],\"class:ARCANIST:1\"");
         // Magia à escolha só dos Mistérios dados (MYSTERY:agua, até o 1º nível): a Onda, não o Escudo Arcano.
         preview(token, damage)
                 .andExpect(jsonPath("$.choices[?(@.key == 'heritage:teste-pericia:16')].options", hasItem(List.of("t-onda"))));
@@ -232,6 +232,9 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.character.typedReductions['gélido']").value(2))
                 // Sentidos: vale o maior (60) e a fonte "ou +15" soma 15; submerso é outro sentido.
                 .andExpect(jsonPath("$.character.senses.DARKVISION").value(75))
+                // Ofício: +1 nível escolhido (Ferraria 1 → 2) e 3 fórmulas a mais (INT 17: 3 × 2 + 3).
+                .andExpect(jsonPath("$.crafts[?(@.name == 'Ferraria')].level").value(2))
+                .andExpect(jsonPath("$.crafts[?(@.name == 'Ferraria')].formulaLimit").value(9))
                 .andExpect(jsonPath("$.character.senses['DARKVISION|submerso']").value(30))
                 // Usos a mais: soma na habilidade que existe (Inspirado 1 → 2) e cria a que falta (Ki Teste com 2).
                 .andExpect(jsonPath("$.abilities[?(@.name == 'Inspirado')].maxUses").value(2))

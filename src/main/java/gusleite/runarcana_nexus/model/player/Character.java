@@ -205,6 +205,22 @@ public class Character {
     @MapKeyColumn(name = "craft")
     @Column(name = "learned_at")
     private Map<String, Integer> craftLevels = new HashMap<>();
+    // Níveis a mais em cada ofício (Minucioso, Operário: +1), o nível mínimo (Maestria: 6º) e fórmulas a mais no limite.
+    @ElementCollection
+    @CollectionTable(name = "character_craft_level_bonus", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "craft")
+    @Column(name = "levels")
+    private Map<String, Integer> craftLevelBonus = new HashMap<>();
+    @ElementCollection
+    @CollectionTable(name = "character_craft_min_level", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "craft")
+    @Column(name = "min_level")
+    private Map<String, Integer> craftMinLevel = new HashMap<>();
+    @ElementCollection
+    @CollectionTable(name = "character_craft_formula_bonus", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "craft")
+    @Column(name = "formulas")
+    private Map<String, Integer> craftFormulaBonus = new HashMap<>();
 
     // Pontos de Herança ainda não gastos (os da criação são gastos no assistente).
     private Integer heritagePoints;

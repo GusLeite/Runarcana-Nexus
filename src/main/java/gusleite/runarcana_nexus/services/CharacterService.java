@@ -207,14 +207,19 @@ public class CharacterService {
             Integer bonus = attribute == null ? null
                     : character.getModifier(attribute) + (expert ? character.getProficiencyBonus() : character.getProficiencyBonus() / 2);
             int learnedAt = character.getCraftLevels().getOrDefault(name, 1);
-            Integer level = k != null && "MAJOR".equals(k.kind()) ? 1 + Math.max(0, character.getLevel() - learnedAt) / 4 : null;
+            // + níveis a mais (Minucioso, Hábil...) e o nível mínimo (Maestria: 6º; Armeiro do Atirador).
+            Integer level = k != null && "MAJOR".equals(k.kind())
+                    ? Math.max(character.getCraftMinLevel().getOrDefault(name, 0),
+                    1 + Math.max(0, character.getLevel() - learnedAt) / 4 + character.getCraftLevelBonus().getOrDefault(name, 0))
+                    : null;
             List<CraftResponse.KnownFormula> known = k == null ? List.of() : character.getFormulas().stream()
                     .filter(f -> f.startsWith(k.id() + ":"))
                     .flatMap(f -> formulas.find(f).map(x -> new CraftResponse.KnownFormula(f, x.name()
                             + (x.discipline() == null ? "" : " (" + x.discipline() + ")"), x.level(), x.dc(), x.description())).stream())
                     .sorted(java.util.Comparator.comparingInt(CraftResponse.KnownFormula::level).thenComparing(CraftResponse.KnownFormula::name))
                     .toList();
-            int limit = Math.max(1, character.getModifier(Attribute.INTELLIGENCE)) * (level == null ? 1 : level);
+            int limit = Math.max(1, character.getModifier(Attribute.INTELLIGENCE)) * (level == null ? 1 : level)
+                    + character.getCraftFormulaBonus().getOrDefault(name, 0);
             return new CraftResponse(k == null ? null : k.id(), name, k == null ? null : k.kind(), attribute, level, learnedAt, expert, bonus, known, limit);
         }).toList();
     }

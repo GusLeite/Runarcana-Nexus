@@ -5780,6 +5780,22 @@
               "abilityType": "PASSIVE",
               "name": "Armeiro Artesão",
               "description": "Especialidade no Ofício de Armeiro e 2º nível nele, acima do limite padrão; 3º nível no 7º, 4º no 11º, 5º no 15º e 6º no 18º nível de Atirador."
+            },
+            {
+              "type": "CRAFT",
+              "value": "armeiro",
+              "expertise": true
+            },
+            {
+              "type": "CRAFT_LEVEL",
+              "value": "armeiro",
+              "valueByLevel": {
+                "3": 2,
+                "7": 3,
+                "11": 4,
+                "15": 5,
+                "18": 6
+              }
             }
           ]
         },

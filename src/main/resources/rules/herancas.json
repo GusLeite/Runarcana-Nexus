@@ -2444,6 +2444,11 @@
           "type": "PASSIVE_BONUS",
           "value": "PERCEPTION",
           "usesFormula": "HALF_PROFICIENCY"
+        },
+        {
+          "type": "CRAFT_LEVEL",
+          "amount": 1,
+          "label": "Minucioso: o ofício que sobe um nível"
         }
       ]
     },
@@ -2464,6 +2469,11 @@
         {
           "type": "SKILL_CHOICE",
           "count": 2
+        },
+        {
+          "type": "CRAFT_LEVEL",
+          "amount": 1,
+          "label": "Operário: o ofício que sobe um nível"
         }
       ]
     },
@@ -2511,6 +2521,11 @@
             "PERFORMANCE",
             "PERSUASION"
           ]
+        },
+        {
+          "type": "CRAFT_LEVEL",
+          "amount": 1,
+          "label": "Privilegiado: o ofício que sobe um nível"
         }
       ],
       "uses": {

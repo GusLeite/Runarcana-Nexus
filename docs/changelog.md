@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento C3: níveis de ofício (`feature/character-sheet`)
+- Concessões `CRAFT_LEVEL` (+níveis ou nível mínimo) e `CRAFT_FORMULAS`; a ficha guarda por ofício e soma no nível e no limite de fórmulas.
+- Minucioso, Operário e Privilegiado (+1 nível), Hábil (opção de nível), Maestria (6º nível, especialidade e fórmulas), Praticante Dedicado (ofício ou +1 nível, 5 fórmulas), Atirador 3º (Armeiro pelo nível da classe).
+- Teste: Ferraria do Nyx com +1 nível e 3 fórmulas a mais.
+
 ## 2026-10-29 — Mapeamento C2: bônus no dano dos ataques (`feature/character-sheet`)
 - Concessão `DAMAGE_BONUS`, guardada como nota `DAMAGE:<alvo>` e somada no dano dos ataques da ficha (com a nota da fonte).
 - Disciplina é Força (+proficiência na arma escolhida), Fúria de Warmog (duas mãos), Briguento (+1d4 desarmado), Detectar/Perceber Fraquezas (metade do atributo, pela escolha), Colosso e Mãos de Ferro (+1).
