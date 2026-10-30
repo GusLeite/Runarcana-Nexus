@@ -3,6 +3,8 @@ import rudoImg from '../assets/characters/rudo.jpg'
 import rudoVid from '../assets/characters/rudo.mp4'
 import gaudronImg from '../assets/characters/gaudron.jpg'
 import gaudronVid from '../assets/characters/gaudron.mp4'
+import logeImg from '../assets/characters/loge.jpg'
+import logeVid from '../assets/characters/loge.mp4'
 
 // Personagens da tela de seleção.
 // - img: arte real (import de src/assets) ou placeholder gerado por hue/variant
@@ -17,7 +19,8 @@ const BASE = [
   { id: 'gaudron', name: 'GAUDRON', role: 'Guardião', hue: 42, variant: 1, lore: 'Guarda os portões e as promessas feitas.',
     img: gaudronImg, vid: gaudronVid, pos: '57% 25%', fx: 'embers', impact: true },
   { id: 'proto', name: 'PROTO', role: 'Arcanista', hue: 190, variant: 2, lore: 'Dobra a magia antiga em novas formas.' },
-  { id: 'loge', name: 'LOGE', role: 'Espreitador', hue: 135, variant: 4, lore: 'Some nas sombras e volta com o que falta.' },
+  { id: 'loge', name: 'LOGE', role: 'Espreitador', hue: 135, variant: 4, lore: 'Some nas sombras e volta com o que falta.',
+    img: logeImg, vid: logeVid, pos: '50% 25%' },
 ]
 
 export const CHARACTERS = BASE.map(c => ({

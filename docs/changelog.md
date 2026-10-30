@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Loge ganha vídeo na tela inicial (`feature/character-sheet`)
+- `assets/characters/loge.mp4` (H.264 1080p sem áudio, comprimido de 22,8 MB para 8,2 MB) e `loge.jpg` (poster, 1600×900), ligados em `data/characters.js`.
+- Só o Proto segue com placeholder.
+
 ## 2026-10-30 — Titan sai da tela inicial (`feature/character-sheet`)
 - O jogador não joga mais: painel removido de `data/characters.js`; a seleção fica com Rudo, Gaudron, Proto e Loge.
 - A conta `titan` continua no seed do back-end (nada foi apagado do banco).
