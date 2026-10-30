@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento: aproximações corrigidas (`feature/character-sheet`)
+- Armas regionais pela região do personagem ("regional (...)" no catálogo de itens, como na wiki): Estudioso de Armas e Ferromante (só marciais).
+- "Mistério a que você tenha acesso" só com os acessíveis (`MYSTERY` `value: ACCESS`, `MagicRules.accessibleElements`).
+- Magia Inata: 2º e 3º nível exatos (`+EXACT`); Acólito Arcanista pelo nível de conjuração do Acólito (`+CASTER:ACOLYTE`). Conferido no sandbox.
+
 ## 2026-10-29 — Mapeamento: Sinergia das Runas, Bônus de Totem e Dançarino (`feature/character-sheet`)
 - Sinergia só com o Pulso da Runa (Elegia, Bênção do Vigia, Fôlego de Guerra); Bônus de Totem dos 15 Grandes Espíritos como efeito ativo; Dançarino com proficiência na perícia escolhida.
 - Efeitos ativos ganham RD e iniciativa (`reduction`/`initiative`). Teste: o efeito de teste soma RD e iniciativa.

@@ -316,9 +316,9 @@ public class RuleCatalogService {
         }
         for (Map.Entry<String, Grant> e : grants) {
             Grant g = e.getValue();
-            if (g.type() == GrantType.MYSTERY && g.value() != null && !mysteries.contains(g.value())) p.add(e.getKey() + " (MYSTERY): Mistério inexistente \"" + g.value() + "\"");
+            if (g.type() == GrantType.MYSTERY && g.value() != null && !"ACCESS".equals(g.value()) && !mysteries.contains(g.value())) p.add(e.getKey() + " (MYSTERY): Mistério inexistente \"" + g.value() + "\"");
             // Mistério à escolha: cada opção é um id de Mistério.
-            if (g.type() == GrantType.MYSTERY && g.value() == null && g.hasOptions()) g.options().stream().filter(o -> !mysteries.contains(o))
+            if (g.type() == GrantType.MYSTERY && (g.value() == null || "ACCESS".equals(g.value())) && g.hasOptions()) g.options().stream().filter(o -> !mysteries.contains(o))
                     .forEach(o -> p.add(e.getKey() + " (MYSTERY): Mistério inexistente \"" + o + "\""));
             if (g.type() == GrantType.MYSTERY && g.options() != null) g.options().stream().filter(o -> !mysteries.contains(o))
                     .forEach(o -> p.add(e.getKey() + " (MYSTERY): opção \"" + o + "\" não é um Mistério"));
@@ -694,7 +694,7 @@ public class RuleCatalogService {
                     if (g.count() == null || g.count() < 1) p.add(at + " (PROFICIENCY_CHOICE): precisa de count");
                     // Além dos tipos, opções literais: "ARMOR:LIGHT" (LIGHT/MEDIUM/HEAVY/SHIELD) e "WEAPON:<nome da arma>".
                     if (g.options() != null) g.options().stream()
-                            .filter(o -> !Set.of("SKILL", "CRAFT", "MARTIAL_WEAPON", "CRAFT_LEVEL").contains(o))
+                            .filter(o -> !Set.of("SKILL", "CRAFT", "MARTIAL_WEAPON", "CRAFT_LEVEL", "REGIONAL_WEAPON", "REGIONAL_MARTIAL").contains(o))
                             .filter(o -> !(o.startsWith("ARMOR:") && ARMOR_TYPES.contains(o.substring(6))))
                             .filter(o -> !(o.startsWith("WEAPON:") && o.length() > 7))
                             .forEach(o -> p.add(at + " (PROFICIENCY_CHOICE): opção desconhecida \"" + o + "\""));
@@ -846,10 +846,10 @@ public class RuleCatalogService {
                     if (g.count() == null || g.count() < 1) p.add(at + " (SPELL_CHOICE): precisa de count");
                     if (g.spellLevel() == null || g.spellLevel() < 0 || g.spellLevel() > 9) p.add(at + " (SPELL_CHOICE): spellLevel deve ir de 0 a 9");
                     if (g.value() != null && g.value().startsWith("LIST:")) {
-                        for (String k : g.value().substring(5).replace("+ATTACK", "").replace("+RITUAL", "").split(",")) {
+                        for (String k : g.value().substring(5).replace("+ATTACK", "").replace("+RITUAL", "").replace("+EXACT", "").split(",")) {
                             if (Arrays.stream(CharacterClassType.values()).noneMatch(t -> t.name().equals(k))) p.add(at + " (SPELL_CHOICE): classe desconhecida em LIST: " + k);
                         }
-                    } else if (g.value() != null && !SPELL_SOURCES.contains(g.value()) && !"ANY".equals(g.value()) && !"ORIGIN".equals(g.value()) && !g.value().startsWith("MYSTERY:")) {
+                    } else if (g.value() != null && !SPELL_SOURCES.contains(g.value().replace("+EXACT", "").replaceAll("\\+CASTER:[A-Z]+", "")) && !g.value().startsWith("ANY") && !g.value().startsWith("ORIGIN") && !g.value().startsWith("MYSTERY:")) {
                         p.add(at + " (SPELL_CHOICE): value deve ser um destes: " + SPELL_SOURCES + ", ANY, MYSTERY:<ids> ou LIST:<classes>");
                     }
                 }

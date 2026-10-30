@@ -747,7 +747,8 @@
             "transmutacao",
             "umbramancia"
           ],
-          "label": "Arcanun: um Mistério"
+          "label": "Arcanun: um Mistério",
+          "value": "ACCESS"
         }
       ]
     },
@@ -924,7 +925,8 @@
             "transmutacao",
             "umbramancia"
           ],
-          "label": "Assinatura Aprimorada: um Mistério"
+          "label": "Assinatura Aprimorada: um Mistério",
+          "value": "ACCESS"
         }
       ]
     },

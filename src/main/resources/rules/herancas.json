@@ -51,78 +51,71 @@
             "transmutacao",
             "umbramancia"
           ],
-          "label": "Acólito Arcanista: um Mistério"
+          "label": "Acólito Arcanista: um Mistério",
+          "value": "ACCESS"
         },
         {
           "type": "SPELL_CHOICE",
-          "value": "MYSTERY:CHOSEN",
+          "value": "MYSTERY:CHOSEN+CASTER:ACOLYTE",
           "spellLevel": 1,
           "count": 1,
           "label": "Acólito Arcanista: uma magia de até 1º nível do Mistério escolhido"
         },
         {
           "type": "SPELL_CHOICE",
-          "value": "MYSTERY:CHOSEN",
+          "value": "MYSTERY:CHOSEN+CASTER:ACOLYTE",
           "spellLevel": 2,
           "count": 1,
-          "label": "Acólito Arcanista: uma magia de até 2º nível do Mistério escolhido",
-          "minLevel": 3
+          "label": "Acólito Arcanista: uma magia de até 2º nível do Mistério escolhido"
         },
         {
           "type": "SPELL_CHOICE",
-          "value": "MYSTERY:CHOSEN",
+          "value": "MYSTERY:CHOSEN+CASTER:ACOLYTE",
           "spellLevel": 3,
           "count": 1,
-          "label": "Acólito Arcanista: uma magia de até 3º nível do Mistério escolhido",
-          "minLevel": 5
+          "label": "Acólito Arcanista: uma magia de até 3º nível do Mistério escolhido"
         },
         {
           "type": "SPELL_CHOICE",
-          "value": "MYSTERY:CHOSEN",
+          "value": "MYSTERY:CHOSEN+CASTER:ACOLYTE",
           "spellLevel": 4,
           "count": 1,
-          "label": "Acólito Arcanista: uma magia de até 4º nível do Mistério escolhido",
-          "minLevel": 7
+          "label": "Acólito Arcanista: uma magia de até 4º nível do Mistério escolhido"
         },
         {
           "type": "SPELL_CHOICE",
-          "value": "MYSTERY:CHOSEN",
+          "value": "MYSTERY:CHOSEN+CASTER:ACOLYTE",
           "spellLevel": 5,
           "count": 1,
-          "label": "Acólito Arcanista: uma magia de até 5º nível do Mistério escolhido",
-          "minLevel": 9
+          "label": "Acólito Arcanista: uma magia de até 5º nível do Mistério escolhido"
         },
         {
           "type": "SPELL_CHOICE",
-          "value": "MYSTERY:CHOSEN",
+          "value": "MYSTERY:CHOSEN+CASTER:ACOLYTE",
           "spellLevel": 6,
           "count": 1,
-          "label": "Acólito Arcanista: uma magia de até 6º nível do Mistério escolhido",
-          "minLevel": 11
+          "label": "Acólito Arcanista: uma magia de até 6º nível do Mistério escolhido"
         },
         {
           "type": "SPELL_CHOICE",
-          "value": "MYSTERY:CHOSEN",
+          "value": "MYSTERY:CHOSEN+CASTER:ACOLYTE",
           "spellLevel": 7,
           "count": 1,
-          "label": "Acólito Arcanista: uma magia de até 7º nível do Mistério escolhido",
-          "minLevel": 13
+          "label": "Acólito Arcanista: uma magia de até 7º nível do Mistério escolhido"
         },
         {
           "type": "SPELL_CHOICE",
-          "value": "MYSTERY:CHOSEN",
+          "value": "MYSTERY:CHOSEN+CASTER:ACOLYTE",
           "spellLevel": 8,
           "count": 1,
-          "label": "Acólito Arcanista: uma magia de até 8º nível do Mistério escolhido",
-          "minLevel": 15
+          "label": "Acólito Arcanista: uma magia de até 8º nível do Mistério escolhido"
         },
         {
           "type": "SPELL_CHOICE",
-          "value": "MYSTERY:CHOSEN",
+          "value": "MYSTERY:CHOSEN+CASTER:ACOLYTE",
           "spellLevel": 9,
           "count": 1,
-          "label": "Acólito Arcanista: uma magia de até 9º nível do Mistério escolhido",
-          "minLevel": 17
+          "label": "Acólito Arcanista: uma magia de até 9º nível do Mistério escolhido"
         }
       ]
     },
@@ -756,29 +749,7 @@
           "type": "PROFICIENCY_CHOICE",
           "count": 1,
           "options": [
-            "WEAPON:Chakram Grande",
-            "WEAPON:Cutelo Crescente",
-            "WEAPON:Dracocida",
-            "WEAPON:Espada Javali",
-            "WEAPON:Han Kote",
-            "WEAPON:Ídolo do Deus Ancião",
-            "WEAPON:Katana",
-            "WEAPON:Lâmina Navori",
-            "WEAPON:Leque de Guerra",
-            "WEAPON:Nodachi",
-            "WEAPON:Ntofo",
-            "WEAPON:Nunchaku",
-            "WEAPON:Sai",
-            "WEAPON:Tonfa",
-            "WEAPON:Machado Giratório",
-            "WEAPON:Shuriken",
-            "WEAPON:Adaga com Corrente",
-            "WEAPON:Cão-Dragão",
-            "WEAPON:Corrente Espinhosa",
-            "WEAPON:Foice com Corrente",
-            "WEAPON:Lâminas do Caos",
-            "WEAPON:Manopla com Corrente",
-            "WEAPON:Martelo Meteoro"
+            "REGIONAL_WEAPON"
           ],
           "label": "Estudioso de Armas: uma arma regional"
         },
@@ -974,29 +945,7 @@
           "type": "PROFICIENCY_CHOICE",
           "count": 1,
           "options": [
-            "WEAPON:Chakram Grande",
-            "WEAPON:Cutelo Crescente",
-            "WEAPON:Dracocida",
-            "WEAPON:Espada Javali",
-            "WEAPON:Han Kote",
-            "WEAPON:Ídolo do Deus Ancião",
-            "WEAPON:Katana",
-            "WEAPON:Lâmina Navori",
-            "WEAPON:Leque de Guerra",
-            "WEAPON:Nodachi",
-            "WEAPON:Ntofo",
-            "WEAPON:Nunchaku",
-            "WEAPON:Sai",
-            "WEAPON:Tonfa",
-            "WEAPON:Machado Giratório",
-            "WEAPON:Shuriken",
-            "WEAPON:Adaga com Corrente",
-            "WEAPON:Cão-Dragão",
-            "WEAPON:Corrente Espinhosa",
-            "WEAPON:Foice com Corrente",
-            "WEAPON:Lâminas do Caos",
-            "WEAPON:Manopla com Corrente",
-            "WEAPON:Martelo Meteoro"
+            "REGIONAL_MARTIAL"
           ],
           "label": "Ferromante: uma arma marcial regional"
         },
@@ -1190,7 +1139,8 @@
             "transmutacao",
             "umbramancia"
           ],
-          "label": "Iniciado nos Mistérios: dois Mistérios"
+          "label": "Iniciado nos Mistérios: dois Mistérios",
+          "value": "ACCESS"
         }
       ]
     },
@@ -1637,7 +1587,8 @@
             "transmutacao",
             "umbramancia"
           ],
-          "label": "Sangue Arcano: um Mistério"
+          "label": "Sangue Arcano: um Mistério",
+          "value": "ACCESS"
         },
         {
           "type": "SITUATIONAL",
@@ -2142,7 +2093,8 @@
             "nevasca",
             "artico"
           ],
-          "label": "Aptidão Elemental: um Mistério Elemental"
+          "label": "Aptidão Elemental: um Mistério Elemental",
+          "value": "ACCESS"
         }
       ]
     },
@@ -6418,18 +6370,18 @@
         },
         {
           "type": "SPELL_CHOICE",
-          "value": "ORIGIN",
+          "value": "ORIGIN+EXACT",
           "spellLevel": 2,
           "count": 1,
-          "label": "Magia Inata (11º nível): uma magia de até 2º nível",
+          "label": "Magia Inata (11º nível): uma magia de 2º nível",
           "minLevel": 11
         },
         {
           "type": "SPELL_CHOICE",
-          "value": "ORIGIN",
+          "value": "ORIGIN+EXACT",
           "spellLevel": 3,
           "count": 1,
-          "label": "Magia Inata (17º nível): uma magia de até 3º nível",
+          "label": "Magia Inata (17º nível): uma magia de 3º nível",
           "minLevel": 17
         }
       ]

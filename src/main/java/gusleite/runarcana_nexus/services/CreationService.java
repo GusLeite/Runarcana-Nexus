@@ -594,6 +594,9 @@ public class CreationService {
                 if (g.when() != null && !(isChoice(g) && whenMet(b, g.when()))) continue;
                 // Escolha que só aparece a partir de um nível do personagem (Magia Inata: magia de 1º nível no 5º).
                 if (g.minLevel() != null && b.level < g.minLevel()) continue;
+                // "+CASTER:ACOLYTE": magia de um nível só quando essa classe já conjura esse nível (Acólito Arcanista).
+                if (g.type() == GrantType.SPELL_CHOICE && g.value() != null && g.value().contains(CASTER)
+                        && casterLevel(b, g.value().substring(g.value().indexOf(CASTER) + CASTER.length()).split("\\+")[0]) < (g.spellLevel() == null ? 0 : g.spellLevel())) continue;
                 switch (g.type()) {
                     case CRAFT_MASTERWORK -> {
                         // Sem value: o ofício escolhido entre os que ele tem (Artífice: "para um de seus ofícios").
@@ -649,9 +652,12 @@ public class CreationService {
                         // Com options: o Mistério de value, ou um das options se ele já tiver (Glifo Ígneo: Fogo, ou Magma/Infernal).
                         if (!g.hasOptions()) break;
                         // Sem value: Mistério(s) à escolha entre as options (ids), sem virar habilidade (Sangue Arcano).
-                        if (g.value() == null) {
+                        // value ACCESS: só os que ele alcança ("um Mistério a que você tenha acesso").
+                        if (g.value() == null || ACCESS.equals(g.value())) {
                             int count = g.count() == null ? 1 : g.count();
-                            List<String> options = g.options().stream().filter(o -> !b.mysteries.contains(o)).toList();
+                            Set<String> reachable = ACCESS.equals(g.value()) ? accessibleMysteries(b) : null;
+                            List<String> options = g.options().stream().filter(o -> !b.mysteries.contains(o))
+                                    .filter(o -> reachable == null || reachable.contains(o)).toList();
                             String label = orLabel(g, "Escolha " + count + " Mistério(s)");
                             List<String> selected = choose(picked, options, count, label, b.errors);
                             b.mysteries.addAll(selected);
@@ -735,12 +741,22 @@ public class CreationService {
                             allCrafts.stream().filter(k -> !b.crafts.contains(k)).forEach(k -> options.add("CRAFT:" + k));
                         }
                         if (kinds.contains("MARTIAL_WEAPON")) options.add("MARTIAL_WEAPON");
+                        // Armas regionais da região do personagem ("regional (Ionia)" nas propriedades do catálogo de itens);
+                        // REGIONAL_MARTIAL: só as marciais (Ferromante).
+                        if (kinds.contains("REGIONAL_WEAPON") || kinds.contains("REGIONAL_MARTIAL")) {
+                            boolean martial = !kinds.contains("REGIONAL_WEAPON");
+                            regionalWeapons(catalog, b, martial).stream().filter(w -> !b.weaponProficiencies.contains(w)).forEach(w -> options.add("WEAPON:" + w));
+                        }
                         if (kinds.contains("CRAFT_LEVEL")) catalog.craftsOrEmpty().stream()
                                 .filter(k -> "MAJOR".equals(k.kind()) && b.crafts.contains(k.id())).forEach(k -> options.add("CRAFT_LEVEL:" + k.id()));
                         // Proficiências literais: "ARMOR:LIGHT" (armadura) e "WEAPON:Armas de fogo leves" (arma pelo nome).
                         kinds.stream().filter(k -> k.startsWith("ARMOR:") && !b.armorProficiencies.contains(k.substring(6))).forEach(options::add);
                         kinds.stream().filter(k -> k.startsWith("WEAPON:") && !b.weaponProficiencies.contains(k.substring(7))).forEach(options::add);
                         String label = orLabel(g, "Escolha " + g.count() + " proficiência(s)");
+                        if (options.isEmpty() && (kinds.contains("REGIONAL_WEAPON") || kinds.contains("REGIONAL_MARTIAL"))) {
+                            b.choices.add(new ChoiceLine(key, g.type(), label, g.count(), options, List.of(), s.label(), "Não há armas regionais desse tipo para a sua região; combine com o mestre."));
+                            break;
+                        }
                         List<String> selected = choose(picked, options, g.count(), label, b.errors);
                         for (String o : selected) {
                             if (o.startsWith("SKILL:")) b.skills.put(SkillType.valueOf(o.substring(6)), s.label());
@@ -1443,6 +1459,23 @@ public class CreationService {
     static final String MYSTERY = "MYSTERY";
 
     // "Água (Elemental)", "Infernal" → id do Mistério, pelo nome (sem acento nem maiúscula; Infernal = Inferno).
+    static final String ACCESS = "ACCESS";
+
+    // Mistérios a que o personagem tem acesso: os Espirituais e Celestiais sempre; os Elementais pelo elemento
+    // (primários sempre; os outros quando um caminho de elementos ou Herança se cumpre, MagicRules.accessibleElements).
+    private Set<String> accessibleMysteries(Build b) {
+        RuleMagic magic = rules.catalog().magic();
+        if (magic == null) return Set.of();
+        Set<String> heritageIds = new LinkedHashSet<>();
+        b.heritages.forEach(h -> heritageIds.add(h.id()));
+        Set<String> elements = MagicRules.accessibleElements(magic, new LinkedHashSet<>(b.mysteries), heritageIds, new LinkedHashSet<>(b.mysteries), false);
+        Set<String> out = new LinkedHashSet<>();
+        for (RuleMagic.Mystery m : magic.mysteriesOrEmpty()) {
+            if (!"ELEMENTAL".equals(m.source()) || (m.element() != null ? elements.contains(m.element()) : elements.contains(m.id()))) out.add(m.id());
+        }
+        return out;
+    }
+
     // Nome de cada Mistério (id → "Água") para as opções de escolha.
     private Map<String, String> mysteryNames(List<String> ids) {
         RuleMagic magic = rules.catalog().magic();
@@ -1542,7 +1575,10 @@ public class CreationService {
                              Set<String> taken, List<Known> known) {
         Grant g = c.grant();
         int level = g.spellLevel() == null ? 0 : g.spellLevel();
-        String given = g.value() == null ? "CLASS_OR_MYSTERIES" : g.value();
+        String raw = g.value() == null ? "CLASS_OR_MYSTERIES" : g.value();
+        // "+EXACT": só magias desse nível (Magia Inata: "uma de 2º"), não as de nível menor; "+CASTER:<classe>" já foi conferido.
+        boolean exact = raw.contains("+EXACT");
+        String given = raw.replace("+EXACT", "").replaceAll("\\+CASTER:[A-Z]+", "");
         // "MYSTERY:CHOSEN": o(s) Mistério(s) escolhido(s) na mesma fonte (a chave sem o índice da concessão).
         List<String> chosenIds = b.chosenMysteries.getOrDefault(c.key().replaceFirst(":\\d+$", ""), List.of());
         String from = !"MYSTERY:CHOSEN".equals(given) ? given : chosenIds.isEmpty() ? "MYSTERY:-" : "MYSTERY:" + String.join(",", chosenIds);
@@ -1552,6 +1588,7 @@ public class CreationService {
         Map<String, String> names = new LinkedHashMap<>();
         for (RuleMagic.Spell sp : magic.spellsOrEmpty()) {
             if (sp.level() == null || (level == 0 ? sp.level() != 0 : sp.level() < 1 || sp.level() > level)) continue;
+            if (exact && sp.level() != level) continue;
             if (!inList(sp, from, classId, mysteries, b.originIds())) continue;
             if (taken.contains(sp.id()) && !c.picked().contains(sp.id())) continue;
             options.add(sp.id());
@@ -2120,6 +2157,32 @@ public class CreationService {
             for (SenseGain s : sorted.subList(1, sorted.size())) total += s.plus() == null ? 0 : s.plus();
             if (total > 0) b.senses.put(key, total);
         });
+    }
+
+    static final String CASTER = "+CASTER:";
+
+    // Armas com "regional (...)" que citam a região do personagem (pelo nome dela: "Águas de Sentina", "Ionia").
+    private static List<String> regionalWeapons(RuleCatalog catalog, Build b, boolean martialOnly) {
+        if (b.region == null || catalog.equipment() == null || catalog.equipment().items() == null) return List.of();
+        String region = AttackCalculator.normalize(b.region.name());
+        return catalog.equipment().items().stream()
+                .filter(i -> "WEAPON".equals(i.kind()) && i.properties() != null)
+                .filter(i -> !martialOnly || (i.groups() != null && i.groups().contains("arma-marcial")))
+                .filter(i -> {
+                    java.util.regex.Matcher m = java.util.regex.Pattern.compile("regional \\(([^)]*)\\)").matcher(AttackCalculator.normalize(i.properties()));
+                    return m.find() && java.util.Arrays.stream(m.group(1).split(",")).map(String::trim).anyMatch(region::equals);
+                })
+                .map(RuleItem::name).toList();
+    }
+
+    // Nível máximo de magia que a classe conjura agora, pela tabela do texto da Conjuração dela (0 = nenhum).
+    private static int casterLevel(Build b, String classId) {
+        int classLevel = b.classLevels.getOrDefault(classId, 0);
+        if (classLevel == 0) return 0;
+        return b.features.stream()
+                .filter(f -> "Conjuração".equals(f.value().name()) && classId.equals(b.sourceClass.get(f.source())))
+                .mapToInt(f -> SpellcastingRules.maxSpellLevel(f.value().description() == null ? "" : f.value().description(), classLevel))
+                .max().orElse(0);
     }
 
     // Concessão de escolha (perícia, magia, ofício... à escolha), que pode depender de uma opção ("when").
