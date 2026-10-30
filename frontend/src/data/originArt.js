@@ -34,7 +34,7 @@ export const ORIGIN_ART = {
   vastaya: { tagline: 'Quimeras de sangue humano e magia espiritual, em sintonia com a natureza.', hue: 286, motes: 'feather',
     video: { src: vastaya, focus: 0.5, focusNarrow: 0.49, show: 0.55, start: 2, end: 47 } },
   yordle: { tagline: 'Pequenos espíritos de Bandópolis, escondidos sob o véu mágico do Glamour.', hue: 322, motes: 'petal',
-    video: { src: yordle, focus: 0.71, focusNarrow: 0.69, show: 0.45 } },
+    video: { src: yordle, focus: 0.74, focusNarrow: 0.75, show: 0.45 } },
   runinata: { tagline: 'Um ser único, nascido das Runas Globais. Cada traço é você quem monta.', hue: 258, motes: 'hex' },
 }
 
