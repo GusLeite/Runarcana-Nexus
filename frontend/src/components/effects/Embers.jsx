@@ -30,18 +30,21 @@ function jagged(x, y, angle, length, parts, seed) {
   return { d, x, y, a }
 }
 
-const CRACKS = []
+// Tudo num traçado só por espessura: as rachaduras crescem e somem como uma imagem, sem redesenhar a cada quadro.
+const mains = []
+const branches = []
 for (let i = 0; i < 11; i++) {
   const angle = i / 11 * Math.PI * 2 + rnd(i) * .35
   const length = 130 + rnd(i + 20) * 110
   const main = jagged(200, 120, angle, length, 6, i * 13)
-  CRACKS.push({ d: main.d, delay: .5 + rnd(i + 40) * .06 })
-  const branch = jagged(main.x, main.y, main.a + (i % 2 ? .8 : -.8), length * .32, 3, i * 17)
-  CRACKS.push({ d: branch.d, delay: .68 + rnd(i + 60) * .1, thin: true })
+  mains.push(main.d)
+  branches.push(jagged(main.x, main.y, main.a + (i % 2 ? .8 : -.8), length * .32, 3, i * 17).d)
 }
+const CRACK_MAIN = mains.join(' ')
+const CRACK_BRANCH = branches.join(' ')
 
 // Pedras e fagulhas lançadas pelo golpe: dx na horizontal; up e fall na vertical.
-const ROCKS = Array.from({ length: 20 }, (_, i) => ({
+const ROCKS = Array.from({ length: 14 }, (_, i) => ({
   '--dx': ((i % 2 ? 1 : -1) * (30 + rnd(i + 80) * 260)).toFixed(0) + 'px',
   '--up': (120 + rnd(i + 100) * 300).toFixed(0) + 'px',
   '--fall': (140 + rnd(i + 120) * 120).toFixed(0) + 'px',
@@ -49,7 +52,7 @@ const ROCKS = Array.from({ length: 20 }, (_, i) => ({
   '--s': (8 + rnd(i + 160) * 18).toFixed(0) + 'px',
   '--d': (1 + rnd(i + 180) * .6).toFixed(2) + 's',
 }))
-const SHOWER = Array.from({ length: 28 }, (_, i) => ({
+const SHOWER = Array.from({ length: 18 }, (_, i) => ({
   '--dx': ((i % 2 ? 1 : -1) * (20 + rnd(i + 200) * 320)).toFixed(0) + 'px',
   '--up': (160 + rnd(i + 220) * 460).toFixed(0) + 'px',
   '--fall': (60 + rnd(i + 240) * 120).toFixed(0) + 'px',
@@ -59,7 +62,7 @@ const SHOWER = Array.from({ length: 28 }, (_, i) => ({
 }))
 
 // Panos vermelhos jogados das arquibancadas.
-const CLOTH = Array.from({ length: 14 }, (_, i) => ({
+const CLOTH = Array.from({ length: 10 }, (_, i) => ({
   '--x': (4 + i * 37 % 92) + '%',
   '--w': (10 + rnd(i + 300) * 12).toFixed(0) + 'px',
   '--sway': ((i % 2 ? 1 : -1) * (20 + rnd(i + 320) * 60)).toFixed(0) + 'px',
@@ -84,9 +87,13 @@ export default function Embers() {
         <span className="gd-torch right" />
         <span className="gd-glow" />
         <svg className="gd-cracks" viewBox="0 0 400 240">
-          {CRACKS.map((c, i) => (
-            <path key={i} d={c.d} pathLength="100" className={c.thin ? 'thin' : undefined} style={{ animationDelay: c.delay + 's' }} />
-          ))}
+          <path d={CRACK_MAIN} className="halo" />
+          <path d={CRACK_MAIN} />
+          <path d={CRACK_BRANCH} className="thin" />
+        </svg>
+        <svg className="gd-cracks hot" viewBox="0 0 400 240">
+          <path d={CRACK_MAIN} />
+          <path d={CRACK_BRANCH} className="thin" />
         </svg>
         <span className="gd-dust" />
         <span className="gd-dust d2" />

@@ -47,7 +47,7 @@ Estado atual: **Rudo** (vídeo + burst vermelho + magia de sangue) e **Gaudron**
 ### Adicionar ou trocar a arte de um personagem
 1. Coloque o arquivo em `src/assets/characters/` (JPG para a imagem; MP4 H.264 sem áudio para o vídeo).
 2. Importe em `characters.js` e preencha `img` / `vid` / `pos` no item do personagem.
-3. Para um efeito novo, crie o componente em `components/effects/`, renderize em `CharacterPanel.jsx` e adicione o CSS em `global.css`.
+3. Para um efeito novo, crie o componente em `components/effects/`, renderize em `CharacterPanel.jsx` e adicione o CSS em `global.css`. Anime só `transform`/`scale`/`translate`/`opacity`: sobre o vídeo, `mix-blend-mode`, `filter` e `stroke-*` animado derrubam os quadros (foi o que travou a martelada do Gaudron).
 
 
 ## Pendências / problemas conhecidos

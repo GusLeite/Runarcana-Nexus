@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Martelada do Gaudron mais leve (`feature/character-sheet`)
+- Saíram `mix-blend-mode`, os `drop-shadow` e o redesenho das rachaduras a cada quadro; agora elas crescem por `scale` e somem por `opacity`. Menos pedras, fagulhas e panos.
+- No preview: de ~21 para 65–74 quadros/s. A medição antiga pode ter sido afetada pelo painel oculto.
+
 ## 2026-10-30 — Efeito do Gaudron: martelada na arena (`feature/character-sheet`)
 - `effects/Embers.jsx` ganhou a sequência: carga, golpe aos 0,5 s (rachaduras de lava, pedras, fagulhas, poeira) e torcida gritando "GAU! DRON! GAUDRON!" com tochas e panos vermelhos. Some em ~3,6 s; ficam as brasas.
 - Tremor, explosão e ondas de choque sincronizados com o golpe; login em laranja (`.login.embers`). Conferido no preview, pausando em cada etapa, no computador e no celular.
