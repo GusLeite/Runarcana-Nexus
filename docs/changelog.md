@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-30 — Imagens dos Chireanos (`feature/character-sheet`)
+- `assets/lineages/`: nocti.webp e fulgor.png (180 e 240 KB). A do Fulgor é vertical e pequena (507×594): `LINEAGE_POS` sobe o recorte (50% 6%) para o rosto aparecer.
+
 ## 2026-10-30 — Imagens do Antroplantæ (`feature/character-sheet`)
 - `assets/lineages/`: arboreo.webp e floral.webp (90 e 115 KB), no enquadramento padrão.
 

@@ -10,6 +10,7 @@ export const LINEAGE_IMAGES = Object.fromEntries(
 // Enquadramento (object-position) de uma imagem que precisa de ajuste; o padrão mostra o centro, um pouco acima.
 export const LINEAGE_POS = {
   alnuk: '50% 12%', // imagem quadrada: sobe o recorte para não cortar os chifres
+  fulgor: '50% 6%', // imagem vertical: o rosto fica no topo
 }
 
 export const lineageImage = id => LINEAGE_IMAGES[id] ?? null
