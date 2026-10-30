@@ -67,6 +67,6 @@ A tela foi prototipada num `index.html` único (React via CDN, imagens e vídeo 
 
 ## Pendências / problemas conhecidos
 
-- As origens da criação, menos Humano (Yasuo), Minotauro (Alistar), Construto (Orianna), Antroplantæ (Ivern), Chireano, Meio-Dragão (Shyvana) e Troll (Trundle), ainda só têm o sigilo: falta a arte definitiva (um `video`, `living` ou `img` por origem em `data/originArt.js`). O vídeo do Trundle (13 MB, 65 s) só usa os primeiros 14,8 s e a Shyvana também é pesada (19 MB, 3,6 min, 1280×576, é a mesma cena em repetição); o do Humano é pesado (31 MB, 2110×1440, 77 s, com uns 1,5 s de preto no início): se o carregamento pesar, cortar e comprimir.
+- As origens da criação, menos Humano (Yasuo), Minotauro (Alistar), Construto (Orianna), Antroplantæ (Ivern), Chireano, Meio-Dragão (Shyvana), Troll (Trundle) e Vastaya (Sett), ainda só têm o sigilo: falta a arte definitiva (um `video`, `living` ou `img` por origem em `data/originArt.js`). O vídeo do Trundle (13 MB, 65 s) só usa os primeiros 14,8 s e a Shyvana também é pesada (19 MB, 3,6 min, 1280×576, é a mesma cena em repetição); o do Humano é pesado (31 MB, 2110×1440, 77 s, com uns 1,5 s de preto no início): se o carregamento pesar, cortar e comprimir.
 - Ainda não há roteamento (react-router): as abas da ficha são estado local e não mudam a URL (recarregar volta para "FICHA").
 - O token fica no `localStorage` (simples, mas acessível a scripts da página); se o projeto crescer, considerar cookie `HttpOnly`.
