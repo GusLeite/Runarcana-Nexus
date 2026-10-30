@@ -647,8 +647,8 @@ public class RuleCatalogService {
                 p.add(at + ": when é \"Habilidade:Opção\" e não vale em RESOURCE_CHOICE nem em FEATURE com opções");
             }
             if (g.valueByLevel() != null) {
-                if (!Set.of(GrantType.ATTRIBUTE, GrantType.AC_BONUS, GrantType.SPEED).contains(g.type())) {
-                    p.add(at + ": valueByLevel só vale em ATTRIBUTE, AC_BONUS e SPEED");
+                if (!Set.of(GrantType.ATTRIBUTE, GrantType.AC_BONUS, GrantType.SPEED, GrantType.SENSE).contains(g.type())) {
+                    p.add(at + ": valueByLevel só vale em ATTRIBUTE, AC_BONUS, SPEED e SENSE");
                 }
                 g.valueByLevel().forEach((lv, n) -> {
                     if (!lv.matches("\\d+") || Integer.parseInt(lv) < 1 || Integer.parseInt(lv) > 20) p.add(at + ": valueByLevel usa o nível (1 a 20) como chave");
@@ -713,6 +713,12 @@ public class RuleCatalogService {
                     else targets.stream().filter(t -> !t.matches(target)).forEach(t -> p.add(at + " (SITUATIONAL): alvo inválido " + t));
                 }
                 // Tipo de dano fixo (value) ou à escolha (options).
+                case SENSE -> {
+                    java.util.Set<String> kinds = java.util.Set.of("DARKVISION", "BLINDSIGHT", "TREMORSENSE", "TELEPATHY");
+                    List<String> types = g.hasOptions() ? g.options() : g.value() == null ? List.of() : List.of(g.value());
+                    if (types.isEmpty() || types.stream().anyMatch(t -> !kinds.contains(t))) p.add(at + " (SENSE): value/options deve ser " + kinds);
+                    if (g.feet() == null && (g.valueByLevel() == null || g.valueByLevel().isEmpty())) p.add(at + " (SENSE): precisa de feet ou valueByLevel");
+                }
                 case EXTRA_USES -> {
                     if (blank(g.value())) p.add(at + " (EXTRA_USES): falta value (nome da habilidade)");
                     if (g.amount() == null && (g.usesFormula() == null || g.usesFormula() == UsesFormula.FIXED)) p.add(at + " (EXTRA_USES): precisa de amount ou usesFormula");

@@ -160,6 +160,23 @@
           "amount": 1,
           "maxUses": 2,
           "description": "Ki de teste."
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 15,
+          "amount": 15
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 60
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "description": "submerso"
         }
       ]
     },

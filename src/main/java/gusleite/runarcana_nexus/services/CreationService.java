@@ -581,6 +581,14 @@ public class CreationService {
                 List<String> picked = picks.get(key);
                 if (g.when() != null && !(isChoice(g) && whenMet(b, g.when()))) continue;
                 switch (g.type()) {
+                    case SENSE -> {
+                        // Com options: o sentido é escolhido (traço Sentidos Especiais: Percepção às Cegas ou Sentido Sísmico).
+                        if (!g.hasOptions()) break;
+                        String label = orLabel(g, "Escolha o sentido");
+                        List<String> selected = choose(picked, g.options(), 1, label, b.errors);
+                        selected.forEach(t -> addSense(b, t, g, b.scale(s.label())));
+                        b.choices.add(new ChoiceLine(key, g.type(), label, 1, g.options(), selected, s.label(), null));
+                    }
                     case SITUATIONAL -> {
                         // Com options: a nota vale para o alvo escolhido (traço Habilidoso: a perícia).
                         if (!g.hasOptions()) break;
@@ -989,6 +997,9 @@ public class CreationService {
             }
             case IMMUNITY -> b.immunities.add(g.value());
             case CONDITION_IMMUNITY -> b.conditionImmunities.add(g.value());
+            case SENSE -> {
+                if (!g.hasOptions()) addSense(b, g.value(), g, b.scale(s.label()));
+            }
             case DAMAGE_REDUCTION -> {
                 int n = g.usesFormula() == UsesFormula.PROFICIENCY ? b.proficiency()
                         : g.usesFormula() == UsesFormula.HALF_PROFICIENCY ? b.proficiency() / 2 : g.amount();
@@ -1825,6 +1836,8 @@ public class CreationService {
         c.getConditionImmunities().addAll(b.conditionImmunities);
         c.getTypedReductions().clear();
         c.getTypedReductions().putAll(b.typedReductions);
+        c.getSenses().clear();
+        c.getSenses().putAll(b.senses);
         c.getSavingThrowExpertise().clear();
         c.getSavingThrowExpertise().addAll(b.saveExpertise);
         c.setPassivePerceptionBonus(b.passivePerception);
@@ -1874,6 +1887,7 @@ public class CreationService {
     // Decidido depois de tudo: tamanho acima (Colosso); "caso já tenha": salvaguarda e ofício → especialidade;
     // resistência → imunidade (Meio-Azakana, Meio-Kanmei).
     private static void damageUpgrades(Build b) {
+        resolveSenses(b);
         if (b.sizeSteps > 0 && b.size != null) {
             CreatureSize[] all = CreatureSize.values();
             b.size = all[Math.min(all.length - 1, b.size.ordinal() + b.sizeSteps)];
@@ -1900,6 +1914,27 @@ public class CreationService {
         b.immunities.removeAll(b.absorptions);
         b.resistances.removeAll(b.immunities);
         b.resistances.removeAll(b.absorptions);
+    }
+
+    // Um sentido ganho; a chave leva onde vale ("DARKVISION|debaixo d'água").
+    private static void addSense(Build b, String type, Grant g, int level) {
+        Integer feet = valueAt(g, g.feet() == null ? null : g.feet().intValue(), level);
+        String key = type + (g.description() == null ? "" : "|" + g.description());
+        b.senseGains.add(new SenseGain(key, feet == null ? 0 : feet, g.amount()));
+    }
+
+    // Sem depender da ordem das fontes: vale o maior alcance, e cada outra fonte com "ou +N" soma N.
+    private static void resolveSenses(Build b) {
+        b.senses.clear();
+        Map<String, List<SenseGain>> byKey = new LinkedHashMap<>();
+        b.senseGains.forEach(s -> byKey.computeIfAbsent(s.key(), k -> new ArrayList<>()).add(s));
+        byKey.forEach((key, gains) -> {
+            List<SenseGain> sorted = new ArrayList<>(gains);
+            sorted.sort((x, y) -> Integer.compare(y.feet(), x.feet()));
+            int total = sorted.getFirst().feet();
+            for (SenseGain s : sorted.subList(1, sorted.size())) total += s.plus() == null ? 0 : s.plus();
+            if (total > 0) b.senses.put(key, total);
+        });
     }
 
     // Concessão de escolha (perícia, magia, ofício... à escolha), que pode depender de uma opção ("when").
@@ -2381,6 +2416,8 @@ public class CreationService {
 
     private record Sourced<T>(T value, String source) {}
 
+    private record SenseGain(String key, int feet, Integer plus) {}
+
     // Resultado do cálculo (rascunho da ficha).
     private static final class Build {
         RuleOption origin;
@@ -2465,6 +2502,9 @@ public class CreationService {
         final Set<String> absorptions = new LinkedHashSet<>();
         final Set<String> conditionImmunities = new LinkedHashSet<>();
         final Map<String, Integer> typedReductions = new LinkedHashMap<>();
+        // Sentidos ganhos (chave, pés da fonte, quanto soma se já tiver), resolvidos no fim (senses).
+        final List<SenseGain> senseGains = new ArrayList<>();
+        final Map<String, Integer> senses = new LinkedHashMap<>();
         final List<Sourced<Attribute>> saveUpgrades = new ArrayList<>();
         final Set<Attribute> saveExpertise = new LinkedHashSet<>();
         // Categorias de tamanho acima da escolhida (SIZE "UP").

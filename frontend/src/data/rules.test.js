@@ -3,7 +3,7 @@ import {
   addHeritage, heritageOptions, carryCapacity, choiceOptionName, critDice, deathSaveResult, situationalFor, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
   addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
-  resourceCost, togglePick, levelChoices, keepChoices, dominantChoices, rollDie, applyHp,
+  resourceCost, togglePick, levelChoices, keepChoices, dominantChoices, senseLabel, rollDie, applyHp,
 } from './rules.js'
 
 describe('modificadores', () => {
@@ -325,5 +325,13 @@ describe('situationalFor', () => {
     expect(situationalFor(sheet, 'SKILL:STEALTH')).toEqual(['Sagaz: Vantagem no escuro.'])
     expect(situationalFor(sheet, 'SAVE:WISDOM')).toEqual(['Resistência Mágica: Vantagem contra magia.'])
     expect(situationalFor(sheet, 'AC')).toEqual([])
+  })
+})
+
+describe('senseLabel', () => {
+  it('dá o nome do sentido, onde vale e o alcance', () => {
+    expect(senseLabel('DARKVISION', 60)).toBe('Visão no escuro 60 pés')
+    expect(senseLabel("DARKVISION|debaixo d'água", 30)).toBe("Visão no escuro (debaixo d'água) 30 pés")
+    expect(senseLabel('TELEPATHY', 60)).toBe('Telepatia 60 pés')
   })
 })

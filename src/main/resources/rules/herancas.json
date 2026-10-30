@@ -291,6 +291,12 @@
           "spellLevel": 0,
           "count": 1,
           "label": "Benefício Colateral: um truque"
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "when": "Vantagem Tecnológica:Visão no Escuro"
         }
       ]
     },
@@ -759,6 +765,12 @@
           "value": "SKILL:STEALTH",
           "description": "Vantagem em Furtividade para se ocultar; sem armadura e parado, pode se esconder sem cobertura.",
           "when": "Vantagem Tecnológica:Epiderme Cromática"
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "when": "Vantagem Tecnológica:Visão no Escuro"
         }
       ]
     },
@@ -1121,6 +1133,11 @@
           {
             "type": "MYSTERY",
             "value": "sombrio"
+          },
+          {
+            "type": "SENSE",
+            "value": "DARKVISION",
+            "feet": 60
           }
         ]
       }
@@ -1479,6 +1496,12 @@
           "type": "SITUATIONAL",
           "value": "SKILL:PERCEPTION",
           "description": "Você não possui desvantagem em testes de Percepção quando estiver na Penumbra."
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 15,
+          "amount": 15
         }
       ]
     },
@@ -2732,6 +2755,12 @@
           "type": "SITUATIONAL",
           "value": "SKILL:INSIGHT",
           "description": "Durante a noite, você tem Vantagem em testes de Intuição."
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 15,
+          "amount": 15
         }
       ]
     },
@@ -2843,6 +2872,12 @@
           "value": "SKILL:STEALTH",
           "description": "Vantagem em Furtividade para se ocultar; sem armadura e parado, pode se esconder sem cobertura.",
           "when": "Vantagem Tecnológica:Epiderme Cromática"
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "when": "Vantagem Tecnológica:Visão no Escuro"
         }
       ]
     },
@@ -2963,6 +2998,12 @@
         {
           "type": "CONDITION_IMMUNITY",
           "value": "Cinza de Zaun"
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "when": "Vantagem Tecnológica:Visão no Escuro"
         }
       ]
     },
@@ -3023,6 +3064,11 @@
           "type": "PASSIVE_BONUS",
           "value": "PERCEPTION",
           "usesFormula": "HALF_PROFICIENCY"
+        },
+        {
+          "type": "SENSE",
+          "value": "BLINDSIGHT",
+          "feet": 10
         }
       ],
       "uses": {
@@ -3101,6 +3147,13 @@
         {
           "type": "WEAPON_PROFICIENCY",
           "value": "Tridente"
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "amount": 30,
+          "description": "debaixo d'água"
         }
       ]
     },
@@ -3235,6 +3288,23 @@
         "Ottrani": "Ação",
         "Lhotlan": "Ação bônus",
         "Vesani": "Ação bônus"
+      },
+      "optionGrants": {
+        "Marai": [
+          {
+            "type": "SENSE",
+            "value": "DARKVISION",
+            "feet": 60,
+            "description": "debaixo d'água"
+          }
+        ],
+        "Kiilash": [
+          {
+            "type": "SENSE",
+            "value": "DARKVISION",
+            "feet": 30
+          }
+        ]
       }
     },
     {
@@ -3624,6 +3694,12 @@
           "value": "SKILL:PERFORMANCE",
           "description": "Desvantagem em Atuação relacionada à voz (Modulador de Voz).",
           "when": "Desvantagem Tecnológica:Modulador de Voz"
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "when": "Vantagem Tecnológica:Visão no Escuro"
         }
       ],
       "threshold": {
@@ -4170,6 +4246,12 @@
           "value": "SKILL:STEALTH",
           "description": "Vantagem em Furtividade para se ocultar; sem armadura e parado, pode se esconder sem cobertura.",
           "when": "Vantagem Tecnológica:Epiderme Cromática"
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "when": "Vantagem Tecnológica:Visão no Escuro"
         }
       ]
     },
@@ -4825,6 +4907,11 @@
           "type": "SKILL",
           "skill": "SURVIVAL",
           "expertise": true
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 60
         }
       ]
     },

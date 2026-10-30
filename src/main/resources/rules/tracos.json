@@ -284,7 +284,15 @@
       "name": "Comunicação Telepática",
       "tier": "MINOR",
       "description": "Você recebe 60 pés de Telepatia. Caso escolha esse traço mais de uma vez, o alcance aumenta em 10 pés.\n\nTelepatia é uma habilidade mágica que permite se comunicar mentalmente com outra criatura no alcance. A criatura contatada não precisa compartilhar um idioma com você, mas deve entender pelo menos um idioma. Uma criatura sem telepatia pode receber e responder mensagens telepáticas, mas não pode iniciar ou terminar uma conversa telepática. Você não precisa ver a criatura contatada e pode encerrar o contato a qualquer momento. O contato é interrompido quando as duas criaturas saem do alcance uma da outra, ou se você contatar outra criatura no alcance. Iniciar ou terminar uma conversa telepática não usa ação, mas enquanto você estiver Incapacitado não pode iniciar contato, e qualquer contato mantido é encerrado. Em um campo antimagia ou em qualquer local onde a magia não funciona, não é possível enviar ou receber mensagens telepáticas.",
-      "maxTimes": 5
+      "maxTimes": 5,
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "TELEPATHY",
+          "feet": 60,
+          "amount": 10
+        }
+      ]
     },
     {
       "id": "disparada",
@@ -458,7 +466,15 @@
       "name": "Visão Noturna",
       "tier": "MINOR",
       "description": "Você recebe 30 pés de visão no escuro cada vez que você escolher esse traço, até o máximo de 120 pés.",
-      "maxTimes": 4
+      "maxTimes": 4,
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "amount": 30
+        }
+      ]
     },
     {
       "id": "alado",
@@ -1034,6 +1050,18 @@
             "Sentido Sísmico"
           ],
           "range": "10 pés"
+        },
+        {
+          "type": "SENSE",
+          "value": "BLINDSIGHT",
+          "feet": 10,
+          "when": "Sentidos Especiais:Percepção às Cegas"
+        },
+        {
+          "type": "SENSE",
+          "value": "TREMORSENSE",
+          "feet": 10,
+          "when": "Sentidos Especiais:Sentido Sísmico"
         }
       ]
     },

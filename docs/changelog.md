@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento C1: sentidos (`feature/character-sheet`)
+- Concessão `SENSE` (visão no escuro, visão às cegas, sentido sísmico, telepatia), com "ou +N se já tiver", lugar ("debaixo d'água") e alcance pelo nível; ficha com `senses` (`character_senses`) em chips.
+- ~45 fontes: Yordle, Chireano/Nocti, Troll da Selva, Marai, Kiilash, Heranças (Visão Treinada/Lunar, Perceptivo, Anfíbio, Meio-Vastaya, Força Predatória, Vantagem Tecnológica), Púrpura, Tecelã, Atirador, Bodisatva, Assassino, Sutras, Vel, Invocações, runas e traços da Runinata.
+
 ## 2026-10-29 — Mapeamento B8: Ki extra (`feature/character-sheet`)
 - Concessão `EXTRA_USES`: Cultivo de Ki (+1, ou 2 pontos sem Ki), Conjurador Natural (+proficiência), Alianças Espirituais (+metade); a tabela de usos passa a somar `usesPlus`.
 - Conferido no sandbox (Bodisatva 2 → 3; Combatente ganha Ki 2; Colosso Médio → Grande).

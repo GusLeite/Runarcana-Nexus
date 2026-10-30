@@ -993,6 +993,11 @@
           "type": "SITUATIONAL",
           "value": "SKILL:PERCEPTION",
           "description": "Vantagem em jogadas relacionadas à audição (Quirosenso)."
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 60
         }
       ],
       "lineages": [
@@ -1057,6 +1062,12 @@
               "type": "SITUATIONAL",
               "value": "SAVE",
               "description": "Desvantagem em salvaguardas contra luz forte e clarões, e contra Intoxicado de fontes respiratórias."
+            },
+            {
+              "type": "SENSE",
+              "value": "DARKVISION",
+              "feet": 60,
+              "amount": 60
             }
           ]
         },
@@ -1918,6 +1929,11 @@
             {
               "type": "CONDITION_IMMUNITY",
               "value": "Envenenado"
+            },
+            {
+              "type": "SENSE",
+              "value": "DARKVISION",
+              "feet": 120
             }
           ]
         }
@@ -2070,6 +2086,12 @@
               "range": "Cone de 15 pés",
               "usesFormula": "PROFICIENCY",
               "recharge": "LONG_REST"
+            },
+            {
+              "type": "SENSE",
+              "value": "DARKVISION",
+              "feet": 60,
+              "description": "debaixo d'água"
             }
           ]
         },
@@ -2212,6 +2234,11 @@
               "type": "SITUATIONAL",
               "value": "SKILL:PERCEPTION",
               "description": "Vantagem em Percepção pelo olfato ou pela audição."
+            },
+            {
+              "type": "SENSE",
+              "value": "DARKVISION",
+              "feet": 60
             }
           ]
         },
@@ -2354,6 +2381,11 @@
           "abilityType": "PASSIVE",
           "name": "Máscara da Natureza",
           "description": "Você pode tentar se esconder mesmo quando estiver apenas levemente oculto pela folhagem, chuva forte, neve caindo ou outro fenômeno natural. Você também pode tentar se esconder atrás de uma criatura, contanto que ela seja no mínimo uma categoria de tamanho maior que a sua."
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 60
         }
       ],
       "lineages": [
@@ -2387,6 +2419,12 @@
             {
               "type": "RESISTANCE",
               "value": "contundente"
+            },
+            {
+              "type": "SENSE",
+              "value": "DARKVISION",
+              "feet": 120,
+              "description": "debaixo d'água"
             }
           ]
         },
@@ -5281,6 +5319,12 @@
               "type": "SITUATIONAL",
               "value": "SKILL:PERCEPTION",
               "description": "Vantagem em testes de Percepção."
+            },
+            {
+              "type": "SENSE",
+              "value": "DARKVISION",
+              "feet": 30,
+              "amount": 15
             }
           ],
           "levels": [
@@ -5349,6 +5393,34 @@
             {
               "type": "MYSTERY",
               "value": "terra"
+            },
+            {
+              "type": "SENSE",
+              "value": "TREMORSENSE",
+              "feet": 5,
+              "amount": 5,
+              "valueByLevel": {
+                "1": 5,
+                "2": 10,
+                "3": 15,
+                "4": 20,
+                "5": 25,
+                "6": 30,
+                "7": 35,
+                "8": 40,
+                "9": 45,
+                "10": 50,
+                "11": 55,
+                "12": 60,
+                "13": 65,
+                "14": 70,
+                "15": 75,
+                "16": 80,
+                "17": 85,
+                "18": 90,
+                "19": 95,
+                "20": 100
+              }
             }
           ],
           "levels": [
@@ -5812,6 +5884,11 @@
             {
               "type": "CONDITION_IMMUNITY",
               "value": "Cego"
+            },
+            {
+              "type": "SENSE",
+              "value": "DARKVISION",
+              "feet": 60
             }
           ]
         },
@@ -6883,6 +6960,19 @@
                 "Escola Umbral",
                 "Escola Noctígena"
               ]
+            },
+            {
+              "type": "SENSE",
+              "value": "BLINDSIGHT",
+              "feet": 10,
+              "amount": 10,
+              "valueByLevel": {
+                "4": 10,
+                "8": 15,
+                "12": 20,
+                "16": 25,
+                "20": 30
+              }
             }
           ]
         },
@@ -11030,6 +11120,12 @@
                   "abilityType": "PASSIVE",
                   "name": "Silenciosamente Mortal",
                   "description": "Vantagem em Furtividade que envolva som e, furtivo, não é detectado por sentido sísmico. Você ganha 60 pés de visão no escuro (ou +30)."
+                },
+                {
+                  "type": "SENSE",
+                  "value": "DARKVISION",
+                  "feet": 60,
+                  "amount": 30
                 }
               ]
             },

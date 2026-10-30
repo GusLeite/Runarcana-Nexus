@@ -183,6 +183,12 @@
           "value": "SKILL:PERFORMANCE",
           "description": "Desvantagem em Atuação relacionada à voz (Modulador de Voz).",
           "when": "Desvantagem Tecnológica:Modulador de Voz"
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "when": "Vantagem Tecnológica:Visão no Escuro"
         }
       ],
       "threshold": {
@@ -446,6 +452,12 @@
           "value": "SKILL:PERFORMANCE",
           "description": "Desvantagem em Atuação relacionada à voz (Modulador de Voz).",
           "when": "Desvantagem Tecnológica:Modulador de Voz"
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "when": "Vantagem Tecnológica:Visão no Escuro"
         }
       ],
       "threshold": {

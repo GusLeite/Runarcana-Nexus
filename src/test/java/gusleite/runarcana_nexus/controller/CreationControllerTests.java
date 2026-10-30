@@ -230,6 +230,9 @@ class CreationControllerTests {
                 .andExpect(jsonPath("$.character.savingThrowExpertise").value(org.hamcrest.Matchers.contains("INTELLIGENCE")))
                 // RD contra gélido = bônus de proficiência (2).
                 .andExpect(jsonPath("$.character.typedReductions['gélido']").value(2))
+                // Sentidos: vale o maior (60) e a fonte "ou +15" soma 15; submerso é outro sentido.
+                .andExpect(jsonPath("$.character.senses.DARKVISION").value(75))
+                .andExpect(jsonPath("$.character.senses['DARKVISION|submerso']").value(30))
                 // Usos a mais: soma na habilidade que existe (Inspirado 1 → 2) e cria a que falta (Ki Teste com 2).
                 .andExpect(jsonPath("$.abilities[?(@.name == 'Inspirado')].maxUses").value(2))
                 .andExpect(jsonPath("$.abilities[?(@.name == 'Ki Teste')].maxUses").value(2))

@@ -87,6 +87,12 @@ public class Character {
     @MapKeyColumn(name = "damage_type")
     @Column(name = "amount")
     private Map<String, Integer> typedReductions = new HashMap<>();
+    // Sentidos ("DARKVISION", "DARKVISION|debaixo d'água", "BLINDSIGHT"...) → alcance em pés.
+    @ElementCollection
+    @CollectionTable(name = "character_senses", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "sense")
+    @Column(name = "feet")
+    private Map<String, Integer> senses = new HashMap<>();
     private Integer passivePerceptionBonus;
     private Integer passiveInsightBonus;
     // Bônus na iniciativa (Atento: +5), das concessões INITIATIVE. Nulo = 0.

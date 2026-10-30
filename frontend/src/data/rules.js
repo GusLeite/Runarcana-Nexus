@@ -531,3 +531,11 @@ export function applyHp({ currentHp, tempHp = 0, maxHp }, action, amount) {
   if (action === 'temp') return { currentHp, tempHp: n }
   return { currentHp, tempHp }
 }
+
+// Nome de cada sentido da ficha (chave "DARKVISION" ou "DARKVISION|debaixo d'água").
+const SENSES = { DARKVISION: 'Visão no escuro', BLINDSIGHT: 'Visão às cegas', TREMORSENSE: 'Sentido sísmico', TELEPATHY: 'Telepatia' }
+
+export function senseLabel(key, feet) {
+  const [type, where] = key.split('|')
+  return (SENSES[type] ?? type) + (where ? ' (' + where + ')' : '') + ' ' + feet + ' pés'
+}

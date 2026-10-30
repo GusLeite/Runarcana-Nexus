@@ -2529,7 +2529,15 @@
         "featureOptions": [
           "Escola Noctígena"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "amount": 30
+        }
+      ]
     },
     {
       "id": "compreensao-noctigena",
@@ -2550,7 +2558,15 @@
         "featureOptions": [
           "Escola Noctígena"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "amount": 30
+        }
+      ]
     },
     {
       "id": "luminescencia-noctigena",
@@ -2643,7 +2659,15 @@
         "featureOptions": [
           "Escola Noctígena"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "amount": 30
+        }
+      ]
     },
     {
       "id": "shugenja-da-escuridao",
@@ -2661,7 +2685,15 @@
         "featureOptions": [
           "Escola Noctígena"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "amount": 30
+        }
+      ]
     },
     {
       "id": "furto-luminar",
@@ -2677,7 +2709,15 @@
         "attributes": {
           "INTELLIGENCE": 13
         }
-      }
+      },
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 15,
+          "amount": 15
+        }
+      ]
     },
     {
       "id": "potencia-de-gong",
@@ -2726,7 +2766,14 @@
         "attributes": {
           "WISDOM": 13
         }
-      }
+      },
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 60
+        }
+      ]
     },
     {
       "id": "palma-de-lotus",
@@ -4301,7 +4348,22 @@
         "attributes": {
           "WISDOM": 13
         }
-      }
+      },
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 60,
+          "amount": 30,
+          "valueByLevel": {
+            "1": 60,
+            "6": 70,
+            "12": 80,
+            "16": 90,
+            "20": 100
+          }
+        }
+      ]
     },
     {
       "id": "bencao-da-aranha",
@@ -4391,7 +4453,20 @@
         "resources": [
           "avatar-das-mares"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 15
+        },
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "description": "debaixo d'água"
+        }
+      ]
     },
     {
       "id": "bencao-do-carneiro",
@@ -4436,7 +4511,15 @@
         "resources": [
           "cervo-prateado"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "amount": 15
+        }
+      ]
     },
     {
       "id": "bencao-do-basilisco",
@@ -4627,7 +4710,21 @@
         "attributes": {
           "WISDOM": 15
         }
-      }
+      },
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "TREMORSENSE",
+          "feet": 15,
+          "amount": 10,
+          "valueByLevel": {
+            "1": 15,
+            "12": 20,
+            "16": 25,
+            "20": 30
+          }
+        }
+      ]
     },
     {
       "id": "aspecto-feral-superior-percepcao-as-cegas",
@@ -4643,7 +4740,21 @@
         "attributes": {
           "WISDOM": 15
         }
-      }
+      },
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "BLINDSIGHT",
+          "feet": 15,
+          "amount": 10,
+          "valueByLevel": {
+            "1": 15,
+            "12": 20,
+            "16": 25,
+            "20": 30
+          }
+        }
+      ]
     },
     {
       "id": "intuicao-feral",
@@ -5969,7 +6080,15 @@
         "resources": [
           "runa-ancestral-vastayes"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "amount": 30
+        }
+      ]
     },
     {
       "id": "runa-ascensao-vastaya",
@@ -6425,6 +6544,12 @@
           "type": "CONDITION_IMMUNITY",
           "value": "Amedrontado",
           "when": "Ninhada:Aranha"
+        },
+        {
+          "type": "SENSE",
+          "value": "BLINDSIGHT",
+          "feet": 15,
+          "when": "Ninhada:Cobra"
         }
       ]
     },
@@ -6447,7 +6572,22 @@
         "resources": [
           "runa-nascimento-da-ninhada"
         ]
-      }
+      },
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "TREMORSENSE",
+          "feet": 30,
+          "when": "Ninhada:Aranha"
+        },
+        {
+          "type": "SENSE",
+          "value": "BLINDSIGHT",
+          "feet": 15,
+          "amount": 15,
+          "when": "Ninhada:Cobra"
+        }
+      ]
     },
     {
       "id": "runa-lider-da-ninhada",
@@ -6496,7 +6636,14 @@
       "uses": {
         "usesFormula": "HALF_PROFICIENCY",
         "recharge": "LONG_REST"
-      }
+      },
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 60
+        }
+      ]
     },
     {
       "id": "runa-mao-da-corrupcao",

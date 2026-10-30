@@ -41,6 +41,8 @@ public enum GrantType {
                         // options + count = à escolha (vale para VULNERABILITY e ABSORPTION; a mesma fonte não repete o tipo)
     ABSORPTION,         // absorção de um tipo de dano: value = o tipo ("necrótico")
     IMMUNITY,           // imunidade a um tipo de dano: value = o tipo ("venenoso")
+    SENSE,              // sentido: value DARKVISION, BLINDSIGHT, TREMORSENSE ou TELEPATHY; feet (valueByLevel pelo nível);
+                        // amount = quanto soma se já tiver ("ou +15"); description = onde vale ("debaixo d'água"); options = à escolha
     EXTRA_USES,         // soma usos numa habilidade (value = nome): amount ou usesFormula; sem a habilidade, cria com
                         // description e maxUses (ou a fórmula). Cultivo de Ki: +1 Ki, ou 2 pontos se não tiver Ki
     DAMAGE_REDUCTION,   // RD contra um tipo de dano: value = o tipo, amount ou usesFormula (PROFICIENCY/HALF_PROFICIENCY)
