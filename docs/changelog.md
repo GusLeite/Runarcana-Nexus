@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-10-29 — Mapeamento do que está só no texto (`feature/character-sheet`)
+- `docs/mapeamento-regras.md`: todas as Heranças, Aprimoramentos, recursos, origens, classes, passados e traços comparados com as concessões.
+- Blocos: A (só dados, inclui erros como a Força Pneumática com a Sobrevivência da Força Predatória), B (sistema pequeno), C (sistema novo: sentidos, dano, níveis de ofício...), M (mestre).
+
 ## 2026-10-29 — Absorção, imunidade, Essência Volátil e Experimentos (`feature/character-sheet`)
 - `ABSORPTION`; resistência/vulnerabilidade/absorção à escolha (Essência Volátil, tipos diferentes); `RESISTANCE.expertise` = caso já tenha, imunidade (Meio-Azakana, Meio-Kanmei).
 - Ficha: `immunities` e `absorptions` (tabelas novas) em chips.

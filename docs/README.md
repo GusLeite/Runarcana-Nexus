@@ -13,6 +13,7 @@ Esta pasta é a **fonte de verdade** do projeto. Ela serve para quem chega ao c�
 | ↳ [frontend-telas.md](frontend-telas.md) | Login, painel do mestre, assistente de criação e ficha |
 | ↳ [frontend-visual.md](frontend-visual.md) | Animações, efeitos, artes dos personagens |
 | [regras-criacao.md](regras-criacao.md) | Formato do catálogo de regras de criação (origens, regiões, classes, passados, ofícios, Heranças) e o que falta preencher |
+| [mapeamento-regras.md](mapeamento-regras.md) | **O que das regras está só no texto**, agrupado em blocos (só dados, sistema pequeno, sistema novo, fica com o mestre), com a ordem de implementação |
 | [plano-jogo.md](plano-jogo.md) | **Roteiro atual**: as etapas do que falta para jogar (inventário, ataques, Mana, morte e condições, edição pelo mestre, visão da mesa), na ordem de desenvolvimento |
 | [changelog.md](changelog.md) | Registro do que foi entregue, em ordem cronológica (mais recente no topo) |
 
