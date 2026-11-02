@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Setas do destaque não repetem a abertura (`feature/character-sheet`)
+- `OriginStage.jsx`: a animação de entrada roda só ao abrir o destaque. Antes, cada seta mudava o `startId` e o painel voltava a crescer a partir do cartão.
+
 ## 2026-11-02 — Linhagens ganham vitrine com a imagem em destaque (`feature/character-sheet`)
 - `OriginStage.jsx`: `LineageShowcase` troca os cartões por imagem grande e inteira, miniaturas e detalhes logo abaixo. O mouse ou o foco mostram a linhagem; o clique escolhe.
 - `origin.css`: estilos `olineage-*` refeitos; a aba Linhagens encosta nas bordas (`.ostage-body.flush`).

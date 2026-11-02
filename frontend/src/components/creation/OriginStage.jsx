@@ -155,14 +155,16 @@ export default function OriginStage({ origins, startId, crafts, equipment, origi
   const same = origin.id === originId && (lineage?.id ?? null) === lineageId
   const missingLineage = lineages.length > 0 && !lineage
 
-  // Entrada: o painel parte do retângulo do cartão e cresce até o lugar final.
+  // Entrada: o painel parte do retângulo do cartão e cresce até o lugar final. Só ao abrir: as setas mudam o startId
+  // (onMove) e o cardOf muda a cada render do pai, e nenhum dos dois deve repetir a animação.
   useLayoutEffect(() => {
     const from = cardOf(startId)?.getBoundingClientRect()
     if (!from || reducedMotion()) return
     const to = panel.current.getBoundingClientRect()
     const anim = panel.current.animate([frame(from), frame(to)], { duration: OPEN_MS, easing: EASE })
     return () => anim.cancel()
-  }, [cardOf, startId])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     closeBtn.current?.focus({ preventScroll: true })
