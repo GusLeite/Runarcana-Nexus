@@ -48,13 +48,14 @@ const SCENES = {
       {list(7, i => <i key={i} className="petal" style={{ '--x': (10 + i * 13) + '%', '--dl': .3 + (i * 3 % 7) * .12 + 's', '--dx': (i % 2 ? 1 : -1) * (20 + i * 9) + 'px' }} />)}
     </>
   ),
-  // Brutamontes: três garradas rasgam o painel e a tela treme.
+  // Brutamontes: o machado gigante desce do alto, racha o chão e a tela treme.
   BRUTE: () => (
     <>
       <i className="dark" />
-      {list(3, i => <i key={i} className="claw" style={{ '--x': -11 + i * 11 + '%', '--dl': .12 + i * .09 + 's' }} />)}
+      <svg className="axe" viewBox="0 0 100 100"><path d="M30 2V96M24 96H36M30 26C48 22 66 12 82 2C98 28 98 54 82 80C66 64 48 54 30 46Z" /></svg>
+      <i className="quake" />
       <i className="flare" />
-      {list(8, i => <i key={i} className="chip" style={{ '--dx': (i % 2 ? 1 : -1) * (30 + i * 23) + 'px', '--up': 40 + i * 31 % 150 + 'px', '--dl': .3 + i * .012 + 's' }} />)}
+      {list(8, i => <i key={i} className="chip" style={{ '--dx': (i % 2 ? 1 : -1) * (30 + i * 23) + 'px', '--up': 40 + i * 31 % 150 + 'px', '--dl': .55 + i * .012 + 's' }} />)}
     </>
   ),
   // Caçador: pegadas se aproximam, a flecha cruza o painel e crava no centro.
@@ -76,14 +77,17 @@ const SCENES = {
       {list(10, i => <i key={i} className="spark" style={{ '--a': i * 36 + 12 + 'deg', '--d': 70 + i * 47 % 120 + 'px' }} />)}
     </>
   ),
-  // Mercurial: fumaça, adagas lançadas de lados opostos e um corte que some no escuro.
+  // Mercurial: um capuz surge da fumaça, os olhos acendem, dois cortes rápidos cruzam o painel e ele some no escuro.
   MERCURIAL: () => (
     <>
       {list(5, i => <i key={i} className="smoke" style={{ '--x': 12 + i * 19 + '%', '--dl': i * .07 + 's', '--dx': (i - 2) * 26 + 'px' }} />)}
-      {list(3, i => (
-        <svg key={i} className={'dagger d' + i} viewBox="0 0 100 20"><path d="M2 10 62 3 98 10 62 17ZM62 0V20" /></svg>
-      ))}
-      <i className="cut" />
+      <svg className="hood" viewBox="0 0 100 100">
+        <path d="M62 4C76 14 82 30 80 46 79 58 84 72 94 94H6C16 72 21 58 20 46 18 24 38 6 62 4Z" />
+        <path className="face" d="M50 34C38 36 32 48 34 62 36 72 44 78 50 78 56 78 64 72 66 62 68 48 62 36 50 34Z" />
+        <path className="eye" d="M42 56h.1M58 56h.1" />
+      </svg>
+      <i className="slash" />
+      <i className="slash s2" />
     </>
   ),
   // Xamã: espíritos sobem em espiral a partir do chão e uma chama cresce no centro.

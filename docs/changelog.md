@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Símbolos e animações do Bruto e do Mercurial (`feature/character-sheet`)
+- Bruto: o sigilo vira um machado grande e a animação troca as garras por um machado que desce, racha o chão (onda, clarão, estilhaços) e faz a tela tremer.
+- Mercurial: o sigilo vira um capuz de ladino; a animação mostra o capuz saindo da fumaça, os olhos acendendo, dois cortes em X e ele sumindo no escuro (sem as adagas voando).
+- Conferido quadro a quadro numa página de teste; o salão em si não foi aberto (exige login).
+
 ## 2026-11-02 — Classes centralizadas e sem zoom (`feature/character-sheet`)
 - `classArt.js`: tiramos `show` e `focusNarrow` (mesmo fix das origens: o vídeo não encolhe para depois crescer) e reajustamos o `focus` de cada classe a partir de quadros dos vídeos; o do Arcanista estava em 0,4 e o personagem fica perto de 0,66.
 - Conferido por quadros dos vídeos e testes; a tela não foi aberta, pois exige login.

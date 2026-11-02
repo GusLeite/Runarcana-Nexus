@@ -54,12 +54,13 @@
 @keyframes bo-fall{0%{opacity:0;transform:none}15%{opacity:.95}100%{opacity:0;transform:translate(var(--dx),62vh) rotate(280deg)}}
 
 /* Brutamontes */
-.cfx-brute{animation:br-shake .5s .15s linear}
+.cfx-brute{animation:br-shake .5s .55s linear}
 @keyframes br-shake{0%,100%{transform:none}15%{transform:translate(-9px,6px)}30%{transform:translate(8px,-7px)}50%{transform:translate(-6px,4px)}70%{transform:translate(4px,-3px)}85%{transform:translate(-2px,2px)}}
-.cfx-brute .dark{inset:0;background:rgba(10,3,0,.55);animation:cfx-fade 1.5s ease}
-.cfx-brute .claw{left:calc(50% + var(--x));top:6%;width:13px;height:60%;margin-left:-6px;border-radius:50%;background:linear-gradient(transparent,#fff3d4 25%,#ff8a2a 70%,transparent);rotate:18deg;transform-origin:50% 0;animation:br-claw .95s var(--dl) cubic-bezier(.1,.8,.3,1)}
-@keyframes br-claw{0%{opacity:1;transform:scaleY(0)}18%{opacity:1;transform:scaleY(1)}55%{opacity:.85;transform:scaleY(1) scaleX(.7)}100%{opacity:0;transform:scaleY(1) scaleX(.2)}}
-.cfx-brute .flare{left:50%;top:34%;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;background:radial-gradient(circle,rgba(255,200,120,.65),rgba(255,90,20,.3) 40%,transparent 68%);animation:br-flare .7s .25s ease-out}
+.cfx-brute .dark{inset:0;background:rgba(10,3,0,.55);animation:cfx-fade 1.7s ease}
+.cfx-brute .axe{left:50%;top:36%;width:340px;height:340px;margin:-170px 0 0 -170px;fill:rgba(255,200,140,.28);stroke:#ffe2bd;stroke-width:2.6;transform-origin:50% 94%;animation:br-axe 1.7s cubic-bezier(.5,0,.2,1)}
+@keyframes br-axe{0%{opacity:0;transform:rotate(-80deg) translateY(-40px)}14%{opacity:1}34%{transform:rotate(14deg)}38%{transform:rotate(9deg)}44%,72%{opacity:1;transform:rotate(12deg)}100%{opacity:0;transform:rotate(12deg)}}
+.cfx-brute .quake{left:50%;top:36%;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;border:3px solid #ffb35a;animation:mk-ring .75s .55s ease-out}
+.cfx-brute .flare{left:50%;top:34%;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;background:radial-gradient(circle,rgba(255,200,120,.65),rgba(255,90,20,.3) 40%,transparent 68%);animation:br-flare .7s .55s ease-out}
 @keyframes br-flare{0%{opacity:0;transform:scale(.4)}25%{opacity:1}100%{opacity:0;transform:scale(1.3)}}
 .cfx-brute .chip{left:50%;top:38%;width:10px;height:10px;border-radius:38% 62% 45% 55%;background:linear-gradient(140deg,#c09a70,#3a241a);animation:br-chip .9s var(--dl) cubic-bezier(.15,.6,.5,1)}
 @keyframes br-chip{0%{opacity:1;transform:none}100%{opacity:0;transform:translate(var(--dx),calc(var(--up)*-1)) rotate(320deg)}}
@@ -85,12 +86,14 @@
 /* Mercurial */
 .cfx-mercurial .smoke{left:var(--x);bottom:12%;width:150px;height:150px;margin-left:-75px;border-radius:50%;background:radial-gradient(circle,rgba(30,44,60,.8),rgba(20,30,44,.4) 45%,transparent 70%);animation:me-smoke 1.9s var(--dl) ease-out}
 @keyframes me-smoke{0%{opacity:0;transform:scale(.4)}30%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-180px) scale(1.9)}}
-.cfx-mercurial .dagger{width:120px;height:24px;margin-top:-12px;fill:#dff1ff;stroke:#7fc7ff;stroke-width:1.5}
-.cfx-mercurial .d0{left:-130px;top:26%;--x:calc(var(--hot-w)*.5 + 90px);--r:9deg;animation:me-dagger 1.25s .3s cubic-bezier(.3,0,.1,1)}
-.cfx-mercurial .d1{right:-130px;top:38%;--x:calc(var(--hot-w)*-.5 - 90px);--r:171deg;animation:me-dagger 1.25s .45s cubic-bezier(.3,0,.1,1)}
-.cfx-mercurial .d2{left:-130px;top:50%;--x:calc(var(--hot-w)*.5 + 90px);--r:-9deg;animation:me-dagger 1.25s .6s cubic-bezier(.3,0,.1,1)}
-@keyframes me-dagger{0%{opacity:1;transform:rotate(var(--r)) translateX(0)}28%{transform:translateX(var(--x)) rotate(var(--r))}70%{opacity:1;transform:translateX(var(--x)) rotate(var(--r))}100%{opacity:0;transform:translateX(var(--x)) rotate(var(--r))}}
-.cfx-mercurial .cut{left:50%;top:6%;width:5px;height:64%;margin-left:-2px;rotate:32deg;background:linear-gradient(transparent,#e6f6ff 30%,#67bfff 70%,transparent);transform-origin:50% 0;animation:br-claw .8s 1.15s cubic-bezier(.1,.8,.3,1)}
+.cfx-mercurial .hood{left:50%;top:36%;width:230px;height:230px;margin:-115px 0 0 -115px;fill:rgba(6,12,22,.86);stroke:#8fd0ff;stroke-width:1.8;animation:me-hood 2.1s .15s ease-out}
+@keyframes me-hood{0%{opacity:0;transform:translateY(34px) scale(.88)}28%{opacity:1;transform:none}72%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-10px) scale(.8)}}
+.cfx-mercurial .hood .face{fill:#000;stroke:rgba(143,208,255,.45);stroke-width:1}
+.cfx-mercurial .hood .eye{stroke:#fff;stroke-width:6;animation:me-eye 2.1s .15s ease-out}
+@keyframes me-eye{0%,32%{opacity:0}40%,72%{opacity:1}100%{opacity:0}}
+.cfx-mercurial .slash{left:50%;top:7%;width:4px;height:58%;margin-left:-2px;rotate:38deg;background:linear-gradient(transparent,#e6f6ff 30%,#67bfff 70%,transparent);transform-origin:50% 50%;animation:me-slash .6s 1.1s cubic-bezier(.1,.8,.3,1)}
+.cfx-mercurial .slash.s2{rotate:-38deg;animation-delay:1.25s}
+@keyframes me-slash{0%{opacity:1;transform:scaleY(0)}30%{opacity:1;transform:scaleY(1)}100%{opacity:0;transform:scaleY(1) scaleX(.2)}}
 
 /* Xamã */
 .cfx-shaman .flame{left:50%;bottom:16%;width:230px;height:340px;margin-left:-115px;transform-origin:50% 100%;border-radius:50% 50% 45% 45%/70% 70% 30% 30%;background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(255,235,170,.75),hsla(var(--h),95%,55%,.45) 45%,transparent 100%);animation:sh-flame 2.1s ease-out}
