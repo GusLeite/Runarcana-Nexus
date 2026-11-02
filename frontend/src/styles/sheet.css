@@ -302,8 +302,8 @@ background:radial-gradient(circle,rgba(255,236,170,.9),rgba(240,199,94,.4) 40%,t
 .pin{width:14px;height:14px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round}
 
 /* ---------- magias e habilidades ---------- */
-.abilities,.documents,.notes{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,400px);gap:24px;align-items:start}
-.abilities>*,.documents>*,.notes>*{min-width:0}
+.documents,.notes{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,400px);gap:24px;align-items:start}
+.documents>*,.notes>*{min-width:0}
 .abl-title{justify-content:space-between;align-items:center;flex-wrap:wrap;row-gap:10px}
 .rest-btns{display:flex;gap:8px}
 .ghost-btn.small{padding:6px 12px;font-size:12px;letter-spacing:.08em}
@@ -318,10 +318,15 @@ background:radial-gradient(circle,rgba(255,236,170,.9),rgba(240,199,94,.4) 40%,t
 .abl-name{font-family:'Cinzel',Georgia,serif;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .abl-meta{font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .abl-actions{display:flex;align-items:center;gap:12px;flex:none}
-/* Ícone quadrado com borda na cor do tipo e a tecla no canto, como a barra de habilidades do LoL. */
+/* Ícone com borda na cor do tipo; o formato diz o tipo: quadrado = habilidade, redondo = passiva, arco = magia. */
 .abl-icon{--c:var(--gold);position:relative;display:grid;place-items:center;width:46px;height:46px;flex:none;border:2px solid var(--c);
 background:radial-gradient(circle at 50% 35%,color-mix(in srgb,var(--c) 40%,#0a1626),#02060c 85%);box-shadow:inset 0 0 12px rgba(0,0,0,.8)}
 .abl-icon.big{width:64px;height:64px}
+.abl-icon{border-radius:3px}
+.abl-icon.t-passive{border-radius:50%}
+.abl-icon.t-spell{border-radius:50% 50% 4px 4px}
+.abl-icon.t-heritage{border-radius:32%}
+.abl-img,.abl-icon.has-img::after{border-radius:inherit}
 .abl-icon.t-passive,.t-passive .abl-icon{--c:var(--teal)}
 .abl-icon.t-spell,.t-spell .abl-icon{--c:#8f7cff}
 .abl-glyph{font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:20px;color:#f0e6d2;text-shadow:0 0 10px var(--c)}
@@ -407,7 +412,7 @@ input.note-title{padding:10px 12px;font-family:'Cinzel',Georgia,serif;font-size:
 .log-mode{margin-left:6px;padding:0 4px;border:1px solid currentColor;font-size:10px;text-decoration:none}
 .log-mode.adv{color:#7dffb0}.log-mode.dis{color:#ff8a7a}
 @container (max-width:760px){
- .abilities,.documents,.notes{grid-template-columns:1fr}
+ .documents,.notes{grid-template-columns:1fr}
  .abl-side,.doc-view,.note-editor-wrap{position:static}
 }
 /* Em coluna estreita, dano e usos descem para uma linha própria, alinhados ao nome. */
@@ -598,3 +603,67 @@ input.note-title{padding:10px 12px;font-family:'Cinzel',Georgia,serif;font-size:
 .form-line{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .form-effects{font-size:12px;color:var(--muted,#9aa3ad)}
 .forms + .card-title{margin-top:16px}
+
+/* ---------- grimório (aba Magias) ---------- */
+.grimoire{display:flex;flex-direction:column}
+/* Capa de couro, miolo de páginas empilhadas e a lombada no meio. */
+.tome{--page:#1b1510;--ink-gold:#d9b765;display:grid;grid-template-columns:minmax(0,1fr) 22px minmax(0,1fr);align-items:stretch;padding:12px;border-radius:10px;
+background:linear-gradient(145deg,#3a2316,#1d0f08 55%,#2f1c11);box-shadow:0 18px 40px rgba(0,0,0,.55),inset 0 0 0 1px rgba(240,199,94,.25),inset 0 0 30px rgba(0,0,0,.6)}
+.tome-page{position:relative;display:flex;flex-direction:column;min-width:0;padding:18px 20px 16px;background:var(--page);
+background-image:radial-gradient(ellipse at 50% 0,rgba(240,199,94,.07),transparent 70%),repeating-linear-gradient(0deg,transparent 0 31px,rgba(200,162,74,.05) 31px 32px)}
+.tome-page.left{border-radius:6px 0 0 6px;background-image:linear-gradient(90deg,transparent 80%,rgba(0,0,0,.55)),radial-gradient(ellipse at 50% 0,rgba(240,199,94,.07),transparent 70%),repeating-linear-gradient(0deg,transparent 0 31px,rgba(200,162,74,.05) 31px 32px);
+box-shadow:-1px 0 0 #3b2e1d,-3px 0 0 #120d08,-4px 0 0 #3b2e1d,-6px 0 0 #120d08,-7px 0 0 #2b2216}
+.tome-page.right{border-radius:0 6px 6px 0;background-image:linear-gradient(270deg,transparent 80%,rgba(0,0,0,.55)),radial-gradient(ellipse at 50% 0,rgba(240,199,94,.07),transparent 70%),repeating-linear-gradient(0deg,transparent 0 31px,rgba(200,162,74,.05) 31px 32px);
+box-shadow:1px 0 0 #3b2e1d,3px 0 0 #120d08,4px 0 0 #3b2e1d,6px 0 0 #120d08,7px 0 0 #2b2216}
+.tome-spine{background:linear-gradient(90deg,rgba(0,0,0,.7),#07040a 45%,#07040a 55%,rgba(0,0,0,.7));box-shadow:inset 0 0 0 1px rgba(240,199,94,.12)}
+/* Fita de marcação vermelha caindo do topo da página direita. */
+.tome-page.right::before{content:"";position:absolute;top:-12px;right:26px;width:18px;height:54px;background:linear-gradient(180deg,#d1233f,#8f0f26);clip-path:polygon(0 0,100% 0,100% 100%,50% 82%,0 100%);filter:drop-shadow(0 3px 3px rgba(0,0,0,.5));z-index:2}
+
+.tome-filters{display:flex;flex-direction:column;gap:9px;padding-bottom:12px;border-bottom:1px solid rgba(217,183,101,.28)}
+.tome-search{width:100%;padding:8px 12px;border:1px solid rgba(217,183,101,.35);background:rgba(0,0,0,.35);color:#f0e6d2;font:inherit;font-size:14px;border-radius:2px}
+.tome-search:focus{outline:2px solid var(--teal);outline-offset:-1px}
+.tome-chips{display:flex;flex-wrap:wrap;gap:6px}
+.tm-chip{padding:4px 10px;border:1px solid rgba(217,183,101,.28);background:rgba(0,0,0,.28);color:var(--muted);font-family:'Cinzel',Georgia,serif;font-size:12px;font-weight:700;letter-spacing:.06em;cursor:pointer;border-radius:999px;transition:background .2s,color .2s,border-color .2s,box-shadow .2s}
+.tm-chip:hover{color:var(--text);border-color:var(--gold-soft)}
+.tm-chip.on{background:rgba(217,183,101,.2);border-color:var(--gold-hi);color:var(--gold-hi);box-shadow:0 0 10px rgba(240,199,94,.2)}
+.tm-chip.lv{min-width:34px;text-align:center;padding:4px 8px}
+.tm-chip:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.tome-selects{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tome-selects:has(select:only-child){grid-template-columns:1fr}
+.tome-selects select{min-width:0;padding:6px 8px;background:rgba(0,0,0,.4);color:var(--text);border:1px solid rgba(217,183,101,.3);font:inherit;font-size:13px;border-radius:2px}
+.tome-count{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-style:italic;color:var(--muted)}
+.tome-scroll{flex:1;min-height:0;max-height:min(62vh,600px);overflow-y:auto;margin:8px -8px 0 0;padding-right:8px;scrollbar-width:thin;scrollbar-color:rgba(217,183,101,.35) transparent}
+/* Título de capítulo com filetes dos dois lados. */
+.tome-chapter{display:flex;align-items:center;gap:10px;margin:10px 0 6px;font-family:'Cinzel',Georgia,serif;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-gold)}
+.tome-chapter::before,.tome-chapter::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(217,183,101,.5))}
+.tome-chapter::after{transform:scaleX(-1)}
+.tome .abl-group{margin-bottom:6px}
+.tome .abl-row{padding:6px 8px;border-radius:3px}
+.tome .abl-row.on{border-color:rgba(217,183,101,.5);background:linear-gradient(90deg,rgba(217,183,101,.18),rgba(0,0,0,.15))}
+.tome .abl-row.unprepared{opacity:.5}
+.tome .abl-row.unprepared .abl-icon{filter:grayscale(.7)}
+.tome-none{padding:30px 10px;text-align:center;font-style:italic}
+.tome-legend{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(217,183,101,.2);font-size:12px;color:var(--muted)}
+.tome-legend span{display:inline-flex;align-items:center;gap:6px}
+.tome-legend i{display:inline-block;width:12px;height:12px;border:2px solid var(--gold)}
+.tome-legend .lg-ability{border-radius:2px}
+.tome-legend .lg-passive{border-radius:50%;border-color:var(--teal)}
+.tome-legend .lg-spell{border-radius:50% 50% 2px 2px;border-color:#8f7cff}
+/* Página direita: a dica da magia sem moldura de caixa, como texto impresso. */
+.tome .abl-detail{flex:1;padding:6px 4px 0;background:none;border:0;animation:page-turn .5s cubic-bezier(.22,1,.36,1)}
+.tome .abl-detail-head{padding-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--c) 45%,transparent)}
+.tome .abl-detail-head .item-name{font-size:22px;color:var(--gold-hi);letter-spacing:.04em}
+.tome .abl-detail .item-desc{font-size:16px;line-height:1.65}
+.tome .abl-detail .item-desc::first-letter{float:left;margin:2px 8px 0 0;font-family:'Cinzel',Georgia,serif;font-size:3em;line-height:.85;font-weight:700;color:var(--c)}
+.tome .abl-detail .abl-stats{border-color:rgba(217,183,101,.22)}
+.tome-folio{margin-top:auto;padding-top:14px;text-align:center;font-family:'Cinzel',Georgia,serif;font-size:13px;letter-spacing:.2em;color:var(--ink-gold);opacity:.7}
+.tome-foot-note{margin:12px 0 0;font-size:12px;font-style:italic;text-align:center;color:var(--muted)}
+@keyframes page-turn{from{opacity:0;transform:perspective(1400px) rotateY(-28deg);transform-origin:left center}to{opacity:1;transform:none;transform-origin:left center}}
+@media (prefers-reduced-motion:reduce){.tome .abl-detail{animation:none}}
+@container (max-width:760px){
+ .tome{grid-template-columns:1fr;gap:10px}
+ .tome-spine{display:none}
+ .tome-page.left,.tome-page.right{border-radius:6px;box-shadow:none}
+ .tome-scroll{max-height:50vh}
+}
+.tome .abl-detail .item-desc{display:flow-root}

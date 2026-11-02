@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Grimório na aba Magias (`feature/character-sheet`)
+- Saem as teclas Q/W/E/R/P (herança do LoL): a magia mostra o selo do círculo (T, 1, 2…) e o formato do ícone diz o tipo: **quadrado = habilidade, redondo = passiva, arco = magia**.
+- Aba Magias vira um **grimório aberto**: índice com filtros à esquerda (busca, tipo, círculo, escola, tempo de conjuração, preparadas, causa dano, concentração, com usos) e a página da magia à direita, com virada de página, capitular e folio.
+- Botão "Descanso longo · preparar magias" deixa claro onde se escolhem as magias preparadas.
+
 ## 2026-11-02 — Preparação para produção (`feature/character-sheet`)
 - Segurança: credenciais do banco por variável de ambiente, senhas iniciais aleatórias (mestre por `RUNARCANA_MASTER_PASSWORD`), rotas antigas só para o mestre e limite de 10 senhas erradas por endereço.
 - Mestre: aba **CONTAS** gera a senha provisória do jogador; a troca da senha provisória deixa de poder ser adiada.
