@@ -4,7 +4,7 @@ import { grantLabel, groupGrants } from '../../data/rules.js'
 import { classArt } from '../../data/classArt.js'
 import TabBar from '../sheet/TabBar.jsx'
 import OriginArt from './OriginArt.jsx'
-import OptionStep from './OptionStep.jsx'
+import SubclassPicker, { SubclassSigil } from './SubclassPicker.jsx'
 import { AbilityCard, GainGroups } from './OriginStage.jsx'
 
 const OPEN_MS = 620
@@ -182,7 +182,7 @@ export default function ClassStage({ classes, startId, crafts, equipment, classI
                 <GainGroups grants={klass.grants} crafts={crafts} equipment={equipment} />
                 {sub && (
                   <div className="ogain-lineage">
-                    <h5 className="ogain-lineage-title">Do {subLabel} {sub.name}</h5>
+                    <h5 className="ogain-lineage-title"><SubclassSigil klass={klass} sub={sub} className="inline" />Do {subLabel} {sub.name}</h5>
                     <GainGroups grants={sub.grants} crafts={crafts} equipment={equipment} />
                   </div>
                 )}
@@ -210,7 +210,7 @@ export default function ClassStage({ classes, startId, crafts, equipment, classI
               </div>
             )}
             {tab === 'subclasses' && (
-              <OptionStep kind="subclass" title={'Escolha: ' + subLabel} items={subclasses} crafts={crafts} selected={subIdHere} onPick={setSubIdHere} />
+              <SubclassPicker klass={klass} title={'Escolha: ' + subLabel} subclasses={subclasses} crafts={crafts} equipment={equipment} selected={subIdHere} onPick={setSubIdHere} />
             )}
             {tab === 'about' && (
               <div className="oabout">

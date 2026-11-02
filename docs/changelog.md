@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Escolha de subclasse com símbolos (`feature/character-sheet`)
+- Nova `SubclassPicker`: grade de símbolos (45 sigilos, um por rito/glifo/trilha/…, em `subclassArt.js`) e detalhe da opção embaixo, com descrição, ganhos e níveis; passar o mouse mostra, clicar escolhe. Substitui os cartões longos do `OptionStep` nessa aba.
+- Teste garante um sigilo por subclasse do catálogo. Conferido numa página de teste com os dados reais; o destaque da classe em si não foi aberto (exige login).
+
 ## 2026-11-02 — Rosto de cada classe no centro do painel (`feature/character-sheet`)
 - `classArt.js`: o `focus` passa a mirar o rosto, não o corpo, no quadro que fica parado antes da expansão (o primeiro do vídeo). Conferido simulando a faixa de 208×650 do painel com a mesma conta do `FocusVideo`.
 - Arcanista (0,84) e Atirador (0,745): o rosto está bem à direita no quadro (a primeira conta tinha mirado o tronco); com isso os dois aparecem no centro, sem precisar de `start`.
