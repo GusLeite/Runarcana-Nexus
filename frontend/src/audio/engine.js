@@ -368,36 +368,30 @@ const SFX = {
   },
 }
 
-// Estilo "cliente do LoL" (ficha e painel do mestre): cliques secos e metálicos, ar nos hovers e um estrondo hextech
-// no botão principal. São sons sintetizados no mesmo estilo, não os arquivos do jogo. `lol-x` vale no lugar de `x`.
+// Sons da ficha e do painel do mestre: suaves e arredondados (pop de bolha, acorde macio no botão principal)
+// para ficarem satisfatórios no uso repetido. Prefixo `lol-` por tradição; `lol-x` vale no lugar de `x`.
 Object.assign(SFX, {
-  'lol-hover': () => {
-    noise({ dur: 0.07, vol: 0.03, f: 5000, f2: 7500, q: 1.2, attack: 0.01 })
-    tone({ f: 2100, dur: 0.05, vol: 0.018 })
-  },
+  // Sem ruído agudo: só notas redondas e filtradas, curtas e baixas, para não cansar com o uso.
+  'lol-hover': () => tone({ f: 520, f2: 600, dur: 0.05, vol: 0.02, attack: 0.01, lp: 1800 }),
   'lol-tap': () => {
-    tone({ f: 880, f2: 640, type: 'triangle', dur: 0.07, vol: 0.07 })
-    noise({ dur: 0.03, vol: 0.05, f: 3500, q: 1.5 })
-    tone({ f: 1760, dur: 0.12, vol: 0.02, send: 0.2 })
+    // um "pop" de bolha: pitch que cai rápido, com um pouco de corpo
+    tone({ f: 620, f2: 300, dur: 0.09, vol: 0.09, lp: 1500 })
+    noise({ dur: 0.02, vol: 0.03, type: 'lowpass', f: 1200, q: 0.5 })
   },
   'lol-page': () => {
-    noise({ dur: 0.22, vol: 0.07, f: 1500, f2: 6000, q: 0.8, attack: 0.03 })
-    tone({ f: 988, t: 0.1, dur: 0.12, vol: 0.04, send: 0.3 })
+    noise({ dur: 0.2, vol: 0.05, type: 'lowpass', f: 400, f2: 1800, q: 0.5, attack: 0.06 })
+    tone({ f: 523, f2: 659, dur: 0.15, vol: 0.04, lp: 2000, send: 0.25 })
   },
   'lol-confirm': () => {
-    tone({ f: 110, f2: 165, dur: 0.5, vol: 0.12, lp: 600 })
-    noise({ dur: 0.35, vol: 0.06, f: 800, f2: 4000, q: 0.8, attack: 0.1 })
-    noise({ dur: 0.03, vol: 0.06, f: 3000, q: 1.5 })
-    bell(660, 0.12, 0.06, 1.2, 0.5)
+    // três notas suaves subindo (acorde maior) sobre um baque quente
+    tone({ f: 130, f2: 90, dur: 0.15, vol: 0.08, lp: 400 })
+    ;[392, 494, 587].forEach((f, i) => tone({ f, t: i * 0.06, dur: 0.35, vol: 0.08, attack: 0.01, lp: 2000, send: 0.35 }))
   },
   'lol-toggle': () => {
-    tone({ f: 1200, dur: 0.04, vol: 0.06 })
-    tone({ f: 1800, t: 0.04, dur: 0.06, vol: 0.05 })
+    tone({ f: 500, dur: 0.05, vol: 0.06, lp: 1800 })
+    tone({ f: 750, t: 0.05, dur: 0.07, vol: 0.05, lp: 1800 })
   },
-  'lol-danger': () => {
-    tone({ f: 160, f2: 80, dur: 0.2, vol: 0.1 })
-    noise({ dur: 0.08, vol: 0.07, type: 'lowpass', f: 400, q: 0.5 })
-  },
+  'lol-danger': () => tone({ f: 140, f2: 70, dur: 0.18, vol: 0.1, lp: 400 }),
 })
 
 const MIN_GAP = { hover: 60, key: 30, quill: 30, tap: 40 }
