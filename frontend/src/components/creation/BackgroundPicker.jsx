@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { grantLabel } from '../../data/rules.js'
-import { backgroundSigil } from '../../data/backgroundArt.js'
+import { backgroundImage, backgroundSigil } from '../../data/backgroundArt.js'
 import '../../styles/background.css'
 
 // Símbolo desenhado com traços (viewBox 100×100); o mesmo da grade e do medalhão do detalhe.
@@ -21,6 +21,7 @@ export default function BackgroundPicker({ title, hint, items, selected, onPick,
   }
   const shown = items.find(b => b.id === (peek ?? selected)) ?? items[0]
   const grants = shown.grants ?? []
+  const image = backgroundImage(shown)
 
   return (
     <>
@@ -50,6 +51,7 @@ export default function BackgroundPicker({ title, hint, items, selected, onPick,
 
         <div className="bgdetail" aria-live="polite">
           <div key={shown.id} className="bgdetail-in">
+            {image && <div className="bgdetail-art"><img src={image} alt="" /></div>}
             <div className="bgdetail-head">
               <div className="bgmedal"><BackgroundSigil background={shown} className="big" /></div>
               <div>

@@ -1,3 +1,5 @@
+import andarilho from '../assets/backgrounds/andarilho.webp'
+
 // Símbolo de cada passado, por id, em traços num viewBox 100×100, como o `SUBCLASS_SIGILS` de subclassArt.js.
 // Um passado novo no catálogo cai no símbolo genérico (backgroundSigil); o teste backgroundArt.test.js avisa quando falta um.
 export const BACKGROUND_SIGILS = {
@@ -29,4 +31,11 @@ const GENERIC = ['M50 8 88 30V70L50 92 12 70V30Z', 'M50 34a16 16 0 1 0 .01 0']
 
 export function backgroundSigil(background) {
   return BACKGROUND_SIGILS[background?.id] ?? GENERIC
+}
+
+// Ilustração de destaque do painel de detalhe, por id; só alguns passados têm (os demais mostram só o símbolo).
+export const BACKGROUND_IMAGES = { andarilho }
+
+export function backgroundImage(background) {
+  return BACKGROUND_IMAGES[background?.id]
 }

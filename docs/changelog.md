@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Arte de exemplo no Andarilho (`feature/character-sheet`)
+- `backgroundArt.js`: `BACKGROUND_IMAGES` (por id) e `backgroundImage()`; o `BackgroundPicker` mostra a ilustração como faixa no topo do card quando o passado tem uma. Só o Andarilho tem, como exemplo (`assets/backgrounds/andarilho.webp`); os outros seguem só com o símbolo.
+
 ## 2026-11-02 — Card do Passado maior (`feature/character-sheet`)
 - `background.css`: o painel de detalhe ganha mais largura (grade 1 : 1,35), mais altura e a história passa a 16px com entrelinha 1,65, para ler melhor.
 
