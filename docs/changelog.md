@@ -10,6 +10,9 @@ Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 ## 2026-11-02 — Origens só expandem ao passar o mouse (`feature/character-sheet`)
 - `originArt.js`: todas seguem o padrão do Humano, sem `show` e sem `focusNarrow`; o vídeo mantém o tamanho e o personagem não sai do lugar.
 
+## 2026-11-02 — Vídeos da seleção em 720p (`feature/character-sheet`)
+- `assets/characters/`: de ~34 MB para ~15 MB nos quatro vídeos, de 1080p para 720p, sem mudar duração nem fps.
+
 ## 2026-11-02 — Animação de hover por classe (`feature/character-sheet`)
 - `ClassFx.jsx` e `classfx.css`: Acólito (luz e halo), Arcanista (círculo e nova), Atirador (mira e tiro), Bodisatva (lótus e Ki), Brutamontes (garras), Caçador (pegadas e flecha), Combatente (espadas), Mercurial (adagas e fumaça) e Xamã (chama e espíritos).
 
