@@ -35,3 +35,21 @@ export const CHARACTERS = BASE.map(c => ({
   ...c,
   img: c.img ?? placeholderArt(c.hue, c.variant),
 }))
+
+// Jogador adicionado pelo mestre: sem arte própria, ganha um retrato gerado (cor e adereço pelo nome).
+export function customCharacter(username) {
+  const seed = [...username].reduce((n, ch) => n + ch.charCodeAt(0), 0)
+  const hue = (seed * 47) % 360
+  const variant = seed % 5
+  return {
+    id: username, name: username.toUpperCase(), role: 'Aventureiro', hue, variant,
+    lore: 'Uma nova lenda começa a ser escrita.',
+    fx: '', impact: false, burst: false, vid: null, pos: 'center top', img: placeholderArt(hue, variant),
+  }
+}
+
+// O personagem do mestre para testar a ficha como jogador (não aparece na seleção).
+export const TEST_CHARACTER = {
+  ...customCharacter('teste'), name: 'TESTE', role: 'Jogador de teste', hue: 280, variant: 2,
+  img: placeholderArt(280, 2),
+}

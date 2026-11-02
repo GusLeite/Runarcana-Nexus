@@ -31,7 +31,7 @@ class AuthControllerTests {
     @Test
     void criaAsContasDosCincoPersonagensEADoMestre() {
         assertThat(accounts.findAll()).extracting("username")
-                .containsExactlyInAnyOrder("rudo", "gaudron", "proto", "titan", "loge", "mestre");
+                .containsExactlyInAnyOrder("rudo", "gaudron", "proto", "titan", "loge", "mestre", "teste");
         assertThat(accounts.findByUsername("mestre")).hasValueSatisfying(a -> assertThat(a.isMaster()).isTrue());
         assertThat(accounts.findByUsername("rudo")).hasValueSatisfying(a -> assertThat(a.isMaster()).isFalse());
     }
@@ -116,6 +116,52 @@ class AuthControllerTests {
 
         mvc.perform(post("/auth/logout").header("Authorization", "Bearer " + token)).andExpect(status().isNoContent());
         mvc.perform(get("/auth/me").header("Authorization", "Bearer " + token)).andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void soOMestreEntraComoOPersonagemDeTeste() throws Exception {
+        mvc.perform(post("/auth/test-player").header("Authorization", "Bearer " + login("rudo", "rudo")))
+                .andExpect(status().isForbidden());
+        mvc.perform(post("/auth/test-player")).andExpect(status().isUnauthorized());
+
+        mvc.perform(post("/auth/test-player").header("Authorization", "Bearer " + login("mestre", "mestre")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").isString())
+                .andExpect(jsonPath("$.account.username").value("teste"))
+                .andExpect(jsonPath("$.account.master").value(false))
+                .andExpect(jsonPath("$.account.mustChangePassword").value(false));
+    }
+
+    @Test
+    void contaDeTesteNaoEntraPeloLogin() throws Exception {
+        mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"teste\",\"password\":\"teste\"}"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void mestreAdicionaJogadorQueApareceNaListaEEntraComONome() throws Exception {
+        mvc.perform(get("/auth/players")).andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(0));
+
+        mvc.perform(post("/auth/players").header("Authorization", "Bearer " + login("rudo", "rudo"))
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"username\":\"lyra\"}"))
+                .andExpect(status().isForbidden());
+
+        String master = login("mestre", "mestre");
+        mvc.perform(post("/auth/players").header("Authorization", "Bearer " + master)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"username\":\" Lyra \"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.username").value("lyra"));
+
+        mvc.perform(get("/auth/players")).andExpect(jsonPath("$[0].username").value("lyra"));
+        login("lyra", "lyra");
+
+        // repetido, reservado e inválido
+        for (String name : new String[]{"lyra", "rudo", "teste", "a", "nome com espaço"}) {
+            mvc.perform(post("/auth/players").header("Authorization", "Bearer " + master)
+                            .contentType(MediaType.APPLICATION_JSON).content("{\"username\":\"" + name + "\"}"))
+                    .andExpect(status().isBadRequest());
+        }
     }
 
     private org.springframework.test.web.servlet.ResultActions changePassword(String token, String current, String next) throws Exception {

@@ -59,3 +59,13 @@ export function saveSession(session) {
     // sem armazenamento (aba anônima etc.): a sessão vale só até recarregar
   }
 }
+
+// Jogadores que o mestre adicionou (a tela de seleção junta aos da mesa). Resposta: [{ username }]
+export const fetchPlayers = () => request('/auth/players')
+
+// Só o mestre. O jogador novo entra com a senha igual ao nome e troca no primeiro acesso.
+export const createPlayer = (token, username) =>
+  request('/auth/players', { method: 'POST', token, body: { username } })
+
+// Só o mestre: sessão própria do personagem de teste (não mexe na sessão do mestre).
+export const loginAsTestPlayer = token => request('/auth/test-player', { method: 'POST', token })

@@ -37,7 +37,7 @@ const sortNotes = list => [...list].sort((a, b) => (b.pinned - a.pinned) || (b.u
 
 // Tela pós-login: a ficha do personagem no estilo do cliente do LoL, em abas.
 // Arte e cores vêm de data/characters.js; os dados, de /character/me, /documents/me e /notes.
-export default function CharacterSheet({ character, session, notice, onChangePassword, onLogout, onExpired }) {
+export default function CharacterSheet({ character, session, notice, onChangePassword, onLogout, onExpired, testing }) {
   const [state, setState] = useState({ status: 'loading' })
   const [abilities, setAbilities] = useState([])
   const [documents, setDocuments] = useState([])
@@ -344,6 +344,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
         }}
         onChangePassword={onChangePassword}
         onLogout={onLogout}
+        testing={testing}
       />
     )
   }
@@ -376,10 +377,12 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             <span className="who-name">{character.name}</span>
             <span className="who-sub">{session.username}</span>
           </div>
-          <button className="icon-btn" type="button" onClick={onChangePassword} title="Alterar senha" aria-label="Alterar senha">
-            <KeyIcon />
-          </button>
-          <button className="icon-btn" type="button" onClick={onLogout} title="Sair" aria-label="Sair">
+          {!testing && (
+            <button className="icon-btn" type="button" onClick={onChangePassword} title="Alterar senha" aria-label="Alterar senha">
+              <KeyIcon />
+            </button>
+          )}
+          <button className="icon-btn" type="button" onClick={onLogout} title={testing ? 'Voltar ao painel do mestre' : 'Sair'} aria-label={testing ? 'Voltar ao painel do mestre' : 'Sair'}>
             <ExitIcon />
           </button>
         </div>

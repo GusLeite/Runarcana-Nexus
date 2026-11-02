@@ -1,6 +1,9 @@
 package gusleite.runarcana_nexus.services;
 
+import gusleite.runarcana_nexus.enums.AccountRole;
 import gusleite.runarcana_nexus.exception.ApiException;
+import gusleite.runarcana_nexus.record.CreatePlayerRequest;
+import gusleite.runarcana_nexus.record.PlayerResponse;
 import gusleite.runarcana_nexus.model.auth.Account;
 import gusleite.runarcana_nexus.model.auth.AuthToken;
 import gusleite.runarcana_nexus.record.ChangePasswordRequest;
@@ -20,11 +23,16 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.HexFormat;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 // Login por token opaco: o cliente recebe um token aleatório e o envia em "Authorization: Bearer <token>".
 @Service
 public class AuthService {
+
+    // Conta de jogador reservada ao mestre, para testar a ficha como jogador.
+    public static final String TEST_PLAYER = "teste";
 
     private static final Duration TOKEN_TTL = Duration.ofDays(30);
     private static final String INVALID_LOGIN = "Usuário ou senha incorretos.";
@@ -50,6 +58,46 @@ public class AuthService {
                 .filter(a -> encoder.matches(request.password(), a.getPasswordHash()))
                 .orElseThrow(() -> ApiException.unauthorized(INVALID_LOGIN));
 
+        return openSession(account);
+    }
+
+    // Entra como o personagem de teste (só o mestre): sessão própria, sem trocar a do mestre.
+    public LoginResponse loginAsTestPlayer(String authorization) {
+        requireMaster(authorization);
+        Account account = accounts.findByUsername(TEST_PLAYER)
+                .orElseThrow(() -> ApiException.badRequest("A conta de teste não existe."));
+        return openSession(account);
+    }
+
+    // Jogadores que aparecem na tela de seleção além dos da mesa original (os que o mestre adicionou).
+    public List<PlayerResponse> customPlayers() {
+        return accounts.findAll().stream()
+                .filter(a -> a.isCustom() && !a.isMaster())
+                .sorted(Comparator.comparing(Account::getId))
+                .map(a -> new PlayerResponse(a.getUsername()))
+                .toList();
+    }
+
+    public PlayerResponse createPlayer(String authorization, CreatePlayerRequest request) {
+        requireMaster(authorization);
+        String username = normalizeUsername(request.username());
+        if (!username.matches("[a-z0-9_-]{2,20}")) {
+            throw ApiException.badRequest("Use de 2 a 20 letras minúsculas, números, - ou _ no nome do jogador.");
+        }
+        if (username.equals(TEST_PLAYER) || accounts.existsByUsername(username)) {
+            throw ApiException.badRequest("Já existe um jogador com esse nome.");
+        }
+        Account account = new Account();
+        account.setUsername(username);
+        account.setPasswordHash(encoder.encode(username));
+        account.setMustChangePassword(true);
+        account.setRole(AccountRole.PLAYER);
+        account.setCustom(true);
+        accounts.save(account);
+        return new PlayerResponse(username);
+    }
+
+    private LoginResponse openSession(Account account) {
         tokens.deleteExpired(Instant.now());
 
         String token = newToken();

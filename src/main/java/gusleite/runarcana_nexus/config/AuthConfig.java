@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.UUID;
 
 @Configuration
 public class AuthConfig {
@@ -36,7 +37,19 @@ public class AuthConfig {
         return args -> {
             seed(accounts, encoder, usernames, AccountRole.PLAYER);
             seed(accounts, encoder, masters, AccountRole.MASTER);
+            seedTestPlayer(accounts, encoder);
         };
+    }
+
+    // Conta do personagem de teste do mestre: nunca entra pelo login (senha aleatória), só pelo painel do mestre.
+    private static void seedTestPlayer(AccountRepository accounts, PasswordEncoder encoder) {
+        if (accounts.existsByUsername(AuthService.TEST_PLAYER)) return;
+        Account account = new Account();
+        account.setUsername(AuthService.TEST_PLAYER);
+        account.setPasswordHash(encoder.encode(UUID.randomUUID().toString()));
+        account.setRole(AccountRole.PLAYER);
+        accounts.save(account);
+        log.info("Conta do personagem de teste do mestre ('{}') criada.", AuthService.TEST_PLAYER);
     }
 
     private static void seed(AccountRepository accounts, PasswordEncoder encoder, List<String> usernames, AccountRole role) {

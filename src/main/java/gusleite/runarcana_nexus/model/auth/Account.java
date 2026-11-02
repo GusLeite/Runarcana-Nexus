@@ -31,7 +31,14 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private AccountRole role;
 
+    // true nos jogadores que o mestre adicionou pela tela de seleção (os da mesa original vêm do seed).
+    private Boolean custom;
+
     public boolean isMaster() {
         return role == AccountRole.MASTER;
+    }
+
+    public boolean isCustom() {
+        return Boolean.TRUE.equals(custom);
     }
 }

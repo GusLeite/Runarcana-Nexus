@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Jogador de teste do mestre e card de novo jogador (`feature/character-sheet`)
+- Mestre: botão **TESTAR COMO JOGADOR** abre a ficha/criação da conta `teste` (sessão própria, volta ao painel pelo botão de sair). Seleção: card **+ NOVO JOGADOR** (pede a senha do mestre) cria contas novas, que aparecem como painéis com retrato gerado.
+- Back: `POST /auth/test-player`, `GET|POST /auth/players`, coluna `account.custom`.
+
 ## 2026-11-02 — Brasões das regiões (`feature/character-sheet`)
 - Etapa Região mostra o brasão de cada região na legenda (grande) e nas miniaturas (pequeno); arte em `assets/region-icons/`, ligada por `icon` em `regionArt.js`.
 

@@ -331,7 +331,7 @@ class PlayerFeaturesTests {
     void mestreVeQuemPodeReceberDocumentos() throws Exception {
         mvc.perform(get("/documents/recipients").header("Authorization", "Bearer " + login("mestre")))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(5))
+                .andExpect(jsonPath("$.length()").value(6))
                 .andExpect(jsonPath("$[0]").value("gaudron"));
         mvc.perform(get("/documents/recipients").header("Authorization", "Bearer " + login("loge")))
                 .andExpect(status().isForbidden());

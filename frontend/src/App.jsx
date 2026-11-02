@@ -1,16 +1,15 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
-import { CHARACTERS } from './data/characters.js'
-import { fetchMe, loadSession, logout, saveSession } from './api/auth.js'
+import { CHARACTERS, TEST_CHARACTER, customCharacter } from './data/characters.js'
+import { fetchMe, fetchPlayers, loadSession, loginAsTestPlayer, logout, saveSession } from './api/auth.js'
 import CharacterPanel from './components/CharacterPanel.jsx'
 import Separator from './components/Separator.jsx'
 import LoginForm from './components/LoginForm.jsx'
+import AddPlayerForm from './components/AddPlayerForm.jsx'
 import PasswordForm from './components/PasswordForm.jsx'
 import CharacterSheet from './components/sheet/CharacterSheet.jsx'
 import MasterPanel from './components/master/MasterPanel.jsx'
 import MasterGate from './components/master/MasterGate.jsx'
 import { CrownIcon } from './components/sheet/icons.jsx'
-
-const indexOf = username => CHARACTERS.findIndex(c => c.id === username)
 
 // O mestre entra pelo botão do topo, não pelos painéis; o LoginForm/PasswordForm usam este "personagem".
 const MASTER = { id: 'mestre', name: 'MESTRE', role: 'Narrador de Runeterra', fx: '' }
@@ -23,10 +22,17 @@ export default function App() {
   // Sessão salva entra direto no personagem (ou no painel do mestre); o useEffect abaixo confirma com o back-end.
   const [session, setSession] = useState(() => {
     const s = loadSession()
-    return s && (s.master || indexOf(s.username) >= 0) ? s : null
+    return s?.token ? s : null
   })
-  const [selected, setSelected] = useState(() => (session && !session.master ? indexOf(session.username) : null))
+  // Jogadores que o mestre adicionou, além dos da mesa original.
+  const [extra, setExtra] = useState([])
+  const characters = [...CHARACTERS, ...extra.map(customCharacter)]
+  const [selectedId, setSelectedId] = useState(() => (session && !session.master ? session.username : null))
+  const selected = selectedId === null ? -1 : characters.findIndex(c => c.id === selectedId)
   const [masterOpen, setMasterOpen] = useState(false)
+  const [addOpen, setAddOpen] = useState(false)
+  // Sessão do personagem de teste do mestre: vive só na memória, a do mestre continua guardada.
+  const [testSession, setTestSession] = useState(null)
   const [view, setView] = useState('account') // 'account' | 'password'
   const [skipPassword, setSkipPassword] = useState(false)
   const [notice, setNotice] = useState(null)
@@ -36,6 +42,10 @@ export default function App() {
     setSession(s)
     saveSession(s)
   }
+
+  useEffect(() => {
+    fetchPlayers().then(list => setExtra(list.map(p => p.username))).catch(() => {})
+  }, [])
 
   useEffect(() => {
     if (!session) return
@@ -80,15 +90,15 @@ export default function App() {
     setHovered(null)
   }
   const pick = i => {
-    if (selected === null) setSelected(i)
+    if (selected < 0) setSelectedId(characters[i].id)
   }
   const back = () => {
-    setSelected(null)
+    setSelectedId(null)
     setHovered(null)
   }
 
-  const chosen = selected === null ? null : CHARACTERS[selected]
-  const choosing = selected === null
+  const chosen = selected < 0 ? null : characters[selected]
+  const choosing = selected < 0
   const askPassword = session && (view === 'password' || (session.mustChangePassword && !skipPassword))
 
   const passwordForm = character => (
@@ -102,6 +112,29 @@ export default function App() {
     />
   )
 
+  const startTest = async () => {
+    const res = await loginAsTestPlayer(session.token)
+    setTestSession({ token: res.token, ...res.account })
+  }
+  const endTest = () => {
+    if (testSession) logout(testSession.token).catch(() => {})
+    setTestSession(null)
+  }
+
+  // Mestre jogando com o personagem de teste: a ficha de sempre, com a saída de volta ao painel.
+  if (session?.master && testSession) {
+    return (
+      <CharacterSheet
+        key="teste-sheet"
+        character={TEST_CHARACTER}
+        session={testSession}
+        testing
+        onLogout={endTest}
+        onExpired={endTest}
+      />
+    )
+  }
+
   // Mestre logado: painel do mestre (antes, a troca da senha inicial, sobre a tela de seleção).
   if (session?.master && !askPassword) {
     return (
@@ -111,6 +144,7 @@ export default function App() {
         onChangePassword={() => { setNotice(null); setView('password') }}
         onLogout={signOut}
         onExpired={sessionExpired}
+        onTestPlayer={startTest}
       />
     )
   }
@@ -122,6 +156,15 @@ export default function App() {
     panel = (
       <MasterGate>
         <LoginForm key="mestre" character={MASTER} onLogin={signIn} onBack={() => setMasterOpen(false)} backLabel="Voltar" />
+      </MasterGate>
+    )
+  } else if (addOpen && !session) {
+    panel = (
+      <MasterGate>
+        <AddPlayerForm
+          onCreated={username => { setExtra(list => [...list, username]); setAddOpen(false) }}
+          onBack={() => setAddOpen(false)}
+        />
       </MasterGate>
     )
   } else if (chosen && !session) {
@@ -159,7 +202,7 @@ export default function App() {
         )}
       </header>
       <div className={'row' + (choosing && hovered !== null ? ' has-hot' : '')} onMouseLeave={leaveRow}>
-        {CHARACTERS.map((c, i) => (
+        {characters.map((c, i) => (
           <Fragment key={c.id}>
             {i > 0 && <Separator hidden={!choosing} lit={choosing && (hovered === i - 1 || hovered === i)} />}
             <CharacterPanel
@@ -177,6 +220,14 @@ export default function App() {
           </Fragment>
         ))}
       </div>
+      {choosing && !session && (
+        <footer className="add-bar">
+          <button className="add-card" type="button" onClick={() => setAddOpen(true)} aria-label="Adicionar novo jogador">
+            <span className="add-plus" aria-hidden="true" />
+            <span className="add-text">NOVO JOGADOR</span>
+          </button>
+        </footer>
+      )}
       {panel}
     </div>
   )

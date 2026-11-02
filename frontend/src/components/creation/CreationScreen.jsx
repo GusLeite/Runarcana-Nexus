@@ -2,7 +2,7 @@ import { ExitIcon, KeyIcon } from '../sheet/icons.jsx'
 import CreationWizard from './CreationWizard.jsx'
 
 // Tela exclusiva da criação, para a conta que ainda não tem personagem: sem herói, abas e rolagens da ficha.
-export default function CreationScreen({ character, session, toast, onCreated, onError, onChangePassword, onLogout }) {
+export default function CreationScreen({ character, session, toast, onCreated, onError, onChangePassword, onLogout, testing }) {
   return (
     <div className="sheet creation-screen" style={{ '--h': character.hue }}>
       <div className="sheet-bg" style={{ backgroundImage: `url("${character.img}")` }} aria-hidden="true" />
@@ -17,10 +17,12 @@ export default function CreationScreen({ character, session, toast, onCreated, o
             <span className="who-name">{character.name}</span>
             <span className="who-sub">{session.username}</span>
           </div>
-          <button className="icon-btn" type="button" onClick={onChangePassword} title="Alterar senha" aria-label="Alterar senha">
-            <KeyIcon />
-          </button>
-          <button className="icon-btn" type="button" onClick={onLogout} title="Sair" aria-label="Sair">
+          {!testing && (
+            <button className="icon-btn" type="button" onClick={onChangePassword} title="Alterar senha" aria-label="Alterar senha">
+              <KeyIcon />
+            </button>
+          )}
+          <button className="icon-btn" type="button" onClick={onLogout} title={testing ? 'Voltar ao painel do mestre' : 'Sair'} aria-label={testing ? 'Voltar ao painel do mestre' : 'Sair'}>
             <ExitIcon />
           </button>
         </div>

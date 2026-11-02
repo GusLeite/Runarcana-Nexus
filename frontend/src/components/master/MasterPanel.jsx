@@ -6,7 +6,7 @@ import MasterSheets from './MasterSheets.jsx'
 import MasterInventory from './MasterInventory.jsx'
 import MasterTable from './MasterTable.jsx'
 import TabBar from '../sheet/TabBar.jsx'
-import { CrownIcon, ExitIcon, KeyIcon } from '../sheet/icons.jsx'
+import { CrownIcon, ExitIcon, FlaskIcon, KeyIcon } from '../sheet/icons.jsx'
 import '../../styles/sheet.css'
 import '../../styles/master.css'
 
@@ -20,7 +20,7 @@ const TABS = [
 ]
 
 // Painel do mestre: mesma moldura da ficha, com as abas da mesa (todos os personagens de uma vez), documentos, habilidades, fichas (subida de nível), inventário (itens, ouro e inspiração) e regras da mesa.
-export default function MasterPanel({ session, notice, onChangePassword, onLogout, onExpired }) {
+export default function MasterPanel({ session, notice, onChangePassword, onLogout, onExpired, onTestPlayer }) {
   const [tab, setTab] = useState('table')
   const [toast, setToast] = useState(notice)
   const expired = useRef(onExpired)
@@ -53,6 +53,9 @@ export default function MasterPanel({ session, notice, onChangePassword, onLogou
             <span className="who-name">Mestre</span>
             <span className="who-sub">{session.username}</span>
           </div>
+          <button className="test-btn" type="button" onClick={() => onTestPlayer().catch(onError)} title="Abrir a ficha de um jogador de teste">
+            <FlaskIcon /> TESTAR COMO JOGADOR
+          </button>
           <button className="icon-btn" type="button" onClick={onChangePassword} title="Alterar senha" aria-label="Alterar senha"><KeyIcon /></button>
           <button className="icon-btn" type="button" onClick={onLogout} title="Sair" aria-label="Sair"><ExitIcon /></button>
         </div>

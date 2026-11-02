@@ -13,6 +13,8 @@
 7. **Logado**: abre a **ficha do personagem** (ver abaixo), que ocupa a tela inteira no lugar da seleção.
 8. "Trocar de personagem" (antes de logar) volta para a seleção; "Sair" (na ficha) faz logout e volta também. "Alterar senha" (na ficha) mostra o `PasswordForm` sobre a arte do personagem e, ao terminar, volta para a ficha.
 
+**Novo jogador**: o card **+ NOVO JOGADOR** (rodapé da seleção, `add-bar`) abre o `AddPlayerForm` no `MasterGate`: nome + senha do mestre; o form entra como mestre, cria (`POST /auth/players`) e descarta a sessão. Os jogadores extras vêm de `GET /auth/players`, ganham painel com retrato gerado (`customCharacter` em `data/characters.js`) e entram com senha = nome.
+
 A sessão (`{ token, username, mustChangePassword }`) fica no `localStorage` (`runarcana.session`). Ao recarregar, o app abre direto no personagem logado e confirma o token com `GET /auth/me`; se o servidor recusar (401), volta para a seleção. Servidor fora do ar não desloga.
 
 Responsivo: abaixo de 760px os painéis empilham na vertical e a lore some. Com `prefers-reduced-motion` as animações e partículas são desligadas.
@@ -21,6 +23,7 @@ Responsivo: abaixo de 760px os painéis empilham na vertical e a lore some. Com 
 
 - **Entrada**: botão **MESTRE** (coroa) no canto do cabeçalho da seleção, visível enquanto ninguém está logado. Abre o `MasterGate` (`components/master/MasterGate.jsx`): fundo escurecido com três anéis hextech girando e o `LoginForm` de sempre, usando um "personagem" `MASTER` (`id: 'mestre'`) definido no `App.jsx`. A troca da senha inicial do mestre aparece no mesmo portal (`PasswordForm`).
 - **Sessão**: a resposta do login traz `master: true`; o `App` aceita sessão salva de mestre (não precisa estar em `CHARACTERS`) e, logado, mostra o `MasterPanel` no lugar da seleção. "Sair" volta para a seleção.
+- **Jogador de teste**: botão **TESTAR COMO JOGADOR** no topo do painel (`POST /auth/test-player`) mostra a ficha (ou a criação) da conta `teste` (`TEST_CHARACTER`), com a sessão só em memória; sem troca de senha, e o botão de sair vira "Voltar ao painel do mestre" (prop `testing`).
 - **Painel** (`MasterPanel.jsx`): mesma moldura da ficha (barra do topo, cards, abas), com selo "MESTRE" e fundo dourado/turquesa sem arte. Abas (abre na Mesa):
   - **Mesa** (`MasterTable.jsx`): um cartão por personagem (arte, classe/subclasse, nível) com CA, Mana, percepção passiva, PV (`HpEditor` compacto: dano, cura, temporários), testes contra a morte quando está com 0 PV (cartão com borda vermelha), chips de condição e **Condições** (abre o `ConditionEditor`), e o losango de **inspiração** (dar/tirar). Atualiza a cada 5 s (`GET /character/table`), pausando com a aba do navegador escondida ou com as condições de um cartão abertas.
   - **Documentos** (`MasterDocuments.jsx`): título, tipo (chips coloridos por tipo), destinatários ("Todos os jogadores" ou um ou mais, vindos de `GET /documents/recipients`; nomes de `CHARACTERS`), texto com a mesma formatação da leitura, link de imagem. "Escrever / Prévia": a prévia usa o `DocumentView` da ficha, então é exatamente o que o jogador vê. O botão diz para quem vai ("ENVIAR PARA RUDO"). À direita, os enviados com destinatários e "Apagar" com confirmação.
