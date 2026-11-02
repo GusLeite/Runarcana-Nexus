@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ITEM_KINDS, carryCapacity, formatKg, itemStats, rarityOf, totalValue, totalWeight } from '../../data/rules.js'
 import { CoinIcon } from './icons.jsx'
+import ItemIcon from './ItemIcon.jsx'
 import Num from './Num.jsx'
 
 const MIN_SLOTS = 24
@@ -12,8 +13,8 @@ const FILTERS = [
   { id: 'OBJECT', label: 'Objetos' },
 ]
 
-// Aba de inventário: casas quadradas como a loja do LoL (a borda mostra a raridade),
-// filtro por tipo e a dica do item escolhido ao lado.
+// Aba de inventário: uma bolsa de couro. A aba da bolsa tem o título e o filtro por tipo, cada item fica num bolso
+// (o brilho mostra a raridade), a carga é o cinto e a etiqueta do item escolhido pende ao lado.
 export default function Inventory({ items, strength, onUse }) {
   const [filter, setFilter] = useState('ALL')
   const [selectedId, setSelectedId] = useState(items[0]?.id ?? null)
@@ -28,10 +29,10 @@ export default function Inventory({ items, strength, onUse }) {
 
   return (
     <div className="inventory">
-      <div className="inv-main">
-        <div className="card-title inv-title">
-          <h3>Inventário <small>{items.length} {items.length === 1 ? 'item' : 'itens'}</small></h3>
-          <div className="seg" role="group" aria-label="Filtrar por tipo">
+      <div className="bag">
+        <div className="bag-flap">
+          <h3 className="bag-title">Mochila <small>{items.length} {items.length === 1 ? 'item' : 'itens'}</small></h3>
+          <div className="bag-tabs" role="group" aria-label="Filtrar por tipo">
             {FILTERS.map(f => (
               <button
                 key={f.id}
@@ -47,7 +48,7 @@ export default function Inventory({ items, strength, onUse }) {
           </div>
         </div>
 
-        <div className="slots">
+        <div className="slots bag-body">
           {visible.map((item, n) => {
             const rarity = rarityOf(item.rarity)
             return (
@@ -60,7 +61,7 @@ export default function Inventory({ items, strength, onUse }) {
                 onMouseEnter={() => setSelectedId(item.id)}
                 aria-label={`${item.name}, ${rarity.name}${item.quantity > 1 ? ', ' + item.quantity + ' unidades' : ''}`}
               >
-                <ItemIcon kind={item.kind} />
+                <ItemIcon item={item} />
                 {item.quantity > 1 && <span className="qty">{item.quantity}</span>}
               </button>
             )
@@ -68,13 +69,15 @@ export default function Inventory({ items, strength, onUse }) {
           {Array.from({ length: empty }, (_, i) => <span key={'e' + i} className="slot empty" aria-hidden="true" />)}
         </div>
 
-        <div className="inv-summary">
+        <div className="bag-belt">
           <div className="carry">
             <div className="carry-head">
               <span>Carga</span>
               <b>{formatKg(weight)} <small>/ {formatKg(capacity)}</small></b>
             </div>
-            <div className={'carry-bar' + (load > 0.8 ? ' heavy' : '')}><div style={{ width: load * 100 + '%' }} /></div>
+            <div className={'carry-bar' + (load > 0.8 ? ' heavy' : '')} role="meter" aria-valuenow={Math.round(load * 100)} aria-valuemin="0" aria-valuemax="100" aria-label="Carga">
+              <div style={{ width: load * 100 + '%' }} />
+            </div>
           </div>
           <div className="inv-value" title="Soma do preço dos itens">
             <span>Valor estimado</span>
@@ -99,9 +102,9 @@ function ItemDetail({ item, onUse }) {
   const rarity = rarityOf(item.rarity)
   const stats = itemStats(item)
   return (
-    <div className="item-detail" style={{ '--r': rarity.color }} aria-live="polite">
+    <div className="item-detail item-tag" style={{ '--r': rarity.color }} aria-live="polite">
       <div className="item-head">
-        <div className="slot mini" style={{ '--r': rarity.color }}><ItemIcon kind={item.kind} /></div>
+        <div className="slot mini" style={{ '--r': rarity.color }}><ItemIcon item={item} /></div>
         <div>
           <div className="item-name">{item.name}</div>
           <div className="item-tags"><span className="rarity">{rarity.name}</span> · {ITEM_KINDS[item.kind] ?? item.kind}</div>
@@ -121,18 +124,4 @@ function ItemDetail({ item, onUse }) {
       )}
     </div>
   )
-}
-
-// Ícones desenhados em SVG enquanto os itens não têm arte própria.
-export function ItemIcon({ kind }) {
-  switch (kind) {
-    case 'WEAPON':
-      return <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M24 4h4v4L13 23l-4-4Z" /><path d="M8 18l6 6M6 22l4 4M5 27l2-2" /></svg>
-    case 'ARMOR':
-      return <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4 26 8v8c0 6-4.5 10-10 12C10.5 26 6 22 6 16V8Z" /><path d="M16 9v14M11 14h10" /></svg>
-    case 'CONSUMABLE':
-      return <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M13 4h6M14 4v6l-6 9a6 6 0 0 0 5 9h6a6 6 0 0 0 5-9l-6-9V4" /><path d="M10 20h12" /></svg>
-    default:
-      return <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4 27 16 16 28 5 16Z" /><path d="M5 16h22M16 4l-4 12 4 12 4-12Z" /></svg>
-  }
 }

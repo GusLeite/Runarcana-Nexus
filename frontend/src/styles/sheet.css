@@ -667,3 +667,79 @@ box-shadow:1px 0 0 #3b2e1d,3px 0 0 #120d08,4px 0 0 #3b2e1d,6px 0 0 #120d08,7px 0
  .tome-scroll{max-height:50vh}
 }
 .tome .abl-detail .item-desc{display:flow-root}
+
+/* ---------- inventário: a bolsa ---------- */
+.bag{--leather:#2a170d;--stitch:rgba(232,190,120,.38);position:relative;padding:0 0 4px;border-radius:20px 20px 26px 26px;border:1px solid #6a4528;
+background:radial-gradient(ellipse at 30% 0,rgba(255,200,130,.1),transparent 60%),linear-gradient(165deg,#4d2e1b,var(--leather) 55%,#3a2214);
+box-shadow:0 22px 44px rgba(0,0,0,.55),inset 0 0 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,220,170,.18)}
+.bag::before{content:"";position:absolute;inset:7px;border:1.5px dashed var(--stitch);border-radius:15px 15px 21px 21px;pointer-events:none}
+/* A aba da bolsa: couro mais escuro, borda de baixo em curva e a fivela de latão. */
+.bag-flap{position:relative;z-index:1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:18px 26px 34px;
+border-radius:20px 20px 70px 70px/20px 20px 30px 30px;background:linear-gradient(180deg,#5b3820,#3a2112 70%,#2b180c);
+box-shadow:0 10px 18px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,220,170,.25),inset 0 -2px 0 rgba(0,0,0,.4)}
+.bag-flap::before{content:"";position:absolute;left:50%;bottom:-22px;width:30px;height:46px;transform:translateX(-50%);border-radius:3px 3px 15px 15px;background:linear-gradient(90deg,#2b180c,#4a2d1a 50%,#2b180c);box-shadow:0 4px 8px rgba(0,0,0,.5)}
+.bag-flap::after{content:"";position:absolute;left:50%;bottom:-6px;width:20px;height:20px;transform:translateX(-50%);border-radius:50%;border:2px solid #7a5818;background:radial-gradient(circle at 35% 30%,#fff0b0,#d9a82e 45%,#7a5818);box-shadow:0 2px 5px rgba(0,0,0,.6),inset 0 0 4px rgba(0,0,0,.5)}
+.bag-title{display:flex;align-items:baseline;gap:10px;margin:0;font-family:'Cinzel',Georgia,serif;font-size:17px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#f3d98e;text-shadow:0 1px 0 #000,0 0 12px rgba(240,199,94,.3)}
+.bag-title small{font-family:'Spectral',Georgia,serif;font-size:13px;font-weight:400;font-style:italic;letter-spacing:0;text-transform:none;color:#cdb48a}
+.bag-tabs{display:flex;flex-wrap:wrap;gap:6px}
+.bag-tabs button{padding:4px 12px;border:1px solid rgba(232,190,120,.35);border-radius:999px;background:rgba(0,0,0,.32);color:#dcc7a0;font-family:'Cinzel',Georgia,serif;font-size:12px;font-weight:700;letter-spacing:.06em;cursor:pointer;transition:background .2s,color .2s,box-shadow .2s}
+.bag-tabs button:hover:not(:disabled){color:#fff0c8;border-color:#e8be78}
+.bag-tabs button.on{background:linear-gradient(180deg,#e3b94f,#a87a22);border-color:#f3d98e;color:#2a170d;box-shadow:0 0 10px rgba(240,199,94,.35)}
+.bag-tabs button:disabled{opacity:.3;cursor:default}
+.bag-tabs button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+/* Dentro da bolsa: o fundo escuro onde ficam os bolsos. */
+.bag-body{margin:-14px 16px 0;padding:34px 18px 20px;border-radius:14px 14px 18px 18px;background:radial-gradient(ellipse at 50% 20%,#2c180c,#120a05 85%);box-shadow:inset 0 6px 22px #000,inset 0 0 0 1px rgba(0,0,0,.6),0 1px 0 rgba(255,220,170,.12)}
+.slots{gap:12px;grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}
+.slot{--pocket:#2d1a0e;border:0;border-radius:13px;background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--r,#8a6a3a) 26%,#35200f),var(--pocket) 62%,#160c05);
+box-shadow:inset 0 0 0 1px rgba(0,0,0,.65),inset 0 -12px 16px -8px color-mix(in srgb,var(--r,transparent) 55%,transparent),inset 0 3px 8px rgba(0,0,0,.6),0 1px 0 rgba(255,220,170,.14)}
+.slot::before{content:"";position:absolute;inset:4px;border:1px dashed rgba(232,190,120,.3);border-radius:9px;pointer-events:none}
+.slot svg{width:66%;height:66%;stroke:#f6ead0;stroke-width:1.5;filter:drop-shadow(0 2px 3px rgba(0,0,0,.7)) drop-shadow(0 0 5px color-mix(in srgb,var(--r,transparent) 80%,transparent))}
+.slot svg .f{fill:var(--r,#c8a24a);fill-opacity:.42}
+.slot:hover{transform:translateY(-3px) rotate(-1.5deg)}
+.slot.on{box-shadow:inset 0 0 0 1px rgba(0,0,0,.65),inset 0 -12px 16px -8px color-mix(in srgb,var(--r,transparent) 55%,transparent),0 0 0 2px #120a05,0 0 0 3px var(--gold-hi),0 0 18px rgba(240,199,94,.45)}
+.slot.on::after{inset:-5px;border-radius:17px}
+.slot.empty{border:0;background:radial-gradient(circle at 50% 35%,#1a0e07,#0d0603);box-shadow:inset 0 3px 8px #000,0 1px 0 rgba(255,220,170,.07)}
+.slot.empty::before{border-color:rgba(232,190,120,.12)}
+.slot.empty::after{width:6px;height:6px;border-radius:50%;border:0;background:rgba(232,190,120,.1)}
+.slot.mini{border-radius:10px}
+.slot.mini::before{inset:3px;border-radius:7px}
+.qty{right:5px;bottom:4px;min-width:20px;padding:0 5px;border-radius:999px;border:1px solid #7a5818;background:linear-gradient(180deg,#f0d27a,#b98a2a);font-family:'Cinzel',Georgia,serif;font-size:11px;line-height:17px;text-align:center;color:#2a170d;text-shadow:none}
+/* O cinto: a carga é a barra, o valor fica ao lado. */
+.bag-belt{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center;margin:16px 14px 14px;padding:12px 22px;border-radius:8px;
+background:linear-gradient(180deg,#6b4527,#4a2d18 50%,#3a2212);
+box-shadow:0 4px 10px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,220,170,.25),inset 0 -1px 0 rgba(0,0,0,.5)}
+.bag-belt::before{content:"";position:absolute;inset:4px;border-top:1px dashed var(--stitch);border-bottom:1px dashed var(--stitch);pointer-events:none}
+.bag-belt .carry{margin:0}
+.bag-belt .carry-head{color:#dcc7a0}
+.bag-belt .carry-head b{color:#fff0c8}
+.bag-belt .carry-bar{height:10px;border-radius:999px;border:1px solid #1a0e07;background:#140a05;box-shadow:inset 0 2px 4px #000;overflow:hidden}
+.bag-belt .carry-bar div{border-radius:999px;background:linear-gradient(180deg,#f3d98e,#b98a2a)}
+.bag-belt .carry-bar.heavy div{background:linear-gradient(180deg,#ff9a5a,#b3361a)}
+.bag-belt .inv-value span{color:#dcc7a0}
+/* A etiqueta do item escolhido: papel de pergaminho com furo, ao lado da bolsa. */
+.inv-side{padding-top:18px}
+.inv-side .item-tag{position:relative;margin-top:0;padding:30px 18px 18px;border:0;border-radius:3px;color:#3b2813;
+clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%,0 16px);
+background:radial-gradient(ellipse at 50% 0,rgba(255,255,255,.35),transparent 70%),linear-gradient(170deg,#ecdcb4,#d6bf8a);
+box-shadow:inset 0 0 0 1px rgba(90,60,20,.35),inset 0 0 30px rgba(120,80,20,.25);animation:tag-swing .6s cubic-bezier(.2,1.3,.4,1);transform-origin:50% 0}
+.inv-side .item-tag::before{content:"";position:absolute;top:8px;left:50%;width:12px;height:12px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,#1a0e07 45%,#b98a2a 50% 70%,#7a5818 75%)}
+.inv-side .item-tag::after{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--r)}
+.inv-side .item-tag .item-name{color:#2a170d}
+.inv-side .item-tag .item-tags{color:#6b5236}
+.inv-side .item-tag .item-tags .rarity{color:color-mix(in srgb,var(--r) 60%,#2a170d);font-weight:700}
+.inv-side .item-tag .item-stats{color:#1d5f58;font-weight:500}
+.inv-side .item-tag .item-desc{color:#3b2813}
+.inv-side .item-tag .item-effect{color:#1d5f58;border-left-color:#2f8a80}
+.inv-side .item-tag .item-foot{border-top:1px dashed rgba(90,60,20,.4);color:#6b5236}
+.inv-side .item-tag .price{color:#7a5410}
+.inv-side .item-tag .ghost-btn{border-color:#7a5410;color:#4a300a;background:rgba(122,84,16,.1)}
+.inv-side .item-tag .ghost-btn:hover{background:rgba(122,84,16,.22)}
+@keyframes tag-swing{from{opacity:0;transform:rotate(-5deg) translateY(-8px)}}
+@media (prefers-reduced-motion:reduce){.inv-side .item-tag{animation:none}}
+.inv-side .empty-detail{padding:24px 18px}
+@container (max-width:560px){
+ .bag-flap{padding:16px 16px 32px}
+ .bag-body{margin:-14px 10px 0;padding:32px 12px 16px}
+ .bag-belt{grid-template-columns:1fr}
+ .bag-belt .inv-value{align-items:flex-start}
+}

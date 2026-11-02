@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Inventário em forma de bolsa (`feature/character-sheet`)
+- Aba Inventário redesenhada como bolsa de couro: aba com fivela e filtros, bolsos com brilho de raridade, cinto de carga e etiqueta de pergaminho para o item escolhido.
+- Novos ícones SVG (`ItemIcon.jsx`, 16 desenhos escolhidos pelo nome do item), usados também na loja do mercador.
+
 ## 2026-11-02 — Grimório na aba Magias (`feature/character-sheet`)
 - Saem as teclas Q/W/E/R/P (herança do LoL): a magia mostra o selo do círculo (T, 1, 2…) e o formato do ícone diz o tipo: **quadrado = habilidade, redondo = passiva, arco = magia**.
 - Aba Magias vira um **grimório aberto**: índice com filtros à esquerda (busca, tipo, círculo, escola, tempo de conjuração, preparadas, causa dano, concentração, com usos) e a página da magia à direita, com virada de página, capitular e folio.

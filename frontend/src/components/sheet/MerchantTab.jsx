@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ITEM_KINDS, formatKg, itemStats, rarityOf } from '../../data/rules.js'
 import { CoinIcon } from './icons.jsx'
-import { ItemIcon } from './Inventory.jsx'
+import ItemIcon from './ItemIcon.jsx'
 import Num from './Num.jsx'
 import { prefersReducedMotion } from '../../hooks/useCountUp.js'
 import '../../styles/merchant.css'
@@ -78,7 +78,7 @@ export default function MerchantTab({ merchant, inventory, gold, busy, onBuy, on
                 <li key={item.id} style={{ '--n': n }}>
                   <button type="button" className={'shop-row' + (item.id === selected?.id ? ' on' : '') + (out ? ' out' : '') + (buying && !out && price > gold ? ' dear' : '')}
                     style={{ '--r': rarity.color }} aria-pressed={item.id === selected?.id} onClick={() => choose(item.id)}>
-                    <span className="slot mini"><ItemIcon kind={item.kind} /></span>
+                    <span className="slot mini"><ItemIcon item={item} /></span>
                     <span className="shop-row-name">
                       <b>{item.name}</b>
                       <small>{rarity.name} · {ITEM_KINDS[item.kind] ?? item.kind}{buying
@@ -115,7 +115,7 @@ function Deal({ item, buying, unit, amount, maxQty, total, gold, busy, merchantN
   return (
     <div className="item-detail" style={{ '--r': rarity.color }} aria-live="polite">
       <div className="item-head">
-        <div className="slot mini" style={{ '--r': rarity.color }}><ItemIcon kind={item.kind} /></div>
+        <div className="slot mini" style={{ '--r': rarity.color }}><ItemIcon item={item} /></div>
         <div>
           <div className="item-name">{item.name}</div>
           <div className="item-tags"><span className="rarity">{rarity.name}</span> · {ITEM_KINDS[item.kind] ?? item.kind}</div>
