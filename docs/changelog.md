@@ -4,7 +4,7 @@ Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
 ## 2026-11-02 — Rosto de cada classe no centro do painel (`feature/character-sheet`)
 - `classArt.js`: o `focus` passa a mirar o rosto, não o corpo, no quadro que fica parado antes da expansão (o primeiro do vídeo). Conferido simulando a faixa de 208×650 do painel com a mesma conta do `FocusVideo`.
-- Arcanista e Atirador têm a cabeça cortada no alto do quadro inicial; neles o centro é o tronco.
+- Arcanista (0,84) e Atirador (0,745): o rosto está bem à direita no quadro (a primeira conta tinha mirado o tronco); com isso os dois aparecem no centro, sem precisar de `start`.
 
 ## 2026-11-02 — Símbolos e animações do Bruto e do Mercurial (`feature/character-sheet`)
 - Bruto: o sigilo vira um machado grande e a animação troca as garras por um machado que desce, racha o chão (onda, clarão, estilhaços) e faz a tela tremer.
