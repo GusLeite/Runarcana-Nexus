@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Passado com símbolos (`feature/character-sheet`)
+- Nova `BackgroundPicker`: grade com um símbolo SVG por passado (22, em `backgroundArt.js`) e painel de detalhe com medalhão, descrição, `details`, ouro e concessões; passar o mouse mostra, clicar escolhe. Em tela estreita o detalhe desce para baixo da grade.
+- `OptionStep` removido (só servia ao Passado). Teste garante um símbolo por passado do catálogo. Conferido numa página de teste com o catálogo real; a etapa dentro do assistente não foi aberta (exige login) e o recuo para uma coluna não foi testado visualmente.
+
 ## 2026-11-02 — Símbolo da Honra do Belator (`feature/character-sheet`)
 - `subclassArt.js`: o sigilo do Belator vira um estandarte de guerra (o anterior, um elmo liso, parecia outra coisa).
 

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { createCharacter, fetchCatalog, previewCreation } from '../../api/creation.js'
 import { ATTRIBUTES, heritageChoices } from '../../data/rules.js'
 import { replay } from '../../utils/motion.js'
-import OptionStep from './OptionStep.jsx'
+import BackgroundPicker from './BackgroundPicker.jsx'
 import OriginStep from './OriginStep.jsx'
 import RegionStep from './RegionStep.jsx'
 import ClassStep from './ClassStep.jsx'
@@ -170,7 +170,7 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
               )}
             </>
           ) : (
-            <OptionStep kind="background" title="Escolha o passado" items={catalog.backgrounds} crafts={catalog.crafts} selected={draft.backgroundId} onPick={id => set('backgroundId', id)} />
+            <BackgroundPicker title="Escolha o passado" items={catalog.backgrounds} crafts={catalog.crafts} selected={draft.backgroundId} onPick={id => set('backgroundId', id)} />
           ))}
           {current === 'attributes' && (
             <AttributeStep methods={catalog.attributeMethods} draft={draft} preview={preview}

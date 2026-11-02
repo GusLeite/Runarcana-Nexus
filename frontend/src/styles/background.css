@@ -1,0 +1,25 @@
+/* Escolha do passado (BackgroundPicker.jsx): grade de símbolos e, ao lado, o detalhe da opção. */
+.bgpick{--h:42;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start}
+.bg-sigil{width:34px;height:34px;flex:none;overflow:visible;fill:none;stroke:var(--gold);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s,filter .3s,transform .4s cubic-bezier(.22,1,.36,1)}
+.bg-sigil.big{width:56px;height:56px;stroke:var(--gold-hi);filter:drop-shadow(0 0 8px hsla(var(--h),90%,60%,.55))}
+.bggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+.bgtile{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:92px;padding:12px 6px 10px;border:1px solid rgba(200,162,74,.22);background:linear-gradient(180deg,rgba(10,22,38,.7),rgba(1,10,18,.85));color:var(--text);font:inherit;text-align:center;cursor:pointer;transition:border-color .25s,background .25s,box-shadow .25s;animation:rise-in .4s cubic-bezier(.22,1,.36,1) backwards;animation-delay:calc(var(--n,0)*30ms)}
+.bgtile-name{font-family:'Cinzel',Georgia,serif;font-size:12.5px;font-weight:700;line-height:1.25;letter-spacing:.03em;transition:color .25s}
+.bgtile:hover,.bgtile:focus-visible,.bgtile.peek{border-color:hsla(var(--h),80%,65%,.7);background:linear-gradient(180deg,hsla(var(--h),70%,40%,.22),rgba(1,10,18,.85))}
+.bgtile:hover .bg-sigil,.bgtile:focus-visible .bg-sigil,.bgtile.peek .bg-sigil{stroke:var(--gold-hi);filter:drop-shadow(0 0 6px hsla(var(--h),90%,60%,.5));transform:scale(1.1)}
+.bgtile:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.bgtile.on{border-color:var(--gold-hi);box-shadow:0 0 0 1px var(--gold),0 0 22px rgba(240,199,94,.22)}
+.bgtile.on .bg-sigil{stroke:var(--gold-hi)}
+.bgtile.on .bgtile-name{color:var(--gold-hi)}
+.bgtile-check{position:absolute;top:4px;right:7px;font-size:13px;font-weight:700;color:var(--gold-hi)}
+.bgdetail{position:sticky;top:0;max-height:calc(100vh - 220px);overflow-y:auto;overscroll-behavior:contain;scrollbar-color:var(--gold-dk) transparent;padding:18px;border:1px solid hsla(var(--h),70%,60%,.38);background:hsla(var(--h),70%,40%,.08)}
+.bgdetail-in{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;animation:bgdetail-in .35s ease}
+@keyframes bgdetail-in{from{opacity:0;transform:translateY(6px)}}
+.bgmedal{position:relative;display:flex;align-items:center;justify-content:center;width:96px;height:96px;border-radius:50%;border:2px solid var(--gold);background:hsla(var(--h),70%,40%,.14)}
+.bgmedal:before{content:"";position:absolute;inset:6px;border-radius:50%;border:1px dashed rgba(200,162,74,.55)}
+.bgdetail-name{display:flex;align-items:center;gap:8px;margin:0;font-family:'Cinzel',Georgia,serif;font-size:20px;letter-spacing:.05em;color:var(--gold-hi)}
+.bgdetail-state{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.bgdetail-desc{margin:0;font-size:14.5px;line-height:1.5;text-align:left;color:#cfc7b2}
+.bgdetail-in>.option-details,.bgdetail-in>.grants{align-self:stretch;text-align:left}
+@media (max-width:760px){.bgpick{grid-template-columns:1fr}.bgdetail{position:static;max-height:none}}
+@media (prefers-reduced-motion:reduce){.bgdetail-in,.bgtile{animation:none}.bgtile:hover .bg-sigil,.bgtile:focus-visible .bg-sigil,.bgtile.peek .bg-sigil{transform:none}}
