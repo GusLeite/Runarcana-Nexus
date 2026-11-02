@@ -290,23 +290,18 @@ const SFX = {
     if (sign) sign(hz)
     else bell(hz * 2, 0, 0.07, 1.4, 0.6)
   },
-  choose: ch => {
-    // desembainhar: lâmina que sobe + sino do personagem
-    noise({ dur: 0.45, vol: 0.09, type: 'highpass', f: 3000, f2: 9000, q: 0.7, attack: 0.05, send: 0.3 })
-    tone({ f: 90, f2: 45, dur: 0.4, vol: 0.13 })
-    bell(196 * Math.pow(2, (((ch?.hue ?? 0) % 360) / 360) * (7 / 12)) * 2, 0.08, 0.08, 1.8, 0.8)
+  choose: () => {
+    // um toque quente e curto: baque suave e duas notas macias
+    tone({ f: 130, f2: 90, dur: 0.18, vol: 0.09, lp: 400 })
+    tone({ f: 392, dur: 0.3, vol: 0.06, attack: 0.01, lp: 1600, send: 0.3 })
+    tone({ f: 587, t: 0.07, dur: 0.35, vol: 0.05, attack: 0.01, lp: 1800, send: 0.3 })
   },
   login: () => {
-    tone({ f: 90, f2: 50, dur: 0.6, vol: 0.14, lp: 400 })
-    noise({ dur: 0.5, vol: 0.05, type: 'lowpass', f: 300, q: 0.5, attack: 0.1 })
-    bell(220, 0.2, 0.08, 2.4, 0.8)
-    bell(330, 0.36, 0.08, 2.4, 0.8)
-    bell(440, 0.52, 0.07, 2.6, 0.9)
+    // boas-vindas: três notas macias subindo (Dó, Sol, Mi), curtas e sem agudos
+    ;[262, 392, 523].forEach((f, i) => tone({ f, t: i * 0.09, dur: 0.5, vol: 0.06, attack: 0.015, lp: 1600, send: 0.35 }))
   },
   logout: () => {
-    bell(330, 0, 0.07, 1.8, 0.8)
-    bell(220, 0.16, 0.07, 2.2, 0.8)
-    tone({ f: 80, f2: 45, t: 0.3, dur: 0.4, vol: 0.1, lp: 300 })
+    ;[392, 262].forEach((f, i) => tone({ f, t: i * 0.1, dur: 0.4, vol: 0.05, attack: 0.015, lp: 1400, send: 0.3 }))
   },
   rattle: () => {
     // o dado quicando: cliques de madeira que vão diminuindo (um a cada 55 ms, como os números na tela)
