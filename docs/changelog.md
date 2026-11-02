@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Preparação do deploy na Oracle Cloud (`feature/character-sheet`)
+- Hospedagem escolhida: Oracle Always Free com DuckDNS; passo a passo em `docs/deploy-oracle.md`.
+- `deploy/setup-oracle.sh` prepara a VM (firewall, Docker, rclone) e `deploy/backup-offsite.sh` copia os dumps para fora do servidor.
+- Ainda não testado num servidor real.
+
 ## 2026-11-02 — Funções e descrições dos personagens (`feature/character-sheet`)
 - Gaudron passa a se chamar Galdren na tela (nome e grito da torcida); o id/usuário da conta continua gaudron.
 - Tela de seleção: Rudo (Arcanista, mago hemomante), Galdren (Bruto, minotauro de Noxus), Proto (Combatente, construto de Piltover) e Loge (Mercurial, assassino louco e alcoólatra) com novas funções e descrições em `frontend/src/data/characters.js`.

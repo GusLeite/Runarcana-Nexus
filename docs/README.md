@@ -5,6 +5,7 @@ Esta pasta é a **fonte de verdade** do projeto. Ela serve para quem chega ao c�
 | Documento | Conteúdo |
 |---|---|
 | [visao-geral.md](visao-geral.md) | O que é o projeto, stack, organização dos branches e como rodar tudo |
+| [deploy-oracle.md](deploy-oracle.md) | Passo a passo para colocar no ar de graça na Oracle Cloud |
 | [backend.md](backend.md) | API Spring Boot: arquitetura, configuração, autenticação, testes, convenções e pendências gerais |
 | ↳ [backend-api.md](backend-api.md) | Tabela de endpoints |
 | ↳ [backend-criacao.md](backend-criacao.md) | Criação, assistente, catálogos JSON, subida de nível, magias preparadas, regras da mesa |
