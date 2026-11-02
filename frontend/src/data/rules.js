@@ -49,7 +49,7 @@ export const CLASS_NAMES = {
 
 export const REGION_NAMES = {
   BILGEWATER: 'Águas de Sentina',
-  BANDLE_CITY: 'Cidade de Bandle',
+  BANDLE_CITY: 'Bandópolis',
   DEMACIA: 'Demacia',
   FRELJORD: 'Freljord',
   SHADOW_ISLES: 'Ilhas das Sombras',
