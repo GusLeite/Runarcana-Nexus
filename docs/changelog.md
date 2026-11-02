@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Opção "Dados reais" nos atributos (`feature/character-sheet`)
+- Novo método na tela: digitar os valores rolados na mesa, travados entre o mínimo e o máximo do catálogo.
+
 ## 2026-11-02 — Rolagem de atributos por pedras (`feature/character-sheet`)
 - Manual/rolagem: cada rolagem dá 6 valores que o jogador arrasta para os atributos; campo livre removido (não dava para limitar). Máx. 3 rolagens.
 

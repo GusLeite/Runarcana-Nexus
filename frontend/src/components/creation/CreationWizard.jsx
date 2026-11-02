@@ -42,6 +42,7 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
   const [preview, setPreview] = useState(null)
   const [step, setStep] = useState(0)
   const [rolled, setRolled] = useState({ used: 0, set: [], dice: null }) // rolagens de atributo (limite em AttributeStep)
+  const [realDice, setRealDice] = useState(false) // atributos digitados de dados rolados na mesa
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState(null)
   const panel = useRef()
@@ -173,7 +174,7 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
             <BackgroundPicker title="Escolha o passado" items={catalog.backgrounds} crafts={catalog.crafts} selected={draft.backgroundId} onPick={id => set('backgroundId', id)} />
           ))}
           {current === 'attributes' && (
-            <AttributeStep methods={catalog.attributeMethods} draft={draft} preview={preview} rolled={rolled} onRolled={setRolled}
+            <AttributeStep methods={catalog.attributeMethods} draft={draft} preview={preview} rolled={rolled} onRolled={setRolled} realDice={realDice} onRealDice={setRealDice}
               onMethod={m => setDraft(d => ({ ...d, attributeMethod: m, baseAttributes: startingAttributes(m, catalog.attributeMethods) }))}
               onChange={values => set('baseAttributes', values)} />
           )}

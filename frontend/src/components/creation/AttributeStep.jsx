@@ -7,7 +7,8 @@ const ROLL_MS = 1300
 const METHODS = [
   { id: 'POINT_BUY', key: 'pointBuy', label: 'Compra de pontos' },
   { id: 'STANDARD_ARRAY', key: 'standardArray', label: 'Arranjo padrão' },
-  { id: 'MANUAL', key: 'manual', label: 'Manual / rolagem' },
+  { id: 'MANUAL', key: 'manual', label: 'Rolagem' },
+  { id: 'REAL', key: 'manual', label: 'Dados reais' },
 ]
 
 // Posição dos pontos em cada face (grade 3×3).
@@ -40,17 +41,27 @@ const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce
 
 // Atributos base pelo método escolhido. A coluna da direita mostra base + bônus (da prévia) = total.
 // rolled: { used, set, dice } — rolagens já gastas e os 6 valores da última (ficam no assistente, para não zerarem ao trocar de etapa).
-export default function AttributeStep({ methods, draft, preview, rolled, onRolled, onMethod, onChange }) {
+export default function AttributeStep({ methods, draft, preview, rolled, onRolled, realDice, onRealDice, onMethod, onChange }) {
   const enabled = METHODS.filter(m => methods[m.key] != null)
   const values = draft.baseAttributes
   const method = draft.attributeMethod
+  // 'Rolagem' e 'Dados reais' são o mesmo método MANUAL para o back; a diferença é só de como o jogador preenche.
+  const mode = method === 'MANUAL' && realDice ? 'REAL' : method
+  const range = methods.manual
+  const pick = m => { onRealDice(m === 'REAL'); onMethod(m === 'REAL' ? 'MANUAL' : m) }
+  const typed = (id, raw) => {
+    if (raw === '') return set(id, null)
+    const n = Math.round(Number(raw))
+    if (Number.isFinite(n)) set(id, Math.min(range.max, Math.max(0, n)))
+  }
+  const settle = id => { const v = values[id]; if (v != null && v < range.min) set(id, range.min) }
   const set = (id, v) => onChange({ ...values, [id]: v })
   const line = id => preview?.attributes.find(a => a.attribute === id)
 
   const pb = methods.pointBuy
   const spent = method === 'POINT_BUY' ? pointBuySpent(pb, values) : 0
-  const dragged = method === 'STANDARD_ARRAY' || method === 'MANUAL'
-  const array = method === 'MANUAL' ? rolled.set : methods.standardArray ?? []
+  const dragged = method === 'STANDARD_ARRAY' || mode === 'MANUAL'
+  const array = mode === 'MANUAL' ? rolled.set : methods.standardArray ?? []
 
   // Arranjo padrão: arrastar (ou tocar) um valor até o atributo.
   const [held, setHeld] = useState(null) // { value, from } escolhido por toque/clique
@@ -115,7 +126,7 @@ export default function AttributeStep({ methods, draft, preview, rolled, onRolle
       <h4 className="step-title">Defina os atributos</h4>
       <div className="seg method-seg" role="radiogroup" aria-label="Método">
         {enabled.map(m => (
-          <button key={m.id} type="button" role="radio" aria-checked={method === m.id} className={method === m.id ? 'on' : ''} onClick={() => onMethod(m.id)}>
+          <button key={m.id} type="button" role="radio" aria-checked={mode === m.id} className={mode === m.id ? 'on' : ''} onClick={() => pick(m.id)}>
             {m.label}
           </button>
         ))}
@@ -150,7 +161,13 @@ export default function AttributeStep({ methods, draft, preview, rolled, onRolle
         </div>
       )}
 
-      {method === 'MANUAL' && (
+      {mode === 'REAL' && (
+        <p className="real-note">
+          Role seus dados na mesa e digite o resultado de cada atributo. Cada valor fica entre <b>{range.min}</b> e <b>{range.max}</b>.
+        </p>
+      )}
+
+      {mode === 'MANUAL' && (
         <div className="roller">
           <div className={'tray' + (rolling ? ' rolling' : '')} aria-hidden="true">
             {trayDice.map((v, i) => <Die3D key={i + '-' + trayDice.join('')} value={v} rolling={rolling} n={i} />)}
@@ -173,7 +190,7 @@ export default function AttributeStep({ methods, draft, preview, rolled, onRolle
           const v = values[a.id]
           const l = line(a.id)
           return (
-            <div className={'attr-row' + (dragged && over === a.id ? ' drop-over' : '') + (rolling && method === 'MANUAL' ? ' shake' : '')}
+            <div className={'attr-row' + (dragged && over === a.id ? ' drop-over' : '') + (rolling && mode === 'MANUAL' ? ' shake' : '')}
               key={a.id} style={{ '--n': n, '--pct': Math.min(100, ((l?.total ?? v ?? 0) / 20) * 100) + '%' }}
               {...(dragged ? dropOn(a.id) : {})}>
               <span className="attr-row-name"><b>{a.abbr}</b> {a.name}</span>
@@ -185,6 +202,10 @@ export default function AttributeStep({ methods, draft, preview, rolled, onRolle
                     <button type="button" aria-label={'Aumentar ' + a.name} disabled={v >= pb.max} onClick={() => set(a.id, v + 1)}>+</button>
                     <small className="cost">custo {pb.costs[String(v)] ?? '—'}</small>
                   </span>
+                )}
+                {mode === 'REAL' && (
+                  <input type="number" className="real-input" inputMode="numeric" aria-label={a.name} min={range.min} max={range.max} step="1" value={v ?? ''}
+                    onChange={e => typed(a.id, e.target.value)} onBlur={() => settle(a.id)} />
                 )}
                 {dragged && (
                   <button type="button" className={'slot' + (v != null ? ' filled' : '') + (held ? ' ready' : '')}

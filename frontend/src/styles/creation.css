@@ -266,3 +266,8 @@ transition:transform .15s,filter .15s;animation:stone-in .5s cubic-bezier(.3,1.6
 .res-list{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
 .res-cost{border-color:var(--gold-hi);color:var(--gold-hi);letter-spacing:.12em}
 .choice .muted-note{margin:0 0 10px}
+
+.real-note{max-width:620px;margin:0 0 14px;padding:10px 14px;border-left:3px solid var(--teal);background:rgba(47,211,192,.08);color:#cfc7b2;font-size:14px;animation:rise-in .35s ease}
+.real-note b{color:var(--gold-hi)}
+.real-input{width:76px;padding:8px;text-align:center;font-family:'Cinzel',Georgia,serif;font-size:18px;background:#050b14;border:1px solid rgba(200,162,74,.5);color:var(--gold-hi)}
+.real-input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 12px rgba(47,211,192,.4)}
