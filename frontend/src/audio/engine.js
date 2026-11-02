@@ -3,7 +3,7 @@
 // sinos esparsos, que muda de tom conforme a cena (`setScene`).
 // O navegador só libera o som depois de um gesto do usuário (`unlock`); antes disso tudo é silêncio.
 
-const STORE = 'runarcana.sound'
+const STORE = 'runarcana.sound.v2'
 const DEFAULTS = { sfx: true, ambient: true, volume: 0.7 }
 
 const readPrefs = () => {
