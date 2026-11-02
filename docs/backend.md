@@ -39,7 +39,8 @@ Build: o `pom.xml` declara o Lombok em `annotationProcessorPaths` (obrigatório 
 
 Configuração em `src/main/resources/application.properties`:
 - `server.servlet.context-path=/runarcana`, então todas as rotas começam com `/runarcana`
-- PostgreSQL em `jdbc:postgresql://localhost:5432/runarcana`
+- PostgreSQL por variáveis de ambiente: `DB_URL` (padrão `jdbc:postgresql://localhost:5432/runarcana`), `DB_USERNAME` (padrão `postgres`) e `DB_PASSWORD`. Em dev, a senha fica em `application-local.properties` na raiz, fora do Git (modelo: `application-local.properties.example`)
+- Perfil `prod` (`application-prod.properties`): sem Swagger e sem `show-sql`, lê `RUNARCANA_MASTER_PASSWORD` e usa o endereço real do cliente vindo do proxy
 - `spring.jpa.hibernate.ddl-auto=update` (o Hibernate cria e altera as tabelas) e `show-sql=true`
 
 Erros de regra e de `@Valid` voltam como `{ "message": "..." }` (`exception/ApiExceptionHandler.java`), já em português para o front mostrar direto.
@@ -51,10 +52,12 @@ Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spri
 - **Contas** (`model/auth/Account`): `username` (único, sempre minúsculo), `passwordHash` (BCrypt), `mustChangePassword`, `passwordChangedAt`, `role` (`PLAYER | MASTER`; nulo nas contas antigas = jogador), `custom` (`Boolean` anulável: jogador criado pelo mestre via `POST /auth/players`, listado em `GET /auth/players`). Uma conta por personagem; o `username` é o `id` do personagem no front (`rudo`, `gaudron`, `proto`, `titan`, `loge`).
 - **Mestre**: a conta `mestre` (`role = MASTER`) é a única que cadastra magias/habilidades e envia documentos (`AuthService.requireMaster`, 403 "Só o mestre pode fazer isso." para jogadores). No front, o mestre entra pelo botão **MESTRE** da tela inicial e usa o painel do mestre (ver `frontend.md`); a API também pode ser usada direto pelo Swagger (`/runarcana/swagger-ui.html`) com o token em `Authorization: Bearer <token>`.
 - **Conta de teste** (`teste`, `AuthService.TEST_PLAYER`): criada no seed com senha aleatória (não entra pelo login); só o mestre abre sessão nela, por `POST /auth/test-player`. É jogador comum: aparece na Mesa e nos destinatários de documentos, o que ajuda a validar.
-- **Seed** (`config/AuthConfig.seedAccounts`): ao subir, cria as contas que ainda não existem, com a **senha inicial igual ao nome do usuário** e `mustChangePassword = true`. Jogadores vêm de `runarcana.auth.seed-accounts` (padrão: os 5 personagens); mestres, de `runarcana.auth.master-accounts` (padrão: `mestre`). Troque a senha do mestre logo no primeiro acesso (`PUT /auth/password`). Conta já existente não é tocada; para "resetar" a senha de alguém, apague a linha dele em `account` (e os tokens em `auth_token`) e reinicie.
+- **Seed** (`config/AuthConfig.seedAccounts`): ao subir, cria as contas que ainda não existem, com `mustChangePassword = true`. Jogadores (`runarcana.auth.seed-accounts`, padrão: os 5 personagens) nascem com senha aleatória, que ninguém vê: o mestre gera a provisória na aba Contas. Mestres (`runarcana.auth.master-accounts`, padrão: `mestre`) usam `runarcana.auth.master-password`; sem ela, a senha aleatória sai uma vez no log. Conta já existente não é tocada. `runarcana.auth.username-as-initial-password=true` (senha = nome) só vale em testes e no sandbox. Mestre sem acesso: apague a linha dele em `account` (e os tokens em `auth_token`) e reinicie.
+- **Senha provisória** (`POST /auth/accounts/{username}/reset-password`, e também ao criar jogador): 12 caracteres aleatórios, mostrados uma vez ao mestre; encerra as sessões do jogador e pede a troca no próximo acesso. A troca obrigatória é imposta pelo front; o back não bloqueia as outras rotas enquanto `mustChangePassword` estiver ligado.
+- **Limite de login** (`services/LoginThrottle`): 10 senhas erradas por endereço em 15 min (`runarcana.auth.login-max-attempts`) dão 429; login certo zera. Fica em memória, então vale para uma instância só e zera ao reiniciar.
 - **Login** (`services/AuthService`): o usuário não diferencia maiúsculas nem espaços nas pontas. Gera um token opaco aleatório (32 bytes, base64url) válido por 30 dias; no banco (`auth_token`) fica só o SHA-256 dele. O cliente manda `Authorization: Bearer <token>`. Tokens vencidos são limpos a cada login.
 - **Troca de senha**: exige a senha atual; a nova precisa ter 6–72 caracteres, ser diferente da atual e não ser o nome do personagem. Ao trocar, `mustChangePassword` vira `false` e as **outras** sessões da conta são encerradas (a atual continua).
-- As rotas antigas (`/background`, `/character-classes`) continuam **abertas**; nada exige login além de `/auth/me`, `/auth/logout` e `/auth/password`.
+- Sem login ficam só `POST /auth/login` e `GET /auth/players` (lista da tela de seleção). As rotas antigas (`/background`, `/character-classes`, `POST /character`) exigem o mestre; o front não as usa.
 
 ## Testes
 
@@ -68,17 +71,15 @@ Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spri
 
 ## Pendências / problemas conhecidos
 
-- **Credencial no Git**: a senha do banco está versionada em `application.properties`. Mover para variável de ambiente (`${DB_PASSWORD}`) e trocar a senha.
+- **Senha antiga no histórico do Git**: a senha do PostgreSQL local foi versionada em commits antigos de um repositório público. Não vale para produção (lá a senha é outra), mas troque a local se ela for usada em outro lugar.
+- O schema depende de `ddl-auto=update` e de `ALTER TABLE` manual; em produção vale adotar migrações versionadas (Flyway) antes de mudanças que o Hibernate não aplica sozinho.
 - `Origin` não tem getters (nem `@Data`).
-- `POST /character` não exige login; `GET /character` e `GET /character/table` exigem o mestre. A ligação conta ↔ personagem é pelo nome (ver acima), não por chave estrangeira.
+- A ligação conta ↔ personagem é pelo nome (ver acima), não por chave estrangeira.
 - O enum `region`/`alignment` em `Character` não tem `@Enumerated(STRING)` e é salvo como ordinal (frágil se a ordem mudar).
 - `BackgroundService.getBackGroundByName` dá NullPointerException quando o nome não existe; o nome do método não diz que ele altera dados.
 - `ItemService` tem métodos com nomes copiados (`getAllCharacters`, `createCharacter`) e ainda não tem controller.
-- As rotas de dados (`/background`, `/character-classes`) não exigem login. Quando houver rotas de ficha/inventário, proteger com `AuthService.authenticate` (ou migrar para Spring Security).
-- Não há como resetar senha esquecida; hoje o reset é apagar a conta no banco (ver Autenticação).
 - Back-end iniciado antes de uma mudança não tem as rotas novas: o front recebe 404 (ex.: "Nova" anotação). Reinicie o `spring-boot:run` depois de puxar o código.
-- Não há rota para o mestre editar uma habilidade (só criar e apagar) nem para editar um documento já enviado.
 - Documentos aceitam só link de imagem (`imageUrl`); não há upload de arquivos.
-- Não há CORS configurado: em dev o Vite faz proxy de `/runarcana`. Num deploy com front e API em domínios diferentes, será preciso configurar CORS.
+- Não há CORS configurado: em dev o Vite faz proxy de `/runarcana` e em produção o Caddy serve front e API no mesmo domínio.
 - Testes não cobrem `/background`, `/character-classes` nem itens.
-- `POST /character` (antigo, sem assistente) continua aberto e não liga a ficha a uma conta.
+- `POST /character` (antigo, só o mestre) não liga a ficha a uma conta.

@@ -8,6 +8,7 @@ export default function AddPlayerForm({ onCreated, onBack }) {
   const [password, setPassword] = useState('')
   const [msg, setMsg] = useState(null)
   const [busy, setBusy] = useState(false)
+  const [created, setCreated] = useState(null)
   const form = useRef()
   const fail = text => {
     setMsg({ type: 'err', text })
@@ -27,14 +28,25 @@ export default function AddPlayerForm({ onCreated, onBack }) {
       const res = await login('mestre', password)
       token = res.token
       if (!res.account.master) throw new Error('Só o mestre pode adicionar jogadores.')
-      const player = await createPlayer(token, username)
-      onCreated(player.username)
+      setCreated(await createPlayer(token, username))
     } catch (err) {
       fail(err.message)
       setBusy(false)
     } finally {
       if (token) logout(token).catch(() => {})
     }
+  }
+
+  // A senha provisória só aparece aqui: o mestre anota antes de fechar.
+  if (created) {
+    return (
+      <div className="login">
+        <h2>Jogador criado</h2>
+        <p>Passe esta senha para {created.username}; ela é trocada no primeiro acesso e não aparece de novo.</p>
+        <output className="temp-password">{created.temporaryPassword}</output>
+        <button className="btn" type="button" onClick={() => onCreated(created.username)}>CONCLUIR</button>
+      </div>
+    )
   }
 
   return (
@@ -45,7 +57,6 @@ export default function AddPlayerForm({ onCreated, onBack }) {
       <input id="np" autoFocus autoComplete="off" maxLength={20} value={name} onChange={e => setName(e.target.value)} />
       <label htmlFor="mp">Senha do mestre</label>
       <input id="mp" type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} />
-      <div className="login-hint">A senha inicial do jogador é o próprio nome; ele a troca no primeiro acesso.</div>
       {msg && <div className={msg.type} role="status">{msg.text}</div>}
       <button className="btn" type="submit" disabled={busy}>{busy ? 'CRIANDO…' : 'ADICIONAR'}</button>
       <button className="back" type="button" onClick={onBack}>Voltar</button>

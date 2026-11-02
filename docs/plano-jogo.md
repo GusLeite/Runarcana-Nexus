@@ -99,6 +99,6 @@ Testes: editar mantém ícone/usos, 403 para jogador, quem leu.
 
 Não fazem parte deste plano; continuam nas pendências de [backend.md](backend.md) e [frontend.md](frontend.md):
 
-- **Segurança**: senha do banco fora do Git, rotas sem login (`POST /character`, `/background`, `/character-classes`; `GET /character` já exige o mestre), ligação conta ↔ personagem por chave estrangeira, reset de senha, CORS, enums salvos como ordinal, token no `localStorage`.
+- **Segurança**: ligação conta ↔ personagem por chave estrangeira, enums salvos como ordinal, token no `localStorage`.
 - **Front/polimento**: artes (itens), vídeos pesados no Git, roteamento, atualização em tempo real, histórico de rolagens compartilhado.
 - **Regras no texto**: o que sobrou está nas pendências de [backend-criacao.md](backend-criacao.md) (formas temporárias, Essência Volátil, escolhas de dentro das Runas...).

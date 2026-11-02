@@ -231,3 +231,16 @@ font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:13px;letter-spacing
 .add-plus::before{width:14px;height:2px}.add-plus::after{width:2px;height:14px}
 .add-card:hover .add-plus{transform:rotate(90deg)}
 .login-hint{margin-top:12px;color:var(--muted);font-size:13px;line-height:1.4}
+
+/* Senha provisória (novo jogador e aba Contas) */
+.temp-password{display:block;margin:10px 0;padding:10px 14px;border:1px solid var(--gold);background:rgba(0,0,0,.35);color:var(--gold-hi);font-family:Consolas,Menlo,monospace;font-size:20px;letter-spacing:.08em;text-align:center;user-select:all;overflow-wrap:anywhere}
+.accounts-card{max-width:760px}
+.accounts-generated{margin:12px 0;padding:12px;border:1px solid rgba(200,162,74,.25);background:rgba(200,162,74,.08)}
+.accounts-list{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+.accounts-list li{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:10px 12px;border:1px solid rgba(200,162,74,.14);background:rgba(0,0,0,.28)}
+.accounts-name{font-weight:700;min-width:96px}
+.accounts-state{flex:1;min-width:150px;color:var(--muted);font-size:14px}
+.accounts-actions{display:flex;gap:6px}
+.btn-mini{padding:6px 10px;border:1px solid var(--gold);background:rgba(5,11,20,.6);color:var(--gold-hi);font:inherit;font-size:12px;letter-spacing:.08em;cursor:pointer}
+.btn-mini:hover:not(:disabled){background:rgba(200,162,74,.16)}
+.btn-mini:disabled{opacity:.5;cursor:default}

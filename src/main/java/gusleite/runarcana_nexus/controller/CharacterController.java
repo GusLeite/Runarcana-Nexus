@@ -147,8 +147,12 @@ public class CharacterController {
 
     public record ConditionsRequest(List<String> conditions, Integer exhaustion) {}
 
+    // Mestre: cria a ficha direto, sem o assistente nem ligação a uma conta.
     @PostMapping
-    public ResponseEntity<CharacterResponse> createCharacter(@Valid @RequestBody CreateCharacterRequest request) {
+    public ResponseEntity<CharacterResponse> createCharacter(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @Valid @RequestBody CreateCharacterRequest request) {
+        authService.requireMaster(authorization);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(charService.createCharacter(request));

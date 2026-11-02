@@ -38,7 +38,7 @@ export default function PasswordForm({ character, session, onDone, onCancel, onE
   return (
     <form ref={form} className={'login' + (character.fx ? ' ' + character.fx : '')} onSubmit={submit} noValidate>
       <h2>{first ? 'Crie sua senha' : 'Alterar senha'}</h2>
-      <p>{first ? 'Você ainda usa a senha inicial. Escolha uma só sua.' : character.name + ' · nova senha'}</p>
+      <p>{first ? 'Você está usando uma senha provisória. Escolha uma só sua para continuar.' : character.name + ' · nova senha'}</p>
       <label htmlFor="cur">Senha atual</label>
       <input id="cur" type="password" autoFocus autoComplete="current-password" value={current} onChange={e => setCurrent(e.target.value)} />
       <label htmlFor="new">Nova senha</label>
@@ -47,7 +47,7 @@ export default function PasswordForm({ character, session, onDone, onCancel, onE
       <input id="conf" type="password" autoComplete="new-password" value={confirm} onChange={e => setConfirm(e.target.value)} />
       {msg && <div className={msg.type} role="status">{msg.text}</div>}
       <button className="btn" type="submit" disabled={busy}>{busy ? 'SALVANDO…' : 'SALVAR SENHA'}</button>
-      <button className="back" type="button" onClick={onCancel}>{first ? 'Agora não' : 'Cancelar'}</button>
+      <button className="back" type="button" onClick={onCancel}>{first ? 'Sair' : 'Cancelar'}</button>
     </form>
   )
 }

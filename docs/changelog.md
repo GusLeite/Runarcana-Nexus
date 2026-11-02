@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Preparação para produção (`feature/character-sheet`)
+- Segurança: credenciais do banco por variável de ambiente, senhas iniciais aleatórias (mestre por `RUNARCANA_MASTER_PASSWORD`), rotas antigas só para o mestre e limite de 10 senhas erradas por endereço.
+- Mestre: aba **CONTAS** gera a senha provisória do jogador; a troca da senha provisória deixa de poder ser adiada.
+- Deploy: perfil `prod`, Dockerfiles, `docker-compose.yml` (PostgreSQL, API, Caddy com HTTPS) e backup diário. Jar conferido no perfil `prod` em banco temporário; as imagens Docker ainda não foram construídas.
+
 ## 2026-11-02 — Mercadores (`feature/character-sheet`)
 - Mestre: aba **MERCADORES** monta lojas (imagem, fala, itens, preço, estoque, % pago na venda), abre uma por vez e mostra o movimento.
 - Jogador: com a loja aberta surge a aba **MERCADOR** (em até 5 s), para comprar com o ouro e vender da mochila; o que é vendido vai para a prateleira.

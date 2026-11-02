@@ -3,10 +3,13 @@ package gusleite.runarcana_nexus.controller;
 import gusleite.runarcana_nexus.record.AccountResponse;
 import gusleite.runarcana_nexus.record.ChangePasswordRequest;
 import gusleite.runarcana_nexus.record.CreatePlayerRequest;
+import gusleite.runarcana_nexus.record.PlayerAccountResponse;
 import gusleite.runarcana_nexus.record.PlayerResponse;
 import gusleite.runarcana_nexus.record.LoginRequest;
 import gusleite.runarcana_nexus.record.LoginResponse;
+import gusleite.runarcana_nexus.record.TemporaryPasswordResponse;
 import gusleite.runarcana_nexus.services.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,8 +29,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        return ResponseEntity.ok(service.login(request));
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request, HttpServletRequest http) {
+        return ResponseEntity.ok(service.login(request, http.getRemoteAddr()));
     }
 
     @GetMapping("/me")
@@ -48,10 +51,25 @@ public class AuthController {
     }
 
     @PostMapping("/players")
-    public ResponseEntity<PlayerResponse> createPlayer(
+    public ResponseEntity<TemporaryPasswordResponse> createPlayer(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
             @Valid @RequestBody CreatePlayerRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createPlayer(authorization, request));
+    }
+
+    // Mestre: contas de jogador e se ainda usam a senha provisória.
+    @GetMapping("/accounts")
+    public ResponseEntity<List<PlayerAccountResponse>> accounts(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        return ResponseEntity.ok(service.playerAccounts(authorization));
+    }
+
+    // Mestre: gera uma senha provisória para o jogador (primeiro acesso ou senha esquecida).
+    @PostMapping("/accounts/{username}/reset-password")
+    public ResponseEntity<TemporaryPasswordResponse> resetPassword(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @PathVariable String username) {
+        return ResponseEntity.ok(service.resetPassword(authorization, username));
     }
 
     @PostMapping("/logout")

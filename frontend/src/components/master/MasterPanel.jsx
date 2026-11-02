@@ -6,6 +6,7 @@ import MasterSheets from './MasterSheets.jsx'
 import MasterInventory from './MasterInventory.jsx'
 import MasterTable from './MasterTable.jsx'
 import MasterMerchants from './MasterMerchants.jsx'
+import MasterAccounts from './MasterAccounts.jsx'
 import TabBar from '../sheet/TabBar.jsx'
 import { CrownIcon, ExitIcon, FlaskIcon, KeyIcon } from '../sheet/icons.jsx'
 import '../../styles/sheet.css'
@@ -19,9 +20,10 @@ const TABS = [
   { id: 'inventory', label: 'INVENTÁRIO' },
   { id: 'merchants', label: 'MERCADORES' },
   { id: 'rules', label: 'REGRAS' },
+  { id: 'accounts', label: 'CONTAS' },
 ]
 
-// Painel do mestre: mesma moldura da ficha, com as abas da mesa (todos os personagens de uma vez), documentos, habilidades, fichas (subida de nível), inventário (itens, ouro e inspiração), mercadores e regras da mesa.
+// Painel do mestre: mesma moldura da ficha, com as abas da mesa (todos os personagens de uma vez), documentos, habilidades, fichas (subida de nível), inventário (itens, ouro e inspiração), mercadores, regras da mesa e contas (senhas provisórias).
 export default function MasterPanel({ session, notice, onChangePassword, onLogout, onExpired, onTestPlayer }) {
   const [tab, setTab] = useState('table')
   const [toast, setToast] = useState(notice)
@@ -71,6 +73,7 @@ export default function MasterPanel({ session, notice, onChangePassword, onLogou
         {tab === 'inventory' && <MasterInventory token={session.token} onError={onError} onToast={setToast} />}
         {tab === 'merchants' && <MasterMerchants token={session.token} onError={onError} onToast={setToast} />}
         {tab === 'rules' && <MasterRules token={session.token} onError={onError} onToast={setToast} />}
+        {tab === 'accounts' && <MasterAccounts token={session.token} onError={onError} />}
       </main>
 
       {toast && <div key={toast} className="toast" role="status">{toast}</div>}

@@ -51,7 +51,7 @@ class PlayerFeaturesTests {
         arcanist.setClassName(CharacterClassType.ARCANIST);
         arcanist.setHitHpDice(6);
         classes.save(arcanist);
-        mvc.perform(post("/character").contentType(MediaType.APPLICATION_JSON).content(RUDO))
+        mvc.perform(post("/character").header("Authorization", "Bearer " + login("mestre")).contentType(MediaType.APPLICATION_JSON).content(RUDO))
                 .andExpect(status().isCreated());
         rudoId = characters.findAll().getFirst().getId();
     }

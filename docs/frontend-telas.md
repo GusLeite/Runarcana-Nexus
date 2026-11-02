@@ -9,11 +9,11 @@
 3. **Hover/foco** em um painel: ele se expande com uma mola, ganha zoom e brilho, mostra papel, nome, linha dourada e lore; os vizinhos encolhem e a divisória ao lado acende. Um feixe de luz cruza o painel.
 4. **Clique, Enter ou Espaço**: o personagem ocupa a tela, os outros somem e aparece o formulário de login com o nome dele.
 5. **Login** (`LoginForm.jsx`): o usuário já vem preenchido com o `id` do personagem; a senha é conferida no back-end (`POST /auth/login`). Se a conta que entrou não for a do personagem escolhido, o login é desfeito e aparece um erro.
-6. **Senha inicial**: enquanto a conta tem `mustChangePassword`, o painel abre direto em "Crie sua senha" (`PasswordForm.jsx`), com a opção "Agora não" (volta a pedir no próximo login).
+6. **Senha inicial**: enquanto a conta tem `mustChangePassword`, o painel abre direto em "Crie sua senha" (`PasswordForm.jsx`) e só sai dali trocando a senha ou com "Sair".
 7. **Logado**: abre a **ficha do personagem** (ver abaixo), que ocupa a tela inteira no lugar da seleção.
 8. "Trocar de personagem" (antes de logar) volta para a seleção; "Sair" (na ficha) faz logout e volta também. "Alterar senha" (na ficha) mostra o `PasswordForm` sobre a arte do personagem e, ao terminar, volta para a ficha.
 
-**Novo jogador**: o card **+ NOVO JOGADOR** (rodapé da seleção, `add-bar`) abre o `AddPlayerForm` no `MasterGate`: nome + senha do mestre; o form entra como mestre, cria (`POST /auth/players`) e descarta a sessão. Os jogadores extras vêm de `GET /auth/players`, ganham painel com retrato gerado (`customCharacter` em `data/characters.js`) e entram com senha = nome.
+**Novo jogador**: o card **+ NOVO JOGADOR** (rodapé da seleção, `add-bar`) abre o `AddPlayerForm` no `MasterGate`: nome + senha do mestre; o form entra como mestre, cria (`POST /auth/players`), descarta a sessão e mostra a senha provisória uma vez, para o mestre anotar. Os jogadores extras vêm de `GET /auth/players`, ganham painel com retrato gerado (`customCharacter` em `data/characters.js`) e entram com a senha provisória.
 
 A sessão (`{ token, username, mustChangePassword }`) fica no `localStorage` (`runarcana.session`). Ao recarregar, o app abre direto no personagem logado e confirma o token com `GET /auth/me`; se o servidor recusar (401), volta para a seleção. Servidor fora do ar não desloga.
 
@@ -23,6 +23,7 @@ Responsivo: abaixo de 760px os painéis empilham na vertical e a lore some. Com 
 
 - **Entrada**: botão **MESTRE** (coroa) no canto do cabeçalho da seleção, visível enquanto ninguém está logado. Abre o `MasterGate` (`components/master/MasterGate.jsx`): fundo escurecido com três anéis hextech girando e o `LoginForm` de sempre, usando um "personagem" `MASTER` (`id: 'mestre'`) definido no `App.jsx`. A troca da senha inicial do mestre aparece no mesmo portal (`PasswordForm`).
 - **Sessão**: a resposta do login traz `master: true`; o `App` aceita sessão salva de mestre (não precisa estar em `CHARACTERS`) e, logado, mostra o `MasterPanel` no lugar da seleção. "Sair" volta para a seleção.
+- **Contas** (`MasterAccounts.jsx`): lista as contas de jogador e se ainda aguardam o primeiro acesso; **GERAR SENHA** (com confirmação) cria a senha provisória e a mostra uma vez. É assim que o mestre entrega o primeiro acesso e resolve senha esquecida.
 - **Jogador de teste**: botão **TESTAR COMO JOGADOR** no topo do painel (`POST /auth/test-player`) mostra a ficha (ou a criação) da conta `teste` (`TEST_CHARACTER`), com a sessão só em memória; sem troca de senha, e o botão de sair vira "Voltar ao painel do mestre" (prop `testing`).
 - **Painel** (`MasterPanel.jsx`): mesma moldura da ficha (barra do topo, cards, abas), com selo "MESTRE" e fundo dourado/turquesa sem arte. Abas (abre na Mesa):
   - **Mesa** (`MasterTable.jsx`): um cartão por personagem (arte, classe/subclasse, nível) com CA, Mana, percepção passiva, PV (`HpEditor` compacto: dano, cura, temporários), testes contra a morte quando está com 0 PV (cartão com borda vermelha), chips de condição e **Condições** (abre o `ConditionEditor`), e o losango de **inspiração** (dar/tirar). Atualiza a cada 5 s (`GET /character/table`), pausando com a aba do navegador escondida ou com as condições de um cartão abertas.
@@ -100,6 +101,5 @@ Layout: 3 colunas acima de 1240px; 2 colunas (herói + conteúdo, rolagens embai
 
 - Passado: os 22 passados têm ilustração (o teste `backgroundArt.test.js` exige). Para trocar, basta substituir `assets/backgrounds/<id>.webp` (o id é o do catálogo); imagens sem uso ficam em `assets/backgrounds/_reserva/`. As artes atuais são provisórias.
 - Fora da loja de um mercador aberto, o jogador só gasta consumíveis, ouro e inspiração (decisão da mesa); quem dá é o mestre, na aba Inventário do painel.
-- O painel do mestre ainda não edita habilidades/documentos já criados (só cria e apaga), não mostra quem leu cada documento e não edita fichas além de liberar a subida de nível e do inventário (PV atual, condições).
 - Documentos e anotações só atualizam ao abrir a ficha (não há aviso em tempo real quando o mestre envia algo).
 - O histórico de rolagens não é compartilhado com o mestre nem salvo.

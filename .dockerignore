@@ -1,0 +1,9 @@
+.git
+.claude
+.idea
+.env
+application-local.properties
+backups
+docs
+frontend
+target

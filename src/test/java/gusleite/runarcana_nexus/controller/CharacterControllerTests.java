@@ -100,8 +100,17 @@ class CharacterControllerTests {
     }
 
     @Test
-    void criaOPersonagemResolvendoClasseAntecedenteEPericias() throws Exception {
+    void soOMestreCriaPersonagemDireto() throws Exception {
         mvc.perform(post("/character").contentType(MediaType.APPLICATION_JSON).content(RUDO))
+                .andExpect(status().isUnauthorized());
+        mvc.perform(post("/character").header("Authorization", "Bearer " + login("rudo"))
+                        .contentType(MediaType.APPLICATION_JSON).content(RUDO))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void criaOPersonagemResolvendoClasseAntecedenteEPericias() throws Exception {
+        mvc.perform(post("/character").header("Authorization", "Bearer " + login("mestre")).contentType(MediaType.APPLICATION_JSON).content(RUDO))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.characterName").value("Rudo"))
@@ -133,7 +142,7 @@ class CharacterControllerTests {
 
     @Test
     void devolveAFichaDoPersonagemLogadoComInventario() throws Exception {
-        mvc.perform(post("/character").contentType(MediaType.APPLICATION_JSON).content(RUDO))
+        mvc.perform(post("/character").header("Authorization", "Bearer " + login("mestre")).contentType(MediaType.APPLICATION_JSON).content(RUDO))
                 .andExpect(status().isCreated());
         Character rudo = characters.findAll().getFirst();
 
@@ -185,7 +194,7 @@ class CharacterControllerTests {
 
     @Test
     void escudoDoInventarioSomaNaCa() throws Exception {
-        mvc.perform(post("/character").contentType(MediaType.APPLICATION_JSON).content(RUDO))
+        mvc.perform(post("/character").header("Authorization", "Bearer " + login("mestre")).contentType(MediaType.APPLICATION_JSON).content(RUDO))
                 .andExpect(status().isCreated());
         Character rudo = characters.findAll().getFirst();
         // Escudo do catálogo de teste (t-escudo, +2): entra no inventário como objeto comum, achado pelo catalogId.
@@ -219,7 +228,7 @@ class CharacterControllerTests {
 
     @Test
     void jogadorAlteraOsPropriosPv() throws Exception {
-        mvc.perform(post("/character").contentType(MediaType.APPLICATION_JSON).content(RUDO))
+        mvc.perform(post("/character").header("Authorization", "Bearer " + login("mestre")).contentType(MediaType.APPLICATION_JSON).content(RUDO))
                 .andExpect(status().isCreated());
         String token = login("rudo");
         mvc.perform(patch("/character/me/hp").header("Authorization", "Bearer " + token)
@@ -250,7 +259,7 @@ class CharacterControllerTests {
 
     @Test
     void recusaClasseQueNaoFoiCadastrada() throws Exception {
-        mvc.perform(post("/character").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/character").header("Authorization", "Bearer " + login("mestre")).contentType(MediaType.APPLICATION_JSON)
                         .content(RUDO.replace("ARCANIST", "SHAMAN")))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("A classe SHAMAN ainda não foi cadastrada."));
@@ -258,7 +267,7 @@ class CharacterControllerTests {
 
     @Test
     void recusaAntecedenteQueNaoExiste() throws Exception {
-        mvc.perform(post("/character").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/character").header("Authorization", "Bearer " + login("mestre")).contentType(MediaType.APPLICATION_JSON)
                         .content(RUDO.replace("Estudioso", "Pirata")))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("O antecedente \"Pirata\" ainda não foi cadastrado."));
@@ -266,7 +275,7 @@ class CharacterControllerTests {
 
     @Test
     void recusaCampoObrigatorioFaltando() throws Exception {
-        mvc.perform(post("/character").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/character").header("Authorization", "Bearer " + login("mestre")).contentType(MediaType.APPLICATION_JSON)
                         .content(RUDO.replace("\"Rudo\"", "\"  \"")))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Informe o nome do personagem."));
@@ -274,7 +283,7 @@ class CharacterControllerTests {
 
     @Test
     void recusaClasseForaDoEnum() throws Exception {
-        mvc.perform(post("/character").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/character").header("Authorization", "Bearer " + login("mestre")).contentType(MediaType.APPLICATION_JSON)
                         .content(RUDO.replace("ARCANIST", "MAGO")))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("JSON inválido ou com algum valor fora das opções aceitas."));

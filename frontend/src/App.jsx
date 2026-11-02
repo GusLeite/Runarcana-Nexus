@@ -34,7 +34,6 @@ export default function App() {
   // Sessão do personagem de teste do mestre: vive só na memória, a do mestre continua guardada.
   const [testSession, setTestSession] = useState(null)
   const [view, setView] = useState('account') // 'account' | 'password'
-  const [skipPassword, setSkipPassword] = useState(false)
   const [notice, setNotice] = useState(null)
   const hoverTimer = useRef()
 
@@ -61,7 +60,6 @@ export default function App() {
   const signIn = s => {
     updateSession(s)
     setView('account')
-    setSkipPassword(false)
     setNotice(null)
   }
   const signOut = () => {
@@ -99,7 +97,7 @@ export default function App() {
 
   const chosen = selected < 0 ? null : characters[selected]
   const choosing = selected < 0
-  const askPassword = session && (view === 'password' || (session.mustChangePassword && !skipPassword))
+  const askPassword = session && (view === 'password' || session.mustChangePassword)
 
   const passwordForm = character => (
     <PasswordForm
@@ -107,7 +105,7 @@ export default function App() {
       character={character}
       session={session}
       onDone={passwordChanged}
-      onCancel={() => { setView('account'); setSkipPassword(true) }}
+      onCancel={() => (session.mustChangePassword ? signOut() : setView('account'))}
       onExpired={sessionExpired}
     />
   )

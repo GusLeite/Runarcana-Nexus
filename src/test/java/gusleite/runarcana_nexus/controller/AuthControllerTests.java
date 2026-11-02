@@ -164,6 +164,56 @@ class AuthControllerTests {
         }
     }
 
+    @Test
+    void mestreGeraSenhaProvisoriaEDerrubaAsSessoesDoJogador() throws Exception {
+        String player = login("rudo", "rudo");
+        changePassword(player, "rudo", "senha-nova").andExpect(status().isOk());
+
+        mvc.perform(post("/auth/accounts/rudo/reset-password").header("Authorization", "Bearer " + player))
+                .andExpect(status().isForbidden());
+        mvc.perform(get("/auth/accounts")).andExpect(status().isUnauthorized());
+
+        String master = login("mestre", "mestre");
+        mvc.perform(get("/auth/accounts").header("Authorization", "Bearer " + master))
+                .andExpect(jsonPath("$.length()").value(5))
+                .andExpect(jsonPath("$[0].username").value("rudo"))
+                .andExpect(jsonPath("$[0].mustChangePassword").value(false));
+
+        String body = mvc.perform(post("/auth/accounts/rudo/reset-password").header("Authorization", "Bearer " + master))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        Matcher m = Pattern.compile("\"temporaryPassword\":\"([^\"]+)\"").matcher(body);
+        assertThat(m.find()).isTrue();
+
+        mvc.perform(get("/auth/me").header("Authorization", "Bearer " + player)).andExpect(status().isUnauthorized());
+        mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"rudo\",\"password\":\"senha-nova\"}"))
+                .andExpect(status().isUnauthorized());
+        mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"rudo\",\"password\":\"" + m.group(1) + "\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.account.mustChangePassword").value(true));
+
+        // nem o mestre nem a conta de teste passam por aqui
+        for (String name : new String[]{"mestre", "teste", "ninguem"}) {
+            mvc.perform(post("/auth/accounts/" + name + "/reset-password").header("Authorization", "Bearer " + master))
+                    .andExpect(status().isNotFound());
+        }
+    }
+
+    @Test
+    void rotasAntigasExigemOMestre() throws Exception {
+        String player = login("rudo", "rudo");
+        String master = login("mestre", "mestre");
+        for (String route : new String[]{"/background", "/character-classes"}) {
+            mvc.perform(get(route)).andExpect(status().isUnauthorized());
+            mvc.perform(post(route).contentType(MediaType.APPLICATION_JSON).content("{\"hitHpDice\":6}")).andExpect(status().isUnauthorized());
+            mvc.perform(get(route).header("Authorization", "Bearer " + player)).andExpect(status().isForbidden());
+            mvc.perform(get(route).header("Authorization", "Bearer " + master)).andExpect(status().isOk());
+        }
+        mvc.perform(patch("/background/x").contentType(MediaType.APPLICATION_JSON).content("{}")).andExpect(status().isUnauthorized());
+    }
+
     private org.springframework.test.web.servlet.ResultActions changePassword(String token, String current, String next) throws Exception {
         return mvc.perform(put("/auth/password").header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)

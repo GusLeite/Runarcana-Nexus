@@ -63,9 +63,16 @@ export function saveSession(session) {
 // Jogadores que o mestre adicionou (a tela de seleção junta aos da mesa). Resposta: [{ username }]
 export const fetchPlayers = () => request('/auth/players')
 
-// Só o mestre. O jogador novo entra com a senha igual ao nome e troca no primeiro acesso.
+// Só o mestre. Resposta: { username, temporaryPassword }; o jogador troca a senha no primeiro acesso.
 export const createPlayer = (token, username) =>
   request('/auth/players', { method: 'POST', token, body: { username } })
+
+// Só o mestre: contas de jogador. Resposta: [{ username, mustChangePassword }]
+export const fetchAccounts = token => request('/auth/accounts', { token })
+
+// Só o mestre: senha provisória nova para o jogador. Resposta: { username, temporaryPassword }
+export const resetPassword = (token, username) =>
+  request('/auth/accounts/' + encodeURIComponent(username) + '/reset-password', { method: 'POST', token })
 
 // Só o mestre: sessão própria do personagem de teste (não mexe na sessão do mestre).
 export const loginAsTestPlayer = token => request('/auth/test-player', { method: 'POST', token })

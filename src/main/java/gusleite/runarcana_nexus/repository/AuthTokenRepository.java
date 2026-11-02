@@ -25,6 +25,12 @@ public interface AuthTokenRepository extends JpaRepository<AuthToken, Long> {
     @Query("delete from AuthToken t where t.account = :account and t.tokenHash <> :keepHash")
     void deleteOthers(Account account, String keepHash);
 
+    // Encerra todas as sessões da conta (usado quando o mestre refaz a senha).
+    @Transactional
+    @Modifying
+    @Query("delete from AuthToken t where t.account = :account")
+    void deleteByAccount(Account account);
+
     @Transactional
     @Modifying
     @Query("delete from AuthToken t where t.expiresAt < :now")

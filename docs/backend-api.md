@@ -4,12 +4,12 @@
 
 | Método | Rota | Corpo | Descrição |
 |---|---|---|---|
-| POST | `/background` | `Background` (entidade) | Cria um antecedente |
-| GET | `/background` | – | Lista os antecedentes |
-| PATCH | `/background/{name}` | `BackGroundSkillsRequest { skills: SkillType[] }` | Substitui as perícias do antecedente com aquele nome |
-| POST | `/character-classes` | `CharacterClassRequest { hitHpDice, className }` | Cria uma classe |
-| GET | `/character-classes` | – | Lista as classes |
-| POST | `/character` | `CreateCharacterRequest` (ver abaixo) | Cria um personagem; devolve `CharacterResponse` (201). 400 com `message` se faltar campo, a classe/antecedente não existir ou o JSON tiver valor fora do enum |
+| POST | `/background` | `Background` (entidade) (Bearer **mestre**) | Cria um antecedente |
+| GET | `/background` | – (Bearer **mestre**) | Lista os antecedentes |
+| PATCH | `/background/{name}` | `BackGroundSkillsRequest { skills: SkillType[] }` (Bearer **mestre**) | Substitui as perícias do antecedente com aquele nome |
+| POST | `/character-classes` | `CharacterClassRequest { hitHpDice, className }` (Bearer **mestre**) | Cria uma classe |
+| GET | `/character-classes` | – (Bearer **mestre**) | Lista as classes |
+| POST | `/character` | `CreateCharacterRequest` (ver abaixo) (Bearer **mestre**) | Cria um personagem; devolve `CharacterResponse` (201). 400 com `message` se faltar campo, a classe/antecedente não existir ou o JSON tiver valor fora do enum |
 | GET | `/character` | – (mestre) | Lista os personagens (`CharacterResponse[]`). 401 sem sessão; 403 para jogador |
 | GET | `/character/table` | – (mestre) | Visão da mesa: `[{ character: CharacterResponse, armorClass, manaLeft, manaMax }]` (Mana nula se a ficha não tem Pontos de Mana). 403 para jogador |
 | GET | `/character/me` | – (Bearer) | Ficha do personagem da conta logada: `{ character: CharacterResponse, armorClass, attacks: AttackResponse[], spellcasting: SpellcastingResponse, inventory: InventoryItemResponse[], abilities: AbilityResponse[] }`. 401 sem sessão; 404 com `message` se a ficha não existir |
@@ -71,12 +71,14 @@
 | POST | `/character/me/level-up/preview` | `LevelUpRequest { levels: LevelPick[] }` (Bearer) | Jogador: prévia dos níveis liberados (não salva): `LevelUpPreview` com a prévia completa, nível e PV antes/depois, `attributeChanges` e `newFeatures`. 403 se o mestre não liberou ou se pedir mais níveis que os liberados |
 | POST | `/character/me/level-up` | `LevelUpRequest` (Bearer) | Jogador: aplica e desconta de `pendingLevels`; devolve `CharacterResponse`. 400 com o 1º erro da prévia (nada muda); 403 como na prévia |
 | DELETE | `/documents/{id}` | – (Bearer **mestre**) | Apaga (e as marcas de lido). 204 |
-| POST | `/auth/login` | `LoginRequest { username, password }` | Entra; devolve `{ token, expiresAt, account: { username, mustChangePassword, master } }`. 401 se errar |
+| POST | `/auth/login` | `LoginRequest { username, password }` | Entra; devolve `{ token, expiresAt, account: { username, mustChangePassword, master } }`. 401 se errar; 429 depois de muitas senhas erradas do mesmo endereço |
 | GET | `/auth/me` | – (Bearer) | Conta do token. 401 se o token for inválido ou expirado |
 | POST | `/auth/logout` | – (Bearer) | Apaga o token. 204 |
 | POST | `/auth/test-player` | – (Bearer **mestre**) | Sessão do personagem de teste (`teste`), com token próprio; 403 para jogador |
 | GET | `/auth/players` | – (aberto) | Jogadores que o mestre adicionou: `[{ username }]` |
-| POST | `/auth/players` | `CreatePlayerRequest { username }` (Bearer **mestre**) | Cria conta de jogador (senha inicial = nome, 2–20 de `a-z0-9_-`); 400 se repetir ou for `teste`. 201 |
+| POST | `/auth/players` | `CreatePlayerRequest { username }` (Bearer **mestre**) | Cria conta de jogador (2–20 de `a-z0-9_-`) e devolve `{ username, temporaryPassword }`; 400 se repetir ou for `teste`. 201 |
+| GET | `/auth/accounts` | – (Bearer **mestre**) | Contas de jogador: `[{ username, mustChangePassword }]` (sem o mestre e a conta de teste) |
+| POST | `/auth/accounts/{username}/reset-password` | – (Bearer **mestre**) | Gera senha provisória: `{ username, temporaryPassword }`; encerra as sessões do jogador. 404 se não for conta de jogador |
 | PUT | `/auth/password` | `ChangePasswordRequest { currentPassword, newPassword }` (Bearer) | Troca a senha; devolve a conta. 400 com `message` se a regra falhar |
 
 Não há endpoints de itens; o catálogo de itens vem no `GET /creation/catalog` (`equipment`).
