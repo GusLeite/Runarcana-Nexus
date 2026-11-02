@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — APK aponta para o endereço real do site (`feature/character-sheet`)
+- O app passa a abrir `https://runarcana-nexus.duckdns.org`; o endereço anterior não existia no DNS.
+
 ## 2026-11-02 — APK Android que abre o site (`feature/character-sheet`)
 - Capacitor em `frontend/`: o app é uma janela para `https://runarcana.duckdns.org`, sem embutir o front, com tela própria sem conexão.
 - `npm run apk` gera `frontend/dist-apk/Runarcana.apk` (cerca de 6 MB); ícone recortado da capa do livro.

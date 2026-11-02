@@ -3,7 +3,7 @@
   "appName": "Runarcana",
   "webDir": "android-shell",
   "server": {
-    "url": "https://runarcana.duckdns.org",
+    "url": "https://runarcana-nexus.duckdns.org",
     "errorPath": "error.html"
   },
   "android": {
