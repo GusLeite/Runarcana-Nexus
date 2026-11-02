@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Repaginada das Heranças (`feature/character-sheet`)
+- Linhas com medalhão e cor por tipo, cartões de pontos, faixa das escolhidas, filtros com contagem e interruptor; bloqueadas mostram só o motivo.
+
 ## 2026-11-02 — Escolhas: tamanho, gemas e cards (`feature/character-sheet`)
 - Silhueta no tamanho, cor/símbolo por gema no Pulso Rúnico, Runa inicial filtrada pelo Pulso, cards com descrição de ofícios e magias ao passar o mouse.
 
