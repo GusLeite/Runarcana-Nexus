@@ -261,19 +261,14 @@ const SFX = {
     noise({ dur: 0.15, vol: 0.1, type: 'lowpass', f: 250, q: 0.4 })
   },
   error: () => {
-    tone({ f: 185, type: 'square', dur: 0.32, vol: 0.06, lp: 700 })
-    tone({ f: 262, type: 'square', dur: 0.32, vol: 0.05, lp: 700 })
-    tone({ f: 92, f2: 70, type: 'sawtooth', dur: 0.4, vol: 0.08, lp: 300 })
+    // duas notas graves descendo, macias: avisa sem assustar
+    ;[294, 220].forEach((f, i) => tone({ f, t: i * 0.11, dur: 0.3, vol: 0.07, attack: 0.012, lp: 900, send: 0.2 }))
   },
   notice: () => {
-    bell(784, 0, 0.08, 1.4, 0.6)
-    bell(1175, 0.09, 0.05, 1.2, 0.6)
+    ;[440, 587].forEach((f, i) => tone({ f, t: i * 0.08, dur: 0.3, vol: 0.045, attack: 0.012, lp: 1600, send: 0.25 }))
   },
   success: () => {
-    pluck(523)
-    pluck(659, 0.08)
-    pluck(784, 0.16)
-    bell(1047, 0.26, 0.06, 1.8, 0.7)
+    ;[392, 494, 587].forEach((f, i) => tone({ f, t: i * 0.07, dur: 0.35, vol: 0.06, attack: 0.012, lp: 1800, send: 0.3 }))
   },
   coin: () => {
     clink(0)
@@ -350,9 +345,8 @@ const SFX = {
       tone({ f, dur: long ? 2.2 : 1.2, vol: 0.05, attack: 0.4, send: 0.7, t: i * 0.12 }))
   },
   levelready: () => {
-    bell(587, 0, 0.08, 2, 0.8)
-    bell(880, 0.15, 0.08, 2.2, 0.8)
-    bell(1175, 0.3, 0.07, 2.5, 0.9)
+    // aviso discreto: duas notas macias
+    ;[392, 587].forEach((f, i) => tone({ f, t: i * 0.1, dur: 0.45, vol: 0.05, attack: 0.015, lp: 1600, send: 0.3 }))
   },
   levelup: () => {
     ;[392, 494, 587, 784, 988].forEach((f, i) => {
