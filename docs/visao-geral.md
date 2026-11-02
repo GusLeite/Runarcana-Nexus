@@ -62,7 +62,7 @@ npm run build    # gera frontend/dist
 
 ## Colocar no ar
 
-Hospedagem escolhida: Oracle Cloud Always Free, com DuckDNS e backup externo no Google Drive; passo a passo em [`deploy-oracle.md`](deploy-oracle.md). Em qualquer servidor com Docker e um domínio apontando para ele (portas 80 e 443 abertas):
+Hospedagem escolhida: VPS Hetzner CAX11, com DuckDNS e backup externo no Google Drive; passo a passo em [`deploy-vps.md`](deploy-vps.md). Em qualquer servidor com Docker e um domínio apontando para ele (portas 80 e 443 abertas):
 
 ```bash
 cp .env.example .env     # preencha domínio e senhas

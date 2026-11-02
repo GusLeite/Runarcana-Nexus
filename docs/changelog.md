@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Deploy passa da Oracle para VPS paga (`feature/character-sheet`)
+- A Oracle ficou sem capacidade de Ampere A1 em São Paulo; hospedagem escolhida: Hetzner CAX11, com guia em `docs/deploy-vps.md`.
+- `deploy/setup-oracle.sh` virou `deploy/setup-server.sh` e também funciona como root.
+- Ainda não testado num servidor real.
+
 ## 2026-11-02 — Preparação do deploy na Oracle Cloud (`feature/character-sheet`)
 - Hospedagem escolhida: Oracle Always Free com DuckDNS; passo a passo em `docs/deploy-oracle.md`.
 - `deploy/setup-oracle.sh` prepara a VM (firewall, Docker, rclone) e `deploy/backup-offsite.sh` copia os dumps para fora do servidor.
