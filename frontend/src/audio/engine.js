@@ -74,7 +74,12 @@ function audio() {
   if (ctx) return ctx
   const AC = globalThis.AudioContext || globalThis.webkitAudioContext
   if (!AC) return null
-  ctx = new AC()
+  // 48 kHz fixo: alguns drivers do Windows (dispositivo em 192 kHz) ficam mudos com a taxa nativa.
+  try {
+    ctx = new AC({ sampleRate: 48000, latencyHint: 'interactive' })
+  } catch {
+    ctx = new AC()
+  }
   // O compressor segura os picos quando vários sons se somam.
   const comp = ctx.createDynamicsCompressor()
   comp.connect(ctx.destination)
