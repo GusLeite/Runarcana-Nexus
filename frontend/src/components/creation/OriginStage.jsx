@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { createPortal } from 'react-dom'
 import { ABILITY_TYPES, RECHARGES, formatFeet, grantLabel, groupGrants } from '../../data/rules.js'
 import { originArt } from '../../data/originArt.js'
-import { lineageContain, lineageImage, lineagePos } from '../../data/lineageArt.js'
+import { lineageImage, lineagePos } from '../../data/lineageArt.js'
 import TabBar from '../sheet/TabBar.jsx'
 import OriginArt, { OriginSigil } from './OriginArt.jsx'
 
@@ -57,36 +57,71 @@ function AbilityCard({ grant: g, source, n }) {
   )
 }
 
-// Cartão de uma linhagem: faixa de ilustração (imagem de data/lineageArt.js, ou o símbolo da origem enquanto não há) e,
-// embaixo, o texto e os ganhos.
-function LineageCard({ lineage: l, originId, hue, on, onPick, crafts, equipment, n }) {
-  const levels = [...(l.levels ?? [])].sort((a, b) => a.level - b.level)
-  const img = lineageImage(l.id)
+// Vitrine das linhagens: a imagem em destaque aparece inteira no topo, com as miniaturas e os detalhes embaixo.
+// Passar o mouse (ou o foco) mostra a linhagem sem escolher; sair da vitrine volta para a escolhida.
+function LineageShowcase({ lineages, originId, selectedId, onPick, crafts, equipment }) {
+  const [previewId, setPreviewId] = useState(null)
+  const shown = lineages.find(l => l.id === previewId) ?? lineages.find(l => l.id === selectedId) ?? lineages[0]
+  const img = lineageImage(shown.id)
+  const on = shown.id === selectedId
+  const levels = [...(shown.levels ?? [])].sort((a, b) => a.level - b.level)
   return (
-    <button type="button" role="radio" aria-checked={on} className={'option olineage' + (on ? ' on' : '')} style={{ '--n': n, '--h': hue }} onClick={onPick}>
-      <span className="olineage-art">
-        {img
-          ? <>
-              {lineageContain(l.id) && <img className="olineage-bg" src={img} alt="" aria-hidden="true" loading="lazy" />}
-              <img src={img} alt="" loading="lazy" style={{ objectPosition: lineagePos(l.id), objectFit: lineageContain(l.id) ? 'contain' : undefined }} />
-            </>
-          : <><OriginSigil id={originId} /><span className="olineage-placeholder">Arte provisória</span></>}
-        <span className="olineage-name">{l.name}</span>
-        {on && <span className="olineage-check">✓</span>}
-      </span>
-      {l.description && <span className="option-desc">{l.description}</span>}
-      {l.grants?.length > 0 && <GrantList grants={l.grants} crafts={crafts} equipment={equipment} />}
-      {levels.length > 0 && (
-        <span className="option-level-list">
-          <span className="option-level-title">Ao subir de nível</span>
-          {levels.map(v => (
-            <span key={v.level} className="option-level">
-              <b>{v.level}º nível.</b> {(v.grants ?? []).map(g => grantLabel(g, crafts, equipment)).join(' · ')}
-            </span>
-          ))}
+    <div className="olineages" onMouseLeave={() => setPreviewId(null)}>
+      <button type="button" tabIndex={-1} className={'olineage-feature' + (on ? ' on' : '')} aria-label={'Escolher a linhagem ' + shown.name} onClick={() => onPick(shown.id)}>
+        <span className="olineage-stagearea" key={shown.id}>
+          {img
+            ? <>
+                <img className="olineage-bg" src={img} alt="" aria-hidden="true" />
+                <img className="olineage-img" src={img} alt="" />
+              </>
+            : <><OriginSigil id={originId} /><span className="olineage-placeholder">Arte provisória</span></>}
         </span>
-      )}
-    </button>
+        <span className="olineage-cap">
+          <span className="olineage-name">{shown.name}</span>
+          <span className={'olineage-status' + (on ? ' on' : '')}>{on ? '✓ Escolhida' : 'Clique para escolher'}</span>
+        </span>
+      </button>
+
+      <div className={'olineage-strip' + (lineages.length > 5 ? ' double' : '')} role="radiogroup" aria-label="Linhagens" style={{ '--cols': lineages.length <= 5 ? lineages.length : Math.ceil(lineages.length / 2) }}>
+        {lineages.map((l, i) => {
+          const thumb = lineageImage(l.id)
+          return (
+            <button
+              type="button"
+              role="radio"
+              key={l.id}
+              aria-checked={l.id === selectedId}
+              className={'olineage-thumb' + (l.id === selectedId ? ' on' : '') + (l.id === shown.id ? ' shown' : '')}
+              style={{ '--n': i }}
+              onClick={() => { setPreviewId(l.id); onPick(l.id) }}
+              onMouseEnter={() => setPreviewId(l.id)}
+              onFocus={() => setPreviewId(l.id)}
+            >
+              {thumb
+                ? <img src={thumb} alt="" style={{ objectPosition: lineagePos(l.id) }} />
+                : <OriginSigil id={originId} />}
+              <span className="olineage-thumb-name">{l.name}</span>
+              {l.id === selectedId && <span className="olineage-check">✓</span>}
+            </button>
+          )
+        })}
+      </div>
+
+      <div className="olineage-detail" key={shown.id}>
+        {shown.description && <p className="olineage-desc">{shown.description}</p>}
+        {shown.grants?.length > 0 && <GrantList grants={shown.grants} crafts={crafts} equipment={equipment} />}
+        {levels.length > 0 && (
+          <div className="option-level-list">
+            <span className="option-level-title">Ao subir de nível</span>
+            {levels.map(v => (
+              <span key={v.level} className="option-level">
+                <b>{v.level}º nível.</b> {(v.grants ?? []).map(g => grantLabel(g, crafts, equipment)).join(' · ')}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 
@@ -248,7 +283,7 @@ export default function OriginStage({ origins, startId, crafts, equipment, origi
             <button type="button" className="ostage-close" ref={closeBtn} aria-label="Voltar para as origens" onClick={close}>×</button>
           </div>
 
-          <div className="ostage-body" role="tabpanel" key={origin.id + tab}>
+          <div className={'ostage-body' + (tab === 'lineages' ? ' flush' : '')} role="tabpanel" key={origin.id + tab}>
             {tab === 'gains' && (
               <>
                 <GainGroups grants={origin.grants} crafts={crafts} equipment={equipment} />
@@ -273,11 +308,7 @@ export default function OriginStage({ origins, startId, crafts, equipment, origi
               </div>
             )}
             {tab === 'lineages' && (
-              <div className="olineages" role="radiogroup" aria-label={'Linhagens de ' + origin.name}>
-                {lineages.map((l, i) => (
-                  <LineageCard key={l.id} lineage={l} originId={origin.id} hue={art.hue} on={l.id === lineageIdHere} n={i} crafts={crafts} equipment={equipment} onPick={() => setLineageIdHere(l.id)} />
-                ))}
-              </div>
+              <LineageShowcase lineages={lineages} originId={origin.id} selectedId={lineageIdHere} onPick={setLineageIdHere} crafts={crafts} equipment={equipment} />
             )}
             {tab === 'about' && (
               <div className="oabout">

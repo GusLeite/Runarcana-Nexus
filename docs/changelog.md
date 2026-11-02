@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Linhagens ganham vitrine com a imagem em destaque (`feature/character-sheet`)
+- `OriginStage.jsx`: `LineageShowcase` troca os cartões por imagem grande e inteira, miniaturas e detalhes logo abaixo. O mouse ou o foco mostram a linhagem; o clique escolhe.
+- `origin.css`: estilos `olineage-*` refeitos; a aba Linhagens encosta nas bordas (`.ostage-body.flush`).
+- `lineageArt.js`: sai `LINEAGE_CONTAIN`, porque toda imagem em destaque já aparece inteira; `LINEAGE_POS` agora só ajusta a miniatura.
+
 ## 2026-10-30 — Etapa Região vira carrossel em tela cheia (`feature/character-sheet`)
 - `RegionStep.jsx` e `styles/region.css`: região em tamanho grande, com setas, teclado, toque e miniaturas; a escolha é confirmada num botão.
 - `assets/regions/`: 12 vídeos comprimidos de 112 MB para ~23 MB (loops de até 10 s, sem áudio) e imagens de Nazumah e do Vazio. `data/regionArt.js` traz as descrições breves, provisórias.

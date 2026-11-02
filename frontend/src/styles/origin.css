@@ -145,20 +145,37 @@
 .oability-options{margin:8px 0 0;font-size:13px;color:#bdb5a1}
 .oability-options b{color:var(--teal);font-weight:600}
 
-.olineages{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;align-items:start}
-/* Faixa de ilustração do cartão de linhagem: ocupa o topo do cartão (que tem 14px de respiro) e esmaece para o texto. */
-.olineage{overflow:hidden}
-.olineage-art{position:relative;display:block;aspect-ratio:16/9;margin:-14px -14px 4px;overflow:hidden;background:radial-gradient(ellipse at 50% 35%,hsl(var(--h) 50% 24%),hsl(var(--h) 45% 8%) 70%,#03070d)}
-.olineage-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.22,1,.36,1)}
-.olineage:hover .olineage-art img{transform:scale(1.05)}
-/* Imagem mostrada inteira (contain): o fundo é a mesma imagem desfocada, para não sobrar faixa vazia. */
-.olineage-art img.olineage-bg{object-fit:cover;filter:blur(14px) brightness(.55) saturate(1.2);transform:scale(1.25)}
-.olineage:hover .olineage-art img.olineage-bg{transform:scale(1.25)}
-.olineage-art::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(4,10,19,.92) 0,rgba(4,10,19,.25) 48%,transparent 75%)}
-.olineage-art .oart-sigil{position:absolute;left:50%;top:42%;z-index:1;width:30%;margin:0;translate:-50% -50%}
-.olineage-placeholder{position:absolute;top:8px;left:10px;z-index:1;padding:0 6px;border:1px dashed rgba(255,255,255,.3);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5)}
-.olineage-name{position:absolute;left:14px;right:40px;bottom:9px;z-index:2;font-family:'Cinzel',Georgia,serif;font-size:17px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-hi);text-shadow:0 2px 10px #000}
-.olineage-check{position:absolute;top:8px;right:10px;z-index:2;display:grid;place-items:center;width:24px;height:24px;border:1px solid var(--teal);background:rgba(4,10,19,.8);color:var(--teal);font-weight:700;animation:chip-pop .3s ease}
+/* Vitrine das linhagens: encosta nas bordas da aba, para a imagem em destaque ocupar toda a largura. */
+.ostage-body.flush{padding:0;overflow-x:hidden}
+.olineage-feature{position:relative;display:block;width:100%;aspect-ratio:2/1;max-height:50dvh;padding:0;overflow:hidden;border:0;border-bottom:1px solid rgba(200,162,74,.3);background:radial-gradient(ellipse at 50% 35%,hsl(var(--h) 50% 24%),hsl(var(--h) 45% 8%) 70%,#03070d);color:var(--text);font:inherit;text-align:left;cursor:pointer}
+.olineage-feature.on{cursor:default}
+.olineage-stagearea{position:absolute;inset:0;display:block;animation:ostage-swap .35s ease}
+/* A imagem aparece inteira, sem corte: o que sobra nas laterais é a mesma imagem desfocada. */
+.olineage-img,.olineage-bg{position:absolute;inset:0;width:100%;height:100%}
+.olineage-img{object-fit:contain}
+.olineage-bg{object-fit:cover;filter:blur(18px) brightness(.5) saturate(1.2);transform:scale(1.2)}
+.olineage-feature .oart-sigil{position:absolute;left:50%;top:44%;width:min(26%,170px);margin:0;translate:-50% -50%}
+.olineage-placeholder{position:absolute;top:10px;left:12px;padding:0 6px;border:1px dashed rgba(255,255,255,.3);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.olineage-cap{position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:6px 16px;padding:44px clamp(16px,2.4vw,34px) 14px;background:linear-gradient(to top,rgba(4,10,19,.9),rgba(4,10,19,.45) 58%,transparent)}
+.olineage-name{font-family:'Cinzel',Georgia,serif;font-size:clamp(22px,2.5vw,38px);font-weight:700;letter-spacing:.08em;line-height:1.1;text-transform:uppercase;color:#f6ecd5;text-shadow:0 2px 14px #000,0 0 22px hsla(var(--h),95%,62%,.7)}
+.olineage-status{flex:none;padding:4px 11px;border:1px solid var(--gold-soft);background:rgba(4,10,19,.75);font-size:13px;letter-spacing:.04em;color:var(--gold-hi)}
+.olineage-status.on{border-color:var(--teal);color:var(--teal);font-weight:600}
+.olineage-strip{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:8px;padding:12px clamp(16px,2.4vw,34px) 0}
+.olineage-thumb{position:relative;height:clamp(78px,13dvh,140px);padding:0;overflow:hidden;border:1px solid rgba(200,162,74,.28);background:#03070d;color:var(--text);font:inherit;cursor:pointer;transition:border-color .2s,box-shadow .2s;animation:rise-in .4s ease backwards;animation-delay:calc(var(--n,0)*40ms)}
+/* Duas fileiras: miniaturas mais baixas, para os detalhes continuarem à vista. */
+.olineage-strip.double .olineage-thumb{height:clamp(70px,9.5dvh,110px)}
+.olineage-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.7) brightness(.62);transition:filter .3s,transform .6s cubic-bezier(.22,1,.36,1)}
+.olineage-thumb .oart-sigil{position:absolute;left:50%;top:40%;width:44px;margin:0;translate:-50% -50%}
+.olineage-thumb::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(4,10,19,.9),transparent 58%)}
+.olineage-thumb.shown{border-color:var(--gold-soft)}
+.olineage-thumb.shown img,.olineage-thumb.on img{filter:none}
+.olineage-thumb.shown img{transform:scale(1.05)}
+.olineage-thumb.on{border-color:var(--gold-hi);box-shadow:0 0 0 1px var(--gold),0 0 18px rgba(240,199,94,.35)}
+.olineage-thumb:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.olineage-thumb-name{position:absolute;left:6px;right:6px;bottom:6px;z-index:1;font-family:'Cinzel',Georgia,serif;font-size:clamp(11px,.85vw,14px);font-weight:700;letter-spacing:.04em;line-height:1.15;text-align:center;text-transform:uppercase;color:var(--gold-hi);text-shadow:0 1px 6px #000}
+.olineage-check{position:absolute;top:5px;right:5px;z-index:1;display:grid;place-items:center;width:22px;height:22px;border:1px solid var(--teal);background:rgba(4,10,19,.85);font-size:13px;color:var(--teal);font-weight:700;animation:chip-pop .3s ease}
+.olineage-detail{display:flex;flex-direction:column;gap:12px;padding:16px clamp(16px,2.4vw,34px) 22px;animation:detail-in .3s cubic-bezier(.22,1,.36,1)}
+.olineage-desc{margin:0;font-size:clamp(15px,1.1vw,17px);line-height:1.5;color:#ece4cf}
 
 .oabout-lead{margin:0 0 18px;font-size:16px;line-height:1.55;color:#ece4cf}
 .oabout-item{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:9px 0;border-top:1px solid rgba(200,162,74,.14);animation:rise-in .35s ease backwards;animation-delay:calc(var(--n,0)*35ms)}
@@ -214,6 +231,9 @@
  .ostage-top .tabs{gap:16px}
  .ostage-top .tab{font-size:12px;letter-spacing:.1em}
  .ostage-body{padding:14px}
+ .olineage-feature{max-height:none}
+ .olineage-strip{grid-template-columns:repeat(min(var(--cols),4),minmax(0,1fr));padding-top:8px}
+ .olineage-thumb{height:66px}
  .ostage-foot{padding:10px 14px}
  .ostage-foot .btn{padding:11px 14px;font-size:13px}
  .oabout-item{grid-template-columns:1fr;gap:2px}
