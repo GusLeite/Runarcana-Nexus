@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Heranças: limite de pontos por tipo (`feature/character-sheet`)
+- Corrigido: dava para escolher Heranças além dos pontos (limite era o total, não o do tipo; cliques rápidos passavam da prévia). Agora conta por tipo e espera a prévia.
+
 ## 2026-11-02 — Repaginada das Heranças (`feature/character-sheet`)
 - Linhas com medalhão e cor por tipo, cartões de pontos, faixa das escolhidas, filtros com contagem e interruptor; bloqueadas mostram só o motivo.
 

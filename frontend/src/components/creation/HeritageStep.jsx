@@ -23,6 +23,9 @@ function HeritageSigil({ category, className = '' }) {
   )
 }
 
+// Espelha CreationService.allows: o ponto de cada escopo só compra certos tipos de Herança (ANY compra todos).
+const buys = (scope, category) => scope === 'REGION' ? category !== 'ORIGIN' : scope === 'ORIGIN' ? category !== 'REGION' : scope === 'GENERAL' ? category === 'GENERAL' : true
+
 const fold = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
 
 // Compra das Heranças com os pontos que a origem dá. O back diz o que dá para escolher
@@ -36,6 +39,10 @@ export default function HeritageStep({ heritages, preview, picks, onChange }) {
   const pools = preview?.heritagePools ?? []
   const total = pools.reduce((s, p) => s + p.points, 0)
   const left = total - pools.reduce((s, p) => s + p.spent, 0)
+  // Sobra de pontos que compram cada tipo (não só o total: o ponto de Região não compra Herança de Origem).
+  const room = category => pools.filter(p => buys(p.scope, category)).reduce((sum, p) => sum + p.points - p.spent, 0)
+  // Prévia ainda não chegou com a última escolha: segura novos cliques para não passar do limite.
+  const stale = picks.some(pk => (preview?.heritages?.find(l => l.id === pk.id)?.times ?? 0) < heritageTimes(picks, pk.id))
   const status = useMemo(() => Object.fromEntries((preview?.heritageOptions ?? []).map(o => [o.id, o])), [preview])
 
   const list = useMemo(() => {
@@ -123,7 +130,7 @@ export default function HeritageStep({ heritages, preview, picks, onChange }) {
           const times = heritageTimes(picks, h.id)
           const max = h.maxTimes ?? 1
           const chosen = times > 0
-          const canAdd = s?.available && left > 0 && times < max
+          const canAdd = s?.available && !stale && room(h.category) > 0 && times < max
           const option = picks.find(p => p.id === h.id)?.option ?? null
           // Escolhas de antes (na subida de nível, as da criação): a prévia conta todas.
           const before = Math.max(0, (preview?.heritages?.find(l => l.id === h.id)?.times ?? times) - times)
@@ -158,12 +165,13 @@ export default function HeritageStep({ heritages, preview, picks, onChange }) {
                   </div>
                 ))}
                 {locked && <div className="hr-reason">{capitalize(s?.reason)}</div>}
+                {chosen && !s?.available && <div className="hr-reason">Não vale mais: {s?.reason}. Remova para liberar o ponto.</div>}
               </div>
               <div className="hr-act">
                 {chosen && <span className="hr-check" title="Escolhida">✓</span>}
                 {(!chosen || max > 1) && (
                   <button type="button" className="btn her-add" disabled={!canAdd} onClick={() => onChange(addHeritage(picks, h.id, h.optionPerPick))}
-                    title={!s?.available ? capitalize(s?.reason) : left === 0 ? 'Sem pontos sobrando' : undefined}>
+                    title={!s?.available ? capitalize(s?.reason) : room(h.category) === 0 ? 'Sem pontos que comprem esta Herança' : undefined}>
                     {chosen ? '+1' : 'Escolher'}
                   </button>
                 )}
