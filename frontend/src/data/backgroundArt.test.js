@@ -15,6 +15,7 @@ describe('backgroundArt', () => {
 
   it('só tem ilustração para passado do catálogo', () => {
     const ids = catalog.backgrounds.map(b => b.id)
+    expect(Object.keys(BACKGROUND_IMAGES).length).toBeGreaterThan(0)
     for (const id of Object.keys(BACKGROUND_IMAGES)) expect(ids).toContain(id)
   })
 })

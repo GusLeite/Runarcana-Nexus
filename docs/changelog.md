@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Ilustrações em 21 passados (`feature/character-sheet`)
+- 21 imagens em `assets/backgrounds/<id>.webp` (≈3,6 MB), escolhidas pela cena de cada uma; `backgroundArt.js` lê a pasta com `import.meta.glob`, então um arquivo novo aparece sozinho. Só o Religioso ficou sem arte (continua com o símbolo). O Andarilho trocou o exemplo pela imagem do explorador; a da aldeia em chamas foi para o Órfão.
+- Enquadramento conferido numa folha de contato com as 21; o card inteiro dentro do assistente não foi aberto (exige login).
+
 ## 2026-11-02 — Arte de exemplo no Andarilho (`feature/character-sheet`)
 - `backgroundArt.js`: `BACKGROUND_IMAGES` (por id) e `backgroundImage()`; o `BackgroundPicker` mostra a ilustração como faixa no topo do card quando o passado tem uma. Só o Andarilho tem, como exemplo (`assets/backgrounds/andarilho.webp`); os outros seguem só com o símbolo.
 
