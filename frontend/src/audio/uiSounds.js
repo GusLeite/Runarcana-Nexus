@@ -16,6 +16,9 @@ export function clickSound(el) {
   return 'tap'
 }
 
+// Na ficha e no painel do mestre (`.sheet`) os sons de interface seguem o estilo do cliente do LoL.
+export const styled = (el, name) => (el.closest?.('.sheet') ? 'lol-' + name : name)
+
 // Instala os sons de interface na página toda (por delegação: telas novas já nascem com som).
 export function installUiSounds(root = document) {
   const wake = () => unlock()
@@ -25,7 +28,7 @@ export function installUiSounds(root = document) {
     const el = e.target.closest?.(INTERACTIVE)
     if (!el || el.disabled || el.getAttribute('aria-disabled') === 'true') return
     const name = clickSound(el)
-    if (name) play(name)
+    if (name) play(styled(el, name))
   })
 
   let over = null
@@ -35,7 +38,7 @@ export function installUiSounds(root = document) {
     if (!el || el === over) return
     over = el
     if (el.disabled || el.getAttribute('data-sfx') === 'none') return
-    play('hover')
+    play(styled(el, 'hover'))
   })
 
   // Digitar: pena raspando no papel nas anotações, um toque suave nos demais campos.

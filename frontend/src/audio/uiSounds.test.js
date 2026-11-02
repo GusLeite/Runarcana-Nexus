@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { clickSound } from './uiSounds.js'
+import { clickSound, styled } from './uiSounds.js'
 
 // Controle de mentira com só o que clickSound lê.
 const el = ({ classes = [], role, type, sfx } = {}) => ({
@@ -25,4 +25,10 @@ describe('clickSound', () => {
     expect(clickSound(el({ role: 'tab', sfx: 'none' }))).toBeNull()
     expect(clickSound(el({ classes: ['btn'], sfx: 'coin' }))).toBe('coin')
   })
+})
+
+describe('styled', () => {
+  const inSheet = { closest: sel => (sel === '.sheet' ? {} : null) }
+  it('ficha e mestre usam o estilo do cliente', () => expect(styled(inSheet, 'tap')).toBe('lol-tap'))
+  it('fora da ficha, o som comum', () => expect(styled({ closest: () => null }, 'tap')).toBe('tap'))
 })

@@ -368,15 +368,49 @@ const SFX = {
   },
 }
 
+// Estilo "cliente do LoL" (ficha e painel do mestre): cliques secos e metálicos, ar nos hovers e um estrondo hextech
+// no botão principal. São sons sintetizados no mesmo estilo, não os arquivos do jogo. `lol-x` vale no lugar de `x`.
+Object.assign(SFX, {
+  'lol-hover': () => {
+    noise({ dur: 0.07, vol: 0.03, f: 5000, f2: 7500, q: 1.2, attack: 0.01 })
+    tone({ f: 2100, dur: 0.05, vol: 0.018 })
+  },
+  'lol-tap': () => {
+    tone({ f: 880, f2: 640, type: 'triangle', dur: 0.07, vol: 0.07 })
+    noise({ dur: 0.03, vol: 0.05, f: 3500, q: 1.5 })
+    tone({ f: 1760, dur: 0.12, vol: 0.02, send: 0.2 })
+  },
+  'lol-page': () => {
+    noise({ dur: 0.22, vol: 0.07, f: 1500, f2: 6000, q: 0.8, attack: 0.03 })
+    tone({ f: 988, t: 0.1, dur: 0.12, vol: 0.04, send: 0.3 })
+  },
+  'lol-confirm': () => {
+    tone({ f: 110, f2: 165, dur: 0.5, vol: 0.12, lp: 600 })
+    noise({ dur: 0.35, vol: 0.06, f: 800, f2: 4000, q: 0.8, attack: 0.1 })
+    noise({ dur: 0.03, vol: 0.06, f: 3000, q: 1.5 })
+    bell(660, 0.12, 0.06, 1.2, 0.5)
+  },
+  'lol-toggle': () => {
+    tone({ f: 1200, dur: 0.04, vol: 0.06 })
+    tone({ f: 1800, t: 0.04, dur: 0.06, vol: 0.05 })
+  },
+  'lol-danger': () => {
+    tone({ f: 160, f2: 80, dur: 0.2, vol: 0.1 })
+    noise({ dur: 0.08, vol: 0.07, type: 'lowpass', f: 400, q: 0.5 })
+  },
+})
+
 const MIN_GAP = { hover: 60, key: 30, quill: 30, tap: 40 }
 const last = {}
 
 export function play(name, arg) {
   if (!prefs.sfx || !unlocked) return
+  // Variante de estilo sem receita própria cai no som comum.
+  if (!SFX[name] && name.startsWith('lol-')) name = name.slice(4)
   const fn = SFX[name]
   if (!fn) return
   const now = performance.now()
-  if (now - (last[name] ?? -1e9) < (MIN_GAP[name] ?? 25)) return
+  if (now - (last[name] ?? -1e9) < (MIN_GAP[name.replace('lol-', '')] ?? 25)) return
   // Aviso comum logo depois de um erro seria barulho em dobro.
   if (name === 'notice' && now - (last.error ?? -1e9) < 500) return
   last[name] = now

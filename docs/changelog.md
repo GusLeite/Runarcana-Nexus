@@ -3,6 +3,7 @@
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
 ## 2026-11-02 — Som em todo o site (`feature/character-sheet`)
+- Ficha e painel do mestre usam sons de interface no estilo do cliente do LoL (sintetizados; não são os arquivos do jogo).
 - Motor de áudio sintetizado (Web Audio, sem arquivos) em `src/audio/`: hover e clique em todos os controles, aba = página virando, apagar = golpe grave, erro/aviso, digitação com pena nas anotações.
 - Cada personagem tem a sua assinatura na seleção (forja, coração, magia, assombração); dado chacoalha e cai, com sons próprios para 20 e 1 natural; PV, magias, descansos, moedas, poções, subida de nível e criação também soam.
 - Controle de efeitos e volume no canto, guardado no navegador. (A música de fundo foi feita e depois removida a pedido.)
