@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Artes trocadas entre passados (`feature/character-sheet`)
+- Marujo e Pirata trocaram de imagem; o Yasuo foi para o Exilado e o lutador pendurado na caverna para o Soldado.
+
 ## 2026-11-02 — Arte do Religioso e do Gladiador (`feature/character-sheet`)
 - Chegaram as 2 imagens que faltavam: Diana com os monges da lua no Religioso e o guerreiro dourado no Gladiador. Agora os 22 passados têm ilustração.
 - A imagem do brutamontes de cartola, que estava no Gladiador, ficou em `assets/backgrounds/_reserva/` (fora do `glob`, sem uso).
