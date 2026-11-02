@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Som em todo o site (`feature/character-sheet`)
+- Motor de áudio sintetizado (Web Audio, sem arquivos) em `src/audio/`: hover e clique em todos os controles, aba = página virando, apagar = golpe grave, erro/aviso, digitação com pena nas anotações.
+- Cada personagem tem a sua assinatura na seleção (forja, coração, magia, assombração); dado chacoalha e cai, com sons próprios para 20 e 1 natural; PV, magias, descansos, moedas, poções, subida de nível e criação também soam.
+- Música de fundo (drone com sinos e vento) que muda de tom por cena; controle de efeitos/música/volume no canto, guardado no navegador.
+
 ## 2026-11-02 — Anotações em forma de diário (`feature/character-sheet`)
 - Aba Anotações redesenhada como diário medieval: capa de couro verde, índice à esquerda e folha pautada com margem vermelha à direita, selo de cera para fixadas e botão "Nova página". A lógica (salvamento automático, fixar, apagar) não mudou.
 

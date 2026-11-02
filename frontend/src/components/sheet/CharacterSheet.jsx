@@ -19,6 +19,8 @@ import TabBar from './TabBar.jsx'
 import CreationScreen from '../creation/CreationScreen.jsx'
 import LevelUp from '../creation/LevelUp.jsx'
 import { fetchCatalog } from '../../api/creation.js'
+import { play } from '../../audio/engine.js'
+import useScene from '../../audio/useScene.js'
 import { ExitIcon, KeyIcon } from './icons.jsx'
 import '../../styles/sheet.css'
 
@@ -64,6 +66,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
 
   // Erro de uma ação: 401 desloga; o resto vira aviso.
   const fail = useCallback(err => {
+    play('error')
     if (err.status === 401) expired.current()
     else setToast(err.message)
   }, [])
@@ -98,6 +101,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const setHp = useCallback(next => {
     const before = state.status === 'ready' ? state.sheet.character : null
     if (!before) return
+    play(next.currentHp > before.currentHp ? 'heal' : next.currentHp < before.currentHp ? 'damage' : 'ward')
     const put = character => setState(s => (s.status === 'ready' ? { ...s, sheet: { ...s.sheet, character } } : s))
     // Com PV de novo, os testes contra a morte zeram (o back faz o mesmo).
     put({ ...before, ...next, ...(next.currentHp > 0 ? { deathSuccesses: 0, deathFailures: 0 } : {}) })
@@ -130,11 +134,11 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   // O jogador só gasta: o back devolve a ficha inteira (inventário, ouro, inspiração).
   const putSheet = useCallback(sheet => setState(s => (s.status === 'ready' ? { ...s, sheet } : s)), [])
   const consumeOne = useCallback(item => {
-    consumeItem(token, item.id).then(sheet => { putSheet(sheet); setToast('Usou 1: ' + item.name + '.') }).catch(fail)
+    consumeItem(token, item.id).then(sheet => { play('consume'); putSheet(sheet); setToast('Usou 1: ' + item.name + '.') }).catch(fail)
   }, [token, fail, putSheet])
-  const spendGold = useCallback(amount => spendGoldApi(token, amount).then(putSheet).catch(err => { fail(err); throw err }), [token, fail, putSheet])
+  const spendGold = useCallback(amount => spendGoldApi(token, amount).then(sheet => { play('coin'); putSheet(sheet) }).catch(err => { fail(err); throw err }), [token, fail, putSheet])
   const spendInspirationNow = useCallback(() => {
-    spendInspiration(token).then(sheet => { putSheet(sheet); setToast('Inspiração gasta.') }).catch(fail)
+    spendInspiration(token).then(sheet => { play('success'); putSheet(sheet); setToast('Inspiração gasta.') }).catch(fail)
   }, [token, fail, putSheet])
 
   // Mercador aberto pelo mestre: a cada poucos segundos (com a aba visível) o ping diz se abriu, fechou ou mudou;
@@ -185,6 +189,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     setBusy(true)
     return call()
       .then(({ merchant: m, sheet }) => {
+        play('coin')
         putMerchant(m)
         putSheet(sheet)
         setToast(done)
@@ -270,6 +275,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     setBusy(true)
     castSpell(token, spell.id, level)
       .then(r => {
+        play('cast')
         setAbilities(r.abilities)
         setToast('Conjurou ' + spell.name + (r.level ? ' no ' + r.level + 'º nível' : '')
           + (r.usedUse ? ' (1 uso da magia).' : r.manaCost ? ' (−' + r.manaCost + ' Mana).' : '.'))
@@ -291,6 +297,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     setBusy(true)
     restApi(token, type, prepared)
       .then(list => {
+        play('rest', type === 'LONG')
         setAbilities(list)
         setPreparing(false)
         setToast(type === 'LONG' ? (prepared ? 'Descanso longo: usos de volta e magias preparadas.' : 'Descanso longo: todos os usos voltaram.')
@@ -399,6 +406,8 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     '--s': 2 + (i % 3) + 'px',
   })), [])
 
+  useScene(state.status === 'empty' ? 'creation' : 'sheet')
+
   // Conta sem ficha: em vez da ficha, a tela exclusiva da criação.
   if (state.status === 'empty') {
     return (
@@ -408,6 +417,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
         toast={toast}
         onError={fail}
         onCreated={created => {
+          play('levelup')
           setToast(created.characterName + ' foi criado!')
           load()
         }}
@@ -482,6 +492,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
                 onPreview={levelUpPreview}
                 onApply={levelUpApply}
                 onApplied={updated => {
+                  play('levelup')
                   setLeveling(false)
                   setToast(updated.characterName + ' subiu para o ' + updated.level + 'º nível!')
                   load()

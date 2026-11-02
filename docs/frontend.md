@@ -38,6 +38,7 @@ frontend/
     │                          SkillList, AbilitiesTab, AbilityIcon, Inventory, MerchantTab, DocumentsTab, NotesTab, DiceRoll,
     │                          TabBar (abas com sublinhado deslizante), Num (número que conta), icons
     │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities, MasterSheets, MasterMerchants, MasterRules
+    ├── audio/                 engine.js (sons sintetizados + música de fundo), uiSounds.js (+ .test.js, sons de interface por delegação), SoundToggle.jsx, useScene.js — ver frontend-visual.md
     ├── hooks/useCountUp.js (+ .test.js)  número que conta até o valor; prefersReducedMotion
     ├── utils/motion.js        replay (reinicia animação de classe) e afterLeave (espera a saída)
     ├── utils/placeholderArt.js   gera um retrato SVG para quem ainda não tem arte
@@ -47,6 +48,7 @@ frontend/
     ├── styles/master.css      botão, portal e painel do mestre
     ├── styles/merchant.css    loja do mercador (ficha) e aba do mestre
     ├── styles/motion.css      animações de polimento (importado por último no main.jsx)
+    ├── styles/sound.css       controle de som do canto da tela
     ├── api/master.js          rotas do mestre (personagens, habilidades, documentos, destinatários, liberar a subida de nível)
     ├── validation.js (+ .test.js)
     └── assets/characters/     rudo.jpg/.mp4, gaudron.jpg/.mp4

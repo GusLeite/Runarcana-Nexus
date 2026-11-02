@@ -10,6 +10,8 @@ import CharacterSheet from './components/sheet/CharacterSheet.jsx'
 import MasterPanel from './components/master/MasterPanel.jsx'
 import MasterGate from './components/master/MasterGate.jsx'
 import { CrownIcon } from './components/sheet/icons.jsx'
+import { play } from './audio/engine.js'
+import useScene from './audio/useScene.js'
 
 // O mestre entra pelo botão do topo, não pelos painéis; o LoginForm/PasswordForm usam este "personagem".
 const MASTER = { id: 'mestre', name: 'MESTRE', role: 'Narrador de Runeterra', fx: '' }
@@ -58,17 +60,20 @@ export default function App() {
   }, [])
 
   const signIn = s => {
+    play('login')
     updateSession(s)
     setView('account')
     setNotice(null)
   }
   const signOut = () => {
+    play('logout')
     if (session) logout(session.token).catch(() => {})
     updateSession(null)
     setMasterOpen(false)
     back()
   }
   const passwordChanged = account => {
+    play('success')
     updateSession({ ...session, ...account })
     setView('account')
     setNotice('Senha alterada.')
@@ -81,14 +86,20 @@ export default function App() {
   // Pequeno atraso no hover para o mouse atravessar os painéis sem disparar todos.
   const enter = i => {
     clearTimeout(hoverTimer.current)
-    hoverTimer.current = setTimeout(() => setHovered(i), 90)
+    hoverTimer.current = setTimeout(() => {
+      setHovered(i)
+      play('char', characters[i])
+    }, 90)
   }
   const leaveRow = () => {
     clearTimeout(hoverTimer.current)
     setHovered(null)
   }
   const pick = i => {
-    if (selected < 0) setSelectedId(characters[i].id)
+    if (selected < 0) {
+      play('choose', characters[i])
+      setSelectedId(characters[i].id)
+    }
   }
   const back = () => {
     setSelectedId(null)
@@ -109,6 +120,10 @@ export default function App() {
       onExpired={sessionExpired}
     />
   )
+
+  // Som de fundo: a ficha e a criação cuidam do próprio tom; aqui ficam o salão e o painel do mestre.
+  const onSheet = !!chosen && !!session && !askPassword && !session.master
+  useScene(onSheet || testSession ? null : session?.master && !askPassword ? 'master' : 'hall')
 
   const startTest = async () => {
     const res = await loginAsTestPlayer(session.token)
@@ -160,7 +175,7 @@ export default function App() {
     panel = (
       <MasterGate>
         <AddPlayerForm
-          onCreated={username => { setExtra(list => [...list, username]); setAddOpen(false) }}
+          onCreated={username => { play('success'); setExtra(list => [...list, username]); setAddOpen(false) }}
           onBack={() => setAddOpen(false)}
         />
       </MasterGate>

@@ -33,6 +33,7 @@ export default function CharacterPanel({ character: c, hot, selected, gone, rest
   return (
     <div
       role="button"
+      data-sfx="none"
       tabIndex={focusable ? 0 : -1}
       aria-label={'Entrar como ' + c.name}
       className={className}
