@@ -143,13 +143,6 @@ transition:transform .15s,filter .15s;animation:stone-in .5s cubic-bezier(.3,1.6
 .attr-row-result .mod{min-width:28px;color:var(--muted);font-size:14px}
 
 /* ---------- escolhas e detalhes ---------- */
-.choice{margin-bottom:16px;padding:12px 14px;border:1px solid rgba(200,162,74,.16);background:rgba(0,0,0,.22);animation:rise-in .35s ease backwards;animation-delay:calc(var(--n,0)*60ms)}
-.choice-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.choice-label{font-family:'Cinzel',Georgia,serif;font-weight:700;color:#f0e6d2}
-.choice-count{font-family:'Cinzel',Georgia,serif;color:#ff8a7a}
-.choice-count.ok{color:var(--teal)}
-.choice-source{margin:2px 0 10px;font-size:12px;color:var(--muted)}
-.choice .to-chip:disabled{opacity:.35;cursor:default}
 .details{max-width:620px}
 
 /* ---------- ficha em construção ---------- */
@@ -202,7 +195,6 @@ transition:transform .15s,filter .15s;animation:stone-in .5s cubic-bezier(.3,1.6
 .grant.g-craft,.grant.g-craft_choice{border-color:#8a9bb3}
 .grant.g-language,.grant.g-language_choice{border-color:#3fbf9f}
 .grant.g-heritage_points{border-color:#e0204a}
-.choice.pending{border-style:dashed;opacity:.85}
 .build-facts{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin:12px 0 0}
 .build-facts dt{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .build-facts dd{margin:1px 0 0;font-size:14px}
@@ -259,7 +251,6 @@ transition:transform .15s,filter .15s;animation:stone-in .5s cubic-bezier(.3,1.6
 /* Linhagem (tribo) logo abaixo da origem escolhida */
 .lineage-step{margin-top:22px;padding-top:16px;border-top:1px solid rgba(200,162,74,.2);animation:rise-in .35s ease backwards}
 .choice-group+.choice-group{margin-top:10px}
-.choice-group-title{margin-bottom:6px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 
 /* Recursos de classe (Sutras, Iras, Técnicas...) nas Escolhas: cartões como os das Heranças */
 .res-search{display:block;width:100%;margin-bottom:10px}
@@ -271,3 +262,61 @@ transition:transform .15s,filter .15s;animation:stone-in .5s cubic-bezier(.3,1.6
 .real-note b{color:var(--gold-hi)}
 .real-input{width:76px;padding:8px;text-align:center;font-family:'Cinzel',Georgia,serif;font-size:18px;background:#050b14;border:1px solid rgba(200,162,74,.5);color:var(--gold-hi)}
 .real-input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 12px rgba(47,211,192,.4)}
+
+/* ===== Etapa Escolhas: cartões com símbolo, gemas de progresso e opções em azulejos ===== */
+.choice-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;margin-bottom:16px}
+.choice-top .step-title{margin:0}
+.choice-summary{display:grid;gap:5px;min-width:200px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.choice-summary.ok{color:var(--teal)}
+.choice-summary-bar{height:5px;background:#02060c;border:1px solid var(--gold-dk)}
+.choice-summary-bar div{height:100%;background:linear-gradient(90deg,var(--gold-dk),var(--gold-hi));transition:width .5s cubic-bezier(.22,1,.36,1)}
+.choice-summary.ok .choice-summary-bar{border-color:var(--teal)}
+.choice-summary.ok .choice-summary-bar div{background:linear-gradient(90deg,var(--gold-hi),var(--teal));box-shadow:0 0 10px var(--teal)}
+
+.choice{position:relative;margin-bottom:18px;padding:16px 18px;border:1px solid rgba(200,162,74,.2);border-left:3px solid var(--gold);
+  background:linear-gradient(135deg,rgba(200,162,74,.06),rgba(0,0,0,.28) 45%);animation:rise-in .35s ease backwards;animation-delay:calc(var(--n,0)*70ms);transition:border-color .3s,box-shadow .3s}
+.choice.done{border-color:rgba(47,211,192,.35);border-left-color:var(--teal);background:linear-gradient(135deg,rgba(47,211,192,.07),rgba(0,0,0,.28) 45%)}
+.choice.pending{border-style:dashed;border-left-style:dashed;opacity:.8}
+.choice-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.choice-medal{display:grid;place-items:center;flex:none;width:52px;height:52px;border:1px solid var(--gold-soft);background:radial-gradient(circle,rgba(240,199,94,.16),rgba(0,0,0,.4) 70%);
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);transition:background .3s}
+.choice.done .choice-medal{background:radial-gradient(circle,rgba(47,211,192,.22),rgba(0,0,0,.4) 70%)}
+.ch-sigil{width:30px;height:30px;overflow:visible;fill:none;stroke:var(--gold-hi);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 5px rgba(240,199,94,.45));transition:stroke .3s}
+.choice.done .ch-sigil{stroke:var(--teal);filter:drop-shadow(0 0 5px rgba(47,211,192,.5))}
+.choice-title{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.choice-label{font-family:'Cinzel',Georgia,serif;font-size:17px;font-weight:700;letter-spacing:.04em;color:#f0e6d2}
+.choice-source{font-size:12px;letter-spacing:.06em;color:var(--muted)}
+.choice-progress{display:flex;align-items:center;gap:10px;flex:none}
+.choice-gems{display:flex;gap:6px}
+.choice-gems i{width:11px;height:11px;transform:rotate(45deg);border:1px solid var(--gold-soft);transition:background .3s,box-shadow .3s,border-color .3s}
+.choice-gems i.on{background:var(--gold-hi);border-color:var(--gold-hi);box-shadow:0 0 8px var(--gold-hi)}
+.choice-progress.ok .choice-gems i.on{background:var(--teal);border-color:var(--teal);box-shadow:0 0 8px var(--teal)}
+.choice-count{font-family:'Cinzel',Georgia,serif;font-size:15px;font-weight:700;color:#ff8a7a}
+.choice-progress.ok .choice-count{color:var(--teal)}
+.choice-progress.ok .choice-count::before{content:"✓ "}
+
+.choice-group+.choice-group{margin-top:14px}
+.choice-group-title{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.choice-group-title::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--gold-dk),transparent)}
+
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.opt{position:relative;display:flex;align-items:center;gap:10px;min-height:44px;padding:9px 12px;border:1px solid rgba(200,162,74,.22);background:rgba(0,0,0,.32);color:#cfc7b2;
+  font-family:'Cinzel',Georgia,serif;font-size:13px;font-weight:700;letter-spacing:.04em;text-align:left;cursor:pointer;transition:border-color .2s,background .2s,transform .2s,box-shadow .2s,color .2s}
+.opt:not(:disabled):hover{border-color:var(--gold-soft);transform:translateY(-2px);color:#f0e6d2}
+.opt:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.opt-gem{flex:none;width:11px;height:11px;transform:rotate(45deg);border:1px solid var(--gold-soft);transition:background .25s,box-shadow .25s,border-color .25s}
+.opt.on{border-color:var(--gold-hi);color:var(--gold-hi);background:linear-gradient(180deg,rgba(40,30,8,.65),rgba(1,10,19,.9));box-shadow:0 0 0 1px var(--gold),0 0 18px rgba(240,199,94,.22)}
+.opt.on .opt-gem{background:var(--gold-hi);border-color:var(--gold-hi);box-shadow:0 0 8px var(--gold-hi)}
+.choice.done .opt.on{border-color:var(--teal);color:var(--teal);background:linear-gradient(180deg,rgba(6,40,36,.6),rgba(1,10,19,.9));box-shadow:0 0 0 1px rgba(47,211,192,.6),0 0 18px rgba(47,211,192,.2)}
+.choice.done .opt.on .opt-gem{background:var(--teal);border-color:var(--teal);box-shadow:0 0 8px var(--teal)}
+.opt:disabled{opacity:.35;cursor:default}
+.opt.wide{flex-wrap:wrap;row-gap:2px;padding:12px 14px}
+.opt.wide .opt-name{font-size:15px}
+.opt-sub{flex:1 0 100%;padding-left:21px;font-family:system-ui,sans-serif;font-size:12px;font-weight:400;letter-spacing:0;color:var(--muted)}
+.wealth-pick{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.wealth-choice .muted-note{margin:12px 0 0}
+.choice-empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:34px 20px;border:1px dashed rgba(200,162,74,.25);color:var(--muted);text-align:center}
+.choice-empty .ch-sigil{width:54px;height:54px;opacity:.6}
+.choice-empty p{margin:0}
+@media (max-width:640px){.choice-head{flex-wrap:wrap}.choice-progress{flex:1 0 100%}.opt-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}}
+@media (prefers-reduced-motion:reduce){.choice{animation:none}.opt:not(:disabled):hover{transform:none}}

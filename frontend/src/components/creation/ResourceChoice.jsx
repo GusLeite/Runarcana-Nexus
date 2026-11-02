@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ChoiceHead } from './ChoiceParts.jsx'
 import { resourceCost, togglePick } from '../../data/rules.js'
 
 // Escolha de recurso de classe (Sutra, Ira, Técnica, Vel, Invocação, Grande Espírito, Aspecto Feral):
@@ -12,6 +13,7 @@ export default function ResourceChoice({ choice, current, resources, onChange, n
   const used = vel ? current.reduce((sum, id) => sum + resourceCost(byId(id)), 0) : current.length
   // Escolhidos que a prévia não aceita mais (pré-requisito): aparecem para poder tirar.
   const stale = current.filter(id => !choice.options.includes(id))
+  const done = vel ? used <= choice.count : used === choice.count
   const q = query.trim().toLowerCase()
   const shown = [...stale, ...choice.options]
     .map(byId).filter(Boolean)
@@ -20,14 +22,9 @@ export default function ResourceChoice({ choice, current, resources, onChange, n
   const pick = id => onChange(togglePick(current, id, vel ? Infinity : choice.count))
 
   return (
-    <div className="choice" style={{ '--n': n }}>
-      <div className="choice-head">
-        <span className="choice-label">{choice.label}</span>
-        <span className={'choice-count' + ((vel ? used <= choice.count : used === choice.count) ? ' ok' : '')}>
-          {vel ? `${used}/${choice.count} ◆` : `${used}/${choice.count}`}
-        </span>
-      </div>
-      <div className="choice-source">{choice.source}</div>
+    <div className={'choice' + (done ? ' done' : '')} style={{ '--n': n }}>
+      <ChoiceHead type="RESOURCE_CHOICE" label={choice.label} source={choice.source} used={used} total={choice.count}
+        done={done} suffix={vel ? ' ◆' : ''} />
       {choice.note && <p className="muted-note">{choice.note}</p>}
       {choice.options.length > 6 && (
         <input className="her-search res-search" type="search" placeholder="Buscar…" value={query} onChange={e => setQuery(e.target.value)}

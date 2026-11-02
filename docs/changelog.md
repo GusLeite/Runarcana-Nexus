@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Polimento visual da etapa Escolhas (`feature/character-sheet`)
+- Cartões com medalhão e símbolo por tipo de escolha, gemas de progresso, opções em azulejos e resumo geral no topo; recursos de classe e equipamento inicial seguem o mesmo padrão.
+
 ## 2026-11-02 — Opção "Dados reais" nos atributos (`feature/character-sheet`)
 - Novo método na tela: digitar os valores rolados na mesa, travados entre o mínimo e o máximo do catálogo.
 
