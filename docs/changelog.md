@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Anotações em forma de diário (`feature/character-sheet`)
+- Aba Anotações redesenhada como diário medieval: capa de couro verde, índice à esquerda e folha pautada com margem vermelha à direita, selo de cera para fixadas e botão "Nova página". A lógica (salvamento automático, fixar, apagar) não mudou.
+
 ## 2026-11-02 — Inventário em forma de bolsa (`feature/character-sheet`)
 - Aba Inventário redesenhada como bolsa de couro: aba com fivela e filtros, bolsos com brilho de raridade, cinto de carga e etiqueta de pergaminho para o item escolhido.
 - Novos ícones SVG (`ItemIcon.jsx`, 16 desenhos escolhidos pelo nome do item), usados também na loja do mercador.

@@ -743,3 +743,82 @@ box-shadow:inset 0 0 0 1px rgba(90,60,20,.35),inset 0 0 30px rgba(120,80,20,.25)
  .bag-belt{grid-template-columns:1fr}
  .bag-belt .inv-value{align-items:flex-start}
 }
+
+/* ---------- anotações: o diário ---------- */
+/* Capa de couro verde-escura com cantoneiras de latão; duas páginas de pergaminho e a lombada no meio. */
+.journal{--ink-d:#2c1d10;--ink-s:#6b5236;--line:rgba(120,80,30,.42);--seal:#a3192f;position:relative;display:grid;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);align-items:stretch;padding:16px;border-radius:10px;
+background:radial-gradient(ellipse at 20% 0,rgba(140,200,150,.1),transparent 60%),linear-gradient(150deg,#1f3a2c,#0f1f17 60%,#183024);
+box-shadow:0 22px 44px rgba(0,0,0,.55),inset 0 0 0 1px rgba(240,199,94,.3),inset 0 0 40px rgba(0,0,0,.55)}
+.journal::before{content:"";position:absolute;inset:6px;border:1.5px dashed rgba(232,200,130,.3);border-radius:7px;pointer-events:none}
+.corner{position:absolute;width:38px;height:38px;z-index:2;pointer-events:none;background:linear-gradient(135deg,#fff0b0,#d9a82e 45%,#6f4f12);filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}
+.corner.tl{top:0;left:0;clip-path:polygon(0 0,100% 0,0 100%);border-top-left-radius:10px}
+.corner.tr{top:0;right:0;clip-path:polygon(0 0,100% 0,100% 100%);border-top-right-radius:10px}
+.corner.bl{bottom:0;left:0;clip-path:polygon(0 0,0 100%,100% 100%);border-bottom-left-radius:10px}
+.corner.br{bottom:0;right:0;clip-path:polygon(100% 0,100% 100%,0 100%);border-bottom-right-radius:10px}
+.jpage{position:relative;display:flex;flex-direction:column;min-width:0;padding:22px 26px 18px;color:var(--ink-d);
+background-color:#e6d4a6;background-image:radial-gradient(ellipse at 50% 0,rgba(255,255,255,.4),transparent 70%),radial-gradient(ellipse at 50% 100%,rgba(140,90,30,.22),transparent 65%),linear-gradient(170deg,#ecdcb2,#d8c08a)}
+.jpage.left{border-radius:5px 0 0 5px;background-image:linear-gradient(90deg,transparent 78%,rgba(70,40,10,.4)),radial-gradient(ellipse at 50% 0,rgba(255,255,255,.4),transparent 70%),radial-gradient(ellipse at 50% 100%,rgba(140,90,30,.22),transparent 65%),linear-gradient(170deg,#ecdcb2,#d8c08a);
+box-shadow:-1px 0 0 #b49a62,-3px 0 0 #6a5230,-4px 0 0 #b49a62,-6px 0 0 #4a3820}
+.jpage.right{border-radius:0 5px 5px 0;background-image:linear-gradient(270deg,transparent 78%,rgba(70,40,10,.4)),radial-gradient(ellipse at 50% 0,rgba(255,255,255,.4),transparent 70%),radial-gradient(ellipse at 50% 100%,rgba(140,90,30,.22),transparent 65%),linear-gradient(170deg,#ecdcb2,#d8c08a);
+box-shadow:1px 0 0 #b49a62,3px 0 0 #6a5230,4px 0 0 #b49a62,6px 0 0 #4a3820}
+.jspine{background:linear-gradient(90deg,rgba(0,0,0,.75),#08130d 45%,#08130d 55%,rgba(0,0,0,.75));box-shadow:inset 0 0 0 1px rgba(240,199,94,.15)}
+.jhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.jtitle{margin:0;display:flex;align-items:baseline;gap:10px;font-family:'Cinzel',Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-d)}
+.jtitle small{font-family:'Spectral',Georgia,serif;font-size:13px;font-weight:400;font-style:italic;letter-spacing:0;text-transform:none;color:var(--ink-s)}
+/* Botão em forma de selo de cera. */
+.wax-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:0;border-radius:999px;background:radial-gradient(circle at 35% 30%,#d8404f,var(--seal) 55%,#6e0e1d);color:#ffe9c8;font-family:'Cinzel',Georgia,serif;font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;box-shadow:0 2px 5px rgba(60,10,10,.5),inset 0 1px 1px rgba(255,200,180,.5);transition:transform .15s,filter .2s}
+.wax-btn:hover:not(:disabled){transform:translateY(-1px) rotate(-1deg);filter:brightness(1.12)}
+.wax-btn:disabled{opacity:.5;cursor:wait}
+.wax-btn:focus-visible{outline:2px solid #1d5f58;outline-offset:2px}
+/* Filete ornamental com losango no meio. */
+.jrule{display:flex;align-items:center;gap:8px;margin:12px 0 8px}
+.jrule::before,.jrule::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(107,82,54,.7))}
+.jrule::after{transform:scaleX(-1)}
+.jrule i{width:7px;height:7px;transform:rotate(45deg);background:var(--seal)}
+.jempty{margin:24px 8px;text-align:center;font-style:italic;color:var(--ink-s)}
+.jindex{margin:0 -8px 0 0;padding:0 8px 0 0;list-style:none;max-height:min(58vh,560px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(107,82,54,.5) transparent}
+.jentry{display:flex;align-items:center;gap:10px;width:100%;padding:9px 8px;border:0;border-bottom:1px dotted rgba(107,82,54,.55);background:none;color:var(--ink-d);font:inherit;text-align:left;cursor:pointer;transition:background .2s}
+.jentry:hover{background:rgba(163,25,47,.07)}
+.jentry.on{background:linear-gradient(90deg,rgba(163,25,47,.16),rgba(163,25,47,.02));box-shadow:inset 3px 0 0 var(--seal)}
+.jentry:focus-visible{outline:2px solid #1d5f58;outline-offset:-2px}
+.jentry-text{display:flex;flex-direction:column;flex:1;min-width:0}
+.jentry-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'Cinzel',Georgia,serif;font-size:15px;font-weight:700;color:var(--ink-d)}
+.jentry-peek{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-style:italic;color:var(--ink-s)}
+.jentry-date{flex:none;font-size:11px;color:var(--ink-s)}
+.seal{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#d8404f,var(--seal) 55%,#6e0e1d);box-shadow:0 1px 3px rgba(60,10,10,.5),inset 0 1px 1px rgba(255,200,180,.5)}
+.seal .pin{width:13px;height:13px;stroke:#ffe9c8;fill:none}
+/* Página da direita: o editor sem caixa, com pauta e margem vermelha. */
+.journal .note-editor{flex:1;gap:8px;padding:0;background:none;border:0;animation:leaf-turn .5s cubic-bezier(.22,1,.36,1);transform-origin:left center}
+.journal .note-toolbar{align-items:center;padding-bottom:8px;border-bottom:1px solid rgba(107,82,54,.4)}
+.journal .pin-btn{border-color:rgba(107,82,54,.55);color:var(--ink-s);border-radius:999px}
+.journal .pin-btn.on{border-color:var(--seal);color:#fff2d6;background:radial-gradient(circle at 35% 30%,#d8404f,var(--seal) 60%,#6e0e1d)}
+.journal .save-status{color:var(--ink-s);font-style:italic}
+.journal .save-status.saving,.journal .save-status.dirty{color:#1d5f58}
+.journal .save-status.error{color:var(--seal);font-style:normal;font-weight:700}
+.journal .ghost-btn{border-color:rgba(107,82,54,.55);color:var(--ink-d);background:rgba(107,82,54,.08)}
+.journal .ghost-btn:hover{background:rgba(107,82,54,.2)}
+.journal .confirm{color:var(--seal)}
+.journal .danger-btn{background:var(--seal);border-color:#6e0e1d;color:#ffe9c8}
+.journal input.note-title{padding:6px 2px 2px;border:0;border-bottom:2px double rgba(107,82,54,.55);background:none;color:var(--ink-d);font-family:'Cinzel',Georgia,serif;font-size:24px;font-weight:700;letter-spacing:.04em}
+.journal input.note-title::placeholder{color:rgba(107,82,54,.55)}
+.journal input.note-title:focus{outline:0;border-bottom-color:var(--seal)}
+.journal .note-body{min-height:44vh;padding:0 4px 0 44px;border:0;resize:vertical;color:var(--ink-d);font-size:18px;line-height:32px;
+background-color:transparent;background-image:linear-gradient(90deg,transparent 34px,rgba(163,25,47,.55) 34px 35px,transparent 35px),repeating-linear-gradient(transparent 0 31px,var(--line) 31px 32px);background-attachment:local}
+.journal .note-body::placeholder{color:rgba(107,82,54,.6);font-style:italic}
+.journal .note-body:focus{outline:0;box-shadow:none;background-color:rgba(255,250,230,.18)}
+.journal .note-foot{align-self:stretch;display:flex;justify-content:space-between;padding-top:6px;font-size:12px;font-style:italic;color:var(--ink-s)}
+@keyframes leaf-turn{from{opacity:0;transform:perspective(1400px) rotateY(-24deg)}}
+@media (prefers-reduced-motion:reduce){.journal .note-editor{animation:none}}
+@container (max-width:760px){
+ .journal{grid-template-columns:1fr;gap:12px}
+ .jspine{display:none}
+ .jpage.left,.jpage.right{border-radius:5px;box-shadow:none}
+ .jindex{max-height:40vh}
+}
+@container (max-width:560px){
+ .journal{padding:12px}
+ .jpage{padding:18px 16px 14px}
+ .jentry-date{display:none}
+ .journal input.note-title{font-size:20px}
+ .journal .save-status{flex-basis:100%;order:3}
+}
