@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mercadores (`feature/character-sheet`)
+- Mestre: aba **MERCADORES** monta lojas (imagem, fala, itens, preço, estoque, % pago na venda), abre uma por vez e mostra o movimento.
+- Jogador: com a loja aberta surge a aba **MERCADOR** (em até 5 s), para comprar com o ouro e vender da mochila; o que é vendido vai para a prateleira.
+- Back: `/merchants`, tabelas novas (`merchant`, `merchant_item`, `merchant_trade`, criadas pelo `ddl-auto`). Testes: `MerchantControllerTests`; conferido no sandbox.
+
 ## 2026-11-02 — Jogador de teste do mestre e card de novo jogador (`feature/character-sheet`)
 - Mestre: botão **TESTAR COMO JOGADOR** abre a ficha/criação da conta `teste` (sessão própria, volta ao painel pelo botão de sair). Seleção: card **+ NOVO JOGADOR** (pede a senha do mestre) cria contas novas, que aparecem como painéis com retrato gerado.
 - Back: `POST /auth/test-player`, `GET|POST /auth/players`, coluna `account.custom`.

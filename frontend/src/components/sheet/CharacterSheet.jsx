@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { applyLevelUp, castSpell, fetchConditions, setDeathSaves as setDeathSavesApi, chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, chooseForm as chooseFormApi, toggleEffect as toggleEffectApi, consumeItem, fetchPreparation, fetchSheet, previewLevelUp, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
+import { buyFromMerchant, fetchActiveMerchant, pingMerchant, sellToMerchant } from '../../api/merchants.js'
 import { deathSaveResult, rollCheck, rollD20, rollDice } from '../../data/rules.js'
 import SheetHero from './SheetHero.jsx'
 import PrepareSpells from './PrepareSpells.jsx'
@@ -11,6 +12,7 @@ import Inventory from './Inventory.jsx'
 import Purse from './Purse.jsx'
 import DocumentsTab from './DocumentsTab.jsx'
 import NotesTab from './NotesTab.jsx'
+import MerchantTab from './MerchantTab.jsx'
 import BookTab from './BookTab.jsx'
 import DiceRoll from './DiceRoll.jsx'
 import TabBar from './TabBar.jsx'
@@ -22,6 +24,8 @@ import '../../styles/sheet.css'
 
 const MAX_LOG = 8
 const PENDING_POLL = 10000
+const MERCHANT_POLL = 5000
+const MERCHANT_TAB = { id: 'merchant', label: 'MERCADOR', glow: true }
 const TABS = [
   { id: 'sheet', label: 'FICHA' },
   { id: 'abilities', label: 'MAGIAS' },
@@ -132,6 +136,71 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const spendInspirationNow = useCallback(() => {
     spendInspiration(token).then(sheet => { putSheet(sheet); setToast('Inspiração gasta.') }).catch(fail)
   }, [token, fail, putSheet])
+
+  // Mercador aberto pelo mestre: a cada poucos segundos (com a aba visível) o ping diz se abriu, fechou ou mudou;
+  // só então a loja, que traz a imagem, é buscada de novo. known: id e revisão do que está na tela (undefined = 1ª vez).
+  const [merchant, setMerchant] = useState(null)
+  const known = useRef(undefined)
+  const hasSheet = state.status === 'ready'
+  const putMerchant = useCallback(m => {
+    known.current = { id: m.id, revision: m.revision }
+    setMerchant(m)
+  }, [])
+  useEffect(() => {
+    if (!hasSheet) return undefined
+    const check = () => {
+      if (document.hidden) return
+      pingMerchant(token)
+        .then(ping => {
+          const before = known.current
+          if (ping.id == null) {
+            known.current = null
+            setMerchant(null)
+            setTab(t => (t === 'merchant' ? 'inventory' : t))
+            if (before) setToast('O mercador fechou a loja.')
+          } else if (before?.id !== ping.id || before?.revision !== ping.revision) {
+            fetchActiveMerchant(token)
+              .then(m => {
+                putMerchant(m)
+                if (before !== undefined && before?.id !== m.id) setToast(m.name + ' abriu a loja! Veja a aba MERCADOR.')
+              })
+              .catch(() => {})
+          }
+        })
+        .catch(() => {})
+    }
+    check()
+    const t = setInterval(check, MERCHANT_POLL)
+    return () => clearInterval(t)
+  }, [token, hasSheet, putMerchant])
+
+  // Ao entrar na loja, ouro e mochila vêm atualizados (o mestre pode ter mexido) e, com eles, as ofertas.
+  useEffect(() => {
+    if (tab !== 'merchant') return
+    fetchSheet(token).then(putSheet).catch(() => {})
+    fetchActiveMerchant(token).then(putMerchant).catch(() => {})
+  }, [token, tab, putSheet, putMerchant])
+
+  const trade = useCallback((call, done) => {
+    setBusy(true)
+    return call()
+      .then(({ merchant: m, sheet }) => {
+        putMerchant(m)
+        putSheet(sheet)
+        setToast(done)
+      })
+      .catch(err => {
+        fail(err)
+        // Recusado (esgotou, o preço mudou): mostra a loja como está agora.
+        fetchActiveMerchant(token).then(putMerchant).catch(() => {})
+        throw err
+      })
+      .finally(() => setBusy(false))
+  }, [token, fail, putSheet, putMerchant])
+  const buy = useCallback((line, quantity) => trade(() => buyFromMerchant(token, line.id, quantity, line.price),
+    'Comprou ' + (quantity > 1 ? quantity + '× ' : '') + line.name + '.'), [token, trade])
+  const sell = useCallback((item, quantity, unitValue) => trade(() => sellToMerchant(token, item.id, quantity, unitValue),
+    'Vendeu ' + (quantity > 1 ? quantity + '× ' : '') + item.name + ' por ' + unitValue * quantity + ' PO.'), [token, trade])
 
   // Forma temporária: o back devolve a ficha inteira (atributos, deslocamento e tamanho mudam).
   const chooseForm = useCallback(name => {
@@ -363,7 +432,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             <span>ROLAR D20{MODE_SHORT[mode] && <i className={'play-mode ' + mode}>{MODE_SHORT[mode]}</i>}</span>
           </button>
         </div>
-        <TabBar tabs={TABS} active={tab} onChange={t => { setLeveling(false); setTab(t) }} badges={badges} alertId="documents" label="Seções" />
+        <TabBar tabs={merchant ? [...TABS.slice(0, 3), MERCHANT_TAB, ...TABS.slice(3)] : TABS} active={tab} onChange={t => { setLeveling(false); setTab(t) }} badges={badges} alertId="documents" label="Seções" />
         <div className="topbar-right">
           {canLevel && !leveling && (
             <button className="lvl-ready" type="button" onClick={openLevelUp} title={'O mestre liberou o ' + (sheet.level + 1) + 'º nível'}>
@@ -454,6 +523,9 @@ export default function CharacterSheet({ character, session, notice, onChangePas
                   onRollDice={rollExpr} onCast={cast} busy={busy} prepares={prepares} />
               )}
               {tab === 'inventory' && <Inventory items={state.sheet.inventory} strength={sheet.str} onUse={consumeOne} />}
+              {tab === 'merchant' && merchant && (
+                <MerchantTab merchant={merchant} inventory={state.sheet.inventory} gold={sheet.gold} busy={busy} onBuy={buy} onSell={sell} />
+              )}
               {tab === 'documents' && (
                 <DocumentsTab documents={documents} selectedId={docId} onSelect={setDocId} onOpen={markRead} />
               )}

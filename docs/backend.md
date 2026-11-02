@@ -10,7 +10,7 @@ Leia este arquivo e **só** o subdocumento da área da tarefa:
 |---|---|
 | [backend-api.md](backend-api.md) | Tabela de todos os endpoints (rota, corpo, resposta, erros) |
 | [backend-criacao.md](backend-criacao.md) | Criação de personagem, assistente `/creation`, catálogos JSON, subida de nível, magias preparadas, regras da mesa |
-| [backend-ficha.md](backend-ficha.md) | CA e escudos, `GET /character/me`, inventário, habilidades, documentos, anotações, modelo de dados e enums |
+| [backend-ficha.md](backend-ficha.md) | CA e escudos, `GET /character/me`, inventário, mercadores, habilidades, documentos, anotações, modelo de dados e enums |
 
 ## Arquitetura
 
@@ -27,6 +27,7 @@ model/        entidades JPA
   auth/       Account, AuthToken (login)
   notes/      PlayerNote (anotações do jogador)
   documents/  GameDocument, DocumentRead (documentos do mestre)
+  merchant/   Merchant, MerchantItem, MerchantTrade (lojas do mestre)
 record/       DTOs de entrada e saída (Java records)
 enums/        enums de domínio (regras do sistema Runarcana)
 config/       beans de configuração (AuthConfig: BCrypt + seed das contas)

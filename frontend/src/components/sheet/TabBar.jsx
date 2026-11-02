@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 
 // Abas da barra do topo com o sublinhado dourado deslizando até a aba ativa (como a navegação do cliente).
-// tabs: [{ id, label }]; badges: { [id]: número } (opcional); alertId: aba cujo contador é alerta (vermelho).
+// tabs: [{ id, label, glow }] (glow: aba que chama atenção); badges: { [id]: número } (opcional); alertId: aba cujo contador é alerta (vermelho).
 export default function TabBar({ tabs, active, onChange, badges = {}, alertId, label }) {
   const nav = useRef()
   const [ink, setInk] = useState(null)
@@ -26,7 +26,7 @@ export default function TabBar({ tabs, active, onChange, badges = {}, alertId, l
           key={t.id}
           type="button"
           role="tab"
-          className={'tab' + (active === t.id ? ' on' : '')}
+          className={'tab' + (active === t.id ? ' on' : '') + (t.glow ? ' glow' : '')}
           aria-selected={active === t.id}
           onClick={() => onChange(t.id)}
         >

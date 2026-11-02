@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 // Inventário, ouro e inspiração da ficha pronta (decisão da mesa): o mestre dá e tira itens e ouro e liga a inspiração;
-// o jogador só gasta (1 de um consumível, ouro, a inspiração acesa).
+// o jogador só gasta (1 de um consumível, ouro, a inspiração acesa). Comprar e vender é com o MerchantService.
 @Service
 public class InventoryService {
 
@@ -70,6 +70,17 @@ public class InventoryService {
     @Transactional
     public MasterInventory addCustom(long characterId, CustomItem request) {
         Character c = character(characterId);
+        Item item = customItem(request);
+        PlayerItems entry = new PlayerItems();
+        entry.setCharacter(c);
+        entry.setItem(item);
+        entry.setQuantity(quantity(request.quantity()));
+        inventory.save(entry);
+        return view(c);
+    }
+
+    // Confere e salva a linha de Item de um item livre.
+    Item customItem(CustomItem request) {
         if (request == null || request.name() == null || request.name().isBlank()) throw ApiException.badRequest("Dê um nome ao item.");
         if (request.name().trim().length() > 120) throw ApiException.badRequest("O nome do item vai até 120 caracteres.");
         if (request.weight() != null && request.weight() < 0) throw ApiException.badRequest("O peso não pode ser negativo.");
@@ -82,12 +93,7 @@ public class InventoryService {
         item.setWeight(request.weight());
         item.setPrice(request.price());
         item.setRarity(request.rarity() == null ? Rarity.Common : request.rarity());
-        PlayerItems entry = new PlayerItems();
-        entry.setCharacter(c);
-        entry.setItem(items.save(item));
-        entry.setQuantity(quantity(request.quantity()));
-        inventory.save(entry);
-        return view(c);
+        return items.save(item);
     }
 
     // Quantidade nova; 0 tira o item da ficha.
@@ -173,7 +179,7 @@ public class InventoryService {
     }
 
     // Tira a linha e, se era a armadura ou o escudo em uso, a ficha volta ao padrão (a maior CA, o maior escudo).
-    private void remove(Character c, PlayerItems entry) {
+    void remove(Character c, PlayerItems entry) {
         String key = "ITEM:" + entry.getId();
         if (key.equals(c.getDefense())) c.setDefense(null);
         if (key.equals(c.getShield())) c.setShield(null);

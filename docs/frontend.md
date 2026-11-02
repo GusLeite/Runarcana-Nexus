@@ -24,6 +24,7 @@ frontend/
     ├── api/character.js       ficha do logado, usos de habilidade e descanso
     ├── api/documents.js       documentos do mestre (listar, marcar lido)
     ├── api/notes.js           anotações (listar, criar, salvar, apagar)
+    ├── api/merchants.js       mercadores (mestre monta e abre; jogador compra e vende)
     ├── data/characters.js     lista de personagens + imports das artes
     ├── data/rules.js (+ .test.js)  rótulos em PT, formatação e regras derivadas dos atributos
     ├── components/
@@ -34,9 +35,9 @@ frontend/
     │   ├── effects/Embers.jsx brasas e calor (Gaudron)
     │   ├── effects/BloodMagic.jsx magia de sangue (Rudo)
     │   └── sheet/             ficha pós-login: CharacterSheet (abas e estado), SheetHero, OverviewTab, AttributeGrid,
-    │                          SkillList, AbilitiesTab, AbilityIcon, Inventory, DocumentsTab, NotesTab, DiceRoll,
+    │                          SkillList, AbilitiesTab, AbilityIcon, Inventory, MerchantTab, DocumentsTab, NotesTab, DiceRoll,
     │                          TabBar (abas com sublinhado deslizante), Num (número que conta), icons
-    │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities, MasterSheets, MasterRules
+    │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities, MasterSheets, MasterMerchants, MasterRules
     ├── hooks/useCountUp.js (+ .test.js)  número que conta até o valor; prefersReducedMotion
     ├── utils/motion.js        replay (reinicia animação de classe) e afterLeave (espera a saída)
     ├── utils/placeholderArt.js   gera um retrato SVG para quem ainda não tem arte
@@ -44,6 +45,7 @@ frontend/
     ├── styles/global.css      visual da seleção e do login (tokens em :root)
     ├── styles/sheet.css       visual da ficha
     ├── styles/master.css      botão, portal e painel do mestre
+    ├── styles/merchant.css    loja do mercador (ficha) e aba do mestre
     ├── styles/motion.css      animações de polimento (importado por último no main.jsx)
     ├── api/master.js          rotas do mestre (personagens, habilidades, documentos, destinatários, liberar a subida de nível)
     ├── validation.js (+ .test.js)

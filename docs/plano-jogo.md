@@ -4,7 +4,7 @@ Roteiro das próximas entregas, na ordem em que serão feitas. O foco é a **mes
 
 Cada etapa é uma entrega própria: código + testes + docs (subdoc da área em `backend-*.md`/`frontend-*.md` + `changelog.md`) no mesmo commit, como manda o `CLAUDE.md`. Ao concluir uma etapa, marque-a aqui como **feita** (com a data) e tire dela as pendências dos outros docs.
 
-Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criacao.md), Decisões da mesa): quem altera a ficha pronta é o **mestre**; o jogador altera só os próprios **PV**, os **usos de habilidade**, as **anotações** e as **preparadas** (no descanso longo). Decididas em 2026-10-27 para este plano: o jogador também **gasta** consumíveis e ouro e marca os próprios **testes contra a morte**; inspiração é **sim/não**; condições e exaustão ficam com o mestre.
+Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criacao.md), Decisões da mesa): quem altera a ficha pronta é o **mestre**; o jogador altera só os próprios **PV**, os **usos de habilidade**, as **anotações** e as **preparadas** (no descanso longo). Decididas em 2026-10-27 para este plano: o jogador também **gasta** consumíveis e ouro (e compra e vende em um mercador aberto pelo mestre, desde 2026-11-02) e marca os próprios **testes contra a morte**; inspiração é **sim/não**; condições e exaustão ficam com o mestre.
 
 ## Estado atual (2026-10-27)
 

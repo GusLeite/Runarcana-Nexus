@@ -77,7 +77,7 @@ public class StartingEquipmentService {
     }
 
     // Item que a ficha já tem soma na mesma linha (o mestre dando mais tochas); senão, linha nova.
-    private void add(Character character, Item item, int quantity) {
+    void add(Character character, Item item, int quantity) {
         PlayerItems entry = inventory.findFirstByCharacterAndItem(character, item).orElseGet(() -> {
             PlayerItems e = new PlayerItems();
             e.setCharacter(character);

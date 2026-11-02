@@ -60,6 +60,15 @@
 
 Por conta (não por personagem): `title`, `body` (até 20.000 caracteres), `pinned`, `createdAt`, `updatedAt`. Nota de outra conta responde 404. `pinned` é `Boolean` no DTO porque o Jackson 3 (Boot 4) recusa campo primitivo ausente no JSON.
 
+## Mercadores (`Merchant`, `MerchantService`)
+
+O mestre monta lojas (`Merchant`: nome, fala, imagem, `buyRate`) com a prateleira em `MerchantItem` (preço e estoque próprios, nulo = sem limite) e abre **uma por vez**. Decisões:
+- **Entrega**: a linha aponta para um `Item` (item livre ou algo vendido por jogador) ou só para o `catalogId` (usa `StartingEquipmentService.give`, que abre conjuntos). Catálogo entra por padrão com o preço do livro arredondado para cima (mínimo 1 PO, já que o ouro é inteiro).
+- **Venda**: a oferta é `buyRate`% (para baixo) do preço da prateleira, se ele tem o item, senão do `Item.price`; assim nunca paga mais do que cobra. Oferta 0 = não compra. Vender a armadura/escudo em uso volta a defesa ao padrão.
+- **Revenda**: o que o jogador vende vai para a prateleira, ao preço normal (linha sem limite continua sem limite).
+- **Concorrência**: comprar e vender travam a linha do mercador (`PESSIMISTIC_WRITE`) e sobem `revision`, que a ficha usa para saber quando buscar a loja de novo. O cliente manda o valor que viu: se mudou, nada é cobrado.
+- **Movimento**: cada negociação fica em `MerchantTrade` para o mestre.
+
 ## Modelo de dados
 
 ### Itens (`model/items`)

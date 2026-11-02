@@ -124,7 +124,7 @@ function ItemDetail({ item, onUse }) {
 }
 
 // Ícones desenhados em SVG enquanto os itens não têm arte própria.
-function ItemIcon({ kind }) {
+export function ItemIcon({ kind }) {
   switch (kind) {
     case 'WEAPON':
       return <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M24 4h4v4L13 23l-4-4Z" /><path d="M8 18l6 6M6 22l4 4M5 27l2-2" /></svg>

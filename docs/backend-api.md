@@ -30,6 +30,16 @@
 | POST | `/character/me/items/{entryId}/use` | – (Bearer) | Jogador gasta 1 de um consumível (a última unidade tira a linha). 400 se não for consumível. Devolve a ficha (`CharacterSheetResponse`) |
 | POST | `/character/me/gold/spend` | `{ amount }` (Bearer) | Jogador gasta ouro (de 1 até o que tem). Devolve a ficha |
 | POST | `/character/me/inspiration/use` | – (Bearer) | Jogador gasta a inspiração acesa. 400 sem inspiração. Devolve a ficha |
+| GET · POST | `/merchants` | `{ name, greeting, image, buyRate }` (Bearer **mestre**) | Lista os mercadores / cria (201). `image`: data URL (PNG, JPEG, WebP, GIF) ou link http(s); `buyRate` 0–100 (padrão 50) |
+| PUT · DELETE | `/merchants/{id}` | igual ao POST / – (Bearer **mestre**) | Edita / apaga com o movimento (204) |
+| POST | `/merchants/{id}/open` · `/close` | – (Bearer **mestre**) | Abre (fecha qualquer outro) ou fecha a loja |
+| POST | `/merchants/{id}/items` | `{ catalogId \| custom: CustomItem, price?, stock? }` (Bearer **mestre**) | Põe na prateleira. Preço nulo = do catálogo; estoque nulo = sem limite. 400 se o item do catálogo já está lá |
+| PATCH · DELETE | `/merchants/{id}/items/{lineId}` | `{ price, stock }` / – (Bearer **mestre**) | Muda preço e estoque / tira da prateleira |
+| GET | `/merchants/{id}/trades` | – (Bearer **mestre**) | Últimas 50 negociações, mais novas primeiro |
+| GET | `/merchants/active/ping` | – (Bearer) | `{ id, name, revision }` sem imagem (`id` nulo = nada aberto) |
+| GET | `/merchants/active` | – (Bearer) | A loja aberta, com `offers: [{ entryId, unitValue }]` para o inventário de quem pede. 404 se nada aberto |
+| POST | `/merchants/active/buy` | `{ lineId, quantity, price? }` (Bearer) | Compra: tira ouro e estoque, dá o item. 400 se faltar ouro/estoque ou `price` for diferente do atual. Devolve `{ merchant, sheet }` |
+| POST | `/merchants/active/sell` | `{ entryId, quantity, unitValue? }` (Bearer) | Vende: dá ouro, tira o item e põe na prateleira. 400 sem oferta, quantidade a mais ou `unitValue` diferente; 404 se não é dele. Devolve `{ merchant, sheet }` |
 | POST | `/character/me/abilities/{abilityId}/cast` | `{ level? }` (Bearer) | Jogador conjura a magia no nível (sem `level` = o da magia): truque não gasta; com usos próprios, no nível dela, gasta 1 uso; senão desconta a Mana do nível de "Pontos de Mana". Devolve `{ level, manaCost, usedUse, abilities }`. 400 se não for magia, não estiver preparada, abaixo do nível da magia, acima do nível máximo da ficha ou faltar Mana |
 | PATCH | `/character/me/death-saves` | `{ successes, failures }` (Bearer) | Jogador marca os próprios testes contra a morte (0–3 cada). Devolve `CharacterResponse`. 400 fora dos limites |
 | PATCH | `/character/{id}/hp` | `{ currentHp?, tempHp?, maxHpBonus? }` (mestre) | Mestre ajusta os PV de qualquer ficha e o bônus nos PV máximos (`maxHpBonus`, pode ser negativo) (mesmos limites do jogador; PV > 0 zera os testes contra a morte). 403 para jogador |
