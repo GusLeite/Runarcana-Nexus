@@ -42,20 +42,20 @@
 .ohall{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain;background:radial-gradient(ellipse at 50% 0,#12233d 0,var(--bg) 60%);animation:ostage-in .4s ease}
 .ohall-title{position:absolute;top:0;left:0;right:0;z-index:4;margin:0;padding:18px 0 40px;text-align:center;font-family:'Cinzel',Georgia,serif;font-size:clamp(15px,1.6vw,22px);font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-hi);text-shadow:0 2px 14px #000;pointer-events:none;background:linear-gradient(rgba(5,11,20,.85),transparent)}
 .origin-row{flex:1 0 auto;display:flex;min-height:max(700px,calc(100dvh - 110px))}
-.ocard{position:relative;flex:1 1 0;min-width:0;overflow:hidden;padding:0;border:0;border-left:1px solid rgba(200,162,74,.25);background:#03070d;color:var(--text);font:inherit;cursor:pointer;
+.ocard{--hot-w:38vw;position:relative;flex:1 1 0;min-width:0;overflow:hidden;padding:0;border:0;border-left:1px solid rgba(200,162,74,.25);background:#03070d;color:var(--text);font:inherit;cursor:pointer;
   transition:flex 1.1s cubic-bezier(.65,0,.35,1),opacity .25s;animation:rise-in .6s cubic-bezier(.22,1,.36,1) backwards;animation-delay:calc(var(--n,0)*55ms)}
 .ocard:first-child{border-left:0}
 .ocard .oart{filter:saturate(.5) brightness(.6);transform:scale(1.02);transition:filter 1.1s ease,transform 1.5s cubic-bezier(.65,0,.35,1)}
 /* O sigilo fica na parte do painel que cabe na primeira tela, acima do texto. */
 .ocard .oart-holder{inset:0 0 auto 0;height:calc(100dvh - 345px)}
 .ocard .oart-sigil{margin-bottom:0}
-.ocard-shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(5,11,20,.96) 0,rgba(5,11,20,.1) 55%,rgba(5,11,20,.5) 100%)}
-.ocard::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;box-shadow:inset 0 0 0 2px var(--gold),inset 0 0 90px hsla(var(--h),90%,60%,.5);transition:opacity .9s ease}
-.ocard::before{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;z-index:2;pointer-events:none;opacity:0;transform:skewX(-12deg);background:linear-gradient(105deg,transparent,hsla(var(--h),100%,85%,.3),transparent)}
+.ocard-shade{position:absolute;top:0;bottom:0;left:0;width:max(100%,var(--hot-w));background:linear-gradient(to top,rgba(5,11,20,.96) 0,rgba(5,11,20,.1) 55%,rgba(5,11,20,.5) 100%)}
+.ocard::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;box-shadow:inset 0 0 0 2px var(--gold);background:linear-gradient(to right,hsla(var(--h),90%,60%,.28),transparent 90px),linear-gradient(to left,hsla(var(--h),90%,60%,.28),transparent 90px),linear-gradient(to bottom,hsla(var(--h),90%,60%,.28),transparent 90px),linear-gradient(to top,hsla(var(--h),90%,60%,.28),transparent 90px);transition:opacity .9s ease}
+.ocard::before{content:"";position:absolute;top:0;bottom:0;left:0;width:26vw;z-index:2;pointer-events:none;opacity:0;transform:skewX(-12deg);background:linear-gradient(105deg,transparent,hsla(var(--h),100%,85%,.3),transparent)}
 .ocard-cap{position:absolute;left:0;right:0;top:calc(100dvh - 345px);z-index:1;display:flex;flex-direction:column;align-items:center;padding:0 10px;text-align:center;transition:transform .9s cubic-bezier(.22,1,.36,1)}
 .ocard-kicker{min-height:16px;font-size:13px;letter-spacing:.12em;color:hsl(var(--h) 85% 76%);opacity:0;transform:translateY(8px);transition:opacity .7s .15s,transform .8s .15s cubic-bezier(.22,1,.36,1)}
-.ocard-name{max-width:100%;margin-top:6px;font-family:'Cinzel',Georgia,serif;font-size:clamp(10px,.85vw,14px);font-weight:700;letter-spacing:.06em;line-height:1.2;text-transform:uppercase;overflow-wrap:normal;color:var(--text);transition:color .4s,font-size .6s}
-.ocard-rule{width:0;height:2px;margin-top:12px;background:linear-gradient(90deg,transparent,var(--gold-hi),transparent);transition:width 1s .2s cubic-bezier(.22,1,.36,1)}
+.ocard-name{max-width:100%;margin-top:6px;font-family:'Cinzel',Georgia,serif;font-size:clamp(10px,.85vw,14px);font-weight:700;letter-spacing:.06em;line-height:1.2;text-transform:uppercase;overflow-wrap:normal;color:var(--text);transition:color .4s}
+.ocard-rule{width:80%;height:2px;margin-top:12px;transform:scaleX(0);background:linear-gradient(90deg,transparent,var(--gold-hi),transparent);transition:transform 1s .2s cubic-bezier(.22,1,.36,1)}
 .ocard-tag{width:min(300px,88%);max-height:0;overflow:hidden;margin-top:0;font-size:15px;line-height:1.5;color:var(--text);opacity:0;transition:opacity .8s .3s,max-height .8s,margin .8s}
 .ocard:hover,.ocard:focus-visible{flex:3.4;outline:none}
 .origin-row:has(.ocard:hover) .ocard:not(:hover) .ocard-name,.origin-row:has(.ocard:focus-visible) .ocard:not(:focus-visible) .ocard-name{font-size:10px;letter-spacing:.02em}
@@ -68,8 +68,9 @@
 .ocard:hover::before,.ocard:focus-visible::before{animation:sweep 1.5s cubic-bezier(.22,1,.36,1) forwards}
 .ocard:hover .ocard-cap,.ocard:focus-visible .ocard-cap{transform:translateY(-10px)}
 .ocard:hover .ocard-kicker,.ocard:focus-visible .ocard-kicker,.ocard.on .ocard-kicker{opacity:1;transform:none}
-.ocard:hover .ocard-name,.ocard:focus-visible .ocard-name{color:var(--gold-hi);font-size:clamp(20px,2.2vw,30px);letter-spacing:.16em}
-.ocard:hover .ocard-rule,.ocard:focus-visible .ocard-rule{width:80%}
+.ocard:hover .ocard-name,.ocard:focus-visible .ocard-name{color:var(--gold-hi);font-size:clamp(20px,2.2vw,30px);letter-spacing:.16em;animation:ocard-name-in .5s ease}
+@keyframes ocard-name-in{from{opacity:0;transform:translateY(6px)}}
+.ocard:hover .ocard-rule,.ocard:focus-visible .ocard-rule{transform:none}
 .ocard:hover .ocard-tag,.ocard:focus-visible .ocard-tag{max-height:8em;margin-top:12px;opacity:1}
 .ocard:focus-visible::after{box-shadow:inset 0 0 0 3px var(--teal)}
 .ocard.on::after{opacity:1}
@@ -85,7 +86,7 @@
 .ohall-bar .rhall-status{flex:1;text-align:center}
 
 /* ---------- destaque ---------- */
-.ostage{position:fixed;inset:0;z-index:300;background:radial-gradient(ellipse at 50% 50%,hsla(var(--h),60%,18%,.62),rgba(2,5,10,.93) 70%);backdrop-filter:blur(5px);animation:ostage-in .45s ease}
+.ostage{position:fixed;inset:0;z-index:300;background:radial-gradient(ellipse at 50% 50%,hsla(var(--h),60%,14%,.84),rgba(2,5,10,.95) 70%);animation:ostage-in .45s ease}
 @keyframes ostage-in{from{opacity:0}}
 .ostage.leaving-stage{opacity:0;transition:opacity .38s ease}
 .ostage-panel{position:fixed;inset:0;margin:auto;width:calc(100vw - 28px);height:calc(100dvh - 28px);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);overflow:hidden;

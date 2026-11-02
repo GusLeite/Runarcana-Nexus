@@ -3,9 +3,9 @@
 // aos 0,5 s (clarão, ondas de choque, tremor, rachaduras de lava, pedras e fagulhas) e a arena responde: a torcida
 // grita o nome dele em três batidas, as tochas chamejam e caem panos vermelhos. Tudo some em ~3,6 s.
 
-const SPARKS = Array.from({ length: 24 }, (_, i) => ({
-  '--x': (i * 29 % 100) + '%',
-  '--s': (3 + i * 5 % 4) + 'px',
+const SPARKS = Array.from({ length: 12 }, (_, i) => ({
+  '--x': (i * 59 % 100) + '%',
+  '--s': (8 + i * 5 % 6) + 'px',
   '--d': (3.5 + i * 7 % 4) + 's',
   '--dl': '-' + (i * 1.1 % 6).toFixed(1) + 's',
   '--dx': ((i % 2 ? 1 : -1) * (10 + i * 11 % 50)) + 'px',
@@ -44,7 +44,7 @@ const CRACK_MAIN = mains.join(' ')
 const CRACK_BRANCH = branches.join(' ')
 
 // Pedras e fagulhas lançadas pelo golpe: dx na horizontal; up e fall na vertical.
-const ROCKS = Array.from({ length: 14 }, (_, i) => ({
+const ROCKS = Array.from({ length: 8 }, (_, i) => ({
   '--dx': ((i % 2 ? 1 : -1) * (30 + rnd(i + 80) * 260)).toFixed(0) + 'px',
   '--up': (120 + rnd(i + 100) * 300).toFixed(0) + 'px',
   '--fall': (140 + rnd(i + 120) * 120).toFixed(0) + 'px',
@@ -52,18 +52,18 @@ const ROCKS = Array.from({ length: 14 }, (_, i) => ({
   '--s': (8 + rnd(i + 160) * 18).toFixed(0) + 'px',
   '--d': (1 + rnd(i + 180) * .6).toFixed(2) + 's',
 }))
-const SHOWER = Array.from({ length: 18 }, (_, i) => ({
+const SHOWER = Array.from({ length: 10 }, (_, i) => ({
   '--dx': ((i % 2 ? 1 : -1) * (20 + rnd(i + 200) * 320)).toFixed(0) + 'px',
   '--up': (160 + rnd(i + 220) * 460).toFixed(0) + 'px',
   '--fall': (60 + rnd(i + 240) * 120).toFixed(0) + 'px',
   '--r': '0deg',
-  '--s': (2 + rnd(i + 260) * 3).toFixed(1) + 'px',
+  '--s': (7 + rnd(i + 260) * 6).toFixed(1) + 'px',
   '--d': (.8 + rnd(i + 280) * .8).toFixed(2) + 's',
 }))
 
 // Panos vermelhos jogados das arquibancadas.
-const CLOTH = Array.from({ length: 10 }, (_, i) => ({
-  '--x': (4 + i * 37 % 92) + '%',
+const CLOTH = Array.from({ length: 6 }, (_, i) => ({
+  '--x': (6 + i * 53 % 88) + '%',
   '--w': (10 + rnd(i + 300) * 12).toFixed(0) + 'px',
   '--sway': ((i % 2 ? 1 : -1) * (20 + rnd(i + 320) * 60)).toFixed(0) + 'px',
   '--r': ((i % 2 ? 1 : -1) * (200 + rnd(i + 340) * 400)).toFixed(0) + 'deg',
@@ -83,8 +83,6 @@ export default function Embers() {
       <div className="gd-arena" aria-hidden="true">
         <span className="gd-dark" />
         <span className="gd-charge" />
-        <span className="gd-torch left" />
-        <span className="gd-torch right" />
         <span className="gd-glow" />
         <svg className="gd-cracks" viewBox="0 0 400 240">
           <path d={CRACK_MAIN} className="halo" />
@@ -96,7 +94,6 @@ export default function Embers() {
           <path d={CRACK_BRANCH} className="thin" />
         </svg>
         <span className="gd-dust" />
-        <span className="gd-dust d2" />
         <span className="gd-flash" />
         {ROCKS.map((style, i) => <i key={i} className={'gd-fly rock v' + i % 3} style={style}><b /></i>)}
         {SHOWER.map((style, i) => <i key={i} className="gd-fly spark" style={style}><b /></i>)}

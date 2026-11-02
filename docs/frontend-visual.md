@@ -17,12 +17,14 @@ Ficam quase todas em `styles/motion.css`, importado **por último** no `main.jsx
 
 ## Como a animação funciona
 
-`usePanelSprings` roda um loop de `requestAnimationFrame` que, para cada painel, simula três molas (rigidez `w = 4`, amortecimento crítico):
-- `g`: `flex-grow` (1 normal, 3.4 em hover, 0.65 nos vizinhos, 10 no selecionado, 0 nos que somem)
-- `t`: progresso visual 0→1, exposto como a variável CSS `--t`
-- `o`: opacidade
+Os painéis da seleção são animados só por transições do CSS, a partir das classes `.hot`, `.sel`, `.gone` e `.row.has-hot`; não há loop em JavaScript, e em repouso nada é recalculado. Com um painel aceso, os vídeos dos outros ficam pausados (`resting` no `CharacterPanel`).
 
-Os valores são escritos **direto no DOM** (`style.flexGrow`, `--t`, `opacity`) para não re-renderizar o React a cada frame. No CSS, zoom, saturação, brilho, legenda, linha e lore são `calc()` em cima de `--t`, por isso tudo anda no mesmo compasso. O hover tem um atraso de 90 ms (`App.jsx`) para o mouse poder atravessar a fileira sem acender todos os painéis.
+**Regras de desempenho** (valem para os painéis da seleção, as origens e as classes):
+- camadas pintadas não acompanham a largura do painel: `--hot-w` (64vw na seleção, 38vw nos salões) é a largura do painel aceso, e sombra, feixe, arena e efeitos têm esse tamanho fixo, para não serem repintados enquanto ele cresce;
+- brilho interno com gradientes, nunca `box-shadow` borrado em área grande; partículas com `radial-gradient`, sem sombra;
+- gradientes grandes e suaves em 1/4 do tamanho, ampliados com `scale(4)` e `will-change:transform`;
+- efeito fora da árvore (`display:none`) quando o painel não está aceso;
+- nos salões, só o vídeo do painel aceso toca, e o `FocusVideo` escreve a posição direto no DOM, sem render do React.
 
 ## Personagens e efeitos
 

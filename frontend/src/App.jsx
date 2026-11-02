@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { CHARACTERS } from './data/characters.js'
-import { usePanelSprings } from './hooks/usePanelSprings.js'
 import { fetchMe, loadSession, logout, saveSession } from './api/auth.js'
 import CharacterPanel from './components/CharacterPanel.jsx'
 import Separator from './components/Separator.jsx'
@@ -32,7 +31,6 @@ export default function App() {
   const [skipPassword, setSkipPassword] = useState(false)
   const [notice, setNotice] = useState(null)
   const hoverTimer = useRef()
-  const panels = usePanelSprings(CHARACTERS, hovered, selected)
 
   const updateSession = s => {
     setSession(s)
@@ -160,16 +158,16 @@ export default function App() {
           </button>
         )}
       </header>
-      <div className="row" onMouseLeave={leaveRow}>
+      <div className={'row' + (choosing && hovered !== null ? ' has-hot' : '')} onMouseLeave={leaveRow}>
         {CHARACTERS.map((c, i) => (
           <Fragment key={c.id}>
             {i > 0 && <Separator hidden={!choosing} lit={choosing && (hovered === i - 1 || hovered === i)} />}
             <CharacterPanel
-              ref={el => { panels.current[i] = el }}
               character={c}
               hot={choosing && hovered === i}
               selected={selected === i}
               gone={!choosing && selected !== i}
+              resting={choosing && hovered !== null && hovered !== i}
               focusable={choosing}
               onHover={() => enter(i)}
               onFocus={() => setHovered(i)}

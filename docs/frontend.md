@@ -37,7 +37,6 @@ frontend/
     │                          SkillList, AbilitiesTab, AbilityIcon, Inventory, DocumentsTab, NotesTab, DiceRoll,
     │                          TabBar (abas com sublinhado deslizante), Num (número que conta), icons
     │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities, MasterSheets, MasterRules
-    ├── hooks/usePanelSprings.js  animação por mola (requestAnimationFrame)
     ├── hooks/useCountUp.js (+ .test.js)  número que conta até o valor; prefersReducedMotion
     ├── utils/motion.js        replay (reinicia animação de classe) e afterLeave (espera a saída)
     ├── utils/placeholderArt.js   gera um retrato SVG para quem ainda não tem arte
@@ -67,6 +66,8 @@ A tela foi prototipada num `index.html` único (React via CDN, imagens e vídeo 
 
 ## Pendências / problemas conhecidos
 
+- Martelada do Gaudron: no painel do Claude, o primeiro quadro ainda atrasa 1 s (a thread principal fica livre; depois disso roda a mais de 90 fps). Falta confirmar num navegador comum se isso também acontece lá.
+- Vídeos da seleção (`assets/characters/`, 7–9 MB cada, 1080p): os quatro tocam juntos em repouso; recomprimir em 720p reduziria o custo de decodificação (precisa de ffmpeg).
 - As 29 linhagens têm imagem. Vale trocar a do fulgor, que é pequena (507×594). Linhagem nova no catálogo: basta soltar `<id>.webp` em `src/assets/lineages/` (sem imagem, o cartão mostra o espaço provisório).
 - Vídeos das origens (`assets/origins/`, ~12 MB no total): para trocar um, corte o original num loop de até 10 s e recomprima, por exemplo `ffmpeg -ss INICIO -t DURACAO -i orig.mp4 -ss FIM_DO_TRECHO -t 1 -i orig.mp4 -filter_complex "[0:v]scale=-2:'min(1080,ih)'[a];[1:v]scale=-2:'min(1080,ih)',format=yuva420p,fade=t=out:st=0:d=1:alpha=1[b];[a][b]overlay=0:0:eof_action=pass,format=yuv420p[v]" -map "[v]" -an -c:v libx264 -preset slow -crf 24 -movflags +faststart saida.mp4` (o segundo `-ss` é INICIO+DURACAO: o último segundo é fundido com o começo para o loop emendar). O ffmpeg não está instalado na máquina; foi usado o pacote npm `ffmpeg-static` numa pasta temporária.
 - Vídeos das classes (`assets/classes/`, ~20 MB no total): mesmo processo dos das origens; os originais (1080p, 14–19 Mbps) foram recomprimidos com `libx264 -crf 25`, 30 fps, sem áudio; o do Xamã (22,8 s) foi cortado em 10 s com o último segundo fundido ao começo.

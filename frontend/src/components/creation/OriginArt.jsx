@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import LivingArt from './LivingArt.jsx'
 
 // Traços do sigilo provisório de cada origem (viewBox 100×100).
@@ -32,13 +32,14 @@ const playMuted = video => {
   if (p) p.catch(() => {})
 }
 
+const FOCUS_VIDEO_STYLE = { right: 'auto', bottom: 'auto', objectFit: 'fill' }
+
 // Vídeo que mantém o personagem no centro do painel. Em vez de object-fit, a posição e o tamanho são calculados a
 // partir do formato do painel e de onde o personagem está no quadro (focus/focusY, 0 a 1). Por padrão o vídeo cobre o
 // painel (cortando as laterais); com show (fração mínima da largura do quadro que deve aparecer) ele encolhe o quanto
 // precisar, encosta no topo e a base esmaece no escuro.
 function FocusVideo({ clip }) {
   const ref = useRef()
-  const [box, setBox] = useState({ left: 0, top: 0, width: '100%', height: '100%' })
   useLayoutEffect(() => {
     const video = ref.current
     const holder = video.parentElement
@@ -57,13 +58,12 @@ function FocusVideo({ clip }) {
       const focus = (clip.focusNarrow ?? clip.focus ?? 0.5) + ((clip.focus ?? 0.5) - (clip.focusNarrow ?? clip.focus ?? 0.5)) * wide
       const height = width / aspect
       const clamp = (v, min, max) => Math.min(max, Math.max(min, v))
-      setBox({
-        left: clamp(bw / 2 - focus * width, bw - width, 0),
-        top: height > bh ? clamp(bh / 2 - (clip.focusY ?? 0.5) * height, bh - height, 0) : 0,
-        width,
-        height,
-        fades: height < bh - 1,
-      })
+      // Direto no DOM: o ResizeObserver dispara a cada quadro da expansão do painel, e isso não pode virar um render do React.
+      video.style.left = clamp(bw / 2 - focus * width, bw - width, 0) + 'px'
+      video.style.top = (height > bh ? clamp(bh / 2 - (clip.focusY ?? 0.5) * height, bh - height, 0) : 0) + 'px'
+      video.style.width = width + 'px'
+      video.style.height = height + 'px'
+      video.style.maskImage = height < bh - 1 ? 'linear-gradient(#000 72%, transparent)' : ''
     }
     const begin = () => {
       if (clip.start) video.currentTime = clip.start
@@ -73,7 +73,23 @@ function FocusVideo({ clip }) {
     video.addEventListener('loadedmetadata', begin)
     const watch = new ResizeObserver(place)
     watch.observe(holder)
+    // No salão só toca o vídeo do painel aceso; os outros ficam no quadro parado (seriam dez vídeos decodificando juntos).
+    const card = video.closest('.ocard')
+    const play = () => playMuted(video)
+    const pause = () => video.pause()
+    if (card) {
+      card.addEventListener('mouseenter', play)
+      card.addEventListener('mouseleave', pause)
+      card.addEventListener('focusin', play)
+      card.addEventListener('focusout', pause)
+    } else play()
     return () => {
+      if (card) {
+        card.removeEventListener('mouseenter', play)
+        card.removeEventListener('mouseleave', pause)
+        card.removeEventListener('focusin', play)
+        card.removeEventListener('focusout', pause)
+      }
       video.removeEventListener('loadedmetadata', place)
       video.removeEventListener('loadedmetadata', begin)
       watch.disconnect()
@@ -85,10 +101,7 @@ function FocusVideo({ clip }) {
     e.currentTarget.currentTime = clip.start ?? 0
     playMuted(e.currentTarget)
   }
-  const { fades, ...place } = box
-  const style = { ...place, right: 'auto', bottom: 'auto', objectFit: 'fill' }
-  if (fades) style.maskImage = 'linear-gradient(#000 72%, transparent)'
-  return <video className="oart-img oart-clip" src={clip.src} autoPlay muted playsInline loop={!clip.start && !clip.end} onEnded={restart} onTimeUpdate={e => { if (clip.end && e.currentTarget.currentTime >= clip.end) restart(e) }} ref={el => { ref.current = el; playMuted(el) }} style={style} />
+  return <video className="oart-img oart-clip" src={clip.src} muted playsInline preload="auto" loop={!clip.start && !clip.end} onEnded={restart} onTimeUpdate={e => { if (clip.end && e.currentTarget.currentTime >= clip.end) restart(e) }} ref={ref} style={FOCUS_VIDEO_STYLE} />
 }
 
 // Só o sigilo da origem, com os traços desenhados (ver .oart-sigil em origin.css).
