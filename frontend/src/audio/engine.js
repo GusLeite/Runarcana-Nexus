@@ -216,10 +216,10 @@ const CHAR_HOVER = {
     noise({ dur: 0.4, vol: 0.03, type: 'lowpass', f: 200, q: 0.5, attack: 0.1 })
   },
   proto() {
-    // magia que sobe, cintilando
-    tone({ f: 440, f2: 1320, dur: 0.6, vol: 0.05, send: 0.9, attack: 0.1 })
-    bell(1760, 0.35, 0.05, 1.4, 0.8)
-    bell(2349, 0.45, 0.04, 1.2, 0.8)
+    // magia calma: um acorde grave que abre (quinta) e um sino baixo, sem agudos
+    tone({ f: 220, dur: 0.9, vol: 0.05, attack: 0.18, send: 0.6, lp: 900 })
+    tone({ f: 330, dur: 0.9, vol: 0.04, attack: 0.22, send: 0.6, lp: 900 })
+    bell(440, 0.2, 0.04, 1.4, 0.6)
   },
   loge() {
     // assombração: sopro e duas vozes desafinadas
