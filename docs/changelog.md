@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Arte do Religioso e do Gladiador (`feature/character-sheet`)
+- Chegaram as 2 imagens que faltavam: Diana com os monges da lua no Religioso e o guerreiro dourado no Gladiador. Agora os 22 passados têm ilustração.
+- A imagem do brutamontes de cartola, que estava no Gladiador, ficou em `assets/backgrounds/_reserva/` (fora do `glob`, sem uso).
+
 ## 2026-11-02 — Ilustrações em 21 passados (`feature/character-sheet`)
 - 21 imagens em `assets/backgrounds/<id>.webp` (≈3,6 MB), escolhidas pela cena de cada uma; `backgroundArt.js` lê a pasta com `import.meta.glob`, então um arquivo novo aparece sozinho. Só o Religioso ficou sem arte (continua com o símbolo). O Andarilho trocou o exemplo pela imagem do explorador; a da aldeia em chamas foi para o Órfão.
 - Enquadramento conferido numa folha de contato com as 21; o card inteiro dentro do assistente não foi aberto (exige login).

@@ -13,6 +13,11 @@ describe('backgroundArt', () => {
     expect(backgroundSigil({ id: 'novo' }).length).toBeGreaterThan(0)
   })
 
+  it('tem ilustração para todo passado do catálogo', () => {
+    const ids = catalog.backgrounds.map(b => b.id)
+    expect(Object.keys(BACKGROUND_IMAGES).sort()).toEqual([...ids].sort())
+  })
+
   it('só tem ilustração para passado do catálogo', () => {
     const ids = catalog.backgrounds.map(b => b.id)
     expect(Object.keys(BACKGROUND_IMAGES).length).toBeGreaterThan(0)

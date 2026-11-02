@@ -93,7 +93,7 @@ Layout: 3 colunas acima de 1240px; 2 colunas (herói + conteúdo, rolagens embai
 
 ## Pendências / problemas conhecidos
 
-- Passado: 21 dos 22 passados têm ilustração (falta o Religioso). Para trocar ou acrescentar, basta pôr `assets/backgrounds/<id>.webp` (o id é o do catálogo); a faixa do card aparece sozinha. As artes atuais são provisórias.
+- Passado: os 22 passados têm ilustração (o teste `backgroundArt.test.js` exige). Para trocar, basta substituir `assets/backgrounds/<id>.webp` (o id é o do catálogo); imagens sem uso ficam em `assets/backgrounds/_reserva/`. As artes atuais são provisórias.
 - O jogador só gasta consumíveis, ouro e inspiração (decisão da mesa); quem dá é o mestre, na aba Inventário do painel.
 - O painel do mestre ainda não edita habilidades/documentos já criados (só cria e apaga), não mostra quem leu cada documento e não edita fichas além de liberar a subida de nível e do inventário (PV atual, condições).
 - Documentos e anotações só atualizam ao abrir a ficha (não há aviso em tempo real quando o mestre envia algo).
