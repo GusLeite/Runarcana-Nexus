@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Card do Passado maior (`feature/character-sheet`)
+- `background.css`: o painel de detalhe ganha mais largura (grade 1 : 1,35), mais altura e a história passa a 16px com entrelinha 1,65, para ler melhor.
+
 ## 2026-11-02 — Detalhe do Passado sem rolar até os ganhos (`feature/character-sheet`)
 - `BackgroundPicker`: o painel tem altura fixa; medalhão ao lado do nome, bloco **O que concede** (ouro e ganhos) logo abaixo e a **História** numa área própria que rola sozinha. Antes o texto longo empurrava os ganhos para o fim.
 

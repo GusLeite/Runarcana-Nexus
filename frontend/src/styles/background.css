@@ -1,5 +1,5 @@
 /* Escolha do passado (BackgroundPicker.jsx): grade de símbolos e, ao lado, o detalhe da opção. */
-.bgpick{--h:42;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start}
+.bgpick{--h:42;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:16px;align-items:start}
 .bg-sigil{width:34px;height:34px;flex:none;overflow:visible;fill:none;stroke:var(--gold);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s,filter .3s,transform .4s cubic-bezier(.22,1,.36,1)}
 .bg-sigil.big{width:56px;height:56px;stroke:var(--gold-hi);filter:drop-shadow(0 0 8px hsla(var(--h),90%,60%,.55))}
 .bggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
@@ -12,7 +12,7 @@
 .bgtile.on .bg-sigil{stroke:var(--gold-hi)}
 .bgtile.on .bgtile-name{color:var(--gold-hi)}
 .bgtile-check{position:absolute;top:4px;right:7px;font-size:13px;font-weight:700;color:var(--gold-hi)}
-.bgdetail{position:sticky;top:0;display:flex;flex-direction:column;height:calc(100vh - 200px);min-height:360px;padding:16px;border:1px solid hsla(var(--h),70%,60%,.38);background:hsla(var(--h),70%,40%,.08)}
+.bgdetail{position:sticky;top:0;display:flex;flex-direction:column;height:calc(100vh - 130px);min-height:440px;padding:20px;border:1px solid hsla(var(--h),70%,60%,.38);background:hsla(var(--h),70%,40%,.08)}
 .bgdetail-in{display:flex;flex-direction:column;gap:14px;flex:1;min-height:0;animation:bgdetail-in .35s ease}
 @keyframes bgdetail-in{from{opacity:0;transform:translateY(6px)}}
 .bgdetail-head{display:flex;align-items:center;gap:14px;flex:none}
@@ -24,6 +24,6 @@
 .bgdetail-gains{flex:none;padding:10px 12px;border:1px solid rgba(200,162,74,.28);background:rgba(1,10,18,.45)}
 .bgdetail-story{display:flex;flex-direction:column;flex:1;min-height:0}
 .bgdetail-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-color:var(--gold-dk) transparent;padding-right:8px}
-.bgdetail-desc{margin:0 0 10px;font-size:14.5px;line-height:1.5;color:#cfc7b2}
+.bgdetail-desc{margin:0 0 12px;font-size:16px;line-height:1.65;color:#cfc7b2}
 @media (max-width:760px){.bgpick{grid-template-columns:1fr}.bgdetail{position:static;height:auto}.bgdetail-scroll{max-height:320px}}
 @media (prefers-reduced-motion:reduce){.bgdetail-in,.bgtile{animation:none}.bgtile:hover .bg-sigil,.bgtile:focus-visible .bg-sigil,.bgtile.peek .bg-sigil{transform:none}}
