@@ -1,6 +1,7 @@
 import { choiceOptionName, equipmentCategory } from '../../data/rules.js'
 import ResourceChoice from './ResourceChoice.jsx'
 import { ChoiceHead, ChoiceSigil } from './ChoiceParts.jsx'
+import OptionTile from './OptionTile.jsx'
 
 // Escolhas que as opções pedem (ex.: "+1 em 1 atributo", "2 perícias de Arcanista").
 // A lista vem da prévia do back, já sem as perícias que o personagem ganhou de outro lugar.
@@ -8,7 +9,7 @@ import { ChoiceHead, ChoiceSigil } from './ChoiceParts.jsx'
 // Recursos de classe (Sutras, Iras, Técnicas...) usam cartões com o texto de cada opção.
 // Magias (SPELL_CHOICE) mostram o nome que vem da prévia (optionNames).
 // Equipamento inicial: o da classe (escolhas EQUIPMENT_CHOICE) ou, trocando, a riqueza inicial da classe (wealth).
-export default function ChoiceStep({ choices, picks, onChange, crafts, resources = [], items = [], wealth, onWealth }) {
+export default function ChoiceStep({ choices, picks, onChange, crafts, resources = [], items = [], lore, wealth, onWealth }) {
   const wealthBox = wealth?.formula && (
     <div className="choice wealth-choice" style={{ '--n': 0 }}>
       <ChoiceHead type="WEALTH" label="Equipamento inicial" source="Como você começa a aventura" />
@@ -42,6 +43,8 @@ export default function ChoiceStep({ choices, picks, onChange, crafts, resources
   // Vel é opcional e escolhas sem opções cadastradas não bloqueiam: ficam fora da contagem do resumo.
   const required = choices.filter(c => c.type === 'RESOURCE_CHOICE' ? !/^Vel/.test(c.label) : c.options.length)
   const doneCount = required.filter(c => (picks[c.key] ?? []).length >= c.count).length
+  // A Runa inicial vem do Pulso Rúnico escolhido (a gema): sem ele, não há o que mostrar.
+  const pulse = picks[choices.find(c => /^Pulso Rúnico/.test(c.label))?.key]?.[0] ?? null
   const allDone = required.length > 0 && doneCount === required.length
   return (
     <>
@@ -59,6 +62,7 @@ export default function ChoiceStep({ choices, picks, onChange, crafts, resources
         const current = picks[c.key] ?? []
         if (c.type === 'RESOURCE_CHOICE') {
           return <ResourceChoice key={c.key} choice={c} current={current} resources={resources} n={n + 1}
+            gem={/^Runa inicial/.test(c.label) ? { name: pulse } : null}
             onChange={list => onChange(c.key, list)} />
         }
         // Sem opções cadastradas: só o aviso (não bloqueia a criação).
@@ -80,18 +84,12 @@ export default function ChoiceStep({ choices, picks, onChange, crafts, resources
             {optionGroups(c, items).map(g => (
               <div key={g.title ?? 'all'} className="choice-group">
                 {g.title && <div className="choice-group-title"><span>{g.title}</span></div>}
-                <div className="opt-grid">
-                  {g.options.map(id => {
+                <div className={'opt-grid' + (c.type === 'SIZE_CHOICE' ? ' sizes' : c.type === 'FEATURE' ? ' gems' : '')}>
+                  {g.options.map((id, i) => {
                     const on = current.includes(id)
-                    return (
-                      <button key={id} type="button" className={'opt' + (on ? ' on' : '')} aria-pressed={on}
-                        disabled={!on && full} onClick={() => toggle(id)}>
-                        <i className="opt-gem" />
-                        <span className="opt-name">
-                          {c.optionNames?.[id] ?? (g.title && c.type !== 'EQUIPMENT_CHOICE' ? choiceOptionName(c.type, id, crafts).replace(/^[^:]+: /, '') : choiceOptionName(c.type, id, crafts, items))}
-                        </span>
-                      </button>
-                    )
+                    const label = c.optionNames?.[id] ?? (g.title && c.type !== 'EQUIPMENT_CHOICE' ? choiceOptionName(c.type, id, crafts).replace(/^[^:]+: /, '') : choiceOptionName(c.type, id, crafts, items))
+                    return <OptionTile key={id} type={c.type} id={id} label={label} on={on} disabled={!on && full}
+                      onClick={() => toggle(id)} crafts={crafts} lore={lore} tileCount={i} />
                   })}
                 </div>
               </div>

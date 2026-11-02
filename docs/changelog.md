@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Escolhas: tamanho, gemas e cards (`feature/character-sheet`)
+- Silhueta no tamanho, cor/símbolo por gema no Pulso Rúnico, Runa inicial filtrada pelo Pulso, cards com descrição de ofícios e magias ao passar o mouse.
+
 ## 2026-11-02 — Polimento visual da etapa Escolhas (`feature/character-sheet`)
 - Cartões com medalhão e símbolo por tipo de escolha, gemas de progresso, opções em azulejos e resumo geral no topo; recursos de classe e equipamento inicial seguem o mesmo padrão.
 

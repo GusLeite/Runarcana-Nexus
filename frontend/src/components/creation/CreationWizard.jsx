@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { fetchFormulas, fetchSpells } from '../../api/book.js'
 import { createCharacter, fetchCatalog, previewCreation } from '../../api/creation.js'
 import { ATTRIBUTES, heritageChoices } from '../../data/rules.js'
 import { replay } from '../../utils/motion.js'
@@ -43,6 +44,7 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
   const [step, setStep] = useState(0)
   const [rolled, setRolled] = useState({ used: 0, set: [], dice: null }) // rolagens de atributo (limite em AttributeStep)
   const [realDice, setRealDice] = useState(false) // atributos digitados de dados rolados na mesa
+  const [lore, setLore] = useState({}) // magias e fórmulas, só para os cards das Escolhas
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState(null)
   const panel = useRef()
@@ -62,6 +64,10 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
       })
       .catch(onError)
   }, [token, defaultPlayer, onError])
+
+  useEffect(() => {
+    Promise.all([fetchSpells(token), fetchFormulas(token)]).then(([spells, formulas]) => setLore({ spells, formulas })).catch(() => {})
+  }, [token])
 
   // Prévia com um pequeno atraso, para não chamar o back a cada tecla.
   useEffect(() => {
@@ -180,7 +186,7 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
           )}
           {current === 'choices' && (
             <ChoiceStep choices={preview?.choices ?? []} picks={draft.choices} crafts={catalog.crafts ?? []} resources={catalog.resources ?? []}
-              items={catalog.equipment?.items ?? []} wealth={preview?.startingWealth}
+              items={catalog.equipment?.items ?? []} lore={lore} wealth={preview?.startingWealth}
               onWealth={on => set('startingEquipment', on ? 'WEALTH' : 'EQUIPMENT')}
               onChange={(key, list) => setDraft(d => ({ ...d, choices: { ...d.choices, [key]: list } }))} />
           )}
@@ -188,7 +194,7 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
             <>
               <HeritageStep heritages={catalog.heritages} preview={preview} picks={draft.heritages} onChange={list => set('heritages', list)} />
               {heritageChoices(preview?.choices, draft.heritages).length > 0 && (
-                <ChoiceStep choices={heritageChoices(preview?.choices, draft.heritages)} picks={draft.choices} crafts={catalog.crafts ?? []}
+                <ChoiceStep choices={heritageChoices(preview?.choices, draft.heritages)} picks={draft.choices} crafts={catalog.crafts ?? []} lore={lore}
                   onChange={(key, list) => setDraft(d => ({ ...d, choices: { ...d.choices, [key]: list } }))} />
               )}
             </>

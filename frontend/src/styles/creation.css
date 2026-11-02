@@ -320,3 +320,52 @@ transition:transform .15s,filter .15s;animation:stone-in .5s cubic-bezier(.3,1.6
 .choice-empty p{margin:0}
 @media (max-width:640px){.choice-head{flex-wrap:wrap}.choice-progress{flex:1 0 100%}.opt-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}}
 @media (prefers-reduced-motion:reduce){.choice{animation:none}.opt:not(:disabled):hover{transform:none}}
+
+/* ===== Escolhas: tamanho, gemas do Pulso Rúnico e cards ao passar o mouse ===== */
+.opt-grid.sizes{grid-template-columns:repeat(auto-fit,minmax(180px,220px))}
+.opt.size{flex-direction:column;justify-content:flex-end;gap:2px;padding:12px 14px 10px;text-align:center}
+.opt.size .opt-name{font-size:15px}
+.opt.size .opt-sub{flex:none;padding:0;text-align:center}
+.size-stage{display:flex;align-items:flex-end;justify-content:center;width:100%;height:96px;margin-bottom:6px;border-bottom:1px solid var(--gold-dk);background:radial-gradient(ellipse at 50% 100%,rgba(240,199,94,.14),transparent 70%)}
+.size-figure{width:auto;height:96px;stroke:var(--gold);stroke-width:3.2;transition:stroke .3s,filter .3s}
+.opt.size[aria-pressed="true"] .size-figure,.opt.size:hover .size-figure{stroke:var(--gold-hi);filter:drop-shadow(0 0 8px rgba(240,199,94,.55))}
+.choice.done .opt.size.on .size-figure{stroke:var(--teal);filter:drop-shadow(0 0 8px rgba(47,211,192,.55))}
+
+.opt-grid.gems{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.opt.gem{flex-direction:column;justify-content:flex-start;gap:4px;padding:14px 10px 12px;text-align:center;border-color:color-mix(in srgb,var(--gem) 40%,transparent);
+  background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--gem) 20%,transparent),rgba(0,0,0,.4) 75%)}
+.opt.gem .gem-sigil{width:44px;height:44px;stroke:var(--gem);filter:drop-shadow(0 0 7px color-mix(in srgb,var(--gem) 65%,transparent));transition:transform .3s}
+.opt.gem:not(:disabled):hover .gem-sigil{transform:scale(1.12) rotate(-4deg)}
+.opt.gem .opt-name{font-size:15px;color:var(--gem)}
+.opt.gem .opt-sub{flex:none;padding:0;text-align:center;font-size:11px}
+.opt.gem:not(:disabled):hover{border-color:var(--gem);color:var(--gem)}
+.opt.gem.on,.choice.done .opt.gem.on{border-color:var(--gem);color:var(--gem);background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--gem) 38%,transparent),rgba(0,0,0,.45) 80%);box-shadow:0 0 0 1px var(--gem),0 0 22px color-mix(in srgb,var(--gem) 40%,transparent)}
+
+/* Card flutuante (ofícios, magias, gemas) */
+.opt{overflow:visible}
+.opt-tip{position:absolute;z-index:30;left:0;bottom:calc(100% + 8px);display:none;flex-direction:column;gap:6px;width:270px;padding:12px 14px;border:1px solid var(--gold);
+  background:linear-gradient(180deg,#0b1520,#050b13);box-shadow:0 10px 30px rgba(0,0,0,.7),0 0 18px rgba(240,199,94,.18);color:#cfc7b2;font-family:system-ui,sans-serif;font-weight:400;
+  letter-spacing:0;text-align:left;text-transform:none;pointer-events:none;animation:rise-in .18s ease}
+.opt-tip.wide{width:330px}
+.opt.right .opt-tip{left:auto;right:0}
+.opt:hover>.opt-tip,.opt:focus-visible>.opt-tip{display:flex}
+.tip-title{font-family:'Cinzel',Georgia,serif;font-size:15px;font-weight:700;color:var(--gold-hi)}
+.tip-tags{display:flex;flex-wrap:wrap;gap:5px}
+.tip-tags i{padding:1px 7px;border:1px solid var(--gold-soft);font-size:11px;font-style:normal;letter-spacing:.05em;text-transform:uppercase;color:var(--teal)}
+.tip-text{font-size:13px;line-height:1.45}
+.tip-text.clamp{display:-webkit-box;-webkit-line-clamp:7;-webkit-box-orient:vertical;overflow:hidden}
+.tip-meta{font-size:12px;color:var(--muted)}
+.opt.gem .opt-tip{left:50%;transform:translateX(-50%);width:250px;border-color:var(--gem);box-shadow:0 10px 30px rgba(0,0,0,.7),0 0 20px color-mix(in srgb,var(--gem) 35%,transparent);text-align:left;white-space:normal}
+.opt.gem .tip-title{color:var(--gem)}
+
+/* Runas da Runa inicial: cartão na cor da gema */
+.her.gemmed{border-color:color-mix(in srgb,var(--gem) 45%,transparent);background:linear-gradient(160deg,color-mix(in srgb,var(--gem) 16%,transparent),rgba(0,0,0,.4) 60%)}
+.her.gemmed .her-name{color:var(--gem)}
+.her.gemmed.on{border-color:var(--gem);box-shadow:0 0 0 1px var(--gem),0 0 22px color-mix(in srgb,var(--gem) 35%,transparent);background:linear-gradient(160deg,color-mix(in srgb,var(--gem) 28%,transparent),rgba(0,0,0,.45) 70%)}
+.her-gem-sigil{flex:none;width:24px;height:24px;stroke:var(--gem);stroke-width:4;filter:drop-shadow(0 0 5px color-mix(in srgb,var(--gem) 60%,transparent))}
+.gem-hint{margin:0;padding:14px;border:1px dashed var(--gold-soft);color:var(--muted);font-size:14px}
+.gem-hint b{color:var(--gold-hi)}
+
+.opt.below>.opt-tip{bottom:auto;top:calc(100% + 8px)}
+.choice:hover,.choice:focus-within{z-index:5}
+.opt:hover,.opt:focus-visible{z-index:40}
