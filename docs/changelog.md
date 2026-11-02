@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Tela de atributos animada (`feature/character-sheet`)
+- Arranjo padrão agora é arrastar os valores (pedras) até os atributos; manual rola 4d6 com dado 3D e no máximo 3 rolagens.
+- Linhas com barra de progresso, animações de entrada/pop e destaque ao soltar. Não verificado visualmente no navegador (só testes e build).
+
 ## 2026-11-02 — Artes trocadas entre passados (`feature/character-sheet`)
 - Marujo e Pirata trocaram de imagem; o Yasuo foi para o Exilado e o lutador pendurado na caverna para o Soldado.
 

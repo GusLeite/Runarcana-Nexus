@@ -74,10 +74,65 @@ color:var(--text);font:inherit;text-align:left;cursor:pointer;transition:border-
 .budget-bar div{height:100%;background:linear-gradient(90deg,var(--gold-dk),var(--gold-hi));transition:width .3s}
 .budget.over b{color:#ff8a7a}
 .budget.over .budget-bar div{background:linear-gradient(90deg,#8a2a10,#ff5a4a)}
-.roll-all{margin-bottom:12px}
 .attr-rows{display:flex;flex-direction:column;gap:6px;max-width:620px}
-.attr-row{display:grid;grid-template-columns:minmax(0,1fr) auto 130px;align-items:center;gap:12px;padding:8px 12px;border:1px solid rgba(200,162,74,.14);background:rgba(0,0,0,.25);
+.attr-row{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto 130px;align-items:center;gap:12px;padding:10px 12px 12px;border:1px solid rgba(200,162,74,.14);background:linear-gradient(90deg,rgba(200,162,74,.07),rgba(0,0,0,.28));transition:border-color .2s,box-shadow .2s,transform .2s;
 animation:slide-in .35s ease backwards;animation-delay:calc(var(--n,0)*40ms)}
+.attr-row:hover{border-color:rgba(200,162,74,.4)}
+.attr-meter{position:absolute;left:0;bottom:0;height:3px;width:var(--pct,0%);background:linear-gradient(90deg,var(--gold-dk),var(--teal));box-shadow:0 0 8px var(--teal);transition:width .6s cubic-bezier(.22,1,.36,1)}
+.pop{display:inline-block;animation:attr-pop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes attr-pop{from{transform:scale(1.6);opacity:.2;filter:brightness(2)}}
+.attr-row.shake{animation:row-shake .18s linear infinite}
+@keyframes row-shake{25%{transform:translateX(-2px)}75%{transform:translateX(2px)}}
+
+/* arranjo padrão: pedras de valor arrastáveis */
+.stone-pool{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;padding:12px 14px;max-width:620px;border:1px dashed rgba(200,162,74,.35);background:radial-gradient(ellipse at 50% 0,rgba(47,211,192,.1),rgba(0,0,0,.3));transition:border-color .2s,box-shadow .2s}
+.stone-pool.over{border-color:var(--teal);box-shadow:0 0 18px rgba(47,211,192,.3)}
+.stone-pool.done{border-style:solid;border-color:var(--teal)}
+.stone-hint{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.stones{display:flex;flex-wrap:wrap;gap:10px;min-height:52px;align-items:center}
+.stone{width:50px;height:50px;display:inline-grid;place-items:center;padding:0;cursor:grab;font-family:'Cinzel',Georgia,serif;font-size:22px;font-weight:700;color:#1a1405;border:0;
+clip-path:polygon(50% 0,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%);background:radial-gradient(circle at 35% 28%,#fff0b3,var(--gold-hi) 45%,var(--gold-dk));filter:drop-shadow(0 0 6px rgba(240,199,94,.45));
+transition:transform .15s,filter .15s;animation:stone-in .5s cubic-bezier(.3,1.6,.5,1) backwards;animation-delay:calc(var(--n,0)*70ms)}
+.stone:hover{transform:translateY(-3px) scale(1.08);filter:drop-shadow(0 0 12px rgba(240,199,94,.8))}
+.stone:active{cursor:grabbing}
+.stone.held{transform:translateY(-4px) scale(1.15);filter:drop-shadow(0 0 14px var(--teal))}
+.stone-empty{color:var(--teal);font-size:22px;animation:attr-pop .5s ease}
+@keyframes stone-in{from{opacity:0;transform:translateY(-14px) scale(.5) rotate(-40deg)}}
+.slot{width:64px;height:54px;display:grid;place-items:center;padding:0;cursor:pointer;background:rgba(0,0,0,.35);border:1px dashed rgba(200,162,74,.45);transition:border-color .2s,box-shadow .2s,background .2s}
+.slot.ready{border-color:var(--teal);animation:slot-glow 1s ease-in-out infinite}
+.slot.filled{border-style:solid;border-color:transparent;background:none}
+.slot-empty{color:var(--muted);font-size:18px}
+.stone.in-slot{width:50px;height:50px;cursor:grab;animation:stone-drop .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes stone-drop{from{transform:translateY(-22px) scale(1.5);opacity:0}}
+@keyframes slot-glow{50%{box-shadow:0 0 12px rgba(47,211,192,.6)}}
+.attr-row.drop-over{border-color:var(--teal);box-shadow:inset 0 0 22px rgba(47,211,192,.2),0 0 14px rgba(47,211,192,.25)}
+.attr-row.drop-over .slot{border-color:var(--teal);background:rgba(47,211,192,.15)}
+
+/* rolagem 4d6 com dado 3D */
+.roller{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:14px;padding:12px 16px;max-width:620px;border:1px solid rgba(200,162,74,.25);background:radial-gradient(ellipse at 20% 50%,rgba(47,211,192,.1),rgba(0,0,0,.3))}
+.tray{display:flex;gap:14px;padding:14px 18px;perspective:600px;background:radial-gradient(ellipse,#0b3a2f,#04130f);border:2px solid var(--gold-dk);box-shadow:inset 0 0 18px #000}
+.roller-side{display:flex;flex-direction:column;gap:8px;align-items:flex-start;flex:1;min-width:200px}
+.roll-btn{width:auto;margin:0;padding:11px 22px}
+.roll-btn:disabled{cursor:default}
+.roller-note{color:var(--muted);font-size:12px}
+.roll-pips{display:flex;align-items:center;gap:6px}
+.roll-pips i{width:12px;height:12px;transform:rotate(45deg);border:1px solid var(--gold-soft);transition:background .3s,box-shadow .3s}
+.roll-pips i.on{background:var(--gold-hi);box-shadow:0 0 8px var(--gold-hi)}
+.roll-pips small{margin-left:6px;font-size:12px;color:var(--muted)}
+.die3d{--size:38px;--half:19px;display:inline-block;width:var(--size);height:var(--size);transform-style:preserve-3d}
+.die3d-spin,.die3d-cube{display:block;width:100%;height:100%;position:relative;transform-style:preserve-3d}
+.die3d-cube{transition:transform .2s}
+.die3d-face{position:absolute;inset:0;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:4px;border-radius:6px;background:linear-gradient(135deg,#fff8e0,#e4d3a0);border:1px solid #b79a4a;backface-visibility:hidden}
+.die3d-face i{display:block;place-self:center;width:6px;height:6px;border-radius:50%}
+.die3d-face i.pip{background:#2a1a06;box-shadow:inset 0 1px 2px #000}
+.die3d.rolling .die3d-spin{animation:die-tumble 1.3s cubic-bezier(.2,.7,.3,1) both,die-hop 1.3s ease-out;animation-delay:calc(var(--n)*60ms)}
+@keyframes die-tumble{from{transform:rotateX(900deg) rotateY(-720deg) rotateZ(360deg)}to{transform:rotateX(0) rotateY(0) rotateZ(0)}}
+@keyframes die-hop{0%,100%{translate:0 0}30%{translate:0 -34px}60%{translate:0 0}75%{translate:0 -10px}}
+.manual-cell{display:flex;align-items:center;gap:10px}
+.mini-dice{display:inline-flex;gap:3px}
+.mini-dice em{display:inline-grid;place-items:center;width:20px;height:20px;font-style:normal;font-size:12px;font-weight:700;color:#1a1405;background:linear-gradient(135deg,#fff3c4,#d8bf7a);border-radius:4px;animation:stone-in .4s cubic-bezier(.3,1.6,.5,1) backwards;animation-delay:calc(var(--n)*60ms)}
+.mini-dice em.drop{opacity:.35;text-decoration:line-through}
+@media (prefers-reduced-motion:reduce){.die3d.rolling .die3d-spin,.attr-row.shake,.pop,.stone,.in-slot,.slot.ready{animation:none}}
 .attr-row-name b{display:inline-block;min-width:38px;font-family:'Cinzel',Georgia,serif;color:var(--teal)}
 .attr-row-input select,.attr-row-input input{width:90px;padding:7px 8px;background:#050b14;border:1px solid rgba(200,162,74,.4);color:var(--text);font:inherit}
 .stepper-input{display:flex;align-items:center;gap:8px}
