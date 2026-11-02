@@ -50,27 +50,39 @@ export default function BackgroundPicker({ title, hint, items, selected, onPick,
 
         <div className="bgdetail" aria-live="polite">
           <div key={shown.id} className="bgdetail-in">
-            <div className="bgmedal"><BackgroundSigil background={shown} className="big" /></div>
-            <h5 className="bgdetail-name">
-              {shown.name}
-              {shown.example && <span className="example-tag" title="Conteúdo de exemplo, a trocar pelas regras reais">EXEMPLO</span>}
-            </h5>
-            <span className="bgdetail-state">{shown.id === selected ? '✓ Escolhido' : 'Clique para escolher'}</span>
-            {shown.description && <p className="bgdetail-desc">{shown.description}</p>}
-            {shown.details?.length > 0 && (
-              <span className="option-details">
-                {shown.details.map(d => <span key={d.name}><b>{d.name}.</b> {d.text}</span>)}
-              </span>
+            <div className="bgdetail-head">
+              <div className="bgmedal"><BackgroundSigil background={shown} className="big" /></div>
+              <div>
+                <h5 className="bgdetail-name">
+                  {shown.name}
+                  {shown.example && <span className="example-tag" title="Conteúdo de exemplo, a trocar pelas regras reais">EXEMPLO</span>}
+                </h5>
+                <span className="bgdetail-state">{shown.id === selected ? '✓ Escolhido' : 'Clique para escolher'}</span>
+              </div>
+            </div>
+            {(grants.length > 0 || shown.startingGold != null) && (
+              <div className="bgdetail-gains">
+                <span className="bgdetail-label">O que concede</span>
+                <span className="grants">
+                  {shown.startingGold != null && <span className="fact-chip gold">{shown.startingGold} de ouro</span>}
+                  {grants.map((g, i) => (
+                    <span key={i} className={'grant g-' + g.type.toLowerCase()} title={g.description ?? undefined}>{grantLabel(g, crafts, equipment)}</span>
+                  ))}
+                </span>
+              </div>
             )}
-            {shown.startingGold != null && (
-              <span className="option-facts"><span className="fact-chip gold">{shown.startingGold} de ouro</span></span>
-            )}
-            {grants.length > 0 && (
-              <span className="grants">
-                {grants.map((g, i) => (
-                  <span key={i} className={'grant g-' + g.type.toLowerCase()} title={g.description ?? undefined}>{grantLabel(g, crafts, equipment)}</span>
-                ))}
-              </span>
+            {(shown.description || shown.details?.length > 0) && (
+              <div className="bgdetail-story">
+                <span className="bgdetail-label">História</span>
+                <div className="bgdetail-scroll">
+                  {shown.description && <p className="bgdetail-desc">{shown.description}</p>}
+                  {shown.details?.length > 0 && (
+                    <span className="option-details">
+                      {shown.details.map(d => <span key={d.name}><b>{d.name}.</b> {d.text}</span>)}
+                    </span>
+                  )}
+                </div>
+              </div>
             )}
           </div>
         </div>
