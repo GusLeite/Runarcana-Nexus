@@ -97,6 +97,7 @@ export default function RegionStep({ regions, crafts, equipment, regionId, onPic
         <button type="button" className="rarrow prev" aria-label="Região anterior" onClick={() => goTo(index - 1)}>‹</button>
         <button type="button" className="rarrow next" aria-label="Próxima região" onClick={() => goTo(index + 1)}>›</button>
         <div className="rcap" key={region.id} aria-live="polite">
+          {art.icon && <img className="rcap-icon" src={art.icon} alt="" />}
           <span className="rcap-count">{index + 1} / {length}</span>
           <h3 className="rcap-name">{region.name}</h3>
           <span className="rcap-rule" />
@@ -124,6 +125,7 @@ export default function RegionStep({ regions, crafts, equipment, regionId, onPic
           return (
             <button key={r.id} type="button" className={'rthumb' + (n === index ? ' on' : '') + (r.id === regionId ? ' chosen' : '')}
               aria-current={n === index ? 'true' : undefined} style={{ '--h': thumb.hue, backgroundImage: thumb.img ? `url(${thumb.img})` : undefined }} onClick={() => goTo(n)}>
+              {thumb.icon && <img className="rthumb-icon" src={thumb.icon} alt="" />}
               <span>{r.id === regionId && '✓ '}{r.name}</span>
             </button>
           )

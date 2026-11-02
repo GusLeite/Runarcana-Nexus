@@ -1,7 +1,7 @@
 // Apresentação de cada região no carrossel da criação; as regras continuam vindo do catálogo do back.
 // tagline: a descrição breve (o catálogo ainda não tem descrição de região). hue: matiz da cor da região.
 // video: loop de fundo. img: quadro inicial do vídeo (aparece enquanto ele carrega e na miniatura) ou, sem vídeo, a arte da região,
-// que ganha um zoom lento. pos: object-position (opcional).
+// que ganha um zoom lento. pos: object-position (opcional). icon: o brasão da região.
 import bilgewaterVid from '../assets/regions/bilgewater.mp4'
 import bilgewaterImg from '../assets/regions/bilgewater.webp'
 import bandleVid from '../assets/regions/bandle-city.mp4'
@@ -28,22 +28,36 @@ import targonImg from '../assets/regions/targon.webp'
 import voidImg from '../assets/regions/void.webp'
 import zaunVid from '../assets/regions/zaun.mp4'
 import zaunImg from '../assets/regions/zaun.webp'
+import bilgewaterIcon from '../assets/region-icons/bilgewater.webp'
+import bandleCityIcon from '../assets/region-icons/bandle-city.webp'
+import demaciaIcon from '../assets/region-icons/demacia.webp'
+import freljordIcon from '../assets/region-icons/freljord.webp'
+import shadowIslesIcon from '../assets/region-icons/shadow-isles.webp'
+import ioniaIcon from '../assets/region-icons/ionia.webp'
+import ixtalIcon from '../assets/region-icons/ixtal.webp'
+import noxusIcon from '../assets/region-icons/noxus.webp'
+import nazumahIcon from '../assets/region-icons/nazumah.webp'
+import piltoverIcon from '../assets/region-icons/piltover.webp'
+import shurimaIcon from '../assets/region-icons/shurima.webp'
+import targonIcon from '../assets/region-icons/targon.webp'
+import voidIcon from '../assets/region-icons/void.webp'
+import zaunIcon from '../assets/region-icons/zaun.webp'
 
 export const REGION_ART = {
-  BILGEWATER: { tagline: 'Porto de piratas e caçadores de monstros, onde tudo tem preço e nada dura muito.', hue: 165, video: bilgewaterVid, img: bilgewaterImg },
-  BANDLE_CITY: { tagline: 'O lar colorido dos yordles, escondido entre o mundo material e o espiritual.', hue: 322, video: bandleVid, img: bandleImg },
-  DEMACIA: { tagline: 'Reino de honra e aço petricite, orgulhoso da sua justiça e desconfiado da magia.', hue: 42, video: demaciaVid, img: demaciaImg },
-  FRELJORD: { tagline: 'Terras de gelo eterno, disputadas por tribos guerreiras e por poderes antigos.', hue: 205, video: freljordVid, img: freljordImg },
-  SHADOW_ISLES: { tagline: 'Ilhas devastadas pela Ruína, onde a Névoa Negra aprisiona os mortos.', hue: 175, video: shadowVid, img: shadowImg },
-  IONIA: { tagline: 'As Primeiras Terras: magia, natureza e espírito em busca de equilíbrio.', hue: 335, video: ioniaVid, img: ioniaImg },
-  IXTAL: { tagline: 'Reino oculto na selva, mestre da magia elemental e fechado para o mundo.', hue: 130, video: ixtalVid, img: ixtalImg },
-  NOXUS: { tagline: 'Império implacável em que a força abre todas as portas, seja qual for a sua origem.', hue: 0, video: noxusVid, img: noxusImg },
-  NAZUMAH: { tagline: 'Cidade-oásis de Shurima, de velas coloridas e águas que desafiam o deserto.', hue: 160, img: nazumahImg },
-  PILTOVER: { tagline: 'A Cidade do Progresso, movida a comércio, invenção e tecnologia hextec.', hue: 45, video: piltoverVid, img: piltoverImg },
-  SHURIMA: { tagline: 'Um império solar em ruínas, cujas areias guardam tesouros e deuses esquecidos.', hue: 32, video: shurimaVid, img: shurimaImg },
-  TARGON: { tagline: 'A montanha que toca as estrelas, cuja escalada transforma quem chega ao topo.', hue: 230, video: targonVid, img: targonImg },
-  VOID: { tagline: 'O nada que existe além da realidade, faminto por tudo o que há em Runeterra.', hue: 295, img: voidImg },
-  ZAUN: { tagline: 'A cidade subterrânea sob Piltover, feita de químicos, ousadia e sobrevivência.', hue: 110, video: zaunVid, img: zaunImg },
+  BILGEWATER: { tagline: 'Porto de piratas e caçadores de monstros, onde tudo tem preço e nada dura muito.', hue: 165, video: bilgewaterVid, img: bilgewaterImg, icon: bilgewaterIcon },
+  BANDLE_CITY: { tagline: 'O lar colorido dos yordles, escondido entre o mundo material e o espiritual.', hue: 322, video: bandleVid, img: bandleImg, icon: bandleCityIcon },
+  DEMACIA: { tagline: 'Reino de honra e aço petricite, orgulhoso da sua justiça e desconfiado da magia.', hue: 42, video: demaciaVid, img: demaciaImg, icon: demaciaIcon },
+  FRELJORD: { tagline: 'Terras de gelo eterno, disputadas por tribos guerreiras e por poderes antigos.', hue: 205, video: freljordVid, img: freljordImg, icon: freljordIcon },
+  SHADOW_ISLES: { tagline: 'Ilhas devastadas pela Ruína, onde a Névoa Negra aprisiona os mortos.', hue: 175, video: shadowVid, img: shadowImg, icon: shadowIslesIcon },
+  IONIA: { tagline: 'As Primeiras Terras: magia, natureza e espírito em busca de equilíbrio.', hue: 335, video: ioniaVid, img: ioniaImg, icon: ioniaIcon },
+  IXTAL: { tagline: 'Reino oculto na selva, mestre da magia elemental e fechado para o mundo.', hue: 130, video: ixtalVid, img: ixtalImg, icon: ixtalIcon },
+  NOXUS: { tagline: 'Império implacável em que a força abre todas as portas, seja qual for a sua origem.', hue: 0, video: noxusVid, img: noxusImg, icon: noxusIcon },
+  NAZUMAH: { tagline: 'Cidade-oásis de Shurima, de velas coloridas e águas que desafiam o deserto.', hue: 160, img: nazumahImg, icon: nazumahIcon },
+  PILTOVER: { tagline: 'A Cidade do Progresso, movida a comércio, invenção e tecnologia hextec.', hue: 45, video: piltoverVid, img: piltoverImg, icon: piltoverIcon },
+  SHURIMA: { tagline: 'Um império solar em ruínas, cujas areias guardam tesouros e deuses esquecidos.', hue: 32, video: shurimaVid, img: shurimaImg, icon: shurimaIcon },
+  TARGON: { tagline: 'A montanha que toca as estrelas, cuja escalada transforma quem chega ao topo.', hue: 230, video: targonVid, img: targonImg, icon: targonIcon },
+  VOID: { tagline: 'O nada que existe além da realidade, faminto por tudo o que há em Runeterra.', hue: 295, img: voidImg, icon: voidIcon },
+  ZAUN: { tagline: 'A cidade subterrânea sob Piltover, feita de químicos, ousadia e sobrevivência.', hue: 110, video: zaunVid, img: zaunImg, icon: zaunIcon },
 }
 
 const DEFAULT_ART = { hue: 42 }

@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Brasões das regiões (`feature/character-sheet`)
+- Etapa Região mostra o brasão de cada região na legenda (grande) e nas miniaturas (pequeno); arte em `assets/region-icons/`, ligada por `icon` em `regionArt.js`.
+
 ## 2026-11-02 — Heranças: limite de pontos por tipo (`feature/character-sheet`)
 - Corrigido: dava para escolher Heranças além dos pontos (limite era o total, não o do tipo; cliques rápidos passavam da prévia). Agora conta por tipo e espera a prévia.
 
