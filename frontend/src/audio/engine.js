@@ -1,10 +1,9 @@
 // Motor de som do Runarcana: tudo é sintetizado na hora com a Web Audio API (osciladores, ruído e uma reverberação
-// de catedral), então não há arquivo de áudio para baixar. Efeitos: `play('nome', arg)`. Fundo: um drone grave com
-// sinos esparsos, que muda de tom conforme a cena (`setScene`).
+// de catedral), então não há arquivo de áudio para baixar. Efeitos: `play('nome', arg)`.
 // O navegador só libera o som depois de um gesto do usuário (`unlock`); antes disso tudo é silêncio.
 
 const STORE = 'runarcana.sound.v2'
-const DEFAULTS = { sfx: true, ambient: true, volume: 0.7 }
+const DEFAULTS = { sfx: true, volume: 0.7 }
 
 const readPrefs = () => {
   try {
@@ -33,13 +32,13 @@ export function setPrefs(patch) {
 }
 
 // Para diagnóstico (console: `await (await import('/src/audio/engine.js')).debugState()`).
-export const debugState = () => ({ unlocked, state: ctx?.state ?? 'sem contexto', prefs, ambient: !!amb, sampleRate: ctx?.sampleRate, out: out?.gain.value })
+export const debugState = () => ({ unlocked, state: ctx?.state ?? 'sem contexto', prefs, sampleRate: ctx?.sampleRate, out: out?.gain.value })
 
 // ---------- contexto e barramentos ----------
 
 let ctx = null
 let out, noiseBuf
-let sfx, ambient // barramentos: { gain, dry, send }
+let sfx // barramento: { gain, dry, send }
 let unlocked = false
 
 // Reverberação: ruído que decai, estéreo.
@@ -87,7 +86,6 @@ function audio() {
   out.gain.value = 0
   out.connect(comp)
   sfx = makeBus(ctx)
-  ambient = makeBus(ctx)
   noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate)
   const data = noiseBuf.getChannelData(0)
   for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1
@@ -100,9 +98,6 @@ function apply() {
   const now = ctx.currentTime
   out.gain.setTargetAtTime(prefs.volume * prefs.volume, now, 0.05)
   sfx.gain.gain.setTargetAtTime(prefs.sfx ? 1 : 0, now, 0.03)
-  ambient.gain.gain.setTargetAtTime(prefs.ambient ? 1 : 0, now, 0.5)
-  if (prefs.ambient) startAmbient()
-  else stopAmbient()
 }
 
 // Chamado no primeiro gesto do usuário (clique, toque ou tecla).
@@ -394,82 +389,4 @@ export function play(name, arg) {
     // Um som que falha não derruba a tela; no desenvolvimento, avisa.
     if (import.meta.env?.DEV) console.warn('Som "' + name + '" falhou:', err)
   }
-}
-
-// ---------- ambiente ----------
-
-// Tom do drone por cena: salão (Ré), ficha (Lá), mestre (Sol), criação (Fá).
-const ROOTS = { hall: 73.42, sheet: 55, master: 49, creation: 87.31 }
-// Escala pentatônica menor, duas oitavas.
-const SCALE = [1, 6 / 5, 4 / 3, 3 / 2, 9 / 5, 2, 12 / 5, 8 / 3, 3]
-let scene = 'hall'
-let amb = null
-
-export function setScene(name) {
-  if (!ROOTS[name] || name === scene) return
-  scene = name
-  if (!amb) return
-  const now = ctx.currentTime
-  amb.oscs.forEach(({ o, r }) => o.frequency.setTargetAtTime(ROOTS[scene] * r, now, 1.5))
-}
-
-function startAmbient() {
-  if (amb || !ctx || !unlocked) return
-  const c = ctx
-  const bus = c.createGain()
-  bus.gain.value = 0
-  bus.gain.setTargetAtTime(1, c.currentTime, 2)
-  wire(bus, ambient, 0.45)
-  const fl = c.createBiquadFilter()
-  fl.type = 'lowpass'
-  fl.frequency.value = 420
-  fl.Q.value = 0.7
-  fl.connect(bus)
-  // O filtro respira devagar.
-  const lfo = c.createOscillator()
-  lfo.frequency.value = 0.07
-  const lg = c.createGain()
-  lg.gain.value = 180
-  lfo.connect(lg)
-  lg.connect(fl.frequency)
-  lfo.start()
-  const oscs = [[1, 'sawtooth', 0.04, -6], [1, 'sawtooth', 0.04, 7], [1.5, 'triangle', 0.05, 0], [2, 'sine', 0.04, 3]].map(([r, type, v, det]) => {
-    const o = c.createOscillator()
-    o.type = type
-    o.detune.value = det
-    o.frequency.value = ROOTS[scene] * r
-    const g = c.createGain()
-    g.gain.value = v
-    o.connect(g)
-    g.connect(fl)
-    o.start()
-    return { o, r }
-  })
-  const state = { bus, oscs, lfo, timer: 0 }
-  amb = state
-  let n = 0
-  const next = () => {
-    state.timer = setTimeout(() => {
-      if (amb !== state) return
-      if (ctx.state === 'running') {
-        bell(ROOTS[scene] * 2 * SCALE[Math.floor(Math.random() * SCALE.length)], 0, 0.05, 4.5, 0.9, ambient)
-        // de vez em quando, uma rajada de vento
-        if (++n % 3 === 0) noise({ dur: 6, vol: 0.03, f: 300, f2: 800, q: 2, attack: 2, bus: ambient, send: 0.4 })
-      }
-      next()
-    }, rand(3500, 9500))
-  }
-  next()
-}
-
-function stopAmbient() {
-  if (!amb) return
-  const a = amb
-  amb = null
-  clearTimeout(a.timer)
-  a.bus.gain.setTargetAtTime(0, ctx.currentTime, 0.6)
-  setTimeout(() => {
-    a.oscs.forEach(({ o }) => o.stop())
-    a.lfo.stop()
-  }, 3000)
 }

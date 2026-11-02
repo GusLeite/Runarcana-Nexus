@@ -20,7 +20,6 @@ import CreationScreen from '../creation/CreationScreen.jsx'
 import LevelUp from '../creation/LevelUp.jsx'
 import { fetchCatalog } from '../../api/creation.js'
 import { play } from '../../audio/engine.js'
-import useScene from '../../audio/useScene.js'
 import { ExitIcon, KeyIcon } from './icons.jsx'
 import '../../styles/sheet.css'
 
@@ -405,8 +404,6 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     '--dl': -((i * 13) % 17) + 's',
     '--s': 2 + (i % 3) + 'px',
   })), [])
-
-  useScene(state.status === 'empty' ? 'creation' : 'sheet')
 
   // Conta sem ficha: em vez da ficha, a tela exclusiva da criação.
   if (state.status === 'empty') {

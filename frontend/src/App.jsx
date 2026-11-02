@@ -11,7 +11,6 @@ import MasterPanel from './components/master/MasterPanel.jsx'
 import MasterGate from './components/master/MasterGate.jsx'
 import { CrownIcon } from './components/sheet/icons.jsx'
 import { play } from './audio/engine.js'
-import useScene from './audio/useScene.js'
 
 // O mestre entra pelo botão do topo, não pelos painéis; o LoginForm/PasswordForm usam este "personagem".
 const MASTER = { id: 'mestre', name: 'MESTRE', role: 'Narrador de Runeterra', fx: '' }
@@ -120,10 +119,6 @@ export default function App() {
       onExpired={sessionExpired}
     />
   )
-
-  // Som de fundo: a ficha e a criação cuidam do próprio tom; aqui ficam o salão e o painel do mestre.
-  const onSheet = !!chosen && !!session && !askPassword && !session.master
-  useScene(onSheet || testSession ? null : session?.master && !askPassword ? 'master' : 'hall')
 
   const startTest = async () => {
     const res = await loginAsTestPlayer(session.token)
