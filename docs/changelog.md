@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Símbolo da Honra do Belator (`feature/character-sheet`)
+- `subclassArt.js`: o sigilo do Belator vira um estandarte de guerra (o anterior, um elmo liso, parecia outra coisa).
+
 ## 2026-11-02 — Subclasses cabem na tela sem rolar (`feature/character-sheet`)
 - A aba de subclasses não rola mais: a grade fica compacta (símbolo ao lado do nome, sem título) e o detalhe ocupa o resto da altura, rolando por dentro se for longo. Sem nada sob o mouse nem escolhido, mostra a primeira opção.
 - Corrigido "Glifo Glifo Escarlate" / "Rito Rito das Estrelas" no destaque e no título dos ganhos: agora só o nome da subclasse.
