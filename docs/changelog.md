@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Subclasses cabem na tela sem rolar (`feature/character-sheet`)
+- A aba de subclasses não rola mais: a grade fica compacta (símbolo ao lado do nome, sem título) e o detalhe ocupa o resto da altura, rolando por dentro se for longo. Sem nada sob o mouse nem escolhido, mostra a primeira opção.
+- Corrigido "Glifo Glifo Escarlate" / "Rito Rito das Estrelas" no destaque e no título dos ganhos: agora só o nome da subclasse.
+
 ## 2026-11-02 — Escolha de subclasse com símbolos (`feature/character-sheet`)
 - Nova `SubclassPicker`: grade de símbolos (45 sigilos, um por rito/glifo/trilha/…, em `subclassArt.js`) e detalhe da opção embaixo, com descrição, ganhos e níveis; passar o mouse mostra, clicar escolhe. Substitui os cartões longos do `OptionStep` nessa aba.
 - Teste garante um sigilo por subclasse do catálogo. Conferido numa página de teste com os dados reais; o destaque da classe em si não foi aberto (exige login).

@@ -149,7 +149,7 @@ export default function ClassStage({ classes, startId, crafts, equipment, classI
           <OriginArt id={klass.id} art={art} large />
           <div className="ostage-shade" />
           <div className="ostage-cap">
-            {sub && <div className="ostage-lineage">{subLabel} {sub.name}</div>}
+            {sub && <div className="ostage-lineage">{sub.name}</div>}
             <h3 className="ostage-name">{klass.name}</h3>
             <div className="ostage-rule" />
             <p className="ostage-tag">{art.tagline}</p>
@@ -182,7 +182,7 @@ export default function ClassStage({ classes, startId, crafts, equipment, classI
                 <GainGroups grants={klass.grants} crafts={crafts} equipment={equipment} />
                 {sub && (
                   <div className="ogain-lineage">
-                    <h5 className="ogain-lineage-title"><SubclassSigil klass={klass} sub={sub} className="inline" />Do {subLabel} {sub.name}</h5>
+                    <h5 className="ogain-lineage-title"><SubclassSigil klass={klass} sub={sub} className="inline" />{sub.name}</h5>
                     <GainGroups grants={sub.grants} crafts={crafts} equipment={equipment} />
                   </div>
                 )}

@@ -13,16 +13,15 @@ export function SubclassSigil({ klass, sub, className = '' }) {
 }
 
 // Escolha da subclasse (rito, glifo, trilha…): uma grade de símbolos e, embaixo, o detalhe da opção sob o mouse ou o foco
-// (ou da escolhida, se nada estiver sob ele): descrição, o que concede e os ganhos por nível. Clicar escolhe.
+// (ou da escolhida, ou da primeira, se nada estiver sob ele): descrição, o que concede e os ganhos por nível. Clicar escolhe.
 export default function SubclassPicker({ klass, title, subclasses, selected, onPick, crafts, equipment = [] }) {
   const [peek, setPeek] = useState(null)
-  const shown = subclasses.find(s => s.id === (peek ?? selected))
+  const shown = subclasses.find(s => s.id === (peek ?? selected)) ?? subclasses[0]
   const grants = shown?.grants ?? []
   const levels = [...(shown?.levels ?? [])].sort((a, b) => a.level - b.level)
 
   return (
     <div className="subpick">
-      <h4 className="step-title">{title}</h4>
       <div className="subgrid" role="radiogroup" aria-label={title} onMouseLeave={() => setPeek(null)}>
         {subclasses.map((s, n) => (
           <button
