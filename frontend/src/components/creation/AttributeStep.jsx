@@ -39,8 +39,8 @@ function Die3D({ value, rolling, dropped, n = 0 }) {
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 // Atributos base pelo método escolhido. A coluna da direita mostra base + bônus (da prévia) = total.
-// rolls: quantas rolagens do 4d6 o jogador já gastou (fica no assistente, para não zerar ao trocar de etapa).
-export default function AttributeStep({ methods, draft, preview, rolls, onRoll, onMethod, onChange }) {
+// rolled: { used, set, dice } — rolagens já gastas e os 6 valores da última (ficam no assistente, para não zerarem ao trocar de etapa).
+export default function AttributeStep({ methods, draft, preview, rolled, onRolled, onMethod, onChange }) {
   const enabled = METHODS.filter(m => methods[m.key] != null)
   const values = draft.baseAttributes
   const method = draft.attributeMethod
@@ -49,7 +49,8 @@ export default function AttributeStep({ methods, draft, preview, rolls, onRoll, 
 
   const pb = methods.pointBuy
   const spent = method === 'POINT_BUY' ? pointBuySpent(pb, values) : 0
-  const array = methods.standardArray ?? []
+  const dragged = method === 'STANDARD_ARRAY' || method === 'MANUAL'
+  const array = method === 'MANUAL' ? rolled.set : methods.standardArray ?? []
 
   // Arranjo padrão: arrastar (ou tocar) um valor até o atributo.
   const [held, setHeld] = useState(null) // { value, from } escolhido por toque/clique
@@ -83,27 +84,27 @@ export default function AttributeStep({ methods, draft, preview, rolls, onRoll, 
     onDragLeave: () => setOver(o => (o === id ? null : o)),
     onDrop: e => { e.preventDefault(); place(id, readDrag(e)) },
   })
-  const allPlaced = method === 'STANDARD_ARRAY' && pool.length === 0
+  const allPlaced = dragged && array.length > 0 && pool.length === 0
 
   // Rolagem 4d6 (descarta o menor) com dado 3D; no máximo MAX_ROLLS por personagem.
   const [rolling, setRolling] = useState(false)
-  const [dice, setDice] = useState(null) // { id: [4 dados] } da última rolagem
-  const [trayDice, setTrayDice] = useState([1, 2, 3, 4])
+  const [trayDice, setTrayDice] = useState(rolled.dice ?? [1, 2, 3, 4])
   const timer = useRef()
   useEffect(() => () => clearTimeout(timer.current), [])
-  const left = MAX_ROLLS - rolls
+  const left = MAX_ROLLS - rolled.used
 
+  // Cada rolagem sorteia 6 valores (4d6, descarta o menor); o jogador distribui nos atributos que quiser.
   const rollAll = () => {
     if (rolling || left <= 0) return
-    const thrown = Object.fromEntries(ATTRIBUTES.map(a => [a.id, Array.from({ length: 4 }, () => rollDie(6))]))
-    const sum = d => d.reduce((s, x) => s + x, 0) - Math.min(...d)
+    const thrown = Array.from({ length: ATTRIBUTES.length }, () => Array.from({ length: 4 }, () => rollDie(6)))
+    const sum = d => d.reduce((t, x) => t + x, 0) - Math.min(...d)
+    setTrayDice(thrown[0])
     const apply = () => {
       setRolling(false)
-      setDice(thrown)
-      onChange(Object.fromEntries(ATTRIBUTES.map(a => [a.id, sum(thrown[a.id])])))
+      setHeld(null)
+      onChange(Object.fromEntries(ATTRIBUTES.map(a => [a.id, null])))
+      onRolled({ used: rolled.used + 1, set: thrown.map(sum).sort((x, y) => y - x), dice: thrown[0] })
     }
-    onRoll()
-    setTrayDice(Array.from({ length: 4 }, () => rollDie(6)))
     if (reducedMotion()) return apply()
     setRolling(true)
     timer.current = setTimeout(apply, ROLL_MS)
@@ -128,7 +129,7 @@ export default function AttributeStep({ methods, draft, preview, rolls, onRoll, 
         </div>
       )}
 
-      {method === 'STANDARD_ARRAY' && (
+      {dragged && array.length > 0 && !rolling && (
         <div className={'stone-pool' + (over === 'pool' ? ' over' : '') + (allPlaced ? ' done' : '')}
           onDragOver={e => { e.preventDefault(); setOver('pool') }} onDragLeave={() => setOver(o => (o === 'pool' ? null : o))}
           onDrop={e => { e.preventDefault(); unplace(readDrag(e)) }}>
@@ -162,7 +163,7 @@ export default function AttributeStep({ methods, draft, preview, rolls, onRoll, 
               {Array.from({ length: MAX_ROLLS }, (_, i) => <i key={i} className={i < left ? 'on' : ''} />)}
               <small>{left} de {MAX_ROLLS} rolagens</small>
             </span>
-            <small className="roller-note">Descarta o menor de cada 4 dados. Você também pode digitar os valores.</small>
+            <small className="roller-note">Cada rolagem dá 6 valores (4d6, descarta o menor). Role e distribua onde quiser; rolar de novo troca os valores.</small>
           </div>
         </div>
       )}
@@ -171,12 +172,10 @@ export default function AttributeStep({ methods, draft, preview, rolls, onRoll, 
         {ATTRIBUTES.map((a, n) => {
           const v = values[a.id]
           const l = line(a.id)
-          const thrown = method === 'MANUAL' && !rolling ? dice?.[a.id] : null
-          const lowest = thrown ? thrown.indexOf(Math.min(...thrown)) : -1
           return (
-            <div className={'attr-row' + (method === 'STANDARD_ARRAY' && over === a.id ? ' drop-over' : '') + (rolling && method === 'MANUAL' ? ' shake' : '')}
+            <div className={'attr-row' + (dragged && over === a.id ? ' drop-over' : '') + (rolling && method === 'MANUAL' ? ' shake' : '')}
               key={a.id} style={{ '--n': n, '--pct': Math.min(100, ((l?.total ?? v ?? 0) / 20) * 100) + '%' }}
-              {...(method === 'STANDARD_ARRAY' ? dropOn(a.id) : {})}>
+              {...(dragged ? dropOn(a.id) : {})}>
               <span className="attr-row-name"><b>{a.abbr}</b> {a.name}</span>
               <span className="attr-row-input">
                 {method === 'POINT_BUY' && (
@@ -187,24 +186,13 @@ export default function AttributeStep({ methods, draft, preview, rolls, onRoll, 
                     <small className="cost">custo {pb.costs[String(v)] ?? '—'}</small>
                   </span>
                 )}
-                {method === 'STANDARD_ARRAY' && (
+                {dragged && (
                   <button type="button" className={'slot' + (v != null ? ' filled' : '') + (held ? ' ready' : '')}
                     draggable={v != null} aria-label={a.name + (v != null ? ': ' + v : ': vazio')}
                     onDragStart={e => v != null && startDrag(e, { value: v, from: a.id })}
                     onClick={() => (held ? place(a.id, held) : v != null && setHeld({ value: v, from: a.id }))}>
                     {v != null ? <span key={v} className="stone in-slot">{v}</span> : <span className="slot-empty">—</span>}
                   </button>
-                )}
-                {method === 'MANUAL' && (
-                  <span className="manual-cell">
-                    <input type="number" aria-label={a.name} min={methods.manual.min} max={methods.manual.max} value={v ?? ''}
-                      onChange={e => set(a.id, e.target.value === '' ? null : Number(e.target.value))} />
-                    {thrown && (
-                      <span className="mini-dice" aria-hidden="true">
-                        {thrown.map((d, i) => <em key={i} className={i === lowest ? 'drop' : ''} style={{ '--n': i }}>{d}</em>)}
-                      </span>
-                    )}
-                  </span>
                 )}
               </span>
               <span className="attr-row-result">

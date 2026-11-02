@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Rolagem de atributos por pedras (`feature/character-sheet`)
+- Manual/rolagem: cada rolagem dá 6 valores que o jogador arrasta para os atributos; campo livre removido (não dava para limitar). Máx. 3 rolagens.
+
 ## 2026-11-02 — Tela de atributos animada (`feature/character-sheet`)
 - Arranjo padrão agora é arrastar os valores (pedras) até os atributos; manual rola 4d6 com dado 3D e no máximo 3 rolagens.
 - Linhas com barra de progresso, animações de entrada/pop e destaque ao soltar. Não verificado visualmente no navegador (só testes e build).

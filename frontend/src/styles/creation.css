@@ -128,10 +128,6 @@ transition:transform .15s,filter .15s;animation:stone-in .5s cubic-bezier(.3,1.6
 .die3d.rolling .die3d-spin{animation:die-tumble 1.3s cubic-bezier(.2,.7,.3,1) both,die-hop 1.3s ease-out;animation-delay:calc(var(--n)*60ms)}
 @keyframes die-tumble{from{transform:rotateX(900deg) rotateY(-720deg) rotateZ(360deg)}to{transform:rotateX(0) rotateY(0) rotateZ(0)}}
 @keyframes die-hop{0%,100%{translate:0 0}30%{translate:0 -34px}60%{translate:0 0}75%{translate:0 -10px}}
-.manual-cell{display:flex;align-items:center;gap:10px}
-.mini-dice{display:inline-flex;gap:3px}
-.mini-dice em{display:inline-grid;place-items:center;width:20px;height:20px;font-style:normal;font-size:12px;font-weight:700;color:#1a1405;background:linear-gradient(135deg,#fff3c4,#d8bf7a);border-radius:4px;animation:stone-in .4s cubic-bezier(.3,1.6,.5,1) backwards;animation-delay:calc(var(--n)*60ms)}
-.mini-dice em.drop{opacity:.35;text-decoration:line-through}
 @media (prefers-reduced-motion:reduce){.die3d.rolling .die3d-spin,.attr-row.shake,.pop,.stone,.in-slot,.slot.ready{animation:none}}
 .attr-row-name b{display:inline-block;min-width:38px;font-family:'Cinzel',Georgia,serif;color:var(--teal)}
 .attr-row-input select,.attr-row-input input{width:90px;padding:7px 8px;background:#050b14;border:1px solid rgba(200,162,74,.4);color:var(--text);font:inherit}
