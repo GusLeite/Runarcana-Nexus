@@ -5,7 +5,7 @@
 ## Tela atual: seleção de personagem + login
 
 1. O topo mostra o logo **RUNARCANA** e uma dica ("Escolha seu personagem para entrar").
-2. Quatro painéis verticais (Rudo, Gaudron, Proto, Loge), separados por divisórias douradas com losangos.
+2. Quatro painéis verticais (Rudo, Galdren, Proto, Loge), separados por divisórias douradas com losangos.
 3. **Hover/foco** em um painel: ele se expande com uma mola, ganha zoom e brilho, mostra papel, nome, linha dourada e lore; os vizinhos encolhem e a divisória ao lado acende. Um feixe de luz cruza o painel.
 4. **Clique, Enter ou Espaço**: o personagem ocupa a tela, os outros somem e aparece o formulário de login com o nome dele.
 5. **Login** (`LoginForm.jsx`): o usuário já vem preenchido com o `id` do personagem; a senha é conferida no back-end (`POST /auth/login`). Se a conta que entrou não for a do personagem escolhido, o login é desfeito e aparece um erro.

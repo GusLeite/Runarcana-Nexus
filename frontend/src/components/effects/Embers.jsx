@@ -1,4 +1,4 @@
-// Gaudron (minotauro gladiador): calor da arena subindo do chão e fagulhas de brasa enquanto durar o hover.
+// Galdren (minotauro gladiador): calor da arena subindo do chão e fagulhas de brasa enquanto durar o hover.
 // Com .hot, a sequência da martelada: ele carrega (a tela escurece e a luz é puxada para o chão), o martelo desce
 // aos 0,5 s (clarão, ondas de choque, tremor, rachaduras de lava, pedras e fagulhas) e a arena responde: a torcida
 // grita o nome dele em três batidas, as tochas chamejam e caem panos vermelhos. Tudo some em ~3,6 s.
@@ -71,7 +71,7 @@ const CLOTH = Array.from({ length: 6 }, (_, i) => ({
   '--d': (1.5 + rnd(i + 380) * .9).toFixed(2) + 's',
 }))
 
-const CHANT = ['GAU!', 'DRON!', 'GAUDRON!']
+const CHANT = ['GAL!', 'DREN!', 'GALDREN!']
 
 export default function Embers() {
   return (

@@ -3,7 +3,8 @@
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
 ## 2026-11-02 — Funções e descrições dos personagens (`feature/character-sheet`)
-- Tela de seleção: Rudo (Arcanista, mago hemomante), Gaudron (Bruto, minotauro de Noxus), Proto (Combatente, construto de Piltover) e Loge (Mercurial, assassino louco e alcoólatra) com novas funções e descrições em `frontend/src/data/characters.js`.
+- Gaudron passa a se chamar Galdren na tela (nome e grito da torcida); o id/usuário da conta continua gaudron.
+- Tela de seleção: Rudo (Arcanista, mago hemomante), Galdren (Bruto, minotauro de Noxus), Proto (Combatente, construto de Piltover) e Loge (Mercurial, assassino louco e alcoólatra) com novas funções e descrições em `frontend/src/data/characters.js`.
 
 ## 2026-11-02 — Som em todo o site (`feature/character-sheet`)
 - Ficha e painel do mestre usam sons de interface suaves e arredondados (pop de bolha, acorde macio), sem ruído agudo.

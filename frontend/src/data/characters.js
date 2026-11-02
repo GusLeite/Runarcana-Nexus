@@ -18,7 +18,7 @@ import logeVid from '../assets/characters/loge.mp4'
 const BASE = [
   { id: 'rudo', name: 'RUDO', role: 'Arcanista', hue: 8, variant: 0, lore: 'Mago hemomante que utiliza o sangue como instrumento arcano.',
     img: rudoImg, vid: rudoVid, pos: '60% 30%', fx: 'blood', burst: true },
-  { id: 'gaudron', name: 'GAUDRON', role: 'Bruto', hue: 42, variant: 1, lore: 'Um guerreiro minotauro de Noxus que busca alguém capaz de superar sua força.',
+  { id: 'gaudron', name: 'GALDREN', role: 'Bruto', hue: 42, variant: 1, lore: 'Um guerreiro minotauro de Noxus que busca alguém capaz de superar sua força.',
     img: gaudronImg, vid: gaudronVid, pos: '57% 25%', fx: 'embers', impact: true },
   { id: 'proto', name: 'PROTO', role: 'Combatente', hue: 190, variant: 2, lore: 'Um construto defensor criado por um inventor de Piltover, movido pelo luto por sua família.',
     img: protoImg, vid: protoVid, pos: '58% 25%', fx: 'oath' },
