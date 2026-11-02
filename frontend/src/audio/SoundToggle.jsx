@@ -8,7 +8,7 @@ export default function SoundToggle() {
   return (
     <div className="snd" role="group" aria-label="Som">
       <button type="button" className={'snd-btn' + (prefs.sfx ? ' on' : '')} aria-pressed={prefs.sfx} data-sfx="none"
-        title={prefs.sfx ? 'Silenciar efeitos' : 'Ativar efeitos'} aria-label="Efeitos sonoros" onClick={() => setPrefs({ sfx: !prefs.sfx })}>
+        title={prefs.sfx ? 'Silenciar efeitos' : 'Ativar efeitos'} aria-label="Efeitos sonoros" onClick={() => setPrefs({ sfx: !getPrefs().sfx })}>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor" />
           {prefs.sfx
@@ -17,7 +17,7 @@ export default function SoundToggle() {
         </svg>
       </button>
       <button type="button" className={'snd-btn' + (prefs.ambient ? ' on' : '')} aria-pressed={prefs.ambient} data-sfx="none"
-        title={prefs.ambient ? 'Silenciar música de fundo' : 'Ativar música de fundo'} aria-label="Música de fundo" onClick={() => setPrefs({ ambient: !prefs.ambient })}>
+        title={prefs.ambient ? 'Silenciar música de fundo' : 'Ativar música de fundo'} aria-label="Música de fundo" onClick={() => setPrefs({ ambient: !getPrefs().ambient })}>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M9 17.5V6.5l10-2v11" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
           <ellipse cx="6.8" cy="17.5" rx="2.6" ry="2" fill="currentColor" />

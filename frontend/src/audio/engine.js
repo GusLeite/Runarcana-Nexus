@@ -32,6 +32,9 @@ export function setPrefs(patch) {
   listeners.forEach(fn => fn())
 }
 
+// Para diagnóstico (console: `await (await import('/src/audio/engine.js')).debugState()`).
+export const debugState = () => ({ unlocked, state: ctx?.state ?? 'sem contexto', prefs, ambient: !!amb, sampleRate: ctx?.sampleRate, out: out?.gain.value })
+
 // ---------- contexto e barramentos ----------
 
 let ctx = null
