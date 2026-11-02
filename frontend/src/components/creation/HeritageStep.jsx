@@ -8,10 +8,10 @@ const FILTERS = [
   { id: 'ORIGIN', label: 'De Origem' },
 ]
 
-// Símbolo por tipo de Herança (viewBox 100×100): Geral = escudo, Região = marcador de mapa, Origem = broto.
+// Símbolo por tipo de Herança (viewBox 100×100): Geral = escudo, Região = mapa dobrado, Origem = broto.
 const SIGILS = {
   GENERAL: ['M16 14H84V52C84 72 66 84 50 92 34 84 16 72 16 52Z', 'M50 30V62M34 46H66'],
-  REGION: ['M50 92C30 66 22 52 22 38a28 28 0 0 1 56 0C78 52 70 66 50 92Z', 'M50 46a10 10 0 1 0 .01 0'],
+  REGION: ["M10 22 36 12 64 22 90 12V78L64 88 36 78 10 88Z", "M36 12V78M64 22V88"],
   ORIGIN: ['M50 92V44', 'M50 64C28 64 20 48 20 28 40 28 50 40 50 56', 'M50 50C50 34 62 22 82 22 82 42 70 54 50 58']
 }
 
@@ -27,12 +27,11 @@ const fold = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
 
 // Compra das Heranças com os pontos que a origem dá. O back diz o que dá para escolher
 // (preview.heritageOptions, com o motivo quando não dá) e quantos pontos de cada tipo sobram.
-// Cada Herança é uma linha: medalhão do tipo, nome, resumo de 2 linhas ("Ler tudo" abre) e a ação à direita.
+// Cada Herança é uma linha: medalhão do tipo, nome, texto completo, pré-requisito e a ação à direita.
 export default function HeritageStep({ heritages, preview, picks, onChange }) {
   const [category, setCategory] = useState('ALL')
   const [onlyAvailable, setOnlyAvailable] = useState(true)
   const [query, setQuery] = useState('')
-  const [open, setOpen] = useState(null)
 
   const pools = preview?.heritagePools ?? []
   const total = pools.reduce((s, p) => s + p.points, 0)
@@ -128,7 +127,6 @@ export default function HeritageStep({ heritages, preview, picks, onChange }) {
           const option = picks.find(p => p.id === h.id)?.option ?? null
           // Escolhas de antes (na subida de nível, as da criação): a prévia conta todas.
           const before = Math.max(0, (preview?.heritages?.find(l => l.id === h.id)?.times ?? times) - times)
-          const expanded = open === h.id
           const locked = !s?.available && !chosen
           return (
             <article key={h.id} className={'hr-card c-' + h.category.toLowerCase() + (chosen ? ' on' : '') + (locked ? ' locked' : '')}
@@ -140,11 +138,8 @@ export default function HeritageStep({ heritages, preview, picks, onChange }) {
                   <span className="hr-tag">{HERITAGE_CATEGORIES[h.category]}</span>
                   {max > 1 && <span className="hr-times" title={'Pode ser escolhida até ' + max + ' vezes'}>{times}/{max}</span>}
                 </div>
-                <p className={'hr-desc' + (expanded ? ' open' : '')}>{h.description}</p>
-                <button type="button" className="link-btn" onClick={() => setOpen(expanded ? null : h.id)} aria-expanded={expanded}>
-                  {expanded ? 'Recolher' : 'Ler tudo'}
-                </button>
-                {expanded && !locked && h.prerequisite && <div className="hr-pre"><b>Pré-requisito:</b> {h.prerequisite}</div>}
+                <p className="hr-desc">{h.description}</p>
+                {!locked && h.prerequisite && <div className="hr-pre"><b>Pré-requisito:</b> {h.prerequisite}</div>}
 
                 {chosen && h.options?.length > 0 && (h.optionPerPick ? heritageOptions(picks, h.id) : [option]).map((current, i, all) => (
                   <div className="hr-options" key={i}>
