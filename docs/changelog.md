@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — APK Android que abre o site (`feature/character-sheet`)
+- Capacitor em `frontend/`: o app é uma janela para `https://runarcana.duckdns.org`, sem embutir o front, com tela própria sem conexão.
+- `npm run apk` gera `frontend/dist-apk/Runarcana.apk` (cerca de 6 MB); ícone recortado da capa do livro.
+- Ferramentas e chave de assinatura ficam em `E:\AndroidBuild`, fora do repositório.
+- Não testado em aparelho, e o domínio ainda não existe no DNS.
+
 ## 2026-11-02 — Deploy passa da Oracle para VPS paga (`feature/character-sheet`)
 - A Oracle ficou sem capacidade de Ampere A1 em São Paulo; hospedagem escolhida: Hetzner CAX11, com guia em `docs/deploy-vps.md`.
 - `deploy/setup-oracle.sh` virou `deploy/setup-server.sh` e também funciona como root.

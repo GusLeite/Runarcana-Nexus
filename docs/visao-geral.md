@@ -58,6 +58,7 @@ npm install
 npm run dev      # http://localhost:5173
 npm test         # testes (Vitest)
 npm run build    # gera frontend/dist
+npm run apk      # gera frontend/dist-apk/Runarcana.apk (ver frontend.md, App Android)
 ```
 
 ## Colocar no ar

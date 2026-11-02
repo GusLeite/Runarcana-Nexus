@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# APK gerado por scripts/build-apk.ps1
+dist-apk

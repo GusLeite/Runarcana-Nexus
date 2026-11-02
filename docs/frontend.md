@@ -58,6 +58,12 @@ frontend/
 
 `src/api/auth.js` chama `VITE_API_URL` (padrão `/runarcana`). Em `npm run dev`, o Vite repassa `/runarcana` para o Spring em `localhost:8080`, então **o back-end precisa estar rodando** para o login funcionar. Os erros mostrados vêm do campo `message` da API; sem servidor, aparece "Não foi possível falar com o servidor". As regras de senha são repetidas em `validation.js` (`validatePasswordChange`) só para avisar antes de enviar; quem decide é o back-end.
 
+## App Android (APK)
+
+O APK (Capacitor, `capacitor.config.json`) é só uma janela para `https://runarcana.duckdns.org`: o front não vai embutido, então atualizar o site atualiza o app, sem CORS nem `VITE_API_URL`. `android-shell/` tem apenas a página vazia exigida pelo Capacitor e `error.html`, mostrada quando o site não abre. Trocar o endereço, o ícone ou o nome exige gerar e reinstalar o APK.
+
+`npm run apk` (`scripts/build-apk.ps1`) gera `dist-apk/Runarcana.apk`. Ferramentas e chave ficam fora do repositório, em `ANDROID_BUILD_ROOT` (padrão `E:\AndroidBuild`): `jdk21`, `sdk`, `gradle`, `runarcana-release.jks` e `keystore.properties`. Sem essa chave, uma versão nova só instala depois de desinstalar a antiga. O ícone e a abertura foram recortados de `android/icon-source.png` (capa do livro, 488×779, com marcadores de captura fora do recorte).
+
 ## Identidade visual
 
 Tokens em `:root` (`global.css`): fundo `--bg #050b14`, painel `--panel #0a1626`, dourado `--gold #c8a24a` / `--gold-hi #f0c75e`, turquesa `--teal #2fd3c0`, texto `--text #e8dfc8`, apagado `--muted #8d97a8`. Fontes: **Cinzel** (títulos, nomes, botões) e **Spectral** (texto).
@@ -70,6 +76,7 @@ A tela foi prototipada num `index.html` único (React via CDN, imagens e vídeo 
 
 ## Pendências / problemas conhecidos
 
+- APK: falta testar em aparelho, com o site no ar (o domínio ainda não existe no DNS). A imagem do ícone é uma captura de baixa resolução; vale regerar a partir do arquivo original da capa.
 - Martelada do Galdren: no painel do Claude, o primeiro quadro ainda atrasa 1 s (a thread principal fica livre; depois disso roda a mais de 90 fps). Falta confirmar num navegador comum se isso também acontece lá.
 - Vídeos da seleção (`assets/characters/`, ~15 MB no total): os quatro tocam juntos em repouso, então ficam em 720p, sem áudio e no fps original (`ffmpeg -i orig.mp4 -an -vf "scale=-2:720:flags=lanczos" -c:v libx264 -preset slow -crf 24 -pix_fmt yuv420p -movflags +faststart saida.mp4`).
 - As 29 linhagens têm imagem. Vale trocar a do fulgor, que é pequena (507×594). Linhagem nova no catálogo: basta soltar `<id>.webp` em `src/assets/lineages/` (sem imagem, o cartão mostra o espaço provisório).
