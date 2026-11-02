@@ -98,13 +98,17 @@ function apply() {
 }
 
 // Chamado no primeiro gesto do usuário (clique, toque ou tecla).
+// Chamado a cada gesto até o áudio de fato estar tocando: alguns navegadores só aceitam o `resume` no click/toque
+// (não no pointerdown), então uma tentativa única não basta.
+let hooked = false
 export function unlock() {
-  if (unlocked) return
   unlocked = true
   const c = audio()
-  if (c?.state === 'suspended') c.resume().catch(() => {})
+  if (!c) return
+  if (c.state !== 'running') c.resume().catch(() => {})
+  if (hooked) return
+  hooked = true
   document.addEventListener('visibilitychange', () => {
-    if (!ctx) return
     if (document.hidden) ctx.suspend().catch(() => {})
     else ctx.resume().catch(() => {})
   })

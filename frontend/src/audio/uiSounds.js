@@ -19,8 +19,7 @@ export function clickSound(el) {
 // Instala os sons de interface na página toda (por delegação: telas novas já nascem com som).
 export function installUiSounds(root = document) {
   const wake = () => unlock()
-  root.addEventListener('pointerdown', wake, { capture: true })
-  root.addEventListener('keydown', wake, { capture: true })
+  ;['pointerdown', 'pointerup', 'click', 'touchend', 'keydown'].forEach(type => root.addEventListener(type, wake, { capture: true }))
 
   root.addEventListener('click', e => {
     const el = e.target.closest?.(INTERACTIVE)
