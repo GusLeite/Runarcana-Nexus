@@ -1,0 +1,61 @@
+# Produção num servidor só: copie .env.example para .env, preencha e rode "docker compose up -d --build".
+# Só o web fica exposto; a API e o banco ficam na rede interna.
+services:
+  db:
+    image: postgres:18
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: runarcana
+      POSTGRES_USER: runarcana
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?defina DB_PASSWORD no .env}
+    volumes:
+      - db-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U runarcana -d runarcana"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/runarcana
+      DB_USERNAME: runarcana
+      DB_PASSWORD: ${DB_PASSWORD}
+      RUNARCANA_MASTER_PASSWORD: ${RUNARCANA_MASTER_PASSWORD:?defina RUNARCANA_MASTER_PASSWORD no .env}
+
+  web:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:?defina SITE_ADDRESS no .env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+
+  backup:
+    image: postgres:18
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./deploy/backup.sh:/backup.sh:ro
+      - ./backups:/backups
+    entrypoint: ["sh", "/backup.sh"]
+
+volumes:
+  db-data:
+  caddy-data:
+  caddy-config:

@@ -2,8 +2,12 @@ package gusleite.runarcana_nexus.model.player;
 
 import gusleite.runarcana_nexus.model.items.Item;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class PlayerItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

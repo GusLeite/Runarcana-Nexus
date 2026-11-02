@@ -1,0 +1,110 @@
+/* Animação de cada classe ao passar o mouse no salão (ClassFx.jsx). Só existe com o painel aceso; anima apenas transform e opacity,
+   e o quadro tem a largura final do painel, para nada ser repintado enquanto ele se expande. --c é a cor da classe. */
+.cfx{--c:hsl(var(--h) 95% 72%);--w:max(100%,var(--hot-w));position:absolute;top:0;bottom:0;left:50%;z-index:1;display:none;width:var(--w);margin-left:calc(var(--w)/-2);contain:strict;pointer-events:none}
+.ocard:hover .cfx,.ocard:focus-visible .cfx{display:block}
+.cfx>*,.cfx div>*{position:absolute;display:block}
+.cfx svg{overflow:visible;fill:none;stroke:var(--c);stroke-linecap:round;stroke-linejoin:round}
+/* Tudo começa invisível e termina invisível: "both" segura o início do atraso e o fim. */
+.cfx *{opacity:0;animation-fill-mode:both}
+.cfx svg *,.cfx .rise b{opacity:1}
+
+@keyframes cfx-fade{0%{opacity:0}25%,60%{opacity:1}100%{opacity:0}}
+
+/* Acólito */
+.cfx-acolyte .beam{left:50%;top:-5%;width:70px;height:62%;margin-left:-35px;transform-origin:50% 0;background:linear-gradient(rgba(220,255,245,.65),hsla(var(--h),90%,70%,.2) 70%,transparent);animation:ac-beam 1.8s ease-out}
+.cfx-acolyte .beam.b2{--r:-16deg;animation-delay:.1s}
+.cfx-acolyte .beam.b3{--r:16deg;animation-delay:.2s}
+@keyframes ac-beam{0%{opacity:0;transform:rotate(var(--r,0deg)) scaleY(.1)}35%{opacity:1;transform:rotate(var(--r,0deg)) scaleY(1)}100%{opacity:0;transform:rotate(var(--r,0deg)) scaleY(1.1)}}
+.cfx-acolyte .halo{left:50%;top:34%;width:240px;height:240px;margin:-120px 0 0 -120px;border-radius:50%;border:3px solid rgba(225,255,245,.9);animation:ac-halo 1.9s .25s cubic-bezier(.2,.8,.3,1)}
+@keyframes ac-halo{0%{opacity:0;transform:scale(.3)}30%{opacity:1;transform:scale(1)}70%{opacity:.8;transform:scale(1.03)}100%{opacity:0;transform:scale(1.25)}}
+.cfx-acolyte .cross{left:50%;top:34%;width:130px;height:130px;margin:-65px 0 0 -65px;stroke:#eafff8;stroke-width:5;animation:ac-cross 1.9s .3s ease-out}
+@keyframes ac-cross{0%{opacity:0;transform:scale(.6)}30%{opacity:1;transform:scale(1)}45%{transform:scale(1.1)}60%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1)}}
+.cfx-acolyte .mote{left:var(--x);top:6%;width:7px;height:7px;border-radius:50%;background:radial-gradient(circle,#fff,var(--c) 45%,transparent 72%);animation:ac-mote 1.6s var(--dl) ease-in}
+@keyframes ac-mote{0%{opacity:0;transform:none}20%{opacity:1}100%{opacity:0;transform:translateY(55vh)}}
+
+/* Arcanista */
+.cfx-arcanist .circle{left:50%;top:36%;width:340px;height:340px;margin:-170px 0 0 -170px;stroke-width:1.6;animation:ar-circle 2.1s cubic-bezier(.2,.7,.3,1)}
+@keyframes ar-circle{0%{opacity:0;transform:scale(.2) rotate(-120deg)}30%{opacity:1}70%{opacity:1;transform:scale(1) rotate(30deg)}100%{opacity:0;transform:scale(1.2) rotate(60deg)}}
+.cfx-arcanist .orbit{left:50%;top:36%;width:0;height:0;opacity:1;animation:ar-orbit 1.5s .1s cubic-bezier(.5,0,.3,1)}
+@keyframes ar-orbit{to{transform:rotate(540deg)}}
+.cfx-arcanist .orbit i{left:-9px;top:-9px;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle,#fff,var(--c) 45%,transparent 72%);animation:ar-charge 1.5s .1s ease-in}
+@keyframes ar-charge{0%{opacity:0;transform:rotate(var(--a)) translateY(-150px) scale(.5)}25%{opacity:1}85%{opacity:1;transform:rotate(var(--a)) translateY(-40px) scale(1.1)}100%{opacity:0;transform:rotate(var(--a)) translateY(0) scale(.3)}}
+.cfx-arcanist .nova{left:50%;top:36%;width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95),hsla(var(--h),95%,70%,.55) 28%,transparent 68%);animation:ar-nova .8s 1.45s ease-out}
+@keyframes ar-nova{0%{opacity:0;transform:scale(.15)}20%{opacity:1}100%{opacity:0;transform:scale(1.7)}}
+
+/* Atirador */
+.cfx-marksman .scope{left:50%;top:36%;width:280px;height:280px;margin:-140px 0 0 -140px;stroke:#ff5a5a;stroke-width:1.6;animation:mk-scope 1.3s cubic-bezier(.2,.9,.3,1)}
+@keyframes mk-scope{0%{opacity:0;transform:scale(2.6) rotate(50deg)}25%{opacity:1}60%{transform:scale(.92) rotate(0)}72%,88%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.8)}}
+.cfx-marksman .flash{left:50%;top:36%;width:260px;height:260px;margin:-130px 0 0 -130px;border-radius:50%;background:radial-gradient(circle,#fff,rgba(255,200,120,.75) 20%,transparent 62%);animation:mk-flash .4s 1.15s ease-out}
+@keyframes mk-flash{0%{opacity:1;transform:scale(.3)}100%{opacity:0;transform:scale(1.5)}}
+.cfx-marksman .tracer{left:0;right:0;top:36%;height:3px;margin-top:-1.5px;background:linear-gradient(90deg,transparent,#fff 45%,#ffd28a);transform-origin:0 50%;animation:mk-tracer .32s 1.13s ease-out}
+@keyframes mk-tracer{0%{opacity:1;transform:scaleX(0)}55%{opacity:1;transform:scaleX(1)}100%{opacity:0;transform:scaleX(1) scaleY(.2)}}
+.cfx-marksman .ring{left:50%;top:36%;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;border:2px solid #ffd28a;animation:mk-ring .6s 1.15s ease-out}
+@keyframes mk-ring{0%{opacity:1;transform:scale(.2)}100%{opacity:0;transform:scale(3.2)}}
+.cfx-marksman .shell{left:50%;top:36%;width:5px;height:12px;background:linear-gradient(#ffe5a0,#b77a1c);animation:mk-shell .85s 1.2s cubic-bezier(.2,.6,.5,1)}
+@keyframes mk-shell{0%{opacity:1;transform:none}100%{opacity:0;transform:translate(var(--dx),calc(var(--up)*-1)) rotate(var(--r))}}
+
+/* Bodisatva */
+.cfx-bodhisattva .lotus{left:50%;top:36%;width:0;height:0;opacity:1}
+.cfx-bodhisattva .lotus i{left:-26px;top:-130px;width:52px;height:130px;transform-origin:50% 100%;border-radius:50% 50% 50% 50%/70% 70% 30% 30%;background:linear-gradient(hsla(var(--h),95%,82%,.8),hsla(var(--h),85%,55%,.12));animation:bo-petal 2s var(--dl) cubic-bezier(.2,.8,.3,1)}
+@keyframes bo-petal{0%{opacity:0;transform:rotate(var(--a)) scale(.1)}35%{opacity:.6;transform:rotate(var(--a)) scale(1)}70%{opacity:.45;transform:rotate(calc(var(--a) + 8deg)) scale(1.02)}100%{opacity:0;transform:rotate(calc(var(--a) + 16deg)) scale(1.2)}}
+.cfx-bodhisattva .wave{left:50%;top:36%;width:200px;height:200px;margin:-100px 0 0 -100px;border-radius:50%;border:2px solid var(--c);animation:bo-wave 1.1s var(--dl) ease-out}
+@keyframes bo-wave{0%{opacity:.9;transform:scale(.2)}100%{opacity:0;transform:scale(3)}}
+.cfx-bodhisattva .petal{left:var(--x);top:-3%;width:12px;height:16px;border-radius:0 80% 0 80%;background:var(--c);animation:bo-fall 1.6s var(--dl) ease-in}
+@keyframes bo-fall{0%{opacity:0;transform:none}15%{opacity:.95}100%{opacity:0;transform:translate(var(--dx),62vh) rotate(280deg)}}
+
+/* Brutamontes */
+.cfx-brute{animation:br-shake .5s .55s linear}
+@keyframes br-shake{0%,100%{transform:none}15%{transform:translate(-9px,6px)}30%{transform:translate(8px,-7px)}50%{transform:translate(-6px,4px)}70%{transform:translate(4px,-3px)}85%{transform:translate(-2px,2px)}}
+.cfx-brute .dark{inset:0;background:rgba(10,3,0,.55);animation:cfx-fade 1.7s ease}
+.cfx-brute .axe{left:50%;top:36%;width:340px;height:340px;margin:-170px 0 0 -170px;fill:rgba(255,200,140,.28);stroke:#ffe2bd;stroke-width:2.6;transform-origin:50% 94%;animation:br-axe 1.7s cubic-bezier(.5,0,.2,1)}
+@keyframes br-axe{0%{opacity:0;transform:rotate(-80deg) translateY(-40px)}14%{opacity:1}34%{transform:rotate(14deg)}38%{transform:rotate(9deg)}44%,72%{opacity:1;transform:rotate(12deg)}100%{opacity:0;transform:rotate(12deg)}}
+.cfx-brute .quake{left:50%;top:36%;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;border:3px solid #ffb35a;animation:mk-ring .75s .55s ease-out}
+.cfx-brute .flare{left:50%;top:34%;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;background:radial-gradient(circle,rgba(255,200,120,.65),rgba(255,90,20,.3) 40%,transparent 68%);animation:br-flare .7s .55s ease-out}
+@keyframes br-flare{0%{opacity:0;transform:scale(.4)}25%{opacity:1}100%{opacity:0;transform:scale(1.3)}}
+.cfx-brute .chip{left:50%;top:38%;width:10px;height:10px;border-radius:38% 62% 45% 55%;background:linear-gradient(140deg,#c09a70,#3a241a);animation:br-chip .9s var(--dl) cubic-bezier(.15,.6,.5,1)}
+@keyframes br-chip{0%{opacity:1;transform:none}100%{opacity:0;transform:translate(var(--dx),calc(var(--up)*-1)) rotate(320deg)}}
+
+/* Caçador */
+.cfx-hunter .track{left:var(--x);top:var(--y);width:13px;height:18px;border-radius:50% 50% 45% 45%;background:hsla(var(--h),85%,80%,.8);animation:hu-track 1.5s var(--dl) ease-out}
+@keyframes hu-track{0%{opacity:0;transform:scale(.4)}15%{opacity:1;transform:scale(1)}65%{opacity:.75}100%{opacity:0;transform:scale(1)}}
+.cfx-hunter .arrow{left:-340px;top:36%;width:300px;height:36px;margin-top:-18px;fill:#f2ecdc;stroke:#f2ecdc;stroke-width:2.5;animation:hu-arrow 1.6s .6s cubic-bezier(.3,0,.1,1)}
+@keyframes hu-arrow{0%{opacity:1;transform:none}26%{opacity:1;transform:translateX(calc(var(--hot-w)/2 + 200px))}29%{transform:translateX(calc(var(--hot-w)/2 + 190px))}33%,78%{opacity:1;transform:translateX(calc(var(--hot-w)/2 + 200px))}100%{opacity:0;transform:translateX(calc(var(--hot-w)/2 + 200px))}}
+.cfx-hunter .hit{left:50%;top:36%;width:220px;height:220px;margin:-110px 0 0 -110px;border-radius:50%;border:3px solid var(--c);animation:mk-ring .6s 1s ease-out}
+.cfx-hunter .feather{left:50%;top:36%;width:7px;height:17px;border-radius:0 80% 0 80%;background:hsl(var(--h) 80% 86%);animation:mk-shell .9s 1s cubic-bezier(.2,.6,.5,1)}
+
+/* Guerreiro */
+.cfx-fighter .sword{left:50%;top:36%;width:64px;height:380px;margin:-190px 0 0 -32px;fill:rgba(225,232,240,.5);stroke:#f4f6f8;stroke-width:2}
+.cfx-fighter .sword.left{--from:-280px;--ang:-42deg;--rest:38deg;animation:fi-sword 1.7s cubic-bezier(.5,0,.2,1)}
+.cfx-fighter .sword.right{--from:280px;--ang:42deg;--rest:-38deg;animation:fi-sword 1.7s cubic-bezier(.5,0,.2,1)}
+@keyframes fi-sword{0%{opacity:0;transform:translateX(var(--from)) rotate(var(--ang))}10%{opacity:1}30%{transform:rotate(var(--rest))}34%{transform:translateX(calc(var(--from)*.05)) rotate(var(--rest))}40%,75%{opacity:1;transform:rotate(var(--rest))}100%{opacity:0;transform:rotate(var(--rest))}}
+.cfx-fighter .clash{left:50%;top:36%;width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;background:radial-gradient(circle,#fff,rgba(255,190,100,.7) 20%,transparent 62%);animation:mk-flash .5s .5s ease-out}
+.cfx-fighter .clang{left:50%;top:36%;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;border:3px solid #ffd28a;animation:mk-ring .7s .5s ease-out}
+.cfx-fighter .spark{left:50%;top:36%;width:14px;height:3px;margin-top:-1px;background:linear-gradient(90deg,#fff3c8,#ff9a3a);animation:fi-spark .65s .5s cubic-bezier(.1,.7,.4,1)}
+@keyframes fi-spark{0%{opacity:1;transform:rotate(var(--a)) translateX(0)}100%{opacity:0;transform:rotate(var(--a)) translateX(var(--d)) scaleX(.3)}}
+
+/* Mercurial */
+.cfx-mercurial .smoke{left:var(--x);bottom:12%;width:150px;height:150px;margin-left:-75px;border-radius:50%;background:radial-gradient(circle,rgba(30,44,60,.8),rgba(20,30,44,.4) 45%,transparent 70%);animation:me-smoke 1.9s var(--dl) ease-out}
+@keyframes me-smoke{0%{opacity:0;transform:scale(.4)}30%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-180px) scale(1.9)}}
+.cfx-mercurial .hood{left:50%;top:36%;width:230px;height:230px;margin:-115px 0 0 -115px;fill:rgba(6,12,22,.86);stroke:#8fd0ff;stroke-width:1.8;animation:me-hood 2.1s .15s ease-out}
+@keyframes me-hood{0%{opacity:0;transform:translateY(34px) scale(.88)}28%{opacity:1;transform:none}72%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-10px) scale(.8)}}
+.cfx-mercurial .hood .face{fill:#000;stroke:rgba(143,208,255,.45);stroke-width:1}
+.cfx-mercurial .hood .eye{stroke:#fff;stroke-width:6;animation:me-eye 2.1s .15s ease-out}
+@keyframes me-eye{0%,32%{opacity:0}40%,72%{opacity:1}100%{opacity:0}}
+.cfx-mercurial .slash{left:50%;top:7%;width:4px;height:58%;margin-left:-2px;rotate:38deg;background:linear-gradient(transparent,#e6f6ff 30%,#67bfff 70%,transparent);transform-origin:50% 50%;animation:me-slash .6s 1.1s cubic-bezier(.1,.8,.3,1)}
+.cfx-mercurial .slash.s2{rotate:-38deg;animation-delay:1.25s}
+@keyframes me-slash{0%{opacity:1;transform:scaleY(0)}30%{opacity:1;transform:scaleY(1)}100%{opacity:0;transform:scaleY(1) scaleX(.2)}}
+
+/* Xamã */
+.cfx-shaman .flame{left:50%;bottom:16%;width:230px;height:340px;margin-left:-115px;transform-origin:50% 100%;border-radius:50% 50% 45% 45%/70% 70% 30% 30%;background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(255,235,170,.75),hsla(var(--h),95%,55%,.45) 45%,transparent 100%);animation:sh-flame 2.1s ease-out}
+.cfx-shaman .flame.f2{width:140px;height:220px;margin-left:-70px;animation-delay:.2s}
+@keyframes sh-flame{0%{opacity:0;transform:scale(.5,.1)}30%{opacity:1;transform:scale(1,1)}50%{transform:scale(.92,1.08)}70%{opacity:.85;transform:scale(1.05,.96)}100%{opacity:0;transform:scale(.8,1.2)}}
+.cfx-shaman .rise{left:var(--x);bottom:12%;opacity:1;animation:sh-sway .55s var(--dl) ease-in-out 3 alternate}
+@keyframes sh-sway{from{transform:translateX(calc(var(--sw)*-1))}to{transform:translateX(var(--sw))}}
+.cfx-shaman .rise b{display:block;width:16px;height:24px;border-radius:50% 50% 50% 50%/65% 65% 35% 35%;background:radial-gradient(ellipse at 50% 70%,#fff,var(--c) 45%,transparent 72%);opacity:0;animation:sh-rise 1.65s var(--dl) ease-out both}
+@keyframes sh-rise{0%{opacity:0;transform:none}18%{opacity:1}75%{opacity:.8}100%{opacity:0;transform:translateY(-60vh) scale(.5)}}
+.cfx-shaman .totem{left:50%;top:36%;width:150px;height:150px;margin:-75px 0 0 -75px;stroke:#ffe6b5;stroke-width:2;animation:sh-totem 1.8s .45s ease-out}
+@keyframes sh-totem{0%{opacity:0;transform:scale(.6) translateY(40px)}35%{opacity:1;transform:none}72%{opacity:1}100%{opacity:0;transform:translateY(-22px)}}
+
+@media (prefers-reduced-motion:reduce){.cfx{display:none!important}}
+@media (max-width:860px){.cfx{display:none!important}}

@@ -6,6 +6,18 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--prefix", "frontend", "--", "--port", "5173", "--strictPort"],
       "port": 5173
+    },
+    {
+      "name": "backend-sandbox",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "set JAVA_HOME=E:\\DevTools&& call .\\mvnw.cmd -q test-compile spring-boot:test-run -Dspring-boot.test-run.main-class=gusleite.runarcana_nexus.SandboxApplication"],
+      "port": 8090
+    },
+    {
+      "name": "frontend-sandbox",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "set VITE_PROXY_TARGET=http://localhost:8090&& npm run dev --prefix frontend -- --port 5175 --strictPort"],
+      "port": 5175
     }
   ]
 }

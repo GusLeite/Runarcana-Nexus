@@ -1,0 +1,576 @@
+{
+  "attributeMethods": {
+    "pointBuy": {
+      "points": 27,
+      "min": 8,
+      "max": 15,
+      "costs": {
+        "8": 0,
+        "9": 1,
+        "10": 2,
+        "11": 3,
+        "12": 4,
+        "13": 5,
+        "14": 7,
+        "15": 9
+      }
+    },
+    "standardArray": [
+      15,
+      14,
+      13,
+      12,
+      10,
+      8
+    ],
+    "manual": {
+      "min": 3,
+      "max": 18
+    }
+  },
+  "baseSpeed": 30,
+  "rounding": "DOWN",
+  "crafts": [
+    {
+      "id": "alquimia",
+      "name": "Alquimia"
+    },
+    {
+      "id": "ferraria",
+      "name": "Ferraria",
+      "kind": "MAJOR",
+      "attribute": "STRENGTH"
+    }
+  ],
+  "origins": [
+    {
+      "id": "teste-origem",
+      "name": "Origem Teste",
+      "speed": 30,
+      "details": [
+        {
+          "name": "Idade",
+          "text": "Vive muito."
+        }
+      ],
+      "grants": [
+        {
+          "type": "ATTRIBUTE",
+          "attribute": "INTELLIGENCE",
+          "amount": 2
+        },
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "STRENGTH",
+            "DEXTERITY"
+          ]
+        },
+        {
+          "type": "SKILL",
+          "skill": "HISTORY"
+        },
+        {
+          "type": "SPEED",
+          "feet": 5
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Visão no Escuro",
+          "description": "Enxerga no escuro."
+        },
+        {
+          "type": "SIZE_CHOICE",
+          "options": [
+            "SMALL",
+            "MEDIUM"
+          ]
+        },
+        {
+          "type": "CRAFT_CHOICE",
+          "count": 1
+        },
+        {
+          "type": "LANGUAGE_CHOICE",
+          "count": 1,
+          "fromRegion": true
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 2,
+          "value": "REGION"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Inspirado",
+          "usesFormula": "HALF_PROFICIENCY",
+          "recharge": "LONG_REST",
+          "diceByProficiency": {
+            "2": "1d4",
+            "4": "1d6",
+            "6": "1d8"
+          }
+        },
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "options": [
+            "STRENGTH",
+            "DEXTERITY"
+          ]
+        },
+        {
+          "type": "HP_BONUS",
+          "usesFormula": "HALF_PROFICIENCY",
+          "perLevel": true
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Chifres",
+          "damage": "1d6",
+          "damageBonus": [
+            "PROFICIENCY",
+            "STRENGTH"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "teste-tribal",
+      "name": "Origem Tribal",
+      "grants": [
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 1,
+          "value": "ORIGIN"
+        }
+      ],
+      "lineages": [
+        {
+          "id": "sol",
+          "name": "Sol",
+          "description": "Tribo do sol.",
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Urro Teste",
+              "usesFormula": "ATTRIBUTE_MODIFIER",
+              "attribute": "CONSTITUTION",
+              "recharge": "LONG_REST"
+            },
+            {
+              "type": "FEATURE",
+              "name": "Resistente",
+              "options": [
+                "Ígneo",
+                "Gélido"
+              ],
+              "optionUses": {
+                "Gélido": {
+                  "maxUses": 1,
+                  "recharge": "LONG_REST"
+                }
+              }
+            },
+            {
+              "type": "PROFICIENCY_CHOICE",
+              "count": 1
+            }
+          ],
+          "levels": [
+            {
+              "level": 2,
+              "grants": [
+                {
+                  "type": "FEATURE",
+                  "abilityType": "ABILITY",
+                  "name": "Sopro Teste",
+                  "description": "Só no 2º nível.",
+                  "usesFormula": "PROFICIENCY"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lua",
+          "name": "Lua"
+        }
+      ]
+    },
+    {
+      "id": "teste-runinata",
+      "name": "Runinata Teste",
+      "speed": 30,
+      "usesTraits": true,
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 2
+        },
+        {
+          "type": "SIZE_CHOICE",
+          "options": [
+            "SMALL",
+            "MEDIUM"
+          ]
+        }
+      ]
+    }
+  ],
+  "classes": [
+    {
+      "id": "ARCANIST",
+      "name": "Arcanista",
+      "hitDie": 6,
+      "startingGold": 40,
+      "grants": [
+        {
+          "type": "SAVING_THROW",
+          "attribute": "INTELLIGENCE"
+        },
+        {
+          "type": "SKILL_CHOICE",
+          "count": 2,
+          "options": [
+            "ARCANA",
+            "HISTORY",
+            "INSIGHT",
+            "RELIGION"
+          ]
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "SPELL",
+          "spellLevel": 0,
+          "name": "Raio",
+          "damage": "1d10"
+        },
+        {
+          "type": "EQUIPMENT",
+          "value": "t-couro+t-adaga*2+t-conjunto"
+        }
+      ],
+      "levels": [
+        {
+          "level": 2,
+          "grants": [
+            {
+              "type": "HP_BONUS",
+              "amount": 1
+            },
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Pontos de Mana",
+              "description": "Mana do Arcanista de teste.",
+              "usesByLevel": {
+                "2": 3
+              },
+              "recharge": "LONG_REST"
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "grants": [
+            {
+              "type": "FEATURE",
+              "abilityType": "ABILITY",
+              "name": "Truque de Teste",
+              "description": "Usos pelo nível da classe.",
+              "usesByLevel": {
+                "1": 1,
+                "3": 2,
+                "5": 3
+              },
+              "recharge": "LONG_REST"
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "grants": [
+            {
+              "type": "RESOURCE_CHOICE",
+              "value": "APRIMORAMENTO",
+              "count": 1,
+              "label": "Aprimoramento: aumento de atributo ou um Aprimoramento"
+            }
+          ]
+        }
+      ],
+      "multiclass": {
+        "prerequisite": "Inteligência 13 e outro atributo 13",
+        "attributes": {
+          "INTELLIGENCE": 13
+        },
+        "anotherAttribute": 13
+      },
+      "preparation": {
+        "attribute": "INTELLIGENCE",
+        "levels": "FULL",
+        "from": "CLASS_OR_MYSTERIES",
+        "maxSpellLevel": {
+          "1": 1,
+          "3": 2
+        }
+      }
+    },
+    {
+      "id": "MERCURIAL",
+      "name": "Mercurial Teste",
+      "hitDie": 8,
+      "subclassLabel": "Cabala",
+      "grants": [
+        {
+          "type": "SAVING_THROW_CHOICE",
+          "count": 1,
+          "options": [
+            "WISDOM",
+            "CHARISMA"
+          ]
+        },
+        {
+          "type": "ARMOR_PROFICIENCY",
+          "value": "MEDIUM"
+        },
+        {
+          "type": "WEAPON_PROFICIENCY",
+          "value": "Rapieiras"
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Furtivo Teste",
+          "description": "Dado pelo nível.",
+          "diceByLevel": {
+            "1": "1d6",
+            "3": "2d6"
+          }
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Pontos de Mana",
+          "description": "Usos pelo nível.",
+          "usesByLevel": {
+            "1": 4,
+            "2": 6
+          },
+          "recharge": "LONG_REST"
+        },
+        {
+          "type": "EXPERTISE_CHOICE",
+          "value": "WITH_CRAFTS",
+          "count": 1
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Duas Teste",
+          "description": "Duas opções.",
+          "count": 2,
+          "options": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Placa Teste",
+          "armor": {
+            "base": 12,
+            "dex": false,
+            "requiresArmor": "MEDIUM"
+          }
+        },
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Couraça Teste",
+          "armor": {
+            "base": 14,
+            "dex": false,
+            "requiresArmor": "HEAVY"
+          }
+        }
+      ],
+      "subclasses": [
+        {
+          "id": "sombra",
+          "name": "Cabala Sombra",
+          "grants": [
+            {
+              "type": "HP_BONUS",
+              "usesFormula": "HALF_ATTRIBUTE_MODIFIER",
+              "attribute": "INTELLIGENCE",
+              "perLevel": true
+            }
+          ]
+        }
+      ],
+      "multiclass": {
+        "prerequisite": "Destreza 13",
+        "attributes": {
+          "DEXTERITY": 13
+        },
+        "grants": [
+          {
+            "type": "ARMOR_PROFICIENCY",
+            "value": "LIGHT"
+          }
+        ]
+      },
+      "levels": [
+        {
+          "level": 2,
+          "grants": [
+            {
+              "type": "SPELL_CHOICE",
+              "count": 1,
+              "spellLevel": 1,
+              "value": "CLASS",
+              "label": "Magia do Mercurial: escolha 1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "BRUTE",
+      "name": "Bruto Teste",
+      "description": "Recursos de classe.",
+      "hitDie": 12,
+      "grants": [
+        {
+          "type": "RESOURCE_CHOICE",
+          "value": "SUTRA",
+          "count": 1,
+          "options": [
+            "Teste"
+          ]
+        },
+        {
+          "type": "RESOURCE_CHOICE",
+          "value": "VEL",
+          "amount": 1
+        },
+        {
+          "type": "RESOURCE_CHOICE",
+          "value": "TECNICA",
+          "count": 1
+        },
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Ki",
+          "description": "Reserva de Ki.",
+          "usesByLevel": {
+            "1": 2,
+            "3": 3
+          },
+          "recharge": "LONG_REST"
+        },
+        {
+          "type": "EQUIPMENT_CHOICE",
+          "label": "Arma do Bruto",
+          "options": [
+            "group:arma-marcial",
+            "t-adaga*2"
+          ]
+        },
+        {
+          "type": "MYSTERY",
+          "value": "agua"
+        },
+        {
+          "type": "SPELL_CHOICE",
+          "count": 1,
+          "spellLevel": 0,
+          "value": "MYSTERIES",
+          "label": "Truque do Bruto"
+        }
+      ],
+      "levels": []
+    }
+  ],
+  "backgrounds": [
+    {
+      "id": "estudioso",
+      "name": "Estudioso",
+      "startingGold": 10,
+      "grants": [
+        {
+          "type": "SKILL",
+          "skill": "INVESTIGATION"
+        },
+        {
+          "type": "SKILL",
+          "skill": "MEDICINE"
+        }
+      ]
+    },
+    {
+      "id": "exilado-teste",
+      "name": "Exilado Teste",
+      "description": "Passado de teste.",
+      "grants": [
+        {
+          "type": "PROFICIENCY_CHOICE",
+          "count": 2,
+          "options": [
+            "ARMOR:LIGHT",
+            "ARMOR:MEDIUM",
+            "WEAPON:Armas de fogo leves"
+          ],
+          "label": "Proficiências do Exilado"
+        }
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "id": "TARGON",
+      "name": "Targon",
+      "languages": [
+        "Comum",
+        "Targoniano"
+      ]
+    },
+    {
+      "id": "NOXUS",
+      "name": "Noxus"
+    }
+  ],
+  "runicNature": [
+    {
+      "type": "FEATURE",
+      "abilityType": "PASSIVE",
+      "name": "Pulso Rúnico",
+      "options": [
+        "Rubi",
+        "Safira"
+      ],
+      "diceByProficiency": {
+        "2": "1d4",
+        "3": "1d6"
+      },
+      "description": "Pulso de teste."
+    },
+    {
+      "type": "RESOURCE_CHOICE",
+      "value": "RUNA",
+      "count": 1,
+      "label": "Runa inicial"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+/* Escolha da subclasse no destaque da classe (SubclassPicker.jsx): grade de símbolos e detalhe da opção. --h vem do .ostage. */
+.sub-sigil{width:38px;height:38px;flex:none;overflow:visible;fill:none;stroke:var(--gold);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s,filter .3s,transform .4s cubic-bezier(.22,1,.36,1)}
+.sub-sigil.big{width:52px;height:52px;stroke:hsl(var(--h) 85% 76%);filter:drop-shadow(0 0 8px hsla(var(--h),90%,60%,.55))}
+.sub-sigil.inline{width:22px;height:22px;stroke-width:5;vertical-align:-5px;margin-right:8px}
+/* O destaque não rola: a grade ocupa o que precisa e o detalhe fica com o resto da altura (rolando por dentro, se for longo). */
+.ostage-body:has(.subpick){display:flex;flex-direction:column;overflow:hidden;padding-top:18px;padding-bottom:18px}
+.subpick{display:flex;flex-direction:column;flex:1;min-height:0;gap:12px}
+.subgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:8px;flex:none}
+.subtile{position:relative;display:flex;align-items:center;gap:10px;min-height:56px;padding:8px 12px;border:1px solid rgba(200,162,74,.22);background:linear-gradient(180deg,rgba(10,22,38,.7),rgba(1,10,18,.85));color:var(--text);font:inherit;text-align:left;cursor:pointer;transition:border-color .25s,background .25s,box-shadow .25s,transform .25s}
+.subtile-name{flex:1;min-width:0;font-family:'Cinzel',Georgia,serif;font-size:13px;font-weight:700;line-height:1.25;letter-spacing:.03em;color:var(--text);transition:color .25s}
+.subtile:hover,.subtile:focus-visible,.subtile.peek{border-color:hsla(var(--h),80%,65%,.7);background:linear-gradient(180deg,hsla(var(--h),70%,40%,.22),rgba(1,10,18,.85))}
+.subtile:hover .sub-sigil,.subtile:focus-visible .sub-sigil,.subtile.peek .sub-sigil{stroke:hsl(var(--h) 85% 76%);filter:drop-shadow(0 0 6px hsla(var(--h),90%,60%,.5));transform:scale(1.1)}
+.subtile:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.subtile.on{border-color:var(--gold-hi);box-shadow:0 0 0 1px var(--gold),0 0 22px rgba(240,199,94,.22)}
+.subtile.on .sub-sigil{stroke:var(--gold-hi)}
+.subtile.on .subtile-name{color:var(--gold-hi)}
+.subtile-check{position:absolute;top:4px;right:7px;font-size:13px;font-weight:700;color:var(--gold-hi)}
+.subdetail{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-color:var(--gold-dk) transparent;padding:16px;border:1px solid hsla(var(--h),70%,60%,.38);background:hsla(var(--h),70%,40%,.08)}
+.subdetail-in{display:flex;flex-direction:column;gap:12px;animation:subdetail-in .35s ease}
+@keyframes subdetail-in{from{opacity:0;transform:translateY(6px)}}
+.subdetail-head{display:flex;align-items:center;gap:14px}
+.subdetail-name{margin:0;font-family:'Cinzel',Georgia,serif;font-size:20px;letter-spacing:.05em;color:var(--gold-hi)}
+.subdetail-state{display:block;margin-top:3px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.subdetail-desc{margin:0;font-size:15px;line-height:1.5;color:#cfc7b2}
+.subdetail-empty{margin:0;font-size:14px;font-style:italic;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.subdetail-in{animation:none}.subtile:hover .sub-sigil,.subtile:focus-visible .sub-sigil,.subtile.peek .sub-sigil{transform:none}}

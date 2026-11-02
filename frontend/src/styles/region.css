@@ -1,0 +1,73 @@
+/* Etapa Região da criação: carrossel em tela cheia (RegionStep.jsx). Usa a casca do salão de origens (.ohall, .ohall-bar).
+   --h é o matiz da região. Só transform e opacity são animados sobre o vídeo. */
+.rhall{background:var(--bg)}
+.rstage{position:relative;flex:1 1 0;min-height:340px;overflow:hidden;touch-action:pan-y;background:#03070d}
+
+/* ---------- quadros ---------- */
+.rslide{position:absolute;inset:0;opacity:0;transition:opacity .7s ease;pointer-events:none}
+.rslide.on{z-index:1;opacity:1}
+/* A que sai fica acesa por baixo, para a troca não passar pelo escuro. */
+.rslide.leaving{opacity:1}
+.rslide video,.rslide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--pos,center)}
+.rslide-still{transform-origin:center;animation:rslide-drift 24s ease-in-out infinite alternate}
+@keyframes rslide-drift{from{transform:scale(1)}to{transform:scale(1.08)}}
+.rstage-shade{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(to right,rgba(3,7,13,.82),rgba(3,7,13,.35) 38%,transparent 62%),linear-gradient(to top,rgba(3,7,13,.75),transparent 40%)}
+.rstage .ohall-title{z-index:3}
+
+/* ---------- setas ---------- */
+.rarrow{position:absolute;top:50%;z-index:4;display:grid;place-items:center;width:54px;height:54px;padding:0 0 5px;translate:0 -50%;border:0;background:none;color:var(--gold-hi);font:400 34px/1 Georgia,serif;cursor:pointer;transition:scale .2s}
+/* O losango é só o fundo: girá-lo não entorta a seta. */
+.rarrow::before{content:"";position:absolute;inset:6px;z-index:-1;rotate:45deg;border:1px solid var(--gold-soft);background:rgba(5,11,20,.72);transition:background .2s,border-color .2s}
+.rarrow.prev{left:30px}
+.rarrow.next{right:30px}
+.rarrow:hover{scale:1.08}
+.rarrow:hover::before{border-color:var(--gold-hi);background:rgba(40,30,8,.85)}
+.rarrow:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+
+/* ---------- legenda ---------- */
+.rcap{position:absolute;left:clamp(96px,8vw,130px);bottom:28px;z-index:3;display:flex;flex-direction:column;align-items:flex-start;gap:8px;width:min(520px,calc(100% - 200px));max-height:calc(100% - 70px);overflow-y:auto;animation:rcap-in .55s cubic-bezier(.22,1,.36,1)}
+@keyframes rcap-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+/* Brasão da região: sobre a arte. */
+.rcap-icon{height:clamp(96px,15vh,150px);width:auto;margin-bottom:4px;filter:drop-shadow(0 4px 14px #000)}
+.rcap-count{font-size:12px;letter-spacing:.24em;color:hsl(var(--h) 75% 74%);text-shadow:0 1px 6px #000}
+.rcap-name{margin:0;font-family:'Cinzel',Georgia,serif;font-size:clamp(30px,4.4vw,64px);font-weight:700;line-height:1.05;color:#f8efda;text-shadow:0 2px 20px #000,0 0 34px hsla(var(--h),80%,50%,.55)}
+.rcap-rule{width:150px;height:2px;background:linear-gradient(to right,hsl(var(--h) 80% 66%),transparent)}
+.rcap-tag{margin:0;font-size:17px;line-height:1.45;color:#ece4d0;text-shadow:0 1px 8px #000}
+.rcap .option-details,.rcap .grants{margin:0}
+.rcap .btn.rcap-pick{width:auto;margin:6px 0 0;padding:12px 26px}
+.rcap .btn.rcap-pick.on{background:rgba(5,11,20,.82);border:1px solid var(--gold-hi);color:var(--gold-hi);box-shadow:0 0 18px rgba(240,199,94,.3)}
+
+/* ---------- miniaturas ---------- */
+.rstrip{position:relative;display:flex;flex:none;gap:6px;padding:8px 12px;overflow-x:auto;scrollbar-width:thin;background:rgba(5,11,20,.96);border-top:1px solid rgba(200,162,74,.3)}
+.rthumb{position:relative;flex:1 0 88px;height:70px;padding:0;overflow:hidden;border:1px solid rgba(200,162,74,.22);background:#0a1626 center/cover no-repeat;color:#e8e0cc;font:inherit;cursor:pointer;opacity:.62;transition:opacity .2s,border-color .2s,box-shadow .2s}
+.rthumb::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(3,7,13,.9),transparent 70%)}
+.rthumb span{position:absolute;left:6px;right:6px;bottom:5px;z-index:1;font-size:12px;line-height:1.15;text-align:left;text-shadow:0 1px 4px #000}
+.rthumb-icon{position:absolute;top:5px;right:5px;z-index:1;height:34px;width:auto;filter:drop-shadow(0 1px 4px #000)}
+.rthumb:hover{opacity:.9}
+.rthumb.on{opacity:1;border-color:var(--gold-hi);box-shadow:inset 0 0 0 1px var(--gold-hi)}
+.rthumb.chosen span{color:var(--gold-hi);font-weight:700}
+.rthumb:focus-visible{outline:2px solid var(--teal);outline-offset:-2px}
+
+.rhall-status{flex:1;text-align:center}
+.rhall .ohall-bar .ghost-btn{flex:none}
+
+@media (prefers-reduced-motion:reduce){
+ .rslide{transition:none}
+ .rslide-still,.rcap{animation:none}
+}
+
+/* ---------- telas menores ---------- */
+@media (max-width:860px){
+ .rstage{min-height:420px}
+ .rstage .ohall-title{position:absolute;padding:12px 0 30px;font-size:13px;background:linear-gradient(rgba(5,11,20,.85),transparent)}
+ .rstage-shade{background:linear-gradient(to top,rgba(3,7,13,.92),rgba(3,7,13,.45) 50%,transparent 75%)}
+ .rarrow{top:36%;width:40px;height:40px;font-size:26px}
+ .rarrow.prev{left:16px}
+ .rarrow.next{right:16px}
+ .rcap{left:16px;bottom:14px;width:calc(100% - 32px)}
+ .rcap-tag{font-size:14px}
+ .rcap-icon{height:72px}
+ .rthumb-icon{height:26px}
+ .rthumb{flex:0 0 96px;height:56px}
+ .rhall-status{display:none}
+}

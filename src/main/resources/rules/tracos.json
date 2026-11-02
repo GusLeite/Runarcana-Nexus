@@ -1,0 +1,1473 @@
+{
+  "budgets": [
+    {
+      "id": "CONTROLLED",
+      "name": "Controlado",
+      "minor": 3,
+      "major": 2,
+      "description": "A opção mais restritiva, um patamar abaixo das origens oficiais. Para mestres que querem permitir a personalização, mas têm receio do que mais pontos podem acarretar."
+    },
+    {
+      "id": "MODERATE",
+      "name": "Moderado",
+      "minor": 4,
+      "major": 3,
+      "description": "Mais flexível; parece abaixo das outras origens, mas o foco em características com grande sinergia pode criar combinações fortes. Para mestres com conhecimento aprofundado do sistema."
+    },
+    {
+      "id": "STRONG",
+      "name": "Forte",
+      "minor": 6,
+      "major": 4,
+      "description": "A mesma quantidade de características das outras origens, mas com grande potencial de combos. Só para mestres com conhecimento profundo do sistema, preparados para jogadores combeiros."
+    }
+  ],
+  "conversion": {
+    "MINOR": 1,
+    "MAJOR": 2
+  },
+  "costs": {
+    "MINOR": 1,
+    "MAJOR": 3,
+    "SUPERIOR": 6
+  },
+  "traits": [
+    {
+      "id": "alimentacao-alternativa",
+      "name": "Alimentação Alternativa",
+      "tier": "MINOR",
+      "description": "Você não precisa se alimentar de comida e água, mas precisa se alimentar de outra forma.",
+      "detail": "Do que você se alimenta?"
+    },
+    {
+      "id": "aquatico",
+      "name": "Aquático",
+      "tier": "MINOR",
+      "description": "Você recebe 15 pés de deslocamento de natação. Cada vez que você escolhe esse traço, o deslocamento aumenta: 15, 15, 10… pés.",
+      "maxTimes": 4,
+      "grants": [
+        {
+          "type": "SPEED",
+          "feet": 15,
+          "value": "SWIM"
+        }
+      ],
+      "speedSteps": [
+        15,
+        15,
+        10
+      ]
+    },
+    {
+      "id": "antecedente",
+      "name": "Antecedente",
+      "tier": "MINOR",
+      "description": "Você pode escolher um Passado à sua escolha.",
+      "background": true
+    },
+    {
+      "id": "arma-aprimorada",
+      "name": "Arma Aprimorada",
+      "tier": "MINOR",
+      "description": "Sua arma natural (ou sopro) tem seu dano aumentado em 1 categoria. Cada vez que você escolhe esse traço, ele se aplica a apenas uma arma.",
+      "maxTimes": 6,
+      "requires": [
+        "arma-de-sopro",
+        "cauda",
+        "chifres",
+        "ferrao-venenoso",
+        "garras",
+        "presas"
+      ],
+      "detail": "Qual arma natural (ou sopro)?"
+    },
+    {
+      "id": "arma-magica",
+      "name": "Arma Mágica",
+      "tier": "MINOR",
+      "description": "Sua arma natural (ou sopro) causa metade do seu bônus de Proficiência como dano adicional e, ao alcançar o 12º nível, o dano causado por ela se torna mágico. Cada vez que você escolhe esse traço, ele se aplica a apenas uma arma.",
+      "maxTimes": 6,
+      "requires": [
+        "arma-de-sopro",
+        "cauda",
+        "chifres",
+        "ferrao-venenoso",
+        "garras",
+        "presas"
+      ],
+      "detail": "Qual arma natural (ou sopro)?"
+    },
+    {
+      "id": "artesao",
+      "name": "Artesão",
+      "tier": "MINOR",
+      "description": "Você recebe proficiência com um Ofício à sua escolha. Você recebe proficiência com um Ofício adicional para cada vez que você escolher esse traço.",
+      "maxTimes": 22,
+      "silent": true,
+      "grants": [
+        {
+          "type": "CRAFT_CHOICE",
+          "count": 1,
+          "label": "Artesão: um ofício à escolha"
+        }
+      ]
+    },
+    {
+      "id": "belico",
+      "name": "Bélico",
+      "tier": "MINOR",
+      "description": "Você recebe proficiência com uma arma à sua escolha. Você recebe proficiência com uma arma adicional para cada vez que você escolher esse traço.",
+      "maxTimes": 10,
+      "detail": "Qual arma?",
+      "grants": [
+        {
+          "type": "PROFICIENCY_CHOICE",
+          "count": 1,
+          "options": [
+            "WEAPON:Adaga",
+            "WEAPON:Arpão",
+            "WEAPON:Azagaia",
+            "WEAPON:Bastão",
+            "WEAPON:Clava Grande",
+            "WEAPON:Foice",
+            "WEAPON:Lança",
+            "WEAPON:Maça",
+            "WEAPON:Machadinha",
+            "WEAPON:Martelo Leve",
+            "WEAPON:Porrete",
+            "WEAPON:Arco Curto",
+            "WEAPON:Besta Leve",
+            "WEAPON:Dardo",
+            "WEAPON:Estilingue",
+            "WEAPON:Funda",
+            "WEAPON:Alabarda",
+            "WEAPON:Cimitarra",
+            "WEAPON:Chakram Pequeno",
+            "WEAPON:Chakram Médio",
+            "WEAPON:Chicote",
+            "WEAPON:Espada Curta",
+            "WEAPON:Espada Grande",
+            "WEAPON:Espada Longa",
+            "WEAPON:Foice de Guerra",
+            "WEAPON:Glaive",
+            "WEAPON:Katar",
+            "WEAPON:Khopesh",
+            "WEAPON:Lança de Montaria",
+            "WEAPON:Lança Longa",
+            "WEAPON:Maça Estrela",
+            "WEAPON:Machado de Batalha",
+            "WEAPON:Machado Grande",
+            "WEAPON:Malho",
+            "WEAPON:Mangual",
+            "WEAPON:Manopla de Guerra",
+            "WEAPON:Martelo de Guerra",
+            "WEAPON:Picareta de Guerra",
+            "WEAPON:Rapieira",
+            "WEAPON:Tridente",
+            "WEAPON:Arco Longo",
+            "WEAPON:Balestra de Repetição",
+            "WEAPON:Besta de Mão",
+            "WEAPON:Besta de Repetição",
+            "WEAPON:Besta de Repetição Pesada",
+            "WEAPON:Besta Pesada",
+            "WEAPON:Boleadeira",
+            "WEAPON:Rede",
+            "WEAPON:Zarabatana",
+            "WEAPON:Chakram Grande",
+            "WEAPON:Cutelo Crescente",
+            "WEAPON:Dracocida",
+            "WEAPON:Espada Javali",
+            "WEAPON:Han Kote",
+            "WEAPON:Ídolo do Deus Ancião",
+            "WEAPON:Katana",
+            "WEAPON:Lâmina Navori",
+            "WEAPON:Leque de Guerra",
+            "WEAPON:Nodachi",
+            "WEAPON:Ntofo",
+            "WEAPON:Nunchaku",
+            "WEAPON:Sai",
+            "WEAPON:Tonfa",
+            "WEAPON:Machado Giratório",
+            "WEAPON:Shuriken",
+            "WEAPON:Adaga com Corrente",
+            "WEAPON:Cão-Dragão",
+            "WEAPON:Corrente Espinhosa",
+            "WEAPON:Foice com Corrente",
+            "WEAPON:Lâminas do Caos",
+            "WEAPON:Manopla com Corrente",
+            "WEAPON:Martelo Meteoro",
+            "WEAPON:Pistola",
+            "WEAPON:Garrucha",
+            "WEAPON:Derringer",
+            "WEAPON:Revolver",
+            "WEAPON:Pistola Semi-Automática",
+            "WEAPON:Pistola Automática",
+            "WEAPON:Pistola Rapinante",
+            "WEAPON:Carabina",
+            "WEAPON:Espingarda",
+            "WEAPON:Escopeta",
+            "WEAPON:Carabina de Tambor",
+            "WEAPON:Espingarda Automática",
+            "WEAPON:Escopeta Krug",
+            "WEAPON:Arcabuz",
+            "WEAPON:Mosquete",
+            "WEAPON:Rifle",
+            "WEAPON:Fuzil",
+            "WEAPON:Rifle de Precisão",
+            "WEAPON:Fuzil Ancião",
+            "WEAPON:Canhão de Mão",
+            "WEAPON:Canhão Médio",
+            "WEAPON:Lança-granadas Simples",
+            "WEAPON:Canhão Pesado",
+            "WEAPON:Lança-granadas Médio",
+            "WEAPON:Canhão Enorme",
+            "WEAPON:Lança-granadas Pesado",
+            "WEAPON:Bazuca Grompe",
+            "WEAPON:Bombarda Nashor",
+            "WEAPON:Lança-Chamas Unitário",
+            "WEAPON:Lança-Chamas Simples",
+            "WEAPON:Lança-Chamas Portátil",
+            "WEAPON:Lança-Chamas Reforçado",
+            "WEAPON:Lança-Chamas Compacto",
+            "WEAPON:Lança-Chamas Mecânico",
+            "WEAPON:Lança-Chamas Automático",
+            "WEAPON:Lança-Chamas Cospe-fogo",
+            "WEAPON:Pistola Faca",
+            "WEAPON:Arcabuz Espada",
+            "WEAPON:Canhão Machado",
+            "WEAPON:Lança de Fogo",
+            "WEAPON:Revólver Laminar"
+          ],
+          "label": "Bélico: uma arma"
+        }
+      ]
+    },
+    {
+      "id": "caminhante-ligeiro",
+      "name": "Caminhante Ligeiro",
+      "tier": "MINOR",
+      "description": "Você recebe 10 pés de deslocamento de caminhada adicional e sua altura aumenta em 30 centímetros para cada vez que você escolher esse traço.",
+      "maxTimes": 4,
+      "grants": [
+        {
+          "type": "SPEED",
+          "feet": 10
+        }
+      ]
+    },
+    {
+      "id": "chaveirinho",
+      "name": "Chaveirinho",
+      "tier": "MINOR",
+      "description": "Você se torna uma criatura Miúda, seu deslocamento é reduzido em 5 pés.",
+      "grants": [
+        {
+          "type": "SIZE",
+          "value": "TINY"
+        },
+        {
+          "type": "SPEED",
+          "feet": -5
+        }
+      ]
+    },
+    {
+      "id": "comunicacao",
+      "name": "Comunicação",
+      "tier": "MINOR",
+      "description": "Você aprende a falar, ler e escrever um idioma comum à sua escolha. Você pode falar, ler e escrever um idioma comum adicional para cada vez que você escolher esse traço.",
+      "maxTimes": 10,
+      "detail": "Qual idioma comum?"
+    },
+    {
+      "id": "comunicacao-telepatica",
+      "name": "Comunicação Telepática",
+      "tier": "MINOR",
+      "description": "Você recebe 60 pés de Telepatia. Caso escolha esse traço mais de uma vez, o alcance aumenta em 10 pés.\n\nTelepatia é uma habilidade mágica que permite se comunicar mentalmente com outra criatura no alcance. A criatura contatada não precisa compartilhar um idioma com você, mas deve entender pelo menos um idioma. Uma criatura sem telepatia pode receber e responder mensagens telepáticas, mas não pode iniciar ou terminar uma conversa telepática. Você não precisa ver a criatura contatada e pode encerrar o contato a qualquer momento. O contato é interrompido quando as duas criaturas saem do alcance uma da outra, ou se você contatar outra criatura no alcance. Iniciar ou terminar uma conversa telepática não usa ação, mas enquanto você estiver Incapacitado não pode iniciar contato, e qualquer contato mantido é encerrado. Em um campo antimagia ou em qualquer local onde a magia não funciona, não é possível enviar ou receber mensagens telepáticas.",
+      "maxTimes": 5,
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "TELEPATHY",
+          "feet": 60,
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "disparada",
+      "name": "Disparada",
+      "tier": "MINOR",
+      "description": "Quando você realizar a ação de Disparada você pode realizar um ataque corpo a corpo adicional."
+    },
+    {
+      "id": "escalada-da-aranha",
+      "name": "Escalada da Aranha",
+      "tier": "MINOR",
+      "description": "Caso você tenha o traço menor Escalador, você pode escalar superfícies difíceis, inclusive de cabeça para baixo no teto, sem a necessidade de fazer um teste de atributo.",
+      "requires": [
+        "escalador"
+      ]
+    },
+    {
+      "id": "escalador",
+      "name": "Escalador",
+      "tier": "MINOR",
+      "description": "Você recebe 15 pés de deslocamento de escalada. Cada vez que você escolhe esse traço, o deslocamento aumenta: 15, 15, 10… pés.",
+      "maxTimes": 4,
+      "grants": [
+        {
+          "type": "SPEED",
+          "feet": 15,
+          "value": "CLIMB"
+        }
+      ],
+      "speedSteps": [
+        15,
+        15,
+        10
+      ]
+    },
+    {
+      "id": "especialista",
+      "name": "Especialista",
+      "tier": "MINOR",
+      "description": "Você recebe especialidade com uma perícia que você possua proficiência.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "EXPERTISE_CHOICE",
+          "count": 1,
+          "label": "Especialista: especialidade em uma perícia que você tenha"
+        }
+      ]
+    },
+    {
+      "id": "flutuar",
+      "name": "Flutuar",
+      "tier": "MINOR",
+      "description": "Caso você tenha o traço maior Alado, desde que seu deslocamento não seja 0, você sempre está flutuando a até 5 pés do chão.",
+      "requires": [
+        "alado"
+      ]
+    },
+    {
+      "id": "habilidoso",
+      "name": "Habilidoso",
+      "tier": "MINOR",
+      "description": "Escolha uma Perícia ou Ofício com o qual você tenha proficiência; você possui vantagem nas rolagens feitas com essa Perícia ou Ofício. Você só pode escolher esse traço 2 vezes.",
+      "maxTimes": 2,
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "options": [
+            "SKILL:ATHLETICS",
+            "SKILL:ACROBATICS",
+            "SKILL:SLEIGHT_OF_HAND",
+            "SKILL:STEALTH",
+            "SKILL:ARCANA",
+            "SKILL:HISTORY",
+            "SKILL:INVESTIGATION",
+            "SKILL:NATURE",
+            "SKILL:RELIGION",
+            "SKILL:TECHNOLOGY",
+            "SKILL:INSIGHT",
+            "SKILL:ANIMAL_HANDLING",
+            "SKILL:MEDICINE",
+            "SKILL:PERCEPTION",
+            "SKILL:SURVIVAL",
+            "SKILL:DECEPTION",
+            "SKILL:INTIMIDATION",
+            "SKILL:PERFORMANCE",
+            "SKILL:PERSUASION"
+          ],
+          "description": "Vantagem (traço Habilidoso).",
+          "label": "Habilidoso: a perícia com vantagem"
+        }
+      ]
+    },
+    {
+      "id": "membros-longos",
+      "name": "Membros Longos",
+      "tier": "MINOR",
+      "description": "Você possui membros superiores mais longos que o normal. Seus ataques corpo a corpo possuem 5 pés de alcance adicional."
+    },
+    {
+      "id": "oriundo",
+      "name": "Oriundo",
+      "tier": "MINOR",
+      "description": "Você recebe as proficiências de acordo com sua Região escolhida."
+    },
+    {
+      "id": "pericia",
+      "name": "Perícia",
+      "tier": "MINOR",
+      "description": "Você recebe proficiência com uma perícia à sua escolha. Você recebe proficiência com uma perícia adicional para cada vez que você escolher esse traço.",
+      "maxTimes": 19,
+      "silent": true,
+      "grants": [
+        {
+          "type": "SKILL_CHOICE",
+          "count": 1,
+          "label": "Perícia: uma à escolha"
+        }
+      ]
+    },
+    {
+      "id": "reuniao-telepatica",
+      "name": "Reunião Telepática",
+      "tier": "MINOR",
+      "description": "Caso você tenha o traço menor Comunicação Telepática, você pode se comunicar com uma quantidade de criaturas igual ao seu modificador de Inteligência (mínimo de 1).",
+      "requires": [
+        "comunicacao-telepatica"
+      ]
+    },
+    {
+      "id": "salto",
+      "name": "Salto",
+      "tier": "MINOR",
+      "description": "A distância que você cobre em seu salto em altura e em distância é dobrada."
+    },
+    {
+      "id": "sentidos-agucados",
+      "name": "Sentidos Aguçados",
+      "tier": "MINOR",
+      "description": "Você deve escolher entre audição, olfato ou visão. Você recebe vantagem em testes de Percepção relacionados a esse sentido; uma vez escolhido, ele não poderá ser alterado. Você pode escolher um sentido adicional para cada vez que você escolher esse traço.",
+      "maxTimes": 3,
+      "silent": true,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Sentidos Aguçados",
+          "description": "Você recebe vantagem em testes de Percepção relacionados ao sentido escolhido. Uma vez escolhido, o sentido não pode ser alterado.",
+          "label": "Sentidos Aguçados: escolha o sentido",
+          "options": [
+            "Audição",
+            "Olfato",
+            "Visão"
+          ]
+        },
+        {
+          "type": "SITUATIONAL",
+          "value": "SKILL:PERCEPTION",
+          "description": "Vantagem em Percepção ligada ao sentido escolhido."
+        }
+      ]
+    },
+    {
+      "id": "sorrateiro",
+      "name": "Sorrateiro",
+      "tier": "MINOR",
+      "description": "Você pode tentar se esconder mesmo quando estiver apenas levemente oculto pela folhagem, chuva forte, neve caindo, ou outro fenômeno natural. Além disso, você pode tentar se esconder até mesmo atrás de uma criatura, contanto que ela seja no mínimo uma categoria de tamanho maior que a sua."
+    },
+    {
+      "id": "visao-noturna",
+      "name": "Visão Noturna",
+      "tier": "MINOR",
+      "description": "Você recebe 30 pés de visão no escuro cada vez que você escolher esse traço, até o máximo de 120 pés.",
+      "maxTimes": 4,
+      "grants": [
+        {
+          "type": "SENSE",
+          "value": "DARKVISION",
+          "feet": 30,
+          "amount": 30
+        }
+      ]
+    },
+    {
+      "id": "alado",
+      "name": "Alado",
+      "tier": "MAJOR",
+      "description": "Você possui deslocamento de voo. Cada vez que você escolhe esse traço, o deslocamento aumenta: 15, 15, 10… pés.",
+      "maxTimes": 4,
+      "grants": [
+        {
+          "type": "SPEED",
+          "feet": 15,
+          "value": "FLY"
+        }
+      ],
+      "speedSteps": [
+        15,
+        15,
+        10
+      ]
+    },
+    {
+      "id": "anfibio",
+      "name": "Anfíbio",
+      "tier": "MAJOR",
+      "description": "Você é capaz de respirar tanto fora da água quanto dentro dela."
+    },
+    {
+      "id": "arma-de-sopro",
+      "name": "Arma de Sopro",
+      "tier": "MAJOR",
+      "description": "Você é capaz de utilizar uma arma de sopro de um elemento.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Arma de Sopro",
+          "description": "Sua arma de sopro deve ser escolhida entre os elementos ácido, elétrico, gélido, ígneo, trovejante ou venenoso. Ela causa seu bônus de proficiência em d6 em um cone de 15 pés (gélido, ígneo ou trovejante) ou em uma linha de 30 pés (ácido, elétrico ou venenoso). Criaturas na área fazem uma salvaguarda de Constituição (gélido, ígneo ou trovejante) ou de Destreza (ácido, elétrico ou venenoso) CD 8 + seu bônus de proficiência + seu modificador de Constituição.",
+          "label": "Arma de Sopro: escolha o elemento",
+          "options": [
+            "Ácido",
+            "Elétrico",
+            "Gélido",
+            "Ígneo",
+            "Trovejante",
+            "Venenoso"
+          ],
+          "castingTime": "Ação",
+          "usesFormula": "PROFICIENCY",
+          "recharge": "LONG_REST",
+          "diceByProficiency": {
+            "2": "2d6",
+            "3": "3d6",
+            "4": "4d6",
+            "5": "5d6",
+            "6": "6d6"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cauda",
+      "name": "Cauda",
+      "tier": "MAJOR",
+      "description": "Você possui uma cauda longa como arma natural.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Cauda",
+          "description": "Arma natural com a qual você é proficiente. Tem alcance de 10 pés e causa 1d4 + seu modificador de Força de dano contundente ou perfurante. Você pode usar essa arma para fazer um ataque em sua ação bônus.",
+          "label": "Cauda: tipo de dano",
+          "options": [
+            "Contundente",
+            "Perfurante"
+          ],
+          "damage": "1d4",
+          "damageBonus": [
+            "STRENGTH"
+          ],
+          "castingTime": "Ataque ou ação bônus",
+          "range": "10 pés"
+        }
+      ]
+    },
+    {
+      "id": "chifres",
+      "name": "Chifres",
+      "tier": "MAJOR",
+      "description": "Você possui chifres como arma natural.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Chifres",
+          "description": "Arma natural com a qual você é proficiente. Causa 1d6 + seu modificador de Força de dano contundente ou perfurante (escolhido uma vez, não pode ser alterado). Você pode usar essa arma para fazer um ataque em sua ação bônus.",
+          "label": "Chifres: tipo de dano",
+          "options": [
+            "Contundente",
+            "Perfurante"
+          ],
+          "damage": "1d6",
+          "damageBonus": [
+            "STRENGTH"
+          ],
+          "castingTime": "Ataque ou ação bônus",
+          "range": "Corpo a corpo"
+        }
+      ]
+    },
+    {
+      "id": "composicao-taurica",
+      "name": "Composição Táurica",
+      "tier": "MAJOR",
+      "description": "A parte de baixo de seu tronco é a de uma criatura quadrúpede, possuindo cascos ou patas ao invés de pés.\n\nVocê conta como uma criatura de uma categoria de tamanho maior que a sua para determinar o peso que pode carregar, empurrar ou puxar. Escaladas que requeiram mãos e pés são especialmente difíceis: cada 1 pé custa 4 a mais para você. Uma criatura Média ou menor pode montá-lo, caso você permita; nessa situação, você mantém sua ordem no turno e age independentemente, e a criatura montada perde a movimentação até que desmonte.",
+      "grants": [
+        {
+          "type": "SITUATIONAL",
+          "value": "GENERAL",
+          "description": "Conta uma categoria acima para carga; escalada com mãos e pés custa 4 pés a mais por pé."
+        }
+      ]
+    },
+    {
+      "id": "comunicacao-ancestral",
+      "name": "Comunicação Ancestral",
+      "tier": "MAJOR",
+      "description": "Você aprende a falar, ler e escrever um idioma exótico ou morto à sua escolha. Você pode falar, ler e escrever um idioma exótico ou morto adicional para cada vez que você escolher esse traço.",
+      "maxTimes": 10,
+      "detail": "Qual idioma exótico ou morto?"
+    },
+    {
+      "id": "conjuracao-inata",
+      "name": "Conjuração Inata",
+      "tier": "MAJOR",
+      "description": "Você recebe acesso a magias de acordo com a evolução do seu personagem, escolhidas com o Mestre entre as magias do Capítulo 10. Não são requeridos componentes materiais. Esses usos só conjuram magias Runinatas e você os recupera no final de um descanso pleno. O atributo de conjuração também é combinado com o Mestre.\n\nCD para suas Magias Runinatas = 8 + bônus de proficiência + modificador do atributo definido com o Mestre.\nModificador de Ataque de Magia Runinata = bônus de proficiência + modificador do atributo definido com o Mestre.\n\nMagias conhecidas e usos (truques / 1º / 2º / 3º): 1º nível: 1 truque; 5º: 1 truque e 1 de 1º; 11º: 1 truque, 1 de 1º e 1 de 2º; 17º: 1 truque, 1 de 1º, 1 de 2º e 1 de 3º.",
+      "detail": "Atributo de conjuração (combinado com o Mestre)"
+    },
+    {
+      "id": "construido",
+      "name": "Construído",
+      "tier": "MAJOR",
+      "description": "Você pode ter sido construído intencionalmente, mas também pode ter sido animado através de algum objeto. Você se torna um construto vivo:\n\nResistência a venenos e a dano venenoso.\nImunidade a doenças não mágicas.\nNão precisa comer, beber ou respirar.\nNão precisa dormir, não sofre efeito de exaustão por falta de descanso e não sofre efeitos de magia de sono.\nCura apenas metade da vida com magias e efeitos de cura. A magia reparar dano cura normalmente.\nDesvantagem em salvaguardas por climas hostis, como frio ou deserto, caso não tenha equipamento adequado.",
+      "grants": [
+        {
+          "type": "RESISTANCE",
+          "value": "venenoso"
+        },
+        {
+          "type": "CONDITION_IMMUNITY",
+          "value": "doenças não mágicas"
+        },
+        {
+          "type": "CONDITION_IMMUNITY",
+          "value": "magia de sono"
+        }
+      ]
+    },
+    {
+      "id": "escavacao",
+      "name": "Escavação",
+      "tier": "MAJOR",
+      "description": "Você possui membros adaptados para escavação, recebendo deslocamento de escavação. Você não pode escavar rocha sólida. Cada vez que você escolhe esse traço, o deslocamento aumenta: 15, 15, 10… pés.",
+      "maxTimes": 4,
+      "grants": [
+        {
+          "type": "SPEED",
+          "feet": 15,
+          "value": "BURROW"
+        }
+      ],
+      "speedSteps": [
+        15,
+        15,
+        10
+      ]
+    },
+    {
+      "id": "ferrao-venenoso",
+      "name": "Ferrão Venenoso",
+      "tier": "MAJOR",
+      "description": "Você possui um ferrão como arma natural.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Ferrão Venenoso",
+          "description": "Arma natural com a qual você é proficiente. Causa 1d4 de dano perfurante; criaturas atingidas fazem uma salvaguarda de Constituição CD 8 + seu bônus de proficiência + seu modificador de Constituição. Em uma falha, recebem a condição Intoxicada até o final de seu próximo turno.",
+          "damage": "1d4",
+          "castingTime": "Ataque",
+          "range": "Corpo a corpo"
+        }
+      ]
+    },
+    {
+      "id": "garras",
+      "name": "Garras",
+      "tier": "MAJOR",
+      "description": "Você possui garras como arma natural.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Garras",
+          "description": "Arma natural com a qual você é proficiente. Causa 1d4 + seu modificador de Força ou Destreza de dano cortante ou perfurante (escolhido uma vez, não pode ser alterado). Você pode usar essa arma para fazer um ataque em sua ação bônus.",
+          "label": "Garras: tipo de dano",
+          "options": [
+            "Cortante",
+            "Perfurante"
+          ],
+          "damage": "1d4",
+          "damageBonus": [
+            "STRENGTH_OR_DEXTERITY"
+          ],
+          "castingTime": "Ataque ou ação bônus",
+          "range": "Corpo a corpo"
+        }
+      ]
+    },
+    {
+      "id": "heranca",
+      "name": "Herança",
+      "tier": "MAJOR",
+      "description": "Você possui 2 pontos de Heranças Gerais e recebe novamente 1 ponto nos níveis 5, 9, 13 e 17.",
+      "grants": [
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 2,
+          "value": "GENERAL",
+          "label": "2 pontos de Herança Geral"
+        }
+      ]
+    },
+    {
+      "id": "membros-adicionais",
+      "name": "Membros Adicionais",
+      "tier": "MAJOR",
+      "description": "Você possui 2 membros superiores adicionais. Você pode escolher esse traço mais de uma vez. Consulte o Capítulo 9 para as regras de combate com membros adicionais.",
+      "maxTimes": 4
+    },
+    {
+      "id": "placas-protetoras",
+      "name": "Placas Protetoras",
+      "tier": "MAJOR",
+      "description": "Você possui placas em seu corpo extremamente resistentes. Utilizando uma ação bônus, você pode se encolher (ou voltar ao normal), encobrindo-se por suas placas; ao fazer isso você não pode realizar nenhuma ação e seu deslocamento cai pela metade, porém você recebe resistência a todos os danos físicos simples.",
+      "grants": [
+        {
+          "type": "EFFECT",
+          "name": "Encolhido nas placas",
+          "description": "Encolhido: sem ações, metade do deslocamento, resistência a danos físicos simples.",
+          "form": {
+            "resistances": [
+              "cortante",
+              "perfurante",
+              "contundente"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "presas",
+      "name": "Presas",
+      "tier": "MAJOR",
+      "description": "Você possui presas como arma natural.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "ABILITY",
+          "name": "Presas",
+          "description": "Arma natural com a qual você é proficiente. Causa 1d4 + seu modificador de Força de dano perfurante. Você pode usar essa arma para fazer um ataque em sua ação bônus.",
+          "damage": "1d4",
+          "damageBonus": [
+            "STRENGTH"
+          ],
+          "castingTime": "Ataque ou ação bônus",
+          "range": "Corpo a corpo"
+        }
+      ]
+    },
+    {
+      "id": "resistencia-lendaria",
+      "name": "Resistência Lendária",
+      "tier": "MAJOR",
+      "description": "Ao alcançar o nível 16, sua Resistência Mágica se torna imunidade.",
+      "requires": [
+        "resistencia-magica"
+      ],
+      "grants": [
+        {
+          "type": "IMMUNITY",
+          "value": "cortante",
+          "when": "Resistência Natural:Cortante",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "cortante mágico",
+          "when": "Resistência Natural:Cortante",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "perfurante",
+          "when": "Resistência Natural:Perfurante",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "perfurante mágico",
+          "when": "Resistência Natural:Perfurante",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "contundente",
+          "when": "Resistência Natural:Contundente",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "contundente mágico",
+          "when": "Resistência Natural:Contundente",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "ácido",
+          "when": "Resistência Natural:Ácido",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "antimônico",
+          "when": "Resistência Natural:Ácido",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "elétrico",
+          "when": "Resistência Natural:Elétrico",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "plásmico",
+          "when": "Resistência Natural:Elétrico",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "ígneo",
+          "when": "Resistência Natural:Ígneo",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "incinerante",
+          "when": "Resistência Natural:Ígneo",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "gélido",
+          "when": "Resistência Natural:Gélido",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "glacial",
+          "when": "Resistência Natural:Gélido",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "trovejante",
+          "when": "Resistência Natural:Trovejante",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "vibracional",
+          "when": "Resistência Natural:Trovejante",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "venenoso",
+          "when": "Resistência Natural:Venenoso",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "energético",
+          "when": "Resistência Natural:Energético",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "necrótico",
+          "when": "Resistência Natural:Necrótico",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "psíquico",
+          "when": "Resistência Natural:Psíquico",
+          "minLevel": 16
+        },
+        {
+          "type": "IMMUNITY",
+          "value": "radiante",
+          "when": "Resistência Natural:Radiante",
+          "minLevel": 16
+        }
+      ]
+    },
+    {
+      "id": "resistencia-magica",
+      "name": "Resistência Mágica",
+      "tier": "MAJOR",
+      "description": "Ao alcançar o nível 12, sua Resistência Natural passa a afetar o tipo de dano mágico.",
+      "requires": [
+        "resistencia-natural"
+      ],
+      "grants": [
+        {
+          "type": "RESISTANCE",
+          "value": "cortante mágico",
+          "when": "Resistência Natural:Cortante",
+          "minLevel": 12
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "perfurante mágico",
+          "when": "Resistência Natural:Perfurante",
+          "minLevel": 12
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "contundente mágico",
+          "when": "Resistência Natural:Contundente",
+          "minLevel": 12
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "antimônico",
+          "when": "Resistência Natural:Ácido",
+          "minLevel": 12
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "plásmico",
+          "when": "Resistência Natural:Elétrico",
+          "minLevel": 12
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "incinerante",
+          "when": "Resistência Natural:Ígneo",
+          "minLevel": 12
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "glacial",
+          "when": "Resistência Natural:Gélido",
+          "minLevel": 12
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "vibracional",
+          "when": "Resistência Natural:Trovejante",
+          "minLevel": 12
+        }
+      ]
+    },
+    {
+      "id": "resistencia-natural",
+      "name": "Resistência Natural",
+      "tier": "MAJOR",
+      "description": "Seu corpo é naturalmente resistente a um tipo de dano: um tipo de dano físico simples, elemental simples ou espiritual.",
+      "detail": "Qual tipo de dano? (físico simples, elemental simples ou espiritual)",
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Resistência Natural",
+          "count": 1,
+          "options": [
+            "Cortante",
+            "Perfurante",
+            "Contundente",
+            "Ácido",
+            "Elétrico",
+            "Ígneo",
+            "Gélido",
+            "Trovejante",
+            "Venenoso",
+            "Energético",
+            "Necrótico",
+            "Psíquico",
+            "Radiante"
+          ],
+          "label": "Resistência Natural: o tipo de dano",
+          "description": "O tipo de dano ao qual seu corpo é naturalmente resistente."
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "cortante",
+          "when": "Resistência Natural:Cortante"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "perfurante",
+          "when": "Resistência Natural:Perfurante"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "contundente",
+          "when": "Resistência Natural:Contundente"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "ácido",
+          "when": "Resistência Natural:Ácido"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "elétrico",
+          "when": "Resistência Natural:Elétrico"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "ígneo",
+          "when": "Resistência Natural:Ígneo"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "gélido",
+          "when": "Resistência Natural:Gélido"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "trovejante",
+          "when": "Resistência Natural:Trovejante"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "venenoso",
+          "when": "Resistência Natural:Venenoso"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "energético",
+          "when": "Resistência Natural:Energético"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "necrótico",
+          "when": "Resistência Natural:Necrótico"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "psíquico",
+          "when": "Resistência Natural:Psíquico"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "radiante",
+          "when": "Resistência Natural:Radiante"
+        }
+      ]
+    },
+    {
+      "id": "sentidos-especiais",
+      "name": "Sentidos Especiais",
+      "tier": "MAJOR",
+      "description": "Você possui 10 pés de um sentido especial à sua escolha entre Percepção às Cegas e Sentido Sísmico.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Sentidos Especiais",
+          "description": "Você possui 10 pés do sentido especial escolhido.",
+          "label": "Sentidos Especiais: escolha o sentido",
+          "options": [
+            "Percepção às Cegas",
+            "Sentido Sísmico"
+          ],
+          "range": "10 pés"
+        },
+        {
+          "type": "SENSE",
+          "value": "BLINDSIGHT",
+          "feet": 10,
+          "when": "Sentidos Especiais:Percepção às Cegas"
+        },
+        {
+          "type": "SENSE",
+          "value": "TREMORSENSE",
+          "feet": 10,
+          "when": "Sentidos Especiais:Sentido Sísmico"
+        }
+      ]
+    },
+    {
+      "id": "absorcao",
+      "name": "Absorção",
+      "tier": "SUPERIOR",
+      "description": "Caso você tenha o traço maior Resistência Lendária, ao alcançar o nível 18, sua imunidade se torna absorção.",
+      "requires": [
+        "resistencia-lendaria"
+      ],
+      "grants": [
+        {
+          "type": "ABSORPTION",
+          "value": "cortante",
+          "when": "Resistência Natural:Cortante",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "cortante mágico",
+          "when": "Resistência Natural:Cortante",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "perfurante",
+          "when": "Resistência Natural:Perfurante",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "perfurante mágico",
+          "when": "Resistência Natural:Perfurante",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "contundente",
+          "when": "Resistência Natural:Contundente",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "contundente mágico",
+          "when": "Resistência Natural:Contundente",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "ácido",
+          "when": "Resistência Natural:Ácido",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "antimônico",
+          "when": "Resistência Natural:Ácido",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "elétrico",
+          "when": "Resistência Natural:Elétrico",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "plásmico",
+          "when": "Resistência Natural:Elétrico",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "ígneo",
+          "when": "Resistência Natural:Ígneo",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "incinerante",
+          "when": "Resistência Natural:Ígneo",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "gélido",
+          "when": "Resistência Natural:Gélido",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "glacial",
+          "when": "Resistência Natural:Gélido",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "trovejante",
+          "when": "Resistência Natural:Trovejante",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "vibracional",
+          "when": "Resistência Natural:Trovejante",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "venenoso",
+          "when": "Resistência Natural:Venenoso",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "energético",
+          "when": "Resistência Natural:Energético",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "necrótico",
+          "when": "Resistência Natural:Necrótico",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "psíquico",
+          "when": "Resistência Natural:Psíquico",
+          "minLevel": 18
+        },
+        {
+          "type": "ABSORPTION",
+          "value": "radiante",
+          "when": "Resistência Natural:Radiante",
+          "minLevel": 18
+        }
+      ]
+    },
+    {
+      "id": "armadura-natural",
+      "name": "Armadura Natural",
+      "tier": "SUPERIOR",
+      "description": "Escolha um de seus seis atributos, com exceção de Destreza. Desde que não esteja utilizando uma armadura, você passa a calcular sua CA da seguinte maneira: 10 + seu modificador de Destreza + o modificador do atributo escolhido. Uma vez escolhido, o atributo não pode ser alterado.",
+      "grants": [
+        {
+          "type": "ARMOR_CLASS",
+          "name": "Armadura Natural",
+          "label": "Armadura Natural: atributo somado à CA",
+          "options": [
+            "STRENGTH",
+            "CONSTITUTION",
+            "INTELLIGENCE",
+            "WISDOM",
+            "CHARISMA"
+          ],
+          "armor": {
+            "base": 10
+          }
+        }
+      ]
+    },
+    {
+      "id": "conjuracao-inata-aprimorada",
+      "name": "Conjuração Inata Aprimorada",
+      "tier": "SUPERIOR",
+      "description": "Você possui uma reserva natural de mana e a capacidade de conjuração inata.",
+      "silent": true,
+      "grants": [
+        {
+          "type": "FEATURE",
+          "abilityType": "PASSIVE",
+          "name": "Conjuração Inata Aprimorada",
+          "description": "Você é um conjurador inato. Suas magias inatas não requerem componentes materiais, e a lista de magias é feita junto ao Mestre, com no máximo 3 magias por nível de conjuração, com coesão temática com a sua origem. Cada magia deve ser de nível igual ou menor que o seu Nível Máximo de Magia. Ao receber uma nova magia de Origem, você pode substituir outra que já possua. Você recupera todos os pontos de Mana gastos ao finalizar um descanso pleno.\n\nCD para suas Magias de Origem = 8 + bônus de proficiência + modificador do atributo escolhido.\nModificador de Ataque de Magia de Origem = bônus de proficiência + modificador do atributo escolhido.\n\nTabela (truques / magias conhecidas / pontos de mana / nível máximo): 1º nível: 1 / – / – / –; 5º: 1 / 2 / 2 / 1º; 11º: 2 / 3 / 5 / 2º; 17º: 2 / 4 / 7 / 3º.",
+          "label": "Conjuração Inata Aprimorada: atributo",
+          "options": [
+            "Inteligência",
+            "Sabedoria",
+            "Carisma"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "consistencia-gelatinosa",
+      "name": "Consistência Gelatinosa",
+      "tier": "SUPERIOR",
+      "description": "Você possui um corpo mais líquido do que sólido.\n\nVocê pode passar pelas menores frestas e entrar e ocupar o espaço de outra criatura. Você possui resistência a danos físicos simples e passa por pequenos orifícios, aberturas estreitas e até rachaduras (tratando líquidos como superfícies sólidas para isso); cada 1 pé percorrido por uma fresta custa 4 pés adicionais.\n\nAo entrar no espaço de uma criatura pelo menos uma categoria de tamanho menor que a sua, ela faz uma salvaguarda de Destreza CD 8 + seu modificador de Constituição. Em um sucesso, pode escolher ser empurrada 5 pés para trás ou para o lado (quem escolhe não ser empurrada sofre as consequências da falha). Em uma falha, você entra no espaço dela, que recebe 1d6 de dano ácido e é engolfada: não pode respirar, fica Contida e sofre 1d6 de dano ácido no início de cada um de seus turnos dentro de você, e se move com você. Uma criatura engolfada pode usar uma ação para uma salvaguarda de Força com a mesma CD; em um sucesso, escapa para um espaço a até 5 pés de você. Você contém até duas criaturas menores que você por vez. Elas têm desvantagem para atacar você, e para elas sua CA se torna 10 + seu modificador de Constituição.",
+      "grants": [
+        {
+          "type": "RESISTANCE",
+          "value": "cortante"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "perfurante"
+        },
+        {
+          "type": "RESISTANCE",
+          "value": "contundente"
+        }
+      ]
+    },
+    {
+      "id": "resquicio",
+      "name": "Resquício",
+      "tier": "SUPERIOR",
+      "description": "Você escolhe um traço de outra origem. Seu subtipo é o mesmo da origem.",
+      "detail": "Qual traço, de qual origem?"
+    }
+  ],
+  "drawbacks": [
+    {
+      "id": "anatomia-nao-humanoide",
+      "name": "Anatomia não-humanoide",
+      "group": "Forma",
+      "points": 1,
+      "description": "Sua anatomia não é humanoide."
+    },
+    {
+      "id": "sem-membro-superior",
+      "name": "Ausência de 1 membro superior",
+      "group": "Forma",
+      "points": 1,
+      "description": "Você não possui um dos membros superiores.",
+      "maxTimes": 2
+    },
+    {
+      "id": "um-olho",
+      "name": "Apenas 1 olho",
+      "group": "Forma",
+      "points": 1,
+      "description": "Você possui apenas 1 olho e tem desvantagem em jogadas contra Cegueira."
+    },
+    {
+      "id": "deslocamento-reduzido",
+      "name": "Deslocamento reduzido",
+      "group": "Deslocamento",
+      "points": 0.5,
+      "description": "Reduz 5 pés de todos os deslocamentos base.",
+      "maxTimes": 5,
+      "silent": true,
+      "grants": [
+        {
+          "type": "SPEED",
+          "feet": -5,
+          "value": "ALL"
+        }
+      ]
+    },
+    {
+      "id": "reducao-atributo",
+      "name": "Redução de Atributo",
+      "group": "Atributos",
+      "points": 0.5,
+      "description": "Reduz 1 ponto de Atributo (dentre os 3 pontos iniciais).",
+      "maxTimes": 3,
+      "silent": true,
+      "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": -1,
+          "label": "Redução de Atributo: −1 em um atributo"
+        }
+      ]
+    },
+    {
+      "id": "fraqueza-espiritual",
+      "name": "Fraqueza a um dano espiritual",
+      "group": "Fraqueza",
+      "points": 1,
+      "description": "Fraqueza a um tipo de dano espiritual.",
+      "maxTimes": 5,
+      "detail": "Qual tipo de dano?"
+    },
+    {
+      "id": "fraqueza-elemental",
+      "name": "Fraqueza a um dano elemental simples ou material mundano",
+      "group": "Fraqueza",
+      "points": 1,
+      "description": "Fraqueza a um tipo de dano elemental simples ou a um material mundano (madeira, pedra, metal, etc.).",
+      "maxTimes": 5,
+      "detail": "Qual dano ou material?"
+    },
+    {
+      "id": "fraqueza-variacao-magica",
+      "name": "Fraqueza a uma variação mágica ou material raro",
+      "group": "Fraqueza",
+      "points": 0.5,
+      "description": "Fraqueza apenas para uma variação mágica de um dano elemental ou a um material raro.",
+      "maxTimes": 5,
+      "detail": "Qual variação mágica ou material?"
+    },
+    {
+      "id": "fraqueza-fisica",
+      "name": "Fraqueza a um dano físico simples",
+      "group": "Fraqueza",
+      "points": 2,
+      "description": "Fraqueza a um tipo de dano físico simples.",
+      "maxTimes": 3,
+      "detail": "Qual tipo de dano?"
+    },
+    {
+      "id": "fraqueza-fisica-magica",
+      "name": "Fraqueza a um dano físico mágico",
+      "group": "Fraqueza",
+      "points": 3,
+      "description": "Fraqueza a um tipo de dano físico mágico.",
+      "maxTimes": 3,
+      "detail": "Qual tipo de dano?"
+    },
+    {
+      "id": "vulnerabilidade-espiritual",
+      "name": "Vulnerabilidade a um dano espiritual",
+      "group": "Vulnerabilidade",
+      "points": 1,
+      "description": "Vulnerabilidade a um tipo de dano espiritual.",
+      "maxTimes": 5,
+      "detail": "Qual tipo de dano?"
+    },
+    {
+      "id": "vulnerabilidade-elemental",
+      "name": "Vulnerabilidade a um dano elemental simples",
+      "group": "Vulnerabilidade",
+      "points": 1,
+      "description": "Vulnerabilidade a um tipo de dano elemental simples.",
+      "maxTimes": 5,
+      "detail": "Qual tipo de dano?"
+    },
+    {
+      "id": "vulnerabilidade-elemental-magica",
+      "name": "Vulnerabilidade a um dano elemental mágico",
+      "group": "Vulnerabilidade",
+      "points": 2,
+      "description": "Vulnerabilidade a um tipo de dano elemental mágico.",
+      "maxTimes": 5,
+      "detail": "Qual tipo de dano?"
+    },
+    {
+      "id": "vulnerabilidade-fisica",
+      "name": "Vulnerabilidade a um dano físico simples",
+      "group": "Vulnerabilidade",
+      "points": 2,
+      "description": "Vulnerabilidade a um tipo de dano físico simples.",
+      "maxTimes": 3,
+      "detail": "Qual tipo de dano?"
+    },
+    {
+      "id": "vulnerabilidade-fisica-magica",
+      "name": "Vulnerabilidade a um dano físico mágico",
+      "group": "Vulnerabilidade",
+      "points": 3,
+      "description": "Vulnerabilidade a um tipo de dano físico mágico.",
+      "maxTimes": 3,
+      "detail": "Qual tipo de dano?"
+    },
+    {
+      "id": "incapaz-de-conjurar",
+      "name": "Incapaz de conjurar",
+      "group": "Magias",
+      "points": 1,
+      "description": "Você se torna incapaz de conjurar qualquer magia, pode sintonizar no máximo com metade da quantidade de itens mágicos que poderia normalmente, e não é capaz de utilizar efeitos ativos desses itens."
+    },
+    {
+      "id": "mana-dolorosa",
+      "name": "Mana dolorosa",
+      "group": "Magias",
+      "points": 1,
+      "description": "Caso você seja um conjurador, sempre que gastar pontos de mana, você recebe dano igual ao nível da magia."
+    },
+    {
+      "id": "mana-reduzida",
+      "name": "Mana reduzida",
+      "group": "Magias",
+      "points": 2,
+      "description": "Caso você seja um conjurador, seus pontos de mana são reduzidos pela metade."
+    },
+    {
+      "id": "sem-sintonia",
+      "name": "Sem sintonia",
+      "group": "Magias",
+      "points": 2,
+      "description": "Você se torna incapaz de sintonizar com itens mágicos."
+    }
+  ]
+}

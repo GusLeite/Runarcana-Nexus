@@ -1,0 +1,2 @@
+# Copie para application-local.properties (fora do Git) e preencha com o seu PostgreSQL de desenvolvimento.
+spring.datasource.password=

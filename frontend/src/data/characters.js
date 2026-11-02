@@ -3,22 +3,27 @@ import rudoImg from '../assets/characters/rudo.jpg'
 import rudoVid from '../assets/characters/rudo.mp4'
 import gaudronImg from '../assets/characters/gaudron.jpg'
 import gaudronVid from '../assets/characters/gaudron.mp4'
+import protoImg from '../assets/characters/proto.jpg'
+import protoVid from '../assets/characters/proto.mp4'
+import logeImg from '../assets/characters/loge.jpg'
+import logeVid from '../assets/characters/loge.mp4'
 
 // Personagens da tela de seleção.
 // - img: arte real (import de src/assets) ou placeholder gerado por hue/variant
 // - vid: vídeo MP4 sem áudio em loop; `img` vira o poster
 // - pos: enquadramento (background-position / object-position)
-// - fx: efeito de partículas ('embers' = brasas do Gaudron)
+// - fx: efeito de partículas ('embers' = brasas do Gaudron, 'blood' = magia de sangue do Rudo, 'haunt' = assombração do Loge, 'oath' = juramento do Proto)
 // - impact: onda de choque + tremor ao receber o mouse
 // - burst: pulso vermelho ao receber o mouse
 const BASE = [
   { id: 'rudo', name: 'RUDO', role: 'Vanguarda', hue: 8, variant: 0, lore: 'Abre caminho no corpo a corpo e nunca recua.',
-    img: rudoImg, vid: rudoVid, pos: '60% 30%', burst: true },
+    img: rudoImg, vid: rudoVid, pos: '60% 30%', fx: 'blood', burst: true },
   { id: 'gaudron', name: 'GAUDRON', role: 'Guardião', hue: 42, variant: 1, lore: 'Guarda os portões e as promessas feitas.',
     img: gaudronImg, vid: gaudronVid, pos: '57% 25%', fx: 'embers', impact: true },
-  { id: 'proto', name: 'PROTO', role: 'Arcanista', hue: 190, variant: 2, lore: 'Dobra a magia antiga em novas formas.' },
-  { id: 'titan', name: 'TITAN', role: 'Colosso', hue: 262, variant: 3, lore: 'Cada passo seu abala o campo de batalha.' },
-  { id: 'loge', name: 'LOGE', role: 'Espreitador', hue: 135, variant: 4, lore: 'Some nas sombras e volta com o que falta.' },
+  { id: 'proto', name: 'PROTO', role: 'Arcanista', hue: 190, variant: 2, lore: 'Dobra a magia antiga em novas formas.',
+    img: protoImg, vid: protoVid, pos: '58% 25%', fx: 'oath' },
+  { id: 'loge', name: 'LOGE', role: 'Espreitador', hue: 348, variant: 4, lore: 'Some nas sombras e volta com o que falta.',
+    img: logeImg, vid: logeVid, pos: '50% 25%', fx: 'haunt' },
 ]
 
 export const CHARACTERS = BASE.map(c => ({
@@ -30,3 +35,21 @@ export const CHARACTERS = BASE.map(c => ({
   ...c,
   img: c.img ?? placeholderArt(c.hue, c.variant),
 }))
+
+// Jogador adicionado pelo mestre: sem arte própria, ganha um retrato gerado (cor e adereço pelo nome).
+export function customCharacter(username) {
+  const seed = [...username].reduce((n, ch) => n + ch.charCodeAt(0), 0)
+  const hue = (seed * 47) % 360
+  const variant = seed % 5
+  return {
+    id: username, name: username.toUpperCase(), role: 'Aventureiro', hue, variant,
+    lore: 'Uma nova lenda começa a ser escrita.',
+    fx: '', impact: false, burst: false, vid: null, pos: 'center top', img: placeholderArt(hue, variant),
+  }
+}
+
+// O personagem do mestre para testar a ficha como jogador (não aparece na seleção).
+export const TEST_CHARACTER = {
+  ...customCharacter('teste'), name: 'TESTE', role: 'Jogador de teste', hue: 280, variant: 2,
+  img: placeholderArt(280, 2),
+}

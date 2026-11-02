@@ -1,0 +1,12 @@
+{
+  "source": "teste",
+  "rule": "Uma fórmula por nível.",
+  "general": [ { "id": "abaco", "name": "Ábaco", "level": 0, "crafts": "Ferraria", "dc": "10", "description": "Conta." } ],
+  "crafts": {
+    "ferraria": [
+      { "id": "criar-arma-1", "name": "Criar Arma", "level": 1, "dc": "13", "description": "Forja armas simples." },
+      { "id": "adaptar-arma-3", "name": "Adaptar Arma", "level": 3, "dc": "17", "description": "Muda o tamanho." }
+    ],
+    "alquimia": [ { "id": "pocao-1", "name": "Poção", "level": 1, "dc": "13", "description": "Cura." } ]
+  }
+}

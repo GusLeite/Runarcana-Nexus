@@ -1,4 +1,7 @@
 HELP.md
+application-local.properties
+.env
+backups/
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

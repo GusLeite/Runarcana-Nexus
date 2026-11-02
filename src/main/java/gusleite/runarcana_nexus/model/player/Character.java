@@ -2,25 +2,38 @@ package gusleite.runarcana_nexus.model.player;
 
 import gusleite.runarcana_nexus.enums.Alignment;
 import gusleite.runarcana_nexus.enums.Attribute;
+import gusleite.runarcana_nexus.enums.CreatureSize;
+import gusleite.runarcana_nexus.enums.MovementType;
 import gusleite.runarcana_nexus.enums.Region;
 import gusleite.runarcana_nexus.enums.SkillType;
+import gusleite.runarcana_nexus.model.auth.Account;
 import gusleite.runarcana_nexus.model.roles.CharacterClass;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+// @Getter/@Setter em vez de @Data: o equals/hashCode/toString do @Data entraria em ciclo com CharacterSkill.
 @Entity
+@Getter
+@Setter
 public class Character {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
-    private String PlayerName;
+    private String playerName;
     @NotBlank
     private String characterName;
-    @Min(0)
+    @Min(1)
     @Max(20)
     private int level;
     @PositiveOrZero
@@ -36,6 +49,67 @@ public class Character {
     private int maxHp;
     @PositiveOrZero
     private int currentHp;
+    // PV temporários (somem antes dos PV atuais ao sofrer dano). Nulo nas fichas antigas = 0.
+    private Integer tempHp;
+    // Fórmulas de Ofício conhecidas ("<id do ofício>:<id da fórmula>" do rules/formulas.json); quem marca é o mestre.
+    @ElementCollection
+    @CollectionTable(name = "character_formulas", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "formula")
+    private Set<String> formulas = new LinkedHashSet<>();
+    // Efeitos situacionais (Heranças, Aprimoramentos), resistências a dano e bônus nas passivas, vindos das concessões.
+    @ElementCollection
+    @CollectionTable(name = "character_situational", joinColumns = @JoinColumn(name = "character_id"))
+    @OrderColumn(name = "position")
+    private List<SituationalNote> situational = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(name = "character_resistances", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "damage_type")
+    private Set<String> resistances = new LinkedHashSet<>();
+    @ElementCollection
+    @CollectionTable(name = "character_vulnerabilities", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "damage_type")
+    private Set<String> vulnerabilities = new LinkedHashSet<>();
+    @ElementCollection
+    @CollectionTable(name = "character_immunities", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "damage_type")
+    private Set<String> immunities = new LinkedHashSet<>();
+    @ElementCollection
+    @CollectionTable(name = "character_absorptions", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "damage_type")
+    private Set<String> absorptions = new LinkedHashSet<>();
+    @ElementCollection
+    @CollectionTable(name = "character_condition_immunities", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "name")
+    private Set<String> conditionImmunities = new LinkedHashSet<>();
+    // RD contra um tipo de dano (Glacinata: gélido = bônus de proficiência), recalculada a cada criação/subida.
+    @ElementCollection
+    @CollectionTable(name = "character_typed_reductions", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "damage_type")
+    @Column(name = "amount")
+    private Map<String, Integer> typedReductions = new HashMap<>();
+    // Sentidos ("DARKVISION", "DARKVISION|debaixo d'água", "BLINDSIGHT"...) → alcance em pés.
+    @ElementCollection
+    @CollectionTable(name = "character_senses", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "sense")
+    @Column(name = "feet")
+    private Map<String, Integer> senses = new HashMap<>();
+    private Integer passivePerceptionBonus;
+    private Integer passiveInsightBonus;
+    // Bônus na iniciativa (Atento: +5), das concessões INITIATIVE. Nulo = 0.
+    private Integer initiativeBonus;
+    // Bônus nos PV máximos dado pelo mestre (item, maldição, bênção); fica fora da conta da subida de nível. Nulo = 0.
+    private Integer maxHpBonus;
+    // Níveis que o mestre liberou e o jogador ainda não subiu (as escolhas são do jogador). Nulo = 0.
+    private Integer pendingLevels;
+    // Testes contra a morte (0–3 cada) com 0 PV; zerados ao ganhar PV ou descansar. Nulos nas fichas antigas = 0.
+    private Integer deathSuccesses;
+    private Integer deathFailures;
+    // Condições do rules/condicoes.json (ids) e nível de Exaustão (0–10); quem mexe é o mestre. Exaustão nula = 0.
+    @ElementCollection
+    @CollectionTable(name = "character_conditions", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "condition_id")
+    private Set<String> conditions = new LinkedHashSet<>();
+    private Integer exhaustion;
     @Positive
     private int str;
     @Positive
@@ -57,12 +131,175 @@ public class Character {
     private Alignment alignment;
     private int inspiration;
 
+    // Dono da ficha. Nulo nas fichas antigas (ligadas à conta pelo nome; ver CharacterService.characterOf).
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    // Nome da origem escolhida no catálogo de regras (rules/criacao.json).
+    private String origin;
+
+    // Nome da linhagem (tribo) da origem, quando ela tem (ex.: "Aelus").
+    private String lineage;
+
+    // Nome da subclasse (Glifo do Arcanista, Cabala do Mercurial...), quando a classe tem.
+    private String subclass;
+
+    // Proficiências com armaduras (LIGHT, MEDIUM, HEAVY, SHIELD) e com armas (pelo nome: "Armas simples", "Rapieiras").
+    @ElementCollection
+    @CollectionTable(name = "character_armor_proficiencies", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "armor")
+    private Set<String> armorProficiencies = new LinkedHashSet<>();
+
+    @ElementCollection
+    @CollectionTable(name = "character_weapon_proficiencies", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "weapon")
+    private Set<String> weaponProficiencies = new LinkedHashSet<>();
+
+    // Ofícios (pelo nome) com especialidade.
+    @ElementCollection
+    @CollectionTable(name = "character_craft_expertise", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "craft")
+    private Set<String> craftExpertise = new LinkedHashSet<>();
+
+    // Deslocamento em pés (como no livro). Nulo nas fichas antigas (o front mostra "—").
+    private Double speed;
+
+    // Outros deslocamentos em pés: natação, escalada, voo, escavação (a caminhada é o speed).
+    @ElementCollection
+    @CollectionTable(name = "character_speeds", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name = "movement")
+    @Column(name = "feet")
+    private Map<MovementType, Double> otherSpeeds = new HashMap<>();
+
+    @Enumerated(EnumType.STRING)
+    private CreatureSize size;
+
+    // CAs alternativas e bônus de CA da origem/linhagem/traços (Pele de Árvore, Proteção Ajustável, Escorregadio...).
+    @ElementCollection
+    @CollectionTable(name = "character_armor_rules", joinColumns = @JoinColumn(name = "character_id"))
+    @OrderColumn(name = "position")
+    private List<ArmorRule> armorRules = new ArrayList<>();
+
+    // Defesa em uso, escolhida na ficha: "UNARMORED", "RULE:<n>" (n-ésima opção de defesa de armorRules, sem contar os bônus)
+    // ou "ITEM:<id do PlayerItems>".
+    // Nulo = a de maior CA.
+    private String defense;
+
+    // Escudo em uso: "ITEM:<id do PlayerItems>", "NONE" (sem escudo) ou nulo (= o de maior bônus do inventário).
+    private String shield;
+
+    @ElementCollection
+    @CollectionTable(name = "character_languages", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "language")
+    private Set<String> languages = new LinkedHashSet<>();
+
+    // Nomes dos ofícios em que é proficiente (vindos de "crafts" do rules/criacao.json).
+    @ElementCollection
+    @CollectionTable(name = "character_crafts", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "craft")
+    private Set<String> crafts = new LinkedHashSet<>();
+
+    // Nível do personagem em que cada ofício (pelo nome) foi aprendido. Sem entrada (fichas antigas) = 1º nível.
+    @ElementCollection
+    @CollectionTable(name = "character_craft_levels", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "craft")
+    @Column(name = "learned_at")
+    private Map<String, Integer> craftLevels = new HashMap<>();
+    // Níveis a mais em cada ofício (Minucioso, Operário: +1), o nível mínimo (Maestria: 6º) e fórmulas a mais no limite.
+    @ElementCollection
+    @CollectionTable(name = "character_craft_level_bonus", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "craft")
+    @Column(name = "levels")
+    private Map<String, Integer> craftLevelBonus = new HashMap<>();
+    @ElementCollection
+    @CollectionTable(name = "character_craft_min_level", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "craft")
+    @Column(name = "min_level")
+    private Map<String, Integer> craftMinLevel = new HashMap<>();
+    @ElementCollection
+    @CollectionTable(name = "character_craft_formula_bonus", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "craft")
+    @Column(name = "formulas")
+    private Map<String, Integer> craftFormulaBonus = new HashMap<>();
+    // Produção: PO por dia a mais por ofício ("*" = todos) e quanto a margem de Obra-Prima diminui.
+    @ElementCollection
+    @CollectionTable(name = "character_craft_income", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "craft")
+    @Column(name = "gold")
+    private Map<String, Integer> craftIncome = new HashMap<>();
+    @ElementCollection
+    @CollectionTable(name = "character_craft_masterwork", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "craft")
+    @Column(name = "margin")
+    private Map<String, Integer> craftMasterwork = new HashMap<>();
+    // Atributo alternativo por alvo ("SKILL:INTIMIDATION" → "STRENGTH"; "AC" → "CONSTITUTION/2" = metade): vale o maior.
+    @ElementCollection
+    @CollectionTable(name = "character_attribute_swaps", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "target")
+    @Column(name = "attribute")
+    private Map<String, String> attributeSwaps = new HashMap<>();
+    // Formas temporárias que o personagem pode assumir e a que está ativa (nulo = forma normal).
+    @ElementCollection
+    @CollectionTable(name = "character_forms", joinColumns = @JoinColumn(name = "character_id"))
+    @OrderColumn(name = "position")
+    private List<CharacterForm> forms = new ArrayList<>();
+    private String activeForm;
+    // Efeitos ativos ligados (vários ao mesmo tempo).
+    @ElementCollection
+    @CollectionTable(name = "character_active_effects", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "name")
+    private Set<String> activeEffects = new LinkedHashSet<>();
+
+    // Pontos de Herança ainda não gastos (os da criação são gastos no assistente).
+    private Integer heritagePoints;
+
+    // Nomes das Heranças escolhidas, com a opção e as repetições: "Variante Meio-Vastaya (Marai)", "Variante Colosso (2×)".
+    // O texto completo de cada uma vira uma habilidade do tipo HERITAGE.
+    @ElementCollection
+    @CollectionTable(name = "character_heritages", joinColumns = @JoinColumn(name = "character_id"))
+    @Column(name = "heritage")
+    private Set<String> heritages = new LinkedHashSet<>();
+
+    @ElementCollection
+    @CollectionTable(name = "character_saving_throws", joinColumns = @JoinColumn(name = "character_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "attribute")
+    private Set<Attribute> savingThrows = new HashSet<>();
+    // Especialidade em salvaguarda (Graciosidade: "caso já tenha proficiência"): proficiência em dobro.
+    @ElementCollection
+    @CollectionTable(name = "character_save_expertise", joinColumns = @JoinColumn(name = "character_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "attribute")
+    private Set<Attribute> savingThrowExpertise = new HashSet<>();
+
+    // Escolhas feitas na criação e nos níveis ganhos (JSON do CreationRequest), para a subida de nível reaproveitar.
+    @Column(length = 100000)
+    private String build;
+
+    // Níveis em cada classe, na ordem em que entraram (a primeira é a da criação). Vazio nas fichas antigas.
+    @ElementCollection
+    @CollectionTable(name = "character_class_levels", joinColumns = @JoinColumn(name = "character_id"))
+    @OrderColumn(name = "position")
+    private List<ClassLevel> classLevels = new ArrayList<>();
+
+
+    // PV máximos com o bônus do mestre (o que a ficha mostra e o limite da cura).
+    public int getMaxHpTotal() {
+        return Math.max(1, maxHp + (maxHpBonus == null ? 0 : maxHpBonus));
+    }
 
     private int getModifier(int attribute){
         return Math.floorDiv(attribute - 10, 2);
         }
 
-    private int getModifier(Attribute attribute) {
+    public int getModifier(Attribute attribute) {
+        return getModifier(getEffective(attribute));
+    }
+
+    // Valor do atributo com a forma ativa (Íbex: FOR +2, DES +4; Forma Dracônica: +metade da proficiência).
+    public int getEffective(Attribute attribute) {
         int value = switch (attribute) {
             case STRENGTH -> str;
             case DEXTERITY -> dex;
@@ -72,8 +309,97 @@ public class Character {
             case CHARISMA -> cha;
             default -> 0;
         };
+        return value + formBonus(attribute);
+    }
 
-        return getModifier(value);
+    public CharacterForm getActiveFormLine() {
+        if (activeForm == null) return null;
+        return forms.stream().filter(f -> !f.isEffect() && activeForm.equals(f.getName())).findFirst().orElse(null);
+    }
+
+    // A forma ativa e os efeitos ligados (Fúria, Iras, Sutras...).
+    public List<CharacterForm> getActiveLines() {
+        List<CharacterForm> out = new ArrayList<>();
+        CharacterForm form = getActiveFormLine();
+        if (form != null) out.add(form);
+        forms.stream().filter(f -> f.isEffect() && activeEffects.contains(f.getName())).forEach(out::add);
+        return out;
+    }
+
+    private int formBonus(Attribute attribute) {
+        int total = 0;
+        for (CharacterForm f : getActiveLines()) {
+            if (f.getAttributes() == null || f.getAttributes().isBlank()) continue;
+            for (String part : f.getAttributes().split(",")) {
+                String[] kv = part.split(":");
+                if (kv.length != 2 || !kv[0].equals(attribute.name())) continue;
+                total += "P".equals(kv[1]) ? getProficiencyBonus() / 2 : Integer.parseInt(kv[1]);
+            }
+        }
+        return total;
+    }
+
+    // Deslocamentos da forma e dos efeitos ativos (tipo → pés; vale o maior) e o que eles somam na caminhada.
+    public Map<MovementType, Double> getFormSpeeds() {
+        Map<MovementType, Double> out = new HashMap<>();
+        for (CharacterForm f : getActiveLines()) {
+            if (f.getSpeeds() == null || f.getSpeeds().isBlank()) continue;
+            for (String part : f.getSpeeds().split(",")) {
+                String[] kv = part.split(":");
+                if (kv.length == 2) out.merge(MovementType.valueOf(kv[0]), Double.parseDouble(kv[1]), Math::max);
+            }
+        }
+        return out;
+    }
+
+    public double getFormSpeedBonus() {
+        return getActiveLines().stream().mapToDouble(f -> f.getSpeedBonus() == null ? 0 : f.getSpeedBonus()).sum();
+    }
+
+    // Bônus de CA dos efeitos ativos (Coragem: +proficiência; Defesa Espiritual: +5).
+    public int getEffectAc() {
+        return getActiveLines().stream().mapToInt(f -> f.getAc() == null ? 0 : f.getAc()).sum();
+    }
+
+    public int getEffectReduction() {
+        return getActiveLines().stream().mapToInt(f -> f.getReduction() == null ? 0 : f.getReduction()).sum();
+    }
+
+    public int getEffectInitiative() {
+        return getActiveLines().stream().mapToInt(f -> f.getInitiative() == null ? 0 : f.getInitiative()).sum();
+    }
+
+    // Resistências e imunidades com as dos efeitos ativos.
+    public List<String> getEffectiveResistances() {
+        return withActive(resistances, CharacterForm::getResistances);
+    }
+
+    public List<String> getEffectiveImmunities() {
+        return withActive(immunities, CharacterForm::getImmunities);
+    }
+
+    private List<String> withActive(Set<String> base, java.util.function.Function<CharacterForm, String> field) {
+        Set<String> out = new LinkedHashSet<>(base);
+        for (CharacterForm f : getActiveLines()) {
+            String v = field.apply(f);
+            if (v != null && !v.isBlank()) out.addAll(List.of(v.split(",")));
+        }
+        return List.copyOf(out);
+    }
+
+    // Tamanho com a forma (ou efeito) ativa ("UP" = uma categoria acima).
+    public CreatureSize getEffectiveSize() {
+        CreatureSize current = size;
+        if (current == null) return null;
+        for (CharacterForm f : getActiveLines()) {
+            if (f.getSize() == null) continue;
+            if (!"UP".equals(f.getSize())) current = CreatureSize.valueOf(f.getSize());
+            else {
+                CreatureSize[] all = CreatureSize.values();
+                current = all[Math.min(all.length - 1, current.ordinal() + 1)];
+            }
+        }
+        return current;
     }
 
     public int getProficiencyBonus() {
@@ -99,21 +425,55 @@ public class Character {
     }
 
     public int getPassivePerception(){
-        return getPassiveSkill(SkillType.PERCEPTION);
+        return getPassiveSkill(SkillType.PERCEPTION) + (passivePerceptionBonus == null ? 0 : passivePerceptionBonus);
     }
     public int getPassiveInsight(){
-        return getPassiveSkill(SkillType.INSIGHT);
+        return getPassiveSkill(SkillType.INSIGHT) + (passiveInsightBonus == null ? 0 : passiveInsightBonus);
     }
 
-    private int getPassiveSkill(SkillType skill) {
-        int modifier = 0;
-
+    public boolean isProficient(SkillType skill) {
         CharacterSkill characterSkill = getSkill(skill);
+        return characterSkill != null && characterSkill.isProficient();
+    }
 
-        if (characterSkill != null && characterSkill.isProficient()) {
+    public boolean isExpert(SkillType skill) {
+        CharacterSkill characterSkill = getSkill(skill);
+        return characterSkill != null && characterSkill.isProficient() && characterSkill.isExpertise();
+    }
+
+    // Bônus de um teste de perícia: modificador do atributo base + proficiência, se tiver (duas vezes com especialidade).
+    // Modificador para um alvo: o do atributo normal, ou o do alternativo (attributeSwaps), o que for maior.
+    public int swapModifier(String target, Attribute base) {
+        int normal = getModifier(base);
+        String alt = attributeSwaps.get(target);
+        if (alt == null) return normal;
+        boolean half = alt.endsWith("/2");
+        int other = getModifier(Attribute.valueOf(half ? alt.substring(0, alt.length() - 2) : alt));
+        return Math.max(normal, half ? Math.floorDiv(other, 2) : other);
+    }
+
+    // O atributo que vale na perícia (o alternativo, se for maior: Comandante usa Força em Intimidação).
+    public Attribute getSkillAttribute(SkillType skill) {
+        String alt = attributeSwaps.get("SKILL:" + skill.name());
+        if (alt == null || alt.endsWith("/2")) return skill.getBaseAttribute();
+        Attribute other = Attribute.valueOf(alt);
+        return getModifier(other) > getModifier(skill.getBaseAttribute()) ? other : skill.getBaseAttribute();
+    }
+
+    public int getSkillModifier(SkillType skill) {
+        int modifier = swapModifier("SKILL:" + skill.name(), skill.getBaseAttribute());
+
+        if (isProficient(skill)) {
+            modifier += getProficiencyBonus();
+        }
+        if (isExpert(skill)) {
             modifier += getProficiencyBonus();
         }
 
-        return 10 + modifier;
+        return modifier;
+    }
+
+    private int getPassiveSkill(SkillType skill) {
+        return 10 + getSkillModifier(skill);
     }
 }

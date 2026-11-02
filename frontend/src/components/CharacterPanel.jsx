@@ -1,5 +1,8 @@
-import { forwardRef } from 'react'
+import { useEffect, useRef } from 'react'
 import Embers from './effects/Embers.jsx'
+import BloodMagic from './effects/BloodMagic.jsx'
+import Haunting from './effects/Haunting.jsx'
+import ShieldOath from './effects/ShieldOath.jsx'
 
 // Força o play mudo: alguns navegadores ignoram autoPlay sem `muted` setado via propriedade.
 const playMuted = video => {
@@ -9,20 +12,26 @@ const playMuted = video => {
   if (p) p.catch(() => {})
 }
 
-const CharacterPanel = forwardRef(function CharacterPanel(
-  { character: c, hot, selected, gone, focusable, onHover, onFocus, onBlur, onPick },
-  ref,
-) {
+export default function CharacterPanel({ character: c, hot, selected, gone, resting, focusable, onHover, onFocus, onBlur, onPick }) {
+  const video = useRef()
+  // Com outro painel aceso (ou já descartado), o vídeo fica parado: decodificar quatro ao mesmo tempo pesa mais que o resto.
+  useEffect(() => {
+    if (!video.current) return
+    if (resting || gone) video.current.pause()
+    else playMuted(video.current)
+  }, [resting, gone])
+
   const className = 'p'
     + (c.burst ? ' burst' : '')
     + (c.impact ? ' impact' : '')
+    + (c.fx === 'haunt' ? ' haunted' : '')
+    + (c.fx === 'oath' ? ' oath' : '')
     + (hot ? ' hot' : '')
     + (selected ? ' sel' : '')
     + (gone ? ' gone' : '')
 
   return (
     <div
-      ref={ref}
       role="button"
       tabIndex={focusable ? 0 : -1}
       aria-label={'Entrar como ' + c.name}
@@ -39,8 +48,7 @@ const CharacterPanel = forwardRef(function CharacterPanel(
         }
       }}
     >
-      <div className="bg" style={{ backgroundImage: `url("${c.img}")`, backgroundPosition: c.pos }} />
-      {c.vid && (
+      {c.vid ? (
         <video
           className="bg"
           src={c.vid}
@@ -50,12 +58,17 @@ const CharacterPanel = forwardRef(function CharacterPanel(
           loop
           playsInline
           preload="auto"
-          ref={playMuted}
+          ref={video}
           style={{ objectPosition: c.pos }}
         />
+      ) : (
+        <div className="bg" style={{ backgroundImage: `url("${c.img}")`, backgroundPosition: c.pos }} />
       )}
       <div className="shade" />
       {c.fx === 'embers' && <Embers />}
+      {c.fx === 'blood' && <BloodMagic />}
+      {c.fx === 'haunt' && <Haunting img={c.img} pos={c.pos} />}
+      {c.fx === 'oath' && <ShieldOath />}
       {c.impact && <div className="ring" />}
       {c.impact && <div className="ring r2" />}
       <div className="cap">
@@ -66,6 +79,4 @@ const CharacterPanel = forwardRef(function CharacterPanel(
       </div>
     </div>
   )
-})
-
-export default CharacterPanel
+}
