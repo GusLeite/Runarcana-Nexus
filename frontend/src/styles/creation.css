@@ -346,14 +346,16 @@ transition:transform .15s,filter .15s;animation:stone-in .5s cubic-bezier(.3,1.6
 .opt-tip{position:absolute;z-index:30;left:0;bottom:calc(100% + 8px);display:none;flex-direction:column;gap:6px;width:270px;padding:12px 14px;border:1px solid var(--gold);
   background:linear-gradient(180deg,#0b1520,#050b13);box-shadow:0 10px 30px rgba(0,0,0,.7),0 0 18px rgba(240,199,94,.18);color:#cfc7b2;font-family:system-ui,sans-serif;font-weight:400;
   letter-spacing:0;text-align:left;text-transform:none;pointer-events:none;animation:rise-in .18s ease}
-.opt-tip.wide{width:330px}
+.opt-tip.wide{width:min(420px,80vw);max-height:min(60vh,440px);overflow-y:auto;pointer-events:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.opt-tip::before{content:"";position:absolute;left:0;right:0;top:100%;height:10px}
+.opt.below>.opt-tip::before{top:auto;bottom:100%}
 .opt.right .opt-tip{left:auto;right:0}
 .opt:hover>.opt-tip,.opt:focus-visible>.opt-tip{display:flex}
 .tip-title{font-family:'Cinzel',Georgia,serif;font-size:15px;font-weight:700;color:var(--gold-hi)}
 .tip-tags{display:flex;flex-wrap:wrap;gap:5px}
 .tip-tags i{padding:1px 7px;border:1px solid var(--gold-soft);font-size:11px;font-style:normal;letter-spacing:.05em;text-transform:uppercase;color:var(--teal)}
 .tip-text{font-size:13px;line-height:1.45}
-.tip-text.clamp{display:-webkit-box;-webkit-line-clamp:7;-webkit-box-orient:vertical;overflow:hidden}
+.tip-text{white-space:pre-line}
 .tip-meta{font-size:12px;color:var(--muted)}
 .opt.gem .opt-tip{left:50%;transform:translateX(-50%);width:250px;border-color:var(--gem);box-shadow:0 10px 30px rgba(0,0,0,.7),0 0 20px color-mix(in srgb,var(--gem) 35%,transparent);text-align:left;white-space:normal}
 .opt.gem .tip-title{color:var(--gem)}

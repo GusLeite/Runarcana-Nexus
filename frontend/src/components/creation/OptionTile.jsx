@@ -10,7 +10,7 @@ export function Sigil({ paths, className = "", style }) {
 }
 
 // O card abre para cima; perto do topo da janela, vira para baixo.
-const flip = e => e.currentTarget.classList.toggle('below', e.currentTarget.getBoundingClientRect().top < 300)
+const flip = e => e.currentTarget.classList.toggle('below', (r => r.top < window.innerHeight - r.bottom)(e.currentTarget.getBoundingClientRect()))
 
 const spellLevel = n => (n ? n + 'º nível' : 'Truque')
 
@@ -43,7 +43,7 @@ function CraftCard({ craft, formulas }) {
 
 function SpellCard({ spell }) {
   return (
-    <span className="opt-tip wide">
+    <span className="opt-tip wide" onClick={e => e.stopPropagation()}>
       <span className="tip-title">{spell.name}</span>
       <span className="tip-tags">
         <i>{spellLevel(spell.level)}</i>
@@ -51,7 +51,7 @@ function SpellCard({ spell }) {
         {spell.concentration && <i>Concentração</i>}
       </span>
       <span className="tip-meta">{[spell.castingTime, spell.range, spell.duration].filter(Boolean).join(' · ')}</span>
-      <span className="tip-text clamp">{spell.description}</span>
+      <span className="tip-text">{spell.description}</span>
     </span>
   )
 }

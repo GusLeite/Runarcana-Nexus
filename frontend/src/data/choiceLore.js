@@ -4,23 +4,23 @@
 export const GEMS = {
   Esmeralda: {
     color: '#3fcf8e', role: 'Sentinela', blurb: 'Escolha um dano físico e um elemental: o resultado do Dado de Pulso reduz o dano desses tipos. A partir do 11º nível vale também contra dano mágico.', effect: 'Redução de dano',
-    sigil: ['M16 14H84V52C84 72 66 84 50 92 34 84 16 72 16 52Z', 'M34 50 46 62 68 36']
+    sigil: ['M32 12H68L88 32V68L68 88H32L12 68V32Z','M38 26H62L74 38V62L62 74H38L26 62V38Z']
   },
   Rubi: {
     color: '#ee5a70', role: 'Conquistador', blurb: 'Escolha um tipo de dano: uma vez por turno, some o Dado de Pulso a esse dano (o crítico multiplica). A partir do 11º nível vale também para dano mágico.', effect: 'Amplificação de dano',
-    sigil: ['M22 18 72 68M78 18 28 68', 'M14 80 32 62M86 80 68 62', 'M50 88a6 6 0 1 0 .01 0']
+    sigil: ['M30 14H70Q86 14 86 30V70Q86 86 70 86H30Q14 86 14 70V30Q14 14 30 14Z','M50 28 72 50 50 72 28 50Z','M50 28V14M50 72V86M28 50H14M72 50H86']
   },
   Diamante: {
     color: '#9ad8ff', role: 'Protetor', blurb: 'Some o Dado de Pulso às curas que fizer em outros ou, uma vez por turno, a uma cura que receber. Não vale para PV temporários.', effect: 'Amplificação de cura',
-    sigil: ['M38 10H62V38H90V62H62V90H38V62H10V38H38Z']
+    sigil: ['M26 16H74L94 40 50 90 6 40Z','M6 40H94','M26 16 36 40 50 16 64 40 74 16','M36 40 50 90 64 40']
   },
   Ametista: {
     color: '#b184ee', role: 'Vampírico', blurb: 'Ao abater um alvo ferido por você, recupera Vida, Mana ou Ki (à sua escolha) com base no Dado de Pulso.', effect: 'Recuperação',
-    sigil: ['M50 8C32 36 24 50 24 64a26 26 0 0 0 52 0C76 50 68 36 50 8Z', 'M40 66 46 80 52 66']
+    sigil: ['M50 8 74 28V72L50 92 26 72V28Z','M26 28 50 44 74 28','M50 44V92']
   },
   Safira: {
     color: '#5b97f5', role: 'Crepuscular', blurb: 'O resultado vira pontos de Pulso: gaste para somar a uma rolagem sua, ou reduzir a de um inimigo ou somar à de um aliado.', effect: 'Versatilidade',
-    sigil: ['M62 10A40 40 0 1 0 90 62 32 32 0 0 1 62 10Z', 'M30 28l3 9 9 3-9 3-3 9-3-9-9-3 9-3Z']
+    sigil: ['M50 8C72 8 82 28 82 50S72 92 50 92 18 72 18 50 28 8 50 8Z','M50 28C60 28 66 38 66 50S60 72 50 72 34 62 34 50 40 28 50 28Z','M50 8V28M50 72V92']
   }
 }
 
