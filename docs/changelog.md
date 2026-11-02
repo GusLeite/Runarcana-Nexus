@@ -10,6 +10,9 @@ Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 ## 2026-11-02 — Origens só expandem ao passar o mouse (`feature/character-sheet`)
 - `originArt.js`: todas seguem o padrão do Humano, sem `show` e sem `focusNarrow`; o vídeo mantém o tamanho e o personagem não sai do lugar.
 
+## 2026-11-02 — Animação de hover por classe (`feature/character-sheet`)
+- `ClassFx.jsx` e `classfx.css`: Acólito (luz e halo), Arcanista (círculo e nova), Atirador (mira e tiro), Bodisatva (lótus e Ki), Brutamontes (garras), Caçador (pegadas e flecha), Combatente (espadas), Mercurial (adagas e fumaça) e Xamã (chama e espíritos).
+
 ## 2026-11-02 — Etapa Classe vira salão com vídeos (`feature/character-sheet`)
 - `ClassStep.jsx` e `ClassStage.jsx`: o salão de painéis da Origem agora é usado nas 9 classes, com um vídeo por classe (`assets/classes/`, `data/classArt.js`), efeito de hover igual ao das origens e destaque com abas (ganhos, habilidades, níveis, subclasse, sobre).
 - A subclasse passou para dentro do destaque; `OptionStep` ficou só para o Passado. `OriginArt` aceita `art.sigil`.

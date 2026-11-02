@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { classArt } from '../../data/classArt.js'
 import OriginArt from './OriginArt.jsx'
+import ClassFx from './ClassFx.jsx'
 import ClassStage from './ClassStage.jsx'
 import useHallTop from './useHallTop.js'
 import '../../styles/origin.css'
@@ -44,6 +45,7 @@ export default function ClassStep({ classes, crafts, equipment, classId, subclas
                 >
                   <OriginArt id={klass.id} art={art} />
                   <span className="ocard-shade" />
+                  <ClassFx id={klass.id} />
                   {on && <span className="ocard-seal">✓ Escolhida</span>}
                   <span className="ocard-cap">
                     <span className="ocard-kicker">
