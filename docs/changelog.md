@@ -7,6 +7,9 @@ Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 - Gaudron: arena de tamanho fixo, menos partículas e gradientes em 1/4 do tamanho. Nos salões, só o vídeo do painel aceso toca; sem `backdrop-filter` no destaque.
 - Medido no painel do Claude: de 5 para cerca de 100 fps na martelada. Resta 1 s de atraso no primeiro quadro (ver pendências).
 
+## 2026-11-02 — Origens só expandem ao passar o mouse (`feature/character-sheet`)
+- `originArt.js`: todas seguem o padrão do Humano, sem `show` e sem `focusNarrow`; o vídeo mantém o tamanho e o personagem não sai do lugar.
+
 ## 2026-11-02 — Etapa Classe vira salão com vídeos (`feature/character-sheet`)
 - `ClassStep.jsx` e `ClassStage.jsx`: o salão de painéis da Origem agora é usado nas 9 classes, com um vídeo por classe (`assets/classes/`, `data/classArt.js`), efeito de hover igual ao das origens e destaque com abas (ganhos, habilidades, níveis, subclasse, sobre).
 - A subclasse passou para dentro do destaque; `OptionStep` ficou só para o Passado. `OriginArt` aceita `art.sigil`.

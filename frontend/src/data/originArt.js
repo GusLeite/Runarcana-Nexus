@@ -3,7 +3,7 @@
 // (spark, petal, feather, snow, hex). img/vid/pos: arte definitiva (como em characters.js); sem elas, entra o sigilo provisório.
 // video: vídeo de fundo, levemente escurecido, com os símbolos da origem por cima: src, focus (x do personagem no quadro, 0 a 1,
 // para centralizá-lo em qualquer formato de painel), focusNarrow (opcional: x do rosto, usado nos painéis estreitos, que mostram só uma faixa), focusY (opcional), show (opcional: fração mínima da largura do quadro que
-// deve aparecer; sem ela o vídeo cobre o painel, o que num painel em pé vira um close) start (segundo inicial, para pular uma abertura preta) e end (segundo em que o vídeo volta ao start, para cortar um trecho
+// deve aparecer; sem ela o vídeo cobre o painel. As origens não usam show nem focusNarrow: assim o painel só se expande, sem zoom e sem mudar o enquadramento) start (segundo inicial, para pular uma abertura preta) e end (segundo em que o vídeo volta ao start, para cortar um trecho
 // sujo; sem ele vai até o fim). O vídeo volta ao start ao terminar.
 // living (hoje sem uso): imagem animada por um shader; tem prioridade sobre o video: src, width, height, scene (data/scenes) e focus/focusY, como no vídeo.
 import humano from '../assets/origins/humano.mp4'
@@ -21,23 +21,23 @@ export const ORIGIN_ART = {
   humano: { tagline: 'A espécie mais numerosa de Runeterra, moldada por cada cultura que a cerca.', hue: 42, motes: 'spark',
     video: { src: humano, focus: 0.71 } },
   minotauro: { tagline: 'Povos tribais de grande vigor, vindos das montanhas da Grande Barreira.', hue: 14, motes: 'spark',
-    video: { src: minotauro, focus: 0.7, show: 0.62 } },
+    video: { src: minotauro, focus: 0.7 } },
   construto: { tagline: 'Máquinas que despertaram para a vida e ainda tentam entender o que sentem.', hue: 198, motes: 'hex',
-    video: { src: construto, focus: 0.66, focusNarrow: 0.86, show: 0.62 } },
+    video: { src: construto, focus: 0.86 } },
   antroplantae: { tagline: 'Plantas sencientes e raras, ligadas à terra, às flores e aos espinhos.', hue: 118, motes: 'petal',
-    video: { src: antroplantae, focus: 0.6, focusNarrow: 0.56, show: 0.62 } },
+    video: { src: antroplantae, focus: 0.56 } },
   chireano: { tagline: 'Gente-morcego de Zaun: curiosa, ágil, apaixonada por maquinário.', hue: 158, motes: 'hex',
-    video: { src: chireano, focus: 0.4, focusNarrow: 0.37, show: 0.62 } },
+    video: { src: chireano, focus: 0.37 } },
   'meio-dragao': { tagline: 'Herdeiros raríssimos dos dragões elementais, que despertam a cada nível.', hue: 352, motes: 'spark',
-    video: { src: meioDragao, focus: 0.58, show: 0.5 } },
+    video: { src: meioDragao, focus: 0.58 } },
   troll: { tagline: 'Enormes, grotescos e tribais, com presas à mostra e uma regeneração brutal.', hue: 88, motes: 'snow',
-    video: { src: troll, focus: 0.65, focusNarrow: 0.6, show: 0.62 } },
+    video: { src: troll, focus: 0.6 } },
   vastaya: { tagline: 'Quimeras de sangue humano e magia espiritual, em sintonia com a natureza.', hue: 286, motes: 'feather',
-    video: { src: vastaya, focus: 0.5, focusNarrow: 0.49, show: 0.55 } },
+    video: { src: vastaya, focus: 0.49 } },
   yordle: { tagline: 'Pequenos espíritos de Bandópolis, escondidos sob o véu mágico do Glamour.', hue: 322, motes: 'petal',
-    video: { src: yordle, focus: 0.74, focusNarrow: 0.75, show: 0.45 } },
+    video: { src: yordle, focus: 0.75 } },
   runinata: { tagline: 'Um ser único, nascido das Runas Globais. Cada traço é você quem monta.', hue: 258, motes: 'hex',
-    video: { src: runinata, focus: 0.5, focusNarrow: 0.53, show: 0.5 } },
+    video: { src: runinata, focus: 0.53 } },
 }
 
 const DEFAULT_ART = { hue: 42, motes: 'spark' }
