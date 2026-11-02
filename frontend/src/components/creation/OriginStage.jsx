@@ -16,7 +16,7 @@ const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce
 // Quadro do painel em coordenadas de tela, para animar entre o cartão da galeria e o centro.
 const frame = rect => ({ left: rect.left + 'px', top: rect.top + 'px', width: rect.width + 'px', height: rect.height + 'px', right: 'auto', bottom: 'auto', margin: 0 })
 
-function GrantList({ grants, crafts, equipment }) {
+export function GrantList({ grants, crafts, equipment }) {
   return (
     <span className="grants">
       {grants.map((g, i) => (
@@ -27,7 +27,7 @@ function GrantList({ grants, crafts, equipment }) {
 }
 
 // Grupos de ganhos ("Atributos", "Corpo"...) de uma lista de concessões.
-function GainGroups({ grants, crafts, equipment }) {
+export function GainGroups({ grants, crafts, equipment }) {
   return groupGrants(grants).groups.map((group, i) => (
     <section className="ogain" key={group.id} style={{ '--n': i }}>
       <h5 className="ogain-title">{group.title}</h5>
@@ -36,7 +36,7 @@ function GainGroups({ grants, crafts, equipment }) {
   ))
 }
 
-function AbilityCard({ grant: g, source, n }) {
+export function AbilityCard({ grant: g, source, n }) {
   const meta = [
     g.castingTime, g.range, g.duration, typeof g.damage === 'string' ? g.damage : null,
     g.recharge ? 'Recupera: ' + (RECHARGES[g.recharge] ?? g.recharge) : null,

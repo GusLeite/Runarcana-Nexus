@@ -81,6 +81,8 @@
 .ohall-status b{font-style:normal;color:var(--gold-hi)}
 .ohall-bar .btn{width:auto;flex:none;margin:0;padding:12px 34px}
 .ohall-bar .btn:disabled{opacity:.4;cursor:default;box-shadow:none}
+.ohall-bar .ghost-btn{flex:none}
+.ohall-bar .rhall-status{flex:1;text-align:center}
 
 /* ---------- destaque ---------- */
 .ostage{position:fixed;inset:0;z-index:300;background:radial-gradient(ellipse at 50% 50%,hsla(var(--h),60%,18%,.62),rgba(2,5,10,.93) 70%);backdrop-filter:blur(5px);animation:ostage-in .45s ease}

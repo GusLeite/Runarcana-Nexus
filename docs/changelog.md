@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Etapa Classe vira salão com vídeos (`feature/character-sheet`)
+- `ClassStep.jsx` e `ClassStage.jsx`: o salão de painéis da Origem agora é usado nas 9 classes, com um vídeo por classe (`assets/classes/`, `data/classArt.js`), efeito de hover igual ao das origens e destaque com abas (ganhos, habilidades, níveis, subclasse, sobre).
+- A subclasse passou para dentro do destaque; `OptionStep` ficou só para o Passado. `OriginArt` aceita `art.sigil`.
+
 ## 2026-11-02 — Setas do destaque não repetem a abertura (`feature/character-sheet`)
 - `OriginStage.jsx`: a animação de entrada roda só ao abrir o destaque. Antes, cada seta mudava o `startId` e o painel voltava a crescer a partir do cartão.
 

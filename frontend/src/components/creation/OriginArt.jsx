@@ -92,10 +92,10 @@ function FocusVideo({ clip }) {
 }
 
 // Só o sigilo da origem, com os traços desenhados (ver .oart-sigil em origin.css).
-export function OriginSigil({ id }) {
+export function OriginSigil({ id, paths }) {
   return (
     <svg className="oart-sigil" viewBox="0 0 100 100" aria-hidden="true">
-      {(SIGILS[id] ?? DEFAULT_SIGIL).map((d, i) => (
+      {(paths ?? SIGILS[id] ?? DEFAULT_SIGIL).map((d, i) => (
         <path key={i} d={d} pathLength="1" style={{ '--n': i }} />
       ))}
     </svg>
@@ -113,7 +113,7 @@ export default function OriginArt({ id, art, large }) {
       <div className="oart-holder">
         {large && <span className="oart-ring" />}
         {large && <span className="oart-ring r2" />}
-        <OriginSigil id={id} />
+        <OriginSigil id={id} paths={art.sigil} />
       </div>
       {large && (
         <div className={'oart-motes m-' + art.motes}>

@@ -5,6 +5,7 @@ import { replay } from '../../utils/motion.js'
 import OptionStep from './OptionStep.jsx'
 import OriginStep from './OriginStep.jsx'
 import RegionStep from './RegionStep.jsx'
+import ClassStep from './ClassStep.jsx'
 import AttributeStep from './AttributeStep.jsx'
 import ChoiceStep from './ChoiceStep.jsx'
 import HeritageStep from './HeritageStep.jsx'
@@ -155,16 +156,10 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
               onPick={id => set('regionId', id)} onBack={() => setStep(s => s - 1)} onNext={() => setStep(s => s + 1)} />
           )}
           {current === 'class' && (
-            <>
-              <OptionStep kind="class" title="Escolha a classe" items={catalog.classes} crafts={catalog.crafts} equipment={catalog.equipment?.items} selected={draft.classId}
-                onPick={id => setDraft(d => (d.classId === id ? d : { ...d, classId: id, subclassId: null }))} />
-              {subclasses.length > 0 && (
-                <div className="lineage-step" key={draft.classId}>
-                  <OptionStep kind="subclass" title={'Escolha: ' + (klass.subclassLabel ?? 'Subclasse') + ' (' + klass.name + ')'} items={subclasses} crafts={catalog.crafts}
-                    selected={draft.subclassId} onPick={id => set('subclassId', id)} />
-                </div>
-              )}
-            </>
+            <ClassStep classes={catalog.classes} crafts={catalog.crafts} equipment={catalog.equipment?.items}
+              classId={draft.classId} subclassId={draft.subclassId}
+              onPick={(classId, subclassId) => setDraft(d => ({ ...d, classId, subclassId }))}
+              onBack={() => setStep(s => s - 1)} onNext={() => setStep(s => s + 1)} />
           )}
           {current === 'background' && (noBackground ? (
             <>
