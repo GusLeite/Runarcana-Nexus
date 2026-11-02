@@ -310,9 +310,9 @@ transition:transform .15s,filter .15s;animation:stone-in .5s cubic-bezier(.3,1.6
 .choice.done .opt.on{border-color:var(--teal);color:var(--teal);background:linear-gradient(180deg,rgba(6,40,36,.6),rgba(1,10,19,.9));box-shadow:0 0 0 1px rgba(47,211,192,.6),0 0 18px rgba(47,211,192,.2)}
 .choice.done .opt.on .opt-gem{background:var(--teal);border-color:var(--teal);box-shadow:0 0 8px var(--teal)}
 .opt:disabled{opacity:.35;cursor:default}
-.opt.wide{flex-wrap:wrap;row-gap:2px;padding:12px 14px}
+.opt.wide{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:10px;row-gap:2px;padding:12px 14px}
 .opt.wide .opt-name{font-size:15px}
-.opt-sub{flex:1 0 100%;padding-left:21px;font-family:system-ui,sans-serif;font-size:12px;font-weight:400;letter-spacing:0;color:var(--muted)}
+.opt-sub{grid-column:2;font-family:system-ui,sans-serif;font-size:12px;font-weight:400;letter-spacing:0;color:var(--muted)}
 .wealth-pick{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .wealth-choice .muted-note{margin:12px 0 0}
 .choice-empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:34px 20px;border:1px dashed rgba(200,162,74,.25);color:var(--muted);text-align:center}
