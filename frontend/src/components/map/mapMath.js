@@ -40,4 +40,14 @@ export const wheelZoom = (z, deltaY) => clampZoom(z * Math.exp(clamp(deltaY, -10
 // Suavização que dá o mesmo resultado em qualquer taxa de quadros; rate é a fração percorrida a cada 1/60 s.
 export const easeFactor = (rate, dt) => 1 - (1 - rate) ** (dt * 60)
 
+// Os brasões das regiões só aparecem com o mapa visto de longe, depois da entrada; de perto eles saem do caminho.
+export const crestsVisible = z => {
+  const progress = zoomProgress(z)
+  return progress > 0 && progress <= 0.32
+}
+
+// Leva o ponto do mundo ao centro da tela, ou mais para o lado quando um painel cobre parte dela.
+export const focusPan = (x, y, z, aspect, clientHeight, coveredPx = 0) =>
+  clampPan({ x: -x - (coveredPx / 2) * worldPerPixel(z, clientHeight), y: -y }, z, aspect)
+
 export const sineInOut = t => 0.5 - Math.cos(Math.PI * clamp(t, 0, 1)) / 2

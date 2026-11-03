@@ -3,13 +3,15 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js'
 import {
-  CAM_FAR_Z, CAM_INTRO_Z, FOV, MAP_SIZE, TERRAIN_HEIGHT, clampPan, clampZoom, easeFactor, sineInOut, tiltFor,
+  CAM_FAR_Z, CAM_INTRO_Z, FOV, MAP_SIZE, TERRAIN_HEIGHT, clampPan, clampZoom, crestsVisible, easeFactor, focusPan, sineInOut, tiltFor,
   wheelZoom, worldPerPixel, zoomProgress,
 } from './mapMath.js'
 
 const TEXTURES = ['terrain_z1', 'depth_z1', 'ocean_z1', 'clouds', 'fog', 'fog-mask'].map(name => `/map/${name}.jpg`)
 const TERRAIN_SEGMENTS = 200
 const INTRO_SECONDS = 2.2
+const FOCUS_SECONDS = 1.5
+const HIGHLIGHT_OPACITY = 0.9
 
 const PLAIN_VERTEX = `
   varying vec2 vUv;
@@ -53,6 +55,17 @@ const TERRAIN_FRAGMENT = `
     vec3 col = texture2D(colorMap, vUv).rgb;
     vec2 border = smoothstep(vec2(0.0), vec2(0.07), vUv) * smoothstep(vec2(0.0), vec2(0.07), 1.0 - vUv);
     gl_FragColor = vec4(mix(edgeColor, col, border.x * border.y), 1.0);
+  }
+`
+
+// Região acesa: imagem transparente sobre o mesmo relevo do terreno.
+const HIGHLIGHT_FRAGMENT = `
+  uniform sampler2D map;
+  uniform float opacity;
+  varying vec2 vUv;
+  void main() {
+    vec4 col = texture2D(map, vUv);
+    gl_FragColor = vec4(col.rgb, col.a * opacity);
   }
 `
 
@@ -122,7 +135,8 @@ const loadTextures = () => {
 }
 
 // Monta a cena no container e devolve os controles. Rejeita se o navegador não tem WebGL ou faltam as texturas.
-export async function createMapScene(container, { reducedMotion = false } = {}) {
+// pins: elementos HTML presos a um ponto do mundo ({ el, x, y, z }); a cena os reposiciona a cada quadro.
+export async function createMapScene(container, { reducedMotion = false, pins = [] } = {}) {
   const textures = await loadTextures()
   const [terrain, depth, ocean, cloudMap, fogMap, fogMask] = textures
 
@@ -168,8 +182,36 @@ export async function createMapScene(container, { reducedMotion = false } = {}) 
     vertexShader: TERRAIN_VERTEX,
     fragmentShader: TERRAIN_FRAGMENT,
   })
-  const terrainMesh = new THREE.Mesh(new THREE.PlaneGeometry(MAP_SIZE, MAP_SIZE, TERRAIN_SEGMENTS, TERRAIN_SEGMENTS), terrainMaterial)
+  const terrainGeometry = new THREE.PlaneGeometry(MAP_SIZE, MAP_SIZE, TERRAIN_SEGMENTS, TERRAIN_SEGMENTS)
+  const terrainMesh = new THREE.Mesh(terrainGeometry, terrainMaterial)
   panGroup.add(terrainMesh)
+
+  // Regiões acesas, criadas na primeira vez em que são pedidas. Sem a imagem, a região só não acende.
+  const highlights = new Map()
+  let destroyed = false
+  const highlightFor = slug => {
+    if (highlights.has(slug)) return highlights.get(slug)
+    const material = new THREE.ShaderMaterial({
+      uniforms: { map: { value: null }, depthMap: { value: depth }, height: { value: TERRAIN_HEIGHT }, opacity: { value: 0 } },
+      vertexShader: TERRAIN_VERTEX,
+      fragmentShader: HIGHLIGHT_FRAGMENT,
+      transparent: true,
+      depthTest: false,
+      depthWrite: false,
+    })
+    const mesh = new THREE.Mesh(terrainGeometry, material)
+    mesh.renderOrder = 0.5
+    mesh.visible = false
+    panGroup.add(mesh)
+    const highlight = { mesh, material, goal: 0, texture: null }
+    highlights.set(slug, highlight)
+    new THREE.TextureLoader().loadAsync(`/map/regions/${slug}.png`).then(texture => {
+      if (destroyed) return texture.dispose()
+      highlight.texture = texture
+      material.uniforms.map.value = texture
+    }).catch(() => {})
+    return highlight
+  }
 
   const sparkleMaterial = new THREE.ShaderMaterial({
     uniforms: { oceanMask: { value: ocean }, time: { value: 0 }, opacity: { value: 0.18 } },
@@ -225,7 +267,8 @@ export async function createMapScene(container, { reducedMotion = false } = {}) 
   // Estado da câmera. "goal" é aonde o usuário pediu para ir; a câmera e o mapa chegam lá aos poucos.
   let z = reducedMotion ? CAM_FAR_Z : CAM_INTRO_Z
   let goalZ = CAM_FAR_Z
-  let intro = reducedMotion ? null : { from: CAM_INTRO_Z, elapsed: 0 }
+  // Voo: câmera e mapa vão juntos até o destino, como na entrada e ao escolher uma região.
+  let flight = reducedMotion ? null : { fromZ: CAM_INTRO_Z, fromPan: { x: 0, y: 0 }, seconds: INTRO_SECONDS, elapsed: 0 }
   let aspect = 1
   const pan = { x: 0, y: 0 }
   let goalPan = { x: 0, y: 0 }
@@ -253,7 +296,7 @@ export async function createMapScene(container, { reducedMotion = false } = {}) 
   }
 
   const setGoalZ = value => {
-    intro = null
+    flight = null
     goalZ = clampZoom(value)
   }
 
@@ -268,6 +311,11 @@ export async function createMapScene(container, { reducedMotion = false } = {}) 
   const canvas = renderer.domElement
   const onDown = e => {
     canvas.setPointerCapture(e.pointerId)
+    if (flight) {
+      flight = null
+      goalPan = { ...pan }
+      goalZ = z
+    }
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
     velocity.x = velocity.y = 0
     pinch = pointers.size === 2 ? pinchDistance() : 0
@@ -302,13 +350,32 @@ export async function createMapScene(container, { reducedMotion = false } = {}) 
   canvas.addEventListener('pointermove', onMove)
   canvas.addEventListener('pointerup', onUp)
   canvas.addEventListener('pointercancel', onUp)
-  canvas.addEventListener('wheel', onWheel, { passive: false })
+  // No container, para a roda funcionar também com o mouse sobre um brasão.
+  container.addEventListener('wheel', onWheel, { passive: false })
+
+  const point = new THREE.Vector3()
+  const placePins = () => {
+    const visible = crestsVisible(z)
+    tiltGroup.updateMatrixWorld(true)
+    camera.updateMatrixWorld()
+    for (const pin of pins) {
+      pin.el.classList.toggle('on', visible)
+      if (!visible) continue
+      point.set(pin.x, pin.y, pin.z).applyMatrix4(panGroup.matrixWorld).project(camera)
+      const left = (point.x + 1) / 2 * container.clientWidth
+      const top = (1 - point.y) / 2 * container.clientHeight
+      pin.el.style.transform = `translate(${left}px, ${top}px) translate(-50%, -50%)`
+    }
+  }
 
   const update = dt => {
-    if (intro) {
-      intro.elapsed += dt
-      z = intro.from + (goalZ - intro.from) * sineInOut(intro.elapsed / INTRO_SECONDS)
-      if (intro.elapsed >= INTRO_SECONDS) intro = null
+    if (flight) {
+      flight.elapsed += dt
+      const t = sineInOut(flight.elapsed / flight.seconds)
+      z = flight.fromZ + (goalZ - flight.fromZ) * t
+      pan.x = flight.fromPan.x + (goalPan.x - flight.fromPan.x) * t
+      pan.y = flight.fromPan.y + (goalPan.y - flight.fromPan.y) * t
+      if (flight.elapsed >= flight.seconds) flight = null
     } else {
       z += (goalZ - z) * easeFactor(0.1, dt)
     }
@@ -319,10 +386,18 @@ export async function createMapScene(container, { reducedMotion = false } = {}) 
     velocity.y *= decay
     if (pointers.size === 0 && Math.hypot(velocity.x, velocity.y) > 1) movePan(velocity.x * dt * 60, velocity.y * dt * 60)
 
-    goalPan = clampPan(goalPan, goalZ, aspect)
-    const follow = pointers.size > 0 ? 1 : easeFactor(0.1, dt)
-    pan.x += (goalPan.x - pan.x) * follow
-    pan.y += (goalPan.y - pan.y) * follow
+    if (!flight) {
+      goalPan = clampPan(goalPan, goalZ, aspect)
+      const follow = pointers.size > 0 ? 1 : easeFactor(0.1, dt)
+      pan.x += (goalPan.x - pan.x) * follow
+      pan.y += (goalPan.y - pan.y) * follow
+    }
+
+    for (const highlight of highlights.values()) {
+      const opacity = highlight.material.uniforms.opacity
+      opacity.value += (highlight.goal - opacity.value) * easeFactor(0.12, dt)
+      highlight.mesh.visible = highlight.texture !== null && (highlight.goal > 0 || opacity.value > 0.01)
+    }
 
     camera.position.z = z
     panGroup.position.set(pan.x, pan.y, 0)
@@ -332,6 +407,7 @@ export async function createMapScene(container, { reducedMotion = false } = {}) 
     // De longe se veem as nuvens; de perto elas abrem e aparece o brilho do mar.
     cloudsMaterial.uniforms.opacity.value = 0.32 * (1 - THREE.MathUtils.smoothstep(progress, 0, 0.6))
     sparkleMaterial.uniforms.opacity.value = 0.4 * progress
+    placePins()
   }
 
   const clock = new THREE.Clock()
@@ -348,14 +424,31 @@ export async function createMapScene(container, { reducedMotion = false } = {}) 
 
   return {
     zoomBy: factor => setGoalZ(goalZ * factor),
+    // Acende uma região (ou nenhuma, com null) e apaga as outras.
+    highlight(slug) {
+      if (slug) highlightFor(slug)
+      for (const [key, highlight] of highlights) highlight.goal = key === slug ? HIGHLIGHT_OPACITY : 0
+    },
+    // Voa até um ponto do mundo; coveredPx é a largura de tela coberta por um painel à direita.
+    focus(x, y, zoom, coveredPx = 0) {
+      velocity.x = velocity.y = 0
+      goalZ = clampZoom(zoom)
+      goalPan = focusPan(x, y, goalZ, aspect, container.clientHeight || 1, coveredPx)
+      flight = { fromZ: z, fromPan: { ...pan }, seconds: reducedMotion ? 0.01 : FOCUS_SECONDS, elapsed: 0 }
+    },
     destroy() {
+      destroyed = true
       renderer.setAnimationLoop(null)
+      for (const highlight of highlights.values()) {
+        highlight.material.dispose()
+        highlight.texture?.dispose()
+      }
       observer.disconnect()
       canvas.removeEventListener('pointerdown', onDown)
       canvas.removeEventListener('pointermove', onMove)
       canvas.removeEventListener('pointerup', onUp)
       canvas.removeEventListener('pointercancel', onUp)
-      canvas.removeEventListener('wheel', onWheel)
+      container.removeEventListener('wheel', onWheel)
       for (const mesh of [seaBed, terrainMesh, sparkle, clouds, fog]) {
         mesh.geometry.dispose()
         mesh.material.dispose()

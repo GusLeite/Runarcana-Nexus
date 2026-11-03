@@ -107,11 +107,13 @@ Layout: 3 colunas acima de 1240px; 2 colunas (herói + conteúdo, rolagens embai
 - arraste com inércia, roda do mouse, pinça e botões +/−; foco de miniatura e vinheta escura nas bordas;
 - mar parado como a pintura, com brilho que cresce ao aproximar (máscara `ocean_z1.jpg`); nuvens `clouds.jpg` que deslizam e somem ao aproximar, com opacidade 0,32 (o original usa 0,15), e névoa `fog.jpg` nas montanhas e no gelo (máscara `fog-mask.jpg`). Com movimento reduzido, nuvens e brilho ficam parados.
 
+As 10 regiões do original ficam em `components/map/regions.js`, com as posições de lá e a arte de `data/regionArt.js`. Os brasões são botões HTML que `mapScene.js` reposiciona a cada quadro e aparecem só com o mapa visto de longe. Passar o mouse acende a região no terreno (`public/map/regions/<slug>.png`; Piltover e Zaun não têm essa imagem) e mostra um resumo; clicar voa até ela (Z 300) e abre `RegionPanel.jsx` depois de 1,5 s. O Esc fecha primeiro o painel, depois o mapa.
+
 As texturas são arte da Riot e ficam fora do Git, em `public/map/`: `frontend/scripts/fetch-map-assets.sh` as baixa. O botão só aparece com login, mas os arquivos em `/map/` são públicos para quem tiver o endereço.
 
 ## Pendências / problemas conhecidos
 
-- Mapa: de perto a imagem fica borrada, porque só usa a textura geral de 2048 px (o original carrega blocos detalhados). A inclinação máxima (0,85 rad) é aproximada. Ainda não há marcadores, regiões nem modelos 3D. Pinça e desempenho dos shaders não foram testados em celular.
+- Mapa: de perto a imagem fica borrada, porque só usa a textura geral de 2048 px (o original carrega blocos detalhados). A inclinação máxima (0,85 rad) é aproximada. Ainda não há cidades, marcadores nem modelos 3D; Bandópolis, Vazio e Nazumah não têm brasão no mapa. O painel mostra só a descrição curta da região. Pinça e desempenho dos shaders não foram testados em celular.
 
 - Passado: os 22 passados têm ilustração (o teste `backgroundArt.test.js` exige). Para trocar, basta substituir `assets/backgrounds/<id>.webp` (o id é o do catálogo); imagens sem uso ficam em `assets/backgrounds/_reserva/`. As artes atuais são provisórias.
 - Fora da loja de um mercador aberto, o jogador só gasta consumíveis, ouro e inspiração (decisão da mesa); quem dá é o mestre, na aba Inventário do painel.

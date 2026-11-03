@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa: regiões (`feature/character-sheet`)
+- 10 brasões nas posições do original, com a arte que a criação já usa; aparecem com o mapa visto de longe.
+- Passar o mouse acende a região no terreno; clicar voa até ela e abre um painel com vídeo e descrição.
+- `fetch-map-assets.sh` baixa também os destaques das regiões.
+
 ## 2026-11-02 — Mapa: nuvens e mar como no original (`feature/character-sheet`)
 - Nuvens e névoa passam a usar as texturas originais, mais fortes que lá; a ondulação do mar saiu e fica só o brilho ao aproximar.
 - `fetch-map-assets.sh` baixa também `clouds`, `fog` e `fog-mask`.

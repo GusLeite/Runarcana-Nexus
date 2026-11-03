@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { CAM_FAR_Z, CAM_NEAR_Z, MAX_TILT, clampPan, easeFactor, tiltFor, wheelZoom, worldPerPixel, zoomProgress } from './mapMath.js'
+import { CAM_FAR_Z, CAM_NEAR_Z, MAX_TILT, clampPan, crestsVisible, easeFactor, focusPan, tiltFor, wheelZoom, worldPerPixel, zoomProgress } from './mapMath.js'
 
 describe('zoomProgress e tiltFor', () => {
   it('deixa o mapa reto de longe e inclina ao máximo de perto', () => {
@@ -45,6 +45,24 @@ describe('clampPan', () => {
 
   it('centraliza quando a vista é maior que o limite', () => {
     expect(clampPan({ x: 500, y: 500 }, 5000, 16 / 9)).toEqual({ x: 0, y: 0 })
+  })
+})
+
+describe('crestsVisible', () => {
+  it('esconde os brasões na entrada e de perto', () => {
+    expect(crestsVisible(2300)).toBe(false)
+    expect(crestsVisible(CAM_FAR_Z)).toBe(true)
+    expect(crestsVisible(300)).toBe(false)
+  })
+})
+
+describe('focusPan', () => {
+  it('centraliza o ponto escolhido', () => {
+    expect(focusPan(100, -50, 300, 16 / 9, 800)).toEqual({ x: -100, y: 50 })
+  })
+
+  it('desloca para o lado quando um painel cobre a tela', () => {
+    expect(focusPan(100, -50, 300, 16 / 9, 800, 360).x).toBeLessThan(-100)
   })
 })
 

@@ -96,3 +96,140 @@
   font-size: 11px;
   color: var(--muted);
 }
+.map-pins {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.map-crest {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 4px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+.map-crest.on {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.map-crest-icons {
+  display: flex;
+  transition: transform 0.2s ease-out;
+}
+.map-crest-icons img {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 5px #000);
+}
+.map-crest-name {
+  font: 600 13px Cinzel, serif;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  text-shadow: 0 1px 4px #000, 0 0 2px #000;
+}
+.map-crest:hover .map-crest-icons,
+.map-crest:focus-visible .map-crest-icons {
+  transform: scale(1.18);
+}
+.map-crest:hover .map-crest-name,
+.map-crest:focus-visible .map-crest-name {
+  color: var(--gold-hi);
+}
+.map-crest:focus-visible {
+  outline: 1px solid var(--gold-hi);
+}
+.map-tease {
+  position: absolute;
+  left: 50%;
+  bottom: 44px;
+  display: grid;
+  gap: 2px;
+  width: min(460px, calc(100% - 120px));
+  padding: 10px 16px;
+  transform: translateX(-50%);
+  border: 1px solid rgba(200, 162, 74, 0.55);
+  background: rgba(5, 11, 20, 0.86);
+  text-align: center;
+  pointer-events: none;
+}
+.map-tease strong {
+  font: 600 16px Cinzel, serif;
+  color: var(--gold-hi);
+}
+.map-tease span {
+  font: 400 14px Spectral, serif;
+}
+.map-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  width: min(380px, 100%);
+  overflow-y: auto;
+  border-left: 1px solid rgba(200, 162, 74, 0.55);
+  background: var(--panel);
+  animation: map-panel-in 0.35s ease-out;
+}
+@keyframes map-panel-in {
+  from { opacity: 0; transform: translateX(32px); }
+}
+.map-panel-art {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: #000;
+}
+.map-panel-art video,
+.map-panel-art > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.map-panel-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+.map-panel-body {
+  padding: 0 24px 28px;
+  text-align: center;
+}
+.map-panel-crests {
+  display: flex;
+  justify-content: center;
+  margin-top: -34px;
+}
+.map-panel-crests img {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px #000);
+}
+.map-panel h2 {
+  margin: 8px 0 12px;
+  font: 600 24px Cinzel, serif;
+  letter-spacing: 0.08em;
+  color: hsl(var(--h) 70% 72%);
+}
+.map-panel p {
+  margin: 0 0 12px;
+  font: 400 16px/1.5 Spectral, serif;
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-panel { animation: none; }
+}

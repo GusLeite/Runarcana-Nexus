@@ -3,9 +3,12 @@
 # rode na máquina de dev e no servidor, antes do "docker compose up -d --build".
 set -eu
 cd "$(dirname "$0")/.."
-mkdir -p public/map
+mkdir -p public/map/regions
 base=https://map.leagueoflegends.com/assets/images
 for file in tiles/terrain_z1 tiles/depth_z1 tiles/ocean_z1 fx/clouds fx/fog fx/fog-mask; do
   curl -fsS -o "public/map/$(basename "$file").jpg" "$base/$file.jpg"
+done
+for region in bilgewater demacia freljord ionia ixtal noxus shadow-isles shurima targon; do
+  curl -fsS -o "public/map/regions/$region.png" "$base/regions/terrain/$region.png"
 done
 echo "Texturas em $(pwd)/public/map"
