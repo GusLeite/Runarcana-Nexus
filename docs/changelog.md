@@ -1,6 +1,9 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Runa inicial junto do Pulso Rúnico (`feature/character-sheet`)
+- Na etapa Escolhas, a Runa inicial aparece sempre logo abaixo do Pulso Rúnico (`orderChoices`), em vez de ficar separada por outras escolhas.
+
 ## 2026-11-03 — Escolhas que se roubam e especialidade das Heranças (`feature/character-sheet`)
 - Escolher numa etapa uma perícia que outra escolha já tinha não trava mais a outra em "1 de 2": `dropStalePicks` tira o valor que saiu das opções e ela volta a ficar livre.
 - Minucioso, Pés Cascudos, Alma da Caça, Instinto Assassino, Incentivo Celeste, Pastor da Montanha, Visão Lunar e Habilidade Símia ganharam `expertise`: a perícia que já tem continua na lista e vira especialidade.

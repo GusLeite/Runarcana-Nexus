@@ -651,3 +651,15 @@ export function formEffects(form) {
 // Linha "Xº nível." da lista "Ao subir de nível": os rótulos das concessões visíveis, separados por " · ".
 export const levelGrantsText = (grants, crafts = [], equipment = []) =>
   visibleGrants(grants).map(g => grantLabel(g, crafts, equipment)).join(' · ')
+
+// Escolhas da Natureza Rúnica juntas: a Runa inicial (que depende da gema) logo abaixo do Pulso Rúnico.
+// O back as cria em fases diferentes, então outras escolhas podiam cair no meio.
+export const isPulseChoice = c => /^Pulso Rúnico/.test(c.label ?? '')
+export const isRuneChoice = c => /^Runa inicial/.test(c.label ?? '')
+export function orderChoices(choices = []) {
+  const list = choices ?? []
+  const pulse = list.find(isPulseChoice)
+  const rune = list.find(isRuneChoice)
+  if (!pulse || !rune) return list
+  return list.filter(c => c !== rune).flatMap(c => (c === pulse ? [c, rune] : [c]))
+}

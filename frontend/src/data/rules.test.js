@@ -3,7 +3,7 @@ import {
   addHeritage, heritageOptions, carryCapacity, choiceOptionName, critDice, deathSaveResult, situationalFor, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
   addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, levelGrantsText, visibleGrants, groupAbilities, groupGrants, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
-  resourceCost, togglePick, levelChoices, keepChoices, dropStalePicks, dominantChoices, pendingChoices, senseLabel, formEffects, rollDie, applyHp,
+  resourceCost, togglePick, levelChoices, keepChoices, dropStalePicks, orderChoices, dominantChoices, pendingChoices, senseLabel, formEffects, rollDie, applyHp,
 } from './rules.js'
 
 describe('modificadores', () => {
@@ -270,6 +270,15 @@ describe('subida de nível', () => {
   it('tira as escolhas que sumiram da prévia', () => {
     expect(keepChoices({ 'level:4:class:ARCANIST:0': ['x'], 'level:4:class:BRUTE:0': ['y'] }, choices))
       .toEqual({ 'level:4:class:ARCANIST:0': ['x'] })
+  })
+
+  it('põe a Runa inicial logo abaixo do Pulso Rúnico', () => {
+    const pulse = { key: 'runic-nature:0', label: 'Pulso Rúnico: escolha a gema' }
+    const skill = { key: 'class:ARCANIST:4', label: 'Perícias do Arcanista' }
+    const rune = { key: 'runic-nature:1', label: 'Runa inicial' }
+    expect(orderChoices([pulse, skill, rune])).toEqual([pulse, rune, skill])
+    expect(orderChoices([rune, skill, pulse])).toEqual([skill, pulse, rune])
+    expect(orderChoices([skill, rune])).toEqual([skill, rune])
   })
 
   it('libera a escolha que perdeu a opção para outra', () => {
