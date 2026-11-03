@@ -7,6 +7,7 @@ import {
   tileCenter, tileNearView, tiltFor,
   wheelZoom, worldPerPixel, zoomProgress,
 } from './mapMath.js'
+import { createTemporalDomes } from './temporalDomes.js'
 
 const TEXTURES = ['terrain_z1', 'depth_z1', 'ocean_z1', 'clouds', 'fog', 'fog-mask'].map(name => `/map/${name}.jpg`)
 const TERRAIN_SEGMENTS = 200
@@ -173,10 +174,11 @@ const loadTextures = () => {
 // pins: elementos HTML presos a um ponto do mundo ({ el, x, y, z, level }); a cena os reposiciona a cada quadro.
 // lift: distância do ponto no plano em pé, de frente para a câmera.
 // decals: imagens em pé nesse mesmo plano ({ draw, x, y, z, size, level }); draw(pixels) devolve um canvas.
+// domes: domos de distorção temporal ({ x, y, radius, speed }).
 // areas: regiões que acendem por um círculo em vez de uma imagem ({ [slug]: { x, y, radius, color } }).
 // onMapClick(clientX, clientY): clique no mapa, sem arrastar.
 // onPinsChange: chamado quando os pontos visíveis mudam, porque o navegador não avisa que o mouse saiu de um ponto escondido.
-export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], areas = {}, onPinsChange, onMapClick } = {}) {
+export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], areas = {}, domes = [], onPinsChange, onMapClick } = {}) {
   const textures = await loadTextures()
   const [terrain, depth, ocean, cloudMap, fogMap, fogMask] = textures
 
@@ -193,6 +195,21 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
   terrain.anisotropy = renderer.capabilities.getMaxAnisotropy()
   renderer.setClearColor(0x05090d)
   container.appendChild(renderer.domElement)
+
+  // Altura do terreno, para o que fica no chão acompanhar as montanhas.
+  let depthPixels = null
+  const heightAt = (x, y) => {
+    if (!depthPixels) {
+      const reader = document.createElement('canvas')
+      reader.width = reader.height = MAP_SIZE
+      const g = reader.getContext('2d', { willReadFrequently: true })
+      g.drawImage(depth.image, 0, 0, MAP_SIZE, MAP_SIZE)
+      depthPixels = g.getImageData(0, 0, MAP_SIZE, MAP_SIZE).data
+    }
+    const column = Math.min(MAP_SIZE - 1, Math.max(0, Math.round(x + MAP_SIZE / 2)))
+    const row = Math.min(MAP_SIZE - 1, Math.max(0, Math.round(MAP_SIZE / 2 - y)))
+    return depthPixels[4 * (column + MAP_SIZE * row) + 2] / 255 * TERRAIN_HEIGHT
+  }
 
   const camera = new THREE.PerspectiveCamera(FOV, 1, 1, 10000)
   const scene = new THREE.Scene()
@@ -338,6 +355,8 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
   sparkle.renderOrder = 0.3
   sparkle.visible = !reducedMotion
   panGroup.add(sparkle)
+
+  const temporalDomes = createTemporalDomes(domes, panGroup, heightAt)
 
   const cloudsMaterial = new THREE.ShaderMaterial({
     uniforms: { cloudMap: { value: cloudMap }, drift: { value: 0 }, opacity: { value: 0 } },
@@ -543,7 +562,6 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     placePins()
   }
 
-  let depthPixels = null
   const clock = new THREE.Clock()
   renderer.setAnimationLoop(() => {
     const dt = Math.min(clock.getDelta(), 0.1)
@@ -552,6 +570,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     if (!reducedMotion) {
       sparkleMaterial.uniforms.time.value = clock.elapsedTime
       cloudsMaterial.uniforms.drift.value = -0.018 * clock.elapsedTime
+      temporalDomes.update(clock.elapsedTime)
     }
     composer.render(dt)
   })
@@ -570,19 +589,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       const hit = raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), new THREE.Vector3())
       return hit && { x: Math.round(hit.x), y: Math.round(hit.y) }
     },
-    // Altura do terreno, para os pontos marcados ficarem em cima das montanhas.
-    heightAt(x, y) {
-      if (!depthPixels) {
-        const reader = document.createElement('canvas')
-        reader.width = reader.height = MAP_SIZE
-        const g = reader.getContext('2d', { willReadFrequently: true })
-        g.drawImage(depth.image, 0, 0, MAP_SIZE, MAP_SIZE)
-        depthPixels = g.getImageData(0, 0, MAP_SIZE, MAP_SIZE).data
-      }
-      const column = Math.min(MAP_SIZE - 1, Math.max(0, Math.round(x + MAP_SIZE / 2)))
-      const row = Math.min(MAP_SIZE - 1, Math.max(0, Math.round(MAP_SIZE / 2 - y)))
-      return depthPixels[4 * (column + MAP_SIZE * row) + 2] / 255 * TERRAIN_HEIGHT
-    },
+    heightAt,
     // Acende uma região (ou nenhuma, com null) e apaga as outras.
     highlight(slug) {
       if (slug) highlightFor(slug)
@@ -603,6 +610,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
         part.texture?.dispose()
       }
       tileGeometry.dispose()
+      temporalDomes.dispose()
       for (const decal of decalMeshes) {
         decal.mesh.geometry.dispose()
         decal.material.dispose()

@@ -112,6 +112,8 @@ Os pontos do mapa ficam em `components/map/regions.js`, com as posições do ori
 
 Bandópolis não tem lugar fixo: o mestre aperta **ROLAR BANDÓPOLIS** e o d10 do servidor (`api/map.js`) escolhe uma das 10 regiões (`BANDLE_SPOTS`, sem o Vazio). A câmera voa até lá e o brasão (`assets/region-icons/bandle-gold.svg`, colorido no destaque) brota do chão. Antes da primeira rolagem ela não aparece; depois, todos a veem de longe e de perto, e ela abre painel como as outras, sem acender o terreno.
 
+**Domos de distorção temporal** (`temporalDomes.js`, posições em `MAP_DOMES`): cúpulas 3D roxas no deserto de Shurima, apoiadas no relevo, com relógio no chão e poeira que sobe e volta. Cada uma tem o próprio ritmo de tempo, e uma corre ao contrário. Com movimento reduzido, ficam paradas.
+
 **Pontos marcados** (`MapPointPanels.jsx`, `poiKinds.jsx`): o mestre clica em **+ PONTO DE INTERESSE** e depois no mapa, escolhe tipo, descrição, verbete da lore e quem vê (`toAll`/`recipients`; sem ninguém, fica oculto até revelar). Os pontos aparecem ao aproximar. Dentro deles, cada conta escreve anotação só sua ou comentário para a mesa; o mestre não vê as anotações privadas. Cada jogador tem até 3 waypoints com comentário, visíveis para ele e para o mestre, que só lê.
 
 As texturas são arte da Riot e ficam fora do Git, em `public/map/`: `frontend/scripts/fetch-map-assets.sh` as baixa. O botão só aparece com login, mas os arquivos em `/map/` são públicos para quem tiver o endereço.

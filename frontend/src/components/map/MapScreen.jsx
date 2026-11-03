@@ -9,7 +9,7 @@ import { fetchLore } from '../../api/lore.js'
 import { fetchRecipients } from '../../api/master.js'
 import DiceRoll from '../sheet/DiceRoll.jsx'
 import { playerName } from '../lore/AudiencePicker.jsx'
-import { MAP_AREAS, MAP_DECALS, MAP_LABELS, MAP_PINS, bandleSpot } from './regions.js'
+import { MAP_AREAS, MAP_DECALS, MAP_DOMES, MAP_LABELS, MAP_PINS, bandleSpot } from './regions.js'
 import RegionPanel from './RegionPanel.jsx'
 import { PoiForm, PoiPanel, WaypointPanel } from './MapPointPanels.jsx'
 import { PoiGlyph } from './poiKinds.jsx'
@@ -75,6 +75,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
       pins,
       decals: MAP_DECALS,
       areas: MAP_AREAS,
+      domes: MAP_DOMES,
       onPinsChange: () => setHovered(null),
       onMapClick: (x, y) => mapClick.current(x, y),
     })

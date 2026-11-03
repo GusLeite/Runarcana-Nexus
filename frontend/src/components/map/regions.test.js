@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { BANDLE_SPOTS, MAP_PINS, bandleSpot } from './regions.js'
+import { BANDLE_SPOTS, MAP_DOMES, MAP_PINS, bandleSpot } from './regions.js'
 
 describe('Bandópolis', () => {
   it('tem um lugar para cada face do d10', () => {
@@ -16,5 +16,21 @@ describe('Bandópolis', () => {
 
   it('não tem lugar antes da primeira rolagem', () => {
     expect(bandleSpot(null)).toBeNull()
+  })
+})
+
+describe('domos de distorção temporal', () => {
+  it('ficam no território de Shurima, ao sul do mapa', () => {
+    expect(MAP_DOMES.length).toBeGreaterThan(0)
+    for (const dome of MAP_DOMES) {
+      expect(dome.x).toBeGreaterThan(-260)
+      expect(dome.x).toBeLessThan(290)
+      expect(dome.y).toBeGreaterThan(-640)
+      expect(dome.y).toBeLessThan(-165)
+    }
+  })
+
+  it('têm um domo com o tempo correndo ao contrário', () => {
+    expect(MAP_DOMES.some(dome => dome.speed < 0)).toBe(true)
   })
 })

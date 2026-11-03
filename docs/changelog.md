@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa: domos de distorção temporal em Shurima (`feature/character-sheet`)
+- Seis cúpulas 3D roxas no deserto, com relógio no chão e poeira presa no tempo.
+- Cada domo tem o próprio ritmo de tempo, e um deles corre ao contrário.
+
 ## 2026-11-02 — Lore, pontos de interesse e waypoints (`feature/character-sheet`)
 - Nova tela de lore, inspirada na página do Azir: o mestre escreve personagens, lugares e regiões e libera cada conhecimento por personagem.
 - O mestre cria pontos de interesse clicando no mapa; os jogadores deixam anotações ou comentários neles e têm até 3 waypoints.
