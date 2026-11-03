@@ -5,3 +5,27 @@ export const fetchBandle = token => request('/map/bandle', { token })
 
 // Só o mestre: rola o dado no servidor e substitui a rolagem anterior.
 export const rollBandle = token => request('/map/bandle/roll', { method: 'POST', token })
+
+// Pontos de interesse que esta conta pode ver, com os comentários visíveis para ela.
+export const fetchPois = token => request('/map/pois', { token })
+
+// Só o mestre.
+export const createPoi = (token, poi) => request('/map/pois', { method: 'POST', token, body: poi })
+
+export const updatePoi = (token, id, poi) => request('/map/pois/' + id, { method: 'PUT', token, body: poi })
+
+export const deletePoi = (token, id) => request('/map/pois/' + id, { method: 'DELETE', token })
+
+// shared: a mesa inteira vê; falso: anotação só de quem escreveu.
+export const addPoiComment = (token, id, comment) => request('/map/pois/' + id + '/comments', { method: 'POST', token, body: comment })
+
+export const deletePoiComment = (token, id) => request('/map/pois/comments/' + id, { method: 'DELETE', token })
+
+// Jogador: os próprios waypoints (até 3). Mestre: os de todos, só para ver.
+export const fetchWaypoints = token => request('/map/waypoints', { token })
+
+export const createWaypoint = (token, waypoint) => request('/map/waypoints', { method: 'POST', token, body: waypoint })
+
+export const updateWaypoint = (token, id, waypoint) => request('/map/waypoints/' + id, { method: 'PUT', token, body: waypoint })
+
+export const deleteWaypoint = (token, id) => request('/map/waypoints/' + id, { method: 'DELETE', token })

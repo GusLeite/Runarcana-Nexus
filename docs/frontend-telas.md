@@ -99,7 +99,7 @@ Layout: 3 colunas acima de 1240px; 2 colunas (herói + conteúdo, rolagens embai
 
 ## Mapa de Runeterra
 
-`components/map/MapButton.jsx` põe o botão no cabeçalho da ficha e do painel do mestre e abre `MapScreen.jsx` em tela cheia, por cima da tela atual (Esc fecha). O Three.js só é baixado ao abrir o mapa.
+`components/map/WorldButtons.jsx` põe os botões de lore e mapa no cabeçalho da ficha, da criação e do painel do mestre e abre `MapScreen.jsx` ou `LoreScreen.jsx` em tela cheia, por cima da tela atual. O Three.js só é baixado ao abrir o mapa. O Esc fecha primeiro o que estiver por cima.
 
 `mapScene.js` monta a cena e `mapMath.js` guarda as regras da câmera, com testes. O comportamento imita o mapa original da Riot:
 - plano de 2048×2048 com 200 segmentos, levantado até 60 unidades pelo canal azul de `depth_z1.jpg`;
@@ -112,11 +112,19 @@ Os pontos do mapa ficam em `components/map/regions.js`, com as posições do ori
 
 Bandópolis não tem lugar fixo: o mestre aperta **ROLAR BANDÓPOLIS** e o d10 do servidor (`api/map.js`) escolhe uma das 10 regiões (`BANDLE_SPOTS`, sem o Vazio). A câmera voa até lá e o brasão (`assets/region-icons/bandle-gold.svg`, colorido no destaque) brota do chão. Antes da primeira rolagem ela não aparece; depois, todos a veem de longe e de perto, e ela abre painel como as outras, sem acender o terreno.
 
+**Pontos marcados** (`MapPointPanels.jsx`, `poiKinds.jsx`): o mestre clica em **+ PONTO DE INTERESSE** e depois no mapa, escolhe tipo, descrição, verbete da lore e quem vê (`toAll`/`recipients`; sem ninguém, fica oculto até revelar). Os pontos aparecem ao aproximar. Dentro deles, cada conta escreve anotação só sua ou comentário para a mesa; o mestre não vê as anotações privadas. Cada jogador tem até 3 waypoints com comentário, visíveis para ele e para o mestre, que só lê.
+
 As texturas são arte da Riot e ficam fora do Git, em `public/map/`: `frontend/scripts/fetch-map-assets.sh` as baixa. O botão só aparece com login, mas os arquivos em `/map/` são públicos para quem tiver o endereço.
+
+## Lore
+
+`components/lore/LoreScreen.jsx` lista os verbetes com filtro por tipo e busca; `LoreEntryView.jsx` é a página, na ordem da do Azir no Universo: capa, citação, resumo, informações, conhecimentos e vínculos. O servidor já filtra: o jogador recebe só o que foi liberado para ele. O mestre escreve em `LoreForm.jsx`, marcando com `AudiencePicker.jsx` quem conhece o verbete e cada conhecimento, e vincula personagens e lugares à região (nos dois sentidos). Imagens são links, como nos documentos.
+
+Lore e mapa se ligam: a região com `mapSlug` mostra as informações do verbete no painel do mapa e **ABRIR NA LORE**, e o verbete com brasão ou ponto de interesse mostra **VER NO MAPA**.
 
 ## Pendências / problemas conhecidos
 
-- Mapa: os blocos detalhados (versão `pt_br` do original) trazem manchas escuras onde o original põe modelos 3D de cidades. O mar continua só com a textura geral. Ainda não há as demais cidades, marcadores nem modelos 3D; Icathia é só um nome, sem painel, e Nazumah não está no mapa. Quem está com o mapa aberto só vê uma rolagem nova de Bandópolis ao reabri-lo. O painel mostra só a descrição curta da região. Pinça e desempenho dos shaders não foram testados em celular.
+- Mapa: os blocos detalhados (versão `pt_br` do original) trazem manchas escuras onde o original põe modelos 3D de cidades. O mar continua só com a textura geral. Ainda não há as demais cidades, marcadores nem modelos 3D; Icathia é só um nome, sem painel, e Nazumah não está no mapa. Quem está com o mapa aberto só vê rolagens, pontos e comentários novos ao reabri-lo. Na lore, imagens precisam de link externo (sem envio de arquivo), e a galeria da página do Universo não foi reproduzida. O painel mostra só a descrição curta da região. Pinça e desempenho dos shaders não foram testados em celular.
 
 - Passado: os 22 passados têm ilustração (o teste `backgroundArt.test.js` exige). Para trocar, basta substituir `assets/backgrounds/<id>.webp` (o id é o do catálogo); imagens sem uso ficam em `assets/backgrounds/_reserva/`. As artes atuais são provisórias.
 - Fora da loja de um mercador aberto, o jogador só gasta consumíveis, ouro e inspiração (decisão da mesa); quem dá é o mestre, na aba Inventário do painel.

@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Lore, pontos de interesse e waypoints (`feature/character-sheet`)
+- Nova tela de lore, inspirada na página do Azir: o mestre escreve personagens, lugares e regiões e libera cada conhecimento por personagem.
+- O mestre cria pontos de interesse clicando no mapa; os jogadores deixam anotações ou comentários neles e têm até 3 waypoints.
+- Lore e mapa levam um ao outro. Rotas `/lore`, `/map/pois` e `/map/waypoints`, com tabelas novas criadas pelo `ddl-auto`.
+
 ## 2026-11-02 — Mapa: Bandópolis por rolagem de dado (`feature/character-sheet`)
 - O mestre rola um d10 no mapa; o servidor sorteia, guarda e todos veem Bandópolis na mesma região.
 - Rotas `GET /map/bandle` e `POST /map/bandle/roll`, sem tabela nova (usa `TableSetting`).

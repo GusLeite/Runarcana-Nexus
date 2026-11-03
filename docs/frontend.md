@@ -24,7 +24,8 @@ frontend/
     ├── api/character.js       ficha do logado, usos de habilidade e descanso
     ├── api/documents.js       documentos do mestre (listar, marcar lido)
     ├── api/notes.js           anotações (listar, criar, salvar, apagar)
-    ├── api/map.js             Bandópolis no mapa (ver a rolagem; o mestre rola o dado)
+    ├── api/map.js             Bandópolis, pontos de interesse, comentários e waypoints
+    ├── api/lore.js            verbetes da lore
     ├── api/merchants.js       mercadores (mestre monta e abre; jogador compra e vende)
     ├── data/characters.js     lista de personagens + imports das artes
     ├── data/rules.js (+ .test.js)  rótulos em PT, formatação e regras derivadas dos atributos
@@ -39,7 +40,8 @@ frontend/
     │                          SkillList, AbilitiesTab, AbilityIcon, Inventory, MerchantTab, DocumentsTab, NotesTab, DiceRoll,
     │                          TabBar (abas com sublinhado deslizante), Num (número que conta), icons
     │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities, MasterSheets, MasterMerchants, MasterRules
-    │   └── map/               mapa 3D de Runeterra (Three.js): MapButton, MapScreen, RegionPanel, regions, mapScene, mapMath (+ .test.js)
+    │   └── map/               mapa 3D de Runeterra (Three.js): WorldButtons, MapScreen, RegionPanel, MapPointPanels, poiKinds, regions, twinFrame, mapScene, mapMath (+ .test.js)
+    │   └── lore/              lore da mesa: LoreScreen, LoreEntryView, LoreForm, AudiencePicker
     ├── audio/                 engine.js (sons sintetizados), uiSounds.js (+ .test.js, sons de interface por delegação), SoundToggle.jsx — ver frontend-visual.md
     ├── hooks/useCountUp.js (+ .test.js)  número que conta até o valor; prefersReducedMotion
     ├── utils/motion.js        replay (reinicia animação de classe) e afterLeave (espera a saída)
@@ -48,6 +50,7 @@ frontend/
     ├── styles/global.css      visual da seleção e do login (tokens em :root)
     ├── styles/sheet.css       visual da ficha
     ├── styles/master.css      botão, portal e painel do mestre
+    ├── styles/map.css, lore.css  mapa e lore
     ├── styles/merchant.css    loja do mercador (ficha) e aba do mestre
     ├── styles/motion.css      animações de polimento (importado por último no main.jsx)
     ├── styles/sound.css       controle de som do canto da tela

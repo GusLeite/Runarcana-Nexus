@@ -28,6 +28,8 @@ model/        entidades JPA
   notes/      PlayerNote (anotações do jogador)
   documents/  GameDocument, DocumentRead (documentos do mestre)
   merchant/   Merchant, MerchantItem, MerchantTrade (lojas do mestre)
+  lore/       LoreEntry, LoreSection, LoreFact (verbetes e conhecimentos por personagem)
+  map/        MapPoi, PoiComment, MapWaypoint (pontos do mapa)
 record/       DTOs de entrada e saída (Java records)
 enums/        enums de domínio (regras do sistema Runarcana)
 config/       beans de configuração (AuthConfig: BCrypt + seed das contas)

@@ -174,8 +174,9 @@ const loadTextures = () => {
 // lift: distância do ponto no plano em pé, de frente para a câmera.
 // decals: imagens em pé nesse mesmo plano ({ draw, x, y, z, size, level }); draw(pixels) devolve um canvas.
 // areas: regiões que acendem por um círculo em vez de uma imagem ({ [slug]: { x, y, radius, color } }).
+// onMapClick(clientX, clientY): clique no mapa, sem arrastar.
 // onPinsChange: chamado quando os pontos visíveis mudam, porque o navegador não avisa que o mouse saiu de um ponto escondido.
-export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], areas = {}, onPinsChange } = {}) {
+export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], areas = {}, onPinsChange, onMapClick } = {}) {
   const textures = await loadTextures()
   const [terrain, depth, ocean, cloudMap, fogMap, fogMask] = textures
 
@@ -421,8 +422,10 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
   }
 
   const canvas = renderer.domElement
+  let press = null
   const onDown = e => {
     canvas.setPointerCapture(e.pointerId)
+    press = pointers.size === 0 ? { x: e.clientX, y: e.clientY } : null
     if (flight) {
       flight = null
       goalPan = { ...pan }
@@ -450,6 +453,9 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     }
   }
   const onUp = e => {
+    const clicked = press && e.type === 'pointerup' && Math.hypot(e.clientX - press.x, e.clientY - press.y) < 6
+    press = null
+    if (clicked) onMapClick?.(e.clientX, e.clientY)
     pointers.delete(e.pointerId)
     pinch = 0
     if (pointers.size === 0) canvas.classList.remove('dragging')
@@ -537,6 +543,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     placePins()
   }
 
+  let depthPixels = null
   const clock = new THREE.Clock()
   renderer.setAnimationLoop(() => {
     const dt = Math.min(clock.getDelta(), 0.1)
@@ -551,6 +558,31 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
 
   return {
     zoomBy: factor => setGoalZ(goalZ * factor),
+    // Ponto do mapa sob o ponteiro, no nível do mar. Nulo se o raio não toca o plano.
+    screenToWorld(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect()
+      const ndc = new THREE.Vector2((clientX - rect.left) / rect.width * 2 - 1, 1 - (clientY - rect.top) / rect.height * 2)
+      const raycaster = new THREE.Raycaster()
+      tiltGroup.updateMatrixWorld(true)
+      camera.updateMatrixWorld()
+      raycaster.setFromCamera(ndc, camera)
+      raycaster.ray.applyMatrix4(panGroup.matrixWorld.clone().invert())
+      const hit = raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), new THREE.Vector3())
+      return hit && { x: Math.round(hit.x), y: Math.round(hit.y) }
+    },
+    // Altura do terreno, para os pontos marcados ficarem em cima das montanhas.
+    heightAt(x, y) {
+      if (!depthPixels) {
+        const reader = document.createElement('canvas')
+        reader.width = reader.height = MAP_SIZE
+        const g = reader.getContext('2d', { willReadFrequently: true })
+        g.drawImage(depth.image, 0, 0, MAP_SIZE, MAP_SIZE)
+        depthPixels = g.getImageData(0, 0, MAP_SIZE, MAP_SIZE).data
+      }
+      const column = Math.min(MAP_SIZE - 1, Math.max(0, Math.round(x + MAP_SIZE / 2)))
+      const row = Math.min(MAP_SIZE - 1, Math.max(0, Math.round(MAP_SIZE / 2 - y)))
+      return depthPixels[4 * (column + MAP_SIZE * row) + 2] / 255 * TERRAIN_HEIGHT
+    },
     // Acende uma região (ou nenhuma, com null) e apaga as outras.
     highlight(slug) {
       if (slug) highlightFor(slug)

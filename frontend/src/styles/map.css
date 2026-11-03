@@ -304,3 +304,129 @@
 @media (prefers-reduced-motion: reduce) {
   .map-pin-born .map-pin-icon { animation: none; }
 }
+.map-screen.placing .map-stage canvas {
+  cursor: crosshair;
+}
+.map-panel-sub {
+  margin: -8px 0 14px !important;
+  font: 600 13px Cinzel, serif !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.map-panel-body .lore-facts {
+  margin-bottom: 14px;
+}
+.map-tools {
+  position: absolute;
+  left: 20px;
+  bottom: 58px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: calc(100% - 96px);
+}
+.map-tool {
+  padding: 8px 12px;
+  border: 1px solid rgba(200, 162, 74, 0.65);
+  background: rgba(5, 11, 20, 0.86);
+  color: var(--gold-hi);
+  font: 600 12px Cinzel, serif;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+.map-tool:hover:not(:disabled),
+.map-tool.on {
+  background: rgba(200, 162, 74, 0.28);
+}
+.map-tool:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.map-tool.quiet {
+  border-color: rgba(200, 162, 74, 0.25);
+  color: var(--text);
+  font: 400 13px Spectral, serif;
+}
+/* Pontos de interesse: disco como o das capitais, com a cor do tipo. */
+.map-poi {
+  --poi: var(--gold-hi);
+}
+.map-poi-danger { --poi: #ff8d7a; }
+.map-poi-quest { --poi: #f7dc6a; }
+.map-poi-mystery { --poi: #c79bff; }
+.map-poi-landmark { --poi: var(--teal); }
+.map-poi-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--poi);
+  border-radius: 50%;
+  outline: 1px solid rgba(200, 162, 74, 0.3);
+  outline-offset: 2px;
+  background: #141b28;
+  box-shadow: 0 2px 6px #000;
+  transition: transform 0.2s ease-out;
+}
+.map-poi-icon svg {
+  width: 19px;
+  fill: var(--poi);
+}
+.map-poi:hover .map-poi-icon,
+.map-poi:focus-visible .map-poi-icon {
+  transform: scale(1.2);
+}
+.map-poi:hover .map-pin-name,
+.map-poi:focus-visible .map-pin-name {
+  color: var(--poi);
+}
+/* Waypoint: bandeira fincada no chão, com a ponta sobre o lugar marcado. */
+.map-waypoint {
+  width: 22px;
+  height: 30px;
+  padding: 0;
+}
+.map-waypoint .map-pin-name {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translate(-50%, -15px);
+}
+.map-waypoint-flag {
+  position: relative;
+  top: -15px;
+  left: 11px;
+  display: block;
+  width: 22px;
+  height: 30px;
+  border-left: 2px solid #f0e6d2;
+  transition: transform 0.2s ease-out;
+  filter: drop-shadow(0 2px 3px #000);
+}
+.map-waypoint-flag::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 14px;
+  background: var(--teal);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+.map-waypoint:hover .map-waypoint-flag,
+.map-waypoint:focus-visible .map-waypoint-flag {
+  transform: scale(1.2);
+  transform-origin: 0 100%;
+}
+.map-draft,
+.map-draft.on {
+  pointer-events: none;
+  cursor: default;
+}
+.map-draft .map-waypoint-flag::after {
+  background: var(--gold-hi);
+}
+.map-panel .lore-action {
+  margin-top: 4px;
+}

@@ -7,7 +7,7 @@ import MasterInventory from './MasterInventory.jsx'
 import MasterTable from './MasterTable.jsx'
 import MasterMerchants from './MasterMerchants.jsx'
 import MasterAccounts from './MasterAccounts.jsx'
-import MapButton from '../map/MapButton.jsx'
+import WorldButtons from '../map/WorldButtons.jsx'
 import TabBar from '../sheet/TabBar.jsx'
 import { CrownIcon, ExitIcon, FlaskIcon, KeyIcon } from '../sheet/icons.jsx'
 import '../../styles/sheet.css'
@@ -61,7 +61,7 @@ export default function MasterPanel({ session, notice, onChangePassword, onLogou
           <button className="test-btn" type="button" onClick={() => onTestPlayer().catch(onError)} title="Abrir a ficha de um jogador de teste">
             <FlaskIcon /> TESTAR COMO JOGADOR
           </button>
-          <MapButton session={session} />
+          <WorldButtons session={session} />
           <button className="icon-btn" type="button" onClick={onChangePassword} title="Alterar senha" aria-label="Alterar senha"><KeyIcon /></button>
           <button className="icon-btn" type="button" onClick={onLogout} title="Sair" aria-label="Sair"><ExitIcon /></button>
         </div>

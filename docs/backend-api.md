@@ -49,6 +49,18 @@
 | PATCH | `/character/{id}/conditions` | `{ conditions?, exhaustion? }` (mestre) | Condições (ids do `condicoes.json`; a lista substitui a atual) e Exaustão (0–10); nulo = mantém. Devolve `CharacterResponse`. 400 com id desconhecido ou Exaustão fora dos limites; 403 para jogador |
 | GET | `/crafts/formulas` | – (Bearer) | Fórmulas de Ofício: `{ rule, general: Formula[], crafts: { <id do ofício>: Formula[] } }` (`id, name, level, discipline, prerequisite, craft/crafts, part, dc, component, value, time, detail, description, natural20`) |
 | PUT | `/character/{id}/formulas` | `{ formulas: ["cuteleiro:criar-arma-1"] }` (mestre) | Fórmulas conhecidas da ficha (substitui a lista). 400 com fórmula desconhecida ou de ofício que a ficha não tem; 403 para jogador |
+| GET | `/lore` | – (Bearer) | Verbetes que a conta conhece, com só os conhecimentos dela: `{ id, kind, name, subtitle, quote, quoteAuthor, summary, imageUrl, mapSlug, region, linked[], facts[], sections[], toAll, recipients }`. `recipients` só para o mestre. O jogador vê o verbete se recebeu ele ou um conhecimento dele; vínculos com o que não conhece não vêm |
+| POST | `/lore` | `LoreEntryRequest` (Bearer **mestre**) | Cria o verbete inteiro (201). `facts` e `sections` substituem os atuais; em região, `linkedIds` são personagens e lugares dela; nos outros, `regionId`. `toAll` falso sem `recipients` = só o mestre |
+| PUT | `/lore/{id}` | `LoreEntryRequest` (Bearer **mestre**) | Edita. 404 se não existir |
+| DELETE | `/lore/{id}` | – (Bearer **mestre**) | Apaga; quem apontava para o verbete só perde o vínculo |
+| GET | `/map/pois` | – (Bearer) | Pontos que a conta vê, com os comentários da mesa e as anotações dela |
+| POST / PUT | `/map/pois`, `/map/pois/{id}` | `PoiRequest { name, kind, description, x, y, loreEntryId, toAll, recipients }` (Bearer **mestre**) | Cria ou edita. `kind`: CITY, LANDMARK, QUEST, DANGER, MYSTERY. `x` e `y` entre -1024 e 1024 |
+| DELETE | `/map/pois/{id}` | – (Bearer **mestre**) | Apaga o ponto e os comentários |
+| POST | `/map/pois/{id}/comments` | `{ text, shared }` (Bearer) | Comentário (`shared`) ou anotação só do autor (201). 404 se a conta não vê o ponto |
+| DELETE | `/map/pois/comments/{id}` | – (Bearer) | O autor apaga o seu; o mestre, os da mesa. 404 nos demais casos |
+| GET | `/map/waypoints` | – (Bearer) | Jogador: os seus. Mestre: os de todos, com `owner` |
+| POST / PUT | `/map/waypoints`, `/map/waypoints/{id}` | `{ name, comment, x, y }` (Bearer) | Só o dono. 400 no quarto waypoint e para o mestre; 404 no waypoint de outro |
+| DELETE | `/map/waypoints/{id}` | – (Bearer) | Só o dono |
 | GET | `/map/bandle` | – (Bearer) | Última rolagem de Bandópolis: `{ roll }` (1 a 10; nulo antes da primeira). 401 sem sessão |
 | POST | `/map/bandle/roll` | – (Bearer **mestre**) | Rola o d10 no servidor, guarda em `TableSetting` (`map.bandleRoll`) e devolve `{ roll }`. 401 sem sessão; 403 para jogador |
 | GET | `/conditions` | – (Bearer) | Catálogo das condições: `{ exhaustionMax, exhaustion, conditions: [{ id, name, text }] }` |
