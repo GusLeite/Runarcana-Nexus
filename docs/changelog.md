@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa: Bandópolis por rolagem de dado (`feature/character-sheet`)
+- O mestre rola um d10 no mapa; o servidor sorteia, guarda e todos veem Bandópolis na mesma região.
+- Rotas `GET /map/bandle` e `POST /map/bandle/roll`, sem tabela nova (usa `TableSetting`).
+- Brasão dourado próprio, colorido no destaque, cartão e painel como as outras regiões.
+
 ## 2026-11-02 — Mapa: moldura nítida e brasão dourado do Vazio (`feature/character-sheet`)
 - A moldura de Piltover e Zaun passa a ser desenhada por código em 2048 px, sem a imagem de 128 px do original.
 - O brasão do Vazio em repouso ganha desenho próprio, no estilo dos brasões dourados das outras regiões.

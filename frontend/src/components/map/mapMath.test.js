@@ -60,6 +60,11 @@ describe('pinVisible', () => {
     expect(pinVisible('near', 300)).toBe(true)
   })
 
+  it('nunca mostra o ponto "hidden"', () => {
+    expect(pinVisible('hidden', CAM_FAR_Z)).toBe(false)
+    expect(pinVisible('hidden', 300)).toBe(false)
+  })
+
   it('mantém o ponto "any" de longe e de perto, menos na entrada', () => {
     expect(pinVisible('any', 2300)).toBe(false)
     expect(pinVisible('any', CAM_FAR_Z)).toBe(true)

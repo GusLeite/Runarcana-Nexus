@@ -454,7 +454,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             <span className="who-name">{character.name}</span>
             <span className="who-sub">{session.username}</span>
           </div>
-          <MapButton />
+          <MapButton session={session} />
           {!testing && (
             <button className="icon-btn" type="button" onClick={onChangePassword} title="Alterar senha" aria-label="Alterar senha">
               <KeyIcon />

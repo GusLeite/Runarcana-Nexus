@@ -1,9 +1,10 @@
 import { REGION_ART } from '../../data/regionArt.js'
 import voidGold from '../../assets/region-icons/void-gold.svg'
+import bandleGold from '../../assets/region-icons/bandle-gold.svg'
 import { drawTwinFrame } from './twinFrame.js'
 
 // Pontos do mapa, nas posições do original (coordenadas do mundo, com o centro do mapa em 0,0).
-// level: 'far' aparece com o mapa visto de longe; 'near', ao aproximar; 'any', nos dois.
+// level: 'far' aparece com o mapa visto de longe; 'near', ao aproximar; 'any', nos dois; 'hidden' fica escondido.
 // highlight: acende a região no terreno, com public/map/regions/<slug>.png ou com a área de MAP_AREAS.
 // icon: 'crest' usa public/map/crests/<slug>.png; 'capital' usa public/map/pins/; 'art' usa goldIcon em repouso e o brasão de regionArt.js no destaque.
 // lift: distância do ponto dentro da moldura em pé, que acompanha a inclinação da câmera.
@@ -26,11 +27,30 @@ const PINS = [
   crest('targon', 'Targon', ['TARGON'], -240, -384, 0),
   // O original não tem brasão do Vazio: o dourado é desenho nosso, o colorido vem da criação, e ele fica visível também de perto.
   { ...crest('void', 'O Vazio', ['VOID'], 270, -537, 9), level: 'any', icon: 'art', goldIcon: voidGold },
+  // Sem lugar fixo: o mestre rola o d10 e MapScreen o põe em bandleSpot(rolagem).
+  { ...crest('bandle', 'Bandópolis', ['BANDLE_CITY'], 0, 0, 0, false), level: 'hidden', icon: 'art', goldIcon: bandleGold },
   capital('piltover', 'Piltover', ['PILTOVER'], TWIN_CITIES.x, TWIN_CITIES.y, TWIN_CITIES.z, 50),
   capital('zaun', 'Zaun', ['ZAUN'], TWIN_CITIES.x, TWIN_CITIES.y, TWIN_CITIES.z, -50),
 ]
 
 export const MAP_PINS = PINS.map(pin => ({ ...pin, art: pin.art.map(id => REGION_ART[id]) }))
+
+// Onde Bandópolis surge em cada face do d10: uma por região, longe do brasão dela.
+// Os pontos vêm da lista de lugares de Bandópolis no original, menos Ilhas das Sombras e Targon, onde lá não há nenhum por perto.
+export const BANDLE_SPOTS = [
+  { region: 'Águas de Sentina', x: 593, y: -66, z: 0 },
+  { region: 'Demacia', x: -360, y: 70, z: 9 },
+  { region: 'Freljord', x: -339, y: 204, z: 25 },
+  { region: 'Ionia', x: 606, y: 256, z: 14 },
+  { region: 'Ixtal', x: 351, y: -380, z: 6 },
+  { region: 'Noxus', x: -107, y: 133, z: 7 },
+  { region: 'Piltover e Zaun', x: 221, y: -202, z: 6 },
+  { region: 'Ilhas das Sombras', x: 655, y: -330, z: 0 },
+  { region: 'Shurima', x: 111, y: -371, z: 8 },
+  { region: 'Targon', x: -200, y: -330, z: 8 },
+]
+
+export const bandleSpot = roll => (roll ? BANDLE_SPOTS[roll - 1] : null)
 
 // Nomes escritos no mapa, sem clique.
 export const MAP_LABELS = [{ slug: 'icathia', name: 'Icathia', x: 275, y: -578, z: 8, level: 'near', lift: 0 }]

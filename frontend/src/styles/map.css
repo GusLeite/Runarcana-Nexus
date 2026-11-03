@@ -268,3 +268,39 @@
 @media (prefers-reduced-motion: reduce) {
   .map-panel { animation: none; }
 }
+.map-roll {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  padding: 10px 18px;
+  transform: translateX(-50%);
+  border: 1px solid var(--gold);
+  background: rgba(5, 11, 20, 0.86);
+  color: var(--gold-hi);
+  font: 600 13px Cinzel, serif;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.map-roll:hover:not(:disabled),
+.map-roll:focus-visible {
+  background: rgba(200, 162, 74, 0.22);
+}
+.map-roll:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+/* Bandópolis brota do chão ao ser rolada. */
+.map-pin-born .map-pin-icon {
+  animation: map-pin-born 0.9s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+@keyframes map-pin-born {
+  from { opacity: 0; transform: scale(0.1) rotate(-160deg); filter: brightness(3); }
+}
+@media (max-width: 720px) {
+  .map-roll { bottom: 52px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-pin-born .map-pin-icon { animation: none; }
+}

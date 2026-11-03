@@ -24,6 +24,7 @@ frontend/
     ├── api/character.js       ficha do logado, usos de habilidade e descanso
     ├── api/documents.js       documentos do mestre (listar, marcar lido)
     ├── api/notes.js           anotações (listar, criar, salvar, apagar)
+    ├── api/map.js             Bandópolis no mapa (ver a rolagem; o mestre rola o dado)
     ├── api/merchants.js       mercadores (mestre monta e abre; jogador compra e vende)
     ├── data/characters.js     lista de personagens + imports das artes
     ├── data/rules.js (+ .test.js)  rótulos em PT, formatação e regras derivadas dos atributos

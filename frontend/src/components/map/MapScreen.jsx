@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { prefersReducedMotion } from '../../hooks/useCountUp.js'
 import { createMapScene } from './mapScene.js'
-import { MAP_AREAS, MAP_DECALS, MAP_LABELS, MAP_PINS } from './regions.js'
+import { fetchBandle, rollBandle } from '../../api/map.js'
+import DiceRoll from '../sheet/DiceRoll.jsx'
+import { MAP_AREAS, MAP_DECALS, MAP_LABELS, MAP_PINS, bandleSpot } from './regions.js'
 import RegionPanel from './RegionPanel.jsx'
 import '../../styles/map.css'
 
@@ -9,6 +11,10 @@ const PANEL_WIDTH = 380
 // Abaixo disso o painel ocupa a tela inteira e não adianta desviar o mapa.
 const PANEL_MIN_SCREEN = 720
 const PANEL_DELAY = 1500
+const BANDLE_ZOOM = 450
+// Espera o dado parar de girar (ver DiceRoll) antes de mostrar onde Bandópolis surgiu.
+const DIE_SPIN = 800
+const NOTICE_MS = 6000
 
 const PIN_IMAGES = {
   crest: pin => [`/map/crests/${pin.slug}.png`, `/map/crests/${pin.slug}-hover.png`],
@@ -17,19 +23,28 @@ const PIN_IMAGES = {
 }
 
 // Mapa de Runeterra em tela cheia. A câmera e o relevo ficam em mapScene.js.
-export default function MapScreen({ onClose }) {
+export default function MapScreen({ session, onClose }) {
   const stage = useRef(null)
   const scene = useRef(null)
   const closeBtn = useRef(null)
   const anchors = useRef({})
   const panelTimer = useRef()
+  const scenePins = useRef([])
+  const rollTimers = useRef([])
   const [status, setStatus] = useState('loading') // 'loading' | 'ready' | 'error'
   const [hovered, setHovered] = useState(null)
   const [selected, setSelected] = useState(null)
+  const [bandleRoll, setBandleRoll] = useState(null)
+  const [die, setDie] = useState(null)
+  const [rolling, setRolling] = useState(false)
+  const [born, setBorn] = useState(false)
+  const [notice, setNotice] = useState(null)
+  const closeDie = useCallback(() => setDie(null), [])
 
   useEffect(() => {
     let cancelled = false
-    const pins = [...MAP_PINS, ...MAP_LABELS].map(pin => ({ el: anchors.current[pin.slug], x: pin.x, y: pin.y, z: pin.z, level: pin.level, lift: pin.lift }))
+    const pins = [...MAP_PINS, ...MAP_LABELS].map(pin => ({ slug: pin.slug, el: anchors.current[pin.slug], x: pin.x, y: pin.y, z: pin.z, level: pin.level, lift: pin.lift }))
+    scenePins.current = pins
     createMapScene(stage.current, {
       reducedMotion: prefersReducedMotion(),
       pins,
@@ -48,10 +63,45 @@ export default function MapScreen({ onClose }) {
     return () => {
       cancelled = true
       clearTimeout(panelTimer.current)
+      rollTimers.current.forEach(clearTimeout)
       scene.current?.destroy()
       scene.current = null
     }
   }, [])
+
+  useEffect(() => {
+    fetchBandle(session.token).then(res => setBandleRoll(res.roll)).catch(() => {})
+  }, [session.token])
+
+  // A cena lê estes objetos a cada quadro: basta mudá-los para Bandópolis aparecer no lugar novo.
+  useEffect(() => {
+    const spot = bandleSpot(bandleRoll)
+    const pin = scenePins.current.find(p => p.slug === 'bandle')
+    if (spot && pin) Object.assign(pin, { x: spot.x, y: spot.y, z: spot.z, level: 'any' })
+  }, [bandleRoll])
+
+  const rollDie = async () => {
+    setRolling(true)
+    setNotice(null)
+    try {
+      const { roll } = await rollBandle(session.token)
+      const spot = bandleSpot(roll)
+      setSelected(null)
+      setBorn(false)
+      setDie({ kind: 'dice', label: 'Bandópolis', expr: '1d10', count: 1, sides: 10, bonus: 0, rolls: [roll], total: roll })
+      rollTimers.current.push(setTimeout(() => {
+        setBandleRoll(roll)
+        setBorn(true)
+        setNotice('Bandópolis surgiu em ' + spot.region + '.')
+        scene.current?.focus(spot.x, spot.y, BANDLE_ZOOM)
+      }, prefersReducedMotion() ? 0 : DIE_SPIN))
+      rollTimers.current.push(setTimeout(() => setNotice(null), NOTICE_MS + DIE_SPIN))
+    } catch (err) {
+      setNotice(err.message)
+    } finally {
+      setRolling(false)
+    }
+  }
 
   // A região escolhida continua acesa enquanto o painel dela estiver aberto.
   const lit = hovered ?? selected
@@ -64,7 +114,8 @@ export default function MapScreen({ onClose }) {
     setHovered(null)
     setSelected(null)
     const covered = window.innerWidth >= PANEL_MIN_SCREEN ? PANEL_WIDTH : 0
-    scene.current?.focus(pin.x, pin.y, pin.zoom, covered)
+    const where = pin.slug === 'bandle' ? bandleSpot(bandleRoll) : pin
+    scene.current?.focus(where.x, where.y, pin.zoom, covered)
     clearTimeout(panelTimer.current)
     panelTimer.current = setTimeout(() => setSelected(pin.slug), prefersReducedMotion() ? 0 : PANEL_DELAY)
   }
@@ -97,7 +148,7 @@ export default function MapScreen({ onClose }) {
               <button
                 key={pin.slug}
                 ref={el => { anchors.current[pin.slug] = el }}
-                className={'map-pin map-pin-' + pin.icon}
+                className={'map-pin map-pin-' + pin.icon + (pin.slug === 'bandle' && born ? ' map-pin-born' : '')}
                 type="button"
                 onClick={() => select(pin)}
                 onPointerEnter={() => setHovered(pin.slug)}
@@ -131,14 +182,21 @@ export default function MapScreen({ onClose }) {
             <button className="map-btn" type="button" onClick={() => scene.current?.zoomBy(1 / 0.75)} title="Afastar" aria-label="Afastar">−</button>
           </div>
           <p className="map-hint">Arraste para mover · role para aproximar</p>
+          {session.master && (
+            <button className="map-roll" type="button" onClick={rollDie} disabled={rolling || die !== null}>
+              {bandleRoll ? 'ROLAR BANDÓPOLIS DE NOVO' : 'ROLAR BANDÓPOLIS'}
+            </button>
+          )}
         </>
       )}
+      {notice && !teased && !chosen && <div className="map-tease" role="status"><strong>{notice}</strong></div>}
       {teased && !chosen && (
         <div className="map-tease">
           <strong>{teased.name}</strong>
           <span>{teased.art[0].tagline}</span>
         </div>
       )}
+      <DiceRoll roll={die} onClose={closeDie} />
       {chosen && <RegionPanel key={chosen.slug} region={chosen} onClose={() => setSelected(null)} />}
       <p className="map-legal">Projeto de fãs sem fins lucrativos, não endossado pela Riot Games. Arte do mapa © Riot Games.</p>
     </div>

@@ -43,6 +43,7 @@ export const easeFactor = (rate, dt) => 1 - (1 - rate) ** (dt * 60)
 // Os brasões das regiões ('far') aparecem com o mapa visto de longe, depois da entrada; ao aproximar, dão lugar aos pontos 'near'.
 // 'any' fica nos dois casos.
 export const pinVisible = (level, z) => {
+  if (level === 'hidden') return false
   const progress = zoomProgress(z)
   if (level === 'any') return progress > 0
   return level === 'near' ? progress > 0.32 : progress > 0 && progress <= 0.32
