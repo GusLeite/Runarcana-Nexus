@@ -21,6 +21,8 @@ const DECAL_PIXELS = 2048
 // A vista começa um pouco ao sul, para o brasão do Vazio não ficar cortado no pé da tela.
 const START_PAN = { x: 0, y: 70 }
 const HIGHLIGHT_OPACITY = 0.9
+// Folga, em pixels, para um ponto (com o nome) fora da tela ainda ser posicionado e não surgir cortado na borda.
+const PIN_MARGIN = 160
 
 const PLAIN_VERTEX = `
   varying vec2 vUv;
@@ -552,8 +554,15 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       const upright = -tiltGroup.rotation.x
       point.set(pin.x, pin.y + lift * Math.cos(upright), pin.z + lift * Math.sin(upright))
       point.applyMatrix4(panGroup.matrixWorld).project(camera)
-      const left = (point.x + 1) / 2 * viewW
-      const top = (1 - point.y) / 2 * viewH
+      const left = Math.round((point.x + 1) / 2 * viewW)
+      const top = Math.round((1 - point.y) / 2 * viewH)
+      // De perto, quase todos os ~100 pontos ficam fora da tela, e mexer em todos a cada quadro custava dezenas de ms
+      // de recálculo de estilo ao arrastar: o que está fora fica escondido e parado, e só se escreve o que mudou.
+      const away = point.z > 1 || left < -PIN_MARGIN || left > viewW + PIN_MARGIN || top < -PIN_MARGIN || top > viewH + PIN_MARGIN
+      if (pin.away !== away) { pin.away = away; pin.el.style.visibility = away ? 'hidden' : '' }
+      if (away || (pin.left === left && pin.top === top)) continue
+      pin.left = left
+      pin.top = top
       pin.el.style.transform = `translate(${left}px, ${top}px) translate(-50%, -50%)`
     }
   }

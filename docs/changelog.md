@@ -1,6 +1,9 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Arrastar o mapa de perto sem travar (`main`)
+- De perto, os ~100 lugares oficiais ficam "ligados", quase todos fora da tela, e `placePins` reescrevia o `transform` de todos a cada quadro: 25–100 ms de recálculo de estilo por quadro ao arrastar. Agora o ponto fora da tela fica escondido e parado, e só se escreve o que mudou (3–6 ms).
+
 ## 2026-11-03 — Zoom do mapa sem travadas (`main`)
 - Ao aproximar, os 27 blocos detalhados e as texturas dos marcos 3D subiam à GPU no mesmo quadro (quadros de 130–170 ms). Agora os blocos são decodificados com `ImageBitmapLoader` e tudo passa por uma fila em `mapScene.js` que sobe um item por quadro (os marcos ainda de longe); os picos caíram para ~11 ms.
 
