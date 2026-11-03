@@ -66,11 +66,11 @@ export default function MasterPanel({ session, notice, onChangePassword, onLogou
           <button className="test-btn" type="button" onClick={() => onTestPlayer().catch(onError)} title="Abrir a ficha de um jogador de teste">
             <FlaskIcon /> TESTAR COMO JOGADOR
           </button>
-          <WorldButtons session={session} />
           <button className="icon-btn" type="button" onClick={onChangePassword} title="Alterar senha" aria-label="Alterar senha"><KeyIcon /></button>
           <button className="icon-btn" type="button" onClick={onLogout} title="Sair" aria-label="Sair"><ExitIcon /></button>
         </div>
       </header>
+      <WorldButtons session={session} />
 
       <main className="master-body">
         {tab === 'table' && <MasterTable token={session.token} onError={onError} onToast={setToast} />}

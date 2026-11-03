@@ -18,10 +18,10 @@ header.topbar{position:sticky;top:0;z-index:30;display:grid;grid-template-column
 background:linear-gradient(180deg,rgba(1,10,19,.97),rgba(1,10,19,.86));border-bottom:1px solid var(--gold-soft);backdrop-filter:blur(6px)}
 header.topbar::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-hi) 50%,transparent);opacity:.7}
 .topbar-left{display:flex;align-items:center;gap:22px;min-width:0}
-.tabs{display:flex;gap:24px;min-width:0;overflow-x:auto;scrollbar-width:none;padding:0 4px}
+.tabs{display:flex;gap:clamp(10px,1.5vw,24px);min-width:0;overflow-x:auto;scrollbar-width:none;padding:0 4px}
 .tabs::-webkit-scrollbar{display:none}
 .tab{flex:none}
-.tab{position:relative;display:flex;align-items:center;gap:6px;padding:8px 0;border:0;background:none;cursor:pointer;font-family:'Cinzel',Georgia,serif;font-size:13px;font-weight:700;letter-spacing:.16em;color:var(--muted);transition:color .2s}
+.tab{position:relative;display:flex;align-items:center;gap:6px;padding:8px 0;border:0;background:none;cursor:pointer;font-family:'Cinzel',Georgia,serif;font-size:clamp(11px,.9vw,13px);font-weight:700;letter-spacing:clamp(.06em,.9vw,.16em);color:var(--muted);transition:color .2s}
 .tab:hover{color:var(--text)}
 .tab:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
 .tab.on{color:var(--gold-hi)}
@@ -884,15 +884,15 @@ background-color:transparent;background-image:linear-gradient(90deg,transparent 
 .explain-total{display:flex;justify-content:space-between;margin-top:6px;padding-top:5px;border-top:1px solid rgba(200,162,74,.25);font-family:'Cinzel',Georgia,serif;color:var(--gold-hi)}
 .explain-none{margin:0;color:var(--muted)}
 /* Barra recolhida: só o botão "Atalhos" fica à vista; os botões grandes aparecem ao abrir. */
-.world-dock{padding:6px;gap:8px;align-items:flex-end;opacity:.9;transition:opacity .2s}
+.world-dock{left:auto;right:20px;padding:6px;gap:8px;align-items:flex-end;flex-direction:row-reverse;opacity:.9;transition:opacity .2s}
 .world-dock:hover,.world-dock.open{opacity:1}
 .dock-items{display:none;gap:10px}
 .world-dock.open .dock-items{display:flex;animation:dock-in .25s ease both}
-@keyframes dock-in{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+@keyframes dock-in{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
 .dock-toggle{min-height:44px;padding:0 16px 0 12px;font-size:12px}
 .dock-toggle svg{width:20px;height:20px}
 @media (max-width:860px){
- .world-dock{flex-direction:column-reverse}
+ .world-dock{right:12px;left:auto;flex-direction:column-reverse}
  .dock-items{flex-direction:column}
  .world-dock.open .dock-items{animation-name:dock-up}
  .dock-toggle{width:44px;min-height:44px}

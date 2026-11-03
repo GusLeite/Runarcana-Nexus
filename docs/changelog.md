@@ -1,6 +1,9 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Barra de atalhos no canto direito e abas do cabeçalho que encolhem (`main`)
+- A `.world-dock` agora vai por portal no `body` e fica no canto inferior direito (no painel do mestre o `backdrop-filter` do header a prendia no topo, sobre o logo). As abas do cabeçalho usam gap, fonte e espaçamento com `clamp()` para não serem cortadas ("MERCAD…").
+
 ## 2026-11-03 — Atalhos de lore, mapa e imprimir ficha numa barra flutuante (`main`)
 - Saíram do cabeçalho e foram para a barra `.world-dock` no canto inferior esquerdo, recolhida por padrão (só o botão "Atalhos", para não cobrir a ficha); ao abrir mostra botões grandes, com rótulo, ouro (lore/mapa) e turquesa (imprimir ficha). Fecha ao escolher um. No celular, só ícones em coluna.
 

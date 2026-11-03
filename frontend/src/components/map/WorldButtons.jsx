@@ -41,7 +41,7 @@ export default function WorldButtons({ session, children }) {
 
   return (
     <>
-      <nav className={"world-dock" + (dockOpen ? " open" : "")} aria-label="Atalhos do mundo" onClick={e => { if (e.target.closest(".dock-btn:not(.dock-toggle)")) setDockOpen(false) }}>
+      {createPortal(<nav className={"world-dock" + (dockOpen ? " open" : "")} aria-label="Atalhos do mundo" onClick={e => { if (e.target.closest(".dock-btn:not(.dock-toggle)")) setDockOpen(false) }}>
         <button className="dock-btn dock-toggle" type="button" onClick={() => setDockOpen(o => !o)} aria-expanded={dockOpen} title={dockOpen ? "Recolher atalhos" : "Lore, mapa e ficha para imprimir"} aria-label="Atalhos">
           <MenuIcon /><span>{dockOpen ? "Fechar" : "Atalhos"}</span>
         </button>
@@ -54,7 +54,7 @@ export default function WorldButtons({ session, children }) {
         </button>
         {children}
         </div>
-      </nav>
+      </nav>, document.body)}
       {screen && createPortal(<Suspense fallback={null}>{screen}</Suspense>, document.body)}
     </>
   )

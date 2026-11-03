@@ -104,7 +104,7 @@ Layout: 3 colunas acima de 1240px; 2 colunas (herói + conteúdo, rolagens embai
 
 ## Mapa de Runeterra
 
-`components/map/WorldButtons.jsx` põe a barra flutuante `.world-dock` (canto inferior esquerdo; recolhida, só o botão "Atalhos", que abre os botões grandes dourados "Lore" e "Mapa", mais o que a tela passar como filho, como o "Imprimir ficha" em azul-turquesa; no celular viram só ícones em coluna) na ficha, na criação e no painel do mestre e abre `MapScreen.jsx` ou `LoreScreen.jsx` em tela cheia, por cima da tela atual. O Three.js só é baixado ao abrir o mapa. O Esc fecha primeiro o que estiver por cima.
+`components/map/WorldButtons.jsx` põe a barra flutuante `.world-dock` (canto inferior direito, renderizada por portal no `body` para o `backdrop-filter` do cabeçalho não prendê-la; recolhida, só o botão "Atalhos", que abre os botões grandes dourados "Lore" e "Mapa", mais o que a tela passar como filho, como o "Imprimir ficha" em azul-turquesa; no celular viram só ícones em coluna) na ficha, na criação e no painel do mestre e abre `MapScreen.jsx` ou `LoreScreen.jsx` em tela cheia, por cima da tela atual. O Three.js só é baixado ao abrir o mapa. O Esc fecha primeiro o que estiver por cima.
 
 `mapScene.js` monta a cena e `mapMath.js` guarda as regras da câmera, com testes. O comportamento imita o mapa original da Riot:
 - plano de 2048×2048 com 200 segmentos, levantado até 60 unidades pelo canal azul de `depth_z1.jpg`;
