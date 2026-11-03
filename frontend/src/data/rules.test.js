@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   addHeritage, heritageOptions, carryCapacity, choiceOptionName, critDice, deathSaveResult, situationalFor, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
-  addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupGrants, groupSkills, itemStats, modifier, parseDice,
+  addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, levelGrantsText, visibleGrants, groupAbilities, groupGrants, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
   resourceCost, togglePick, levelChoices, keepChoices, dominantChoices, pendingChoices, senseLabel, formEffects, rollDie, applyHp,
 } from './rules.js'
@@ -383,5 +383,22 @@ describe('grantLabel de origens', () => {
     expect(grantLabel({ type: 'CONDITION_IMMUNITY', value: 'doenças mundanas' })).toBe('Imune a doenças mundanas')
     expect(grantLabel({ type: 'SENSE', value: 'DARKVISION', feet: 60 })).toBe('Visão no escuro 60 pés')
     expect(grantLabel({ type: 'FORM', name: 'Forma Dracônica' })).toBe('Forma: Forma Dracônica')
+    expect(grantLabel({ type: 'INITIATIVE', amount: 5 })).toBe('+5 na iniciativa')
+    expect(grantLabel({ type: 'DAMAGE_BONUS', value: 'ATTACK:MELEE', amount: 1 })).toBe('Dano +1 em ataques corpo a corpo')
+    expect(grantLabel({ type: 'SPEED', value: 'SWIM', walkFraction: 1 })).toBe('Natação igual à caminhada')
+    expect(grantLabel({ type: 'RESISTANCE', count: 1, options: ['cortante'], label: 'Pele Rígida: um tipo de dano' })).toBe('Pele Rígida: um tipo de dano')
+    expect(grantLabel({ type: 'TIPO_NOVO', name: 'Algo' })).toBe('Algo')
+  })
+
+  it('esconde o efeito mecânico e o que depende de uma opção escolhida', () => {
+    const grants = [
+      { type: 'FEATURE', abilityType: 'ABILITY', name: 'Postura do Grão-mestre' },
+      { type: 'EFFECT', name: 'Postura do Grão-mestre', form: { resistances: ['cortante'] } },
+      { type: 'ARMOR_CLASS', name: 'Estilo de Luta: Defesa sem Armadura', armor: { base: 10, feature: 'Estilo de Luta', featureOption: 'Defesa sem Armadura' } },
+      { type: 'RESISTANCE', value: 'ácido', when: 'Resistente:Ácido' },
+    ]
+    expect(visibleGrants(grants)).toEqual([grants[0]])
+    expect(levelGrantsText(grants)).toBe('Habilidade: Postura do Grão-mestre')
+    expect(groupGrants(grants).groups).toEqual([])
   })
 })

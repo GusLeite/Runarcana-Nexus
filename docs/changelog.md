@@ -1,6 +1,12 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Humano completo e rótulos da criação sem texto cru (`feature/character-sheet`)
+- Humano: +2/+1 em atributos e 3 pontos de Herança de Origem (antes só tinha os 2 de Região), como no livro.
+- Construto: o painel explica que o Nebulon é a Herança de Origem Variante Nebulon.
+- Criação: todos os tipos de concessão têm rótulo em português (sumiu o "EFFECT"); `visibleGrants` esconde efeitos mecânicos e o que depende de opção (a CA "Estilo de Luta: Defesa sem Armadura" do Combatente só vale escolhendo o estilo).
+- `launch.json`: terceiro par de sandbox (8093/5178).
+
 ## 2026-11-03 — Mapa: lugares do mapa oficial com liga/desliga (`feature/character-sheet`)
 - Etapa 14 do plano: catálogo de ~30 lugares oficiais (Disco Solar, Nashramae, Camavor, Icathia…) criado escondido no primeiro start; o mestre liga e desliga cada um, por região ou todos (`PATCH /map/pois/official/audience`), e move qualquer ponto com **MOVER**. Não se apagam.
 - Posições são aproximadas; o catálogo está em `OfficialPlaces.java` para ampliar/corrigir.

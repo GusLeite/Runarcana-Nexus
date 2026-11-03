@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { ABILITY_TYPES, RECHARGES, formatFeet, grantLabel, groupGrants } from '../../data/rules.js'
+import { ABILITY_TYPES, RECHARGES, formatFeet, grantLabel, groupGrants, levelGrantsText, visibleGrants } from '../../data/rules.js'
 import { originArt } from '../../data/originArt.js'
 import { lineageImage, lineagePos } from '../../data/lineageArt.js'
 import TabBar from '../sheet/TabBar.jsx'
@@ -19,7 +19,7 @@ const frame = rect => ({ left: rect.left + 'px', top: rect.top + 'px', width: re
 export function GrantList({ grants, crafts, equipment }) {
   return (
     <span className="grants">
-      {grants.map((g, i) => (
+      {visibleGrants(grants).map((g, i) => (
         <span key={i} className={'grant g-' + g.type.toLowerCase()} title={g.description ?? undefined}>{grantLabel(g, crafts, equipment)}</span>
       ))}
     </span>
@@ -64,7 +64,7 @@ function LineageShowcase({ lineages, originId, selectedId, onPick, crafts, equip
   const shown = lineages.find(l => l.id === previewId) ?? lineages.find(l => l.id === selectedId) ?? lineages[0]
   const img = lineageImage(shown.id)
   const on = shown.id === selectedId
-  const levels = [...(shown.levels ?? [])].sort((a, b) => a.level - b.level)
+  const levels = [...(shown.levels ?? [])].sort((a, b) => a.level - b.level).filter(l => visibleGrants(l.grants).length > 0)
   return (
     <div className="olineages" onMouseLeave={() => setPreviewId(null)}>
       <button type="button" tabIndex={-1} className={'olineage-feature' + (on ? ' on' : '')} aria-label={'Escolher a linhagem ' + shown.name} onClick={() => onPick(shown.id)}>
@@ -115,7 +115,7 @@ function LineageShowcase({ lineages, originId, selectedId, onPick, crafts, equip
             <span className="option-level-title">Ao subir de nível</span>
             {levels.map(v => (
               <span key={v.level} className="option-level">
-                <b>{v.level}º nível.</b> {(v.grants ?? []).map(g => grantLabel(g, crafts, equipment)).join(' · ')}
+                <b>{v.level}º nível.</b> {levelGrantsText(v.grants, crafts, equipment)}
               </span>
             ))}
           </div>

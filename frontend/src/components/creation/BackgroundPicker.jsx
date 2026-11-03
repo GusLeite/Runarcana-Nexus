@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { grantLabel } from '../../data/rules.js'
+import { grantLabel, visibleGrants } from '../../data/rules.js'
 import { backgroundImage, backgroundSigil } from '../../data/backgroundArt.js'
 import '../../styles/background.css'
 
@@ -20,7 +20,7 @@ export default function BackgroundPicker({ title, hint, items, selected, onPick,
     return <p className="muted-note">Nenhuma opção cadastrada ainda nas regras de criação.</p>
   }
   const shown = items.find(b => b.id === (peek ?? selected)) ?? items[0]
-  const grants = shown.grants ?? []
+  const grants = visibleGrants(shown.grants)
   const image = backgroundImage(shown)
 
   return (

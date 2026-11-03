@@ -177,7 +177,11 @@
         },
         {
           "name": "Tamanho",
-          "text": "Pequeno ou Médio, à escolha do jogador."
+          "text": "Pequeno ou Médio, à escolha do jogador (de quase 1,5 metro a mais de 1,8 metro)."
+        },
+        {
+          "name": "Herança",
+          "text": "3 pontos de Herança de Origem e mais 1 ponto nos níveis 5, 9, 13 e 17."
         },
         {
           "name": "Passado",
@@ -185,10 +189,22 @@
         },
         {
           "name": "Região",
-          "text": "A região representa onde o personagem cresceu e influencia sua visão de mundo."
+          "text": "2 pontos de Herança de Região e 1 idioma dessa região. A região representa onde o personagem cresceu e influencia sua visão de mundo."
         }
       ],
       "grants": [
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 2,
+          "label": "+2 em um atributo"
+        },
+        {
+          "type": "ATTRIBUTE_CHOICE",
+          "count": 1,
+          "amount": 1,
+          "label": "+1 em um segundo atributo"
+        },
         {
           "type": "SIZE_CHOICE",
           "options": [
@@ -206,6 +222,12 @@
           "type": "CRAFT_CHOICE",
           "count": 1,
           "label": "Proficiência em um ofício à escolha"
+        },
+        {
+          "type": "HERITAGE_POINTS",
+          "amount": 3,
+          "value": "ORIGIN",
+          "label": "3 pontos de Herança de Origem"
         },
         {
           "type": "HERITAGE_POINTS",
@@ -450,6 +472,10 @@
         {
           "name": "Modelo",
           "text": "Escolha um dos três modelos: Brutal, Emissário ou Ligeiro."
+        },
+        {
+          "name": "Nebulon",
+          "text": "Para ser um Nebulon (criatura gasosa num corpo mecânico), escolha a Herança de Origem Variante Nebulon na etapa de Heranças. Ela libera Gás Corrosivo, Gás Ionizado e Gás Termiônico."
         },
         {
           "name": "Peculiaridades",

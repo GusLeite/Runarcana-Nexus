@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { grantLabel } from '../../data/rules.js'
+import { grantLabel, levelGrantsText, visibleGrants } from '../../data/rules.js'
 import { subclassSigil } from '../../data/subclassArt.js'
 import '../../styles/subclass.css'
 
@@ -17,8 +17,8 @@ export function SubclassSigil({ klass, sub, className = '' }) {
 export default function SubclassPicker({ klass, title, subclasses, selected, onPick, crafts, equipment = [] }) {
   const [peek, setPeek] = useState(null)
   const shown = subclasses.find(s => s.id === (peek ?? selected)) ?? subclasses[0]
-  const grants = shown?.grants ?? []
-  const levels = [...(shown?.levels ?? [])].sort((a, b) => a.level - b.level)
+  const grants = visibleGrants(shown?.grants)
+  const levels = [...(shown?.levels ?? [])].sort((a, b) => a.level - b.level).filter(l => visibleGrants(l.grants).length > 0)
 
   return (
     <div className="subpick">
@@ -66,7 +66,7 @@ export default function SubclassPicker({ klass, title, subclasses, selected, onP
                 <span className="option-level-title">Ao subir de nível</span>
                 {levels.map(l => (
                   <span key={l.level} className="option-level">
-                    <b>{l.level}º nível.</b> {(l.grants ?? []).map(g => grantLabel(g, crafts, equipment)).join(' · ')}
+                    <b>{l.level}º nível.</b> {levelGrantsText(l.grants, crafts, equipment)}
                   </span>
                 ))}
               </span>
