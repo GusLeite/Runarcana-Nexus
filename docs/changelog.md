@@ -1,6 +1,11 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Mapa: o que aconteceu ali (`feature/character-sheet`)
+- Etapa 9 do plano: entradas do diário podem apontar um local (`JournalEntry.poi`); o painel do ponto mostra "Aconteceu aqui" (entradas, eventos e paradas da trilha perto dele) e deixa escrever no diário dali mesmo.
+- No diário, a entrada ligada tem o botão **📍 nome**, que abre o mapa voando até o ponto (`openMapAt`; a base do link `?tela=mapa&ponto=` já funciona, a Etapa 10 completa).
+- Quem não vê o ponto não recebe nem o nome dele pelo diário. Rota nova: `GET /map/pois/{id}/history`.
+
 ## 2026-11-03 — Mapa: imagens e notas secretas no ponto (`feature/character-sheet`)
 - Etapa 8 do plano: galeria de até 6 imagens por ponto (arquivo ou link), notas que só o mestre lê e **MOSTRAR À MESA**, que abre a imagem em tela cheia para os jogadores que veem o ponto.
 - Seis tipos novos: posto avançado, esconderijo, ruína, acampamento, masmorra, porto (o `CHECK` do `kind` no PostgreSQL precisa do `ALTER TABLE` em `backend-api.md`).

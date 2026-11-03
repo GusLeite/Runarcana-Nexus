@@ -3,6 +3,7 @@ import { formatDate } from '../../data/rules.js'
 import AudiencePicker, { audienceLabel, playerName } from '../lore/AudiencePicker.jsx'
 import { PoiGlyph, POI_KINDS } from './poiKinds.jsx'
 import PoiGallery from './PoiGallery.jsx'
+import PoiHistory from './PoiHistory.jsx'
 import '../../styles/lore.css'
 
 // Moldura comum dos painéis laterais dos pontos do mapa.
@@ -57,6 +58,7 @@ export function PoiPanel({ poi, loreEntry, master, players = [], token, onPoi, o
         {master && <button type="button" className="lore-action ghost" onClick={onEdit}>EDITAR</button>}
       </div>
 
+      <PoiHistory token={token} poi={poi} />
       <div className="lore-rule" aria-hidden="true" />
       <h3>{master ? 'Comentários da mesa' : 'Comentários e anotações'}</h3>
       {poi.comments.length === 0 && <p className="lore-form-hint">Nada escrito aqui ainda.</p>}

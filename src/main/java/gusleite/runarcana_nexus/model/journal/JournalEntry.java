@@ -1,6 +1,7 @@
 package gusleite.runarcana_nexus.model.journal;
 
 import gusleite.runarcana_nexus.model.auth.Account;
+import gusleite.runarcana_nexus.model.map.MapPoi;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,6 +41,11 @@ public class JournalEntry {
 
     @Column(length = MAX_BODY)
     private String body;
+
+    // Local do mapa a que a entrada se refere (opcional); o ponto some do diário para quem não o vê.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "poi_id")
+    private MapPoi poi;
 
     private Instant createdAt;
 

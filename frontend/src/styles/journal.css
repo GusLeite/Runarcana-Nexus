@@ -45,3 +45,17 @@
 @media (max-width:560px){.gj-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .master-journal{max-width:960px;margin:0 auto;width:100%}
 .gj-event.place .gj-icon,.gj-highlights .place{color:#8fd7ff}
+
+.gj-place-in { max-width: 100%; }
+.gj-place {
+  margin-left: 8px;
+  padding: 1px 8px;
+  border: 1px solid rgba(200, 162, 74, 0.5);
+  border-radius: 999px;
+  background: none;
+  color: var(--gold-hi, #f0c75e);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.gj-place:hover, .gj-place:focus-visible { background: rgba(200, 162, 74, 0.15); }

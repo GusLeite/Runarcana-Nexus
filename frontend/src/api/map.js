@@ -61,3 +61,6 @@ export const removePoiImage = (token, id, index) => request('/map/pois/' + id + 
 
 // MOSTRAR À MESA: os jogadores que veem o ponto abrem esta imagem na tela.
 export const showPoiImage = (token, id, index) => request('/map/pois/' + id + '/spotlight', { method: 'POST', token, body: { index } })
+
+// O que aconteceu ali: { entries: [entrada do diário ligadas ao ponto], stops: [{ x, y, label, createdAt }] }.
+export const fetchPoiHistory = (token, id) => request('/map/pois/' + id + '/history', { token })

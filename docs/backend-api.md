@@ -42,7 +42,7 @@
 | POST | `/merchants/active/buy` | `{ lineId, quantity, price? }` (Bearer) | Compra: tira ouro e estoque, dá o item. 400 se faltar ouro/estoque ou `price` for diferente do atual. Devolve `{ merchant, sheet }` |
 | POST | `/merchants/active/sell` | `{ entryId, quantity, unitValue? }` (Bearer) | Vende: dá ouro, tira o item e põe na prateleira. 400 sem oferta, quantidade a mais ou `unitValue` diferente; 404 se não é dele. Devolve `{ merchant, sheet }` |
 | POST | `/merchants/active/haggle` | `{ skill: PERSUASION | DECEPTION }` (Bearer) | Pechincha (o back rola), uma vez por abertura: devolve a loja com `haggle` e os preços dele. 400 se já tentou, perícia errada ou o mercador não pechincha (CD 0); 404 sem loja aberta |
-| GET · POST | `/journal` | `{ title, body }` (Bearer) | Diário do grupo: lista `[{ id, kind, who, title, body, createdAt, updatedAt, mine }]` / escreve (201). `kind`: `NOTE`, `LOOT`, `GOLD`, `DOWNED`, `DOCUMENT`, `LEVEL_UP`. 400 sem título nem texto |
+| GET · POST | `/journal` | `{ title, body, poiId }` (Bearer) | Diário do grupo: lista `[{ id, kind, who, title, body, createdAt, updatedAt, mine, poiId, poiName }]`; `poiId` liga a entrada a um ponto do mapa e só volta (com `poiName`) para quem vê o ponto; citar um ponto que a conta não vê dá 400 / escreve (201). `kind`: `NOTE`, `LOOT`, `GOLD`, `DOWNED`, `DOCUMENT`, `LEVEL_UP`. 400 sem título nem texto |
 | PUT · DELETE | `/journal/{id}` | igual ao POST / – (Bearer) | Edita / apaga (204). 403 se não é de quem pede (o mestre pode tudo; evento automático, só o mestre) |
 | POST | `/character/me/abilities/{abilityId}/cast` | `{ level? }` (Bearer) | Jogador conjura a magia no nível (sem `level` = o da magia): truque não gasta; com usos próprios, no nível dela, gasta 1 uso; senão desconta a Mana do nível de "Pontos de Mana". Devolve `{ level, manaCost, usedUse, abilities }`. 400 se não for magia, não estiver preparada, abaixo do nível da magia, acima do nível máximo da ficha ou faltar Mana |
 | PATCH | `/character/me/death-saves` | `{ successes, failures }` (Bearer) | Jogador marca os próprios testes contra a morte (0–3 cada). Devolve `CharacterResponse`. 400 fora dos limites |
@@ -64,6 +64,7 @@
 | DELETE | `/map/pois/comments/{id}` | – (Bearer) | O autor apaga o seu; o mestre, os da mesa. 404 nos demais casos |
 | PATCH | `/map/pois/{id}/audience` | `{ toAll, recipients }` (Bearer **mestre**) | Revela (a todos e/ou a jogadores) ou esconde o ponto sem mexer no resto. Revelar a mais gente gera o evento `PLACE` no diário (com o nome só se for a todos) |
 | GET | `/map/pois/visible` | – (Bearer) | Lista leve `[{ id, name }]` do que a conta vê (a ficha usa para avisar de local novo) |
+| GET | `/map/pois/{id}/history` | – (Bearer) | "Aconteceu aqui": `{ entries: [entradas do diário ligadas ao ponto], stops: [paradas da trilha a até 60 unidades] }`. 404 se a conta não vê o ponto |
 | GET | `/map/pois/{id}/images` | – (Bearer) | Imagens do ponto (data URL ou link), só para quem vê o ponto (404 se não). A lista de pontos traz só `imageCount`, `spotlight` e `spotlightRev` |
 | POST | `/map/pois/{id}/images` | `{ image }` (Bearer **mestre**) | Adiciona (até 6 por ponto; mesmas regras de imagem do mercador, em `ImageRules`) e devolve o ponto |
 | DELETE | `/map/pois/{id}/images/{index}` | – (Bearer **mestre**) | Apaga a imagem e limpa o destaque |

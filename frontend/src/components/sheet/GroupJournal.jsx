@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { createJournalEntry, deleteJournalEntry, fetchJournal, updateJournalEntry } from '../../api/journal.js'
 import { sessionSummaries } from '../../data/journal.js'
+import { fetchVisiblePois } from '../../api/map.js'
+import { openMapAt } from '../../utils/mapLink.js'
 import '../../styles/journal.css'
 
 const POLL = 15000
-const EMPTY = { title: '', body: '' }
+const EMPTY = { title: '', body: '', poiId: '' }
 const EVENT_ICON = { LOOT: '◆', GOLD: '●', DOWNED: '✝', DOCUMENT: '✉', LEVEL_UP: '▲', PLACE: '⌖' }
 const fmtTime = iso => new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
 const fmtDay = key => {
@@ -20,6 +22,7 @@ export default function GroupJournal({ token, onError, onToast }) {
   const [draft, setDraft] = useState(EMPTY)
   const [editing, setEditing] = useState(null)
   const [busy, setBusy] = useState(false)
+  const [places, setPlaces] = useState([]) // locais que esta conta vê, para ligar a entrada a um deles
 
   const load = useCallback(() => fetchJournal(token).then(setEntries), [token])
   useEffect(() => {
@@ -28,18 +31,21 @@ export default function GroupJournal({ token, onError, onToast }) {
     return () => clearInterval(t)
   }, [load, onError])
 
+  useEffect(() => { fetchVisiblePois(token).then(setPlaces).catch(() => {}) }, [token])
+
   const summaries = useMemo(() => sessionSummaries(entries ?? []), [entries])
 
   const save = e => {
     e.preventDefault()
     if (!draft.title.trim() && !draft.body.trim()) return onToast?.('Escreva algo no diário.')
     setBusy(true)
-    const call = editing ? updateJournalEntry(token, editing, draft) : createJournalEntry(token, draft)
+    const body = { title: draft.title, body: draft.body, poiId: draft.poiId === '' ? null : Number(draft.poiId) }
+    const call = editing ? updateJournalEntry(token, editing, body) : createJournalEntry(token, body)
     call.then(() => { setDraft(EMPTY); setEditing(null); onToast?.(editing ? 'Entrada salva.' : 'Escrito no diário do grupo.'); return load() })
       .catch(onError)
       .finally(() => setBusy(false))
   }
-  const edit = entry => { setEditing(entry.id); setDraft({ title: entry.title ?? '', body: entry.body ?? '' }) }
+  const edit = entry => { setEditing(entry.id); setDraft({ title: entry.title ?? '', body: entry.body ?? '', poiId: entry.poiId ?? '' }) }
   const remove = entry => {
     if (!window.confirm('Apagar esta entrada do diário?')) return
     deleteJournalEntry(token, entry.id).then(load).catch(onError)
@@ -61,6 +67,12 @@ export default function GroupJournal({ token, onError, onToast }) {
             <input className="gj-title-in" value={draft.title} maxLength={120} placeholder="Título (opcional)" onChange={e => setDraft(d => ({ ...d, title: e.target.value }))} />
             <textarea className="gj-body-in" rows={3} maxLength={8000} value={draft.body} placeholder="O que aconteceu hoje? Todos da mesa vão ler."
               onChange={e => setDraft(d => ({ ...d, body: e.target.value }))} />
+            {places.length > 0 && (
+              <select className="gj-place-in" aria-label="Local do mapa" value={draft.poiId} onChange={e => setDraft(d => ({ ...d, poiId: e.target.value }))}>
+                <option value="">Sem local</option>
+                {places.map(p => <option key={p.id} value={p.id}>📍 {p.name}</option>)}
+              </select>
+            )}
             <div className="gj-form-foot">
               {editing && <button type="button" className="link-btn" onClick={() => { setEditing(null); setDraft(EMPTY) }}>Cancelar edição</button>}
               <button className="btn" type="submit" disabled={busy}>{editing ? 'SALVAR' : 'ESCREVER'}</button>
@@ -78,6 +90,7 @@ export default function GroupJournal({ token, onError, onToast }) {
                 </div>
                 {e.title && <h4>{e.title}</h4>}
                 {e.body && <p>{e.body}</p>}
+                {e.poiId && <PlaceLink entry={e} />}
                 {e.mine && (
                   <div className="gj-actions">
                     <button type="button" className="link-btn" onClick={() => edit(e)}>Editar</button>
@@ -89,6 +102,7 @@ export default function GroupJournal({ token, onError, onToast }) {
               <li key={e.id} className={'gj-event ' + e.kind.toLowerCase()} style={{ '--n': Math.min(n, 12) }}>
                 <span className="gj-icon" aria-hidden="true">{EVENT_ICON[e.kind]}</span>
                 <span className="gj-event-text">{e.title}</span>
+                {e.poiId && <PlaceLink entry={e} />}
                 <time dateTime={e.createdAt}>{fmtTime(e.createdAt)}</time>
                 {e.mine && <button type="button" className="gj-x" aria-label="Apagar evento" title="Apagar evento" onClick={() => remove(e)}>×</button>}
               </li>
@@ -135,5 +149,14 @@ function Stat({ label, value, tone = '' }) {
       <b>{value}</b>
       <span>{label}</span>
     </div>
+  )
+}
+
+// "📍 Local": leva ao mapa, voando até o ponto (o link ?tela=mapa&ponto= funciona também colado na barra).
+function PlaceLink({ entry }) {
+  return (
+    <button type="button" className="gj-place" title="Ver no mapa" onClick={() => openMapAt(entry.poiId)}>
+      📍 {entry.poiName}
+    </button>
   )
 }

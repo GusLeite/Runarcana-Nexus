@@ -1,6 +1,6 @@
 import { request } from './auth.js'
 
-// Diário do grupo: [{ id, kind, who, title, body, createdAt, updatedAt, mine }], mais novas primeiro.
+// Diário do grupo: [{ id, kind, who, title, body, createdAt, updatedAt, mine, poiId, poiName }], mais novas primeiro.
 // kind: NOTE (escrita) ou evento automático (LOOT, GOLD, DOWNED, DOCUMENT, LEVEL_UP).
 export const fetchJournal = token => request('/journal', { token })
 

@@ -59,7 +59,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   const staticPins = useRef([])
   const rollTimers = useRef([])
   const mapClick = useRef(() => {})
-  const focused = useRef(false)
+  const focused = useRef(null)
   const [status, setStatus] = useState('loading') // 'loading' | 'ready' | 'error'
   const [hovered, setHovered] = useState(null)
   const [selected, setSelected] = useState(null)
@@ -364,8 +364,8 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
 
   // Abre já mostrando o que a lore pediu, uma vez, quando a cena e os pontos estiverem prontos.
   useEffect(() => {
-    if (!focus || focused.current || status !== 'ready' || pois === null) return
-    focused.current = true
+    if (!focus || focused.current === focus || status !== 'ready' || pois === null) return
+    focused.current = focus
     if (focus.poiId) {
       const poi = pois.find(p => p.id === focus.poiId)
       if (poi) openPoint('poi', poi)

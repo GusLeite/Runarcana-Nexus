@@ -73,6 +73,12 @@ public class MapController {
 
     public record ShowImageRequest(int index) {}
 
+    @GetMapping("/pois/{id}/history")
+    public ResponseEntity<MapPointService.History> poiHistory(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                                              @PathVariable Long id) {
+        return ResponseEntity.ok(points.history(auth.authenticate(authorization), id));
+    }
+
     @GetMapping("/pois/{id}/images")
     public ResponseEntity<List<String>> poiImages(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
                                                   @PathVariable Long id) {

@@ -177,6 +177,44 @@ class MapControllerTests {
                 .andExpect(jsonPath("$.spotlight").doesNotExist());
     }
 
+    @Test
+    void oDiarioLigaEntradasAUmLocalEOPontoMostraOHistorico() throws Exception {
+        String master = login("mestre");
+        String player = login("gaudron");
+        String body = send(post("/map/pois"), master, "{\"name\":\"Torre Caída\",\"kind\":\"RUIN\",\"x\":200,\"y\":200,\"toAll\":false,\"recipients\":[]}")
+                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+        Matcher m = Pattern.compile("^\\{\"id\":(\\d+)").matcher(body);
+        assertThat(m.find()).isTrue();
+        String id = m.group(1);
+
+        // Escondido: o jogador não cita o ponto e não lê o histórico.
+        send(post("/journal"), player, "{\"title\":\"Vimos algo\",\"poiId\":" + id + "}").andExpect(status().isBadRequest());
+        mvc.perform(get("/map/pois/" + id + "/history").header("Authorization", "Bearer " + player)).andExpect(status().isNotFound());
+        send(post("/journal"), master, "{\"title\":\"Preparar a torre\",\"poiId\":" + id + "}").andExpect(jsonPath("$.poiName").value("Torre Caída"));
+        mvc.perform(get("/journal").header("Authorization", "Bearer " + player))
+                .andExpect(jsonPath("$[0].title").value("Preparar a torre"))
+                .andExpect(jsonPath("$[0].poiId").doesNotExist())
+                .andExpect(jsonPath("$[0].poiName").doesNotExist());
+
+        // Revelado: o evento PLACE já nasce ligado, e o jogador escreve sobre o local.
+        send(patch("/map/pois/" + id + "/audience"), master, "{\"toAll\":true,\"recipients\":[]}").andExpect(status().isOk());
+        send(post("/journal"), player, "{\"title\":\"Achamos um corpo\",\"poiId\":" + id + "}").andExpect(jsonPath("$.poiId").value(Integer.parseInt(id)));
+        send(put("/map/party"), master, "{\"x\":210,\"y\":190,\"label\":\"Acampamos\"}").andExpect(status().isOk());
+        send(put("/map/party"), master, "{\"x\":-600,\"y\":0,\"label\":\"Longe\"}").andExpect(status().isOk());
+        mvc.perform(get("/map/pois/" + id + "/history").header("Authorization", "Bearer " + player))
+                .andExpect(jsonPath("$.entries.length()").value(3))
+                .andExpect(jsonPath("$.entries[0].title").value("Achamos um corpo"))
+                .andExpect(jsonPath("$.entries[1].kind").value("PLACE"))
+                .andExpect(jsonPath("$.stops.length()").value(1))
+                .andExpect(jsonPath("$.stops[0].label").value("Acampamos"));
+
+        // Apagar o ponto não apaga o diário.
+        mvc.perform(delete("/map/pois/" + id).header("Authorization", "Bearer " + master)).andExpect(status().isNoContent());
+        mvc.perform(get("/journal").header("Authorization", "Bearer " + player))
+                .andExpect(jsonPath("$[0].title").value("Achamos um corpo"))
+                .andExpect(jsonPath("$[0].poiId").doesNotExist());
+    }
+
     private org.springframework.test.web.servlet.ResultActions send(org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder request,
                                                                      String token, String body) throws Exception {
         return mvc.perform(request.header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON).content(body));

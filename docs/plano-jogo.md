@@ -116,7 +116,7 @@ O plano vai até a Etapa 11 (decisão de 2026-11-03). Ficam de fora: modo transm
 - Painel do ponto: galeria; clicar abre em tela cheia. O mestre tem **MOSTRAR À MESA**: a imagem abre na tela dos jogadores que veem o ponto (reaproveita o polling da Etapa 7).
 - Mais tipos de ponto: posto avançado, esconderijo, ruína, acampamento, masmorra, porto. `PoiKind` é salvo como texto, mas o Hibernate cria um `CHECK` com os valores antigos no PostgreSQL: o `ddl-auto` não atualiza esse `CHECK`, então é preciso um `ALTER TABLE` no banco local e no de produção.
 
-## Etapa 9 — O que aconteceu ali (histórico do local)
+## Etapa 9 — O que aconteceu ali (histórico do local) — **feita (2026-11-03)**
 
 - Entrada do diário pode apontar um ponto (`JournalEntry.poi`); o painel do ponto lista "Aconteceu aqui" (entradas e eventos ligados, mais as paradas da trilha a menos de N unidades).
 - No diário, a entrada ligada mostra "📍 Local" e leva ao mapa (usa o link da Etapa 10).

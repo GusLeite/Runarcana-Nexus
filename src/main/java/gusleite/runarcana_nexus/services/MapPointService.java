@@ -16,6 +16,7 @@ import gusleite.runarcana_nexus.repository.LoreEntryRepository;
 import gusleite.runarcana_nexus.repository.MapPoiRepository;
 import gusleite.runarcana_nexus.repository.MapWaypointRepository;
 import gusleite.runarcana_nexus.repository.PoiCommentRepository;
+import gusleite.runarcana_nexus.repository.PartyTrailPointRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,9 +39,11 @@ public class MapPointService {
     private final LoreEntryRepository lore;
     private final RecipientResolver resolver;
     private final JournalService journal;
+    private final PartyTrailPointRepository trail;
 
     public MapPointService(MapPoiRepository pois, PoiCommentRepository comments, MapWaypointRepository waypoints,
-                           LoreEntryRepository lore, RecipientResolver resolver, JournalService journal) {
+                           LoreEntryRepository lore, RecipientResolver resolver, JournalService journal, PartyTrailPointRepository trail) {
+        this.trail = trail;
         this.journal = journal;
         this.pois = pois;
         this.comments = comments;
@@ -128,6 +131,23 @@ public class MapPointService {
         return toResponse(master, poi, comments.findAllByOrderByCreatedAtAscIdAsc(), poi.getImages().size());
     }
 
+    // Paradas da trilha a até este tanto de unidades do ponto contam como "o grupo esteve aqui".
+    public static final int NEAR = 60;
+
+    public record History(List<JournalService.JournalView> entries, List<MapPartyService.TrailPoint> stops) {}
+
+    // O que aconteceu ali: entradas e eventos do diário ligados ao ponto e as paradas da viagem perto dele.
+    @Transactional(readOnly = true)
+    public History history(Account viewer, Long id) {
+        MapPoi poi = findPoi(id);
+        if (!RecipientResolver.reaches(viewer, poi.isToAll(), poi.getRecipients())) throw ApiException.notFound("Ponto não encontrado.");
+        List<MapPartyService.TrailPoint> stops = trail.findAllByOrderByIdAsc().stream()
+                .filter(t -> Math.hypot(t.getX() - poi.getX(), t.getY() - poi.getY()) <= NEAR)
+                .map(t -> new MapPartyService.TrailPoint(t.getX(), t.getY(), t.getLabel(), t.getCreatedAt()))
+                .toList();
+        return new History(journal.about(viewer, poi), stops);
+    }
+
     // Leve, para a ficha avisar de local novo: só id e nome do que a conta vê.
     public record VisiblePoi(long id, String name) {}
 
@@ -143,6 +163,7 @@ public class MapPointService {
     public void deletePoi(Long id) {
         MapPoi poi = findPoi(id);
         comments.deleteByPoi(poi);
+        journal.unlinkPoi(poi);
         pois.delete(poi);
     }
 
@@ -181,11 +202,11 @@ public class MapPointService {
     private void announce(MapPoi poi, Audience before) {
         if (before.toAll()) return;
         if (poi.isToAll()) {
-            journal.record(JournalEntry.Kind.PLACE, JournalService.MASTER_NAME, "Novo local revelado: " + poi.getName());
+            journal.record(JournalEntry.Kind.PLACE, JournalService.MASTER_NAME, "Novo local revelado: " + poi.getName(), poi);
             return;
         }
         List<String> added = poi.getRecipients().stream().filter(a -> !before.ids().contains(a.getId())).map(Account::getUsername).sorted().toList();
-        if (!added.isEmpty()) journal.record(JournalEntry.Kind.PLACE, JournalService.MASTER_NAME, "Novo local revelado a " + String.join(", ", added));
+        if (!added.isEmpty()) journal.record(JournalEntry.Kind.PLACE, JournalService.MASTER_NAME, "Novo local revelado a " + String.join(", ", added), poi);
     }
 
     private MapPoi findPoi(Long id) {
