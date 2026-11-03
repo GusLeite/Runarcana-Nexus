@@ -67,7 +67,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   const rollTimers = useRef([])
   const mapClick = useRef(() => {})
   const focused = useRef(null)
-  const [status, setStatus] = useState('loading') // 'loading' | 'ready' | 'error'
+  const [status, setStatus] = useState('loading') // 'loading' | 'ready' | 'missing' (sem texturas) | 'error'
   const [hovered, setHovered] = useState(null)
   const [selected, setSelected] = useState(null)
   const [bandleRoll, setBandleRoll] = useState(null)
@@ -123,8 +123,9 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
         scene.current = created
         setStatus('ready')
       })
-      .catch(() => {
-        if (!cancelled) setStatus('error')
+      .catch(err => {
+        console.error(err)
+        if (!cancelled) setStatus(err?.code === 'textures' ? 'missing' : 'error')
       })
     return () => {
       cancelled = true
@@ -641,6 +642,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
         </div>
       </header>
       {status === 'loading' && <p className="map-msg">Desenrolando o mapa…</p>}
+      {status === 'missing' && <p className="map-msg">O mapa ainda não foi instalado neste servidor. Avise o mestre.</p>}
       {status === 'error' && <p className="map-msg">Não foi possível abrir o mapa. Confira se o navegador tem WebGL ativo e tente de novo.</p>}
       {status === 'ready' && (
         <>

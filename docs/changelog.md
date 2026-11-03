@@ -1,6 +1,11 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Mapa: aviso quando faltam as texturas (`main`)
+- No servidor real o mapa falhava com o aviso de WebGL: `public/map/` (fora do Git) não existia lá, e o Caddy devolvia `index.html` no lugar das texturas.
+- `mapScene.js` marca a falha de textura (`code: 'textures'`) e o `MapScreen` mostra "O mapa ainda não foi instalado neste servidor"; o erro vai para o console.
+- No servidor: `sh frontend/scripts/fetch-map-assets.sh` e depois `docker compose up -d --build`.
+
 ## 2026-11-03 — Arcanista prepara magias (`main`)
 - O Arcanista passa a ter "Preparando Magias": prepara Inteligência + metade do nível de Arcanista (mínimo 1) entre as magias conhecidas, como o Xamã (`preparation` `KNOWN` no `criacao.json`). As conhecidas nascem não preparadas; fichas existentes são marcadas na próxima sincronização (`syncAbilities`).
 - Limitação: o grimório (magias anotadas e não conhecidas) e a diferença descanso longo/pleno ainda não são modelados; a escolha é feita no descanso longo.

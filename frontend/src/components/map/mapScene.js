@@ -170,7 +170,9 @@ const TILT_SHIFT_FRAGMENT = `
 
 const loadTextures = () => {
   const loader = new THREE.TextureLoader()
-  return Promise.all(TEXTURES.map(url => loader.loadAsync(url)))
+  return Promise.all(TEXTURES.map(url => loader.loadAsync(url))).catch(() => {
+    throw Object.assign(new Error('Faltam as texturas do mapa em /map/ (scripts/fetch-map-assets.sh).'), { code: 'textures' })
+  })
 }
 
 // Monta a cena no container e devolve os controles. Rejeita se o navegador não tem WebGL ou faltam as texturas.
