@@ -40,7 +40,7 @@ frontend/
     │                          SkillList, AbilitiesTab, AbilityIcon, Inventory, MerchantTab, DocumentsTab, NotesTab, DiceRoll,
     │                          TabBar (abas com sublinhado deslizante), Num (número que conta), icons
     │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities, MasterSheets, MasterMerchants, MasterRules
-    │   └── map/               mapa 3D de Runeterra (Three.js): WorldButtons, MapScreen, RegionPanel, MapPointPanels, poiKinds, regions, twinFrame, temporalDomes, demonGlobe, ravenModel, mapScene, mapMath (+ .test.js)
+    │   └── map/               mapa 3D de Runeterra (Three.js): WorldButtons, MapScreen, RegionPanel, MapPointPanels, poiKinds, regions, twinFrame, temporalDomes, demonGlobe, ravens, ravenModel, mapScene, mapMath (+ .test.js)
     │   └── lore/              lore da mesa: LoreScreen, LoreEntryView, LoreForm, AudiencePicker
     ├── audio/                 engine.js (sons sintetizados), uiSounds.js (+ .test.js, sons de interface por delegação), SoundToggle.jsx — ver frontend-visual.md
     ├── hooks/useCountUp.js (+ .test.js)  número que conta até o valor; prefersReducedMotion

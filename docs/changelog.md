@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa: corvos detalhados (`feature/character-sheet`)
+- Penas desenhadas em textura: rêmiges, "dedos" abertos na ponta da asa, coberteiras em escamas e cauda em cunha.
+- Corpo mais encorpado, bico longo e olhos em brasa; pretos com brilho azul-violeta.
+- Voo com asa que recolhe na subida, planeio, trajeto irregular e mergulhos.
+
 ## 2026-11-02 — Mapa: globo menor e corvos novos (`feature/character-sheet`)
 - O globo passa a seguir a fronteira de Shurima, sem invadir as regiões vizinhas.
 - Corvos remodelados, com corpo, bico, olhos em brasa, penas e asas articuladas, voando em 5 bandos.

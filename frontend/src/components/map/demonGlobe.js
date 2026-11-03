@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { buildRaven } from './ravenModel.js'
+import { createRavenFlock } from './ravens.js'
 
 // Globo demoníaco sobre uma região, moldado na fronteira dela: cúpula vermelha com veias que correm e pulsam como um coração, e corvos em volta.
 const GLOBE_VERTEX = `
@@ -64,78 +64,6 @@ const GLOBE_FRAGMENT = `
     gl_FragColor = vec4(color, clamp(alpha, 0.0, 0.95) * inside);
   }
 `
-
-const RAVEN_VERTEX = `
-  attribute float tone;
-  attribute vec4 orbit;
-  attribute vec3 flight;
-  uniform float time;
-  uniform vec3 globe;
-  varying vec3 vPlace;
-  varying float vTone;
-  void main() {
-    float phase = orbit.z * 7.0;
-    float beat = time * flight.y + phase;
-    // Alterna batidas fortes e planeio, como uma ave de verdade.
-    float effort = mix(0.22, 1.0, smoothstep(-0.3, 0.5, sin(time * 0.33 + phase)));
-    vec3 bird = position;
-    float span = abs(bird.y);
-    // Asa com articulação: a mão atrasa em relação ao braço.
-    float arm = sin(beat) * 0.42 * effort + 0.1;
-    float hand = sin(beat - 1.05) * 0.78 * effort + 0.06;
-    float inner = min(span, 0.62);
-    float outer = max(span - 0.62, 0.0);
-    bird.z += inner * arm + outer * (arm + hand);
-    bird.x -= outer * (0.1 + 0.1 * sin(beat + 0.6) * effort);
-    bird.z -= sin(beat) * 0.05 * effort;
-    bird *= orbit.w;
-
-    float angle = orbit.z + time * flight.x;
-    float direction = flight.x > 0.0 ? 1.0 : -1.0;
-    // Inclina para dentro da curva.
-    float roll = direction * flight.z;
-    bird = vec3(bird.x, bird.y * cos(roll) - bird.z * sin(roll), bird.y * sin(roll) + bird.z * cos(roll));
-    float heading = angle + direction * 1.5708;
-    float c = cos(heading);
-    float s = sin(heading);
-    vec3 turned = vec3(bird.x * c - bird.y * s, bird.x * s + bird.y * c, bird.z);
-
-    float wander = 1.0 + 0.035 * sin(angle * 3.0 + phase);
-    vec3 center = vec3(
-      cos(angle) * globe.x * orbit.x * wander,
-      sin(angle) * globe.z * orbit.x * wander,
-      globe.y * orbit.y + sin(time * 0.45 + phase) * 9.0
-    );
-    vec4 view = modelViewMatrix * vec4(center + turned, 1.0);
-    vPlace = view.xyz;
-    vTone = tone;
-    gl_Position = projectionMatrix * view;
-  }
-`
-
-const RAVEN_FRAGMENT = `
-  varying vec3 vPlace;
-  varying float vTone;
-  void main() {
-    if (vTone > 1.5) {
-      gl_FragColor = vec4(1.0, 0.16, 0.04, 1.0);
-      return;
-    }
-    vec3 normal = normalize(cross(dFdx(vPlace), dFdy(vPlace)));
-    vec3 toEye = normalize(-vPlace);
-    if (dot(normal, toEye) < 0.0) normal = -normal;
-    vec3 light = normalize(vec3(-0.35, 0.6, 0.72));
-    float diffuse = max(dot(normal, light), 0.0);
-    // Pena preta com brilho azul-violeta e um reflexo vermelho que vem do globo.
-    float sheen = pow(max(dot(normal, normalize(light + toEye)), 0.0), 26.0);
-    float glow = pow(1.0 - max(dot(normal, toEye), 0.0), 3.0);
-    vec3 base = vTone > 0.5 ? vec3(0.035, 0.032, 0.04) : vec3(0.018, 0.016, 0.028);
-    vec3 color = base + base * diffuse * 2.6 + vec3(0.2, 0.18, 0.42) * sheen + vec3(0.2, 0.025, 0.02) * glow;
-    gl_FragColor = vec4(color, 1.0);
-  }
-`
-
-const random = (min, max) => min + Math.random() * (max - min)
 
 const MAP_SIZE = 2048
 const FIELD = 512
@@ -243,6 +171,7 @@ export function createDemonGlobe(config, parent) {
   parent.add(group)
   const time = { value: 0 }
   const disposables = []
+  let ravenTime = null
   let destroyed = false
 
   new THREE.TextureLoader().loadAsync('/map/regions/' + config.region + '.png').then(image => {
@@ -265,48 +194,18 @@ export function createDemonGlobe(config, parent) {
     globe.renderOrder = 1.5
     group.add(globe)
 
-    const ravens = new THREE.InstancedBufferGeometry()
-    const model = buildRaven()
-    ravens.setAttribute('position', new THREE.Float32BufferAttribute(model.positions, 3))
-    ravens.setAttribute('tone', new THREE.Float32BufferAttribute(model.tones, 1))
-    ravens.instanceCount = config.ravens
-    const orbit = []
-    const flight = []
-    // Bandos: cada um gira junto, com as aves próximas umas das outras e um ou outro desgarrado.
-    const flocks = Array.from({ length: config.flocks }, (_, i) => ({
-      angle: (i / config.flocks) * Math.PI * 2 + random(-0.3, 0.3),
-      reach: random(0.86, 1.02),
-      lift: random(0.75, 1.5),
-      speed: random(0.07, 0.11) * (i % 3 === 2 ? -1 : 1),
-    }))
-    for (let i = 0; i < config.ravens; i++) {
-      const flock = flocks[i % config.flocks]
-      // Raio relativo à região, altura relativa à da cúpula, ângulo inicial e tamanho.
-      orbit.push(flock.reach + random(-0.05, 0.05), Math.max(0.5, flock.lift + random(-0.2, 0.2)), flock.angle + random(-0.2, 0.2), random(5.5, 8.5))
-      // Velocidade na órbita, ritmo das asas e inclinação na curva.
-      flight.push(flock.speed * random(0.94, 1.06), random(6.5, 9), random(0.2, 0.42))
-    }
-    ravens.setAttribute('orbit', new THREE.InstancedBufferAttribute(new Float32Array(orbit), 4))
-    ravens.setAttribute('flight', new THREE.InstancedBufferAttribute(new Float32Array(flight), 3))
-    const ravenMaterial = new THREE.ShaderMaterial({
-      uniforms: { time, globe: { value: new THREE.Vector3((region.maxX - region.minX) / 2, config.flightHeight, (region.maxY - region.minY) / 2) } },
-      vertexShader: RAVEN_VERTEX,
-      fragmentShader: RAVEN_FRAGMENT,
-      side: THREE.DoubleSide,
-      transparent: true,
-    })
-    const flockMesh = new THREE.Mesh(ravens, ravenMaterial)
-    flockMesh.position.set((region.minX + region.maxX) / 2, (region.minY + region.maxY) / 2, 0)
-    flockMesh.frustumCulled = false
-    // Por cima das nuvens: os corvos são o que mais chama a atenção de longe.
-    flockMesh.renderOrder = 2.5
-    group.add(flockMesh)
-    disposables.push(mask, shell, globeMaterial, ravens, ravenMaterial)
+    const flock = createRavenFlock(config, [(region.maxX - region.minX) / 2, (region.maxY - region.minY) / 2], 8)
+    flock.time.value = time.value
+    ravenTime = flock.time
+    flock.mesh.position.set((region.minX + region.maxX) / 2, (region.minY + region.maxY) / 2, 0)
+    group.add(flock.mesh)
+    disposables.push(mask, shell, globeMaterial, flock)
   }).catch(() => {})
 
   return {
     update(elapsed) {
       time.value = elapsed
+      if (ravenTime) ravenTime.value = elapsed
     },
     dispose() {
       destroyed = true
