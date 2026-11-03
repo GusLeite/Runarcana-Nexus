@@ -4,7 +4,9 @@ import gusleite.runarcana_nexus.enums.Rarity;
 import gusleite.runarcana_nexus.exception.ApiException;
 import gusleite.runarcana_nexus.model.auth.Account;
 import gusleite.runarcana_nexus.model.items.Consumable;
+import gusleite.runarcana_nexus.model.items.Armor;
 import gusleite.runarcana_nexus.model.items.Item;
+import gusleite.runarcana_nexus.model.items.Weapon;
 import gusleite.runarcana_nexus.model.journal.JournalEntry;
 import gusleite.runarcana_nexus.model.player.Character;
 import gusleite.runarcana_nexus.model.player.PlayerItems;
@@ -13,12 +15,17 @@ import gusleite.runarcana_nexus.record.CreationPreview.EquipmentLine;
 import gusleite.runarcana_nexus.record.InventoryItemResponse;
 import gusleite.runarcana_nexus.repository.CharacterRepository;
 import gusleite.runarcana_nexus.repository.ItemRepository;
+import gusleite.runarcana_nexus.repository.MerchantItemRepository;
 import gusleite.runarcana_nexus.repository.PlayerItemsRepository;
 import gusleite.runarcana_nexus.rules.RuleItem;
+import org.hibernate.Hibernate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 // Inventário, ouro e inspiração da ficha pronta (decisão da mesa): o mestre dá e tira itens e ouro e liga a inspiração;
 // o jogador só gasta (1 de um consumível, ouro, a inspiração acesa). Comprar e vender é com o MerchantService.
@@ -34,10 +41,12 @@ public class InventoryService {
     private final CharacterService characterService;
     private final RuleCatalogService rules;
     private final JournalService journal;
+    private final MerchantItemRepository shelves;
 
     public InventoryService(CharacterRepository characters, PlayerItemsRepository inventory, ItemRepository items,
                             StartingEquipmentService equipment, CharacterService characterService, RuleCatalogService rules,
-                            JournalService journal) {
+                            JournalService journal, MerchantItemRepository shelves) {
+        this.shelves = shelves;
         this.journal = journal;
         this.characters = characters;
         this.inventory = inventory;
@@ -52,7 +61,7 @@ public class InventoryService {
 
     // Item livre (loot fora do catálogo).
     public record CustomItem(String name, String description, String effect, Double weight, Integer price, Rarity rarity,
-                             Integer quantity, Boolean consumable) {}
+                             Integer quantity, Boolean consumable, String image) {}
 
     // ---------- Mestre ----------
 
@@ -103,7 +112,68 @@ public class InventoryService {
         item.setWeight(request.weight());
         item.setPrice(request.price());
         item.setRarity(request.rarity() == null ? Rarity.Common : request.rarity());
+        item.setImage(ImageRules.clean(request.image()));
         return items.save(item);
+    }
+
+    // Edição de um item já existente (o mestre muda texto e imagem). image: link http(s) ou data URL; vazio tira a imagem.
+    public record ItemEdit(String name, String description, String effect, Double weight, Integer price, Rarity rarity, String image) {}
+
+    // Mudar o texto de um item que outras fichas ou lojas também usam (item do catálogo) cria uma cópia só para esta linha;
+    // mudar só a imagem vale para o item inteiro, para todos que o têm.
+    @Transactional
+    public MasterInventory editItem(long characterId, long entryId, ItemEdit request) {
+        Character c = character(characterId);
+        PlayerItems entry = entry(c, entryId);
+        if (request == null || request.name() == null || request.name().isBlank()) throw ApiException.badRequest("Dê um nome ao item.");
+        if (request.name().trim().length() > 120) throw ApiException.badRequest("O nome do item vai até 120 caracteres.");
+        if (request.weight() != null && request.weight() < 0) throw ApiException.badRequest("O peso não pode ser negativo.");
+        if (request.price() != null && request.price() < 0) throw ApiException.badRequest("O preço não pode ser negativo.");
+        if (tooLong(request.description()) || tooLong(request.effect())) throw ApiException.badRequest("Descrição e efeito vão até 4000 caracteres.");
+        String image = ImageRules.clean(request.image());
+        Rarity rarity = request.rarity() == null ? Rarity.Common : request.rarity();
+        Item item = (Item) Hibernate.unproxy(entry.getItem());
+        boolean textChanged = !Objects.equals(item.getName(), request.name().trim())
+                || !Objects.equals(item.getItemDescription(), blankToNull(request.description()))
+                || !Objects.equals(item.getEffect(), blankToNull(request.effect()))
+                || !Objects.equals(item.getWeight(), request.weight())
+                || !Objects.equals(item.getPrice(), request.price())
+                || item.getRarity() != rarity;
+        if (textChanged && (inventory.countByItem(item) > 1 || shelves.existsByItem(item))) {
+            item = items.save(copyOf(item, consumable(item)));
+            entry.setItem(item);
+            inventory.save(entry);
+        }
+        item.setName(request.name().trim());
+        item.setItemDescription(blankToNull(request.description()));
+        item.setEffect(blankToNull(request.effect()));
+        item.setWeight(request.weight());
+        item.setPrice(request.price());
+        item.setRarity(rarity);
+        item.setImage(image);
+        items.save(item);
+        return view(c);
+    }
+
+    // Cópia independente (sem o id do catálogo, para não voltar a se juntar ao original); o consumível do catálogo vira Consumable.
+    private static Item copyOf(Item original, boolean consumable) {
+        Item copy;
+        if (original instanceof Weapon weapon) {
+            Weapon w = new Weapon();
+            BeanUtils.copyProperties(weapon, w, "id", "masteries", "properties");
+            w.setMasteries(new HashSet<>(weapon.getMasteries()));
+            w.setProperties(new HashSet<>(weapon.getProperties()));
+            copy = w;
+        } else if (original instanceof Armor armor) {
+            Armor a = new Armor();
+            BeanUtils.copyProperties(armor, a, "id");
+            copy = a;
+        } else {
+            copy = original instanceof Consumable || consumable ? new Consumable() : new gusleite.runarcana_nexus.model.items.Object();
+            BeanUtils.copyProperties(original, copy, "id");
+        }
+        copy.setCatalogId(null);
+        return copy;
     }
 
     // Quantidade nova; 0 tira o item da ficha.

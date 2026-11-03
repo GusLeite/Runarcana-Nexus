@@ -2,6 +2,7 @@ package gusleite.runarcana_nexus.model.items;
 
 import gusleite.runarcana_nexus.enums.ItemSize;
 import gusleite.runarcana_nexus.enums.Rarity;
+import gusleite.runarcana_nexus.model.merchant.Merchant;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,9 @@ public class Item {
     private ItemSize size;
     @Column(length = 4000)
     private String effect;
+    // Imagem do item (link http(s) ou imagem enviada, em data URL); sem ela, o front desenha o ícone pelo tipo.
+    @Column(name = "item_image", length = Merchant.MAX_IMAGE)
+    private String image;
 }
 
 

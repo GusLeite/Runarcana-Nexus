@@ -17,4 +17,6 @@ public interface PlayerItemsRepository extends JpaRepository<PlayerItems, Long> 
     Optional<PlayerItems> findFirstByCharacterAndItem(Character character, Item item);
 
     void deleteByCharacter(Character character);
+
+    long countByItem(Item item);
 }

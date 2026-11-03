@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Itens: editar e anexar imagem (`feature/character-sheet`)
+- O mestre edita o item de um jogador (nome, peso, preço, raridade, descrição, efeito) e anexa imagem por arquivo ou link, tanto num item existente quanto ao dar um item livre. Dar e tirar já existiam.
+- Item do catálogo que outros também têm ganha uma cópia só da linha editada quando o texto muda; só a imagem vale para todos. `PUT /character/{id}/items/{entryId}`, `Item.image` (coluna nula), `ItemImageField.jsx`; o `ItemIcon` mostra a imagem.
+
 ## 2026-11-03 — Lore: imagem enviada no verbete (`feature/character-sheet`)
 - No formulário do verbete o mestre envia uma imagem (arquivo) além de colar um link; prévia e **REMOVER**.
 - Back: `LoreEntry.imageData` (coluna nova e nula) guarda a imagem enviada; link e imagem passam por `ImageRules`. Documentos do mestre continuam só com link.

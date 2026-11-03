@@ -244,3 +244,13 @@ font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:13px;letter-spacing
 .btn-mini{padding:6px 10px;border:1px solid var(--gold);background:rgba(5,11,20,.6);color:var(--gold-hi);font:inherit;font-size:12px;letter-spacing:.08em;cursor:pointer}
 .btn-mini:hover:not(:disabled){background:rgba(200,162,74,.16)}
 .btn-mini:disabled{opacity:.5;cursor:default}
+.item-image-field{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.item-image-row{display:flex;align-items:center;gap:12px}
+.item-image-preview{width:56px;flex:none}
+.item-image-controls{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.item-image-file{cursor:pointer}
+.inv-thumb{width:36px;flex:none}
+.inv-edit{grid-column:1/-1;padding:10px 0 2px;border-top:1px solid rgba(200,162,74,.18)}
+.inv-edit .mform{margin:0}
+.inv-actions{display:flex;gap:12px;align-items:center}
+.inv-name{display:flex;align-items:center;gap:10px;min-width:0}

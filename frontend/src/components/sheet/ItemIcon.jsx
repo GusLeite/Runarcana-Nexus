@@ -53,6 +53,8 @@ export function iconKey(item) {
   return 'gem'
 }
 
+// Com imagem (enviada ou link, anexada pelo mestre), mostra ela no lugar do desenho.
 export default function ItemIcon({ item }) {
+  if (item.image) return <img className="item-art" src={item.image} alt="" loading="lazy" referrerPolicy="no-referrer" />
   return <svg viewBox="0 0 32 32" aria-hidden="true">{DRAWINGS[iconKey(item)]}</svg>
 }
