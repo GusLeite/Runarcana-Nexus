@@ -2,8 +2,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { applyLevelUp, castSpell, fetchConditions, setDeathSaves as setDeathSavesApi, chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, chooseForm as chooseFormApi, toggleEffect as toggleEffectApi, consumeItem, fetchPreparation, fetchSheet, previewLevelUp, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
-import { buyFromMerchant, fetchActiveMerchant, pingMerchant, sellToMerchant } from '../../api/merchants.js'
-import { deathSaveResult, rollCheck, rollD20, rollDice } from '../../data/rules.js'
+import { fetchVisiblePois } from '../../api/map.js'
+import { buyFromMerchant, fetchActiveMerchant, haggleWithMerchant, pingMerchant, sellToMerchant } from '../../api/merchants.js'
+import { SKILL_NAMES, deathSaveResult, rollCheck, rollD20, rollDice } from '../../data/rules.js'
+import WorldButtons from '../map/WorldButtons.jsx'
 import SheetHero from './SheetHero.jsx'
 import PrepareSpells from './PrepareSpells.jsx'
 import OverviewTab from './OverviewTab.jsx'
@@ -14,11 +16,16 @@ import DocumentsTab from './DocumentsTab.jsx'
 import NotesTab from './NotesTab.jsx'
 import MerchantTab from './MerchantTab.jsx'
 import BookTab from './BookTab.jsx'
+import GroupJournal from './GroupJournal.jsx'
 import DiceRoll from './DiceRoll.jsx'
 import TabBar from './TabBar.jsx'
 import CreationScreen from '../creation/CreationScreen.jsx'
 import LevelUp from '../creation/LevelUp.jsx'
 import { fetchCatalog } from '../../api/creation.js'
+import { play } from '../../audio/engine.js'
+import useUrlParam from '../../hooks/useUrlParam.js'
+import { levelUpGains } from '../../data/levelGains.js'
+import LevelUpCeremony from './LevelUpCeremony.jsx'
 import { ExitIcon, KeyIcon } from './icons.jsx'
 import '../../styles/sheet.css'
 
@@ -32,8 +39,10 @@ const TABS = [
   { id: 'inventory', label: 'INVENTÁRIO' },
   { id: 'documents', label: 'DOCUMENTOS' },
   { id: 'notes', label: 'ANOTAÇÕES' },
+  { id: 'journal', label: 'DIÁRIO' },
   { id: 'book', label: 'LIVRO' },
 ]
+const TAB_IDS = [...TABS.map(t => t.id), MERCHANT_TAB.id]
 const MODE_SHORT = { adv: 'V', dis: 'D' }
 
 // Fixadas primeiro, depois as editadas mais recentemente (mesma ordem do back-end).
@@ -46,7 +55,8 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const [abilities, setAbilities] = useState([])
   const [documents, setDocuments] = useState([])
   const [notes, setNotes] = useState([])
-  const [tab, setTab] = useState('sheet')
+  // A aba fica na URL (?aba=…): recarregar volta para ela e o "voltar" do navegador troca de aba.
+  const [tab, setTab] = useUrlParam('aba', TAB_IDS, 'sheet')
   const [docId, setDocId] = useState(null)
   const [noteId, setNoteId] = useState(null)
   const [rolls, setRolls] = useState([])
@@ -64,6 +74,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
 
   // Erro de uma ação: 401 desloga; o resto vira aviso.
   const fail = useCallback(err => {
+    play('error')
     if (err.status === 401) expired.current()
     else setToast(err.message)
   }, [])
@@ -98,6 +109,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const setHp = useCallback(next => {
     const before = state.status === 'ready' ? state.sheet.character : null
     if (!before) return
+    play(next.currentHp > before.currentHp ? 'heal' : next.currentHp < before.currentHp ? 'damage' : 'ward')
     const put = character => setState(s => (s.status === 'ready' ? { ...s, sheet: { ...s.sheet, character } } : s))
     // Com PV de novo, os testes contra a morte zeram (o back faz o mesmo).
     put({ ...before, ...next, ...(next.currentHp > 0 ? { deathSuccesses: 0, deathFailures: 0 } : {}) })
@@ -130,11 +142,11 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   // O jogador só gasta: o back devolve a ficha inteira (inventário, ouro, inspiração).
   const putSheet = useCallback(sheet => setState(s => (s.status === 'ready' ? { ...s, sheet } : s)), [])
   const consumeOne = useCallback(item => {
-    consumeItem(token, item.id).then(sheet => { putSheet(sheet); setToast('Usou 1: ' + item.name + '.') }).catch(fail)
+    consumeItem(token, item.id).then(sheet => { play('consume'); putSheet(sheet); setToast('Usou 1: ' + item.name + '.') }).catch(fail)
   }, [token, fail, putSheet])
-  const spendGold = useCallback(amount => spendGoldApi(token, amount).then(putSheet).catch(err => { fail(err); throw err }), [token, fail, putSheet])
+  const spendGold = useCallback(amount => spendGoldApi(token, amount).then(sheet => { play('coin'); putSheet(sheet) }).catch(err => { fail(err); throw err }), [token, fail, putSheet])
   const spendInspirationNow = useCallback(() => {
-    spendInspiration(token).then(sheet => { putSheet(sheet); setToast('Inspiração gasta.') }).catch(fail)
+    spendInspiration(token).then(sheet => { play('success'); putSheet(sheet); setToast('Inspiração gasta.') }).catch(fail)
   }, [token, fail, putSheet])
 
   // Mercador aberto pelo mestre: a cada poucos segundos (com a aba visível) o ping diz se abriu, fechou ou mudou;
@@ -156,7 +168,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
           if (ping.id == null) {
             known.current = null
             setMerchant(null)
-            setTab(t => (t === 'merchant' ? 'inventory' : t))
+            setTab(t => (t === 'merchant' ? 'inventory' : t), { replace: true })
             if (before) setToast('O mercador fechou a loja.')
           } else if (before?.id !== ping.id || before?.revision !== ping.revision) {
             fetchActiveMerchant(token)
@@ -185,6 +197,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     setBusy(true)
     return call()
       .then(({ merchant: m, sheet }) => {
+        play('coin')
         putMerchant(m)
         putSheet(sheet)
         setToast(done)
@@ -201,6 +214,22 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     'Comprou ' + (quantity > 1 ? quantity + '× ' : '') + line.name + '.'), [token, trade])
   const sell = useCallback((item, quantity, unitValue) => trade(() => sellToMerchant(token, item.id, quantity, unitValue),
     'Vendeu ' + (quantity > 1 ? quantity + '× ' : '') + item.name + ' por ' + unitValue * quantity + ' PO.'), [token, trade])
+  // Pechincha: o back rola; o dado aparece como uma rolagem comum e a loja volta com os preços dele.
+  const haggle = useCallback(skill => {
+    setBusy(true)
+    haggleWithMerchant(token, skill)
+      .then(m => {
+        const h = m.haggle
+        putMerchant(m)
+        pushRoll({ id: Date.now() + Math.random(), kind: 'check', label: 'Pechincha (' + SKILL_NAMES[skill] + ')', mod: h.modifier, d20: h.d20, other: null, mode: 'normal', total: h.total })
+        play(h.percent < 0 ? 'coin' : h.percent > 0 ? 'error' : 'ward')
+      })
+      .catch(err => {
+        fail(err)
+        fetchActiveMerchant(token).then(putMerchant).catch(() => {})
+      })
+      .finally(() => setBusy(false))
+  }, [token, fail, putMerchant])
 
   // Forma temporária: o back devolve a ficha inteira (atributos, deslocamento e tamanho mudam).
   const chooseForm = useCallback(name => {
@@ -270,6 +299,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     setBusy(true)
     castSpell(token, spell.id, level)
       .then(r => {
+        play('cast')
         setAbilities(r.abilities)
         setToast('Conjurou ' + spell.name + (r.level ? ' no ' + r.level + 'º nível' : '')
           + (r.usedUse ? ' (1 uso da magia).' : r.manaCost ? ' (−' + r.manaCost + ' Mana).' : '.'))
@@ -291,6 +321,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     setBusy(true)
     restApi(token, type, prepared)
       .then(list => {
+        play('rest', type === 'LONG')
         setAbilities(list)
         setPreparing(false)
         setToast(type === 'LONG' ? (prepared ? 'Descanso longo: usos de volta e magias preparadas.' : 'Descanso longo: todos os usos voltaram.')
@@ -363,6 +394,45 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const levelUpPreview = useCallback(levels => previewLevelUp(token, levels), [token])
   const levelUpApply = useCallback(levels => applyLevelUp(token, levels), [token])
 
+  // Depois de salvar o nível: busca a ficha nova e compara com a de antes para a cerimônia.
+  const [ceremony, setCeremony] = useState(null)
+  const levelApplied = useCallback(updated => {
+    const before = state.status === 'ready' ? state.sheet : null
+    setLeveling(false)
+    fetchSheet(token)
+      .then(after => {
+        play('levelup')
+        putSheet(after)
+        setAbilities(after.abilities ?? [])
+        if (before) setCeremony(levelUpGains({ ...before, abilities }, after))
+        else setToast(updated.characterName + ' subiu para o ' + updated.level + 'º nível!')
+      })
+      .catch(() => load())
+  }, [state, abilities, token, putSheet, load])
+  const closeCeremony = useCallback(() => setCeremony(null), [])
+
+  // Locais do mapa: a cada 10 s (com a aba visível) confere se o mestre revelou algum novo para este jogador.
+  const knownPois = useRef(null)
+  useEffect(() => {
+    if (!hasSheet) return undefined
+    const check = () => {
+      if (document.hidden && knownPois.current) return
+      fetchVisiblePois(token)
+        .then(list => {
+          const fresh = knownPois.current ? list.filter(p => !knownPois.current.has(p.id)) : []
+          knownPois.current = new Set(list.map(p => p.id))
+          if (fresh.length) {
+            play('success')
+            setToast((fresh.length > 1 ? fresh.length + ' novos locais revelados no mapa' : 'Novo local revelado no mapa: ' + fresh[0].name) + '. Abra o mapa no topo.')
+          }
+        })
+        .catch(() => {})
+    }
+    check()
+    const t = setInterval(check, PENDING_POLL)
+    return () => clearInterval(t)
+  }, [token, hasSheet])
+
   // O mestre libera a subida no painel: a cada 10 s (com a aba visível) confere se mudou o que está liberado.
   const pendingNow = sheet?.pendingLevels
   useEffect(() => {
@@ -372,6 +442,11 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       fetchSheet(token)
         .then(s => {
           if (s.character.pendingLevels !== pendingNow) {
+            // Liberou um nível agora: aviso com som, além do botão que brilha no topo.
+            if (s.character.pendingLevels > pendingNow && s.character.canLevelUp) {
+              play('levelready')
+              setToast('O mestre liberou o ' + (s.character.level + 1) + 'º nível! Clique em SUBIR DE NÍVEL.')
+            }
             setState(st => (st.status === 'ready'
               ? { ...st, sheet: { ...st.sheet, character: { ...st.sheet.character, pendingLevels: s.character.pendingLevels } } } : st))
           }
@@ -408,6 +483,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
         toast={toast}
         onError={fail}
         onCreated={created => {
+          play('levelup')
           setToast(created.characterName + ' foi criado!')
           load()
         }}
@@ -446,6 +522,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             <span className="who-name">{character.name}</span>
             <span className="who-sub">{session.username}</span>
           </div>
+          <WorldButtons session={session} />
           {!testing && (
             <button className="icon-btn" type="button" onClick={onChangePassword} title="Alterar senha" aria-label="Alterar senha">
               <KeyIcon />
@@ -481,11 +558,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
                 catalog={catalog}
                 onPreview={levelUpPreview}
                 onApply={levelUpApply}
-                onApplied={updated => {
-                  setLeveling(false)
-                  setToast(updated.characterName + ' subiu para o ' + updated.level + 'º nível!')
-                  load()
-                }}
+                onApplied={levelApplied}
                 onCancel={() => setLeveling(false)}
                 onError={fail}
               />
@@ -524,12 +597,13 @@ export default function CharacterSheet({ character, session, notice, onChangePas
               )}
               {tab === 'inventory' && <Inventory items={state.sheet.inventory} strength={sheet.str} onUse={consumeOne} />}
               {tab === 'merchant' && merchant && (
-                <MerchantTab merchant={merchant} inventory={state.sheet.inventory} gold={sheet.gold} busy={busy} onBuy={buy} onSell={sell} />
+                <MerchantTab merchant={merchant} inventory={state.sheet.inventory} gold={sheet.gold} skills={sheet.skills} busy={busy} onBuy={buy} onSell={sell} onHaggle={haggle} />
               )}
               {tab === 'documents' && (
                 <DocumentsTab documents={documents} selectedId={docId} onSelect={setDocId} onOpen={markRead} />
               )}
               {tab === 'book' && <BookTab token={token} onError={fail} />}
+              {tab === 'journal' && <GroupJournal token={token} onError={fail} onToast={setToast} />}
               {tab === 'notes' && (
                 <NotesTab
                   notes={notes}
@@ -550,6 +624,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       {preparing && preparation && (
         <PrepareSpells preparation={preparation} busy={busy} onConfirm={picks => doRest('LONG', picks)} onCancel={() => setPreparing(false)} />
       )}
+      {ceremony && <LevelUpCeremony gains={ceremony} name={sheet?.characterName ?? character.name} onClose={closeCeremony} />}
       {toast && <div key={toast} className="toast" role="status">{toast}</div>}
     </div>
   )

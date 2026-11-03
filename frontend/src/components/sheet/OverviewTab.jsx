@@ -7,7 +7,6 @@ import Crafts from './Crafts.jsx'
 import Forms from './Forms.jsx'
 import { RollLog } from './DiceRoll.jsx'
 import { RichText } from './DocumentsTab.jsx'
-import { keysFor } from './AbilitiesTab.jsx'
 import AbilityIcon from './AbilityIcon.jsx'
 import Num from './Num.jsx'
 import { DocIcon, PinIcon } from './icons.jsx'
@@ -24,7 +23,6 @@ export default function OverviewTab({ sheet, attacks = [], crafts = [], abilitie
   const initiative = sheet.initiative ?? modifier(sheet.dex)
   const conMod = modifier(sheet.con)
   const quick = abilities.filter(a => a.type !== 'PASSIVE').slice(0, 5)
-  const keys = keysFor(abilities)
   const recentDocs = documents.slice(0, 3)
   const note = notes.find(n => n.pinned) ?? notes[0]
 
@@ -104,7 +102,7 @@ export default function OverviewTab({ sheet, attacks = [], crafts = [], abilitie
                   onClick={() => (a.damage ? onRollDice(a.name, a.damage) : onGo('abilities', a.id))}
                   title={a.damage ? `${a.name}: rolar ${a.damage}` : a.name}
                 >
-                  <AbilityIcon ability={a} hotkey={keys[a.id] ?? (a.type === 'SPELL' ? (a.spellLevel ? String(a.spellLevel) : 'T') : null)} />
+                  <AbilityIcon ability={a} badge={a.type === 'SPELL' ? (a.spellLevel ? String(a.spellLevel) : 'T') : null} />
                   <span className="hot-name">{a.name}</span>
                   {a.maxUses != null && <span className="hot-uses">{a.usesLeft}/{a.maxUses}</span>}
                 </button>

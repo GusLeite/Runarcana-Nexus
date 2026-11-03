@@ -18,6 +18,32 @@
       "runtimeExecutable": "cmd",
       "runtimeArgs": ["/c", "set VITE_PROXY_TARGET=http://localhost:8090&& npm run dev --prefix frontend -- --port 5175 --strictPort"],
       "port": 5175
+    },
+    {
+      "name": "backend-sandbox-2",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "set JAVA_HOME=E:\\DevTools&& set SANDBOX_PORT=8091&& call .\\mvnw.cmd -q test-compile spring-boot:test-run -Dspring-boot.test-run.main-class=gusleite.runarcana_nexus.SandboxApplication"],
+      "port": 8091
+    },
+    {
+      "name": "frontend-sandbox-2",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "set VITE_PROXY_TARGET=http://localhost:8091&& npm run dev --prefix frontend -- --port 5176 --strictPort"],
+      "port": 5176
+    },
+    {
+      "name": "backend-sandbox-3",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "set JAVA_HOME=E:\\DevTools&& set SANDBOX_PORT=8093&& call .\\mvnw.cmd -q test-compile spring-boot:test-run -Dspring-boot.test-run.main-class=gusleite.runarcana_nexus.SandboxApplication"],
+      "port": 8093,
+      "autoPort": false
+    },
+    {
+      "name": "frontend-sandbox-3",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "set VITE_PROXY_TARGET=http://localhost:8093&& npm run dev --prefix frontend -- --port 5178 --strictPort"],
+      "port": 5178,
+      "autoPort": false
     }
   ]
 }

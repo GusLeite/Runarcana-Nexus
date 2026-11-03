@@ -1,14 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
-  addCatalogItem, addCustomItem, fetchCatalog, fetchCharacters, fetchInventory, removeItem, setGold, setInspiration, setItemQuantity,
+  addCatalogItem, addCustomItem, editItem, fetchCatalog, fetchCharacters, fetchInventory, removeItem, setGold, setInspiration, setItemQuantity,
 } from '../../api/master.js'
 import { CHARACTERS } from '../../data/characters.js'
 import { ITEM_KINDS, RARITIES, formatKg, rarityOf } from '../../data/rules.js'
 import { CoinIcon } from '../sheet/icons.jsx'
+import ItemIcon from '../sheet/ItemIcon.jsx'
+import ItemImageField from './ItemImageField.jsx'
+import { isIconLink } from '../../utils/iconImage.js'
 
 const artOf = name => CHARACTERS.find(c => c.id === name.trim().toLowerCase())
 const MAX_RESULTS = 40
-const EMPTY_CUSTOM = { name: '', description: '', effect: '', weight: '', price: '', rarity: 'Common', quantity: '1', consumable: false }
+const EMPTY_CUSTOM = { name: '', description: '', effect: '', weight: '', price: '', rarity: 'Common', quantity: '1', consumable: false, image: '' }
 // Tipos do catálogo (rules/itens.json) em PT, para a busca.
 const CATALOG_KINDS = {
   WEAPON: 'Arma', ARMOR: 'Armadura', SHIELD: 'Escudo', AMMUNITION: 'Munição', GEAR: 'Equipamento', FOCUS: 'Foco',
@@ -28,6 +31,7 @@ export default function MasterInventory({ token, onError, onToast }) {
   const [qty, setQty] = useState('1')
   const [custom, setCustom] = useState(EMPTY_CUSTOM)
   const [busy, setBusy] = useState(false)
+  const [editingId, setEditingId] = useState(null) // linha do inventário em edição
 
   useEffect(() => {
     fetchCatalog(token).then(setCatalog).catch(onError)
@@ -86,6 +90,7 @@ export default function MasterInventory({ token, onError, onToast }) {
       rarity: custom.rarity,
       quantity: custom.quantity === '' ? 1 : Number(custom.quantity),
       consumable: custom.consumable,
+      image: custom.image || null,
     }
     run(() => addCustomItem(token, characterId, body), body.name + ' para ' + name + '.')
       .then(() => setCustom(EMPTY_CUSTOM))
@@ -150,8 +155,11 @@ export default function MasterInventory({ token, onError, onToast }) {
               {inv.items.map((item, n) => (
                 <li key={item.id} className="inv-row" style={{ '--r': rarityOf(item.rarity).color, '--n': n }}>
                   <span className="inv-name">
-                    <b>{item.name}</b>
-                    <small>{ITEM_KINDS[item.kind] ?? item.kind}{item.weight != null ? ' · ' + formatKg(item.weight) : ''}</small>
+                    <span className="slot mini inv-thumb" aria-hidden="true"><ItemIcon item={item} /></span>
+                    <span>
+                      <b>{item.name}</b>
+                      <small>{ITEM_KINDS[item.kind] ?? item.kind}{item.weight != null ? ' · ' + formatKg(item.weight) : ''}</small>
+                    </span>
                   </span>
                   <span className="inv-qty">
                     <button type="button" className="qty-btn" disabled={busy} aria-label={'Tirar 1 ' + item.name}
@@ -160,10 +168,19 @@ export default function MasterInventory({ token, onError, onToast }) {
                     <button type="button" className="qty-btn" disabled={busy || item.quantity >= 9999} aria-label={'Dar mais 1 ' + item.name}
                       onClick={() => run(() => setItemQuantity(token, characterId, item.id, item.quantity + 1)).catch(() => {})}>+</button>
                   </span>
-                  <button type="button" className="link-btn danger" disabled={busy}
-                    onClick={() => run(() => removeItem(token, characterId, item.id), item.name + ' saiu do inventário.').catch(() => {})}>
-                    Remover
-                  </button>
+                  <span className="inv-actions">
+                    <button type="button" className="link-btn" disabled={busy} aria-expanded={editingId === item.id} onClick={() => setEditingId(id => (id === item.id ? null : item.id))}>Editar</button>
+                    <button type="button" className="link-btn danger" disabled={busy}
+                      onClick={() => run(() => removeItem(token, characterId, item.id), item.name + ' saiu do inventário.').catch(() => {})}>
+                      Remover
+                    </button>
+                  </span>
+                  {editingId === item.id && (
+                    <div className="inv-edit">
+                      <ItemEditForm item={item} busy={busy} onCancel={() => setEditingId(null)}
+                        onSave={body => run(() => editItem(token, characterId, item.id, body), item.name + ' atualizado.').then(() => setEditingId(null)).catch(() => {})} />
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>
@@ -218,6 +235,7 @@ export default function MasterInventory({ token, onError, onToast }) {
               <textarea id="c-desc" className="note-body" rows={3} maxLength={4000} value={custom.description} onChange={e => setC('description', e.target.value)} />
               <label htmlFor="c-effect">Efeito</label>
               <textarea id="c-effect" className="note-body" rows={2} maxLength={4000} value={custom.effect} onChange={e => setC('effect', e.target.value)} placeholder="Ex.: recupera 2d4+2 PV" />
+              <ItemImageField value={custom.image} kind={custom.consumable ? 'CONSUMABLE' : 'OBJECT'} onChange={value => setC('image', value)} />
               <label className="check">
                 <input type="checkbox" checked={custom.consumable} onChange={e => setC('consumable', e.target.checked)} />
                 Consumível (o jogador pode usar e gastar)
@@ -228,5 +246,59 @@ export default function MasterInventory({ token, onError, onToast }) {
         </div>
       )}
     </>
+  )
+}
+
+// Edição de um item já existente: texto, raridade, peso, preço e imagem. O item do catálogo que outros também têm ganha uma cópia
+// só desta ficha quando o texto muda; mudar só a imagem vale para todos que têm o item.
+function ItemEditForm({ item, busy, onSave, onCancel }) {
+  const [draft, setDraft] = useState({
+    name: item.name, description: item.description ?? '', effect: item.effect ?? '',
+    weight: item.weight ?? '', price: item.price ?? '', rarity: item.rarity ?? 'Common', image: item.image ?? '',
+  })
+  const set = (key, value) => setDraft(d => ({ ...d, [key]: value }))
+  const imageOk = !draft.image || draft.image.startsWith('data:') || isIconLink(draft.image)
+  const save = e => {
+    e.preventDefault()
+    onSave({
+      name: draft.name.trim(),
+      description: draft.description.trim() || null,
+      effect: draft.effect.trim() || null,
+      weight: draft.weight === '' ? null : Number(draft.weight),
+      price: draft.price === '' ? null : Number(draft.price),
+      rarity: draft.rarity,
+      image: draft.image || null,
+    })
+  }
+  return (
+    <form className="mform" onSubmit={save} noValidate>
+      <label htmlFor={'e-name-' + item.id}>Nome</label>
+      <input id={'e-name-' + item.id} value={draft.name} maxLength={120} onChange={e => set('name', e.target.value)} />
+      <div className="mrow">
+        <div>
+          <label htmlFor={'e-weight-' + item.id}>Peso (kg)</label>
+          <input id={'e-weight-' + item.id} type="number" min={0} step="0.1" value={draft.weight} onChange={e => set('weight', e.target.value)} placeholder="—" />
+        </div>
+        <div>
+          <label htmlFor={'e-price-' + item.id}>Preço (PO)</label>
+          <input id={'e-price-' + item.id} type="number" min={0} value={draft.price} onChange={e => set('price', e.target.value)} placeholder="—" />
+        </div>
+        <div>
+          <label htmlFor={'e-rarity-' + item.id}>Raridade</label>
+          <select id={'e-rarity-' + item.id} value={draft.rarity} onChange={e => set('rarity', e.target.value)}>
+            {Object.entries(RARITIES).map(([id, r]) => <option key={id} value={id}>{r.name}</option>)}
+          </select>
+        </div>
+      </div>
+      <label htmlFor={'e-desc-' + item.id}>Descrição</label>
+      <textarea id={'e-desc-' + item.id} className="note-body" rows={3} maxLength={4000} value={draft.description} onChange={e => set('description', e.target.value)} />
+      <label htmlFor={'e-effect-' + item.id}>Efeito</label>
+      <textarea id={'e-effect-' + item.id} className="note-body" rows={2} maxLength={4000} value={draft.effect} onChange={e => set('effect', e.target.value)} />
+      <ItemImageField value={draft.image} kind={item.kind} onChange={value => set('image', value)} />
+      <div className="mrow">
+        <button className="btn" type="submit" disabled={busy || !draft.name.trim() || !imageOk}>SALVAR</button>
+        <button type="button" className="link-btn" onClick={onCancel}>Cancelar</button>
+      </div>
+    </form>
   )
 }

@@ -259,6 +259,21 @@ const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many)
 // PV que escala com o bônus de proficiência (HP_BONUS com usesFormula).
 const HP_FORMULAS = { HALF_PROFICIENCY: '+½ do bônus de proficiência em', PROFICIENCY: '+bônus de proficiência em' }
 
+// Quantidade de uma concessão que escala (usesFormula) ou fixa (amount), para os rótulos curtos.
+const AMOUNT_FORMULAS = { HALF_PROFICIENCY: '½ do bônus de proficiência', PROFICIENCY: 'bônus de proficiência', DOUBLE_PROFICIENCY: '2× o bônus de proficiência' }
+const amountText = g => AMOUNT_FORMULAS[g.usesFormula] ? '+' + AMOUNT_FORMULAS[g.usesFormula] : signed(g.amount ?? 1)
+
+// Alvo de bônus de dano/crítico/troca de atributo ("ATTACK", "UNARMED", "SKILL:INTIMIDATION"...).
+const TARGET_NAMES = { ATTACK: 'ataques', 'ATTACK:MELEE': 'ataques corpo a corpo', 'ATTACK:RANGED': 'ataques à distância', UNARMED: 'ataques desarmados',
+  TWO_HANDED: 'armas de duas mãos', SPELLCASTING: 'conjuração', CHOSEN: 'a arma escolhida' }
+const targetName = v => !v ? '' : v.startsWith('SKILL:') ? SKILL_NAMES[v.slice(6)] ?? v.slice(6)
+  : v.startsWith('WEAPON:') ? v.slice(7) : TARGET_NAMES[v] ?? v
+
+// Concessões que não viram rótulo no assistente: EFFECT é a parte mecânica de uma habilidade que já tem
+// o seu cartão (Fúria, Postura do Grão-mestre...), e "when"/armor.feature só valem com uma opção escolhida
+// (a CA do estilo Defesa sem Armadura, as resistências do Resistente), que aparece na própria habilidade.
+export const visibleGrants = (grants = []) => (grants ?? []).filter(g => g.type !== 'EFFECT' && !g.when && !g.armor?.feature)
+
 // Texto curto de uma concessão do catálogo (rules/criacao.json), para os cartões do assistente.
 // crafts: lista de ofícios do catálogo, para mostrar o nome no lugar do id; equipment: itens do rules/itens.json.
 export function grantLabel(g, crafts = [], equipment = []) {
@@ -274,8 +289,9 @@ export function grantLabel(g, crafts = [], equipment = []) {
     case 'WEAPON_PROFICIENCY': return 'Armas: ' + g.value
     case 'FEATURE': return (ABILITY_TYPES[g.abilityType ?? 'PASSIVE']?.name ?? 'Passiva') + ': ' + g.name + (g.options?.length ? ' (à escolha)' : '')
     case 'PROFICIENCY_CHOICE': return g.label ?? plural(g.count, 'proficiência', 'proficiências') + ' à escolha'
-    case 'HP_BONUS': return g.label ?? (HP_FORMULAS[g.usesFormula] ?? signed(g.amount)) + ' PV' + (g.perLevel ? ' por nível' : '')
-    case 'SPEED': return signed(g.feet) + ' pés de ' + (!g.value || g.value === 'WALK' ? 'deslocamento'
+    case 'HP_BONUS': return g.label ?? (g.value === 'HALF_HIT_DIE' ? '+½ do dado de vida em PV por nível' : null) ?? (HP_FORMULAS[g.usesFormula] ?? signed(g.amount)) + ' PV' + (g.perLevel ? ' por nível' : '')
+    case 'SPEED': if (g.walkFraction) return (MOVEMENT_NAMES[g.value] ?? g.value) + (g.walkFraction === 1 ? ' igual à caminhada' : ' de metade da caminhada')
+      return signed(g.feet) + ' pés de ' + (!g.value || g.value === 'WALK' ? 'deslocamento'
       : g.value === 'ALL' ? 'todos os deslocamentos' : MOVEMENT_NAMES[g.value]?.toLowerCase() ?? g.value)
     case 'GOLD': return signed(g.amount) + ' de ouro'
     case 'SIZE': return 'Tamanho: ' + (SIZE_NAMES[g.value] ?? g.value)
@@ -292,16 +308,31 @@ export function grantLabel(g, crafts = [], equipment = []) {
     case 'EQUIPMENT': return 'Equipamento: ' + equipmentOptionName(g.value, equipment)
     case 'EQUIPMENT_CHOICE': return g.label ?? 'Equipamento à escolha'
     case 'SPELL_CHOICE': return g.label ?? (g.spellLevel ? plural(g.count, 'magia', 'magias') + ' até o ' + g.spellLevel + 'º nível' : plural(g.count, 'truque', 'truques')) + ' à escolha'
-    case 'MYSTERY': return 'Mistério: ' + idName(g.value)
+    case 'MYSTERY': return g.label ?? 'Mistério: ' + idName(g.value)
     case 'SPELL': return 'Magia: ' + idName(g.value)
-    case 'RESISTANCE': return 'Resistência a dano ' + g.value
-    case 'IMMUNITY': return 'Imunidade a dano ' + g.value
-    case 'VULNERABILITY': return 'Vulnerabilidade a dano ' + g.value
+    case 'RESISTANCE': return g.value ? 'Resistência a dano ' + g.value : g.label ?? 'Resistência a dano à escolha'
+    case 'IMMUNITY': return g.value ? 'Imunidade a dano ' + g.value : g.label ?? 'Imunidade a dano à escolha'
+    case 'VULNERABILITY': return g.value ? 'Vulnerabilidade a dano ' + g.value : g.label ?? 'Vulnerabilidade a dano à escolha'
     case 'CONDITION_IMMUNITY': return 'Imune a ' + g.value
     case 'SENSE': return senseLabel(g.value, g.feet)
     case 'SITUATIONAL': return g.description ?? g.value
     case 'FORM': return 'Forma: ' + g.name
-    default: return g.type
+    case 'ABILITY_USES': return (g.usesFormula ? amountText(g) : signed(g.amount ?? 1)) + ' usos de ' + g.value
+    case 'EXTRA_USES': return amountText(g) + ' pontos de ' + g.value
+    case 'DAMAGE_BONUS': return 'Dano ' + (g.damage ? '+' + g.damage : g.valueByLevel ? 'extra' : amountText(g)) + ' em ' + targetName(g.value)
+      + (g.description ? ' ' + g.description : '')
+    case 'INITIATIVE': return amountText(g) + ' na iniciativa'
+    case 'PASSIVE_BONUS': return amountText(g) + ' em ' + (SKILL_NAMES[g.value] ?? g.value) + ' passiva'
+    case 'CRAFT_LEVEL': return g.label ?? 'Ofício' + (g.value && g.value !== 'CHOSEN' ? ' ' + (crafts.find(k => k.id === g.value)?.name ?? g.value) : '') + ': sobe de nível'
+    case 'CRAFT_FORMULAS': return g.label ?? 'Fórmulas de ofício extras'
+    case 'CRAFT_INCOME': return g.label ?? 'Renda de ofício'
+    case 'CRAFT_MASTERWORK': return g.label ?? 'Obra-Prima mais fácil' + (g.value ? ' (' + (crafts.find(k => k.id === g.value)?.name ?? g.value) + ')' : '')
+    case 'ATTRIBUTE_SWAP': return attrName(g.attribute) + ' em ' + targetName(g.value)
+    case 'DAMAGE_REDUCTION': return 'Redução de dano ' + g.value
+    case 'ABSORPTION': return g.label ?? 'Absorção de dano ' + g.value
+    case 'CRIT_BONUS': return 'Margem de crítico ' + signed(g.amount ?? 1) + ' em ' + targetName(g.value)
+    case 'EFFECT': return 'Efeito: ' + g.name
+    default: return g.label ?? g.name ?? 'Outro ganho'
   }
 }
 
@@ -317,7 +348,7 @@ const GRANT_GROUPS = [
 ]
 
 export function groupGrants(grants = []) {
-  const list = grants ?? []
+  const list = visibleGrants(grants)
   const abilities = list.filter(g => g.type === 'FEATURE' || g.type === 'FORM')
   const rest = list.filter(g => !abilities.includes(g))
   const known = GRANT_GROUPS.flatMap(g => g.types)
@@ -552,6 +583,24 @@ export function keepChoices(picks, choices) {
   return Object.fromEntries(Object.entries(picks).filter(([k]) => keys.has(k)))
 }
 
+// Tira de cada escolha o que saiu das opções dela na prévia. Ex.: Arcanismo escolhido na classe e depois numa
+// escolha que o back processa antes (Herança): a da classe perde a opção e volta a ficar livre ("1 de 2"),
+// em vez de guardar um valor invisível que trava o contador. Recursos (opções vazias) ficam como estão.
+export function dropStalePicks(picks, choices) {
+  let changed = false
+  const out = { ...picks }
+  for (const c of choices ?? []) {
+    const list = picks[c.key]
+    if (!list?.length || c.type === 'RESOURCE_CHOICE' || !c.options?.length) continue
+    const kept = list.filter(id => c.options.includes(id))
+    if (kept.length !== list.length) {
+      out[c.key] = kept
+      changed = true
+    }
+  }
+  return changed ? out : picks
+}
+
 // ---------- Pontos de vida ----------
 
 // Dano, cura e PV temporários: { currentHp, tempHp } depois da ação. O dano gasta os temporários primeiro;
@@ -597,4 +646,20 @@ export function formEffects(form) {
   if (form.immunities) parts.push('imune: ' + form.immunities.split(',').join(', '))
   if (form.damage) parts.push(form.damage.split(';').map(d => d.split('|')[1] + ' no dano').join(', '))
   return parts.join(' · ')
+}
+
+// Linha "Xº nível." da lista "Ao subir de nível": os rótulos das concessões visíveis, separados por " · ".
+export const levelGrantsText = (grants, crafts = [], equipment = []) =>
+  visibleGrants(grants).map(g => grantLabel(g, crafts, equipment)).join(' · ')
+
+// Escolhas da Natureza Rúnica juntas: a Runa inicial (que depende da gema) logo abaixo do Pulso Rúnico.
+// O back as cria em fases diferentes, então outras escolhas podiam cair no meio.
+export const isPulseChoice = c => /^Pulso Rúnico/.test(c.label ?? '')
+export const isRuneChoice = c => /^Runa inicial/.test(c.label ?? '')
+export function orderChoices(choices = []) {
+  const list = choices ?? []
+  const pulse = list.find(isPulseChoice)
+  const rune = list.find(isRuneChoice)
+  if (!pulse || !rune) return list
+  return list.filter(c => c !== rune).flatMap(c => (c === pulse ? [c, rune] : [c]))
 }

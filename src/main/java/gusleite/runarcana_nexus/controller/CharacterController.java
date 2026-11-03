@@ -147,6 +147,16 @@ public class CharacterController {
 
     public record ConditionsRequest(List<String> conditions, Integer exhaustion) {}
 
+    // Mestre: apaga a ficha (o jogador pode criar outra pelo assistente).
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCharacter(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @PathVariable long id) {
+        authService.requireMaster(authorization);
+        charService.deleteCharacter(id);
+        return ResponseEntity.noContent().build();
+    }
+
     // Mestre: cria a ficha direto, sem o assistente nem ligação a uma conta.
     @PostMapping
     public ResponseEntity<CharacterResponse> createCharacter(

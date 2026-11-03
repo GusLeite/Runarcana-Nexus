@@ -28,7 +28,8 @@ public record InventoryItemResponse(
         DamageType damageType,
         List<WeaponProperty> properties,
         Integer armorClass,
-        ArmorWeight armorWeight
+        ArmorWeight armorWeight,
+        String image
 ) {
     public static InventoryItemResponse of(PlayerItems entry) {
         return of(entry, false);
@@ -64,6 +65,6 @@ public record InventoryItemResponse(
 
         return new InventoryItemResponse(entry.getId(), item.getName(), item.getItemDescription(), item.getEffect(),
                 item.getRarity(), kind, quantity, item.getWeight(), item.getPrice(),
-                damage, damageType, properties, armorClass, armorWeight);
+                damage, damageType, properties, armorClass, armorWeight, item.getImage());
     }
 }

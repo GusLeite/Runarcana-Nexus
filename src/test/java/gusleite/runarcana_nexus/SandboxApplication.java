@@ -25,6 +25,7 @@ public final class SandboxApplication {
             "--spring.datasource.username=sa",
             "--spring.datasource.password=",
             "--spring.jpa.hibernate.ddl-auto=create-drop",
+            "--runarcana.official-places.seed=true",
     };
 
     private SandboxApplication() {}

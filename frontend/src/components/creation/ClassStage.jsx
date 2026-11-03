@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { grantLabel, groupGrants } from '../../data/rules.js'
+import { groupGrants, levelGrantsText, visibleGrants } from '../../data/rules.js'
 import { classArt } from '../../data/classArt.js'
 import TabBar from '../sheet/TabBar.jsx'
 import OriginArt from './OriginArt.jsx'
@@ -37,7 +37,7 @@ export default function ClassStage({ classes, startId, crafts, equipment, classI
   const own = groupGrants(klass.grants)
   const fromSub = groupGrants(sub?.grants)
   const abilityCount = own.abilities.length + fromSub.abilities.length
-  const levels = [...(klass.levels ?? [])].sort((a, b) => a.level - b.level)
+  const levels = [...(klass.levels ?? [])].sort((a, b) => a.level - b.level).filter(l => visibleGrants(l.grants).length > 0)
   const tabs = [
     { id: 'gains', label: 'GANHOS' },
     ...(abilityCount ? [{ id: 'abilities', label: 'HABILIDADES' }] : []),
@@ -204,7 +204,7 @@ export default function ClassStage({ classes, startId, crafts, equipment, classI
                 <span className="option-level-title">Ao subir de nível</span>
                 {levels.map(v => (
                   <span key={v.level} className="option-level">
-                    <b>{v.level}º nível.</b> {(v.grants ?? []).map(g => grantLabel(g, crafts, equipment)).join(' · ')}
+                    <b>{v.level}º nível.</b> {levelGrantsText(v.grants, crafts, equipment)}
                   </span>
                 ))}
               </div>

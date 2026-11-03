@@ -38,6 +38,9 @@ export const setHpFor = (token, characterId, currentHp, tempHp) =>
 export const setMaxHpBonus = (token, characterId, maxHpBonus) =>
   request('/character/' + characterId + '/hp', { method: 'PATCH', token, body: { maxHpBonus } })
 
+// Apaga a ficha (e inventário, habilidades...); a conta do jogador fica e ele pode recriar o personagem.
+export const deleteCharacter = (token, characterId) => request('/character/' + characterId, { method: 'DELETE', token })
+
 export const deleteDocument = (token, id) => request('/documents/' + id, { method: 'DELETE', token })
 
 // Regras da mesa: modo de traços da Runinata travado (traitBudget: id do modo ou null = o jogador escolhe).
@@ -87,3 +90,8 @@ export const setGold = (token, characterId, gold) => request('/character/' + cha
 
 export const setInspiration = (token, characterId, inspiration) =>
   request('/character/' + characterId + '/inspiration', { method: 'PATCH', token, body: { inspiration } })
+
+// Edita o item de uma linha do inventário: { name, description, effect, weight, price, rarity, image }. Item do catálogo que outros
+// também têm vira uma cópia só dessa ficha se o texto mudar; mudar só a imagem vale para todos. image: link, data URL ou vazio.
+export const editItem = (token, characterId, entryId, item) =>
+  request('/character/' + characterId + '/items/' + entryId, { method: 'PUT', token, body: item })

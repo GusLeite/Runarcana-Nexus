@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { grantLabel } from '../../data/rules.js'
+import { grantLabel, visibleGrants } from '../../data/rules.js'
 import { regionArt, wrapIndex } from '../../data/regionArt.js'
 import useHallTop from './useHallTop.js'
 import '../../styles/origin.css'
@@ -73,7 +73,7 @@ export default function RegionStep({ regions, crafts, equipment, regionId, onPic
   const region = regions[index]
   const art = regionArt(region)
   const chosen = regions.find(r => r.id === regionId)
-  const grants = region.grants ?? []
+  const grants = visibleGrants(region.grants)
   // Monta só a região à mostra, as vizinhas (já carregando) e a que está saindo; o resto não baixa vídeo.
   const mounted = new Set([index, wrapIndex(index - 1, length), wrapIndex(index + 1, length), leaving])
 

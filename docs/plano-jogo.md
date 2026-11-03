@@ -95,10 +95,69 @@ Testes: editar mantém ícone/usos, 403 para jogador, quem leu.
 - Aba **Mesa** no painel do mestre: um cartão por personagem com PV (barra), CA, condições, testes contra a morte, Mana e inspiração; atualiza a cada poucos segundos (polling simples de `GET /character`, só para o mestre — a rota passa a exigir o mestre, adiantando parte da segurança).
 - Ações rápidas no cartão: dano/cura (usa a rota da Etapa 5), condição, inspiração.
 
+# Plano do mapa de campanha (comparado ao Incognium)
+
+Comparação com a página do [Incognium](https://runarcana.org/incognium/) (protótipo de mapa e registro de campanha do Runarcana), feita em 2026-11-03. **Já temos:** pontos do mestre com tipo, descrição, verbete da lore e quem vê (oculto até revelar), comentários da mesa e anotação privada, edição no próprio mapa, relevo com zoom e blocos nítidos, waypoints dos jogadores, o grupo no mapa (marcador, trilha e névoa por região) e o diário do grupo. As etapas abaixo cobrem **o que falta**, na ordem de valor para a mesa. Mesmas regras do plano anterior: uma entrega por etapa (código + testes + docs + changelog) e marcar como **feita** ao concluir.
+
+O plano vai até a Etapa 11 (decisão de 2026-11-03). Ficam de fora: modo transmissão (OBS), ligação com a Wiki, exportar/importar em Markdown, várias campanhas e o que é do serviço deles (hospedagem, armazenamento externo, contas e convites).
+
+## Etapa 7 — Revelar o ponto na hora certa — **feita (2026-11-03)**
+
+**Por quê**: hoje revelar é editar o formulário, e os jogadores só veem o ponto novo quando reabrem o mapa (`fetchPois` roda uma vez).
+- No painel do ponto (mestre): botão **REVELAR AO GRUPO** (todos) e **revelar a…** (escolhe jogadores), sem abrir o formulário; **ESCONDER** desfaz. Rota curta `PATCH /map/pois/{id}/audience`.
+- O mapa confere os pontos a cada poucos segundos, junto com o `GET /map/party` (ou uma revisão leve, como o ping do mercador). O ponto recém-revelado brota com animação, e a câmera do jogador oferece "Ver no mapa".
+- Aviso fora do mapa: a ficha mostra "Novo local revelado: X", e o diário ganha o evento `PLACE` (com o nome só se foi para todos).
+- Contadores no topo do mapa do mestre: "Mestre: N pontos · Grupo: M revelados".
+
+## Etapa 8 — Imagens e notas secretas no ponto — **feita (2026-11-03)**
+
+**Por quê**: o Incognium usa o ponto como cartão da cena (imagens para mostrar à mesa e notas só do mestre).
+- `MapPoi.images` (lista, como a imagem do mercador: data URL reduzida com `fileToBanner` ou link http(s); limite por ponto) e `MapPoi.secretNotes` (só o mestre recebe na resposta).
+- Painel do ponto: galeria; clicar abre em tela cheia. O mestre tem **MOSTRAR À MESA**: a imagem abre na tela dos jogadores que veem o ponto (reaproveita o polling da Etapa 7).
+- Mais tipos de ponto: posto avançado, esconderijo, ruína, acampamento, masmorra, porto. `PoiKind` é salvo como texto, mas o Hibernate cria um `CHECK` com os valores antigos no PostgreSQL: o `ddl-auto` não atualiza esse `CHECK`, então é preciso um `ALTER TABLE` no banco local e no de produção.
+
+## Etapa 9 — O que aconteceu ali (histórico do local) — **feita (2026-11-03)**
+
+- Entrada do diário pode apontar um ponto (`JournalEntry.poi`); o painel do ponto lista "Aconteceu aqui" (entradas e eventos ligados, mais as paradas da trilha a menos de N unidades).
+- No diário, a entrada ligada mostra "📍 Local" e leva ao mapa (usa o link da Etapa 10).
+
+## Etapa 10 — Links de locais — **feita (2026-11-03)**
+
+- `?tela=mapa&ponto=12` (e `&regiao=demacia`) abre o mapa voando até o ponto: estende o `useUrlParam`/`WorldButtons` e o `focus` do `MapScreen`.
+- Botão **Copiar link** no painel do ponto; documentos, lore e diário podem colar o link (quem não vê o ponto cai no mapa sem foco).
+
+## Etapa 11 — Ver como jogador (prévia por camada) — **feita (2026-11-03)**
+
+**Por quê**: o mestre quer conferir o que cada um vê antes de revelar.
+- Seletor "Ver como: Mestre / Nyx / Rudo…" no mapa do mestre. `GET /map/pois?as=<usuário>` (só mestre) devolve o que aquela conta vê; a névoa passa a ser opaca e os brasões ficam "???" como para o jogador; os waypoints mostrados são os dele.
+- Faixa "Prévia de Nyx" no topo enquanto ativo; nenhuma edição nesse modo.
+
+## Etapa 12 — Visual do Incognium e névoa mais escura — **feita (2026-11-03)**
+
+Cabeçalho fixo (CAMPANHA / Runeterra, abas **Visão do mestre | Jogador**, **+ Novo ponto**, **Compartilhar**, fechar), painel lateral escuro com rótulos pequenos em caixa alta e botões dourados, marcadores de ponto e da bandeira como anel fino de ouro, e a névoa de guerra bem mais escura (opaca para o jogador). O "Ver como" virou a aba **Jogador** do cabeçalho.
+
+## Etapa 13 — Informações e personagens por região — **feita (2026-11-03)**
+
+- Cada região (Noxus, Shurima…) ganha, no painel, uma seção do mestre com texto próprio, anotações e a lista de **personagens relacionados** (verbetes da lore do tipo personagem ligados à região, mais os que o mestre escolher), cada um abrindo o verbete.
+- O mestre decide o que o jogador vê (como no ponto: a todos ou a alguns).
+
+## Etapa 14 — Pontos oficiais do mapa de Runeterra — **feita (2026-11-03)**
+
+- Catálogo com os lugares do mapa oficial (Disco Solar, Zirima…), por região, com nome, tipo e posição.
+- O mestre liga e desliga a exibição de cada um para os jogadores (e de uma região inteira); desligado, só o mestre vê. Os pontos oficiais usam o painel e a galeria do ponto, mas não se apagam.
+
+## Etapa 15 — Trajetória dos jogadores — **feita (2026-11-03)**
+
+- Cada jogador desenha a própria rota no mapa (clicando as paradas, como a trilha do grupo, mas pessoal), com nome e cor; o mestre vê as de todos. Apagar e refazer; limite por jogador.
+
+## Etapa 16 — Desempenho e marcos 3D do mapa original — **feita (2026-11-03)**
+
+Marcos em 3D com os modelos do mapa original (8 `.obj` com texturas, posições e animações iguais), os 99 lugares do mapa oficial com nome e posição reais (inclui Zirima e o Disco Solar) aparecendo por tamanho como no original, e ajustes de desempenho (sem leitura de layout por pin, névoa que descarta cedo, resolução adaptativa). **Pendente**: medir em hardware mais fraco que o do desenvolvimento (o mapa rodava a 80–160 quadros por segundo na RTX 5070 do dev, então o travamento relatado não foi reproduzido); ver "Depois do para jogar".
+
 ## Depois do "para jogar"
 
 Não fazem parte deste plano; continuam nas pendências de [backend.md](backend.md) e [frontend.md](frontend.md):
 
 - **Segurança**: ligação conta ↔ personagem por chave estrangeira, enums salvos como ordinal, token no `localStorage`.
-- **Front/polimento**: artes (itens), vídeos pesados no Git, roteamento, atualização em tempo real, histórico de rolagens compartilhado.
+- **Front/polimento**: artes (itens), vídeos pesados no Git, atualização em tempo real, histórico de rolagens compartilhado.
 - **Regras no texto**: o que sobrou está nas pendências de [backend-criacao.md](backend-criacao.md) (formas temporárias, Essência Volátil, escolhas de dentro das Runas...).

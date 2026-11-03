@@ -5,7 +5,8 @@ import { afterLeave } from '../../utils/motion.js'
 
 const SAVE_DELAY = 700
 
-// Aba de anotações do jogador: lista à esquerda e editor à direita, que salva sozinho enquanto digita.
+// Aba de anotações do jogador: um diário medieval. O índice fica na página esquerda e a página pautada,
+// que salva sozinha enquanto se escreve, na direita.
 export default function NotesTab({ notes, selectedId, onSelect, onCreate, onSave, onDelete, busy }) {
   const selected = notes.find(n => n.id === selectedId) ?? notes[0]
   const [leavingId, setLeavingId] = useState(null)
@@ -16,32 +17,37 @@ export default function NotesTab({ notes, selectedId, onSelect, onCreate, onSave
   }
 
   return (
-    <div className="notes">
-      <div className="note-list">
-        <div className="card-title inv-title">
-          <h3>Anotações <small>{notes.length} {notes.length === 1 ? 'nota' : 'notas'}</small></h3>
-          <button type="button" className="ghost-btn small" disabled={busy} onClick={onCreate}>+ Nova</button>
+    <div className="journal">
+      {['tl', 'tr', 'bl', 'br'].map(c => <i key={c} className={'corner ' + c} aria-hidden="true" />)}
+      <div className="jpage left">
+        <div className="jhead">
+          <h3 className="jtitle">Diário <small>{notes.length} {notes.length === 1 ? 'página' : 'páginas'}</small></h3>
+          <button type="button" className="wax-btn" disabled={busy} onClick={onCreate}><span aria-hidden="true">+</span> Nova página</button>
         </div>
-        {notes.length === 0 && <p className="muted-note">Nada anotado ainda. Crie uma nota para pistas, nomes e planos do grupo.</p>}
-        <ul className="docs">
+        <div className="jrule" aria-hidden="true"><i /></div>
+        {notes.length === 0 && <p className="jempty">Nada anotado ainda. Abra uma página para pistas, nomes e planos do grupo.</p>}
+        <ul className="jindex">
           {notes.map((note, n) => (
             <li key={note.id}>
-              <button type="button" className={'doc-row note-row' + (note.id === selected?.id ? ' on' : '') + (note.id === leavingId ? ' leaving' : '')} style={{ '--n': n }} onClick={() => onSelect(note.id)}>
-                <span className="doc-info">
-                  <span className="doc-name">{note.pinned && <PinIcon />}{note.title}</span>
-                  <span className="doc-meta">{preview(note.body)}</span>
+              <button type="button" className={'jentry' + (note.id === selected?.id ? ' on' : '') + (note.id === leavingId ? ' leaving' : '')} style={{ '--n': n }} onClick={() => onSelect(note.id)}>
+                {note.pinned && <span className="seal" title="Fixada" aria-label="Fixada"><PinIcon /></span>}
+                <span className="jentry-text">
+                  <span className="jentry-name">{note.title}</span>
+                  <span className="jentry-peek">{preview(note.body)}</span>
                 </span>
-                <span className="note-date">{formatDateTime(note.updatedAt)}</span>
+                <span className="jentry-date">{formatDateTime(note.updatedAt)}</span>
               </button>
             </li>
           ))}
         </ul>
       </div>
 
-      <div className="note-editor-wrap">
+      <div className="jspine" aria-hidden="true" />
+
+      <div className="jpage right">
         {selected
           ? <NoteEditor key={selected.id} note={selected} onSave={onSave} onDelete={remove} />
-          : <div className="item-detail empty-detail"><p className="muted-note">Escolha ou crie uma anotação.</p></div>}
+          : <p className="jempty">Página em branco. Escolha ou abra uma anotação.</p>}
       </div>
     </div>
   )
@@ -109,7 +115,7 @@ function NoteEditor({ note, onSave, onDelete }) {
       <input
         className="note-title"
         value={title}
-        placeholder="Título"
+        placeholder="Título da página"
         maxLength={120}
         aria-label="Título da anotação"
         onChange={e => { setTitle(e.target.value); change({ title: e.target.value }) }}
@@ -123,7 +129,7 @@ function NoteEditor({ note, onSave, onDelete }) {
         onChange={e => { setBody(e.target.value); change({ body: e.target.value }) }}
         onBlur={flush}
       />
-      <div className="note-foot">{body.length.toLocaleString('pt-BR')} / 20.000</div>
+      <div className="note-foot"><span>{body.length.toLocaleString('pt-BR')} / 20.000 letras</span></div>
     </div>
   )
 }

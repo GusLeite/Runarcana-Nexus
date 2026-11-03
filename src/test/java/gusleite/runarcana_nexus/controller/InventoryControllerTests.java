@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -137,6 +138,41 @@ class InventoryControllerTests {
         for (int i = 0; i < 4; i++) send(post("/character/me/items/" + torch + "/use"), player, "").andExpect(status().isOk());
         mvc.perform(get("/character/me").header("Authorization", "Bearer " + player))
                 .andExpect(jsonPath("$.inventory[?(@.name == 'Tocha Teste')]").isEmpty());
+    }
+
+    @Test
+    void mestreEditaItensEAnexaImagem() throws Exception {
+        long nyx = createNyx();
+        long rudo = create("rudo", NYX.replace("Nyx", "Rudo"));
+        String master = login("mestre");
+        String img = "data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA";
+        String nyxItems = mvc.perform(get("/character/" + nyx + "/items").header("Authorization", "Bearer " + master)).andReturn().getResponse().getContentAsString();
+        String rudoItems = mvc.perform(get("/character/" + rudo + "/items").header("Authorization", "Bearer " + master)).andReturn().getResponse().getContentAsString();
+        long nyxTorch = entryId(nyxItems, "Tocha Teste");
+        long rudoTorch = entryId(rudoItems, "Tocha Teste");
+
+        // Só o mestre edita; imagem inválida e nome vazio são recusados.
+        send(put("/character/" + nyx + "/items/" + nyxTorch), login("gaudron"), "{\"name\":\"X\"}").andExpect(status().isForbidden());
+        send(put("/character/" + nyx + "/items/" + nyxTorch), master, "{\"name\":\"Tocha\",\"image\":\"javascript:alert(1)\"}").andExpect(status().isBadRequest());
+        send(put("/character/" + nyx + "/items/" + nyxTorch), master, "{\"name\":\" \"}").andExpect(status().isBadRequest());
+
+        // Item do catálogo que outra ficha também tem: mudar o texto cria uma cópia só da Nyx.
+        send(put("/character/" + nyx + "/items/" + nyxTorch), master, "{\"name\":\"Tocha Rúnica\",\"description\":\"Arde azul.\",\"price\":9,\"rarity\":\"Rare\",\"image\":\"" + img + "\"}")
+                .andExpect(jsonPath("$.items[?(@.name == 'Tocha Rúnica')].rarity").value("Rare"))
+                .andExpect(jsonPath("$.items[?(@.name == 'Tocha Rúnica')].image").value(img))
+                .andExpect(jsonPath("$.items[?(@.name == 'Tocha Rúnica')].kind").value("CONSUMABLE"))
+                .andExpect(jsonPath("$.items[?(@.name == 'Tocha Teste')]").isEmpty());
+        mvc.perform(get("/character/" + rudo + "/items").header("Authorization", "Bearer " + master))
+                .andExpect(jsonPath("$.items[?(@.name == 'Tocha Teste')].quantity").value(5))
+                .andExpect(jsonPath("$.items[?(@.name == 'Tocha Teste')].image").value(org.hamcrest.Matchers.contains(org.hamcrest.Matchers.nullValue())));
+
+        // Agora o item da Rudo é só dela: editar de novo muda o próprio item, sem cópia (a linha continua a mesma).
+        send(put("/character/" + rudo + "/items/" + rudoTorch), master, "{\"name\":\"Tocha Teste\",\"image\":\"https://exemplo.com/tocha.png\"}")
+                .andExpect(jsonPath("$.items[?(@.id == " + rudoTorch + ")].image").value("https://exemplo.com/tocha.png"));
+        send(put("/character/" + rudo + "/items/" + rudoTorch), master, "{\"name\":\"Tocha Teste\"}")
+                .andExpect(jsonPath("$.items[?(@.id == " + rudoTorch + ")].image").value(org.hamcrest.Matchers.contains(org.hamcrest.Matchers.nullValue())));
+        // A linha de outra ficha não é editável por aqui.
+        send(put("/character/" + rudo + "/items/" + nyxTorch), master, "{\"name\":\"Roubo\"}").andExpect(status().isNotFound());
     }
 
     private ResultActions send(org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder request, String token, String body) throws Exception {

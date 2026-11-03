@@ -1,4 +1,5 @@
 import { ExitIcon, KeyIcon } from '../sheet/icons.jsx'
+import WorldButtons from '../map/WorldButtons.jsx'
 import CreationWizard from './CreationWizard.jsx'
 
 // Tela exclusiva da criação, para a conta que ainda não tem personagem: sem herói, abas e rolagens da ficha.
@@ -17,6 +18,7 @@ export default function CreationScreen({ character, session, toast, onCreated, o
             <span className="who-name">{character.name}</span>
             <span className="who-sub">{session.username}</span>
           </div>
+          <WorldButtons session={session} />
           {!testing && (
             <button className="icon-btn" type="button" onClick={onChangePassword} title="Alterar senha" aria-label="Alterar senha">
               <KeyIcon />

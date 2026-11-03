@@ -4,6 +4,7 @@ import gusleite.runarcana_nexus.enums.SkillType;
 import gusleite.runarcana_nexus.exception.ApiException;
 import gusleite.runarcana_nexus.model.auth.Account;
 import gusleite.runarcana_nexus.model.player.Background;
+import gusleite.runarcana_nexus.model.journal.JournalEntry;
 import gusleite.runarcana_nexus.model.player.Character;
 import gusleite.runarcana_nexus.model.player.CharacterSkill;
 import gusleite.runarcana_nexus.model.player.CharacterAbility;
@@ -30,6 +31,7 @@ import gusleite.runarcana_nexus.repository.BackGroundRepository;
 import gusleite.runarcana_nexus.repository.CharacterAbilityRepository;
 import gusleite.runarcana_nexus.repository.CharacterClassRepository;
 import gusleite.runarcana_nexus.repository.CharacterRepository;
+import gusleite.runarcana_nexus.repository.MerchantHaggleRepository;
 import gusleite.runarcana_nexus.repository.PlayerItemsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,17 +56,24 @@ public class CharacterService {
     private final BackGroundRepository backgroundRepository;
     private final PlayerItemsRepository itemsRepository;
     private final CharacterAbilityRepository abilityRepository;
+    private final MerchantHaggleRepository haggleRepository;
     private final RuleCatalogService rules;
     private final FormulaService formulas;
+
+    private final JournalService journal;
 
     public CharacterService(CharacterRepository charRepository,
                             CharacterClassRepository classRepository,
                             BackGroundRepository backgroundRepository,
                             PlayerItemsRepository itemsRepository,
                             CharacterAbilityRepository abilityRepository,
+                            MerchantHaggleRepository haggleRepository,
                             RuleCatalogService rules,
-                            FormulaService formulas) {
+                            FormulaService formulas,
+                            JournalService journal) {
+        this.haggleRepository = haggleRepository;
         this.formulas = formulas;
+        this.journal = journal;
         this.charRepository = charRepository;
         this.classRepository = classRepository;
         this.backgroundRepository = backgroundRepository;
@@ -88,6 +97,17 @@ public class CharacterService {
     @Transactional(readOnly = true)
     public List<CharacterResponse> getAllCharacters() {
         return charRepository.findAll().stream().map(CharacterResponse::of).toList();
+    }
+
+    // Mestre: apaga a ficha com o que depende dela (inventário, habilidades, perícias, regateios), para o jogador recriá-la.
+    // A conta, o diário e as notas ficam; o diário só guarda o autor pela conta.
+    @Transactional
+    public void deleteCharacter(long id) {
+        Character c = charRepository.findById(id).orElseThrow(() -> ApiException.notFound("Personagem não encontrado."));
+        itemsRepository.deleteByCharacter(c);
+        abilityRepository.deleteByCharacter(c);
+        haggleRepository.deleteByCharacterId(id);
+        charRepository.delete(c);
     }
 
     // Ficha da conta: pela ligação direta (fichas criadas pelo assistente) ou, nas fichas antigas,
@@ -183,6 +203,7 @@ public class CharacterService {
             throw ApiException.badRequest("Os PV atuais vão de 0 a " + character.getMaxHpTotal() + ".");
         }
         if (tempHp != null && tempHp < 0) throw ApiException.badRequest("Os PV temporários não podem ser negativos.");
+        if (character.getCurrentHp() > 0 && currentHp == 0) journal.record(JournalEntry.Kind.DOWNED, character, character.getCharacterName() + " caiu a 0 PV");
         character.setCurrentHp(currentHp);
         if (tempHp != null) character.setTempHp(tempHp);
         // Com PV de novo, os testes contra a morte zeram.

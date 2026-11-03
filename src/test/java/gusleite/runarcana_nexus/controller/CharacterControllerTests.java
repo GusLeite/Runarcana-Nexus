@@ -32,6 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -182,6 +183,32 @@ class CharacterControllerTests {
                 .andExpect(jsonPath("$.inventory[0].properties[0]").value("VERSATILE"))
                 .andExpect(jsonPath("$.inventory[1].kind").value("CONSUMABLE"))
                 .andExpect(jsonPath("$.inventory[1].quantity").value(3));
+    }
+
+    @Test
+    void soOMestreApagaAFichaEOJogadorPodeRecria() throws Exception {
+        String master = login("mestre");
+        mvc.perform(post("/character").header("Authorization", "Bearer " + master).contentType(MediaType.APPLICATION_JSON).content(RUDO))
+                .andExpect(status().isCreated());
+        Character rudo = characters.findAll().getFirst();
+        Consumable potion = new Consumable();
+        potion.setName("Poção de Cura");
+        potion.setRarity(Rarity.Common);
+        inventory.save(entry(rudo, items.save(potion), 2));
+
+        mvc.perform(delete("/character/" + rudo.getId())).andExpect(status().isUnauthorized());
+        mvc.perform(delete("/character/" + rudo.getId()).header("Authorization", "Bearer " + login("rudo")))
+                .andExpect(status().isForbidden());
+        assertThat(characters.count()).isEqualTo(1);
+
+        mvc.perform(delete("/character/" + rudo.getId()).header("Authorization", "Bearer " + master))
+                .andExpect(status().isNoContent());
+        assertThat(characters.count()).isZero();
+        assertThat(inventory.count()).isZero();
+        mvc.perform(delete("/character/" + rudo.getId()).header("Authorization", "Bearer " + master))
+                .andExpect(status().isNotFound());
+        mvc.perform(get("/character/me").header("Authorization", "Bearer " + login("rudo")))
+                .andExpect(status().isNotFound());
     }
 
     @Test

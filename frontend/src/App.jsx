@@ -10,9 +10,13 @@ import CharacterSheet from './components/sheet/CharacterSheet.jsx'
 import MasterPanel from './components/master/MasterPanel.jsx'
 import MasterGate from './components/master/MasterGate.jsx'
 import { CrownIcon } from './components/sheet/icons.jsx'
+import { play } from './audio/engine.js'
 
 // O mestre entra pelo botão do topo, não pelos painéis; o LoginForm/PasswordForm usam este "personagem".
 const MASTER = { id: 'mestre', name: 'MESTRE', role: 'Narrador de Runeterra', fx: '' }
+
+// Aba e tela abertas ficam na query (?aba=, ?tela=); ao sair, a URL volta limpa.
+const clearUrl = () => window.history.replaceState(null, '', window.location.pathname)
 
 // Tela inicial: o jogador escolhe o personagem e, em seguida, faz login com ele.
 // Logado, abre a ficha do personagem (antes, pede a troca da senha inicial).
@@ -58,17 +62,21 @@ export default function App() {
   }, [])
 
   const signIn = s => {
+    play('login')
     updateSession(s)
     setView('account')
     setNotice(null)
   }
   const signOut = () => {
+    play('logout')
     if (session) logout(session.token).catch(() => {})
     updateSession(null)
     setMasterOpen(false)
+    clearUrl()
     back()
   }
   const passwordChanged = account => {
+    play('success')
     updateSession({ ...session, ...account })
     setView('account')
     setNotice('Senha alterada.')
@@ -81,14 +89,20 @@ export default function App() {
   // Pequeno atraso no hover para o mouse atravessar os painéis sem disparar todos.
   const enter = i => {
     clearTimeout(hoverTimer.current)
-    hoverTimer.current = setTimeout(() => setHovered(i), 90)
+    hoverTimer.current = setTimeout(() => {
+      setHovered(i)
+      play('char', characters[i])
+    }, 90)
   }
   const leaveRow = () => {
     clearTimeout(hoverTimer.current)
     setHovered(null)
   }
   const pick = i => {
-    if (selected < 0) setSelectedId(characters[i].id)
+    if (selected < 0) {
+      play('choose', characters[i])
+      setSelectedId(characters[i].id)
+    }
   }
   const back = () => {
     setSelectedId(null)
@@ -115,6 +129,7 @@ export default function App() {
     setTestSession({ token: res.token, ...res.account })
   }
   const endTest = () => {
+    clearUrl()
     if (testSession) logout(testSession.token).catch(() => {})
     setTestSession(null)
   }
@@ -160,7 +175,7 @@ export default function App() {
     panel = (
       <MasterGate>
         <AddPlayerForm
-          onCreated={username => { setExtra(list => [...list, username]); setAddOpen(false) }}
+          onCreated={username => { play('success'); setExtra(list => [...list, username]); setAddOpen(false) }}
           onBack={() => setAddOpen(false)}
         />
       </MasterGate>

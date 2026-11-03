@@ -46,7 +46,7 @@ export default function LoginForm({ character, onLogin, onBack, backLabel = 'Tro
       <label htmlFor="pw">Senha</label>
       <input id="pw" type="password" autoFocus autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} />
       {msg && <div className={msg.type} role="status">{msg.text}</div>}
-      <button className="btn" type="submit" disabled={busy}>{busy ? 'ENTRANDO…' : 'ENTRAR'}</button>
+      <button className="btn" type="submit" data-sfx="none" disabled={busy}>{busy ? 'ENTRANDO…' : 'ENTRAR'}</button>
       <button className="back" type="button" onClick={onBack}>{backLabel}</button>
     </form>
   )

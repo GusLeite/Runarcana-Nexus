@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,6 +71,15 @@ public class InventoryController {
                                                        @RequestBody QuantityRequest request) {
         auth.requireMaster(authorization);
         return ResponseEntity.ok(inventory.setQuantity(characterId, entryId, request.quantity()));
+    }
+
+    // Edita o item (texto e imagem). Item do catálogo usado por outros ganha uma cópia só para esta linha, se o texto mudar.
+    @PutMapping("/{characterId}/items/{entryId}")
+    public ResponseEntity<MasterInventory> editItem(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                                    @PathVariable Long characterId, @PathVariable Long entryId,
+                                                    @RequestBody InventoryService.ItemEdit request) {
+        auth.requireMaster(authorization);
+        return ResponseEntity.ok(inventory.editItem(characterId, entryId, request));
     }
 
     @DeleteMapping("/{characterId}/items/{entryId}")

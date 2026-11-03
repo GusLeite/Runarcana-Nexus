@@ -16,13 +16,13 @@ import logeVid from '../assets/characters/loge.mp4'
 // - impact: onda de choque + tremor ao receber o mouse
 // - burst: pulso vermelho ao receber o mouse
 const BASE = [
-  { id: 'rudo', name: 'RUDO', role: 'Vanguarda', hue: 8, variant: 0, lore: 'Abre caminho no corpo a corpo e nunca recua.',
+  { id: 'rudo', name: 'RUDO', role: 'Arcanista', hue: 8, variant: 0, lore: 'Mago hemomante que utiliza o sangue como instrumento arcano.',
     img: rudoImg, vid: rudoVid, pos: '60% 30%', fx: 'blood', burst: true },
-  { id: 'gaudron', name: 'GAUDRON', role: 'Guardião', hue: 42, variant: 1, lore: 'Guarda os portões e as promessas feitas.',
+  { id: 'gaudron', name: 'GALDREN', role: 'Bruto', hue: 42, variant: 1, lore: 'Um guerreiro minotauro de Noxus que busca alguém capaz de superar sua força.',
     img: gaudronImg, vid: gaudronVid, pos: '57% 25%', fx: 'embers', impact: true },
-  { id: 'proto', name: 'PROTO', role: 'Arcanista', hue: 190, variant: 2, lore: 'Dobra a magia antiga em novas formas.',
+  { id: 'proto', name: 'PROTO', role: 'Combatente', hue: 190, variant: 2, lore: 'Um construto defensor criado por um inventor de Piltover, movido pelo luto por sua família.',
     img: protoImg, vid: protoVid, pos: '58% 25%', fx: 'oath' },
-  { id: 'loge', name: 'LOGE', role: 'Espreitador', hue: 348, variant: 4, lore: 'Some nas sombras e volta com o que falta.',
+  { id: 'loge', name: 'LOGE', role: 'Mercurial', hue: 348, variant: 4, lore: 'Assassino louco e alcoólatra.',
     img: logeImg, vid: logeVid, pos: '50% 25%', fx: 'haunt' },
 ]
 

@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
   addHeritage, heritageOptions, carryCapacity, choiceOptionName, critDice, deathSaveResult, situationalFor, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
-  addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, groupAbilities, groupGrants, groupSkills, itemStats, modifier, parseDice,
+  addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, levelGrantsText, visibleGrants, groupAbilities, groupGrants, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
-  resourceCost, togglePick, levelChoices, keepChoices, dominantChoices, pendingChoices, senseLabel, formEffects, rollDie, applyHp,
+  resourceCost, togglePick, levelChoices, keepChoices, dropStalePicks, orderChoices, dominantChoices, pendingChoices, senseLabel, formEffects, rollDie, applyHp,
 } from './rules.js'
 
 describe('modificadores', () => {
@@ -272,6 +272,28 @@ describe('subida de nível', () => {
       .toEqual({ 'level:4:class:ARCANIST:0': ['x'] })
   })
 
+  it('põe a Runa inicial logo abaixo do Pulso Rúnico', () => {
+    const pulse = { key: 'runic-nature:0', label: 'Pulso Rúnico: escolha a gema' }
+    const skill = { key: 'class:ARCANIST:4', label: 'Perícias do Arcanista' }
+    const rune = { key: 'runic-nature:1', label: 'Runa inicial' }
+    expect(orderChoices([pulse, skill, rune])).toEqual([pulse, rune, skill])
+    expect(orderChoices([rune, skill, pulse])).toEqual([skill, pulse, rune])
+    expect(orderChoices([skill, rune])).toEqual([skill, rune])
+  })
+
+  it('libera a escolha que perdeu a opção para outra', () => {
+    const choices = [
+      { key: 'class:ARCANIST:1', type: 'SKILL_CHOICE', count: 2, options: ['HISTORY', 'INSIGHT'] },
+      { key: 'heritage:x:0', type: 'SKILL_CHOICE', count: 1, options: ['ARCANA', 'INSIGHT'] },
+      { key: 'class:ARCANIST:2', type: 'RESOURCE_CHOICE', count: 1, options: [] },
+    ]
+    const picks = { 'class:ARCANIST:1': ['ARCANA', 'HISTORY'], 'heritage:x:0': ['ARCANA'], 'class:ARCANIST:2': ['runa'] }
+    expect(dropStalePicks(picks, choices)).toEqual({ ...picks, 'class:ARCANIST:1': ['HISTORY'] })
+    // Nada a tirar: devolve o mesmo objeto (não dispara nova prévia).
+    const clean = { 'heritage:x:0': ['ARCANA'] }
+    expect(dropStalePicks(clean, choices)).toBe(clean)
+  })
+
   it('rola o dado de vida entre 1 e o lado', () => {
     expect(rollDie(8, () => 0)).toBe(1)
     expect(rollDie(8, () => 0.999)).toBe(8)
@@ -383,5 +405,22 @@ describe('grantLabel de origens', () => {
     expect(grantLabel({ type: 'CONDITION_IMMUNITY', value: 'doenças mundanas' })).toBe('Imune a doenças mundanas')
     expect(grantLabel({ type: 'SENSE', value: 'DARKVISION', feet: 60 })).toBe('Visão no escuro 60 pés')
     expect(grantLabel({ type: 'FORM', name: 'Forma Dracônica' })).toBe('Forma: Forma Dracônica')
+    expect(grantLabel({ type: 'INITIATIVE', amount: 5 })).toBe('+5 na iniciativa')
+    expect(grantLabel({ type: 'DAMAGE_BONUS', value: 'ATTACK:MELEE', amount: 1 })).toBe('Dano +1 em ataques corpo a corpo')
+    expect(grantLabel({ type: 'SPEED', value: 'SWIM', walkFraction: 1 })).toBe('Natação igual à caminhada')
+    expect(grantLabel({ type: 'RESISTANCE', count: 1, options: ['cortante'], label: 'Pele Rígida: um tipo de dano' })).toBe('Pele Rígida: um tipo de dano')
+    expect(grantLabel({ type: 'TIPO_NOVO', name: 'Algo' })).toBe('Algo')
+  })
+
+  it('esconde o efeito mecânico e o que depende de uma opção escolhida', () => {
+    const grants = [
+      { type: 'FEATURE', abilityType: 'ABILITY', name: 'Postura do Grão-mestre' },
+      { type: 'EFFECT', name: 'Postura do Grão-mestre', form: { resistances: ['cortante'] } },
+      { type: 'ARMOR_CLASS', name: 'Estilo de Luta: Defesa sem Armadura', armor: { base: 10, feature: 'Estilo de Luta', featureOption: 'Defesa sem Armadura' } },
+      { type: 'RESISTANCE', value: 'ácido', when: 'Resistente:Ácido' },
+    ]
+    expect(visibleGrants(grants)).toEqual([grants[0]])
+    expect(levelGrantsText(grants)).toBe('Habilidade: Postura do Grão-mestre')
+    expect(groupGrants(grants).groups).toEqual([])
   })
 })

@@ -1,0 +1,12 @@
+{
+  "appId": "gusleite.runarcana_nexus",
+  "appName": "Runarcana",
+  "webDir": "android-shell",
+  "server": {
+    "url": "https://runarcana-nexus.duckdns.org",
+    "errorPath": "error.html"
+  },
+  "android": {
+    "backgroundColor": "#0b0d14"
+  }
+}

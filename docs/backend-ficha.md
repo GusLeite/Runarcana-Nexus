@@ -16,6 +16,7 @@
 
 **Iniciativa**: `CharacterResponse.initiative` = mod. de DES + `initiativeBonus` (Atento).
 
+## Imagem e edição de itens (`Item.image`, `InventoryService.editItem`)`Item` ganhou `image` (coluna `item_image`, nula; o `ddl-auto` cria): link ou imagem enviada, devolvida em `InventoryItemResponse.image` e mostrada pelo `ItemIcon` no lugar do desenho do tipo. O mestre edita o item de uma linha (`PUT /character/{id}/items/{entryId}`). Item do catálogo é uma linha de `Item` compartilhada entre fichas e lojas: mudar o **texto** cria uma cópia (`copyOf`, sem `catalogId`, mantendo arma/armadura/consumível) só para aquela linha; mudar só a **imagem** vale para todos que têm o item. A armadura em uso é guardada pelo id da linha do inventário, então a cópia não a desequipa.
 ## Ataques com arma
 
 `AttackCalculator` (sem salvar, como a CA) monta `attacks` em `GET /character/me`: uma linha por arma do inventário (lida do `itens.json` pelo `catalogId`; sem catálogo, da linha de `Weapon`) e o **ataque desarmado** (1 + FOR, contundente, sempre proficiente) no fim. Atributo: **acuidade** = o maior entre FOR e DES; **à distância** (munição, arma de fogo, grupo `-distancia` ou categoria "Distância") = DES; senão FOR (arremesso corpo a corpo usa FOR). **Proficiência** pelas `weaponProficiencies`: categoria ("Armas simples" ↔ grupo `arma-simples`; também marciais, de fogo, Bodisatva, de corrente, impróprias) ou nome no plural ("Espadas longas" ↔ Espada Longa, sem acento). `AttackResponse`: `attackBonus` (mod. + proficiência), `damage` (primeiro dado do livro + mod., "1d8+3"), `versatileDamage` ("Versátil (1d10 r)"), `damageType` (r = cortante, p = perfurante, c = contundente), `critRange`/`critMultiplier` ("p 19 x3" → 19, 3; padrão 20, ×2), `range` ("20/60 pés", das propriedades ou do alcance das armas de fogo), `mastery`, `properties` (texto).
@@ -68,6 +69,23 @@ O mestre monta lojas (`Merchant`: nome, fala, imagem, `buyRate`) com a prateleir
 - **Revenda**: o que o jogador vende vai para a prateleira, ao preço normal (linha sem limite continua sem limite).
 - **Concorrência**: comprar e vender travam a linha do mercador (`PESSIMISTIC_WRITE`) e sobem `revision`, que a ficha usa para saber quando buscar a loja de novo. O cliente manda o valor que viu: se mudou, nada é cobrado.
 - **Movimento**: cada negociação fica em `MerchantTrade` para o mestre.
+- **Pechincha** (`MerchantHaggle`, uma por personagem por abertura; abrir ou fechar a loja apaga todas): o back rola d20 + Persuasão ou Enganação contra `Merchant.haggleDc` (nulo = 15, 0 = não pechincha, até 40) e guarda o `percent` que muda só o preço de **compra** de quem pechinchou (`haggled`: arredonda para cima, nunca zera um preço > 0). Tabela (`haggleOutcome`): Persuasão: CD+10 ou 20 natural −20%, CD −10%, até CD−4 nada, até CD−9 +10%, pior ou 1 natural +20%; Enganação: −25% / −15% / qualquer falha +10% / +25%. `Line.price` vem com a pechincha de quem pediu e `basePrice` é o da prateleira; o mestre vê os preços normais e as pechinchas (`View.haggles`, `GET /merchants/{id}/haggles`).
+
+## Diário do grupo (`JournalEntry`, `JournalService`)
+
+Crônica compartilhada da mesa: qualquer conta logada lê (últimas 300, mais novas primeiro) e escreve (`NOTE`: título e/ou texto, até 120/8000 caracteres; `who` = personagem do autor ou "Mestre"). Edita e apaga só quem escreveu; o mestre mexe em tudo, inclusive nos eventos. Os outros serviços chamam `JournalService.record(...)` para os **eventos automáticos** (sem autor; o personagem de teste do mestre não entra):
+- `LOOT`: o mestre dá item do catálogo ou item livre ("Nyx recebeu 2× Adaga"); `GOLD`: o mestre aumenta o ouro ("Nyx recebeu 30 PO"; diminuir não entra);
+- `DOWNED`: os PV vão de mais de 0 para 0 (jogador ou mestre);
+- `DOCUMENT`: documento novo; o título só aparece se é para todos e não é `SECRET` ("Documento novo para gaudron" nos outros casos);
+- `LEVEL_UP`: o jogador aplica a subida ("Nyx subiu para o 5º nível");
+- `PLACE`: um ponto do mapa é revelado a mais gente (criar, editar ou `PATCH /map/pois/{id}/audience`); com o nome só se for a todos ("Novo local revelado a gaudron" nos outros casos). Se a tabela `journal_entry` já existia no PostgreSQL, o `CHECK` do `kind` não tem `PLACE`: rode um `ALTER TABLE` para incluí-lo.
+- Ligação com o mapa: `JournalEntry.poi` (coluna `poi_id`, nula) aponta o local da entrada. O `PLACE` já nasce ligado ao ponto; as `NOTE` escolhem o local no formulário ou no painel do ponto. Apagar o ponto só zera a ligação. Se `journal_entry` já existia no PostgreSQL, o `ddl-auto` cria a coluna sozinho (é nula).
+O `JournalService` não depende do `CharacterService` (que o usa): acha o personagem do autor direto no `CharacterRepository`.
+
+## Trajetórias dos jogadores (`MapRoute`, `MapRouteService`)Cada jogador desenha até 5 trajetórias no mapa (2 a 60 paradas, dentro de ±1024), privadas: só o dono e o mestre veem. Guardadas em `map_route` com os pontos num texto `x,y;x,y` (`route_path`), validado e convertido pelo serviço. O mestre não cria (ele move o grupo, que tem a trilha); `GET /map/routes?as=` alimenta a prévia "Ver como". Tabela nova: o `ddl-auto` cria sozinho.
+## Lugares do mapa oficial (`OfficialPlaces`, `OfficialPlacesSeeder`)
+
+Catálogo fixo em código (`services/OfficialPlaces`, 99 lugares com nome e posição **iguais aos do mapa original**: Disco Solar, Zirima, Nashramae, Ixaocan, Placídio de Navori…; a região é a do brasão mais próximo, só para agrupar). Sem descrição: o mestre escreve. O mestre pode mover qualquer ponto. Ao subir, o `OfficialPlacesSeeder` cria como `MapPoi` os que faltam (pela `officialKey`), escondidos (`toAll` falso); o que o mestre já mexeu não é sobrescrito, e lugares novos do catálogo entram nas atualizações seguintes. Desligue com `runarcana.official-places.seed=false` (os testes desligam; `OfficialPlacesTests` liga). Ligar e desligar usa o `PATCH /map/pois/{id}/audience` ou, em lote, `PATCH /map/pois/official/audience`. Não se apagam (400). Colunas novas e nulas em `map_poi` (`official_key`, `region_slug`): o `ddl-auto` cria sozinho.
 
 ## Modelo de dados
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ATTRIBUTES, CLASS_NAMES, HERITAGE_LEVELS, heritageChoices, pendingChoices, keepChoices, levelChoices, rollDie } from '../../data/rules.js'
+import { ATTRIBUTES, CLASS_NAMES, HERITAGE_LEVELS, heritageChoices, pendingChoices, keepChoices, dropStalePicks, levelChoices, rollDie } from '../../data/rules.js'
 import ChoiceStep from './ChoiceStep.jsx'
 import HeritageStep from './HeritageStep.jsx'
 import '../../styles/creation.css'
@@ -43,8 +43,9 @@ export default function LevelUp({ character, catalog, onPreview, onApply, onAppl
   useEffect(() => {
     if (!preview) return
     setDraft(d => {
-      const kept = keepChoices(d.choices, choices)
-      return Object.keys(kept).length === Object.keys(d.choices).length ? d : { ...d, choices: kept }
+      const kept = dropStalePicks(keepChoices(d.choices, choices), choices)
+      const same = Object.keys(kept).length === Object.keys(d.choices).length && Object.keys(kept).every(k => kept[k] === d.choices[k])
+      return same ? d : { ...d, choices: kept }
     })
   }, [preview, choices])
 

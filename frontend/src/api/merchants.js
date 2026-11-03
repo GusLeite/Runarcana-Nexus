@@ -3,7 +3,7 @@ import { request } from './auth.js'
 // Mestre: monta as lojas e abre uma por vez.
 export const fetchMerchants = token => request('/merchants', { token })
 
-// merchant: { name, greeting, image, buyRate }.
+// merchant: { name, greeting, image, buyRate, haggleDc } (haggleDc 0 = não pechincha).
 export const createMerchant = (token, merchant) => request('/merchants', { method: 'POST', token, body: merchant })
 
 export const updateMerchant = (token, id, merchant) => request('/merchants/' + id, { method: 'PUT', token, body: merchant })
@@ -36,3 +36,10 @@ export const buyFromMerchant = (token, lineId, quantity, price) =>
 
 export const sellToMerchant = (token, entryId, quantity, unitValue) =>
   request('/merchants/active/sell', { method: 'POST', token, body: { entryId, quantity, unitValue } })
+
+// Pechincha (skill: 'PERSUASION' | 'DECEPTION'), uma vez por abertura da loja: devolve a loja com os preços de quem pediu
+// e haggle: { skill, d20, modifier, total, dc, percent } (percent negativo = desconto).
+export const haggleWithMerchant = (token, skill) => request('/merchants/active/haggle', { method: 'POST', token, body: { skill } })
+
+// Mestre: as pechinchas desta abertura.
+export const fetchMerchantHaggles = (token, id) => request('/merchants/' + id + '/haggles', { token })

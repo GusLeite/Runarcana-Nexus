@@ -1,4 +1,4 @@
-import { choiceOptionName, equipmentCategory } from '../../data/rules.js'
+import { choiceOptionName, equipmentCategory, isPulseChoice, isRuneChoice, orderChoices } from '../../data/rules.js'
 import ResourceChoice from './ResourceChoice.jsx'
 import { ChoiceHead, ChoiceSigil } from './ChoiceParts.jsx'
 import OptionTile from './OptionTile.jsx'
@@ -44,7 +44,7 @@ export default function ChoiceStep({ choices, picks, onChange, crafts, resources
   const required = choices.filter(c => c.type === 'RESOURCE_CHOICE' ? !/^Vel/.test(c.label) : c.options.length)
   const doneCount = required.filter(c => (picks[c.key] ?? []).length >= c.count).length
   // A Runa inicial vem do Pulso Rúnico escolhido (a gema): sem ele, não há o que mostrar.
-  const pulse = picks[choices.find(c => /^Pulso Rúnico/.test(c.label))?.key]?.[0] ?? null
+  const pulse = picks[choices.find(isPulseChoice)?.key]?.[0] ?? null
   const allDone = required.length > 0 && doneCount === required.length
   return (
     <>
@@ -58,11 +58,12 @@ export default function ChoiceStep({ choices, picks, onChange, crafts, resources
         )}
       </div>
       {wealthBox}
-      {choices.map((c, n) => {
-        const current = picks[c.key] ?? []
+      {orderChoices(choices).map((c, n) => {
+        // Só o que ainda está nas opções (a prévia pode ter tirado uma que outra escolha pegou).
+        const current = (picks[c.key] ?? []).filter(id => c.type === 'RESOURCE_CHOICE' || !c.options.length || c.options.includes(id))
         if (c.type === 'RESOURCE_CHOICE') {
           return <ResourceChoice key={c.key} choice={c} current={current} resources={resources} n={n + 1}
-            gem={/^Runa inicial/.test(c.label) ? { name: pulse } : null}
+            gem={isRuneChoice(c) ? { name: pulse } : null}
             onChange={list => onChange(c.key, list)} />
         }
         // Sem opções cadastradas: só o aviso (não bloqueia a criação).

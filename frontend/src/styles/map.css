@@ -1,0 +1,887 @@
+/* Mapa de Runeterra: tela cheia, com a interface flutuando sobre o canvas. */
+.map-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #05090d;
+  color: var(--text);
+  overflow: hidden;
+}
+.map-stage {
+  position: absolute;
+  inset: 0;
+  /* Contexto próprio: os brasões ficam presos ao mapa, abaixo dos cartões e botões. */
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.map-screen.ready .map-stage {
+  opacity: 1;
+}
+.map-stage canvas {
+  display: block;
+  cursor: grab;
+  touch-action: none;
+}
+.map-stage canvas.dragging {
+  cursor: grabbing;
+}
+.map-head {
+  position: absolute;
+  inset: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: linear-gradient(rgba(5, 11, 20, 0.75), transparent);
+  pointer-events: none;
+}
+.map-head h1 {
+  margin: 0;
+  font: 600 20px Cinzel, serif;
+  letter-spacing: 0.22em;
+  color: var(--gold-hi);
+  text-shadow: 0 1px 8px #000;
+}
+.map-btn {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(200, 162, 74, 0.55);
+  background: rgba(5, 11, 20, 0.78);
+  color: var(--gold-hi);
+  font: 400 24px/1 Spectral, serif;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background 0.2s, border-color 0.2s;
+}
+.map-btn:hover,
+.map-btn:focus-visible {
+  background: rgba(200, 162, 74, 0.22);
+  border-color: var(--gold-hi);
+}
+.map-zoom {
+  position: absolute;
+  right: 20px;
+  bottom: 44px;
+  display: grid;
+  gap: 6px;
+}
+.map-msg {
+  position: absolute;
+  inset: 50% 16px auto;
+  margin: 0;
+  transform: translateY(-50%);
+  text-align: center;
+  font: 400 18px Spectral, serif;
+  color: var(--text);
+}
+.map-hint,
+.map-legal {
+  position: absolute;
+  margin: 0;
+  font: 400 13px Spectral, serif;
+  text-shadow: 0 1px 4px #000;
+  pointer-events: none;
+}
+.map-hint {
+  left: 20px;
+  bottom: 30px;
+  color: var(--text);
+}
+.map-legal {
+  left: 20px;
+  bottom: 10px;
+  max-width: calc(100% - 84px);
+  font-size: 11px;
+  color: var(--muted);
+}
+.map-pins {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.map-pin {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 4px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+.map-pin.on {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+/* Em repouso, o ícone dourado; no destaque, ele cresce e dá lugar à versão colorida. */
+.map-pin-icon {
+  position: relative;
+  display: block;
+  transition: transform 0.2s ease-out;
+}
+.map-pin-icon img {
+  display: block;
+  width: 64px;
+  height: auto;
+  transition: opacity 0.2s;
+}
+.map-pin-capital .map-pin-icon img {
+  width: 44px;
+}
+/* A arte colorida do Vazio ocupa o quadro inteiro; recua para ter o tamanho dos outros brasões. */
+.map-pin-art .map-pin-active {
+  box-sizing: border-box;
+  padding: 9px;
+}
+.map-pin-active {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+.map-pin-name {
+  font: 600 13px Cinzel, serif;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  text-shadow: 0 1px 4px #000, 0 0 2px #000;
+}
+.map-pin:hover .map-pin-icon,
+.map-pin:focus-visible .map-pin-icon {
+  transform: scale(1.25);
+}
+.map-pin:hover .map-pin-active,
+.map-pin:focus-visible .map-pin-active {
+  opacity: 1;
+}
+.map-pin:hover .map-pin-icon img:not(.map-pin-active),
+.map-pin:focus-visible .map-pin-icon img:not(.map-pin-active) {
+  opacity: 0;
+}
+.map-pin:hover .map-pin-name,
+.map-pin:focus-visible .map-pin-name {
+  color: var(--gold-hi);
+}
+.map-pin:focus-visible {
+  outline: 1px solid var(--gold-hi);
+}
+.map-label,
+.map-label.on {
+  cursor: default;
+  pointer-events: none;
+  font: 600 15px Cinzel, serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 4px #000, 0 0 2px #000;
+}
+/* No alto, para não cobrir os brasões do sul, os mais próximos do pé da tela. */
+.map-tease {
+  position: absolute;
+  left: 50%;
+  top: 16px;
+  display: grid;
+  gap: 2px;
+  width: min(460px, calc(100% - 120px));
+  padding: 10px 16px;
+  transform: translateX(-50%);
+  border: 1px solid rgba(200, 162, 74, 0.55);
+  background: rgba(5, 11, 20, 0.86);
+  text-align: center;
+  pointer-events: none;
+}
+.map-tease strong {
+  font: 600 16px Cinzel, serif;
+  color: var(--gold-hi);
+}
+.map-tease span {
+  font: 400 14px Spectral, serif;
+}
+.map-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  width: min(380px, 100%);
+  overflow-y: auto;
+  border-left: 1px solid rgba(200, 162, 74, 0.55);
+  background: var(--panel);
+  animation: map-panel-in 0.35s ease-out;
+}
+@keyframes map-panel-in {
+  from { opacity: 0; transform: translateX(32px); }
+}
+.map-panel-art {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: #000;
+}
+.map-panel-art video,
+.map-panel-art > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.map-panel-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+.map-panel-body {
+  padding: 0 24px 28px;
+  text-align: center;
+}
+.map-panel-crests {
+  display: flex;
+  justify-content: center;
+  margin-top: -34px;
+}
+.map-panel-crests img {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px #000);
+}
+.map-panel h2 {
+  margin: 8px 0 12px;
+  font: 600 24px Cinzel, serif;
+  letter-spacing: 0.08em;
+  color: hsl(var(--h) 70% 72%);
+}
+.map-panel p {
+  margin: 0 0 12px;
+  font: 400 16px/1.5 Spectral, serif;
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-panel { animation: none; }
+}
+.map-roll {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  padding: 10px 18px;
+  transform: translateX(-50%);
+  border: 1px solid var(--gold);
+  background: rgba(5, 11, 20, 0.86);
+  color: var(--gold-hi);
+  font: 600 13px Cinzel, serif;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.map-roll:hover:not(:disabled),
+.map-roll:focus-visible {
+  background: rgba(200, 162, 74, 0.22);
+}
+.map-roll:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+/* Bandópolis brota do chão ao ser rolada. */
+.map-pin-born .map-pin-icon {
+  animation: map-pin-born 0.9s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+@keyframes map-pin-born {
+  from { opacity: 0; transform: scale(0.1) rotate(-160deg); filter: brightness(3); }
+}
+@media (max-width: 720px) {
+  .map-roll { bottom: 52px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-pin-born .map-pin-icon { animation: none; }
+}
+.map-screen.placing .map-stage canvas {
+  cursor: crosshair;
+}
+.map-panel-sub {
+  margin: -8px 0 14px !important;
+  font: 600 13px Cinzel, serif !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.map-panel-body .lore-facts {
+  margin-bottom: 14px;
+}
+.map-tools {
+  position: absolute;
+  left: 20px;
+  bottom: 58px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: calc(100% - 96px);
+}
+.map-tool {
+  padding: 8px 12px;
+  border: 1px solid rgba(200, 162, 74, 0.65);
+  background: rgba(5, 11, 20, 0.86);
+  color: var(--gold-hi);
+  font: 600 12px Cinzel, serif;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+.map-tool:hover:not(:disabled),
+.map-tool.on {
+  background: rgba(200, 162, 74, 0.28);
+}
+.map-tool:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.map-tool.quiet {
+  border-color: rgba(200, 162, 74, 0.25);
+  color: var(--text);
+  font: 400 13px Spectral, serif;
+}
+/* Pontos de interesse: disco como o das capitais, com a cor do tipo. */
+.map-poi {
+  --poi: var(--gold-hi);
+}
+.map-poi-danger { --poi: #ff8d7a; }
+.map-poi-quest { --poi: #f7dc6a; }
+.map-poi-mystery { --poi: #c79bff; }
+.map-poi-landmark { --poi: var(--teal); }
+.map-poi-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--poi);
+  border-radius: 50%;
+  outline: 1px solid rgba(200, 162, 74, 0.3);
+  outline-offset: 2px;
+  background: #141b28;
+  box-shadow: 0 2px 6px #000;
+  transition: transform 0.2s ease-out;
+}
+.map-poi-icon svg {
+  width: 19px;
+  fill: var(--poi);
+}
+.map-poi:hover .map-poi-icon,
+.map-poi:focus-visible .map-poi-icon {
+  transform: scale(1.2);
+}
+.map-poi:hover .map-pin-name,
+.map-poi:focus-visible .map-pin-name {
+  color: var(--poi);
+}
+/* Waypoint: bandeira fincada no chão, com a ponta sobre o lugar marcado. */
+.map-waypoint {
+  width: 22px;
+  height: 30px;
+  padding: 0;
+}
+.map-waypoint .map-pin-name {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translate(-50%, -15px);
+}
+.map-waypoint-flag {
+  position: relative;
+  top: -15px;
+  left: 11px;
+  display: block;
+  width: 22px;
+  height: 30px;
+  border-left: 2px solid #f0e6d2;
+  transition: transform 0.2s ease-out;
+  filter: drop-shadow(0 2px 3px #000);
+}
+.map-waypoint-flag::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 14px;
+  background: var(--teal);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+.map-waypoint:hover .map-waypoint-flag,
+.map-waypoint:focus-visible .map-waypoint-flag {
+  transform: scale(1.2);
+  transform-origin: 0 100%;
+}
+.map-draft,
+.map-draft.on {
+  pointer-events: none;
+  cursor: default;
+}
+.map-draft .map-waypoint-flag::after {
+  background: var(--gold-hi);
+}
+.map-panel .lore-action {
+  margin-top: 4px;
+}
+/* O grupo: estandarte dourado com pulso no chão; o mestre arrasta. */
+.map-party {
+  z-index: 3;
+  width: 30px;
+  height: 40px;
+  padding: 0;
+  touch-action: none;
+}
+.map-party.draggable { cursor: grab; }
+.map-party.draggable:active { cursor: grabbing; }
+.map-party::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34px;
+  height: 14px;
+  margin: 6px 0 0 -17px;
+  border: 2px solid var(--gold-hi);
+  border-radius: 50%;
+  animation: party-pulse 2s ease-out infinite;
+  pointer-events: none;
+}
+.map-party-banner {
+  position: relative;
+  top: -18px;
+  left: 14px;
+  display: block;
+  width: 26px;
+  height: 40px;
+  border-left: 3px solid #f0e6d2;
+  filter: drop-shadow(0 3px 4px #000);
+  transition: transform 0.2s ease-out;
+  transform-origin: 0 100%;
+}
+.map-party-banner > span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 22px;
+  height: 26px;
+  background: linear-gradient(180deg, var(--gold-hi), #b07a1e);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%);
+  animation: party-wave 2.6s ease-in-out infinite;
+  transform-origin: 0 0;
+}
+.map-party:hover .map-party-banner,
+.map-party:focus-visible .map-party-banner { transform: scale(1.15); }
+.map-party .map-pin-name {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translate(-50%, -12px);
+  color: var(--gold-hi);
+  white-space: nowrap;
+}
+@keyframes party-pulse {
+  from { transform: scale(0.5); opacity: 0.9; }
+  to { transform: scale(1.6); opacity: 0; }
+}
+@keyframes party-wave {
+  50% { transform: skewY(6deg) scaleX(0.92); }
+}
+/* Região na névoa (jogador): brasão apagado e sem nome. */
+.map-pin[data-fogged] .map-pin-icon { filter: grayscale(1) brightness(0.45) blur(0.5px); }
+.map-pin[data-fogged] .map-pin-name { color: var(--muted); letter-spacing: 0.3em; }
+.map-pin[data-fogged]:hover .map-pin-icon { transform: none; }
+.map-pin[data-fogged] .map-pin-active { display: none; }
+/* Lista de regiões reveladas (mestre). */
+.map-fog-list {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid rgba(200, 162, 74, 0.35);
+  background: rgba(5, 11, 20, 0.9);
+}
+.map-fog-chip {
+  padding: 5px 10px;
+  border: 1px solid rgba(141, 151, 168, 0.4);
+  background: transparent;
+  color: var(--muted);
+  font: 400 13px Spectral, serif;
+  cursor: pointer;
+}
+.map-fog-chip.on {
+  border-color: var(--teal);
+  color: var(--teal);
+  background: rgba(47, 211, 192, 0.08);
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-party::before, .map-party-banner > span { animation: none; }
+}
+/* Ponto recém-revelado: brota com um anel dourado e fica visível também de longe por alguns segundos. */
+.map-poi-born .map-poi-icon {
+  animation: poi-born 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both, poi-glow 1.6s 1.2s ease-in-out 2;
+}
+@keyframes poi-born {
+  from { transform: scale(0) translateY(20px); opacity: 0; }
+}
+@keyframes poi-glow {
+  50% { box-shadow: 0 0 0 8px rgba(240, 199, 94, 0.35), 0 0 24px rgba(240, 199, 94, 0.8); }
+}
+.map-fresh { border-color: var(--gold-hi); pointer-events: auto; top: 64px; }
+.map-fresh-actions { display: flex; gap: 6px; margin-top: 6px; justify-content: center; }
+.map-count {
+  align-self: center;
+  padding: 8px 10px;
+  color: var(--muted);
+  font: 400 13px Spectral, serif;
+  background: rgba(5, 11, 20, 0.86);
+}
+.map-reveal { margin: 4px 0 12px; }
+.map-reveal .lore-chips { flex-wrap: wrap; align-items: center; margin-top: 8px; }
+.map-reveal-label { color: var(--muted); font-size: 13px; margin-right: 4px; }
+.map-reveal-go { box-shadow: 0 0 14px rgba(240, 199, 94, 0.35); }
+@media (prefers-reduced-motion: reduce) {
+  .map-poi-born .map-poi-icon { animation: none; }
+}
+
+/* Notas secretas, galeria do ponto e imagem em tela cheia. */
+.map-secret {
+  margin: 10px 0;
+  padding: 8px 12px;
+  border-left: 3px solid #c79bff;
+  background: rgba(199, 155, 255, 0.08);
+}
+.map-secret strong { color: #c79bff; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+.map-gallery h3 { margin: 12px 0 6px; }
+.map-gallery-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.map-gallery-thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  border: 1px solid rgba(200, 162, 74, 0.4);
+  background: #0b0f17;
+  cursor: zoom-in;
+  overflow: hidden;
+}
+.map-gallery-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.map-gallery-actions { display: flex; flex-direction: column; gap: 2px; align-items: flex-start; margin-top: 4px; }
+.map-gallery-show { font-size: 11px; padding: 4px 8px; }
+.map-gallery-add { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.map-gallery-file { text-align: center; cursor: pointer; }
+.map-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  background: rgba(4, 6, 10, 0.92);
+  animation: map-lightbox-in 0.25s ease-out;
+}
+.map-lightbox img { max-width: 100%; max-height: calc(100vh - 110px); object-fit: contain; border: 1px solid var(--gold-hi); box-shadow: 0 0 40px #000; }
+.map-lightbox-bar { display: flex; align-items: center; gap: 14px; color: var(--muted); }
+@keyframes map-lightbox-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .map-lightbox { animation: none; } }
+
+/* Aconteceu aqui. */
+.map-history h3 { margin: 12px 0 6px; }
+.map-history-list { list-style: none; margin: 0 0 8px; padding: 0; display: grid; gap: 6px; font-size: 14px; }
+.map-history-list li { padding: 6px 10px; border-left: 2px solid rgba(200, 162, 74, 0.45); background: rgba(255, 255, 255, 0.03); }
+.map-history-list li.stop { border-left-color: var(--teal); }
+.map-history-list li.note strong { display: block; margin-top: 2px; }
+.map-history-list li.note p { margin: 2px 0 0; white-space: pre-wrap; }
+.map-history-list time { color: var(--muted); font-size: 12px; margin-left: 6px; }
+
+/* Links de locais. */
+.map-text-link {
+  padding: 0 8px;
+  border: 1px solid rgba(200, 162, 74, 0.5);
+  border-radius: 999px;
+  background: none;
+  color: var(--gold-hi, #f0c75e);
+  font: inherit;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+.map-text-link:hover, .map-text-link:focus-visible { background: rgba(200, 162, 74, 0.15); }
+.map-link-field { width: 100%; margin-top: 6px; }
+
+/* Identidade do Incognium: cabeçalho fixo, painel lateral escuro, rótulos pequenos em caixa alta, ouro e verde-água como destaques. */
+.map-screen {
+  --inc-bg: #0a1018;
+  --inc-line: rgba(232, 195, 106, 0.2);
+  --inc-gold: #e8c36a;
+  --inc-teal: #4fd1c5;
+  --inc-head: 56px;
+}
+.map-stage { top: var(--inc-head); }
+.map-head {
+  z-index: 6;
+  inset: 0 0 auto;
+  height: var(--inc-head);
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  padding: 0 16px 0 20px;
+  background: #070c13;
+  border-bottom: 1px solid var(--inc-line);
+  pointer-events: auto;
+}
+.map-head-title { display: grid; gap: 1px; justify-items: start; }
+.map-head-title small { font: 600 9px Spectral, serif; letter-spacing: 0.22em; color: var(--inc-teal); }
+.map-head h1 { margin: 0; font: 700 17px Cinzel, serif; letter-spacing: 0.04em; color: #f3ecda; text-shadow: none; }
+.map-head-tabs { display: inline-flex; align-items: stretch; align-self: center; border: 1px solid var(--inc-line); background: #0c141d; }
+.map-head-tabs button, .map-head-tabs select {
+  padding: 8px 16px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: 600 11px Spectral, serif;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+.map-head-tabs button + button, .map-head-tabs select { border-left: 1px solid var(--inc-line); }
+.map-head-tabs button.on { background: #17222f; color: #f3ecda; }
+.map-head-tabs button:disabled { opacity: 0.4; cursor: default; }
+.map-head-tabs button:not(.on):not(:disabled):hover { color: var(--inc-gold); }
+.map-head-tabs select { background: #17222f; color: var(--inc-gold); padding-right: 10px; }
+.map-head-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.map-head-btn {
+  padding: 8px 14px;
+  border: 1px solid rgba(232, 195, 106, 0.55);
+  background: rgba(232, 195, 106, 0.06);
+  color: var(--inc-gold);
+  font: 600 11px Spectral, serif;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.map-head-btn:hover, .map-head-btn.on { background: rgba(232, 195, 106, 0.25); }
+.map-head-btn.primary { background: rgba(232, 195, 106, 0.14); }
+.map-head-close {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--inc-line);
+  background: none;
+  color: var(--muted);
+  font: 400 22px/1 Spectral, serif;
+  cursor: pointer;
+}
+.map-head-close:hover { color: var(--inc-gold); border-color: var(--inc-gold); }
+.map-preview-strip {
+  position: absolute;
+  top: calc(var(--inc-head) + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 6px 16px;
+  border: 1px solid #c79bff;
+  background: rgba(20, 12, 36, 0.88);
+  color: #d9bcff;
+  font: 600 11px Spectral, serif;
+  letter-spacing: 0.06em;
+  box-shadow: 0 0 18px rgba(199, 155, 255, 0.25);
+  pointer-events: none;
+}
+@media (max-width: 720px) {
+  .map-head { grid-template-columns: 1fr auto; }
+  .map-head-tabs { grid-column: 1 / -1; grid-row: 2; justify-self: start; }
+  .map-screen { --inc-head: 56px; }
+}
+
+/* Painel lateral: o "editor de ponto" do Incognium. */
+.map-panel {
+  top: var(--inc-head);
+  background: var(--inc-bg);
+  border-left: 1px solid var(--inc-line);
+  box-shadow: -12px 0 28px rgba(0, 0, 0, 0.45);
+}
+.map-panel .map-panel-close { top: 10px; right: 10px; width: 30px; height: 30px; font-size: 20px; border-color: var(--inc-line); background: rgba(10, 16, 24, 0.7); color: var(--muted); }
+.map-point-body { padding: 0 20px 28px; }
+.map-point-body > .map-point-glyph { display: none; }
+.map-point-body > .lore-hero-kind {
+  display: block;
+  margin: 0 -20px;
+  padding: 44px 20px 0;
+  background: linear-gradient(180deg, rgba(79, 209, 197, 0.07), transparent 140%);
+  color: var(--inc-teal);
+  font: 600 10px Spectral, serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.map-point-body > h2 {
+  margin: 0 -20px 14px;
+  padding: 4px 20px 16px;
+  border-bottom: 1px solid var(--inc-line);
+  background: linear-gradient(180deg, rgba(79, 209, 197, 0.07), transparent);
+  font: 700 22px/1.15 Cinzel, serif;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #f3ecda;
+}
+.map-point-body h3 {
+  margin: 14px 0 6px;
+  font: 600 10px Spectral, serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.map-point-body .lore-form label,
+.map-point-body .lore-form legend {
+  font: 600 10px Spectral, serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.map-point-body input,
+.map-point-body textarea,
+.map-point-body select {
+  background: #070c13;
+  border: 1px solid var(--inc-line);
+  color: var(--text);
+  font: 400 14px Spectral, serif;
+}
+.map-point-body input:focus,
+.map-point-body textarea:focus,
+.map-point-body select:focus { outline: none; border-color: var(--inc-gold); }
+.map-panel .lore-action {
+  border: 1px solid var(--inc-gold);
+  background: var(--inc-gold);
+  color: #10161f;
+  font: 700 11px Spectral, serif;
+  letter-spacing: 0.1em;
+}
+.map-panel .lore-action:hover:not(:disabled) { background: #f4d98d; }
+.map-panel .lore-action.ghost { background: none; color: var(--inc-gold); border-color: rgba(232, 195, 106, 0.5); }
+.map-panel .lore-action.ghost:hover:not(:disabled) { background: rgba(232, 195, 106, 0.14); }
+.map-panel .lore-link.danger { color: #ff8d7a; }
+.map-panel .lore-rule { background: var(--inc-line); }
+.map-point-body .lore-hero-who { color: var(--muted); font-size: 12px; }
+
+/* Ferramentas e zoom. */
+.map-tool {
+  border: 1px solid rgba(232, 195, 106, 0.5);
+  background: rgba(7, 12, 19, 0.9);
+  color: var(--inc-gold);
+  font: 600 11px Spectral, serif;
+  letter-spacing: 0.08em;
+}
+.map-tool:hover:not(:disabled), .map-tool.on { background: rgba(232, 195, 106, 0.22); }
+.map-tool.quiet { border-color: var(--inc-line); color: var(--text); font: 500 12px Spectral, serif; }
+.map-zoom .map-btn { border-color: var(--inc-line); background: rgba(7, 12, 19, 0.9); color: var(--inc-gold); }
+.map-count { font: 600 11px Spectral, serif; letter-spacing: 0.06em; }
+
+/* Pontos e bandeira: anel fino de ouro com um segundo anel apagado, como o marcador do Incognium. */
+.map-poi-icon {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--poi);
+  outline: 1px solid rgba(232, 195, 106, 0.3);
+  outline-offset: 5px;
+  background: rgba(7, 12, 19, 0.88);
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.7), inset 0 0 8px rgba(232, 195, 106, 0.12);
+}
+.map-pin-name { font-family: Spectral, serif; letter-spacing: 0.14em; }
+.map-party { width: 40px; height: 40px; }
+.map-party::before {
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -20px;
+  border: 1px solid var(--inc-gold);
+  outline: 1px solid rgba(232, 195, 106, 0.3);
+  outline-offset: 5px;
+  background: rgba(7, 12, 19, 0.88);
+  box-shadow: 0 0 16px rgba(232, 195, 106, 0.35), inset 0 0 8px rgba(232, 195, 106, 0.15);
+  animation: party-pulse 2.4s ease-out infinite;
+}
+.map-party-banner { top: 3px; left: 11px; width: 20px; height: 26px; border-left-width: 2px; border-left-color: var(--inc-gold); }
+.map-party-banner > span { width: 16px; height: 17px; background: linear-gradient(180deg, var(--inc-gold), #b8892a); }
+.map-party .map-pin-name { top: 44px; color: var(--inc-gold); }
+.map-point-body { background: linear-gradient(180deg, rgba(79, 209, 197, 0.08), transparent 150px); }
+.map-point-body > .lore-hero-kind,
+.map-point-body > h2 { background: none; }
+
+/* Região: conhecimentos, personagens e lugares. */
+.map-region-block { margin-top: 18px; padding-top: 6px; border-top: 1px solid var(--inc-line); }
+.map-region-block h3 { margin: 10px 0 8px; font: 600 10px Spectral, serif; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.map-region-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px; }
+.map-region-cards .lore-card { min-width: 0; }
+.map-panel .lore-knowledge { margin-bottom: 6px; }
+
+/* Lugares do mapa oficial (mestre). */
+.map-official {
+  position: absolute;
+  left: 16px;
+  bottom: 96px;
+  z-index: 5;
+  width: min(340px, calc(100% - 32px));
+  max-height: calc(100% - var(--inc-head) - 150px);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--inc-line);
+  background: rgba(7, 12, 19, 0.95);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+}
+.map-official > header { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--inc-line); }
+.map-official > header small { display: block; font: 600 9px Spectral, serif; letter-spacing: 0.22em; color: var(--inc-teal); }
+.map-official > header strong { font: 600 13px Spectral, serif; color: #f3ecda; }
+.map-official-all { display: flex; gap: 6px; padding: 8px 12px; border-bottom: 1px solid var(--inc-line); }
+.map-official-list { overflow-y: auto; padding: 4px 12px 10px; }
+.map-official-head { display: flex; align-items: baseline; gap: 10px; margin-top: 10px; }
+.map-official-head b { flex: 1; font: 600 11px Spectral, serif; letter-spacing: 0.14em; text-transform: uppercase; color: var(--inc-gold); }
+.map-official-head b span { color: var(--muted); font-weight: 400; margin-left: 4px; }
+.map-official ul { list-style: none; margin: 4px 0 0; padding: 0; }
+.map-official li { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.map-official-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; font: 400 13px Spectral, serif; color: var(--text); cursor: pointer; }
+.map-official-row small { color: var(--muted); margin-left: 4px; font-size: 11px; }
+.map-official-row input { accent-color: var(--inc-gold); }
+.map-official-link { padding: 0; border: 0; background: none; color: var(--inc-teal); font: 500 11px Spectral, serif; cursor: pointer; }
+.map-official-link:disabled { opacity: 0.35; cursor: default; }
+.map-official-link:hover:not(:disabled) { text-decoration: underline; }
+/* Ponto oficial: anel tracejado, para o mestre e os jogadores distinguirem do que o mestre criou. */
+.map-poi-official .map-poi-icon { outline-style: dashed; }
+.map-official-tag { display: inline-block; margin-left: 8px; padding: 0 6px; border: 1px solid var(--inc-line); color: var(--muted); font: 600 9px Spectral, serif; letter-spacing: 0.14em; text-transform: uppercase; vertical-align: middle; }
+.map-official li { align-items: flex-start; padding: 2px 0; }
+.map-official-row { flex: 1; align-items: flex-start; min-width: 0; text-align: left; }
+.map-official-row input { flex: 0 0 auto; margin: 3px 0 0; }
+.map-official-row span { flex: 1; min-width: 0; text-align: left; }
+.map-official-row small { display: block; margin: 0; }
+.map-official-link { flex: 0 0 auto; padding-top: 4px; }
+.map-official-row input[type="checkbox"] { width: 14px; height: 14px; min-width: 0; padding: 0; display: inline-block; }
+
+/* Trajetórias dos jogadores. */
+.map-route-chip { display: inline-flex; align-items: stretch; border-left: 3px solid var(--route, var(--inc-gold)); }
+.map-route-chip .map-tool.quiet { border-left: 0; }
+.map-route-x { padding: 8px 8px; }
+.map-route-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: calc(100% - 32px);
+  padding: 10px 14px;
+  border: 1px solid var(--inc-gold);
+  background: rgba(7, 12, 19, 0.94);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
+}
+.map-route-bar strong { font: 600 12px Spectral, serif; letter-spacing: 0.08em; color: var(--inc-gold); }
+.map-route-bar input { width: 170px; padding: 6px 8px; border: 1px solid var(--inc-line); background: #070c13; color: var(--text); font: 400 13px Spectral, serif; }
+.map-route-bar span { flex-basis: 100%; text-align: center; color: var(--muted); font: 400 12px Spectral, serif; }

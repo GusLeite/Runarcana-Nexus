@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { formatModifier } from '../../data/rules.js'
+import { play } from '../../audio/engine.js'
 
 const SPIN_MS = 750
 const STAY_MS = 3600
@@ -19,19 +20,23 @@ export default function DiceRoll({ roll, onClose }) {
     if (!roll) return
     const final = roll.kind === 'check' ? roll.d20 : roll.total
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    const landing = () => play(outcome(roll) === 'crit' ? 'crit' : outcome(roll) === 'fumble' ? 'fumble' : 'settle')
     if (reduced) {
       setFace(final)
       setSettled(true)
+      landing()
       const close = setTimeout(onClose, STAY_MS)
       return () => clearTimeout(close)
     }
     setSettled(false)
+    play('rattle')
     const max = roll.kind === 'check' ? 20 : Math.max(roll.count * roll.sides + roll.bonus, 2)
     const spin = setInterval(() => setFace(1 + Math.floor(Math.random() * max)), 55)
     const stop = setTimeout(() => {
       clearInterval(spin)
       setFace(final)
       setSettled(true)
+      landing()
     }, SPIN_MS)
     const close = setTimeout(onClose, SPIN_MS + STAY_MS)
     return () => { clearInterval(spin); clearTimeout(stop); clearTimeout(close) }

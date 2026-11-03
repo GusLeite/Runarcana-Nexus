@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MerchantItemRepository extends JpaRepository<MerchantItem, Long> {
+    boolean existsByItem(gusleite.runarcana_nexus.model.items.Item item);
 }

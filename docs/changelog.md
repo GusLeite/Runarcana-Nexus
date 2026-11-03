@@ -1,6 +1,225 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Itens: editar e anexar imagem (`feature/character-sheet`)
+- O mestre edita o item de um jogador (nome, peso, preço, raridade, descrição, efeito) e anexa imagem por arquivo ou link, tanto num item existente quanto ao dar um item livre. Dar e tirar já existiam.
+- Item do catálogo que outros também têm ganha uma cópia só da linha editada quando o texto muda; só a imagem vale para todos. `PUT /character/{id}/items/{entryId}`, `Item.image` (coluna nula), `ItemImageField.jsx`; o `ItemIcon` mostra a imagem.
+
+## 2026-11-03 — Lore: imagem enviada no verbete (`feature/character-sheet`)
+- No formulário do verbete o mestre envia uma imagem (arquivo) além de colar um link; prévia e **REMOVER**.
+- Back: `LoreEntry.imageData` (coluna nova e nula) guarda a imagem enviada; link e imagem passam por `ImageRules`. Documentos do mestre continuam só com link.
+
+## 2026-11-03 — Mapa: marcos 3D do original, lugares oficiais reais e desempenho (`feature/character-sheet`)
+- Etapa 16: os 8 modelos 3D do mapa original (Disco Solar, Ixaocan, Monte Targon com o feixe de luz, Placídio, Vazio…) com texturas, posição e animação do original; `fetch-map-assets.sh` baixa para `public/map/landmarks/` (rode de novo no servidor).
+- Catálogo oficial refeito com os dados reais do site: 99 lugares (Zirima, Disco Solar…), por tamanho (marcos/cidades/vilarejos aparecem conforme o zoom); lugares da versão anterior (inventada) saem sozinhos no próximo start.
+- Desempenho: sem leitura de layout por pin a cada quadro, névoa que descarta cedo e resolução adaptativa quando cai abaixo de ~30 quadros por segundo.
+
+## 2026-11-03 — Runa inicial junto do Pulso Rúnico (`feature/character-sheet`)
+- Na etapa Escolhas, a Runa inicial aparece sempre logo abaixo do Pulso Rúnico (`orderChoices`), em vez de ficar separada por outras escolhas.
+
+## 2026-11-03 — Escolhas que se roubam e especialidade das Heranças (`feature/character-sheet`)
+- Escolher numa etapa uma perícia que outra escolha já tinha não trava mais a outra em "1 de 2": `dropStalePicks` tira o valor que saiu das opções e ela volta a ficar livre.
+- Minucioso, Pés Cascudos, Alma da Caça, Instinto Assassino, Incentivo Celeste, Pastor da Montanha, Visão Lunar e Habilidade Símia ganharam `expertise`: a perícia que já tem continua na lista e vira especialidade.
+
+## 2026-11-03 — Mapa: trajetórias dos jogadores (`feature/character-sheet`)
+- Etapa 15 do plano: cada jogador desenha até 5 trajetórias no mapa (clica as paradas, nome opcional); linhas sólidas na cor do dono, privadas ao jogador e ao mestre, que vê as de todos e a prévia "Jogador".
+- Novos: `MapRoute`, `MapRouteService`, `/map/routes`, `setRoutes` na cena 3D e `routeColors.js` (com testes).
+- Com isso o pedido de ajustes do mapa (Etapas 12 a 15) está completo.
+
+## 2026-11-03 — Mestre exclui ficha de personagem (`feature/character-sheet`)
+- `DELETE /character/{id}` (só mestre) apaga a ficha com inventário, habilidades, perícias e regateios; a conta do jogador fica e ele recria o personagem pelo assistente.
+- Aba Fichas do mestre: card **Excluir ficha** com confirmação no botão. Teste em `CharacterControllerTests`.
+
+## 2026-11-03 — Humano completo e rótulos da criação sem texto cru (`feature/character-sheet`)
+- Humano: +2/+1 em atributos e 3 pontos de Herança de Origem (antes só tinha os 2 de Região), como no livro.
+- Construto: o painel explica que o Nebulon é a Herança de Origem Variante Nebulon.
+- Criação: todos os tipos de concessão têm rótulo em português (sumiu o "EFFECT"); `visibleGrants` esconde efeitos mecânicos e o que depende de opção (a CA "Estilo de Luta: Defesa sem Armadura" do Combatente só vale escolhendo o estilo).
+- `launch.json`: terceiro par de sandbox (8093/5178).
+
+## 2026-11-03 — Mapa: lugares do mapa oficial com liga/desliga (`feature/character-sheet`)
+- Etapa 14 do plano: catálogo de ~30 lugares oficiais (Disco Solar, Nashramae, Camavor, Icathia…) criado escondido no primeiro start; o mestre liga e desliga cada um, por região ou todos (`PATCH /map/pois/official/audience`), e move qualquer ponto com **MOVER**. Não se apagam.
+- Posições são aproximadas; o catálogo está em `OfficialPlaces.java` para ampliar/corrigir.
+- Novos: `OfficialPlaces`, `OfficialPlacesSeeder`, `OfficialPlacesPanel.jsx`; colunas `official_key` e `region_slug` em `map_poi` (nulas, o `ddl-auto` cria).
+
+## 2026-11-03 — Mapa: informações e personagens por região (`feature/character-sheet`)
+- Etapa 13 do plano: o painel da região mostra informações, conhecimentos liberados e os personagens e lugares ligados a ela (cada um abre o verbete). O mestre cria o verbete da região e personagens/lugares dela direto do mapa, com o formulário da lore já preenchido.
+- Só front: reaproveita `LoreEntry.region` e `linked`.
+
+## 2026-11-03 — Mapa: visual do Incognium e névoa mais escura (`feature/character-sheet`)
+- Etapa 12 do plano: cabeçalho fixo com abas **Visão do mestre | Jogador** (o "Ver como" antigo), **+ Novo ponto** e **Compartilhar**; painel lateral escuro com rótulos em caixa alta e botões dourados; pontos e bandeira do grupo como anel de ouro.
+- Névoa de guerra bem mais escura, opaca para o jogador. Plano ganhou as Etapas 13 a 15 (regiões com personagens, pontos oficiais com liga/desliga, trajetória dos jogadores).
+
+## 2026-11-03 — Mapa: ver como jogador (`feature/character-sheet`)
+- Etapa 11 do plano: seletor "Ver como" no mapa do mestre; mostra pontos, waypoints, névoa opaca e brasões "???" como aquele jogador vê, em modo só leitura com a faixa "Prévia de Nyx".
+- Back: `GET /map/pois?as=` e `/map/waypoints?as=` (só mestre); a prévia não vaza notas secretas nem as anotações privadas do jogador.
+- Com isso o plano do mapa (Etapas 7 a 11) está completo.
+
+## 2026-11-03 — Mapa: links de locais (`feature/character-sheet`)
+- Etapa 10 do plano: `?tela=mapa&ponto=12` (e `&regiao=demacia`) abre o mapa voando até o lugar, inclusive com o mapa já aberto; o foco sai da URL ao fechar.
+- Botão **COPIAR LINK** nos painéis de ponto e de região; link colado em diário, comentários, documentos ou lore vira o botão "📍 Ver no mapa".
+- Novos: `utils/mapLink.js` (com testes), `CopyLinkButton.jsx`, `MapLinkText.jsx`.
+
+## 2026-11-03 — Mapa: o que aconteceu ali (`feature/character-sheet`)
+- Etapa 9 do plano: entradas do diário podem apontar um local (`JournalEntry.poi`); o painel do ponto mostra "Aconteceu aqui" (entradas, eventos e paradas da trilha perto dele) e deixa escrever no diário dali mesmo.
+- No diário, a entrada ligada tem o botão **📍 nome**, que abre o mapa voando até o ponto (`openMapAt`; a base do link `?tela=mapa&ponto=` já funciona, a Etapa 10 completa).
+- Quem não vê o ponto não recebe nem o nome dele pelo diário. Rota nova: `GET /map/pois/{id}/history`.
+
+## 2026-11-03 — Mapa: imagens e notas secretas no ponto (`feature/character-sheet`)
+- Etapa 8 do plano: galeria de até 6 imagens por ponto (arquivo ou link), notas que só o mestre lê e **MOSTRAR À MESA**, que abre a imagem em tela cheia para os jogadores que veem o ponto.
+- Seis tipos novos: posto avançado, esconderijo, ruína, acampamento, masmorra, porto (o `CHECK` do `kind` no PostgreSQL precisa do `ALTER TABLE` em `backend-api.md`).
+- Novos: `ImageRules` (validação de imagem compartilhada com o mercador), `PoiGallery.jsx`, rotas `/map/pois/{id}/images` e `/spotlight`.
+
+
+## 2026-11-03 — Mapa: revelar o ponto na hora certa (`feature/character-sheet`)
+- Etapa 7 do plano: botões **REVELAR AO GRUPO**, **ESCONDER** e "Só a:" no painel do ponto (`PATCH /map/pois/{id}/audience`).
+- O jogador vê o ponto brotar no mapa sem reabrir (consulta a cada 5 s) e recebe aviso na ficha (`GET /map/pois/visible`).
+- Diário ganha o evento `PLACE` (nome só quando é para todos); contadores de pontos e revelados para o mestre.
+
+## 2026-11-03 — Plano do mapa de campanha (`feature/character-sheet`)
+- `plano-jogo.md` ganha as Etapas 7 a 11: o que o Incognium tem e o projeto não (revelar na hora, imagens e notas secretas no ponto, histórico do local, links de locais, ver como jogador). Transmissão, Wiki, Markdown e várias campanhas ficaram de fora por decisão.
+
+## 2026-11-03 — O grupo no mapa: marcador, trilha e névoa (`feature/character-sheet`)
+- Marcador do grupo que o mestre arrasta; todos veem em até 3 s, e ele anda até o lugar novo.
+- Trilha da viagem: linha dourada tracejada sobre o relevo, com as paradas (`PartyTrailPoint`).
+- Névoa de guerra por região: o mestre liga e revela cada uma; ao revelar, a névoa some com um brilho dourado.
+- Novos: `MapPartyService`, `/map/party`, `/map/fog`, `partyLayers.js`.
+
+## 2026-11-03 — Diário do grupo e resumo das sessões (`feature/character-sheet`)
+- Aba **DIÁRIO** na ficha e no painel do mestre: crônica que todos escrevem (cada um edita a sua; o mestre, tudo).
+- Eventos entram sozinhos: loot e ouro dados pelo mestre, queda a 0 PV, documento novo (sem o título se for secreto ou só para alguns) e subida de nível.
+- "Resumo das sessões": um cartão por dia com quem jogou, itens, ouro, quedas e documentos.
+- Novos: `JournalEntry`, `JournalService`, `/journal`.
+
+## 2026-11-03 — Mercador com pechincha (`feature/character-sheet`)
+- O jogador pechincha uma vez por abertura da loja, com Persuasão (segura) ou Enganação (rende mais, mas qualquer falha irrita); o back rola contra a CD do mercador (padrão 15, 0 = não pechincha).
+- O resultado muda só os preços de compra dele (de −25% a +25%) até a loja fechar; o mestre vê as pechinchas no Movimento.
+- Novos: `MerchantHaggle`, `Merchant.haggleDc` (coluna nula, o `ddl-auto` cria sozinho), `POST /merchants/active/haggle`, `GET /merchants/{id}/haggles`.
+
+## 2026-11-03 — Abas na URL e cerimônia de subida de nível (`feature/character-sheet`)
+- A aba da ficha e a do painel do mestre ficam na URL (`?aba=`), e o mapa/lore aberto em `?tela=`: recarregar volta ao mesmo lugar e o "voltar" do navegador funciona (hook `useUrlParam`, sem react-router).
+- Ao subir de nível, uma cerimônia: o anel enche até o nível novo, o número vira, raios e faíscas, e o resumo do que foi ganho (`levelUpGains`).
+- Quando o mestre libera um nível, a ficha avisa com som e mensagem.
+
+## 2026-11-02 — Mapa: domos roxos dentro do globo vermelho (`feature/character-sheet`)
+- Os seis domos de distorção ficam menores (raio de 14 a 26) e todos dentro do globo demoníaco; um teste garante isso.
+
+## 2026-11-02 — Mapa: domo demoníaco menor e menos corvos (`feature/character-sheet`)
+- O domo fica com raio 140 e altura 83 (a metade do anterior, depois 50% maior), e os corvos caem para 12, em 3 bandos.
+
+## 2026-11-02 — Mapa: domo redondo e corvos menores (`feature/character-sheet`)
+- O globo demoníaco vira um círculo de raio 185, ainda só sobre o deserto.
+- Os corvos ficam com menos da metade do tamanho.
+
+## 2026-11-02 — Mapa: globo vira domo oval sobre o deserto (`feature/character-sheet`)
+- O globo volta a ser um domo liso, oval e menor, só sobre o deserto de Shurima, cobrindo os domos de distorção.
+- Ele não chega mais aos brasões vizinhos (Ixtal, Targon, Piltover e Zaun, Vazio).
+
+## 2026-11-02 — Mapa: corvos detalhados (`feature/character-sheet`)
+- Penas desenhadas em textura: rêmiges, "dedos" abertos na ponta da asa, coberteiras em escamas e cauda em cunha.
+- Corpo mais encorpado, bico longo e olhos em brasa; pretos com brilho azul-violeta.
+- Voo com asa que recolhe na subida, planeio, trajeto irregular e mergulhos.
+
+## 2026-11-02 — Mapa: globo menor e corvos novos (`feature/character-sheet`)
+- O globo passa a seguir a fronteira de Shurima, sem invadir as regiões vizinhas.
+- Corvos remodelados, com corpo, bico, olhos em brasa, penas e asas articuladas, voando em 5 bandos.
+
+## 2026-11-02 — Mapa: globo demoníaco sobre Shurima (`feature/character-sheet`)
+- Cúpula vermelha sobre toda a região, com veias que pulsam e 42 corvos em órbita.
+- Os domos de distorção perdem a rede e ficam lisos.
+
+## 2026-11-02 — Mapa: domos de distorção temporal em Shurima (`feature/character-sheet`)
+- Seis cúpulas 3D roxas no deserto, com relógio no chão e poeira presa no tempo.
+- Cada domo tem o próprio ritmo de tempo, e um deles corre ao contrário.
+
+## 2026-11-02 — Lore, pontos de interesse e waypoints (`feature/character-sheet`)
+- Nova tela de lore, inspirada na página do Azir: o mestre escreve personagens, lugares e regiões e libera cada conhecimento por personagem.
+- O mestre cria pontos de interesse clicando no mapa; os jogadores deixam anotações ou comentários neles e têm até 3 waypoints.
+- Lore e mapa levam um ao outro. Rotas `/lore`, `/map/pois` e `/map/waypoints`, com tabelas novas criadas pelo `ddl-auto`.
+
+## 2026-11-02 — Mapa: Bandópolis por rolagem de dado (`feature/character-sheet`)
+- O mestre rola um d10 no mapa; o servidor sorteia, guarda e todos veem Bandópolis na mesma região.
+- Rotas `GET /map/bandle` e `POST /map/bandle/roll`, sem tabela nova (usa `TableSetting`).
+- Brasão dourado próprio, colorido no destaque, cartão e painel como as outras regiões.
+
+## 2026-11-02 — Mapa: moldura nítida e brasão dourado do Vazio (`feature/character-sheet`)
+- A moldura de Piltover e Zaun passa a ser desenhada por código em 2048 px, sem a imagem de 128 px do original.
+- O brasão do Vazio em repouso ganha desenho próprio, no estilo dos brasões dourados das outras regiões.
+
+## 2026-11-02 — Mapa: moldura em pé e Vazio como região (`feature/character-sheet`)
+- A moldura de Piltover e Zaun fica de frente para a câmera, com os ícones no mesmo plano, e a inclinação passa ao valor do original (0,75).
+- O Vazio ganha brasão, destaque roxo e painel, e aparece de longe e de perto.
+- O cartão da região sobe para o alto da tela, e a vista inicial desce um pouco para o brasão do Vazio caber.
+
+## 2026-11-02 — Mapa: Piltover, Zaun, Vazio e brasões originais (`feature/character-sheet`)
+- De perto, Piltover e Zaun se separam dentro da moldura original, e aparecem O Vazio e o nome Icathia.
+- Brasões dourados do original, que ficam coloridos no destaque; `fetch-map-assets.sh` baixa `crests/` e `pins/`.
+
+## 2026-11-02 — Mapa: nomes em português (`feature/character-sheet`)
+- Os blocos detalhados passam a ser a versão `pt_br` do original; `fetch-map-assets.sh` baixa essa versão.
+- O brilho do mar deixa de formar quadradinhos de perto.
+
+## 2026-11-02 — Mapa: nitidez de perto e cartão da região (`feature/character-sheet`)
+- 27 blocos detalhados do original cobrem as terras ao aproximar, baixados conforme a vista.
+- O cartão da região passa a ficar por cima dos brasões e nomes.
+
+## 2026-11-02 — Mapa: regiões (`feature/character-sheet`)
+- 10 brasões nas posições do original, com a arte que a criação já usa; aparecem com o mapa visto de longe.
+- Passar o mouse acende a região no terreno; clicar voa até ela e abre um painel com vídeo e descrição.
+- `fetch-map-assets.sh` baixa também os destaques das regiões.
+
+## 2026-11-02 — Mapa: nuvens e mar como no original (`feature/character-sheet`)
+- Nuvens e névoa passam a usar as texturas originais, mais fortes que lá; a ondulação do mar saiu e fica só o brilho ao aproximar.
+- `fetch-map-assets.sh` baixa também `clouds`, `fog` e `fog-mask`.
+
+## 2026-11-02 — Mapa: bordas, mar e nuvens (`feature/character-sheet`)
+- Vinheta escura e terreno fundido ao fundo no lugar das barras azuis; o arraste horizontal não passa da borda do mapa.
+- Água que ondula, nuvens que deslizam e névoa sobre o gelo, geradas por shader.
+
+## 2026-11-02 — Mapa 3D de Runeterra (`feature/character-sheet`)
+- Botão na ficha e no painel do mestre abre o mapa em tela cheia, com Three.js carregado só ao abrir.
+- Relevo real, entrada animada, zoom com inclinação, arraste com inércia, foco de miniatura e brilho no mar, imitando o original.
+- Texturas da Riot fora do Git: `frontend/scripts/fetch-map-assets.sh` precisa rodar no servidor antes do build.
+
+## 2026-11-02 — APK aponta para o endereço real do site (`feature/character-sheet`)
+- O app passa a abrir `https://runarcana-nexus.duckdns.org`; o endereço anterior não existia no DNS.
+
+## 2026-11-02 — APK Android que abre o site (`feature/character-sheet`)
+- Capacitor em `frontend/`: o app é uma janela para `https://runarcana.duckdns.org`, sem embutir o front, com tela própria sem conexão.
+- `npm run apk` gera `frontend/dist-apk/Runarcana.apk` (cerca de 6 MB); ícone recortado da capa do livro.
+- Ferramentas e chave de assinatura ficam em `E:\AndroidBuild`, fora do repositório.
+- Não testado em aparelho, e o domínio ainda não existe no DNS.
+
+## 2026-11-02 — Deploy passa da Oracle para VPS paga (`feature/character-sheet`)
+- A Oracle ficou sem capacidade de Ampere A1 em São Paulo; hospedagem escolhida: Hetzner CAX11, com guia em `docs/deploy-vps.md`.
+- `deploy/setup-oracle.sh` virou `deploy/setup-server.sh` e também funciona como root.
+- Ainda não testado num servidor real.
+
+## 2026-11-02 — Preparação do deploy na Oracle Cloud (`feature/character-sheet`)
+- Hospedagem escolhida: Oracle Always Free com DuckDNS; passo a passo em `docs/deploy-oracle.md`.
+- `deploy/setup-oracle.sh` prepara a VM (firewall, Docker, rclone) e `deploy/backup-offsite.sh` copia os dumps para fora do servidor.
+- Ainda não testado num servidor real.
+
+## 2026-11-02 — Funções e descrições dos personagens (`feature/character-sheet`)
+- Gaudron passa a se chamar Galdren na tela (nome e grito da torcida); o id/usuário da conta continua gaudron.
+- Tela de seleção: Rudo (Arcanista, mago hemomante), Galdren (Bruto, minotauro de Noxus), Proto (Combatente, construto de Piltover) e Loge (Mercurial, assassino louco e alcoólatra) com novas funções e descrições em `frontend/src/data/characters.js`.
+
+## 2026-11-02 — Som em todo o site (`feature/character-sheet`)
+- Ficha e painel do mestre usam sons de interface suaves e arredondados (pop de bolha, acorde macio), sem ruído agudo.
+- Motor de áudio sintetizado (Web Audio, sem arquivos) em `src/audio/`: hover e clique em todos os controles, aba = página virando, apagar = golpe grave, erro/aviso, digitação com pena nas anotações.
+- Cada personagem tem a sua assinatura na seleção (forja, coração, magia, assombração); dado chacoalha e cai, com sons próprios para 20 e 1 natural; PV, magias, descansos, moedas, poções, subida de nível e criação também soam.
+- Controle de efeitos e volume no canto, guardado no navegador. (A música de fundo foi feita e depois removida a pedido.)
+
+## 2026-11-02 — Anotações em forma de diário (`feature/character-sheet`)
+- Aba Anotações redesenhada como diário medieval: capa de couro verde, índice à esquerda e folha pautada com margem vermelha à direita, selo de cera para fixadas e botão "Nova página". A lógica (salvamento automático, fixar, apagar) não mudou.
+
+## 2026-11-02 — Inventário em forma de bolsa (`feature/character-sheet`)
+- Aba Inventário redesenhada como bolsa de couro: aba com fivela e filtros, bolsos com brilho de raridade, cinto de carga e etiqueta de pergaminho para o item escolhido.
+- Novos ícones SVG (`ItemIcon.jsx`, 16 desenhos escolhidos pelo nome do item), usados também na loja do mercador.
+
+## 2026-11-02 — Grimório na aba Magias (`feature/character-sheet`)
+- Saem as teclas Q/W/E/R/P (herança do LoL): a magia mostra o selo do círculo (T, 1, 2…) e o formato do ícone diz o tipo: **quadrado = habilidade, redondo = passiva, arco = magia**.
+- Aba Magias vira um **grimório aberto**: índice com filtros à esquerda (busca, tipo, círculo, escola, tempo de conjuração, preparadas, causa dano, concentração, com usos) e a página da magia à direita, com virada de página, capitular e folio.
+- Botão "Descanso longo · preparar magias" deixa claro onde se escolhem as magias preparadas.
 
 ## 2026-11-02 — Preparação para produção (`feature/character-sheet`)
 - Segurança: credenciais do banco por variável de ambiente, senhas iniciais aleatórias (mestre por `RUNARCANA_MASTER_PASSWORD`), rotas antigas só para o mestre e limite de 10 senhas erradas por endereço.
