@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-03 — Diário do grupo e resumo das sessões (`feature/character-sheet`)
+- Aba **DIÁRIO** na ficha e no painel do mestre: crônica que todos escrevem (cada um edita a sua; o mestre, tudo).
+- Eventos entram sozinhos: loot e ouro dados pelo mestre, queda a 0 PV, documento novo (sem o título se for secreto ou só para alguns) e subida de nível.
+- "Resumo das sessões": um cartão por dia com quem jogou, itens, ouro, quedas e documentos.
+- Novos: `JournalEntry`, `JournalService`, `/journal`.
+
 ## 2026-11-03 — Mercador com pechincha (`feature/character-sheet`)
 - O jogador pechincha uma vez por abertura da loja, com Persuasão (segura) ou Enganação (rende mais, mas qualquer falha irrita); o back rola contra a CD do mercador (padrão 15, 0 = não pechincha).
 - O resultado muda só os preços de compra dele (de −25% a +25%) até a loja fechar; o mestre vê as pechinchas no Movimento.

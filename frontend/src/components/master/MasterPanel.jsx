@@ -8,6 +8,7 @@ import MasterTable from './MasterTable.jsx'
 import MasterMerchants from './MasterMerchants.jsx'
 import MasterAccounts from './MasterAccounts.jsx'
 import WorldButtons from '../map/WorldButtons.jsx'
+import GroupJournal from '../sheet/GroupJournal.jsx'
 import TabBar from '../sheet/TabBar.jsx'
 import useUrlParam from '../../hooks/useUrlParam.js'
 import { CrownIcon, ExitIcon, FlaskIcon, KeyIcon } from '../sheet/icons.jsx'
@@ -21,12 +22,13 @@ const TABS = [
   { id: 'sheets', label: 'FICHAS' },
   { id: 'inventory', label: 'INVENTÁRIO' },
   { id: 'merchants', label: 'MERCADORES' },
+  { id: 'journal', label: 'DIÁRIO' },
   { id: 'rules', label: 'REGRAS' },
   { id: 'accounts', label: 'CONTAS' },
 ]
 const TAB_IDS = TABS.map(t => t.id)
 
-// Painel do mestre: mesma moldura da ficha, com as abas da mesa (todos os personagens de uma vez), documentos, habilidades, fichas (subida de nível), inventário (itens, ouro e inspiração), mercadores, regras da mesa e contas (senhas provisórias).
+// Painel do mestre: mesma moldura da ficha, com as abas da mesa (todos os personagens de uma vez), documentos, habilidades, fichas (subida de nível), inventário (itens, ouro e inspiração), mercadores, diário do grupo, regras da mesa e contas (senhas provisórias).
 export default function MasterPanel({ session, notice, onChangePassword, onLogout, onExpired, onTestPlayer }) {
   // A aba fica na URL (?aba=…), como na ficha.
   const [tab, setTab] = useUrlParam('aba', TAB_IDS, 'table')
@@ -77,6 +79,7 @@ export default function MasterPanel({ session, notice, onChangePassword, onLogou
         {tab === 'sheets' && <MasterSheets token={session.token} onError={onError} onToast={setToast} />}
         {tab === 'inventory' && <MasterInventory token={session.token} onError={onError} onToast={setToast} />}
         {tab === 'merchants' && <MasterMerchants token={session.token} onError={onError} onToast={setToast} />}
+        {tab === 'journal' && <section className="card master-journal"><GroupJournal token={session.token} onError={onError} onToast={setToast} /></section>}
         {tab === 'rules' && <MasterRules token={session.token} onError={onError} onToast={setToast} />}
         {tab === 'accounts' && <MasterAccounts token={session.token} onError={onError} />}
       </main>

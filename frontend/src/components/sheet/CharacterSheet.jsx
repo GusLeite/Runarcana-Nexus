@@ -15,6 +15,7 @@ import DocumentsTab from './DocumentsTab.jsx'
 import NotesTab from './NotesTab.jsx'
 import MerchantTab from './MerchantTab.jsx'
 import BookTab from './BookTab.jsx'
+import GroupJournal from './GroupJournal.jsx'
 import DiceRoll from './DiceRoll.jsx'
 import TabBar from './TabBar.jsx'
 import CreationScreen from '../creation/CreationScreen.jsx'
@@ -37,6 +38,7 @@ const TABS = [
   { id: 'inventory', label: 'INVENTÁRIO' },
   { id: 'documents', label: 'DOCUMENTOS' },
   { id: 'notes', label: 'ANOTAÇÕES' },
+  { id: 'journal', label: 'DIÁRIO' },
   { id: 'book', label: 'LIVRO' },
 ]
 const TAB_IDS = [...TABS.map(t => t.id), MERCHANT_TAB.id]
@@ -578,6 +580,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
                 <DocumentsTab documents={documents} selectedId={docId} onSelect={setDocId} onOpen={markRead} />
               )}
               {tab === 'book' && <BookTab token={token} onError={fail} />}
+              {tab === 'journal' && <GroupJournal token={token} onError={fail} onToast={setToast} />}
               {tab === 'notes' && (
                 <NotesTab
                   notes={notes}

@@ -24,6 +24,8 @@ frontend/
     ├── api/character.js       ficha do logado, usos de habilidade e descanso
     ├── api/documents.js       documentos do mestre (listar, marcar lido)
     ├── api/notes.js           anotações (listar, criar, salvar, apagar)
+    ├── api/journal.js         diário do grupo (listar, escrever, editar, apagar)
+    ├── data/journal.js (+ .test.js)  resumo das sessões do diário (um por dia)
     ├── api/map.js             Bandópolis, pontos de interesse, comentários e waypoints
     ├── api/lore.js            verbetes da lore
     ├── api/merchants.js       mercadores (mestre monta e abre; jogador compra e vende)
@@ -37,7 +39,7 @@ frontend/
     │   ├── effects/Embers.jsx brasas e calor (Galdren)
     │   ├── effects/BloodMagic.jsx magia de sangue (Rudo)
     │   └── sheet/             ficha pós-login: CharacterSheet (abas e estado), SheetHero, OverviewTab, AttributeGrid,
-    │                          SkillList, AbilitiesTab, AbilityIcon, Inventory, MerchantTab, DocumentsTab, NotesTab, DiceRoll, LevelUpCeremony,
+    │                          SkillList, AbilitiesTab, AbilityIcon, Inventory, MerchantTab, DocumentsTab, NotesTab, DiceRoll, LevelUpCeremony, GroupJournal,
     │                          TabBar (abas com sublinhado deslizante), Num (número que conta), icons
     │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities, MasterSheets, MasterMerchants, MasterRules
     │   └── map/               mapa 3D de Runeterra (Three.js): WorldButtons, MapScreen, RegionPanel, MapPointPanels, poiKinds, regions, twinFrame, temporalDomes, demonGlobe, ravens, ravenModel, mapScene, mapMath (+ .test.js)

@@ -5,6 +5,7 @@ import gusleite.runarcana_nexus.exception.ApiException;
 import gusleite.runarcana_nexus.model.auth.Account;
 import gusleite.runarcana_nexus.model.items.Consumable;
 import gusleite.runarcana_nexus.model.items.Item;
+import gusleite.runarcana_nexus.model.journal.JournalEntry;
 import gusleite.runarcana_nexus.model.player.Character;
 import gusleite.runarcana_nexus.model.player.PlayerItems;
 import gusleite.runarcana_nexus.record.CharacterSheetResponse;
@@ -32,9 +33,12 @@ public class InventoryService {
     private final StartingEquipmentService equipment;
     private final CharacterService characterService;
     private final RuleCatalogService rules;
+    private final JournalService journal;
 
     public InventoryService(CharacterRepository characters, PlayerItemsRepository inventory, ItemRepository items,
-                            StartingEquipmentService equipment, CharacterService characterService, RuleCatalogService rules) {
+                            StartingEquipmentService equipment, CharacterService characterService, RuleCatalogService rules,
+                            JournalService journal) {
+        this.journal = journal;
         this.characters = characters;
         this.inventory = inventory;
         this.items = items;
@@ -64,6 +68,7 @@ public class InventoryService {
         RuleItem item = EquipmentRules.item(rules.catalog().equipment(), catalogId)
                 .orElseThrow(() -> ApiException.badRequest("Item desconhecido no catálogo."));
         equipment.give(c, List.of(new EquipmentLine(item.id(), item.name(), quantity(quantity), "Mestre")));
+        journal.record(JournalEntry.Kind.LOOT, c, received(c, quantity(quantity), item.name()));
         return view(c);
     }
 
@@ -76,7 +81,12 @@ public class InventoryService {
         entry.setItem(item);
         entry.setQuantity(quantity(request.quantity()));
         inventory.save(entry);
+        journal.record(JournalEntry.Kind.LOOT, c, received(c, entry.getQuantity(), item.getName()));
         return view(c);
+    }
+
+    private static String received(Character c, int quantity, String item) {
+        return c.getCharacterName() + " recebeu " + (quantity > 1 ? quantity + "× " : "") + item;
     }
 
     // Confere e salva a linha de Item de um item livre.
@@ -121,6 +131,7 @@ public class InventoryService {
     public MasterInventory setGold(long characterId, Integer gold) {
         Character c = character(characterId);
         if (gold == null || gold < 0) throw ApiException.badRequest("O ouro não pode ser negativo.");
+        if (gold > c.getGold()) journal.record(JournalEntry.Kind.GOLD, c, c.getCharacterName() + " recebeu " + (gold - c.getGold()) + " PO");
         c.setGold(gold);
         characters.save(c);
         return view(c);

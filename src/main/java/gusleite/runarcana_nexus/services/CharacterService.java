@@ -4,6 +4,7 @@ import gusleite.runarcana_nexus.enums.SkillType;
 import gusleite.runarcana_nexus.exception.ApiException;
 import gusleite.runarcana_nexus.model.auth.Account;
 import gusleite.runarcana_nexus.model.player.Background;
+import gusleite.runarcana_nexus.model.journal.JournalEntry;
 import gusleite.runarcana_nexus.model.player.Character;
 import gusleite.runarcana_nexus.model.player.CharacterSkill;
 import gusleite.runarcana_nexus.model.player.CharacterAbility;
@@ -57,14 +58,18 @@ public class CharacterService {
     private final RuleCatalogService rules;
     private final FormulaService formulas;
 
+    private final JournalService journal;
+
     public CharacterService(CharacterRepository charRepository,
                             CharacterClassRepository classRepository,
                             BackGroundRepository backgroundRepository,
                             PlayerItemsRepository itemsRepository,
                             CharacterAbilityRepository abilityRepository,
                             RuleCatalogService rules,
-                            FormulaService formulas) {
+                            FormulaService formulas,
+                            JournalService journal) {
         this.formulas = formulas;
+        this.journal = journal;
         this.charRepository = charRepository;
         this.classRepository = classRepository;
         this.backgroundRepository = backgroundRepository;
@@ -183,6 +188,7 @@ public class CharacterService {
             throw ApiException.badRequest("Os PV atuais vão de 0 a " + character.getMaxHpTotal() + ".");
         }
         if (tempHp != null && tempHp < 0) throw ApiException.badRequest("Os PV temporários não podem ser negativos.");
+        if (character.getCurrentHp() > 0 && currentHp == 0) journal.record(JournalEntry.Kind.DOWNED, character, character.getCharacterName() + " caiu a 0 PV");
         character.setCurrentHp(currentHp);
         if (tempHp != null) character.setTempHp(tempHp);
         // Com PV de novo, os testes contra a morte zeram.

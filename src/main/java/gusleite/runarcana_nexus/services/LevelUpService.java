@@ -2,6 +2,7 @@ package gusleite.runarcana_nexus.services;
 
 import gusleite.runarcana_nexus.exception.ApiException;
 import gusleite.runarcana_nexus.model.auth.Account;
+import gusleite.runarcana_nexus.model.journal.JournalEntry;
 import gusleite.runarcana_nexus.model.player.Character;
 import gusleite.runarcana_nexus.record.CharacterResponse;
 import gusleite.runarcana_nexus.record.LevelUpPreview;
@@ -18,8 +19,11 @@ public class LevelUpService {
     private final CreationService creation;
     private final CharacterService characterService;
     private final CharacterRepository characters;
+    private final JournalService journal;
 
-    public LevelUpService(CreationService creation, CharacterService characterService, CharacterRepository characters) {
+    public LevelUpService(CreationService creation, CharacterService characterService, CharacterRepository characters,
+                          JournalService journal) {
+        this.journal = journal;
         this.creation = creation;
         this.characterService = characterService;
         this.characters = characters;
@@ -51,7 +55,9 @@ public class LevelUpService {
     public CharacterResponse apply(Account account, LevelUpRequest request) {
         Character c = released(account, request);
         c.setPendingLevels(pendingOf(c) - request.levelsOrEmpty().size());
-        return creation.levelUp(c.getId(), request);
+        CharacterResponse leveled = creation.levelUp(c.getId(), request);
+        journal.record(JournalEntry.Kind.LEVEL_UP, c, c.getCharacterName() + " subiu para o " + leveled.level() + "º nível");
+        return leveled;
     }
 
     private Character released(Account account, LevelUpRequest request) {

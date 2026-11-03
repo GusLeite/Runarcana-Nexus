@@ -1,0 +1,46 @@
+/* Diário do grupo (GroupJournal.jsx), na ficha e no painel do mestre. */
+.gj-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.gj-body{display:flex;flex-direction:column;gap:16px}
+.gj-form{display:flex;flex-direction:column;gap:8px;padding:14px;border:1px solid rgba(200,162,74,.35);background:linear-gradient(180deg,rgba(200,162,74,.06),transparent)}
+.gj-title-in,.gj-body-in{width:100%;padding:8px 10px;border:1px solid rgba(200,162,74,.3);background:rgba(1,10,19,.6);color:var(--text);font:inherit}
+.gj-title-in{font-family:'Cinzel',Georgia,serif;letter-spacing:.04em}
+.gj-body-in{resize:vertical;min-height:70px;line-height:1.5}
+.gj-title-in:focus,.gj-body-in:focus{outline:none;border-color:var(--gold-hi);box-shadow:0 0 0 1px rgba(240,199,94,.3)}
+.gj-form-foot{display:flex;justify-content:flex-end;align-items:center;gap:14px}
+.gj-list{list-style:none;margin:0;padding:0 0 0 18px;display:flex;flex-direction:column;gap:10px;border-left:1px solid rgba(200,162,74,.3)}
+.gj-list>li{position:relative;animation:gj-in .4s calc(var(--n) * 40ms) ease both}
+.gj-list>li::before{content:"";position:absolute;left:-23px;top:14px;width:9px;height:9px;transform:rotate(45deg);background:var(--panel);border:1px solid var(--gold)}
+.gj-note{padding:12px 14px;border:1px solid rgba(200,162,74,.25);background:rgba(10,22,38,.7)}
+.gj-note-head{display:flex;justify-content:space-between;gap:12px;font-size:13px}
+.gj-note-head b{font-family:'Cinzel',Georgia,serif;color:var(--gold-hi);letter-spacing:.06em}
+.gj-note time,.gj-event time{color:var(--muted);font-size:12px;white-space:nowrap}
+.gj-note h4{margin:6px 0 2px;font-family:'Cinzel',Georgia,serif;font-size:16px;color:var(--text)}
+.gj-note p{margin:4px 0 0;white-space:pre-wrap;line-height:1.55;color:var(--text)}
+.gj-actions{display:flex;gap:14px;margin-top:8px}
+.gj-event{display:flex;align-items:center;gap:10px;padding:6px 10px;font-size:14px;color:var(--text);background:rgba(47,211,192,.04)}
+.gj-event::before{background:var(--teal)!important;border-color:var(--teal)!important;width:7px!important;height:7px!important;left:-22px!important}
+.gj-icon{width:18px;text-align:center;color:var(--teal)}
+.gj-event-text{flex:1;min-width:0}
+.gj-event.downed .gj-icon{color:#ff8a80}
+.gj-event.gold .gj-icon,.gj-event.loot .gj-icon{color:var(--gold-hi)}
+.gj-event.level_up .gj-icon{color:#b9a4ff}
+.gj-x{border:0;background:none;color:var(--muted);font-size:16px;cursor:pointer;padding:0 4px}
+.gj-x:hover{color:#ff8a80}
+.gj-sessions{display:flex;flex-direction:column;gap:14px}
+.gj-session{padding:14px 16px;border:1px solid rgba(200,162,74,.35);background:linear-gradient(135deg,rgba(200,162,74,.07),rgba(10,22,38,.75) 40%);animation:gj-in .45s calc(var(--n) * 60ms) ease both}
+.gj-session header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px}
+.gj-session h4{margin:0;font-family:'Cinzel',Georgia,serif;font-size:16px;letter-spacing:.06em;color:var(--gold-hi);text-transform:capitalize}
+.gj-session header small{color:var(--muted)}
+.gj-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.gj-stat{display:flex;flex-direction:column;align-items:center;padding:8px 4px;border:1px solid rgba(47,211,192,.2);background:rgba(1,10,19,.5)}
+.gj-stat b{font-family:'Cinzel',Georgia,serif;font-size:18px;color:var(--text)}
+.gj-stat span{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal)}
+.gj-stat.bad b{color:#ff8a80}
+.gj-highlights{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:14px}
+.gj-highlights .downed{color:#ff8a80}
+.gj-highlights .level_up{color:#cdbfff}
+.gj-highlights .loot{color:var(--text)}
+.gj-highlights .document{color:var(--muted)}
+@keyframes gj-in{from{opacity:0;transform:translateY(6px)}}
+@media (max-width:560px){.gj-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.master-journal{max-width:960px;margin:0 auto;width:100%}

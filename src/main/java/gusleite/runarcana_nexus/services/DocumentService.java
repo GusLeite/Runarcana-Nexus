@@ -1,9 +1,11 @@
 package gusleite.runarcana_nexus.services;
 
+import gusleite.runarcana_nexus.enums.DocumentKind;
 import gusleite.runarcana_nexus.exception.ApiException;
 import gusleite.runarcana_nexus.model.auth.Account;
 import gusleite.runarcana_nexus.model.documents.DocumentRead;
 import gusleite.runarcana_nexus.model.documents.GameDocument;
+import gusleite.runarcana_nexus.model.journal.JournalEntry;
 import gusleite.runarcana_nexus.record.DocumentRequest;
 import gusleite.runarcana_nexus.record.DocumentResponse;
 import gusleite.runarcana_nexus.repository.AccountRepository;
@@ -25,8 +27,11 @@ public class DocumentService {
     private final GameDocumentRepository documents;
     private final DocumentReadRepository reads;
     private final AccountRepository accounts;
+    private final JournalService journal;
 
-    public DocumentService(GameDocumentRepository documents, DocumentReadRepository reads, AccountRepository accounts) {
+    public DocumentService(GameDocumentRepository documents, DocumentReadRepository reads, AccountRepository accounts,
+                           JournalService journal) {
+        this.journal = journal;
         this.documents = documents;
         this.reads = reads;
         this.accounts = accounts;
@@ -83,6 +88,7 @@ public class DocumentService {
         document.setAuthor(master);
         document.setCreatedAt(Instant.now());
         fill(document, request);
+        journal.record(JournalEntry.Kind.DOCUMENT, JournalService.MASTER_NAME, announcement(document));
         return DocumentResponse.forMaster(documents.save(document), List.of());
     }
 
@@ -93,6 +99,12 @@ public class DocumentService {
                 .orElseThrow(() -> ApiException.notFound("Documento não encontrado."));
         fill(document, request);
         return DocumentResponse.forMaster(document, reads.findReaders(document));
+    }
+
+    // No diário: o título só aparece se o documento é para todos e não é segredo; senão, só para quem foi.
+    private static String announcement(GameDocument d) {
+        if (d.isToAll()) return d.getKind() == DocumentKind.SECRET ? "Documento secreto para toda a mesa" : "Documento novo: " + d.getTitle();
+        return "Documento novo para " + String.join(", ", d.getRecipients().stream().map(Account::getUsername).toList());
     }
 
     private void fill(GameDocument document, DocumentRequest request) {

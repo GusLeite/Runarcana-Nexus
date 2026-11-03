@@ -70,6 +70,15 @@ O mestre monta lojas (`Merchant`: nome, fala, imagem, `buyRate`) com a prateleir
 - **Movimento**: cada negociação fica em `MerchantTrade` para o mestre.
 - **Pechincha** (`MerchantHaggle`, uma por personagem por abertura; abrir ou fechar a loja apaga todas): o back rola d20 + Persuasão ou Enganação contra `Merchant.haggleDc` (nulo = 15, 0 = não pechincha, até 40) e guarda o `percent` que muda só o preço de **compra** de quem pechinchou (`haggled`: arredonda para cima, nunca zera um preço > 0). Tabela (`haggleOutcome`): Persuasão: CD+10 ou 20 natural −20%, CD −10%, até CD−4 nada, até CD−9 +10%, pior ou 1 natural +20%; Enganação: −25% / −15% / qualquer falha +10% / +25%. `Line.price` vem com a pechincha de quem pediu e `basePrice` é o da prateleira; o mestre vê os preços normais e as pechinchas (`View.haggles`, `GET /merchants/{id}/haggles`).
 
+## Diário do grupo (`JournalEntry`, `JournalService`)
+
+Crônica compartilhada da mesa: qualquer conta logada lê (últimas 300, mais novas primeiro) e escreve (`NOTE`: título e/ou texto, até 120/8000 caracteres; `who` = personagem do autor ou "Mestre"). Edita e apaga só quem escreveu; o mestre mexe em tudo, inclusive nos eventos. Os outros serviços chamam `JournalService.record(...)` para os **eventos automáticos** (sem autor; o personagem de teste do mestre não entra):
+- `LOOT`: o mestre dá item do catálogo ou item livre ("Nyx recebeu 2× Adaga"); `GOLD`: o mestre aumenta o ouro ("Nyx recebeu 30 PO"; diminuir não entra);
+- `DOWNED`: os PV vão de mais de 0 para 0 (jogador ou mestre);
+- `DOCUMENT`: documento novo; o título só aparece se é para todos e não é `SECRET` ("Documento novo para gaudron" nos outros casos);
+- `LEVEL_UP`: o jogador aplica a subida ("Nyx subiu para o 5º nível").
+O `JournalService` não depende do `CharacterService` (que o usa): acha o personagem do autor direto no `CharacterRepository`.
+
 ## Modelo de dados
 
 ### Itens (`model/items`)
