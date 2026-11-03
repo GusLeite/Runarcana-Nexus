@@ -39,6 +39,21 @@ class LoreAndMapPointsTests {
     private MockMvc mvc;
 
     @Test
+    void verbeteAceitaImagemEnviadaOuLink() throws Exception {
+        String master = login("mestre");
+        String upload = "data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA";
+        String body = "{\"kind\":\"CHARACTER\",\"name\":\"Azir\",\"toAll\":true,\"recipients\":[],\"imageUrl\":\"%s\"}";
+        long id = id(send(post("/lore"), master, body.formatted(upload)));
+        mvc.perform(get("/lore").header("Authorization", "Bearer " + login("gaudron")))
+                .andExpect(jsonPath("$[0].imageUrl").value(upload));
+        // Trocar por um link zera a imagem enviada; link e imagem inválidos são recusados.
+        send(put("/lore/" + id), master, body.formatted("https://exemplo.com/azir.png")).andExpect(jsonPath("$.imageUrl").value("https://exemplo.com/azir.png"));
+        send(put("/lore/" + id), master, body.formatted("javascript:alert(1)")).andExpect(status().isBadRequest());
+        send(put("/lore/" + id), master, body.formatted("data:text/html;base64,PGgxPg==")).andExpect(status().isBadRequest());
+        send(put("/lore/" + id), master, body.formatted("")).andExpect(jsonPath("$.imageUrl").doesNotExist());
+    }
+
+    @Test
     void soOMestreEscreveNaLore() throws Exception {
         send(post("/lore"), login("gaudron"), AZIR).andExpect(status().isForbidden());
         mvc.perform(get("/lore")).andExpect(status().isUnauthorized());

@@ -2,6 +2,7 @@ package gusleite.runarcana_nexus.model.lore;
 
 import gusleite.runarcana_nexus.enums.LoreKind;
 import gusleite.runarcana_nexus.model.auth.Account;
+import gusleite.runarcana_nexus.model.merchant.Merchant;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,6 +42,10 @@ public class LoreEntry {
 
     @Column(length = 1000)
     private String imageUrl;
+
+    // Imagem enviada pelo mestre (data URL reduzida no navegador). Quando existe, vale no lugar do link; as respostas trazem uma só.
+    @Column(length = Merchant.MAX_IMAGE)
+    private String imageData;
 
     // Região: qual brasão do mapa ela representa (slug de components/map/regions.js).
     @Column(length = 40)

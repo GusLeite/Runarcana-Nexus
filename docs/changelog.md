@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Lore: imagem enviada no verbete (`feature/character-sheet`)
+- No formulário do verbete o mestre envia uma imagem (arquivo) além de colar um link; prévia e **REMOVER**.
+- Back: `LoreEntry.imageData` (coluna nova e nula) guarda a imagem enviada; link e imagem passam por `ImageRules`. Documentos do mestre continuam só com link.
+
 ## 2026-11-03 — Mapa: marcos 3D do original, lugares oficiais reais e desempenho (`feature/character-sheet`)
 - Etapa 16: os 8 modelos 3D do mapa original (Disco Solar, Ixaocan, Monte Targon com o feixe de luz, Placídio, Vazio…) com texturas, posição e animação do original; `fetch-map-assets.sh` baixa para `public/map/landmarks/` (rode de novo no servidor).
 - Catálogo oficial refeito com os dados reais do site: 99 lugares (Zirima, Disco Solar…), por tamanho (marcos/cidades/vilarejos aparecem conforme o zoom); lugares da versão anterior (inventada) saem sozinhos no próximo start.

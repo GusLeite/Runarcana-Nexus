@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { MAP_PINS } from '../map/regions.js'
 import AudiencePicker from './AudiencePicker.jsx'
+import { fileToBanner } from '../../utils/iconImage.js'
 import { KIND_LABELS } from './LoreEntryView.jsx'
 
 const EMPTY = {
@@ -39,13 +40,19 @@ export default function LoreForm({ entry, draft, entries, players, onSave, onDel
   const toggleLinked = id => set('linkedIds', form.linkedIds.includes(id) ? form.linkedIds.filter(x => x !== id) : [...form.linkedIds, id])
 
   const isRegion = form.kind === 'REGION'
+  const isUpload = form.imageUrl.startsWith('data:')
+  const chooseImage = file => {
+    if (!file) return
+    setMsg(null)
+    fileToBanner(file, 900).then(image => set('imageUrl', image)).catch(err => setMsg(err.message))
+  }
   const regions = entries.filter(e => e.kind === 'REGION' && e.id !== entry?.id)
   const linkable = entries.filter(e => e.kind !== 'REGION' && e.id !== entry?.id)
 
   const submit = async e => {
     e.preventDefault()
     if (!form.name.trim()) return setMsg('Dê um nome ao verbete.')
-    if (form.imageUrl && !/^https?:\/\/\S+$/.test(form.imageUrl)) return setMsg('O link da imagem deve começar com http:// ou https://.')
+    if (form.imageUrl && !isUpload && !/^https?:\/\/\S+$/.test(form.imageUrl)) return setMsg('O link da imagem deve começar com http:// ou https://.')
     if (form.facts.some(f => !f.label.trim() || !f.value.trim())) return setMsg('Preencha nome e valor de todas as informações.')
     if (form.sections.some(s => !s.title.trim())) return setMsg('Todo conhecimento precisa de um título.')
     setBusy(true)
@@ -81,9 +88,18 @@ export default function LoreForm({ entry, draft, entries, players, onSave, onDel
       <label>Título
         <input value={form.subtitle} maxLength={160} onChange={e => set('subtitle', e.target.value)} placeholder="O Imperador das Areias" />
       </label>
-      <label>Imagem (link, opcional)
-        <input value={form.imageUrl} maxLength={1000} onChange={e => set('imageUrl', e.target.value)} placeholder="https://…" />
-      </label>
+      <div className="lore-image-field">
+        <span className="lore-image-label">Imagem (opcional)</span>
+        {form.imageUrl && <img className="lore-image-preview" src={form.imageUrl} alt="Prévia da imagem do verbete" />}
+        <div className="lore-actions">
+          <label className="lore-action ghost lore-file">
+            {form.imageUrl ? 'TROCAR IMAGEM' : 'ENVIAR IMAGEM'}
+            <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden onChange={e => { chooseImage(e.target.files[0]); e.target.value = '' }} />
+          </label>
+          {form.imageUrl && <button type="button" className="lore-action ghost" onClick={() => set('imageUrl', '')}>REMOVER</button>}
+        </div>
+        <input aria-label="Link da imagem" value={isUpload ? '' : form.imageUrl} maxLength={1000} disabled={isUpload} onChange={e => set('imageUrl', e.target.value)} placeholder={isUpload ? 'Imagem enviada (remova para usar um link)' : 'ou cole um link https://…'} />
+      </div>
       <div className="lore-form-row">
         <label>Citação
           <input value={form.quote} maxLength={500} onChange={e => set('quote', e.target.value)} />
