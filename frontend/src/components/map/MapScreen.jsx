@@ -14,7 +14,6 @@ import { FOG_AREAS, FOG_REGIONS, MAP_AREAS, MAP_DECALS, MAP_DOMES, MAP_GLOBE, MA
 import { sineInOut } from './mapMath.js'
 import RegionPanel from './RegionPanel.jsx'
 import { PoiForm, PoiPanel, WaypointPanel } from './MapPointPanels.jsx'
-import { PoiGlyph } from './poiKinds.jsx'
 import { ImageLightbox } from './PoiGallery.jsx'
 import OfficialPlacesPanel from './OfficialPlacesPanel.jsx'
 import { cssColor, routeColor } from './routeColors.js'
@@ -66,6 +65,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   const staticPins = useRef([])
   const rollTimers = useRef([])
   const mapClick = useRef(() => {})
+  const poiClick = useRef(() => {})
   const focused = useRef(null)
   const [status, setStatus] = useState('loading') // 'loading' | 'ready' | 'missing' (sem texturas) | 'error'
   const [hovered, setHovered] = useState(null)
@@ -117,6 +117,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
       landmarks: MAP_LANDMARKS,
       onPinsChange: () => setHovered(null),
       onMapClick: (x, y) => mapClick.current(x, y),
+      onPoiClick: id => poiClick.current(id),
     })
       .then(created => {
         if (cancelled) return created.destroy()
@@ -307,7 +308,6 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   useEffect(() => {
     const heightAt = (x, y) => scene.current?.heightAt(x, y) ?? 0
     const dynamic = [
-      ...(pois ?? []).map(p => ({ slug: 'poi-' + p.id, x: p.x, y: p.y, level: bornPois.includes(p.id) ? 'any' : poiLevel(p) })),
       ...waypoints.map(w => ({ slug: 'wp-' + w.id, x: w.x, y: w.y, level: 'any' })),
       ...(draftPoint ? [{ slug: 'draft', x: draftPoint.x, y: draftPoint.y, level: 'any' }] : []),
     ]
@@ -319,7 +319,20 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
     if (partyX != null && group.el) dynamic.push(group)
     scenePins.current.length = 0
     scenePins.current.push(...staticPins.current, ...dynamic)
-  }, [pois, waypoints, draftPoint?.x, draftPoint?.y, status, partyX != null, bornPois]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [waypoints, draftPoint?.x, draftPoint?.y, status, partyX != null]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Pontos de interesse: desenhados pela cena (poiSprites.js), não em HTML, para o arraste não travar com muitos.
+  useEffect(() => {
+    if (status !== 'ready') return
+    const heightAt = (x, y) => scene.current?.heightAt(x, y) ?? 0
+    scene.current?.setPois((pois ?? []).map(p => ({
+      id: p.id, x: p.x, y: p.y, z: heightAt(p.x, p.y), kind: p.kind, name: p.name, official: Boolean(p.official), level: poiLevel(p), born: bornPois.includes(p.id),
+    })))
+  }, [pois, bornPois, status])
+  poiClick.current = id => {
+    const poi = pois?.find(p => p.id === id)
+    if (poi) openPoint('poi', poi)
+  }
 
   const rollDie = async () => {
     setRolling(true)
@@ -586,12 +599,6 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
           })}
           {MAP_LABELS.map(label => (
             <span key={label.slug} ref={el => { anchors.current[label.slug] = el }} className="map-pin map-label">{label.name}</span>
-          ))}
-          {(pois ?? []).map(poi => (
-            <button key={poi.id} ref={el => { anchors.current['poi-' + poi.id] = el }} className={'map-pin map-poi map-poi-' + poi.kind.toLowerCase() + (poi.official ? ' map-poi-official' : '') + (bornPois.includes(poi.id) ? ' map-poi-born' : '')} type="button" onClick={() => openPoint('poi', poi)}>
-              <span className="map-poi-icon"><PoiGlyph kind={poi.kind} /></span>
-              <span className="map-pin-name">{poi.name}</span>
-            </button>
           ))}
           {waypoints.map(waypoint => (
             <button key={waypoint.id} ref={el => { anchors.current['wp-' + waypoint.id] = el }} className="map-pin map-waypoint" type="button" onClick={() => openPoint('waypoint', waypoint)}>

@@ -1,6 +1,11 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Pontos de interesse no WebGL e só 8 lugares oficiais (`main`)
+- O mestre via o mapa travar de perto: ~50 botões HTML de pontos na tela custavam 20–40 ms por quadro. Os pontos agora são sprites (`poiSprites.js`), numa cena desenhada depois do foco de miniatura, com hover e clique por `hitTest`; o arraste fica igual a sem pontos (~6 ms).
+- `OfficialPlaces` passa a ter só os 8 lugares com modelo 3D; no próximo start o seeder **apaga** os outros 91 do banco (com comentários, imagens e ligações do diário).
+- CSS dos pontos (`.map-poi*`) removido; `GLYPH_PATHS` exportado de `poiKinds.jsx`.
+
 ## 2026-11-03 — Arrastar o mapa de perto sem travar (`main`)
 - De perto, os ~100 lugares oficiais ficam "ligados", quase todos fora da tela, e `placePins` reescrevia o `transform` de todos a cada quadro: 25–100 ms de recálculo de estilo por quadro ao arrastar. Agora o ponto fora da tela fica escondido e parado, e só se escreve o que mudou (3–6 ms).
 

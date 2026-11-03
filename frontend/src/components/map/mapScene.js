@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js'
+import { CopyShader } from 'three/addons/shaders/CopyShader.js'
 import {
   CAM_FAR_Z, CAM_INTRO_Z, FOV, MAP_SIZE, TERRAIN_HEIGHT, clampPan, clampZoom, TILE_IDS, TILE_MIN_PROGRESS, TILE_SIZE, easeFactor, focusPan, pinVisible, sineInOut,
   tileCenter, tileNearView, tiltFor,
@@ -11,6 +12,7 @@ import { createDemonGlobe } from './demonGlobe.js'
 import { createTemporalDomes } from './temporalDomes.js'
 import { createLandmarks } from './landmarks.js'
 import { createPartyLayers } from './partyLayers.js'
+import { createPoiSprites } from './poiSprites.js'
 
 const TEXTURES = ['terrain_z1', 'depth_z1', 'ocean_z1', 'clouds', 'fog', 'fog-mask'].map(name => `/map/${name}.jpg`)
 const TERRAIN_SEGMENTS = 200
@@ -195,9 +197,9 @@ const loadTileTexture = async url => {
 // globe: globo demoníaco com corvos ({ x, y, radius, height, flightHeight, ravens, flocks }).
 // landmarks: marcos em 3D (MAP_LANDMARKS), que aparecem de perto.
 // areas: regiões que acendem por um círculo em vez de uma imagem ({ [slug]: { x, y, radius, color } }).
-// onMapClick(clientX, clientY): clique no mapa, sem arrastar.
+// onMapClick(clientX, clientY): clique no mapa, sem arrastar. onPoiClick(id): clique num ponto de interesse (setPois).
 // onPinsChange: chamado quando os pontos visíveis mudam, porque o navegador não avisa que o mouse saiu de um ponto escondido.
-export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], areas = {}, fogAreas = {}, domes = [], globe = null, landmarks = [], onPinsChange, onMapClick } = {}) {
+export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], areas = {}, fogAreas = {}, domes = [], globe = null, landmarks = [], onPinsChange, onMapClick, onPoiClick } = {}) {
   const textures = await loadTextures()
   const [terrain, depth, ocean, cloudMap, fogMap, fogMask] = textures
 
@@ -432,6 +434,17 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     fragmentShader: TILT_SHIFT_FRAGMENT,
   })
   composer.addPass(tiltShift)
+  // Pontos de interesse numa cena à parte, desenhada depois do foco de miniatura para ficarem nítidos e por cima de tudo.
+  // O grupo deles copia a matriz do mapa a cada quadro.
+  const poiScene = new THREE.Scene()
+  const poiRoot = new THREE.Group()
+  poiRoot.matrixAutoUpdate = false
+  poiScene.add(poiRoot)
+  const poiSprites = createPoiSprites(poiRoot, { reducedMotion })
+  const poiPass = new RenderPass(poiScene, camera)
+  poiPass.clear = false
+  composer.addPass(poiPass)
+  composer.addPass(new ShaderPass(CopyShader))
 
   // Estado da câmera. "goal" é aonde o usuário pediu para ir; a câmera e o mapa chegam lá aos poucos.
   let z = reducedMotion ? CAM_FAR_Z : CAM_INTRO_Z
@@ -518,10 +531,25 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       pinch = distance
     }
   }
+  // Ponteiro parado sobre o mapa (sem botão apertado), para acender o ponto de interesse embaixo dele.
+  let hoverAt = null
+  let hoverId = null
+  // Ponto do ponteiro dentro do canvas (a tela do mapa pode estar entrando com animação, então a posição é lida na hora).
+  const local = e => {
+    const rect = canvas.getBoundingClientRect()
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top }
+  }
+  const onHover = e => { hoverAt = pointers.size === 0 ? local(e) : null }
+  const onLeave = () => { hoverAt = null }
   const onUp = e => {
     const clicked = press && e.type === 'pointerup' && Math.hypot(e.clientX - press.x, e.clientY - press.y) < 6
     press = null
-    if (clicked) onMapClick?.(e.clientX, e.clientY)
+    if (clicked) {
+      const at = local(e)
+      const id = poiSprites.hitTest(at.x, at.y)
+      if (id != null) onPoiClick?.(id)
+      else onMapClick?.(e.clientX, e.clientY)
+    }
     pointers.delete(e.pointerId)
     pinch = 0
     if (pointers.size === 0) canvas.classList.remove('dragging')
@@ -532,6 +560,8 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
   }
   canvas.addEventListener('pointerdown', onDown)
   canvas.addEventListener('pointermove', onMove)
+  canvas.addEventListener('pointermove', onHover)
+  canvas.addEventListener('pointerleave', onLeave)
   canvas.addEventListener('pointerup', onUp)
   canvas.addEventListener('pointercancel', onUp)
   // No container, para a roda funcionar também com o mouse sobre um brasão.
@@ -564,6 +594,25 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       pin.left = left
       pin.top = top
       pin.el.style.transform = `translate(${left}px, ${top}px) translate(-50%, -50%)`
+    }
+  }
+
+  const toScreen = (x, y, height) => {
+    point.set(x, y, height).applyMatrix4(panGroup.matrixWorld).project(camera)
+    if (point.z > 1) return null
+    return { left: (point.x + 1) / 2 * viewW, top: (1 - point.y) / 2 * viewH }
+  }
+  const placePois = dt => {
+    poiRoot.matrix.copy(panGroup.matrixWorld)
+    poiRoot.matrixWorldNeedsUpdate = true
+    // Sprite sem perspectiva: a escala vira altura na tela multiplicada por este fator.
+    const pixel = 2 / (camera.projectionMatrix.elements[5] * viewH)
+    poiSprites.update(z, dt, pixel, toScreen)
+    const id = hoverAt && pointers.size === 0 ? poiSprites.hitTest(hoverAt.x, hoverAt.y) : null
+    if (id !== hoverId) {
+      hoverId = id
+      poiSprites.setHover(id)
+      canvas.style.cursor = id != null ? 'pointer' : ''
     }
   }
 
@@ -617,6 +666,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     landmarkModels?.setVisible(pinVisible('near', z))
     landmarkModels?.update(dt)
     placePins()
+    placePois(dt)
   }
 
   // Chamado a cada quadro com o tempo real desde o anterior (sem o teto de 0,1 s da animação).
@@ -668,6 +718,8 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     setFog: (hidden, strength) => party.setFog(hidden, strength),
     setTrail: (points, options) => party.setTrail(points, options),
     setRoutes: items => party.setRoutes(items),
+    // Pontos de interesse: [{ id, x, y, z, kind, name, official, level, born }] (poiSprites.js).
+    setPois: items => poiSprites.set(items),
     // Acende uma região (ou nenhuma, com null) e apaga as outras.
     highlight(slug) {
       if (slug) highlightFor(slug)
@@ -693,6 +745,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       party.dispose()
       demonGlobe?.dispose()
       landmarkModels?.dispose()
+      poiSprites.dispose()
       for (const decal of decalMeshes) {
         decal.mesh.geometry.dispose()
         decal.material.dispose()
@@ -701,6 +754,8 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       observer.disconnect()
       canvas.removeEventListener('pointerdown', onDown)
       canvas.removeEventListener('pointermove', onMove)
+      canvas.removeEventListener('pointermove', onHover)
+      canvas.removeEventListener('pointerleave', onLeave)
       canvas.removeEventListener('pointerup', onUp)
       canvas.removeEventListener('pointercancel', onUp)
       container.removeEventListener('wheel', onWheel)

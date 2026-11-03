@@ -41,8 +41,8 @@ class OfficialPlacesTests {
             assertThat(Math.abs(p.y())).isLessThanOrEqualTo(1024);
         });
         assertThat(OfficialPlaces.ALL).anyMatch(p -> p.name().equals("O Disco Solar"));
-        assertThat(OfficialPlaces.ALL).anyMatch(p -> p.name().equals("Zirima"));
-        assertThat(OfficialPlaces.ALL).hasSize(99);
+        assertThat(OfficialPlaces.ALL).anyMatch(p -> p.name().equals("Monte Targon"));
+        assertThat(OfficialPlaces.ALL).hasSize(8);
     }
 
     @Test
