@@ -25,6 +25,7 @@ const SAVE_ROWS = [
 const ATTR_ROWS = [['str', 119.3], ['dex', 155.3], ['con', 191.3], ['intel', 227.3], ['wis', 263.3], ['cha', 299.3]]
 const RUNES = [['Pulso Rúnico', 350.7], ['Fagulha Rúnica', 372.7], ['Fluxo Rúnico', 395.3], ['Vórtice Rúnico', 417.3], ['Explosão Rúnica', 440.7]]
 
+const isPulse = a => /^pulso rúnico/i.test(a.name ?? '')
 const signed = n => formatModifier(n).replace('−', '-')
 const list = items => (items ?? []).filter(Boolean).join(', ')
 
@@ -65,8 +66,9 @@ export function additionalInfo(sheet, abilities, extraSpells = []) {
   const titleOnly = a => entry(a, false)
   const sections = []
   const push = (title, items) => items.length && sections.push({ title, items })
-  push('Habilidades', abilities.filter(a => a.type === 'ABILITY' && a.name !== MANA).map(titleOnly))
-  push('Passivas', abilities.filter(a => a.type === 'PASSIVE').map(titleOnly))
+  push('Habilidades', abilities.filter(a => a.type === 'ABILITY' && a.name !== MANA && !isPulse(a)).map(titleOnly))
+  // O Pulso Rúnico vai na linha dele nas Runas da frente.
+  push('Passivas', abilities.filter(a => a.type === 'PASSIVE' && !isPulse(a)).map(titleOnly))
   push('Heranças', abilities.filter(a => a.type === 'HERITAGE').map(titleOnly))
   push('Formas', (sheet.forms ?? []).map(f => ({ title: f.name, sub: '', text: f.description ?? '' })))
   push('Magias (continuação)', extraSpells.map(entry))
@@ -303,9 +305,14 @@ export async function buildPrintSheet({ pages, sheet: full, abilities = full.abi
   }
 
   // Runas: só se a ficha tiver a habilidade com o nome da runa.
+  // Runas: o Pulso Rúnico com a pedra e o dado ("Esmeralda · 1d4"); as outras linhas só se a ficha tiver a habilidade
+  // com o nome da runa.
   RUNES.forEach(([name, row]) => {
     const rune = abilities.find(a => a.name.toLowerCase().startsWith(name.toLowerCase()))
-    if (rune) text(p, [rune.damage, rune.maxUses ? rune.maxUses + ' usos' : ''].filter(Boolean).join(' · ') || rune.name, 564.5, row + 2.8, { size: 8, width: 115, align: 'center' })
+    if (!rune) return
+    const gem = rune.name.match(/\(([^)]+)\)\s*$/)?.[1]
+    const uses = rune.maxUses ? rune.maxUses + (rune.maxUses === 1 ? ' uso' : ' usos') : ''
+    text(p, [gem, rune.damage, uses].filter(Boolean).join(' · ') || rune.name, 564.5, row + 2.8, { size: 8.5, width: 115, align: 'center', f: bold })
   })
 
   // Caixas de baixo.
@@ -336,8 +343,10 @@ export async function buildPrintSheet({ pages, sheet: full, abilities = full.abi
   const flow = sz => {
     const out = []
     sections.forEach(sec => {
+      // As seções com texto (formas, magias) começam na coluna seguinte: a 1ª fica com as listas de nomes.
+      if (out.length && sec.items.some(it => it.text) && !out.some(o => o.kind === 'column')) out.push({ kind: 'column', h: 0 })
       // Respiro antes de cada seção (depois de uma lista só de títulos ela ficaria colada).
-      if (out.length) out.push({ kind: 'gap', h: sz * 0.6 })
+      else if (out.length) out.push({ kind: 'gap', h: sz * 0.6 })
       out.push({ kind: 'section', l: sec.title.toUpperCase(), h: sz * 1.6 })
       sec.items.forEach(it => {
         out.push({ kind: 'title', l: it.title + (it.sub ? ' (' + it.sub + ')' : ''), h: sz * 1.25 })
@@ -377,6 +386,7 @@ export async function buildPrintSheet({ pages, sheet: full, abilities = full.abi
           rest = clean(rest).slice(line.length).trim()
         }
       } else if (it.kind === 'gap') cursor += it.h
+      else if (it.kind === 'column') { if (cursor > 0) { col++; cursor = 0 } }
       else place(it.kind, it.l, it.h)
       if (!ok) break
     }

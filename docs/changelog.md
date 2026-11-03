@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Ficha física: Pulso Rúnico nas Runas (`main`)
+- O Pulso Rúnico sai das passivas do verso e vai na linha "Pulso Rúnico" das Runas, com a pedra e o dado.
+- No verso, a 1ª coluna fica com Habilidades, Passivas e Heranças; formas e magias com texto começam na 2ª.
+
 ## 2026-11-03 — Ficha física: habilidades, passivas e heranças só com o nome (`main`)
 - No verso, Habilidades, Passivas e Heranças saem só com o título (usos e dano entre parênteses); formas e magias extras mantêm o texto.
 - O texto que passa para a coluna seguinte quebra de novo na largura dela (antes encolhia a letra).
