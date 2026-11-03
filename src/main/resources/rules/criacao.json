@@ -5789,6 +5789,11 @@
           "INTELLIGENCE": 13
         },
         "anotherAttribute": 13
+      },
+      "preparation": {
+        "attribute": "INTELLIGENCE",
+        "levels": "HALF",
+        "from": "KNOWN"
       }
     },
     {

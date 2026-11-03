@@ -33,7 +33,9 @@ Ao aplicar (`CreationService.levelUp`): nível, atributos, PV máximo (a diferen
 
 `CharacterResponse` traz `classLevels`, `canLevelUp` (tem `build` e está abaixo do 20º nível) e `pendingLevels`.
 
-## Magias preparadas (Acólito, Xamã)
+## Magias preparadas (Acólito, Xamã, Arcanista)
+
+O Arcanista prepara como o Xamã (`KNOWN`, Inteligência + metade do nível, mínimo 1); o grimório (magias não conhecidas) e o descanso pleno ainda não existem na ficha. `syncAbilities` marca como não preparadas as conhecidas de fichas antigas.
 
 `RuleClass.preparation` diz quantas e de onde (ver [regras-criacao.md](regras-criacao.md)). `CreationService.preparationOf` recalcula o `build` para saber os níveis por classe e os Mistérios. Da lista (Acólito): as preparadas viram `CharacterAbility` `SPELL` com `source` "Magias preparadas: Acólito", `prepared = true` e `spellId`; a cada descanso longo com `prepared`, as antigas saem e as novas entram. A subida de nível não mexe nelas. Entre os conhecidos (Xamã): os feitiços de 1º nível ou mais que o assistente dá à classe nascem com `prepared = false` (`markPreparable`), e o descanso só troca a marca. `AbilityResponse.prepared`: `true`/`false` nas magias que se preparam, nulo nas outras. O jogador só troca no descanso longo (decisão da mesa).
 

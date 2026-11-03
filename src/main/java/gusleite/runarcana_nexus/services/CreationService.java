@@ -395,6 +395,10 @@ public class CreationService {
             old.setMaxUses(fresh.getMaxUses());
             old.setUsesLeft(fresh.getMaxUses() == null ? null : Math.max(0, fresh.getMaxUses() - (spent == null ? 0 : spent)));
             old.setSource(f.source());
+            if (old.getPrepared() == null) {
+                markPreparable(fresh, f, b);
+                old.setPrepared(fresh.getPrepared());
+            }
             abilities.save(old);
         }
         // As magias preparadas do Acólito não vêm do assistente: ficam até o próximo descanso longo.

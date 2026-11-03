@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Arcanista prepara magias (`main`)
+- O Arcanista passa a ter "Preparando Magias": prepara Inteligência + metade do nível de Arcanista (mínimo 1) entre as magias conhecidas, como o Xamã (`preparation` `KNOWN` no `criacao.json`). As conhecidas nascem não preparadas; fichas existentes são marcadas na próxima sincronização (`syncAbilities`).
+- Limitação: o grimório (magias anotadas e não conhecidas) e a diferença descanso longo/pleno ainda não são modelados; a escolha é feita no descanso longo.
+
 ## 2026-11-03 — Itens: editar e anexar imagem (`feature/character-sheet`)
 - O mestre edita o item de um jogador (nome, peso, preço, raridade, descrição, efeito) e anexa imagem por arquivo ou link, tanto num item existente quanto ao dar um item livre. Dar e tirar já existiam.
 - Item do catálogo que outros também têm ganha uma cópia só da linha editada quando o texto muda; só a imagem vale para todos. `PUT /character/{id}/items/{entryId}`, `Item.image` (coluna nula), `ItemImageField.jsx`; o `ItemIcon` mostra a imagem.
