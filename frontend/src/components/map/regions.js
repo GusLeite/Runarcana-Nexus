@@ -69,7 +69,7 @@ export const MAP_DOMES = [
 ]
 
 // Globo demoníaco: domo redondo no meio do deserto de Shurima.
-export const MAP_GLOBE = { x: 0, y: -380, radius: 93, height: 55, flightHeight: 70, ravens: 12, flocks: 3 }
+export const MAP_GLOBE = { x: 0, y: -380, radius: 140, height: 83, flightHeight: 95, ravens: 12, flocks: 3 }
 
 // Regiões sem imagem de destaque no original: acendem a terra dentro de um círculo em volta do ponto.
 export const MAP_AREAS = { void: { x: 270, y: -560, radius: 175, color: [0.55, 0.2, 0.85] } }

@@ -3,7 +3,7 @@
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
 ## 2026-11-02 — Mapa: domo demoníaco menor e menos corvos (`feature/character-sheet`)
-- O domo cai para a metade (raio 93 e altura 55), e os corvos para 12, em 3 bandos.
+- O domo fica com raio 140 e altura 83 (a metade do anterior, depois 50% maior), e os corvos caem para 12, em 3 bandos.
 
 ## 2026-11-02 — Mapa: domo redondo e corvos menores (`feature/character-sheet`)
 - O globo demoníaco vira um círculo de raio 185, ainda só sobre o deserto.
