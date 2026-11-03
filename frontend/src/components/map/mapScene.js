@@ -175,6 +175,16 @@ const loadTextures = () => {
   })
 }
 
+// Blocos detalhados: decodificados fora da thread principal quando o navegador deixa. A imagem já vem virada, como o WebGL espera.
+const loadTileTexture = async url => {
+  if (typeof createImageBitmap === 'undefined') return new THREE.TextureLoader().loadAsync(url)
+  const bitmap = await new THREE.ImageBitmapLoader().setOptions({ imageOrientation: 'flipY' }).loadAsync(url)
+  const texture = new THREE.Texture(bitmap)
+  texture.flipY = false
+  texture.needsUpdate = true
+  return texture
+}
+
 // Monta a cena no container e devolve os controles. Rejeita se o navegador não tem WebGL ou faltam as texturas.
 // pins: elementos HTML presos a um ponto do mundo ({ el, x, y, z, level }); a cena os reposiciona a cada quadro.
 // lift: distância do ponto no plano em pé, de frente para a câmera.
@@ -294,6 +304,11 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
   // Névoa de guerra e trilha do grupo (partyLayers.js).
   const party = createPartyLayers({ panGroup, terrainGeometry, depth, ocean, heightAt, fogAreas, renderer })
 
+  // Subir uma textura à GPU leva até ~15 ms, e os blocos e os marcos chegavam todos no mesmo quadro ao aproximar,
+  // o que travava o zoom. O que chega entra nesta fila, e sai um item por quadro.
+  const warmups = []
+  const warm = job => warmups.push(job)
+
   // Blocos detalhados por cima da imagem geral, baixados só quando o zoom e a vista pedem.
   const tileGeometry = new THREE.PlaneGeometry(TILE_SIZE, TILE_SIZE, 64, 64)
   const maxAnisotropy = renderer.capabilities.getMaxAnisotropy()
@@ -318,19 +333,22 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     mesh.renderOrder = 0.2
     mesh.visible = false
     panGroup.add(mesh)
-    return { id, mesh, material, texture: null, requested: false }
+    return { id, mesh, material, texture: null, pending: null, requested: false }
   })
   const updateTiles = (progress, dt) => {
     const wanted = progress >= TILE_MIN_PROGRESS
-    const loader = new THREE.TextureLoader()
     for (const tile of tiles) {
       if (wanted && !tile.requested && tileNearView(tile.id, { x: goalPan.x, y: goalPan.y }, goalZ, aspect)) {
         tile.requested = true
-        loader.loadAsync(`/map/tiles/${tile.id + 1}.jpg`).then(texture => {
+        loadTileTexture(`/map/tiles/${tile.id + 1}.jpg`).then(texture => {
           if (destroyed) return texture.dispose()
           texture.anisotropy = maxAnisotropy
-          tile.texture = texture
-          tile.material.uniforms.map.value = texture
+          tile.pending = texture
+          warm(() => {
+            renderer.initTexture(texture)
+            tile.texture = texture
+            tile.material.uniforms.map.value = texture
+          })
         }).catch(() => {})
       }
       const opacity = tile.material.uniforms.opacity
@@ -368,7 +386,12 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
 
   const temporalDomes = createTemporalDomes(domes, panGroup, heightAt)
   const demonGlobe = globe && createDemonGlobe(globe, panGroup)
-  const landmarkModels = landmarks.length > 0 ? createLandmarks(landmarks, panGroup) : null
+  const landmarkModels = landmarks.length > 0
+    ? createLandmarks(landmarks, panGroup, {
+      texture: texture => warm(() => renderer.initTexture(texture)),
+      mesh: mesh => warm(() => renderer.compile(mesh, camera, scene)),
+    })
+    : null
 
   const cloudsMaterial = new THREE.ShaderMaterial({
     uniforms: { cloudMap: { value: cloudMap }, drift: { value: 0 }, opacity: { value: 0 } },
@@ -601,11 +624,11 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
   }
 
   const clock = new THREE.Clock()
-  window.__mapDebug = { renderer, composer, update, scene, tiles, terrain, sparkle, fog, clouds, party, landmarkModels, setZ: v => { goalZ = z = v; flight = null }, tiltShift, target }
   renderer.setAnimationLoop(() => {
     const raw = clock.getDelta()
     watchSpeed(raw)
     const dt = Math.min(raw, 0.1)
+    warmups.shift()?.()
     update(dt)
     // Com movimento reduzido, as nuvens e o brilho do mar ficam parados.
     if (!reducedMotion) {
@@ -654,6 +677,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       for (const part of [...highlights.values(), ...tiles]) {
         part.material.dispose()
         part.texture?.dispose()
+        part.pending?.dispose()
       }
       tileGeometry.dispose()
       temporalDomes.dispose()

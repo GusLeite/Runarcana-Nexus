@@ -27,7 +27,8 @@ const FADE = 0.12
 const SPIN_PER_SECOND = 60
 
 // landmarks: MAP_LANDMARKS; panGroup: o grupo do mapa. Nada é carregado até haver algum marco.
-export function createLandmarks(landmarks, panGroup) {
+// warm: { texture, mesh }, chamados quando cada textura e cada modelo chegam, para a cena os subir à GPU ainda de longe.
+export function createLandmarks(landmarks, panGroup, warm = {}) {
   let destroyed = false
   const objLoader = new OBJLoader()
   const textureLoader = new THREE.TextureLoader()
@@ -45,7 +46,7 @@ export function createLandmarks(landmarks, panGroup) {
 
   const textureOf = file => {
     if (!textures.has(file)) {
-      const texture = textureLoader.load(LANDMARK_DIR + file)
+      const texture = textureLoader.load(LANDMARK_DIR + file, loaded => { if (!destroyed) warm.texture?.(loaded) })
       texture.anisotropy = 4
       textures.set(file, texture)
     }
@@ -77,6 +78,7 @@ export function createLandmarks(landmarks, panGroup) {
       mesh.renderOrder = 0.9
       entry.group.add(mesh)
       for (const [axis, speed] of Object.entries(model.spin ?? {})) entry.spins.push({ rotation: mesh.rotation, axis, speed })
+      warm.mesh?.(mesh)
     }).catch(() => {})
   }
 

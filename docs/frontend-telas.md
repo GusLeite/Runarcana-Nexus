@@ -108,7 +108,7 @@ Layout: 3 colunas acima de 1240px; 2 colunas (herói + conteúdo, rolagens embai
 
 `mapScene.js` monta a cena e `mapMath.js` guarda as regras da câmera, com testes. O comportamento imita o mapa original da Riot:
 - plano de 2048×2048 com 200 segmentos, levantado até 60 unidades pelo canal azul de `depth_z1.jpg`;
-- ao aproximar, 27 blocos de 1024 px (`public/map/tiles/`, 4x mais nítidos) cobrem as terras, baixados conforme a vista;
+- ao aproximar, 27 blocos de 1024 px (`public/map/tiles/`, 4x mais nítidos) cobrem as terras, baixados conforme a vista e decodificados fora da thread principal (`ImageBitmapLoader`). Os blocos e as texturas/modelos dos marcos entram numa fila (`warm` em `mapScene.js`) e sobem à GPU um por quadro, porque subir todos juntos (~15 ms cada) travava o zoom;
 - câmera de 50°, com entrada de Z 2300 a 1189 e zoom até Z 200; a inclinação cresce com o cubo do zoom;
 - arraste com inércia, roda do mouse, pinça e botões +/−; foco de miniatura e vinheta escura nas bordas;
 - mar parado como a pintura, com brilho que cresce ao aproximar (máscara `ocean_z1.jpg`); nuvens `clouds.jpg` que deslizam e somem ao aproximar, com opacidade 0,32 (o original usa 0,15), e névoa `fog.jpg` nas montanhas e no gelo (máscara `fog-mask.jpg`). Com movimento reduzido, nuvens e brilho ficam parados.

@@ -1,6 +1,9 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Zoom do mapa sem travadas (`main`)
+- Ao aproximar, os 27 blocos detalhados e as texturas dos marcos 3D subiam à GPU no mesmo quadro (quadros de 130–170 ms). Agora os blocos são decodificados com `ImageBitmapLoader` e tudo passa por uma fila em `mapScene.js` que sobe um item por quadro (os marcos ainda de longe); os picos caíram para ~11 ms.
+
 ## 2026-11-03 — Painel da região sem o resumo (`main`)
 - O texto de resumo some do `RegionPanel`; fica só no verbete, aberto por "ABRIR NA LORE".
 - As informações (Regime, Nível de tecnologia…) ficam em 2 colunas entre filetes dourados, como no Universo (`map.css`).
