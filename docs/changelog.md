@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Ficha física em PDF (`main`)
+- Botão da impressora na barra da ficha baixa a "Planilha Dupla 0.93" preenchida com os dados do personagem (`utils/printSheet.js`, `pdf-lib` carregado sob demanda).
+- Fundo: as 2 páginas do PDF original em PNG 300 dpi (`public/ficha-fisica/`), porque o original vem cifrado. Texto que não cabe encolhe; magias além de 20 e os textos das habilidades vão para o verso.
+
 ## 2026-11-03 — Mapa: aviso quando faltam as texturas (`main`)
 - No servidor real o mapa falhava com o aviso de WebGL: `public/map/` (fora do Git) não existia lá, e o Caddy devolvia `index.html` no lugar das texturas.
 - `mapScene.js` marca a falha de textura (`code: 'textures'`) e o `MapScreen` mostra "O mapa ainda não foi instalado neste servidor"; o erro vai para o console.

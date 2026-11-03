@@ -64,6 +64,12 @@ export function KeyIcon() {
   )
 }
 
+export function PrintIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H4v-8h16v8h-3M7 14h10v7H7Z" /></svg>
+  )
+}
+
 export function ExitIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10" /></svg>

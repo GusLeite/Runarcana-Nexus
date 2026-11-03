@@ -26,7 +26,7 @@ import { play } from '../../audio/engine.js'
 import useUrlParam from '../../hooks/useUrlParam.js'
 import { levelUpGains } from '../../data/levelGains.js'
 import LevelUpCeremony from './LevelUpCeremony.jsx'
-import { ExitIcon, KeyIcon } from './icons.jsx'
+import { ExitIcon, KeyIcon, PrintIcon } from './icons.jsx'
 import '../../styles/sheet.css'
 
 const MAX_LOG = 8
@@ -144,6 +144,17 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const consumeOne = useCallback(item => {
     consumeItem(token, item.id).then(sheet => { play('consume'); putSheet(sheet); setToast('Usou 1: ' + item.name + '.') }).catch(fail)
   }, [token, fail, putSheet])
+  // Ficha física: o PDF de impressão da mesa preenchido com a ficha atual (as habilidades vêm do estado, com os usos em dia).
+  const [printing, setPrinting] = useState(false)
+  const printSheet = useCallback(() => {
+    if (state.status !== 'ready') return
+    setPrinting(true)
+    import('../../utils/printSheet.js')
+      .then(m => m.downloadPrintSheet({ sheet: state.sheet, abilities, portraitSrc: character.img }))
+      .then(() => setToast('Ficha física gerada.'))
+      .catch(err => { play('error'); setToast(err.message || 'Não deu para gerar a ficha física.') })
+      .finally(() => setPrinting(false))
+  }, [state, abilities, character.img])
   const spendGold = useCallback(amount => spendGoldApi(token, amount).then(sheet => { play('coin'); putSheet(sheet) }).catch(err => { fail(err); throw err }), [token, fail, putSheet])
   const spendInspirationNow = useCallback(() => {
     spendInspiration(token).then(sheet => { play('success'); putSheet(sheet); setToast('Inspiração gasta.') }).catch(fail)
@@ -523,6 +534,12 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             <span className="who-sub">{session.username}</span>
           </div>
           <WorldButtons session={session} />
+          {sheet && (
+            <button className="icon-btn" type="button" onClick={printSheet} disabled={printing}
+              title={printing ? 'Gerando a ficha física…' : 'Baixar ficha física (PDF para imprimir)'} aria-label="Baixar ficha física">
+              <PrintIcon />
+            </button>
+          )}
           {!testing && (
             <button className="icon-btn" type="button" onClick={onChangePassword} title="Alterar senha" aria-label="Alterar senha">
               <KeyIcon />
