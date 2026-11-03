@@ -19,7 +19,7 @@ function PointPanel({ label, onClose, children }) {
 }
 
 // Ponto de interesse: descrição, verbete ligado, comentários da mesa e anotações de quem está vendo.
-export function PoiPanel({ poi, loreEntry, master, preview = false, players = [], token, onPoi, onNotice, onOpenLore, onEdit, onAudience, onAddComment, onDeleteComment, onClose }) {
+export function PoiPanel({ poi, loreEntry, master, preview = false, players = [], token, onPoi, onNotice, onMove, onOpenLore, onEdit, onAudience, onAddComment, onDeleteComment, onClose }) {
   const [text, setText] = useState('')
   const [shared, setShared] = useState(false)
   const [msg, setMsg] = useState(null)
@@ -44,7 +44,7 @@ export function PoiPanel({ poi, loreEntry, master, preview = false, players = []
     <PointPanel label={poi.name} onClose={onClose}>
       <span className="map-point-glyph"><PoiGlyph kind={poi.kind} /></span>
       <span className="lore-hero-kind">{POI_KINDS[poi.kind]}</span>
-      <h2>{poi.name}</h2>
+      <h2>{poi.name}{poi.official && <span className="map-official-tag">Mapa oficial</span>}</h2>
       {master && <p className="lore-hero-who">Revelado a: {audienceLabel(poi)}</p>}
       {master && onAudience && <RevealBar poi={poi} players={players} onAudience={onAudience} />}
       {poi.description && <p className="map-point-text">{mapLinkNodes(poi.description)}</p>}
@@ -58,6 +58,7 @@ export function PoiPanel({ poi, loreEntry, master, preview = false, players = []
       <div className="lore-actions">
         {loreEntry && <button type="button" className="lore-action" onClick={() => onOpenLore(loreEntry.id)}>ABRIR NA LORE</button>}
         {master && <button type="button" className="lore-action ghost" onClick={onEdit}>EDITAR</button>}
+        {master && onMove && <button type="button" className="lore-action ghost" onClick={onMove}>MOVER</button>}
         <CopyLinkButton target={poi.id} />
       </div>
 
@@ -158,7 +159,7 @@ export function PoiForm({ poi, lore, players, onSave, onDelete, onClose }) {
         {msg && <p className="lore-form-error" role="alert">{msg}</p>}
         <div className="lore-form-actions">
           <button type="submit" className="lore-action" disabled={busy}>{busy ? 'SALVANDO…' : 'SALVAR'}</button>
-          {poi.id && (confirming
+          {poi.id && !poi.official && (confirming
             ? <button type="button" className="lore-link danger" onClick={() => onDelete(poi)}>Confirmar: apagar</button>
             : <button type="button" className="lore-link danger" onClick={() => setConfirming(true)}>Apagar ponto</button>)}
         </div>

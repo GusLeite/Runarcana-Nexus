@@ -180,9 +180,22 @@ public class MapPointService {
     @Transactional
     public void deletePoi(Long id) {
         MapPoi poi = findPoi(id);
+        if (poi.getOfficialKey() != null) throw ApiException.badRequest("Lugares do mapa oficial não se apagam: esconda para os jogadores.");
         comments.deleteByPoi(poi);
         journal.unlinkPoi(poi);
         pois.delete(poi);
+    }
+
+    // Liga ou desliga, de uma vez, os lugares oficiais (de uma região ou de todas) para a mesa inteira. Sem aviso no diário.
+    @Transactional
+    public int setOfficialAudience(String region, boolean toAll) {
+        int changed = 0;
+        for (MapPoi poi : pois.findByOfficialKeyIsNotNull()) {
+            if (region != null && !region.isBlank() && !region.equals(poi.getRegionSlug())) continue;
+            if (poi.isToAll() != toAll) changed++;
+            poi.setToAll(toAll);
+        }
+        return changed;
     }
 
     @Transactional
@@ -255,7 +268,7 @@ public class MapPointService {
                 .map(c -> toComment(viewer, c))
                 .toList();
         return new PoiResponse(p.getId(), p.getName(), p.getKind(), p.getDescription(), p.getX(), p.getY(), entryId,
-                viewer.isMaster() ? p.getSecretNotes() : null, imageCount, p.getSpotlight(), p.getSpotlightRev() == null ? 0 : p.getSpotlightRev(),
+                viewer.isMaster() ? p.getSecretNotes() : null, p.getOfficialKey() != null, p.getRegionSlug(), imageCount, p.getSpotlight(), p.getSpotlightRev() == null ? 0 : p.getSpotlightRev(),
                 p.isToAll(), RecipientResolver.names(viewer, p.getRecipients()), visible);
     }
 

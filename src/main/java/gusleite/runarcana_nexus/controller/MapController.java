@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 // Mapa de Runeterra: Bandópolis, pontos de interesse do mestre, waypoints dos jogadores e o grupo (marcador, trilha e névoa).
 @RestController
@@ -66,6 +67,16 @@ public class MapController {
     }
 
     public record AudienceRequest(Boolean toAll, List<String> recipients) {}
+
+    public record OfficialAudienceRequest(String region, boolean toAll) {}
+
+    // Liga ou desliga os lugares oficiais (de uma região ou de todos) para os jogadores.
+    @PatchMapping("/pois/official/audience")
+    public ResponseEntity<Map<String, Integer>> officialAudience(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                                                 @RequestBody OfficialAudienceRequest request) {
+        auth.requireMaster(authorization);
+        return ResponseEntity.ok(Map.of("changed", points.setOfficialAudience(request.region(), request.toAll())));
+    }
 
     // Revela ou esconde o ponto sem o formulário inteiro.
     @PatchMapping("/pois/{id}/audience")

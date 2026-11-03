@@ -59,11 +59,12 @@
 | DELETE | `/lore/{id}` | – (Bearer **mestre**) | Apaga; quem apontava para o verbete só perde o vínculo |
 | GET | `/map/pois` | – (Bearer; `?as=usuário` só o **mestre**) | Pontos que a conta vê, com os comentários da mesa e as anotações dela. Com `as`, a prévia "Ver como": o que aquele jogador vê, sem `secretNotes` e sem as anotações privadas dele (403 para jogador; 400 se o usuário não é jogador) |
 | POST / PUT | `/map/pois`, `/map/pois/{id}` | `PoiRequest { name, kind, description, x, y, loreEntryId, secretNotes, toAll, recipients }` (Bearer **mestre**) | Cria ou edita. `kind`: CITY, LANDMARK, QUEST, DANGER, MYSTERY, OUTPOST, HIDEOUT, RUIN, CAMP, DUNGEON, PORT. `secretNotes` só volta para o mestre. Se `map_poi` já existia no PostgreSQL, o `CHECK` do `kind` não tem os tipos novos: `ALTER TABLE map_poi DROP CONSTRAINT map_poi_kind_check;` (o `ddl-auto` não recria). `x` e `y` entre -1024 e 1024 |
-| DELETE | `/map/pois/{id}` | – (Bearer **mestre**) | Apaga o ponto e os comentários |
+| DELETE | `/map/pois/{id}` | – (Bearer **mestre**) | Apaga o ponto e os comentários. 400 num lugar do mapa oficial (esconda em vez de apagar) |
 | POST | `/map/pois/{id}/comments` | `{ text, shared }` (Bearer) | Comentário (`shared`) ou anotação só do autor (201). 404 se a conta não vê o ponto |
 | DELETE | `/map/pois/comments/{id}` | – (Bearer) | O autor apaga o seu; o mestre, os da mesa. 404 nos demais casos |
 | PATCH | `/map/pois/{id}/audience` | `{ toAll, recipients }` (Bearer **mestre**) | Revela (a todos e/ou a jogadores) ou esconde o ponto sem mexer no resto. Revelar a mais gente gera o evento `PLACE` no diário (com o nome só se for a todos) |
 | GET | `/map/pois/visible` | – (Bearer) | Lista leve `[{ id, name }]` do que a conta vê (a ficha usa para avisar de local novo) |
+| PATCH | `/map/pois/official/audience` | `{ region, toAll }` (Bearer **mestre**) | Liga ou desliga para a mesa os lugares do mapa oficial de uma região (slug) ou de todos (`region` nulo). Devolve `{ changed }`. Sem aviso no diário |
 | GET | `/map/pois/{id}/history` | – (Bearer) | "Aconteceu aqui": `{ entries: [entradas do diário ligadas ao ponto], stops: [paradas da trilha a até 60 unidades] }`. 404 se a conta não vê o ponto |
 | GET | `/map/pois/{id}/images` | – (Bearer) | Imagens do ponto (data URL ou link), só para quem vê o ponto (404 se não). A lista de pontos traz só `imageCount`, `spotlight` e `spotlightRev` |
 | POST | `/map/pois/{id}/images` | `{ image }` (Bearer **mestre**) | Adiciona (até 6 por ponto; mesmas regras de imagem do mercador, em `ImageRules`) e devolve o ponto |

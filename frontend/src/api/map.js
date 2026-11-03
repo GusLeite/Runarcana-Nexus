@@ -65,3 +65,7 @@ export const showPoiImage = (token, id, index) => request('/map/pois/' + id + '/
 
 // O que aconteceu ali: { entries: [entrada do diário ligadas ao ponto], stops: [{ x, y, label, createdAt }] }.
 export const fetchPoiHistory = (token, id) => request('/map/pois/' + id + '/history', { token })
+
+// Só o mestre: liga (toAll) ou desliga os lugares do mapa oficial para os jogadores, de uma região (slug) ou de todas (nulo). { changed }
+export const setOfficialAudience = (token, region, toAll) =>
+  request('/map/pois/official/audience', { method: 'PATCH', token, body: { region, toAll } })

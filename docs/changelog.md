@@ -1,6 +1,11 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Mapa: lugares do mapa oficial com liga/desliga (`feature/character-sheet`)
+- Etapa 14 do plano: catálogo de ~30 lugares oficiais (Disco Solar, Nashramae, Camavor, Icathia…) criado escondido no primeiro start; o mestre liga e desliga cada um, por região ou todos (`PATCH /map/pois/official/audience`), e move qualquer ponto com **MOVER**. Não se apagam.
+- Posições são aproximadas; o catálogo está em `OfficialPlaces.java` para ampliar/corrigir.
+- Novos: `OfficialPlaces`, `OfficialPlacesSeeder`, `OfficialPlacesPanel.jsx`; colunas `official_key` e `region_slug` em `map_poi` (nulas, o `ddl-auto` cria).
+
 ## 2026-11-03 — Mapa: informações e personagens por região (`feature/character-sheet`)
 - Etapa 13 do plano: o painel da região mostra informações, conhecimentos liberados e os personagens e lugares ligados a ela (cada um abre o verbete). O mestre cria o verbete da região e personagens/lugares dela direto do mapa, com o formulário da lore já preenchido.
 - Só front: reaproveita `LoreEntry.region` e `linked`.

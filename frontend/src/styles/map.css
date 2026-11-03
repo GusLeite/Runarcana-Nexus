@@ -819,3 +819,44 @@
 .map-region-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px; }
 .map-region-cards .lore-card { min-width: 0; }
 .map-panel .lore-knowledge { margin-bottom: 6px; }
+
+/* Lugares do mapa oficial (mestre). */
+.map-official {
+  position: absolute;
+  left: 16px;
+  bottom: 96px;
+  z-index: 5;
+  width: min(340px, calc(100% - 32px));
+  max-height: calc(100% - var(--inc-head) - 150px);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--inc-line);
+  background: rgba(7, 12, 19, 0.95);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+}
+.map-official > header { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--inc-line); }
+.map-official > header small { display: block; font: 600 9px Spectral, serif; letter-spacing: 0.22em; color: var(--inc-teal); }
+.map-official > header strong { font: 600 13px Spectral, serif; color: #f3ecda; }
+.map-official-all { display: flex; gap: 6px; padding: 8px 12px; border-bottom: 1px solid var(--inc-line); }
+.map-official-list { overflow-y: auto; padding: 4px 12px 10px; }
+.map-official-head { display: flex; align-items: baseline; gap: 10px; margin-top: 10px; }
+.map-official-head b { flex: 1; font: 600 11px Spectral, serif; letter-spacing: 0.14em; text-transform: uppercase; color: var(--inc-gold); }
+.map-official-head b span { color: var(--muted); font-weight: 400; margin-left: 4px; }
+.map-official ul { list-style: none; margin: 4px 0 0; padding: 0; }
+.map-official li { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.map-official-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; font: 400 13px Spectral, serif; color: var(--text); cursor: pointer; }
+.map-official-row small { color: var(--muted); margin-left: 4px; font-size: 11px; }
+.map-official-row input { accent-color: var(--inc-gold); }
+.map-official-link { padding: 0; border: 0; background: none; color: var(--inc-teal); font: 500 11px Spectral, serif; cursor: pointer; }
+.map-official-link:disabled { opacity: 0.35; cursor: default; }
+.map-official-link:hover:not(:disabled) { text-decoration: underline; }
+/* Ponto oficial: anel tracejado, para o mestre e os jogadores distinguirem do que o mestre criou. */
+.map-poi-official .map-poi-icon { outline-style: dashed; }
+.map-official-tag { display: inline-block; margin-left: 8px; padding: 0 6px; border: 1px solid var(--inc-line); color: var(--muted); font: 600 9px Spectral, serif; letter-spacing: 0.14em; text-transform: uppercase; vertical-align: middle; }
+.map-official li { align-items: flex-start; padding: 2px 0; }
+.map-official-row { flex: 1; align-items: flex-start; min-width: 0; text-align: left; }
+.map-official-row input { flex: 0 0 auto; margin: 3px 0 0; }
+.map-official-row span { flex: 1; min-width: 0; text-align: left; }
+.map-official-row small { display: block; margin: 0; }
+.map-official-link { flex: 0 0 auto; padding-top: 4px; }
+.map-official-row input[type="checkbox"] { width: 14px; height: 14px; min-width: 0; padding: 0; display: inline-block; }

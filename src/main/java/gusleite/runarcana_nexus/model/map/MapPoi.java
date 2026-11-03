@@ -56,6 +56,13 @@ public class MapPoi {
 
     private Long spotlightRev;
 
+    // Lugar do catálogo oficial (OfficialPlaces): chave estável, região (slug do mapa). Não se apaga; o mestre só liga e desliga.
+    @Column(length = 60)
+    private String officialKey;
+
+    @Column(length = 40)
+    private String regionSlug;
+
     private boolean toAll;
 
     @ManyToMany

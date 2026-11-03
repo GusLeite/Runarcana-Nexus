@@ -141,7 +141,7 @@ Cabeçalho fixo (CAMPANHA / Runeterra, abas **Visão do mestre | Jogador**, **+ 
 - Cada região (Noxus, Shurima…) ganha, no painel, uma seção do mestre com texto próprio, anotações e a lista de **personagens relacionados** (verbetes da lore do tipo personagem ligados à região, mais os que o mestre escolher), cada um abrindo o verbete.
 - O mestre decide o que o jogador vê (como no ponto: a todos ou a alguns).
 
-## Etapa 14 — Pontos oficiais do mapa de Runeterra
+## Etapa 14 — Pontos oficiais do mapa de Runeterra — **feita (2026-11-03)**
 
 - Catálogo com os lugares do mapa oficial (Disco Solar, Zirima…), por região, com nome, tipo e posição.
 - O mestre liga e desliga a exibição de cada um para os jogadores (e de uma região inteira); desligado, só o mestre vê. Os pontos oficiais usam o painel e a galeria do ponto, mas não se apagam.

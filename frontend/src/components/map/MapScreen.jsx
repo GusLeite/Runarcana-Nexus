@@ -3,7 +3,7 @@ import { prefersReducedMotion } from '../../hooks/useCountUp.js'
 import { createMapScene } from './mapScene.js'
 import {
   addPoiComment, clearPartyTrail, createPoi, createWaypoint, deletePoi, deletePoiComment, deleteWaypoint, fetchBandle, fetchParty, fetchPois,
-  fetchPoiImages, fetchWaypoints, hideParty, moveParty, rollBandle, setMapFog, setPoiAudience, setRegionRevealed, updatePoi, updateWaypoint,
+  fetchPoiImages, fetchWaypoints, hideParty, setOfficialAudience, moveParty, rollBandle, setMapFog, setPoiAudience, setRegionRevealed, updatePoi, updateWaypoint,
 } from '../../api/map.js'
 import { fetchLore } from '../../api/lore.js'
 import { fetchRecipients } from '../../api/master.js'
@@ -15,6 +15,7 @@ import RegionPanel from './RegionPanel.jsx'
 import { PoiForm, PoiPanel, WaypointPanel } from './MapPointPanels.jsx'
 import { PoiGlyph } from './poiKinds.jsx'
 import { ImageLightbox } from './PoiGallery.jsx'
+import OfficialPlacesPanel from './OfficialPlacesPanel.jsx'
 import '../../styles/map.css'
 
 const PANEL_WIDTH = 380
@@ -80,6 +81,9 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   // O grupo: { x, y, trail, fog, revealed } do back. partyPin é o ponto que a cena desenha (anda aos poucos).
   const [party, setParty] = useState(null)
   const [fogOpen, setFogOpen] = useState(false)
+  const [officialOpen, setOfficialOpen] = useState(false) // lista dos lugares do mapa oficial (mestre)
+  const [officialBusy, setOfficialBusy] = useState(false)
+  const [movingId, setMovingId] = useState(null) // ponto que o mestre está movendo (placing === 'move')
   const partyPin = useRef({ slug: 'party', el: null, x: 0, y: 0, z: 0, level: 'any', lift: 0 })
   const partyWalk = useRef(0)
   const partyDrag = useRef(null)
@@ -378,6 +382,11 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
     }
     setNotice(null)
     setPlacing(null)
+    if (placing === 'move') {
+      const poi = pois?.find(p => p.id === movingId)
+      if (poi) movePoiTo(poi, world.x, world.y)
+      return
+    }
     if (placing === 'party') {
       moveGroupTo(world.x, world.y)
       return
@@ -409,6 +418,37 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
     const saved = await setPoiAudience(session.token, poi.id, toAll, recipients)
     setPois(list => list.map(p => (p.id === saved.id ? saved : p)))
     setNotice(toAll ? poi.name + ' foi revelado ao grupo.' : recipients.length ? poi.name + ' foi revelado a alguns.' : poi.name + ' voltou a ser segredo.')
+  }
+
+  // Mestre: leva o ponto (inclusive um oficial, cuja posição é aproximada) para onde clicou.
+  const movePoiTo = async (poi, x, y) => {
+    try {
+      const saved = await updatePoi(session.token, poi.id, {
+        name: poi.name, kind: poi.kind, description: poi.description, loreEntryId: poi.loreEntryId, secretNotes: poi.secretNotes,
+        toAll: poi.toAll, recipients: poi.recipients, x: Math.round(x), y: Math.round(y),
+      })
+      setPois(list => list.map(p => (p.id === saved.id ? saved : p)))
+      setNotice(poi.name + ' foi movido.')
+      openPoint('poi', saved)
+    } catch (err) {
+      setNotice(err.message)
+    } finally {
+      setMovingId(null)
+    }
+  }
+
+  // Lugares do mapa oficial: um liga/desliga, ou uma região (ou todos) de uma vez.
+  const toggleOfficial = poi => revealPoi(poi, !poi.toAll, poi.recipients ?? []).catch(err => setNotice(err.message))
+  const bulkOfficial = async (region, toAll) => {
+    setOfficialBusy(true)
+    try {
+      await setOfficialAudience(session.token, region, toAll)
+      setPois(await fetchPois(session.token))
+    } catch (err) {
+      setNotice(err.message)
+    } finally {
+      setOfficialBusy(false)
+    }
   }
 
   const removePoi = async poi => {
@@ -495,7 +535,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
             <span key={label.slug} ref={el => { anchors.current[label.slug] = el }} className="map-pin map-label">{label.name}</span>
           ))}
           {(pois ?? []).map(poi => (
-            <button key={poi.id} ref={el => { anchors.current['poi-' + poi.id] = el }} className={'map-pin map-poi map-poi-' + poi.kind.toLowerCase() + (bornPois.includes(poi.id) ? ' map-poi-born' : '')} type="button" onClick={() => openPoint('poi', poi)}>
+            <button key={poi.id} ref={el => { anchors.current['poi-' + poi.id] = el }} className={'map-pin map-poi map-poi-' + poi.kind.toLowerCase() + (poi.official ? ' map-poi-official' : '') + (bornPois.includes(poi.id) ? ' map-poi-born' : '')} type="button" onClick={() => openPoint('poi', poi)}>
               <span className="map-poi-icon"><PoiGlyph kind={poi.kind} /></span>
               <span className="map-pin-name">{poi.name}</span>
             </button>
@@ -568,6 +608,9 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
                     <button type="button" className="map-tool quiet" onClick={() => window.confirm('Apagar a trilha da viagem?') && partyAction(() => clearPartyTrail(session.token), 'Trilha apagada.')}>APAGAR TRILHA</button>
                   )}
                   {party?.x != null && <button type="button" className="map-tool quiet" onClick={() => partyAction(() => hideParty(session.token), 'O grupo saiu do mapa.')}>TIRAR O GRUPO</button>}
+                  <button type="button" className={'map-tool' + (officialOpen ? ' on' : '')} aria-pressed={officialOpen} onClick={() => setOfficialOpen(o => !o)}>
+                    LUGARES OFICIAIS {(pois ?? []).filter(p => p.official && p.toAll).length}/{(pois ?? []).filter(p => p.official).length}
+                  </button>
                   <button type="button" className={'map-tool' + (party?.fog ? ' on' : '')} aria-pressed={!!party?.fog} onClick={() => partyAction(() => setMapFog(session.token, !party?.fog))}>
                     NÉVOA {party?.fog ? 'LIGADA' : 'DESLIGADA'}
                   </button>
@@ -602,6 +645,16 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
               )}
           </div>
           <p className="map-hint">Arraste para mover · role para aproximar</p>
+          {master && officialOpen && (
+            <OfficialPlacesPanel
+              places={(pois ?? []).filter(p => p.official)}
+              busy={officialBusy}
+              onToggle={toggleOfficial}
+              onBulk={bulkOfficial}
+              onOpen={poi => openPoint('poi', poi)}
+              onClose={() => setOfficialOpen(false)}
+            />
+          )}
           {viewAs && <p className="map-preview-strip" role="status">Prévia de {playerName(viewAs)}: o mapa como esse jogador vê, sem edição.</p>}
           {master && (
             <button className="map-roll" type="button" onClick={rollDie} disabled={rolling || die !== null}>
@@ -610,7 +663,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
           )}
         </>
       )}
-      {placing && <div className="map-tease" role="status"><strong>{placing === 'party' ? 'Clique onde o grupo está' : 'Clique no mapa para marcar'}</strong><span>Esc cancela.</span></div>}
+      {placing && <div className="map-tease" role="status"><strong>{placing === 'party' ? 'Clique onde o grupo está' : placing === 'move' ? 'Clique onde o ponto fica' : 'Clique no mapa para marcar'}</strong><span>Esc cancela.</span></div>}
       {notice && !placing && !teased && !chosen && <div className="map-tease" role="status"><strong>{notice}</strong></div>}
       {freshPoi && !placing && !panel && (
         <div className="map-tease map-fresh" role="status">
@@ -641,6 +694,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
           onOpenLore={onOpenLore}
           onEdit={() => setPanel({ type: 'poiForm', id: openPoi.id })}
           onAudience={revealPoi}
+          onMove={() => { setMovingId(openPoi.id); setPanel(null); setPlacing('move') }}
           token={session.token}
           onPoi={saved => setPois(list => list.map(p => (p.id === saved.id ? saved : p)))}
           onNotice={setNotice}

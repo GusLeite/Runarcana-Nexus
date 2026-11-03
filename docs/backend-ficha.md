@@ -81,6 +81,10 @@ Crônica compartilhada da mesa: qualquer conta logada lê (últimas 300, mais no
 - Ligação com o mapa: `JournalEntry.poi` (coluna `poi_id`, nula) aponta o local da entrada. O `PLACE` já nasce ligado ao ponto; as `NOTE` escolhem o local no formulário ou no painel do ponto. Apagar o ponto só zera a ligação. Se `journal_entry` já existia no PostgreSQL, o `ddl-auto` cria a coluna sozinho (é nula).
 O `JournalService` não depende do `CharacterService` (que o usa): acha o personagem do autor direto no `CharacterRepository`.
 
+## Lugares do mapa oficial (`OfficialPlaces`, `OfficialPlacesSeeder`)
+
+Catálogo fixo em código (`services/OfficialPlaces`, ~30 lugares do mapa de Runeterra por região: Disco Solar, Nashramae, Camavor, Icathia…), com posições **aproximadas** (partem do brasão da região; o mestre move qualquer ponto). Ao subir, o `OfficialPlacesSeeder` cria como `MapPoi` os que faltam (pela `officialKey`), escondidos (`toAll` falso); o que o mestre já mexeu não é sobrescrito, e lugares novos do catálogo entram nas atualizações seguintes. Desligue com `runarcana.official-places.seed=false` (os testes desligam; `OfficialPlacesTests` liga). Ligar e desligar usa o `PATCH /map/pois/{id}/audience` ou, em lote, `PATCH /map/pois/official/audience`. Não se apagam (400). Colunas novas e nulas em `map_poi` (`official_key`, `region_slug`): o `ddl-auto` cria sozinho.
+
 ## Modelo de dados
 
 ### Itens (`model/items`)
