@@ -43,3 +43,10 @@ export const clearPartyTrail = token => request('/map/party/trail', { method: 'D
 export const setMapFog = (token, enabled) => request('/map/fog', { method: 'PUT', token, body: { enabled } })
 
 export const setRegionRevealed = (token, slug, revealed) => request('/map/fog/' + slug, { method: 'PUT', token, body: { revealed } })
+
+// Só o mestre: revela (toAll e/ou jogadores) ou esconde o ponto, sem mexer no resto.
+export const setPoiAudience = (token, id, toAll, recipients) =>
+  request('/map/pois/' + id + '/audience', { method: 'PATCH', token, body: { toAll, recipients } })
+
+// Leve: [{ id, name }] do que a conta vê (a ficha usa para avisar de local novo).
+export const fetchVisiblePois = token => request('/map/pois/visible', { token })

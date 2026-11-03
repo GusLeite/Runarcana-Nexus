@@ -101,7 +101,7 @@ Comparação com a página do [Incognium](https://runarcana.org/incognium/) (pro
 
 O plano vai até a Etapa 11 (decisão de 2026-11-03). Ficam de fora: modo transmissão (OBS), ligação com a Wiki, exportar/importar em Markdown, várias campanhas e o que é do serviço deles (hospedagem, armazenamento externo, contas e convites).
 
-## Etapa 7 — Revelar o ponto na hora certa
+## Etapa 7 — Revelar o ponto na hora certa — **feita (2026-11-03)**
 
 **Por quê**: hoje revelar é editar o formulário, e os jogadores só veem o ponto novo quando reabrem o mapa (`fetchPois` roda uma vez).
 - No painel do ponto (mestre): botão **REVELAR AO GRUPO** (todos) e **revelar a…** (escolhe jogadores), sem abrir o formulário; **ESCONDER** desfaz. Rota curta `PATCH /map/pois/{id}/audience`.

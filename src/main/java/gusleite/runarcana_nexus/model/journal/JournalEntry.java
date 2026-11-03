@@ -8,12 +8,12 @@ import lombok.Setter;
 import java.time.Instant;
 
 // Diário do grupo: entradas escritas por qualquer um da mesa (NOTE) e eventos que o sistema registra sozinho
-// (loot, ouro, alguém caindo a 0 PV, documento enviado, subida de nível), base do resumo de cada sessão.
+// (loot, ouro, alguém caindo a 0 PV, documento enviado, subida de nível, local revelado no mapa), base do resumo de cada sessão.
 @Entity
 @Getter
 @Setter
 public class JournalEntry {
-    public enum Kind { NOTE, LOOT, GOLD, DOWNED, DOCUMENT, LEVEL_UP }
+    public enum Kind { NOTE, LOOT, GOLD, DOWNED, DOCUMENT, LEVEL_UP, PLACE }
 
     public static final int MAX_TITLE = 120;
     public static final int MAX_BODY = 8000;

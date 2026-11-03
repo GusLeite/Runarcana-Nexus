@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-03 — Mapa: revelar o ponto na hora certa (`feature/character-sheet`)
+- Etapa 7 do plano: botões **REVELAR AO GRUPO**, **ESCONDER** e "Só a:" no painel do ponto (`PATCH /map/pois/{id}/audience`).
+- O jogador vê o ponto brotar no mapa sem reabrir (consulta a cada 5 s) e recebe aviso na ficha (`GET /map/pois/visible`).
+- Diário ganha o evento `PLACE` (nome só quando é para todos); contadores de pontos e revelados para o mestre.
+
 ## 2026-11-03 — Plano do mapa de campanha (`feature/character-sheet`)
 - `plano-jogo.md` ganha as Etapas 7 a 11: o que o Incognium tem e o projeto não (revelar na hora, imagens e notas secretas no ponto, histórico do local, links de locais, ver como jogador). Transmissão, Wiki, Markdown e várias campanhas ficaram de fora por decisão.
 

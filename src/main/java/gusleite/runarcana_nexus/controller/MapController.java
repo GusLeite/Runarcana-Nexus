@@ -54,6 +54,21 @@ public class MapController {
         return ResponseEntity.ok(points.listPois(auth.authenticate(authorization)));
     }
 
+    // Lista leve (id e nome) do que a conta vê: a ficha confere para avisar de local novo.
+    @GetMapping("/pois/visible")
+    public ResponseEntity<List<MapPointService.VisiblePoi>> visiblePois(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        return ResponseEntity.ok(points.visible(auth.authenticate(authorization)));
+    }
+
+    public record AudienceRequest(Boolean toAll, List<String> recipients) {}
+
+    // Revela ou esconde o ponto sem o formulário inteiro.
+    @PatchMapping("/pois/{id}/audience")
+    public ResponseEntity<PoiResponse> setAudience(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                                   @PathVariable Long id, @RequestBody AudienceRequest request) {
+        return ResponseEntity.ok(points.setAudience(auth.requireMaster(authorization), id, request.toAll(), request.recipients()));
+    }
+
     @PostMapping("/pois")
     public ResponseEntity<PoiResponse> createPoi(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
                                                  @Valid @RequestBody PoiRequest request) {

@@ -15,7 +15,7 @@ function PointPanel({ label, onClose, children }) {
 }
 
 // Ponto de interesse: descrição, verbete ligado, comentários da mesa e anotações de quem está vendo.
-export function PoiPanel({ poi, loreEntry, master, onOpenLore, onEdit, onAddComment, onDeleteComment, onClose }) {
+export function PoiPanel({ poi, loreEntry, master, players = [], onOpenLore, onEdit, onAudience, onAddComment, onDeleteComment, onClose }) {
   const [text, setText] = useState('')
   const [shared, setShared] = useState(false)
   const [msg, setMsg] = useState(null)
@@ -42,6 +42,7 @@ export function PoiPanel({ poi, loreEntry, master, onOpenLore, onEdit, onAddComm
       <span className="lore-hero-kind">{POI_KINDS[poi.kind]}</span>
       <h2>{poi.name}</h2>
       {master && <p className="lore-hero-who">Revelado a: {audienceLabel(poi)}</p>}
+      {master && onAudience && <RevealBar poi={poi} players={players} onAudience={onAudience} />}
       {poi.description && <p className="map-point-text">{poi.description}</p>}
       <div className="lore-actions">
         {loreEntry && <button type="button" className="lore-action" onClick={() => onOpenLore(loreEntry.id)}>ABRIR NA LORE</button>}
@@ -198,5 +199,49 @@ export function WaypointPanel({ waypoint, readOnly, onSave, onDelete, onClose })
         </div>
       </form>
     </PointPanel>
+  )
+}
+
+// Mestre: revela o ponto na hora (a todos ou a alguns) ou o esconde de novo, sem abrir o formulário.
+function RevealBar({ poi, players, onAudience }) {
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState(null)
+  const revealed = poi.toAll || poi.recipients?.length > 0
+  const set = async (toAll, recipients) => {
+    setBusy(true)
+    setMsg(null)
+    try {
+      await onAudience(poi, toAll, recipients)
+    } catch (err) {
+      setMsg(err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+  const toggle = username => {
+    const now = poi.recipients ?? []
+    set(false, now.includes(username) ? now.filter(u => u !== username) : [...now, username])
+  }
+  return (
+    <div className="map-reveal">
+      <div className="lore-actions">
+        {!poi.toAll && <button type="button" className="lore-action map-reveal-go" disabled={busy} onClick={() => set(true, [])}>REVELAR AO GRUPO</button>}
+        {revealed && <button type="button" className="lore-action ghost" disabled={busy} onClick={() => set(false, [])}>ESCONDER</button>}
+      </div>
+      {!poi.toAll && players.length > 0 && (
+        <div className="lore-chips" role="group" aria-label="Revelar só a alguns">
+          <span className="map-reveal-label">Só a:</span>
+          {players.map(username => {
+            const on = poi.recipients?.includes(username)
+            return (
+              <button key={username} type="button" className={'lore-chip' + (on ? ' on' : '')} aria-pressed={on} disabled={busy} onClick={() => toggle(username)}>
+                {playerName(username)}
+              </button>
+            )
+          })}
+        </div>
+      )}
+      {msg && <p className="lore-form-error" role="alert">{msg}</p>}
+    </div>
   )
 }

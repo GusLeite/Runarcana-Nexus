@@ -76,7 +76,8 @@ Crônica compartilhada da mesa: qualquer conta logada lê (últimas 300, mais no
 - `LOOT`: o mestre dá item do catálogo ou item livre ("Nyx recebeu 2× Adaga"); `GOLD`: o mestre aumenta o ouro ("Nyx recebeu 30 PO"; diminuir não entra);
 - `DOWNED`: os PV vão de mais de 0 para 0 (jogador ou mestre);
 - `DOCUMENT`: documento novo; o título só aparece se é para todos e não é `SECRET` ("Documento novo para gaudron" nos outros casos);
-- `LEVEL_UP`: o jogador aplica a subida ("Nyx subiu para o 5º nível").
+- `LEVEL_UP`: o jogador aplica a subida ("Nyx subiu para o 5º nível");
+- `PLACE`: um ponto do mapa é revelado a mais gente (criar, editar ou `PATCH /map/pois/{id}/audience`); com o nome só se for a todos ("Novo local revelado a gaudron" nos outros casos). Se a tabela `journal_entry` já existia no PostgreSQL, o `CHECK` do `kind` não tem `PLACE`: rode um `ALTER TABLE` para incluí-lo.
 O `JournalService` não depende do `CharacterService` (que o usa): acha o personagem do autor direto no `CharacterRepository`.
 
 ## Modelo de dados

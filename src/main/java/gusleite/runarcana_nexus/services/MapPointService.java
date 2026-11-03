@@ -2,6 +2,7 @@ package gusleite.runarcana_nexus.services;
 
 import gusleite.runarcana_nexus.exception.ApiException;
 import gusleite.runarcana_nexus.model.auth.Account;
+import gusleite.runarcana_nexus.model.journal.JournalEntry;
 import gusleite.runarcana_nexus.model.lore.LoreEntry;
 import gusleite.runarcana_nexus.model.map.MapPoi;
 import gusleite.runarcana_nexus.model.map.MapWaypoint;
@@ -20,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 // Pontos de interesse do mestre, comentários neles e waypoints dos jogadores.
 @Service
@@ -32,9 +35,11 @@ public class MapPointService {
     private final MapWaypointRepository waypoints;
     private final LoreEntryRepository lore;
     private final RecipientResolver resolver;
+    private final JournalService journal;
 
     public MapPointService(MapPoiRepository pois, PoiCommentRepository comments, MapWaypointRepository waypoints,
-                           LoreEntryRepository lore, RecipientResolver resolver) {
+                           LoreEntryRepository lore, RecipientResolver resolver, JournalService journal) {
+        this.journal = journal;
         this.pois = pois;
         this.comments = comments;
         this.waypoints = waypoints;
@@ -55,14 +60,40 @@ public class MapPointService {
     public PoiResponse createPoi(Account master, PoiRequest request) {
         MapPoi poi = new MapPoi();
         fill(poi, request);
+        announce(poi, Audience.NOBODY);
         return toResponse(master, pois.save(poi), List.of());
     }
 
     @Transactional
     public PoiResponse updatePoi(Account master, Long id, PoiRequest request) {
         MapPoi poi = findPoi(id);
+        Audience before = Audience.of(poi);
         fill(poi, request);
+        announce(poi, before);
         return toResponse(master, poi, comments.findAllByOrderByCreatedAtAscIdAsc());
+    }
+
+    // Revelar (ou esconder) sem mexer no resto do ponto: toAll e/ou jogadores. Os dois vazios = só o mestre.
+    @Transactional
+    public PoiResponse setAudience(Account master, Long id, Boolean toAll, List<String> recipients) {
+        MapPoi poi = findPoi(id);
+        Audience before = Audience.of(poi);
+        poi.setToAll(Boolean.TRUE.equals(toAll));
+        poi.getRecipients().clear();
+        poi.getRecipients().addAll(resolver.resolve(recipients));
+        announce(poi, before);
+        return toResponse(master, poi, comments.findAllByOrderByCreatedAtAscIdAsc());
+    }
+
+    // Leve, para a ficha avisar de local novo: só id e nome do que a conta vê.
+    public record VisiblePoi(long id, String name) {}
+
+    @Transactional(readOnly = true)
+    public List<VisiblePoi> visible(Account viewer) {
+        return pois.findAll().stream()
+                .filter(p -> RecipientResolver.reaches(viewer, p.isToAll(), p.getRecipients()))
+                .map(p -> new VisiblePoi(p.getId(), p.getName()))
+                .toList();
     }
 
     @Transactional
@@ -92,6 +123,26 @@ public class MapPointService {
         boolean mine = comment.getAuthor().getId().equals(account.getId());
         if (!mine && !(account.isMaster() && comment.isShared())) throw ApiException.notFound("Comentário não encontrado.");
         comments.delete(comment);
+    }
+
+    // Quem via o ponto antes de uma mudança (para saber se ele foi revelado a mais gente).
+    private record Audience(boolean toAll, Set<Long> ids) {
+        static final Audience NOBODY = new Audience(false, Set.of());
+
+        static Audience of(MapPoi p) {
+            return new Audience(p.isToAll(), p.getRecipients().stream().map(Account::getId).collect(Collectors.toSet()));
+        }
+    }
+
+    // Diário: revelado a todos mostra o nome; revelado a alguns, só a quem (o nome continua segredo para o resto da mesa).
+    private void announce(MapPoi poi, Audience before) {
+        if (before.toAll()) return;
+        if (poi.isToAll()) {
+            journal.record(JournalEntry.Kind.PLACE, JournalService.MASTER_NAME, "Novo local revelado: " + poi.getName());
+            return;
+        }
+        List<String> added = poi.getRecipients().stream().filter(a -> !before.ids().contains(a.getId())).map(Account::getUsername).sorted().toList();
+        if (!added.isEmpty()) journal.record(JournalEntry.Kind.PLACE, JournalService.MASTER_NAME, "Novo local revelado a " + String.join(", ", added));
     }
 
     private MapPoi findPoi(Long id) {

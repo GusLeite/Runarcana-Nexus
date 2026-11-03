@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -103,6 +104,37 @@ class MapControllerTests {
         mvc.perform(get("/map/party").header("Authorization", "Bearer " + player))
                 .andExpect(jsonPath("$.revealed.length()").value(1))
                 .andExpect(jsonPath("$.revealed[0]").value("noxus"));
+    }
+
+    @Test
+    void oMestreRevelaOPontoNaHora() throws Exception {
+        String master = login("mestre");
+        String player = login("gaudron");
+        String body = send(post("/map/pois"), master, "{\"name\":\"Ruína de Shurima\",\"kind\":\"MYSTERY\",\"x\":10,\"y\":-300,\"toAll\":false,\"recipients\":[]}")
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        Matcher m = Pattern.compile("^\\{\"id\":(\\d+)").matcher(body);
+        assertThat(m.find()).isTrue();
+        String id = m.group(1);
+        mvc.perform(get("/map/pois/visible").header("Authorization", "Bearer " + player)).andExpect(jsonPath("$").isEmpty());
+        send(patch("/map/pois/" + id + "/audience"), player, "{\"toAll\":true}").andExpect(status().isForbidden());
+
+        // A alguns: o diário não conta o nome; a todos: conta.
+        send(patch("/map/pois/" + id + "/audience"), master, "{\"toAll\":false,\"recipients\":[\"gaudron\"]}")
+                .andExpect(jsonPath("$.recipients[0]").value("gaudron"));
+        mvc.perform(get("/map/pois/visible").header("Authorization", "Bearer " + player))
+                .andExpect(jsonPath("$[0].name").value("Ruína de Shurima"));
+        send(patch("/map/pois/" + id + "/audience"), master, "{\"toAll\":true,\"recipients\":[]}").andExpect(jsonPath("$.toAll").value(true));
+        // Já era de todos: salvar de novo não repete o aviso.
+        send(patch("/map/pois/" + id + "/audience"), master, "{\"toAll\":true,\"recipients\":[]}").andExpect(status().isOk());
+        mvc.perform(get("/journal").header("Authorization", "Bearer " + player))
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].kind").value("PLACE"))
+                .andExpect(jsonPath("$[0].title").value("Novo local revelado: Ruína de Shurima"))
+                .andExpect(jsonPath("$[1].title").value("Novo local revelado a gaudron"));
+
+        send(patch("/map/pois/" + id + "/audience"), master, "{\"toAll\":false,\"recipients\":[]}").andExpect(status().isOk());
+        mvc.perform(get("/map/pois/visible").header("Authorization", "Bearer " + player)).andExpect(jsonPath("$").isEmpty());
     }
 
     private org.springframework.test.web.servlet.ResultActions send(org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder request,

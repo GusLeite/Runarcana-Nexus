@@ -3,7 +3,7 @@ import { prefersReducedMotion } from '../../hooks/useCountUp.js'
 import { createMapScene } from './mapScene.js'
 import {
   addPoiComment, clearPartyTrail, createPoi, createWaypoint, deletePoi, deletePoiComment, deleteWaypoint, fetchBandle, fetchParty, fetchPois,
-  fetchWaypoints, hideParty, moveParty, rollBandle, setMapFog, setRegionRevealed, updatePoi, updateWaypoint,
+  fetchWaypoints, hideParty, moveParty, rollBandle, setMapFog, setPoiAudience, setRegionRevealed, updatePoi, updateWaypoint,
 } from '../../api/map.js'
 import { fetchLore } from '../../api/lore.js'
 import { fetchRecipients } from '../../api/master.js'
@@ -29,6 +29,9 @@ const MAX_WAYPOINTS = 3
 // O grupo no mapa: todos conferem a cada poucos segundos; o marcador anda até o lugar novo.
 const PARTY_POLL = 3000
 const PARTY_WALK_MS = 1600
+// Pontos: conferidos com a mesma frequência; o recém-revelado brota e fica em destaque por um tempo.
+const POI_POLL = 5000
+const BORN_MS = 4000
 // Névoa: quase opaca para os jogadores; o mestre vê através.
 const FOG_PLAYER = 0.96
 const FOG_MASTER = 0.45
@@ -39,6 +42,7 @@ const PIN_IMAGES = {
   art: pin => [pin.goldIcon, pin.art[0].icon],
 }
 
+const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many)
 const coveredWidth = () => (window.innerWidth >= PANEL_MIN_SCREEN ? PANEL_WIDTH : 0)
 
 // Mapa de Runeterra em tela cheia. A câmera e o relevo ficam em mapScene.js.
@@ -77,6 +81,9 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   const partyWalk = useRef(0)
   const partyDrag = useRef(null)
   const trailKey = useRef(null)
+  // Ponto recém-revelado ao jogador: { id, name } para o aviso com "Ver no mapa"; born: ids que brotam agora.
+  const [freshPoi, setFreshPoi] = useState(null)
+  const [bornPois, setBornPois] = useState([])
 
   useEffect(() => {
     let cancelled = false
@@ -115,9 +122,35 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   useEffect(() => {
     fetchBandle(session.token).then(res => setBandleRoll(res.roll)).catch(() => {})
     fetchLore(session.token).then(setLore).catch(() => {})
-    fetchPois(session.token).then(setPois).catch(() => setPois([]))
     fetchWaypoints(session.token).then(setWaypoints).catch(() => {})
     if (master) fetchRecipients(session.token).then(setPlayers).catch(() => {})
+  }, [session.token, master])
+
+  // Pontos de interesse: conferidos a cada poucos segundos; o jogador é avisado do que acabou de ser revelado a ele.
+  useEffect(() => {
+    let known = null
+    let lastKey = null
+    const check = () => {
+      if (document.hidden && known) return
+      fetchPois(session.token)
+        .then(list => {
+          if (known && !master) {
+            const fresh = list.filter(p => !known.has(p.id))
+            if (fresh.length) {
+              setFreshPoi(fresh[0])
+              setBornPois(fresh.map(p => p.id))
+              setTimeout(() => setBornPois([]), BORN_MS)
+            }
+          }
+          known = new Set(list.map(p => p.id))
+          const key = JSON.stringify(list)
+          if (key !== lastKey) { lastKey = key; setPois(list) }
+        })
+        .catch(() => setPois(p => p ?? []))
+    }
+    check()
+    const t = setInterval(check, POI_POLL)
+    return () => clearInterval(t)
   }, [session.token, master])
 
   // O grupo: a mesa inteira confere a cada poucos segundos (com a aba visível); só troca o estado quando muda.
@@ -231,7 +264,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   useEffect(() => {
     const heightAt = (x, y) => scene.current?.heightAt(x, y) ?? 0
     const dynamic = [
-      ...(pois ?? []).map(p => ({ slug: 'poi-' + p.id, x: p.x, y: p.y, level: 'near' })),
+      ...(pois ?? []).map(p => ({ slug: 'poi-' + p.id, x: p.x, y: p.y, level: bornPois.includes(p.id) ? 'any' : 'near' })),
       ...waypoints.map(w => ({ slug: 'wp-' + w.id, x: w.x, y: w.y, level: 'any' })),
       ...(draftPoint ? [{ slug: 'draft', x: draftPoint.x, y: draftPoint.y, level: 'any' }] : []),
     ]
@@ -243,7 +276,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
     if (partyX != null && group.el) dynamic.push(group)
     scenePins.current.length = 0
     scenePins.current.push(...staticPins.current, ...dynamic)
-  }, [pois, waypoints, draftPoint?.x, draftPoint?.y, status, partyX != null]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [pois, waypoints, draftPoint?.x, draftPoint?.y, status, partyX != null, bornPois]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const rollDie = async () => {
     setRolling(true)
@@ -338,6 +371,12 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
     openPoint('poi', saved)
   }
 
+  const revealPoi = async (poi, toAll, recipients) => {
+    const saved = await setPoiAudience(session.token, poi.id, toAll, recipients)
+    setPois(list => list.map(p => (p.id === saved.id ? saved : p)))
+    setNotice(toAll ? poi.name + ' foi revelado ao grupo.' : recipients.length ? poi.name + ' foi revelado a alguns.' : poi.name + ' voltou a ser segredo.')
+  }
+
   const removePoi = async poi => {
     await deletePoi(session.token, poi.id)
     setPois(list => list.filter(p => p.id !== poi.id))
@@ -422,7 +461,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
             <span key={label.slug} ref={el => { anchors.current[label.slug] = el }} className="map-pin map-label">{label.name}</span>
           ))}
           {(pois ?? []).map(poi => (
-            <button key={poi.id} ref={el => { anchors.current['poi-' + poi.id] = el }} className={'map-pin map-poi map-poi-' + poi.kind.toLowerCase()} type="button" onClick={() => openPoint('poi', poi)}>
+            <button key={poi.id} ref={el => { anchors.current['poi-' + poi.id] = el }} className={'map-pin map-poi map-poi-' + poi.kind.toLowerCase() + (bornPois.includes(poi.id) ? ' map-poi-born' : '')} type="button" onClick={() => openPoint('poi', poi)}>
               <span className="map-poi-icon"><PoiGlyph kind={poi.kind} /></span>
               <span className="map-pin-name">{poi.name}</span>
             </button>
@@ -467,6 +506,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
             {master
               ? (
                 <>
+                  <span className="map-count" title="Pontos que você criou e quantos o grupo inteiro já vê">Mestre: {plural((pois ?? []).length, 'ponto', 'pontos')} · Grupo: {plural((pois ?? []).filter(p => p.toAll).length, 'revelado', 'revelados')}</span>
                   <button type="button" className={'map-tool' + (placing === 'poi' ? ' on' : '')} aria-pressed={placing === 'poi'} onClick={() => setPlacing(p => (p === 'poi' ? null : 'poi'))}>+ PONTO DE INTERESSE</button>
                   <button type="button" className={'map-tool' + (placing === 'party' ? ' on' : '')} aria-pressed={placing === 'party'} onClick={() => setPlacing(p => (p === 'party' ? null : 'party'))}>
                     {party?.x != null ? 'MOVER O GRUPO' : 'POR O GRUPO NO MAPA'}
@@ -518,6 +558,15 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
       )}
       {placing && <div className="map-tease" role="status"><strong>{placing === 'party' ? 'Clique onde o grupo está' : 'Clique no mapa para marcar'}</strong><span>Esc cancela.</span></div>}
       {notice && !placing && !teased && !chosen && <div className="map-tease" role="status"><strong>{notice}</strong></div>}
+      {freshPoi && !placing && !panel && (
+        <div className="map-tease map-fresh" role="status">
+          <strong>Novo local revelado: {freshPoi.name}</strong>
+          <span className="map-fresh-actions">
+            <button type="button" className="map-tool" onClick={() => { openPoint('poi', freshPoi); setFreshPoi(null) }}>VER NO MAPA</button>
+            <button type="button" className="map-tool quiet" onClick={() => setFreshPoi(null)}>Fechar</button>
+          </span>
+        </div>
+      )}
       {teased && !placing && !chosen && !panel && (
         <div className="map-tease">
           <strong>{teased.name}</strong>
@@ -532,8 +581,10 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
           poi={openPoi}
           loreEntry={lore.find(entry => entry.id === openPoi.loreEntryId)}
           master={master}
+          players={players}
           onOpenLore={onOpenLore}
           onEdit={() => setPanel({ type: 'poiForm', id: openPoi.id })}
+          onAudience={revealPoi}
           onAddComment={addComment}
           onDeleteComment={removeComment}
           onClose={() => setPanel(null)}

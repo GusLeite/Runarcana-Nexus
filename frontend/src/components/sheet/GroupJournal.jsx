@@ -5,7 +5,7 @@ import '../../styles/journal.css'
 
 const POLL = 15000
 const EMPTY = { title: '', body: '' }
-const EVENT_ICON = { LOOT: '◆', GOLD: '●', DOWNED: '✝', DOCUMENT: '✉', LEVEL_UP: '▲' }
+const EVENT_ICON = { LOOT: '◆', GOLD: '●', DOWNED: '✝', DOCUMENT: '✉', LEVEL_UP: '▲', PLACE: '⌖' }
 const fmtTime = iso => new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
 const fmtDay = key => {
   const text = new Date(key + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' })
@@ -111,6 +111,7 @@ export default function GroupJournal({ token, onError, onToast }) {
                 <Stat label="Ouro" value={s.gold + ' PO'} />
                 <Stat label="Quedas" value={s.downed.length} tone={s.downed.length ? 'bad' : ''} />
                 <Stat label="Documentos" value={s.documents.length} />
+                <Stat label="Locais" value={s.places.length} />
                 <Stat label="Entradas" value={s.notes} />
               </div>
               <ul className="gj-highlights">
@@ -118,6 +119,7 @@ export default function GroupJournal({ token, onError, onToast }) {
                 {s.downed.length > 0 && <li className="downed">✝ Caíram a 0 PV: {s.downed.join(', ')}</li>}
                 {s.loot.map((t, i) => <li key={i} className="loot">◆ {t}</li>)}
                 {s.documents.map((t, i) => <li key={'d' + i} className="document">✉ {t}</li>)}
+                {s.places.map((t, i) => <li key={'p' + i} className="place">⌖ {t}</li>)}
               </ul>
             </article>
           ))}

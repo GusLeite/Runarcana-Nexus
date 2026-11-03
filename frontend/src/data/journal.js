@@ -10,7 +10,7 @@ export function sessionSummaries(entries) {
   const days = new Map()
   for (const e of entries) {
     const key = dayKey(e.createdAt)
-    if (!days.has(key)) days.set(key, { date: key, loot: [], gold: 0, downed: [], documents: [], levelUps: [], notes: 0, people: new Set() })
+    if (!days.has(key)) days.set(key, { date: key, loot: [], gold: 0, downed: [], documents: [], levelUps: [], places: [], notes: 0, people: new Set() })
     const s = days.get(key)
     if (e.who) s.people.add(e.who)
     if (e.kind === 'NOTE') s.notes++
@@ -19,6 +19,7 @@ export function sessionSummaries(entries) {
     else if (e.kind === 'DOWNED') s.downed.push(e.who)
     else if (e.kind === 'DOCUMENT') s.documents.push(e.title)
     else if (e.kind === 'LEVEL_UP') s.levelUps.push(e.title)
+    else if (e.kind === 'PLACE') s.places.push(e.title)
   }
   // As entradas já vêm da mais nova para a mais antiga; as listas de cada dia ficam em ordem cronológica.
   return [...days.values()].map(s => ({
@@ -27,6 +28,7 @@ export function sessionSummaries(entries) {
     downed: [...new Set(s.downed.reverse())],
     documents: s.documents.reverse(),
     levelUps: s.levelUps.reverse(),
+    places: s.places.reverse(),
     people: [...s.people].filter(p => p !== 'Mestre').sort(),
   }))
 }

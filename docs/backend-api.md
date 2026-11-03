@@ -62,6 +62,8 @@
 | DELETE | `/map/pois/{id}` | – (Bearer **mestre**) | Apaga o ponto e os comentários |
 | POST | `/map/pois/{id}/comments` | `{ text, shared }` (Bearer) | Comentário (`shared`) ou anotação só do autor (201). 404 se a conta não vê o ponto |
 | DELETE | `/map/pois/comments/{id}` | – (Bearer) | O autor apaga o seu; o mestre, os da mesa. 404 nos demais casos |
+| PATCH | `/map/pois/{id}/audience` | `{ toAll, recipients }` (Bearer **mestre**) | Revela (a todos e/ou a jogadores) ou esconde o ponto sem mexer no resto. Revelar a mais gente gera o evento `PLACE` no diário (com o nome só se for a todos) |
+| GET | `/map/pois/visible` | – (Bearer) | Lista leve `[{ id, name }]` do que a conta vê (a ficha usa para avisar de local novo) |
 | GET | `/map/waypoints` | – (Bearer) | Jogador: os seus. Mestre: os de todos, com `owner` |
 | POST / PUT | `/map/waypoints`, `/map/waypoints/{id}` | `{ name, comment, x, y }` (Bearer) | Só o dono. 400 no quarto waypoint e para o mestre; 404 no waypoint de outro |
 | DELETE | `/map/waypoints/{id}` | – (Bearer) | Só o dono |

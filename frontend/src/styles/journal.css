@@ -31,7 +31,7 @@
 .gj-session header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px}
 .gj-session h4{margin:0;font-family:'Cinzel',Georgia,serif;font-size:16px;letter-spacing:.06em;color:var(--gold-hi)}
 .gj-session header small{color:var(--muted)}
-.gj-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.gj-stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
 .gj-stat{display:flex;flex-direction:column;align-items:center;padding:8px 4px;border:1px solid rgba(47,211,192,.2);background:rgba(1,10,19,.5)}
 .gj-stat b{font-family:'Cinzel',Georgia,serif;font-size:18px;color:var(--text)}
 .gj-stat span{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal)}
@@ -44,3 +44,4 @@
 @keyframes gj-in{from{opacity:0;transform:translateY(6px)}}
 @media (max-width:560px){.gj-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .master-journal{max-width:960px;margin:0 auto;width:100%}
+.gj-event.place .gj-icon,.gj-highlights .place{color:#8fd7ff}

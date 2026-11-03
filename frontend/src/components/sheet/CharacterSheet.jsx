@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { applyLevelUp, castSpell, fetchConditions, setDeathSaves as setDeathSavesApi, chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, chooseForm as chooseFormApi, toggleEffect as toggleEffectApi, consumeItem, fetchPreparation, fetchSheet, previewLevelUp, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
+import { fetchVisiblePois } from '../../api/map.js'
 import { buyFromMerchant, fetchActiveMerchant, haggleWithMerchant, pingMerchant, sellToMerchant } from '../../api/merchants.js'
 import { SKILL_NAMES, deathSaveResult, rollCheck, rollD20, rollDice } from '../../data/rules.js'
 import WorldButtons from '../map/WorldButtons.jsx'
@@ -409,6 +410,28 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       .catch(() => load())
   }, [state, abilities, token, putSheet, load])
   const closeCeremony = useCallback(() => setCeremony(null), [])
+
+  // Locais do mapa: a cada 10 s (com a aba visível) confere se o mestre revelou algum novo para este jogador.
+  const knownPois = useRef(null)
+  useEffect(() => {
+    if (!hasSheet) return undefined
+    const check = () => {
+      if (document.hidden && knownPois.current) return
+      fetchVisiblePois(token)
+        .then(list => {
+          const fresh = knownPois.current ? list.filter(p => !knownPois.current.has(p.id)) : []
+          knownPois.current = new Set(list.map(p => p.id))
+          if (fresh.length) {
+            play('success')
+            setToast((fresh.length > 1 ? fresh.length + ' novos locais revelados no mapa' : 'Novo local revelado no mapa: ' + fresh[0].name) + '. Abra o mapa no topo.')
+          }
+        })
+        .catch(() => {})
+    }
+    check()
+    const t = setInterval(check, PENDING_POLL)
+    return () => clearInterval(t)
+  }, [token, hasSheet])
 
   // O mestre libera a subida no painel: a cada 10 s (com a aba visível) confere se mudou o que está liberado.
   const pendingNow = sheet?.pendingLevels
