@@ -26,7 +26,7 @@ export const visibleHeight = z => 2 * Math.tan((FOV / 2) * Math.PI / 180) * z
 // Quanto mais perto, mais longe o mapa pode ser arrastado; de longe, ele fica centralizado.
 export function clampPan(pan, z, aspect) {
   const height = visibleHeight(z)
-  const maxX = Math.max(1.25 * MAP_SIZE - height * aspect, 0) / 2
+  const maxX = Math.max(MAP_SIZE - height * aspect, 0) / 2
   const maxY = Math.max(0.75 * MAP_SIZE - height, 0) / 2
   return { x: clamp(pan.x, -maxX, maxX), y: clamp(pan.y, -maxY, maxY) }
 }
