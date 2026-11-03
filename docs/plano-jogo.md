@@ -99,7 +99,7 @@ Testes: editar mantém ícone/usos, 403 para jogador, quem leu.
 
 Comparação com a página do [Incognium](https://runarcana.org/incognium/) (protótipo de mapa e registro de campanha do Runarcana), feita em 2026-11-03. **Já temos:** pontos do mestre com tipo, descrição, verbete da lore e quem vê (oculto até revelar), comentários da mesa e anotação privada, edição no próprio mapa, relevo com zoom e blocos nítidos, waypoints dos jogadores, o grupo no mapa (marcador, trilha e névoa por região) e o diário do grupo. As etapas abaixo cobrem **o que falta**, na ordem de valor para a mesa. Mesmas regras do plano anterior: uma entrega por etapa (código + testes + docs + changelog) e marcar como **feita** ao concluir.
 
-Fica de fora (é do serviço deles, não serve a uma mesa própria): planos de hospedagem, armazenamento no Google Drive/Dropbox/GitHub, contas e convites (já temos contas).
+O plano vai até a Etapa 11 (decisão de 2026-11-03). Ficam de fora: modo transmissão (OBS), ligação com a Wiki, exportar/importar em Markdown, várias campanhas e o que é do serviço deles (hospedagem, armazenamento externo, contas e convites).
 
 ## Etapa 7 — Revelar o ponto na hora certa
 
@@ -131,27 +131,6 @@ Fica de fora (é do serviço deles, não serve a uma mesa própria): planos de h
 **Por quê**: o mestre quer conferir o que cada um vê antes de revelar.
 - Seletor "Ver como: Mestre / Nyx / Rudo…" no mapa do mestre. `GET /map/pois?as=<usuário>` (só mestre) devolve o que aquela conta vê; a névoa passa a ser opaca e os brasões ficam "???" como para o jogador; os waypoints mostrados são os dele.
 - Faixa "Prévia de Nyx" no topo enquanto ativo; nenhuma edição nesse modo.
-
-## Etapa 12 — Modo transmissão (OBS)
-
-**Por quê**: para mesa presencial ou live, uma tela limpa só com o que os jogadores podem ver.
-- Rota `?tela=mapa&modo=transmissao`: sem painéis de edição, ferramentas, notas nem nomes de waypoints privados; camada "Grupo" (o que foi revelado a todos), névoa opaca.
-- **Chave de transmissão**: o mestre gera um token só de leitura do mapa (`/map/broadcast-key`, revogável) para colar na fonte de navegador do OBS, sem login.
-- A câmera da transmissão segue o mestre: o mestre marca "Câmera ao vivo" e o foco/zoom dele vai para o back (`/map/broadcast/view`), que a transmissão lê a cada segundo e anima.
-
-## Etapa 13 — Ligação com a Wiki Runarcana
-
-- Campo `wikiUrl` no ponto e no verbete da lore (só links de `runarcana.org`), mostrado como "Abrir na Wiki". Busca automática na Wiki fica para depois (depende de API deles).
-
-## Etapa 14 — Exportar e importar a campanha (Markdown)
-
-- `GET /campaign/export` (mestre): um `.zip` com Markdown (um arquivo por ponto, com front matter de posição, tipo e quem vê; diário por sessão; trilha) e as imagens. `POST /campaign/import` recria tudo numa mesa vazia. Serve de backup e para levar a campanha a outro servidor.
-
-## Etapa 15 — Várias campanhas (opcional, maior)
-
-**Por quê**: o Incognium separa pontos, marcadores e acessos por campanha. Hoje o projeto é uma mesa só.
-- Entidade `Campaign` (nome, cor do marcador) e "campanha ativa" do mestre; pontos, trilha, névoa, waypoints, diário e mercadores passam a ter `campaign_id`; jogadores participam de uma ou mais campanhas.
-- Mexe em quase todas as tabelas e rotas: fazer só se a mesa for rodar mais de uma campanha ao mesmo tempo. Migração: tudo que existe vira a campanha "Principal".
 
 ## Depois do "para jogar"
 

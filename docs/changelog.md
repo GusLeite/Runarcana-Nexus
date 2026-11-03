@@ -3,7 +3,7 @@
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
 ## 2026-11-03 — Plano do mapa de campanha (`feature/character-sheet`)
-- `plano-jogo.md` ganha as Etapas 7 a 15: o que o Incognium tem e o projeto não (revelar na hora, imagens e notas secretas no ponto, histórico do local, links, ver como jogador, modo transmissão, Wiki, exportar em Markdown, várias campanhas).
+- `plano-jogo.md` ganha as Etapas 7 a 11: o que o Incognium tem e o projeto não (revelar na hora, imagens e notas secretas no ponto, histórico do local, links de locais, ver como jogador). Transmissão, Wiki, Markdown e várias campanhas ficaram de fora por decisão.
 
 ## 2026-11-03 — O grupo no mapa: marcador, trilha e névoa (`feature/character-sheet`)
 - Marcador do grupo que o mestre arrasta; todos veem em até 3 s, e ele anda até o lugar novo.
