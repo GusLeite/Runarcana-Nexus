@@ -314,8 +314,22 @@
   text-transform: uppercase;
   color: var(--muted);
 }
+/* Como no Universo: duas colunas, rótulo pequeno e valor em caixa alta, entre dois filetes. */
 .map-panel-body .lore-facts {
-  margin-bottom: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 20px;
+  margin: 0 0 16px;
+  padding: 18px 0;
+  border-top: 1px solid rgba(200, 162, 74, 0.28);
+  border-bottom: 1px solid rgba(200, 162, 74, 0.28);
+}
+.map-panel-body .lore-facts dt {
+  font-size: 13px;
+}
+.map-panel-body .lore-facts dd {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.3;
 }
 .map-tools {
   position: absolute;

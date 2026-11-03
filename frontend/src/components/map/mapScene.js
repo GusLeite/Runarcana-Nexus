@@ -601,6 +601,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
   }
 
   const clock = new THREE.Clock()
+  window.__mapDebug = { renderer, composer, update, scene, tiles, terrain, sparkle, fog, clouds, party, landmarkModels, setZ: v => { goalZ = z = v; flight = null }, tiltShift, target }
   renderer.setAnimationLoop(() => {
     const raw = clock.getDelta()
     watchSpeed(raw)
