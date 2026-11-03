@@ -10,11 +10,11 @@ const LoreScreen = lazy(() => import('../lore/LoreScreen.jsx'))
 
 const SCREENS = ['mapa', 'lore']
 
-// Botões do cabeçalho que abrem o mapa e a lore por cima da tela atual, sem perder o estado dela.
+// Barra flutuante (canto inferior esquerdo) com botões grandes que abrem o mapa e a lore por cima da tela atual, sem perder o estado dela.
 // Um leva ao outro: a região abre o verbete, e o verbete mostra onde fica no mapa.
 // A tela aberta fica na URL (?tela=mapa|lore): recarregar reabre e o "voltar" do navegador fecha.
 // Link de local: ?tela=mapa&ponto=12 (ou &regiao=demacia) abre o mapa voando até lá (quem não vê o ponto cai no mapa sem foco).
-export default function WorldButtons({ session }) {
+export default function WorldButtons({ session, children }) {
   const [screenId, setScreenId] = useUrlParam('tela', SCREENS, null)
   const [target, setTarget] = useState(() => ({ focus: focusFromUrl() })) // { focus } no mapa, { entryId } na lore
   const close = useCallback(() => {
@@ -40,12 +40,15 @@ export default function WorldButtons({ session }) {
 
   return (
     <>
-      <button className="icon-btn" type="button" onClick={() => openLore(undefined)} title="Lore de Runeterra" aria-label="Lore de Runeterra">
-        <LoreIcon />
-      </button>
-      <button className="icon-btn" type="button" onClick={() => showOnMap(undefined)} title="Mapa de Runeterra" aria-label="Mapa de Runeterra">
-        <MapIcon />
-      </button>
+      <nav className="world-dock" aria-label="Atalhos do mundo">
+        <button className="dock-btn" type="button" onClick={() => openLore(undefined)} title="Lore de Runeterra" aria-label="Lore de Runeterra">
+          <LoreIcon /><span>Lore</span>
+        </button>
+        <button className="dock-btn" type="button" onClick={() => showOnMap(undefined)} title="Mapa de Runeterra" aria-label="Mapa de Runeterra">
+          <MapIcon /><span>Mapa</span>
+        </button>
+        {children}
+      </nav>
       {screen && createPortal(<Suspense fallback={null}>{screen}</Suspense>, document.body)}
     </>
   )

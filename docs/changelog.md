@@ -1,6 +1,9 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Atalhos de lore, mapa e imprimir ficha numa barra flutuante (`main`)
+- Saíram do cabeçalho e foram para a barra `.world-dock` no canto inferior esquerdo: botões grandes, com rótulo, ouro (lore/mapa) e turquesa (imprimir ficha). No celular, só ícones em coluna.
+
 ## 2026-11-03 — Modo "de onde vem" nos atributos, PV e ataques (`main`)
 - Botão "i" na barra da ficha liga/desliga (lembrado no navegador): com ele ligado, passar o mouse (ou o foco) por um atributo, pelos PV ou por um ataque (e seus Estilos de Luta) mostra cada fonte do número.
 - `GET /character/me/breakdown` refaz a conta pelo `build` guardado (`CreationService.breakdown`); o `Build` agora guarda a fonte de cada bônus de atributo (`bonusSources`) e de PV (`hpLabels`). O ataque se explica no front (`data/breakdown.js`).

@@ -561,18 +561,11 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             <span className="who-name">{character.name}</span>
             <span className="who-sub">{session.username}</span>
           </div>
-          <WorldButtons session={session} />
           {sheet && (
             <button className={'icon-btn' + (explain ? ' on' : '')} type="button" onClick={toggleExplain} aria-pressed={explain}
               title={explain ? 'Desligar: parar de mostrar de onde vem cada número' : 'Ligar: passe o mouse em um atributo, nos PV ou em um ataque para ver de onde vem cada ponto'}
               aria-label="Mostrar de onde vem cada número">
               <InfoIcon />
-            </button>
-          )}
-          {sheet && (
-            <button className="icon-btn" type="button" onClick={printSheet} disabled={printing}
-              title={printing ? 'Gerando a ficha física…' : 'Baixar ficha física (PDF para imprimir)'} aria-label="Baixar ficha física">
-              <PrintIcon />
             </button>
           )}
           {!testing && (
@@ -585,6 +578,15 @@ export default function CharacterSheet({ character, session, notice, onChangePas
           </button>
         </div>
       </header>
+
+      <WorldButtons session={session}>
+        {sheet && (
+          <button className="dock-btn print" type="button" onClick={printSheet} disabled={printing}
+            title={printing ? 'Gerando a ficha física…' : 'Baixar ficha física (PDF para imprimir)'} aria-label="Baixar ficha física">
+            <PrintIcon /><span>{printing ? 'Gerando…' : 'Imprimir ficha'}</span>
+          </button>
+        )}
+      </WorldButtons>
 
       <main className={'sheet-body tab-' + (leveling ? 'levelup' : tab)}>
         <SheetHero character={character} sheet={sheet} armorClass={state.status === 'ready' ? state.sheet.armorClass : null}
