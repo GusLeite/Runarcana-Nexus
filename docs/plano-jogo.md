@@ -146,7 +146,7 @@ Cabeçalho fixo (CAMPANHA / Runeterra, abas **Visão do mestre | Jogador**, **+ 
 - Catálogo com os lugares do mapa oficial (Disco Solar, Zirima…), por região, com nome, tipo e posição.
 - O mestre liga e desliga a exibição de cada um para os jogadores (e de uma região inteira); desligado, só o mestre vê. Os pontos oficiais usam o painel e a galeria do ponto, mas não se apagam.
 
-## Etapa 15 — Trajetória dos jogadores
+## Etapa 15 — Trajetória dos jogadores — **feita (2026-11-03)**
 
 - Cada jogador desenha a própria rota no mapa (clicando as paradas, como a trilha do grupo, mas pessoal), com nome e cor; o mestre vê as de todos. Apagar e refazer; limite por jogador.
 

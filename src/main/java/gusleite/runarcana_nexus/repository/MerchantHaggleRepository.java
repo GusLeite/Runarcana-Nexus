@@ -16,4 +16,6 @@ public interface MerchantHaggleRepository extends JpaRepository<MerchantHaggle, 
     List<MerchantHaggle> findByMerchantOrderByIdDesc(Merchant merchant);
 
     void deleteByMerchant(Merchant merchant);
+
+    void deleteByCharacterId(Long characterId);
 }

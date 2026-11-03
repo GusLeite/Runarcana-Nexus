@@ -3,7 +3,7 @@ import { prefersReducedMotion } from '../../hooks/useCountUp.js'
 import { createMapScene } from './mapScene.js'
 import {
   addPoiComment, clearPartyTrail, createPoi, createWaypoint, deletePoi, deletePoiComment, deleteWaypoint, fetchBandle, fetchParty, fetchPois,
-  fetchPoiImages, fetchWaypoints, hideParty, setOfficialAudience, moveParty, rollBandle, setMapFog, setPoiAudience, setRegionRevealed, updatePoi, updateWaypoint,
+  createRoute, deleteRoute, fetchPoiImages, fetchRoutes, fetchWaypoints, hideParty, setOfficialAudience, moveParty, rollBandle, setMapFog, setPoiAudience, setRegionRevealed, updatePoi, updateWaypoint,
 } from '../../api/map.js'
 import { fetchLore } from '../../api/lore.js'
 import { fetchRecipients } from '../../api/master.js'
@@ -16,6 +16,7 @@ import { PoiForm, PoiPanel, WaypointPanel } from './MapPointPanels.jsx'
 import { PoiGlyph } from './poiKinds.jsx'
 import { ImageLightbox } from './PoiGallery.jsx'
 import OfficialPlacesPanel from './OfficialPlacesPanel.jsx'
+import { cssColor, routeColor } from './routeColors.js'
 import '../../styles/map.css'
 
 const PANEL_WIDTH = 380
@@ -28,6 +29,7 @@ const POINT_ZOOM = 400
 const DIE_SPIN = 800
 const NOTICE_MS = 6000
 const MAX_WAYPOINTS = 3
+const MAX_ROUTES = 5
 // O grupo no mapa: todos conferem a cada poucos segundos; o marcador anda até o lugar novo.
 const PARTY_POLL = 3000
 const PARTY_WALK_MS = 1600
@@ -84,6 +86,9 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   const [officialOpen, setOfficialOpen] = useState(false) // lista dos lugares do mapa oficial (mestre)
   const [officialBusy, setOfficialBusy] = useState(false)
   const [movingId, setMovingId] = useState(null) // ponto que o mestre está movendo (placing === 'move')
+  const [routes, setRoutes] = useState([]) // trajetórias dos jogadores (as do jogador; as de todos para o mestre)
+  const [draftRoute, setDraftRoute] = useState([]) // pontos da trajetória que o jogador está desenhando
+  const [routeName, setRouteName] = useState('')
   const partyPin = useRef({ slug: 'party', el: null, x: 0, y: 0, z: 0, level: 'any', lift: 0 })
   const partyWalk = useRef(0)
   const partyDrag = useRef(null)
@@ -137,6 +142,20 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   useEffect(() => {
     fetchWaypoints(session.token, viewAs).then(setWaypoints).catch(() => {})
   }, [session.token, viewAs])
+
+  // Trajetórias: seguem o "Ver como" e vão para a cena junto com o rascunho em desenho.
+  useEffect(() => {
+    fetchRoutes(session.token, viewAs).then(setRoutes).catch(() => {})
+  }, [session.token, viewAs])
+
+  useEffect(() => { if (placing !== 'route') { setDraftRoute([]); setRouteName('') } }, [placing])
+
+  useEffect(() => {
+    if (status !== 'ready') return
+    const items = routes.map(r => ({ key: r.id, color: routeColor(r.owner), points: r.points }))
+    if (draftRoute.length) items.push({ key: 'draft', color: 0xffffff, points: draftRoute, dashed: true })
+    scene.current?.setRoutes(items)
+  }, [routes, draftRoute, status])
 
   // Pontos de interesse: conferidos a cada poucos segundos; o jogador é avisado do que acabou de ser revelado a ele.
   useEffect(() => {
@@ -381,6 +400,10 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
       return
     }
     setNotice(null)
+    if (placing === 'route') {
+      setDraftRoute(d => (d.length >= 60 ? d : [...d, { x: Math.round(world.x), y: Math.round(world.y) }]))
+      return
+    }
     setPlacing(null)
     if (placing === 'move') {
       const poi = pois?.find(p => p.id === movingId)
@@ -418,6 +441,32 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
     const saved = await setPoiAudience(session.token, poi.id, toAll, recipients)
     setPois(list => list.map(p => (p.id === saved.id ? saved : p)))
     setNotice(toAll ? poi.name + ' foi revelado ao grupo.' : recipients.length ? poi.name + ' foi revelado a alguns.' : poi.name + ' voltou a ser segredo.')
+  }
+
+  // Trajetória do jogador: cada clique é uma parada; CONCLUIR salva (nome opcional), DESFAZER tira a última.
+  const finishRoute = async () => {
+    if (draftRoute.length < 2) return setNotice('Marque pelo menos 2 pontos no mapa.')
+    try {
+      const saved = await createRoute(session.token, { name: routeName.trim(), points: draftRoute })
+      setRoutes(list => [...list, saved])
+      setPlacing(null)
+      setNotice('Trajetória "' + saved.name + '" salva.')
+    } catch (err) {
+      setNotice(err.message)
+    }
+  }
+  const removeRoute = async route => {
+    if (!window.confirm('Apagar a trajetória "' + route.name + '"?')) return
+    try {
+      await deleteRoute(session.token, route.id)
+      setRoutes(list => list.filter(r => r.id !== route.id))
+    } catch (err) {
+      setNotice(err.message)
+    }
+  }
+  const focusRoute = route => {
+    const start = route.points[0]
+    scene.current?.focus(start.x, start.y, POINT_ZOOM, coveredWidth())
   }
 
   // Mestre: leva o ponto (inclusive um oficial, cuja posição é aproximada) para onde clicou.
@@ -611,6 +660,11 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
                   <button type="button" className={'map-tool' + (officialOpen ? ' on' : '')} aria-pressed={officialOpen} onClick={() => setOfficialOpen(o => !o)}>
                     LUGARES OFICIAIS {(pois ?? []).filter(p => p.official && p.toAll).length}/{(pois ?? []).filter(p => p.official).length}
                   </button>
+                  {routes.map(route => (
+                    <span key={route.id} className="map-route-chip" style={{ '--route': cssColor(routeColor(route.owner)) }}>
+                      <button type="button" className="map-tool quiet" onClick={() => focusRoute(route)}>{route.name} · {playerName(route.owner)}</button>
+                    </span>
+                  ))}
                   <button type="button" className={'map-tool' + (party?.fog ? ' on' : '')} aria-pressed={!!party?.fog} onClick={() => partyAction(() => setMapFog(session.token, !party?.fog))}>
                     NÉVOA {party?.fog ? 'LIGADA' : 'DESLIGADA'}
                   </button>
@@ -641,6 +695,15 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
                     + WAYPOINT {mine.length}/{MAX_WAYPOINTS}
                   </button>
                   {mine.map(waypoint => <button key={waypoint.id} type="button" className="map-tool quiet" onClick={() => openPoint('waypoint', waypoint)}>{waypoint.name}</button>)}
+                  <button type="button" className={'map-tool' + (placing === 'route' ? ' on' : '')} aria-pressed={placing === 'route'} disabled={routes.length >= MAX_ROUTES && placing !== 'route'} title={routes.length >= MAX_ROUTES ? 'Apague uma trajetória para criar outra' : undefined} onClick={() => setPlacing(p => (p === 'route' ? null : 'route'))}>
+                    + TRAJETÓRIA {routes.length}/{MAX_ROUTES}
+                  </button>
+                  {routes.map(route => (
+                    <span key={route.id} className="map-route-chip" style={{ '--route': cssColor(routeColor(route.owner)) }}>
+                      <button type="button" className="map-tool quiet" onClick={() => focusRoute(route)}>{route.name}</button>
+                      <button type="button" className="map-tool quiet map-route-x" aria-label={'Apagar a trajetória ' + route.name} onClick={() => removeRoute(route)}>×</button>
+                    </span>
+                  ))}
                 </>
               )}
           </div>
@@ -663,7 +726,17 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
           )}
         </>
       )}
-      {placing && <div className="map-tease" role="status"><strong>{placing === 'party' ? 'Clique onde o grupo está' : placing === 'move' ? 'Clique onde o ponto fica' : 'Clique no mapa para marcar'}</strong><span>Esc cancela.</span></div>}
+      {placing && placing !== 'route' && <div className="map-tease" role="status"><strong>{placing === 'party' ? 'Clique onde o grupo está' : placing === 'move' ? 'Clique onde o ponto fica' : 'Clique no mapa para marcar'}</strong><span>Esc cancela.</span></div>}
+      {placing === 'route' && (
+        <div className="map-route-bar" role="group" aria-label="Desenhando uma trajetória">
+          <strong>Trajetória · {draftRoute.length} {draftRoute.length === 1 ? 'ponto' : 'pontos'}</strong>
+          <input aria-label="Nome da trajetória" placeholder="Nome (opcional)" maxLength={80} value={routeName} onChange={e => setRouteName(e.target.value)} />
+          <button type="button" className="map-tool quiet" disabled={draftRoute.length === 0} onClick={() => setDraftRoute(d => d.slice(0, -1))}>DESFAZER</button>
+          <button type="button" className="map-tool" disabled={draftRoute.length < 2} onClick={finishRoute}>CONCLUIR</button>
+          <button type="button" className="map-tool quiet" onClick={() => setPlacing(null)}>CANCELAR</button>
+          <span>Clique no mapa para marcar cada parada.</span>
+        </div>
+      )}
       {notice && !placing && !teased && !chosen && <div className="map-tease" role="status"><strong>{notice}</strong></div>}
       {freshPoi && !placing && !panel && (
         <div className="map-tease map-fresh" role="status">

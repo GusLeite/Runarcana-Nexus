@@ -1,6 +1,15 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Mapa: trajetórias dos jogadores (`feature/character-sheet`)
+- Etapa 15 do plano: cada jogador desenha até 5 trajetórias no mapa (clica as paradas, nome opcional); linhas sólidas na cor do dono, privadas ao jogador e ao mestre, que vê as de todos e a prévia "Jogador".
+- Novos: `MapRoute`, `MapRouteService`, `/map/routes`, `setRoutes` na cena 3D e `routeColors.js` (com testes).
+- Com isso o pedido de ajustes do mapa (Etapas 12 a 15) está completo.
+
+## 2026-11-03 — Mestre exclui ficha de personagem (`feature/character-sheet`)
+- `DELETE /character/{id}` (só mestre) apaga a ficha com inventário, habilidades, perícias e regateios; a conta do jogador fica e ele recria o personagem pelo assistente.
+- Aba Fichas do mestre: card **Excluir ficha** com confirmação no botão. Teste em `CharacterControllerTests`.
+
 ## 2026-11-03 — Humano completo e rótulos da criação sem texto cru (`feature/character-sheet`)
 - Humano: +2/+1 em atributos e 3 pontos de Herança de Origem (antes só tinha os 2 de Região), como no livro.
 - Construto: o painel explica que o Nebulon é a Herança de Origem Variante Nebulon.

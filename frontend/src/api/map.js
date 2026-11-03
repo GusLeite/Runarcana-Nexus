@@ -69,3 +69,12 @@ export const fetchPoiHistory = (token, id) => request('/map/pois/' + id + '/hist
 // Só o mestre: liga (toAll) ou desliga os lugares do mapa oficial para os jogadores, de uma região (slug) ou de todas (nulo). { changed }
 export const setOfficialAudience = (token, region, toAll) =>
   request('/map/pois/official/audience', { method: 'PATCH', token, body: { region, toAll } })
+
+// Trajetórias que os jogadores desenham: [{ id, owner, name, points: [{ x, y }] }]. Jogador: as suas; mestre: as de todos.
+// as (só o mestre): as daquele jogador ("Ver como").
+export const fetchRoutes = (token, as) => request('/map/routes' + (as ? '?as=' + encodeURIComponent(as) : ''), { token })
+
+// Só jogador (até 5): nome opcional e 2 a 60 pontos.
+export const createRoute = (token, route) => request('/map/routes', { method: 'POST', token, body: route })
+
+export const deleteRoute = (token, id) => request('/map/routes/' + id, { method: 'DELETE', token })

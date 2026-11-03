@@ -860,3 +860,28 @@
 .map-official-row small { display: block; margin: 0; }
 .map-official-link { flex: 0 0 auto; padding-top: 4px; }
 .map-official-row input[type="checkbox"] { width: 14px; height: 14px; min-width: 0; padding: 0; display: inline-block; }
+
+/* Trajetórias dos jogadores. */
+.map-route-chip { display: inline-flex; align-items: stretch; border-left: 3px solid var(--route, var(--inc-gold)); }
+.map-route-chip .map-tool.quiet { border-left: 0; }
+.map-route-x { padding: 8px 8px; }
+.map-route-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: calc(100% - 32px);
+  padding: 10px 14px;
+  border: 1px solid var(--inc-gold);
+  background: rgba(7, 12, 19, 0.94);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
+}
+.map-route-bar strong { font: 600 12px Spectral, serif; letter-spacing: 0.08em; color: var(--inc-gold); }
+.map-route-bar input { width: 170px; padding: 6px 8px; border: 1px solid var(--inc-line); background: #070c13; color: var(--text); font: 400 13px Spectral, serif; }
+.map-route-bar span { flex-basis: 100%; text-align: center; color: var(--muted); font: 400 12px Spectral, serif; }

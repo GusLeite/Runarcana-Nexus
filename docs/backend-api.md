@@ -50,6 +50,7 @@
 | PUT | `/character/{id}/abilities/{abilityId}` | `AbilityRequest` (mestre) | Edita a habilidade: mantém o ícone (se não vier outro) e os usos gastos (usos restantes = novo máximo − gastos, mínimo 0). 403 para jogador; 404 se não for da ficha |
 | PUT | `/documents/{id}` | `DocumentRequest` (mestre) | Edita título, tipo, texto, imagem e destinatários; as leituras ficam. Devolve com `readBy` |
 | PATCH | `/character/{id}/death-saves` | `{ successes, failures }` (mestre) | Mestre ajusta os testes contra a morte de qualquer ficha. 403 para jogador |
+| DELETE | `/character/{id}` | (mestre) | Apaga a ficha com inventário, habilidades, perícias e regateios (a conta, o diário e as notas ficam), para o jogador recriar o personagem pelo assistente. 204; 404 se não existe; 403 para jogador |
 | PATCH | `/character/{id}/conditions` | `{ conditions?, exhaustion? }` (mestre) | Condições (ids do `condicoes.json`; a lista substitui a atual) e Exaustão (0–10); nulo = mantém. Devolve `CharacterResponse`. 400 com id desconhecido ou Exaustão fora dos limites; 403 para jogador |
 | GET | `/crafts/formulas` | – (Bearer) | Fórmulas de Ofício: `{ rule, general: Formula[], crafts: { <id do ofício>: Formula[] } }` (`id, name, level, discipline, prerequisite, craft/crafts, part, dc, component, value, time, detail, description, natural20`) |
 | PUT | `/character/{id}/formulas` | `{ formulas: ["cuteleiro:criar-arma-1"] }` (mestre) | Fórmulas conhecidas da ficha (substitui a lista). 400 com fórmula desconhecida ou de ofício que a ficha não tem; 403 para jogador |
@@ -65,6 +66,9 @@
 | PATCH | `/map/pois/{id}/audience` | `{ toAll, recipients }` (Bearer **mestre**) | Revela (a todos e/ou a jogadores) ou esconde o ponto sem mexer no resto. Revelar a mais gente gera o evento `PLACE` no diário (com o nome só se for a todos) |
 | GET | `/map/pois/visible` | – (Bearer) | Lista leve `[{ id, name }]` do que a conta vê (a ficha usa para avisar de local novo) |
 | PATCH | `/map/pois/official/audience` | `{ region, toAll }` (Bearer **mestre**) | Liga ou desliga para a mesa os lugares do mapa oficial de uma região (slug) ou de todos (`region` nulo). Devolve `{ changed }`. Sem aviso no diário |
+| GET | `/map/routes` | – (Bearer; `?as=usuário` só o **mestre**) | Trajetórias que os jogadores desenham: `[{ id, owner, name, points: [{ x, y }] }]`. Jogador: as suas; mestre: as de todos; com `as`, as daquele jogador (prévia) |
+| POST | `/map/routes` | `{ name, points }` (Bearer **jogador**) | Cria (201): nome opcional (padrão "Trajetória"), 2 a 60 pontos dentro do mapa, até 5 por jogador. 400 para o mestre |
+| PUT · DELETE | `/map/routes/{id}` | igual ao POST / – (Bearer) | Só o dono (404 nos demais) |
 | GET | `/map/pois/{id}/history` | – (Bearer) | "Aconteceu aqui": `{ entries: [entradas do diário ligadas ao ponto], stops: [paradas da trilha a até 60 unidades] }`. 404 se a conta não vê o ponto |
 | GET | `/map/pois/{id}/images` | – (Bearer) | Imagens do ponto (data URL ou link), só para quem vê o ponto (404 se não). A lista de pontos traz só `imageCount`, `spotlight` e `spotlightRev` |
 | POST | `/map/pois/{id}/images` | `{ image }` (Bearer **mestre**) | Adiciona (até 6 por ponto; mesmas regras de imagem do mercador, em `ImageRules`) e devolve o ponto |

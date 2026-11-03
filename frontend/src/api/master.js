@@ -38,6 +38,9 @@ export const setHpFor = (token, characterId, currentHp, tempHp) =>
 export const setMaxHpBonus = (token, characterId, maxHpBonus) =>
   request('/character/' + characterId + '/hp', { method: 'PATCH', token, body: { maxHpBonus } })
 
+// Apaga a ficha (e inventário, habilidades...); a conta do jogador fica e ele pode recriar o personagem.
+export const deleteCharacter = (token, characterId) => request('/character/' + characterId, { method: 'DELETE', token })
+
 export const deleteDocument = (token, id) => request('/documents/' + id, { method: 'DELETE', token })
 
 // Regras da mesa: modo de traços da Runinata travado (traitBudget: id do modo ou null = o jogador escolhe).

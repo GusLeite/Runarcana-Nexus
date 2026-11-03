@@ -15,4 +15,6 @@ public interface PlayerItemsRepository extends JpaRepository<PlayerItems, Long> 
     List<PlayerItems> findByCharacterOrderByIdAsc(Character character);
 
     Optional<PlayerItems> findFirstByCharacterAndItem(Character character, Item item);
+
+    void deleteByCharacter(Character character);
 }

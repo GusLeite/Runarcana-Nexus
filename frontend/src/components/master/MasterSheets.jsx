@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchCharacters, fetchConditions, fetchFormulas, setPendingLevels } from '../../api/master.js'
+import { deleteCharacter, fetchCharacters, fetchConditions, fetchFormulas, setPendingLevels } from '../../api/master.js'
 import ConditionEditor from './ConditionEditor.jsx'
 import HpEditor from './HpEditor.jsx'
 import FormulaEditor from './FormulaEditor.jsx'
@@ -33,7 +33,26 @@ export default function MasterSheets({ token, onError, onToast }) {
   const pending = character?.pendingLevels ?? 0
   const put = updated => setCharacters(list => list.map(c => (c.id === updated.id ? updated : c)))
 
-  useEffect(() => setMsg(null), [characterId])
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  useEffect(() => { setMsg(null); setConfirmDelete(false) }, [characterId])
+
+  // Apaga a ficha para o jogador recriá-la pelo assistente (pede confirmação no próprio botão).
+  const remove = async () => {
+    setBusy(true)
+    try {
+      await deleteCharacter(token, character.id)
+      const rest = characters.filter(c => c.id !== character.id)
+      setCharacters(rest)
+      setCharacterId(rest[0]?.id ?? null)
+      onToast(character.characterName + ' foi excluído. O jogador pode criar o personagem de novo.')
+    } catch (err) {
+      if (err.status === 401) onError(err)
+      else setMsg(err.message)
+    } finally {
+      setBusy(false)
+      setConfirmDelete(false)
+    }
+  }
 
   const release = async next => {
     setBusy(true)
@@ -125,6 +144,23 @@ export default function MasterSheets({ token, onError, onToast }) {
                 </div>
               </>
             )}
+          </section>
+
+          <section className="card" style={{ '--i': 3 }}>
+            <h3 className="card-title">Excluir ficha <small>{character.characterName}</small></h3>
+            <p className="muted-note">
+              Apaga a ficha, o inventário e as habilidades. A conta do jogador continua e ele cria o personagem de novo. Não dá para desfazer.
+            </p>
+            <div className="lvl-release-actions">
+              {!confirmDelete ? (
+                <button className="ghost-btn" type="button" disabled={busy} onClick={() => setConfirmDelete(true)}>Excluir personagem</button>
+              ) : (
+                <>
+                  <button className="btn" type="button" disabled={busy} onClick={remove}>CONFIRMAR: EXCLUIR {character.characterName.toUpperCase()}</button>
+                  <button className="ghost-btn" type="button" disabled={busy} onClick={() => setConfirmDelete(false)}>Cancelar</button>
+                </>
+              )}
+            </div>
           </section>
         </div>
       )}

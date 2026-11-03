@@ -14,4 +14,6 @@ public interface CharacterAbilityRepository extends JpaRepository<CharacterAbili
     List<CharacterAbility> findByCharacterOrderByIdAsc(Character character);
 
     Optional<CharacterAbility> findByIdAndCharacter(Long id, Character character);
+
+    void deleteByCharacter(Character character);
 }

@@ -12,6 +12,7 @@ const TRAIL_STEP = 6
 const TRAIL_WIDTH = 3.5
 const DRAW_SECONDS = 1.6
 const STOP_RADIUS = 4
+const ROUTE_WIDTH = 3
 
 const FOG_VERTEX = `
   uniform sampler2D depthMap;
@@ -132,10 +133,24 @@ export function createPartyLayers({ panGroup, terrainGeometry, depth, ocean, hei
   const stopMaterial = new THREE.MeshBasicMaterial({ color: 0xf0c75e, transparent: true, opacity: 0.9, depthTest: false, depthWrite: false })
   let stops = []
 
+  // Trajetórias dos jogadores: uma linha sólida por rota, na cor do dono, com um disco em cada parada.
+  // items: [{ key, color, points, dashed }]; o rascunho em desenho vai como mais um item, tracejado.
+  let routeObjects = []
+  const clearRoutes = () => {
+    for (const r of routeObjects) {
+      for (const obj of r.objects) panGroup.remove(obj)
+      r.geometry?.dispose()
+      r.lineMaterial.dispose()
+      r.stopMaterial.dispose()
+    }
+    routeObjects = []
+  }
+
   const size = new THREE.Vector2()
   const resize = () => {
     renderer.getSize(size)
     lineMaterial.resolution.set(size.x, size.y)
+    for (const r of routeObjects) r.lineMaterial.resolution.set(size.x, size.y)
   }
   resize()
 
@@ -177,6 +192,37 @@ export function createPartyLayers({ panGroup, terrainGeometry, depth, ocean, hei
       drawElapsed = animate ? 0 : DRAW_SECONDS
       geometry.instanceCount = Math.round(drawFrom)
     },
+    setRoutes(items) {
+      clearRoutes()
+      routeObjects = items.map(item => {
+        const lineMat = new LineMaterial({
+          color: item.color, linewidth: ROUTE_WIDTH, dashed: Boolean(item.dashed), dashSize: 8, gapSize: 5, transparent: true, opacity: 0.95,
+          depthTest: false, depthWrite: false,
+        })
+        lineMat.resolution.set(size.x, size.y)
+        const stopMat = new THREE.MeshBasicMaterial({ color: item.color, transparent: true, opacity: 0.95, depthTest: false, depthWrite: false })
+        const objects = item.points.map(p => {
+          const mesh = new THREE.Mesh(stopGeometry, stopMat)
+          mesh.position.set(p.x, p.y, heightAt(p.x, p.y) + TRAIL_LIFT)
+          mesh.scale.setScalar(0.75)
+          mesh.renderOrder = 0.75
+          panGroup.add(mesh)
+          return mesh
+        })
+        let geometry = null
+        const path = trailPath(item.points, heightAt)
+        if (path.length >= 2) {
+          geometry = new LineGeometry()
+          geometry.setPositions(path.flat())
+          const routeLine = new Line2(geometry, lineMat)
+          routeLine.computeLineDistances()
+          routeLine.renderOrder = 0.75
+          panGroup.add(routeLine)
+          objects.push(routeLine)
+        }
+        return { objects, geometry, lineMaterial: lineMat, stopMaterial: stopMat, dashed: Boolean(item.dashed) }
+      })
+    },
     update(time, dt) {
       for (const fog of fogs.values()) {
         const u = fog.material.uniforms
@@ -196,6 +242,7 @@ export function createPartyLayers({ panGroup, terrainGeometry, depth, ocean, hei
       }
       // A linha "anda": o tracejado desliza na direção da viagem.
       lineMaterial.dashOffset = -time * 8
+      for (const r of routeObjects) if (r.dashed) r.lineMaterial.dashOffset = -time * 8
     },
     dispose() {
       destroyed = true
@@ -203,6 +250,7 @@ export function createPartyLayers({ panGroup, terrainGeometry, depth, ocean, hei
         fog.material.dispose()
         fog.texture?.dispose()
       }
+      clearRoutes()
       if (line) line.geometry.dispose()
       lineMaterial.dispose()
       stopGeometry.dispose()

@@ -603,6 +603,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     // Névoa: regiões encobertas e o quanto cobrem (1 = opaca). Trilha: as paradas do grupo, em ordem.
     setFog: (hidden, strength) => party.setFog(hidden, strength),
     setTrail: (points, options) => party.setTrail(points, options),
+    setRoutes: items => party.setRoutes(items),
     // Acende uma região (ou nenhuma, com null) e apaga as outras.
     highlight(slug) {
       if (slug) highlightFor(slug)
