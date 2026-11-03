@@ -3,7 +3,8 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js'
 import {
-  CAM_FAR_Z, CAM_INTRO_Z, FOV, MAP_SIZE, TERRAIN_HEIGHT, clampPan, clampZoom, crestsVisible, easeFactor, focusPan, sineInOut, tiltFor,
+  CAM_FAR_Z, CAM_INTRO_Z, FOV, MAP_SIZE, TERRAIN_HEIGHT, clampPan, clampZoom, TILE_IDS, TILE_MIN_PROGRESS, TILE_SIZE, crestsVisible, easeFactor, focusPan, sineInOut,
+  tileCenter, tileNearView, tiltFor,
   wheelZoom, worldPerPixel, zoomProgress,
 } from './mapMath.js'
 
@@ -58,7 +59,21 @@ const TERRAIN_FRAGMENT = `
   }
 `
 
-// Região acesa: imagem transparente sobre o mesmo relevo do terreno.
+// Bloco detalhado: lê o relevo no trecho do mapa de profundidade que corresponde a ele, para encaixar no terreno.
+const TILE_VERTEX = `
+  uniform sampler2D depthMap;
+  uniform float height;
+  uniform vec2 offset;
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    vec3 raised = position;
+    raised.z += texture2D(depthMap, uv / 8.0 + offset).b * height;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(raised, 1.0);
+  }
+`
+
+// Região acesa e bloco detalhado: imagem transparente sobre o mesmo relevo do terreno.
 const HIGHLIGHT_FRAGMENT = `
   uniform sampler2D map;
   uniform float opacity;
@@ -115,7 +130,7 @@ const TILT_SHIFT_FRAGMENT = `
   varying vec2 vUv;
   void main() {
     float edge = pow(abs(0.5 - vUv.y) * 2.0, 2.0);
-    float step = 0.0015 * strength * edge;
+    float step = 0.001 * strength * edge;
     vec4 sum = vec4(0.0);
     float total = 0.0;
     for (int i = -4; i <= 4; i++) {
@@ -213,6 +228,51 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     return highlight
   }
 
+  // Blocos detalhados por cima da imagem geral, baixados só quando o zoom e a vista pedem.
+  const tileGeometry = new THREE.PlaneGeometry(TILE_SIZE, TILE_SIZE, 64, 64)
+  const maxAnisotropy = renderer.capabilities.getMaxAnisotropy()
+  const tiles = TILE_IDS.map(id => {
+    const center = tileCenter(id)
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        map: { value: null },
+        depthMap: { value: depth },
+        height: { value: TERRAIN_HEIGHT },
+        offset: { value: new THREE.Vector2((id % 8) / 8, (7 - Math.floor(id / 8)) / 8) },
+        opacity: { value: 0 },
+      },
+      vertexShader: TILE_VERTEX,
+      fragmentShader: HIGHLIGHT_FRAGMENT,
+      transparent: true,
+      depthTest: false,
+      depthWrite: false,
+    })
+    const mesh = new THREE.Mesh(tileGeometry, material)
+    mesh.position.set(center.x, center.y, 0)
+    mesh.renderOrder = 0.2
+    mesh.visible = false
+    panGroup.add(mesh)
+    return { id, mesh, material, texture: null, requested: false }
+  })
+  const updateTiles = (progress, dt) => {
+    const wanted = progress >= TILE_MIN_PROGRESS
+    const loader = new THREE.TextureLoader()
+    for (const tile of tiles) {
+      if (wanted && !tile.requested && tileNearView(tile.id, { x: goalPan.x, y: goalPan.y }, goalZ, aspect)) {
+        tile.requested = true
+        loader.loadAsync(`/map/tiles/${tile.id + 1}.jpg`).then(texture => {
+          if (destroyed) return texture.dispose()
+          texture.anisotropy = maxAnisotropy
+          tile.texture = texture
+          tile.material.uniforms.map.value = texture
+        }).catch(() => {})
+      }
+      const opacity = tile.material.uniforms.opacity
+      opacity.value += ((wanted && tile.texture ? 1 : 0) - opacity.value) * easeFactor(0.12, dt)
+      tile.mesh.visible = tile.texture !== null && opacity.value > 0.01
+    }
+  }
+
   const sparkleMaterial = new THREE.ShaderMaterial({
     uniforms: { oceanMask: { value: ocean }, time: { value: 0 }, opacity: { value: 0.18 } },
     vertexShader: PLAIN_VERTEX,
@@ -223,6 +283,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
   })
   const sparkle = new THREE.Mesh(new THREE.PlaneGeometry(MAP_SIZE, MAP_SIZE), sparkleMaterial)
   sparkle.position.z = 1
+  sparkle.renderOrder = 0.3
   sparkle.visible = !reducedMotion
   panGroup.add(sparkle)
 
@@ -407,6 +468,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     // De longe se veem as nuvens; de perto elas abrem e aparece o brilho do mar.
     cloudsMaterial.uniforms.opacity.value = 0.32 * (1 - THREE.MathUtils.smoothstep(progress, 0, 0.6))
     sparkleMaterial.uniforms.opacity.value = 0.4 * progress
+    updateTiles(progress, dt)
     placePins()
   }
 
@@ -439,10 +501,11 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     destroy() {
       destroyed = true
       renderer.setAnimationLoop(null)
-      for (const highlight of highlights.values()) {
-        highlight.material.dispose()
-        highlight.texture?.dispose()
+      for (const part of [...highlights.values(), ...tiles]) {
+        part.material.dispose()
+        part.texture?.dispose()
       }
+      tileGeometry.dispose()
       observer.disconnect()
       canvas.removeEventListener('pointerdown', onDown)
       canvas.removeEventListener('pointermove', onMove)

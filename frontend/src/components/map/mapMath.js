@@ -50,4 +50,23 @@ export const crestsVisible = z => {
 export const focusPan = (x, y, z, aspect, clientHeight, coveredPx = 0) =>
   clampPan({ x: -x - (coveredPx / 2) * worldPerPixel(z, clientHeight), y: -y }, z, aspect)
 
+// Blocos detalhados: grade de 8x8 sobre o mapa, só onde há terra. Numerados da esquerda para a direita, de cima para baixo.
+export const TILE_SIZE = MAP_SIZE / 8
+export const TILE_IDS = [17, 18, 19, 20, 21, 22, 25, 26, 27, 28, 29, 30, 33, 34, 35, 36, 37, 38, 42, 43, 44, 45, 46, 47, 51, 52, 53]
+// Aparecem a partir deste zoom, antes de a imagem geral começar a borrar. O original espera até 0,33.
+export const TILE_MIN_PROGRESS = 0.1
+
+export const tileCenter = id => ({
+  x: (id % 8 - 3.5) * TILE_SIZE,
+  y: (3.5 - Math.floor(id / 8)) * TILE_SIZE,
+})
+
+// Só baixa o bloco que está perto da vista; a inclinação revela mais do mapa, daí a folga.
+export function tileNearView(id, pan, z, aspect) {
+  const center = tileCenter(id)
+  const height = visibleHeight(z)
+  const reach = Math.max(height, height * aspect) * 1.2 + TILE_SIZE
+  return Math.hypot(center.x + pan.x, center.y + pan.y) <= reach
+}
+
 export const sineInOut = t => 0.5 - Math.cos(Math.PI * clamp(t, 0, 1)) / 2

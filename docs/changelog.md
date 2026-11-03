@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa: nitidez de perto e cartão da região (`feature/character-sheet`)
+- 27 blocos detalhados do original cobrem as terras ao aproximar, baixados conforme a vista.
+- O cartão da região passa a ficar por cima dos brasões e nomes.
+
 ## 2026-11-02 — Mapa: regiões (`feature/character-sheet`)
 - 10 brasões nas posições do original, com a arte que a criação já usa; aparecem com o mapa visto de longe.
 - Passar o mouse acende a região no terreno; clicar voa até ela e abre um painel com vídeo e descrição.

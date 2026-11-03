@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { CAM_FAR_Z, CAM_NEAR_Z, MAX_TILT, clampPan, crestsVisible, easeFactor, focusPan, tiltFor, wheelZoom, worldPerPixel, zoomProgress } from './mapMath.js'
+import { CAM_FAR_Z, CAM_NEAR_Z, MAX_TILT, clampPan, crestsVisible, easeFactor, focusPan, tileCenter, tileNearView, tiltFor, wheelZoom, worldPerPixel, zoomProgress } from './mapMath.js'
 
 describe('zoomProgress e tiltFor', () => {
   it('deixa o mapa reto de longe e inclina ao máximo de perto', () => {
@@ -63,6 +63,19 @@ describe('focusPan', () => {
 
   it('desloca para o lado quando um painel cobre a tela', () => {
     expect(focusPan(100, -50, 300, 16 / 9, 800, 360).x).toBeLessThan(-100)
+  })
+})
+
+describe('blocos detalhados', () => {
+  it('posiciona o bloco na grade 8x8 em volta do centro do mapa', () => {
+    expect(tileCenter(0)).toEqual({ x: -896, y: 896 })
+    expect(tileCenter(63)).toEqual({ x: 896, y: -896 })
+  })
+
+  it('pede só os blocos perto da vista', () => {
+    const atTile = id => ({ x: -tileCenter(id).x, y: -tileCenter(id).y })
+    expect(tileNearView(17, atTile(17), CAM_NEAR_Z, 16 / 9)).toBe(true)
+    expect(tileNearView(53, atTile(17), CAM_NEAR_Z, 16 / 9)).toBe(false)
   })
 })
 
