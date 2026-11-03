@@ -6,7 +6,7 @@
 /* Com a aba a mais, todas ainda cabem na barra em telas médias. */
 @media (min-width:901px) and (max-width:2100px){.topbar .tabs{gap:14px}.topbar .tab{letter-spacing:.08em;font-size:12px}.master .topbar .who{display:none}}
 /* Telas de notebook (com zoom do Windows a janela fica em ~1500px): sobra pouco espaço, então o botão de teste vira só ícone e o cabeçalho aperta os vãos. Vem depois da regra acima para vencê-la. */
-@media (min-width:901px) and (max-width:1750px){header.topbar{gap:14px;padding-left:16px;padding-right:16px}.topbar-left{gap:14px}.topbar-right{gap:8px}.test-btn{font-size:0;gap:0;padding:8px 10px}.topbar .logo{font-size:19px}.topbar .play span{padding:8px 16px;font-size:13px;letter-spacing:.12em}.topbar .tabs{gap:10px}.topbar .tab{letter-spacing:.05em;font-size:11.5px}}
+@media (min-width:901px) and (max-width:2100px){header.topbar{gap:14px;padding-left:16px;padding-right:16px}.topbar-left{gap:14px}.topbar-right{gap:8px}.topbar-right .test-btn{font-size:0;gap:0;padding:8px 10px}.topbar .logo{font-size:19px}.topbar .play span{padding:8px 16px;font-size:13px;letter-spacing:.12em}.topbar .tabs{gap:10px}.topbar .tab{letter-spacing:.05em;font-size:11.5px}}
 
 /* ---------- loja (jogador) ---------- */
 .shop{margin:-18px -18px -20px}
