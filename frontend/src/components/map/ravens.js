@@ -129,7 +129,7 @@ export function createRavenFlock(config, radii, maxAnisotropy) {
   const motion = []
   for (let i = 0; i < config.ravens; i++) {
     const flock = flocks[i % config.flocks]
-    path.push(flock.reach + random(-0.05, 0.05), Math.max(0.5, flock.lift + random(-0.18, 0.18)), flock.angle + random(-0.16, 0.16), random(5, 7.5))
+    path.push(flock.reach + random(-0.05, 0.05), Math.max(0.5, flock.lift + random(-0.18, 0.18)), flock.angle + random(-0.16, 0.16), random(2.2, 3.2))
     const direction = Math.sign(flock.speed)
     motion.push(flock.speed * random(0.95, 1.05), random(6.5, 8.5), random(0, Math.PI * 2), direction * random(0.18, 0.34))
   }

@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa: domo redondo e corvos menores (`feature/character-sheet`)
+- O globo demoníaco vira um círculo de raio 185, ainda só sobre o deserto.
+- Os corvos ficam com menos da metade do tamanho.
+
 ## 2026-11-02 — Mapa: globo vira domo oval sobre o deserto (`feature/character-sheet`)
 - O globo volta a ser um domo liso, oval e menor, só sobre o deserto de Shurima, cobrindo os domos de distorção.
 - Ele não chega mais aos brasões vizinhos (Ixtal, Targon, Piltover e Zaun, Vazio).

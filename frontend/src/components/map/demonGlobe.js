@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { createRavenFlock } from './ravens.js'
 
-// Globo demoníaco: domo oval e liso, com veias que correm e pulsam como um coração, e corvos em volta.
+// Globo demoníaco: domo redondo e liso, com veias que correm e pulsam como um coração, e corvos em volta.
 const GLOBE_VERTEX = `
   varying vec3 vNormal;
   varying vec3 vView;
@@ -57,14 +57,14 @@ const GLOBE_FRAGMENT = `
   }
 `
 
-// Devolve o que anima e libera a cena. config: { x, y, radiusX, radiusY, height, flightHeight, ravens, flocks }.
+// Devolve o que anima e libera a cena. config: { x, y, radius, height, flightHeight, ravens, flocks }.
 export function createDemonGlobe(config, parent) {
   const group = new THREE.Group()
   group.position.set(config.x, config.y, 0)
   parent.add(group)
   const time = { value: 0 }
 
-  // Hemisfério unitário com o polo em +Z, esticado até a forma oval do domo.
+  // Hemisfério unitário com o polo em +Z, no tamanho do domo.
   const shell = new THREE.SphereGeometry(1, 96, 40, 0, Math.PI * 2, 0, Math.PI / 2)
   shell.rotateX(Math.PI / 2)
   const globeMaterial = new THREE.ShaderMaterial({
@@ -76,12 +76,12 @@ export function createDemonGlobe(config, parent) {
     depthWrite: false,
   })
   const globe = new THREE.Mesh(shell, globeMaterial)
-  globe.scale.set(config.radiusX, config.radiusY, config.height)
+  globe.scale.set(config.radius, config.radius, config.height)
   globe.renderOrder = 1.5
   group.add(globe)
 
   // Os corvos contornam o domo, um pouco além da base.
-  const flock = createRavenFlock(config, [config.radiusX * 1.12, config.radiusY * 1.12], 8)
+  const flock = createRavenFlock(config, [config.radius * 1.12, config.radius * 1.12], 8)
   group.add(flock.mesh)
 
   return {
