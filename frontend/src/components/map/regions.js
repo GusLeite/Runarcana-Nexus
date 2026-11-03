@@ -68,8 +68,8 @@ export const MAP_DOMES = [
   { x: 105, y: -505, radius: 38, speed: 0.2 },
 ]
 
-// Globo demoníaco limitado à fronteira de Shurima (a mesma imagem que acende a região). height baixo: com a cúpula alta, a perspectiva a jogaria para fora da fronteira.
-export const MAP_GLOBE = { region: 'shurima', height: 40, flightHeight: 110, ravens: 30, flocks: 5 }
+// Globo demoníaco: domo oval só sobre o deserto de Shurima, cobrindo os domos de distorção.
+export const MAP_GLOBE = { x: 0, y: -380, radiusX: 225, radiusY: 165, height: 110, flightHeight: 120, ravens: 30, flocks: 5 }
 
 // Regiões sem imagem de destaque no original: acendem a terra dentro de um círculo em volta do ponto.
 export const MAP_AREAS = { void: { x: 270, y: -560, radius: 175, color: [0.55, 0.2, 0.85] } }

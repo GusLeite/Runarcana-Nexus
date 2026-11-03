@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa: globo vira domo oval sobre o deserto (`feature/character-sheet`)
+- O globo volta a ser um domo liso, oval e menor, só sobre o deserto de Shurima, cobrindo os domos de distorção.
+- Ele não chega mais aos brasões vizinhos (Ixtal, Targon, Piltover e Zaun, Vazio).
+
 ## 2026-11-02 — Mapa: corvos detalhados (`feature/character-sheet`)
 - Penas desenhadas em textura: rêmiges, "dedos" abertos na ponta da asa, coberteiras em escamas e cauda em cunha.
 - Corpo mais encorpado, bico longo e olhos em brasa; pretos com brilho azul-violeta.

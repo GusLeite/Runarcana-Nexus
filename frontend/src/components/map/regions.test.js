@@ -36,9 +36,15 @@ describe('domos de distorção temporal', () => {
 })
 
 describe('globo demoníaco', () => {
-  it('se limita a Shurima, que tem imagem de destaque', () => {
-    expect(MAP_GLOBE.region).toBe('shurima')
-    expect(MAP_PINS.find(pin => pin.slug === MAP_GLOBE.region).highlight).toBe(true)
+  const inside = point => ((point.x - MAP_GLOBE.x) / MAP_GLOBE.radiusX) ** 2 + ((point.y - MAP_GLOBE.y) / MAP_GLOBE.radiusY) ** 2 < 1
+
+  it('cobre os domos de distorção e o brasão de Shurima', () => {
+    for (const dome of MAP_DOMES) expect(inside(dome)).toBe(true)
+    expect(inside(MAP_PINS.find(pin => pin.slug === 'shurima'))).toBe(true)
+  })
+
+  it('não chega aos brasões vizinhos', () => {
+    for (const slug of ['ixtal', 'targon', 'piltover-zaun', 'void']) expect(inside(MAP_PINS.find(pin => pin.slug === slug))).toBe(false)
   })
 
   it('deixa a câmera passar por cima no zoom máximo', () => {
