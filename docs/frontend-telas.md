@@ -114,7 +114,7 @@ As texturas são arte da Riot e ficam fora do Git, em `public/map/`: `frontend/s
 
 ## Pendências / problemas conhecidos
 
-- Mapa: os blocos detalhados trazem nomes de lugares em inglês e manchas escuras onde o original põe modelos 3D de cidades. O mar continua só com a textura geral. A inclinação máxima (0,85 rad) é aproximada. Ainda não há cidades, marcadores nem modelos 3D; Bandópolis, Vazio e Nazumah não têm brasão no mapa. O painel mostra só a descrição curta da região. Pinça e desempenho dos shaders não foram testados em celular.
+- Mapa: os blocos detalhados (versão `pt_br` do original) trazem manchas escuras onde o original põe modelos 3D de cidades. O mar continua só com a textura geral. A inclinação máxima (0,85 rad) é aproximada. Ainda não há cidades, marcadores nem modelos 3D; Bandópolis, Vazio e Nazumah não têm brasão no mapa. O painel mostra só a descrição curta da região. Pinça e desempenho dos shaders não foram testados em celular.
 
 - Passado: os 22 passados têm ilustração (o teste `backgroundArt.test.js` exige). Para trocar, basta substituir `assets/backgrounds/<id>.webp` (o id é o do catálogo); imagens sem uso ficam em `assets/backgrounds/_reserva/`. As artes atuais são provisórias.
 - Fora da loja de um mercador aberto, o jogador só gasta consumíveis, ouro e inspiração (decisão da mesa); quem dá é o mestre, na aba Inventário do painel.

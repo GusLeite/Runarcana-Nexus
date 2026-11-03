@@ -14,6 +14,6 @@ for region in bilgewater demacia freljord ionia ixtal noxus shadow-isles shurima
 done
 # Blocos detalhados: mesma lista de TILE_IDS em src/components/map/mapMath.js, com o número somado de 1.
 for tile in 18 19 20 21 22 23 26 27 28 29 30 31 34 35 36 37 38 39 43 44 45 46 47 48 52 53 54; do
-  curl -fsS -o "public/map/tiles/$tile.jpg" "$site/images/tiles/en_us/terrain_z2_$tile.jpg"
+  curl -fsS -o "public/map/tiles/$tile.jpg" "$site/images/tiles/pt_br/terrain_z2_$tile.jpg"
 done
 echo "Texturas em $(pwd)/public/map"

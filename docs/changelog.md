@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa: nomes em português (`feature/character-sheet`)
+- Os blocos detalhados passam a ser a versão `pt_br` do original; `fetch-map-assets.sh` baixa essa versão.
+- O brilho do mar deixa de formar quadradinhos de perto.
+
 ## 2026-11-02 — Mapa: nitidez de perto e cartão da região (`feature/character-sheet`)
 - 27 blocos detalhados do original cobrem as terras ao aproximar, baixados conforme a vista.
 - O cartão da região passa a ficar por cima dos brasões e nomes.

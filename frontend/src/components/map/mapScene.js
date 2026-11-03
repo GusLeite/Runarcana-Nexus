@@ -93,8 +93,9 @@ const SPARKLE_FRAGMENT = `
   ${NOISE}
   void main() {
     float wide = noise(vUv * 30.0 + time * 0.05);
-    float fine = noise(vUv * 1500.0 + time * 0.2);
-    float glint = clamp((wide * 0.6 + fine - 1.2) * 2.5, 0.0, 1.0);
+    // Duas camadas giradas entre si, para o brilho não formar quadradinhos de perto.
+    float fine = 2.0 * noise(vUv * 1500.0 + time * 0.2) * noise(mat2(0.8, -0.6, 0.6, 0.8) * vUv * 2300.0 - time * 0.15);
+    float glint = clamp((wide * 0.6 + fine - 1.45) * 2.5, 0.0, 1.0);
     gl_FragColor = vec4(vec3(glint * texture2D(oceanMask, vUv).r), opacity);
   }
 `
@@ -467,7 +468,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     tiltShift.uniforms.strength.value = progress
     // De longe se veem as nuvens; de perto elas abrem e aparece o brilho do mar.
     cloudsMaterial.uniforms.opacity.value = 0.32 * (1 - THREE.MathUtils.smoothstep(progress, 0, 0.6))
-    sparkleMaterial.uniforms.opacity.value = 0.4 * progress
+    sparkleMaterial.uniforms.opacity.value = 0.25 * progress
     updateTiles(progress, dt)
     placePins()
   }
