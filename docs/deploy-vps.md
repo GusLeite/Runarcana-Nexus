@@ -37,6 +37,7 @@ sh deploy/setup-server.sh
 cp .env.example .env
 openssl rand -hex 24      # rode duas vezes: uma para DB_PASSWORD, outra para RUNARCANA_MASTER_PASSWORD
 nano .env                 # SITE_ADDRESS=runarcana.duckdns.org e as duas senhas
+sh frontend/scripts/fetch-map-assets.sh
 docker compose up -d --build
 docker compose logs -f web api
 ```

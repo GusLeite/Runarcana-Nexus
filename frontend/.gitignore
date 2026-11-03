@@ -25,3 +25,6 @@ dist-ssr
 
 # APK gerado por scripts/build-apk.ps1
 dist-apk
+
+# Texturas do mapa (arte da Riot): scripts/fetch-map-assets.sh
+public/map

@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa 3D de Runeterra (`feature/character-sheet`)
+- Botão na ficha e no painel do mestre abre o mapa em tela cheia, com Three.js carregado só ao abrir.
+- Relevo real, entrada animada, zoom com inclinação, arraste com inércia, foco de miniatura e brilho no mar, imitando o original.
+- Texturas da Riot fora do Git: `frontend/scripts/fetch-map-assets.sh` precisa rodar no servidor antes do build.
+
 ## 2026-11-02 — APK aponta para o endereço real do site (`feature/character-sheet`)
 - O app passa a abrir `https://runarcana-nexus.duckdns.org`; o endereço anterior não existia no DNS.
 

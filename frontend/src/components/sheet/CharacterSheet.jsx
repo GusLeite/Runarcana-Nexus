@@ -4,6 +4,7 @@ import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
 import { buyFromMerchant, fetchActiveMerchant, pingMerchant, sellToMerchant } from '../../api/merchants.js'
 import { deathSaveResult, rollCheck, rollD20, rollDice } from '../../data/rules.js'
+import MapButton from '../map/MapButton.jsx'
 import SheetHero from './SheetHero.jsx'
 import PrepareSpells from './PrepareSpells.jsx'
 import OverviewTab from './OverviewTab.jsx'
@@ -453,6 +454,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             <span className="who-name">{character.name}</span>
             <span className="who-sub">{session.username}</span>
           </div>
+          <MapButton />
           {!testing && (
             <button className="icon-btn" type="button" onClick={onChangePassword} title="Alterar senha" aria-label="Alterar senha">
               <KeyIcon />

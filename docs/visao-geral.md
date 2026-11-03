@@ -73,5 +73,5 @@ docker compose up -d --build
 - Só o Caddy fica exposto: ele emite o certificado HTTPS, serve o front e repassa `/runarcana` para a API. A API e o banco ficam na rede interna.
 - **Primeiro acesso**: entre como `mestre` com `RUNARCANA_MASTER_PASSWORD`, troque a senha e, na aba **Contas**, gere a senha provisória de cada jogador.
 - **Backup**: o serviço `backup` grava um `pg_dump` por dia em `backups/` e guarda 14 dias. Essa pasta fica no mesmo servidor; `deploy/backup-offsite.sh` copia para fora com o rclone. Para restaurar: `docker compose exec -T db pg_restore -U runarcana -d runarcana --clean --if-exists < backups/ARQUIVO.dump`.
-- **Atualizar**: `git pull` e `docker compose up -d --build`. Faça um backup antes, e rode antes os `ALTER TABLE` que o `ddl-auto` não aplica.
+- **Atualizar**: `git pull` e `docker compose up -d --build`. As texturas do mapa ficam fora do Git: `sh frontend/scripts/fetch-map-assets.sh` as baixa uma vez em cada servidor. Faça um backup antes, e rode antes os `ALTER TABLE` que o `ddl-auto` não aplica.
 - **Levar fichas do banco local**: `pg_dump -Fc` no local e `pg_restore` no contêiner `db`, antes de abrir o site. As contas vêm junto, com as senhas antigas: gere senhas novas na aba Contas.

@@ -9,6 +9,15 @@ export function CoinIcon() {
   )
 }
 
+export function MapIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2Z" />
+      <path d="M9 4v14M15 6v14" />
+    </svg>
+  )
+}
+
 // Ícone por tipo de documento do mestre.
 export function DocIcon({ kind }) {
   const common = { viewBox: '0 0 24 24', 'aria-hidden': true }

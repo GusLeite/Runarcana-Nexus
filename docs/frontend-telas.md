@@ -97,7 +97,20 @@ Os números que contam (bônus de perícia, proficiência, passivas) vêm pronto
 Layout: 3 colunas acima de 1240px; 2 colunas (herói + conteúdo, rolagens embaixo) até 860px; 1 coluna no celular. Atributos e estatísticas usam **container queries** na coluna (`.sheet-col` é `container-type: inline-size`): com a coluna abaixo de 640px os hexágonos passam de 6 para 3 por linha (e as estatísticas de 6 para 3 abaixo de 680px), e o texto dos hexágonos escala em `cqi`, para a sigla não ser cortada pelas pontas. O CSS fica em `styles/sheet.css`, importado pelo `CharacterSheet`.
 
 
+## Mapa de Runeterra
+
+`components/map/MapButton.jsx` põe o botão no cabeçalho da ficha e do painel do mestre e abre `MapScreen.jsx` em tela cheia, por cima da tela atual (Esc fecha). O Three.js só é baixado ao abrir o mapa.
+
+`mapScene.js` monta a cena e `mapMath.js` guarda as regras da câmera, com testes. O comportamento imita o mapa original da Riot:
+- plano de 2048×2048 com 200 segmentos, levantado até 60 unidades pelo canal azul de `depth_z1.jpg`;
+- câmera de 50°, com entrada de Z 2300 a 1189 e zoom até Z 200; a inclinação cresce com o cubo do zoom;
+- arraste com inércia, roda do mouse, pinça e botões +/−; foco de miniatura, névoa e brilho no mar (máscara `ocean_z1.jpg`).
+
+As texturas são arte da Riot e ficam fora do Git, em `public/map/`: `frontend/scripts/fetch-map-assets.sh` as baixa. O botão só aparece com login, mas os arquivos em `/map/` são públicos para quem tiver o endereço.
+
 ## Pendências / problemas conhecidos
+
+- Mapa: de perto a imagem fica borrada, porque só usa a textura geral de 2048 px (o original carrega blocos detalhados). A inclinação máxima (0,85 rad) é aproximada. Ainda não há marcadores, regiões, nuvens nem modelos 3D. Pinça não testada em aparelho.
 
 - Passado: os 22 passados têm ilustração (o teste `backgroundArt.test.js` exige). Para trocar, basta substituir `assets/backgrounds/<id>.webp` (o id é o do catálogo); imagens sem uso ficam em `assets/backgrounds/_reserva/`. As artes atuais são provisórias.
 - Fora da loja de um mercador aberto, o jogador só gasta consumíveis, ouro e inspiração (decisão da mesa); quem dá é o mestre, na aba Inventário do painel.
