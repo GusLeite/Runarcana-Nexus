@@ -34,7 +34,7 @@ const PARTY_WALK_MS = 1600
 const POI_POLL = 5000
 const BORN_MS = 4000
 // Névoa: quase opaca para os jogadores; o mestre vê através.
-const FOG_PLAYER = 0.96
+const FOG_PLAYER = 1
 const FOG_MASTER = 0.45
 
 const PIN_IMAGES = {
@@ -341,6 +341,24 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
     panelTimer.current = setTimeout(() => setSelected(pin.slug), prefersReducedMotion() ? 0 : PANEL_DELAY)
   }
 
+  // Cabeçalho: "Visão do mestre" ou "Jogador" (prévia do que aquele jogador vê).
+  const switchView = username => {
+    setPanel(null)
+    setPlacing(null)
+    setFreshPoi(null)
+    setViewAs(username)
+  }
+
+  // Compartilhar: copia o link do mapa (a mesa abre direto nele).
+  const shareMap = async () => {
+    try {
+      await navigator.clipboard.writeText(new URL('/?tela=mapa', window.location.href).href)
+      setNotice('Link do mapa copiado.')
+    } catch {
+      setNotice('Não foi possível copiar o link.')
+    }
+  }
+
   const openPoint = (type, point) => {
     clearTimeout(panelTimer.current)
     setHovered(null)
@@ -506,10 +524,30 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
           )}
         </div>
       </div>
-      <div className="map-head">
-        <h1>RUNETERRA</h1>
-        <button ref={closeBtn} className="map-btn map-close" type="button" onClick={onClose} title="Fechar o mapa" aria-label="Fechar o mapa">×</button>
-      </div>
+      <header className="map-head">
+        <div className="map-head-title">
+          <small>CAMPANHA</small>
+          <h1>Runeterra</h1>
+        </div>
+        {isMaster && (
+          <div className="map-head-tabs" role="group" aria-label="Quem está vendo o mapa">
+            <button type="button" className={viewAs ? '' : 'on'} aria-pressed={!viewAs} onClick={() => switchView(null)}>Visão do mestre</button>
+            <button type="button" className={viewAs ? 'on' : ''} aria-pressed={Boolean(viewAs)} disabled={players.length === 0} onClick={() => !viewAs && switchView(players[0])}>Jogador</button>
+            {viewAs && (
+              <select aria-label="Jogador da prévia" value={viewAs} onChange={e => switchView(e.target.value)}>
+                {players.map(username => <option key={username} value={username}>{playerName(username)}</option>)}
+              </select>
+            )}
+          </div>
+        )}
+        <div className="map-head-actions">
+          {master && status === 'ready' && (
+            <button type="button" className={'map-head-btn primary' + (placing === 'poi' ? ' on' : '')} aria-pressed={placing === 'poi'} onClick={() => setPlacing(p => (p === 'poi' ? null : 'poi'))}>+ Novo ponto</button>
+          )}
+          <button type="button" className="map-head-btn" onClick={shareMap}>Compartilhar</button>
+          <button ref={closeBtn} className="map-head-close" type="button" onClick={onClose} title="Fechar o mapa" aria-label="Fechar o mapa">×</button>
+        </div>
+      </header>
       {status === 'loading' && <p className="map-msg">Desenrolando o mapa…</p>}
       {status === 'error' && <p className="map-msg">Não foi possível abrir o mapa. Confira se o navegador tem WebGL ativo e tente de novo.</p>}
       {status === 'ready' && (
@@ -523,7 +561,6 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
               ? (
                 <>
                   <span className="map-count" title="Pontos que você criou e quantos o grupo inteiro já vê">Mestre: {plural((pois ?? []).length, 'ponto', 'pontos')} · Grupo: {plural((pois ?? []).filter(p => p.toAll).length, 'revelado', 'revelados')}</span>
-                  <button type="button" className={'map-tool' + (placing === 'poi' ? ' on' : '')} aria-pressed={placing === 'poi'} onClick={() => setPlacing(p => (p === 'poi' ? null : 'poi'))}>+ PONTO DE INTERESSE</button>
                   <button type="button" className={'map-tool' + (placing === 'party' ? ' on' : '')} aria-pressed={placing === 'party'} onClick={() => setPlacing(p => (p === 'party' ? null : 'party'))}>
                     {party?.x != null ? 'MOVER O GRUPO' : 'POR O GRUPO NO MAPA'}
                   </button>
@@ -565,17 +602,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
               )}
           </div>
           <p className="map-hint">Arraste para mover · role para aproximar</p>
-          {isMaster && (
-            <div className={'map-viewas' + (viewAs ? ' on' : '')} role="group" aria-label="Ver como jogador">
-              <label>Ver como:
-                <select value={viewAs ?? ''} onChange={e => { setPanel(null); setPlacing(null); setFreshPoi(null); setViewAs(e.target.value || null) }}>
-                  <option value="">Mestre</option>
-                  {players.map(username => <option key={username} value={username}>{playerName(username)}</option>)}
-                </select>
-              </label>
-              {viewAs && <strong>Prévia de {playerName(viewAs)}: o mapa como esse jogador vê, sem edição.</strong>}
-            </div>
-          )}
+          {viewAs && <p className="map-preview-strip" role="status">Prévia de {playerName(viewAs)}: o mapa como esse jogador vê, sem edição.</p>}
           {master && (
             <button className="map-roll" type="button" onClick={rollDie} disabled={rolling || die !== null}>
               {bandleRoll ? 'ROLAR BANDÓPOLIS DE NOVO' : 'ROLAR BANDÓPOLIS'}

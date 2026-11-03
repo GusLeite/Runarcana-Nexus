@@ -53,9 +53,9 @@ const FOG_FRAGMENT = `
       mask = texture2D(map, vUv).a;
     }
     float n = noise(vUv * 36.0 + vec2(time * 0.04, time * 0.02)) * 0.6 + noise(vUv * 110.0 - time * 0.06) * 0.4;
-    vec3 mist = mix(vec3(0.03, 0.045, 0.06), vec3(0.2, 0.23, 0.27), n);
+    vec3 mist = mix(vec3(0.004, 0.008, 0.012), vec3(0.07, 0.085, 0.105), n);
     mist += vec3(1.0, 0.75, 0.3) * glow * (0.4 + n);
-    gl_FragColor = vec4(mist, mask * opacity * (0.82 + 0.18 * n));
+    gl_FragColor = vec4(mist, min(1.0, mask * opacity * (1.0 + 0.1 * n)));
   }
 `
 

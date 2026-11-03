@@ -132,6 +132,24 @@ O plano vai até a Etapa 11 (decisão de 2026-11-03). Ficam de fora: modo transm
 - Seletor "Ver como: Mestre / Nyx / Rudo…" no mapa do mestre. `GET /map/pois?as=<usuário>` (só mestre) devolve o que aquela conta vê; a névoa passa a ser opaca e os brasões ficam "???" como para o jogador; os waypoints mostrados são os dele.
 - Faixa "Prévia de Nyx" no topo enquanto ativo; nenhuma edição nesse modo.
 
+## Etapa 12 — Visual do Incognium e névoa mais escura — **feita (2026-11-03)**
+
+Cabeçalho fixo (CAMPANHA / Runeterra, abas **Visão do mestre | Jogador**, **+ Novo ponto**, **Compartilhar**, fechar), painel lateral escuro com rótulos pequenos em caixa alta e botões dourados, marcadores de ponto e da bandeira como anel fino de ouro, e a névoa de guerra bem mais escura (opaca para o jogador). O "Ver como" virou a aba **Jogador** do cabeçalho.
+
+## Etapa 13 — Informações e personagens por região
+
+- Cada região (Noxus, Shurima…) ganha, no painel, uma seção do mestre com texto próprio, anotações e a lista de **personagens relacionados** (verbetes da lore do tipo personagem ligados à região, mais os que o mestre escolher), cada um abrindo o verbete.
+- O mestre decide o que o jogador vê (como no ponto: a todos ou a alguns).
+
+## Etapa 14 — Pontos oficiais do mapa de Runeterra
+
+- Catálogo com os lugares do mapa oficial (Disco Solar, Zirima…), por região, com nome, tipo e posição.
+- O mestre liga e desliga a exibição de cada um para os jogadores (e de uma região inteira); desligado, só o mestre vê. Os pontos oficiais usam o painel e a galeria do ponto, mas não se apagam.
+
+## Etapa 15 — Trajetória dos jogadores
+
+- Cada jogador desenha a própria rota no mapa (clicando as paradas, como a trilha do grupo, mas pessoal), com nome e cor; o mestre vê as de todos. Apagar e refazer; limite por jogador.
+
 ## Depois do "para jogar"
 
 Não fazem parte deste plano; continuam nas pendências de [backend.md](backend.md) e [frontend.md](frontend.md):

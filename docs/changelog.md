@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Mapa: visual do Incognium e névoa mais escura (`feature/character-sheet`)
+- Etapa 12 do plano: cabeçalho fixo com abas **Visão do mestre | Jogador** (o "Ver como" antigo), **+ Novo ponto** e **Compartilhar**; painel lateral escuro com rótulos em caixa alta e botões dourados; pontos e bandeira do grupo como anel de ouro.
+- Névoa de guerra bem mais escura, opaca para o jogador. Plano ganhou as Etapas 13 a 15 (regiões com personagens, pontos oficiais com liga/desliga, trajetória dos jogadores).
+
 ## 2026-11-03 — Mapa: ver como jogador (`feature/character-sheet`)
 - Etapa 11 do plano: seletor "Ver como" no mapa do mestre; mostra pontos, waypoints, névoa opaca e brasões "???" como aquele jogador vê, em modo só leitura com a faixa "Prévia de Nyx".
 - Back: `GET /map/pois?as=` e `/map/waypoints?as=` (só mestre); a prévia não vaza notas secretas nem as anotações privadas do jogador.
