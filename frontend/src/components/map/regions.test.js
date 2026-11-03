@@ -36,10 +36,9 @@ describe('domos de distorção temporal', () => {
 })
 
 describe('globo demoníaco', () => {
-  it('cobre todos os domos e o brasão de Shurima', () => {
-    const inside = point => Math.hypot(point.x - MAP_GLOBE.x, point.y - MAP_GLOBE.y) < MAP_GLOBE.radius
-    for (const dome of MAP_DOMES) expect(inside(dome)).toBe(true)
-    expect(inside(MAP_PINS.find(pin => pin.slug === 'shurima'))).toBe(true)
+  it('se limita a Shurima, que tem imagem de destaque', () => {
+    expect(MAP_GLOBE.region).toBe('shurima')
+    expect(MAP_PINS.find(pin => pin.slug === MAP_GLOBE.region).highlight).toBe(true)
   })
 
   it('deixa a câmera passar por cima no zoom máximo', () => {

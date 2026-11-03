@@ -176,7 +176,7 @@ const loadTextures = () => {
 // lift: distância do ponto no plano em pé, de frente para a câmera.
 // decals: imagens em pé nesse mesmo plano ({ draw, x, y, z, size, level }); draw(pixels) devolve um canvas.
 // domes: domos de distorção temporal ({ x, y, radius, speed }).
-// globe: globo demoníaco com corvos ({ x, y, radius, height, ravens }).
+// globe: globo demoníaco com corvos ({ region, height, flightHeight, ravens, flocks }).
 // areas: regiões que acendem por um círculo em vez de uma imagem ({ [slug]: { x, y, radius, color } }).
 // onMapClick(clientX, clientY): clique no mapa, sem arrastar.
 // onPinsChange: chamado quando os pontos visíveis mudam, porque o navegador não avisa que o mouse saiu de um ponto escondido.

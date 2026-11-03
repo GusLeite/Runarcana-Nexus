@@ -62,14 +62,14 @@ export const MAP_DECALS = [{ draw: drawTwinFrame, x: TWIN_CITIES.x, y: TWIN_CITI
 export const MAP_DOMES = [
   { x: -55, y: -285, radius: 50, speed: 1 },
   { x: 120, y: -265, radius: 34, speed: 1.9 },
-  { x: 190, y: -390, radius: 66, speed: 0.45 },
+  { x: 158, y: -395, radius: 56, speed: 0.45 },
   { x: -10, y: -440, radius: 42, speed: -1 },
   { x: -150, y: -400, radius: 30, speed: 2.8 },
   { x: 105, y: -505, radius: 38, speed: 0.2 },
 ]
 
-// Globo demoníaco sobre todo o território de Shurima. height menor que radius: a câmera precisa caber por cima dele de perto.
-export const MAP_GLOBE = { x: 85, y: -400, radius: 365, height: 175, ravens: 42 }
+// Globo demoníaco limitado à fronteira de Shurima (a mesma imagem que acende a região). height baixo: com a cúpula alta, a perspectiva a jogaria para fora da fronteira.
+export const MAP_GLOBE = { region: 'shurima', height: 40, flightHeight: 110, ravens: 30, flocks: 5 }
 
 // Regiões sem imagem de destaque no original: acendem a terra dentro de um círculo em volta do ponto.
 export const MAP_AREAS = { void: { x: 270, y: -560, radius: 175, color: [0.55, 0.2, 0.85] } }

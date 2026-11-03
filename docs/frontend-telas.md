@@ -114,7 +114,7 @@ Bandópolis não tem lugar fixo: o mestre aperta **ROLAR BANDÓPOLIS** e o d10 d
 
 **Domos de distorção temporal** (`temporalDomes.js`, posições em `MAP_DOMES`): cúpulas 3D roxas lisas no deserto de Shurima, apoiadas no relevo, com relógio no chão e poeira que sobe e volta. Cada uma tem o próprio ritmo de tempo, e uma corre ao contrário. Com movimento reduzido, ficam paradas.
 
-**Globo demoníaco** (`demonGlobe.js`, `MAP_GLOBE`): cúpula vermelha sobre toda Shurima, com veias que pulsam e corvos 3D em órbita. É achatada para a câmera passar por cima no zoom máximo.
+**Globo demoníaco** (`demonGlobe.js`, `MAP_GLOBE`): cúpula vermelha limitada à fronteira de Shurima (moldada em `public/map/regions/shurima.png`), com veias que pulsam e bandos de corvos em órbita (`ravenModel.js`, modelo gerado por código, com voo articulado). É baixa de propósito: alta, a perspectiva a jogaria para fora da fronteira.
 
 **Pontos marcados** (`MapPointPanels.jsx`, `poiKinds.jsx`): o mestre clica em **+ PONTO DE INTERESSE** e depois no mapa, escolhe tipo, descrição, verbete da lore e quem vê (`toAll`/`recipients`; sem ninguém, fica oculto até revelar). Os pontos aparecem ao aproximar. Dentro deles, cada conta escreve anotação só sua ou comentário para a mesa; o mestre não vê as anotações privadas. Cada jogador tem até 3 waypoints com comentário, visíveis para ele e para o mestre, que só lê.
 
