@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa: globo demoníaco sobre Shurima (`feature/character-sheet`)
+- Cúpula vermelha sobre toda a região, com veias que pulsam e 42 corvos em órbita.
+- Os domos de distorção perdem a rede e ficam lisos.
+
 ## 2026-11-02 — Mapa: domos de distorção temporal em Shurima (`feature/character-sheet`)
 - Seis cúpulas 3D roxas no deserto, com relógio no chão e poeira presa no tempo.
 - Cada domo tem o próprio ritmo de tempo, e um deles corre ao contrário.

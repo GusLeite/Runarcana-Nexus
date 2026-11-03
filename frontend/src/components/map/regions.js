@@ -68,5 +68,8 @@ export const MAP_DOMES = [
   { x: 105, y: -505, radius: 38, speed: 0.2 },
 ]
 
+// Globo demoníaco sobre todo o território de Shurima. height menor que radius: a câmera precisa caber por cima dele de perto.
+export const MAP_GLOBE = { x: 85, y: -400, radius: 365, height: 175, ravens: 42 }
+
 // Regiões sem imagem de destaque no original: acendem a terra dentro de um círculo em volta do ponto.
 export const MAP_AREAS = { void: { x: 270, y: -560, radius: 175, color: [0.55, 0.2, 0.85] } }

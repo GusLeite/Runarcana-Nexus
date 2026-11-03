@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { BANDLE_SPOTS, MAP_DOMES, MAP_PINS, bandleSpot } from './regions.js'
+import { BANDLE_SPOTS, MAP_DOMES, MAP_GLOBE, MAP_PINS, bandleSpot } from './regions.js'
 
 describe('Bandópolis', () => {
   it('tem um lugar para cada face do d10', () => {
@@ -32,5 +32,17 @@ describe('domos de distorção temporal', () => {
 
   it('têm um domo com o tempo correndo ao contrário', () => {
     expect(MAP_DOMES.some(dome => dome.speed < 0)).toBe(true)
+  })
+})
+
+describe('globo demoníaco', () => {
+  it('cobre todos os domos e o brasão de Shurima', () => {
+    const inside = point => Math.hypot(point.x - MAP_GLOBE.x, point.y - MAP_GLOBE.y) < MAP_GLOBE.radius
+    for (const dome of MAP_DOMES) expect(inside(dome)).toBe(true)
+    expect(inside(MAP_PINS.find(pin => pin.slug === 'shurima'))).toBe(true)
+  })
+
+  it('deixa a câmera passar por cima no zoom máximo', () => {
+    expect(MAP_GLOBE.height).toBeLessThan(200)
   })
 })

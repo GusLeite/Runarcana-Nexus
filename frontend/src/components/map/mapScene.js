@@ -7,6 +7,7 @@ import {
   tileCenter, tileNearView, tiltFor,
   wheelZoom, worldPerPixel, zoomProgress,
 } from './mapMath.js'
+import { createDemonGlobe } from './demonGlobe.js'
 import { createTemporalDomes } from './temporalDomes.js'
 
 const TEXTURES = ['terrain_z1', 'depth_z1', 'ocean_z1', 'clouds', 'fog', 'fog-mask'].map(name => `/map/${name}.jpg`)
@@ -175,10 +176,11 @@ const loadTextures = () => {
 // lift: distância do ponto no plano em pé, de frente para a câmera.
 // decals: imagens em pé nesse mesmo plano ({ draw, x, y, z, size, level }); draw(pixels) devolve um canvas.
 // domes: domos de distorção temporal ({ x, y, radius, speed }).
+// globe: globo demoníaco com corvos ({ x, y, radius, height, ravens }).
 // areas: regiões que acendem por um círculo em vez de uma imagem ({ [slug]: { x, y, radius, color } }).
 // onMapClick(clientX, clientY): clique no mapa, sem arrastar.
 // onPinsChange: chamado quando os pontos visíveis mudam, porque o navegador não avisa que o mouse saiu de um ponto escondido.
-export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], areas = {}, domes = [], onPinsChange, onMapClick } = {}) {
+export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], areas = {}, domes = [], globe = null, onPinsChange, onMapClick } = {}) {
   const textures = await loadTextures()
   const [terrain, depth, ocean, cloudMap, fogMap, fogMask] = textures
 
@@ -357,6 +359,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
   panGroup.add(sparkle)
 
   const temporalDomes = createTemporalDomes(domes, panGroup, heightAt)
+  const demonGlobe = globe && createDemonGlobe(globe, panGroup)
 
   const cloudsMaterial = new THREE.ShaderMaterial({
     uniforms: { cloudMap: { value: cloudMap }, drift: { value: 0 }, opacity: { value: 0 } },
@@ -571,6 +574,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       sparkleMaterial.uniforms.time.value = clock.elapsedTime
       cloudsMaterial.uniforms.drift.value = -0.018 * clock.elapsedTime
       temporalDomes.update(clock.elapsedTime)
+      demonGlobe?.update(clock.elapsedTime)
     }
     composer.render(dt)
   })
@@ -611,6 +615,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       }
       tileGeometry.dispose()
       temporalDomes.dispose()
+      demonGlobe?.dispose()
       for (const decal of decalMeshes) {
         decal.mesh.geometry.dispose()
         decal.material.dispose()

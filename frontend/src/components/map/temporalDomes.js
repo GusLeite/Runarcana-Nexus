@@ -27,11 +27,6 @@ const DOME_FRAGMENT = `
   void main() {
     float rim = pow(1.0 - abs(dot(normalize(vNormal), normalize(vView))), 2.2);
     float height = clamp(vLocal.z, 0.0, 1.0);
-    // Meridianos e paralelos, como o mostrador de um relógio visto de cima.
-    float angle = atan(vLocal.y, vLocal.x);
-    float meridians = smoothstep(0.93, 1.0, abs(sin(angle * 6.0)));
-    float parallels = smoothstep(0.9, 1.0, abs(sin(height * 15.7 - time * 0.5)));
-    float lattice = max(meridians, parallels) * (0.25 + 0.75 * height);
     // Faixa de luz que percorre a cúpula, de tempos em tempos.
     float sweep = fract(time * 0.11 + seed);
     float band = smoothstep(0.09, 0.0, abs(height - sweep));
@@ -39,7 +34,7 @@ const DOME_FRAGMENT = `
     vec3 bright = vec3(0.62, 0.32, 1.0);
     vec3 color = mix(deep, bright, clamp(rim + band * 0.7, 0.0, 1.0));
     float fade = smoothstep(0.0, 0.05, height);
-    float alpha = (0.24 + rim * 0.62 + lattice * 0.3 + band * 0.35) * mix(0.55, 1.0, fade);
+    float alpha = (0.26 + rim * 0.62 + band * 0.35) * mix(0.55, 1.0, fade);
     gl_FragColor = vec4(color, clamp(alpha, 0.0, 1.0));
   }
 `
