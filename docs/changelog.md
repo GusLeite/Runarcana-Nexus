@@ -1,8 +1,9 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
-## 2026-11-03 — Ficha física: habilidades e heranças só com o nome (`main`)
-- No verso, Habilidades e Heranças saem só com o título (usos e dano entre parênteses); passivas, formas e magias extras mantêm o texto.
+## 2026-11-03 — Ficha física: habilidades, passivas e heranças só com o nome (`main`)
+- No verso, Habilidades, Passivas e Heranças saem só com o título (usos e dano entre parênteses); formas e magias extras mantêm o texto.
+- O texto que passa para a coluna seguinte quebra de novo na largura dela (antes encolhia a letra).
 
 ## 2026-11-03 — Ficha física em PDF (`main`)
 - Botão da impressora na barra da ficha baixa a "Planilha Dupla 0.93" preenchida com os dados do personagem (`utils/printSheet.js`, `pdf-lib` carregado sob demanda).

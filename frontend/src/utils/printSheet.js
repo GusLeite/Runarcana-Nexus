@@ -55,8 +55,8 @@ export function importantInfo(sheet) {
   return out
 }
 
-// Verso (Informações Adicionais): habilidades e heranças só com o título (e usos/dano); passivas, formas e magias
-// com o texto de cada uma.
+// Verso (Informações Adicionais): habilidades, passivas e heranças só com o título (e usos/dano); formas e as magias
+// que não couberam na frente com o texto de cada uma.
 export function additionalInfo(sheet, abilities, extraSpells = []) {
   const entry = (a, withText = true) => {
     const uses = a.maxUses ? a.maxUses + (a.maxUses === 1 ? ' uso' : ' usos') + (a.recharge && RECHARGES[a.recharge] ? ' / ' + RECHARGES[a.recharge].toLowerCase() : '') : ''
@@ -66,7 +66,7 @@ export function additionalInfo(sheet, abilities, extraSpells = []) {
   const sections = []
   const push = (title, items) => items.length && sections.push({ title, items })
   push('Habilidades', abilities.filter(a => a.type === 'ABILITY' && a.name !== MANA).map(titleOnly))
-  push('Passivas', abilities.filter(a => a.type === 'PASSIVE').map(a => entry(a)))
+  push('Passivas', abilities.filter(a => a.type === 'PASSIVE').map(titleOnly))
   push('Heranças', abilities.filter(a => a.type === 'HERITAGE').map(titleOnly))
   push('Formas', (sheet.forms ?? []).map(f => ({ title: f.name, sub: '', text: f.description ?? '' })))
   push('Magias (continuação)', extraSpells.map(entry))
@@ -336,6 +336,8 @@ export async function buildPrintSheet({ pages, sheet: full, abilities = full.abi
   const flow = sz => {
     const out = []
     sections.forEach(sec => {
+      // Respiro antes de cada seção (depois de uma lista só de títulos ela ficaria colada).
+      if (out.length) out.push({ kind: 'gap', h: sz * 0.6 })
       out.push({ kind: 'section', l: sec.title.toUpperCase(), h: sz * 1.6 })
       sec.items.forEach(it => {
         out.push({ kind: 'title', l: it.title + (it.sub ? ' (' + it.sub + ')' : ''), h: sz * 1.25 })
@@ -365,7 +367,15 @@ export async function buildPrintSheet({ pages, sheet: full, abilities = full.abi
     }
     for (const it of flow(size)) {
       if (it.kind === 'body') {
-        wrap(font, it.text, size - 0.5, columns[Math.min(col, 2)][1]).forEach(l => place('body', l, lineH))
+        // Uma linha por vez: ao pular de coluna, o resto do texto quebra de novo na largura da coluna nova.
+        let rest = it.text
+        while (rest && ok) {
+          if (cursor + lineH > height) { col++; cursor = 0 }
+          const [line] = wrap(font, rest, size - 0.5, columns[Math.min(col, 2)][1])
+          if (!line) break
+          place('body', line, lineH)
+          rest = clean(rest).slice(line.length).trim()
+        }
       } else if (it.kind === 'gap') cursor += it.h
       else place(it.kind, it.l, it.h)
       if (!ok) break
