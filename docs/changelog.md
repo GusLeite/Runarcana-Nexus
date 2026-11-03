@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa: moldura nítida e brasão dourado do Vazio (`feature/character-sheet`)
+- A moldura de Piltover e Zaun passa a ser desenhada por código em 2048 px, sem a imagem de 128 px do original.
+- O brasão do Vazio em repouso ganha desenho próprio, no estilo dos brasões dourados das outras regiões.
+
 ## 2026-11-02 — Mapa: moldura em pé e Vazio como região (`feature/character-sheet`)
 - A moldura de Piltover e Zaun fica de frente para a câmera, com os ícones no mesmo plano, e a inclinação passa ao valor do original (0,75).
 - O Vazio ganha brasão, destaque roxo e painel, e aparece de longe e de perto.

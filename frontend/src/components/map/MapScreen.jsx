@@ -13,7 +13,7 @@ const PANEL_DELAY = 1500
 const PIN_IMAGES = {
   crest: pin => [`/map/crests/${pin.slug}.png`, `/map/crests/${pin.slug}-hover.png`],
   capital: () => ['/map/pins/capital.png', '/map/pins/capital-hover.png'],
-  art: pin => [pin.art[0].icon, pin.art[0].icon],
+  art: pin => [pin.goldIcon, pin.art[0].icon],
 }
 
 // Mapa de Runeterra em tela cheia. A câmera e o relevo ficam em mapScene.js.

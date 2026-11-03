@@ -141,22 +141,10 @@
 .map-pin-capital .map-pin-icon img {
   width: 44px;
 }
-/* Brasão sem versão dourada no original: a própria arte, tingida dentro de um disco como os demais. */
-.map-pin-art .map-pin-icon img {
+/* A arte colorida do Vazio ocupa o quadro inteiro; recua para ter o tamanho dos outros brasões. */
+.map-pin-art .map-pin-active {
   box-sizing: border-box;
-  width: 58px;
-  height: 58px;
-  margin: 3px;
-  padding: 10px;
-  border-radius: 50%;
-  object-fit: contain;
-}
-.map-pin-art .map-pin-icon img:not(.map-pin-active) {
-  border: 1px solid rgba(200, 162, 74, 0.8);
-  outline: 1px solid rgba(200, 162, 74, 0.35);
-  outline-offset: 2px;
-  background: #10161f;
-  filter: grayscale(1) sepia(1) saturate(1.8) brightness(1.15);
+  padding: 9px;
 }
 .map-pin-active {
   position: absolute;

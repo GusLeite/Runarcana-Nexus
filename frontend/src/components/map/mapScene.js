@@ -12,6 +12,8 @@ const TEXTURES = ['terrain_z1', 'depth_z1', 'ocean_z1', 'clouds', 'fog', 'fog-ma
 const TERRAIN_SEGMENTS = 200
 const INTRO_SECONDS = 2.2
 const FOCUS_SECONDS = 1.5
+// De perto, a moldura chega perto da altura da tela em telas de alta densidade.
+const DECAL_PIXELS = 2048
 // A vista começa um pouco ao sul, para o brasão do Vazio não ficar cortado no pé da tela.
 const START_PAN = { x: 0, y: 70 }
 const HIGHLIGHT_OPACITY = 0.9
@@ -170,7 +172,7 @@ const loadTextures = () => {
 // Monta a cena no container e devolve os controles. Rejeita se o navegador não tem WebGL ou faltam as texturas.
 // pins: elementos HTML presos a um ponto do mundo ({ el, x, y, z, level }); a cena os reposiciona a cada quadro.
 // lift: distância do ponto no plano em pé, de frente para a câmera.
-// decals: imagens em pé nesse mesmo plano ({ url, x, y, z, size, level }).
+// decals: imagens em pé nesse mesmo plano ({ draw, x, y, z, size, level }); draw(pixels) devolve um canvas.
 // areas: regiões que acendem por um círculo em vez de uma imagem ({ [slug]: { x, y, radius, color } }).
 // onPinsChange: chamado quando os pontos visíveis mudam, porque o navegador não avisa que o mouse saiu de um ponto escondido.
 export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], areas = {}, onPinsChange } = {}) {
@@ -316,14 +318,10 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     mesh.renderOrder = 0.6
     mesh.visible = false
     panGroup.add(mesh)
-    const part = { mesh, material, level: decal.level, texture: null }
-    new THREE.TextureLoader().loadAsync(decal.url).then(texture => {
-      if (destroyed) return texture.dispose()
-      part.texture = texture
-      material.map = texture
-      material.needsUpdate = true
-    }).catch(() => {})
-    return part
+    const texture = new THREE.CanvasTexture(decal.draw(DECAL_PIXELS))
+    texture.anisotropy = maxAnisotropy
+    material.map = texture
+    return { mesh, material, level: decal.level, texture }
   })
 
   const sparkleMaterial = new THREE.ShaderMaterial({

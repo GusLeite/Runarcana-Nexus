@@ -17,7 +17,7 @@ for crest in bilgewater demacia freljord ionia ixtal noxus piltover-zaun shadow-
   curl -fsS -o "public/map/crests/$crest.png" "$base/regions/$crest.png"
   curl -fsS -o "public/map/crests/$crest-hover.png" "$base/regions/$crest-hover.png"
 done
-for pin in capital capital-hover capital-frame; do
+for pin in capital capital-hover; do
   curl -fsS -o "public/map/pins/$pin.png" "$base/pins/$pin.png"
 done
 # Blocos detalhados: mesma lista de TILE_IDS em src/components/map/mapMath.js, com o número somado de 1.
