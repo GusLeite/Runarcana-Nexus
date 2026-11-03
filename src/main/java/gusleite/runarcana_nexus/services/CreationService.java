@@ -44,6 +44,7 @@ import gusleite.runarcana_nexus.record.LevelUpPreview;
 import gusleite.runarcana_nexus.record.LevelUpRequest;
 import gusleite.runarcana_nexus.record.PreparationResponse;
 import gusleite.runarcana_nexus.record.SpeedLine;
+import gusleite.runarcana_nexus.record.StatBreakdown;
 import gusleite.runarcana_nexus.record.CreationRequest.HeritagePick;
 import gusleite.runarcana_nexus.record.CreationRequest.TraitPick;
 import gusleite.runarcana_nexus.repository.BackGroundRepository;
@@ -423,6 +424,50 @@ public class CreationService {
         return preparationOf(characterService.characterOf(account));
     }
 
+    // De onde vem cada ponto de atributo e de PV: refaz a conta pelas escolhas guardadas. Ficha sem as escolhas
+    // (criada à mão) não tem como: 400, e a ficha esconde o botão.
+    @Transactional(readOnly = true)
+    public StatBreakdown breakdown(Account account) {
+        Character c = characterService.characterOf(account);
+        Build b = evaluate(buildOf(c));
+        List<StatBreakdown.AttributeLines> attributes = new ArrayList<>();
+        for (Attribute a : Attribute.values()) {
+            List<StatBreakdown.Line> lines = new ArrayList<>();
+            lines.add(new StatBreakdown.Line("Valor base", b.base.get(a) == null ? 10 : b.base.get(a)));
+            Map<String, Integer> bySource = new LinkedHashMap<>();
+            b.bonusSources.getOrDefault(a, List.of()).forEach(s -> bySource.merge(s.source(), s.value(), Integer::sum));
+            bySource.forEach((label, amount) -> { if (amount != 0) lines.add(new StatBreakdown.Line(label, amount)); });
+            int now = c.getEffective(a);
+            int known = lines.stream().mapToInt(StatBreakdown.Line::amount).sum();
+            if (now != known) lines.add(new StatBreakdown.Line("Forma ativa ou ajuste do mestre", now - known));
+            attributes.add(new StatBreakdown.AttributeLines(a, now, lines));
+        }
+
+        List<StatBreakdown.Line> hp = new ArrayList<>();
+        if (b.klass != null) {
+            int con = b.hpModifier();
+            int levels = 1 + b.hpRolls.size();
+            hp.add(new StatBreakdown.Line("Dado de vida de " + b.klass.name() + " (1º nível, valor máximo)", b.klass.hitDie()));
+            int rolled = b.hpRolls.stream().mapToInt(Integer::intValue).sum();
+            if (!b.hpRolls.isEmpty()) hp.add(new StatBreakdown.Line("Dados de vida rolados (do 2º ao " + levels + "º nível)", rolled));
+            String conName = b.attributeSwaps.get("HP") != null && con != b.modifier(Attribute.CONSTITUTION)
+                    ? "Resiliência Adaptativa" : "Constituição";
+            hp.add(new StatBreakdown.Line("Modificador de " + conName + " (" + (con >= 0 ? "+" : "−") + Math.abs(con) + ") em " + levels
+                    + (levels == 1 ? " nível" : " níveis"), con * levels));
+            // Cada nível rende no mínimo 1 PV.
+            int floor = Math.max(1, b.klass.hitDie() + con) - (b.klass.hitDie() + con);
+            for (int roll : b.hpRolls) floor += Math.max(1, roll + con) - (roll + con);
+            if (floor != 0) hp.add(new StatBreakdown.Line("Mínimo de 1 PV por nível", floor));
+            Map<String, Integer> grants = new LinkedHashMap<>();
+            for (int i = 0; i < b.hpGrants.size(); i++) grants.merge(b.hpLabels.get(i), b.hpGrantAmount(b.hpGrants.get(i)), Integer::sum);
+            grants.forEach((label, amount) -> { if (amount != 0) hp.add(new StatBreakdown.Line(label, amount)); });
+        }
+        if (c.getMaxHpBonus() != null && c.getMaxHpBonus() != 0) hp.add(new StatBreakdown.Line("Ajuste do mestre", c.getMaxHpBonus()));
+        int known = hp.stream().mapToInt(StatBreakdown.Line::amount).sum();
+        if (known != c.getMaxHpTotal()) hp.add(new StatBreakdown.Line("Outros ajustes", c.getMaxHpTotal() - known));
+        return new StatBreakdown(attributes, new StatBreakdown.HpLines(c.getMaxHpTotal(), hp));
+    }
+
     // Troca as preparadas (só no descanso longo). picks: classe → chaves das opções; classe fora de picks não muda.
     @Transactional
     public void prepare(Account account, Map<String, List<String>> picks) {
@@ -645,7 +690,7 @@ public class CreationService {
                                 .filter(o -> !sourceAttributes.contains(o)).toList();
                         String label = orLabel(g, "Escolha " + g.count() + " atributo(s) para +" + g.amount());
                         List<String> selected = choose(picked, options, g.count(), label, b.errors);
-                        selected.forEach(a -> b.bonus.merge(Attribute.valueOf(a), g.amount(), Integer::sum));
+                        selected.forEach(a -> b.addBonus(Attribute.valueOf(a), g.amount(), s.label()));
                         // "Até o máximo de 22" (Conjurador Eficiente): o atributo escolhido passa a ter outro limite.
                         if (g.value() != null) selected.forEach(a -> b.attributeCap.merge(Attribute.valueOf(a), Integer.parseInt(g.value()), Math::max));
                         sourceAttributes.addAll(selected);
@@ -1004,7 +1049,7 @@ public class CreationService {
         if (g.minLevel() != null && b.level < g.minLevel()) return;
         switch (g.type()) {
             case ATTRIBUTE -> {
-                b.bonus.merge(g.attribute(), valueAt(g, g.amount(), b.scale(s.label())), Integer::sum);
+                b.addBonus(g.attribute(), valueAt(g, g.amount(), b.scale(s.label())), s.label());
                 // value: novo limite do atributo ("Constituição +2, máximo 22").
                 if (g.value() != null) b.attributeCap.merge(g.attribute(), Integer.parseInt(g.value()), Math::max);
             }
@@ -1022,7 +1067,10 @@ public class CreationService {
                 if (!g.hasOptions()) b.features.add(new Sourced<>(g, s.label()));
             }
             // PV calculado no fim (maxHp), quando os atributos já estão definidos.
-            case HP_BONUS -> b.hpGrants.add(g);
+            case HP_BONUS -> {
+                b.hpGrants.add(g);
+                b.hpLabels.add(s.label());
+            }
             case ARMOR_PROFICIENCY -> b.armorProficiencies.add(g.value());
             case WEAPON_PROFICIENCY -> b.weaponProficiencies.add(g.value());
             case SPEED -> {
@@ -2680,6 +2728,8 @@ public class CreationService {
         boolean roundUp;
         final Map<Attribute, Integer> base = new EnumMap<>(Attribute.class);
         final Map<Attribute, Integer> bonus = new EnumMap<>(Attribute.class);
+        // De onde veio cada bônus de atributo (fonte, valor), para a ficha mostrar a origem dos pontos.
+        final Map<Attribute, List<Sourced<Integer>>> bonusSources = new EnumMap<>(Attribute.class);
         // Limite de cada atributo acima de 20 (ATTRIBUTE_CHOICE com value: Conjurador Eficiente, até 22).
         final Map<Attribute, Integer> attributeCap = new EnumMap<>(Attribute.class);
         PointBuyStatus pointBuy;
@@ -2714,6 +2764,8 @@ public class CreationService {
         // Ofícios "caso já tenha, especialidade" (id, chave da fonte), decididos no fim.
         final List<Sourced<String>> craftUpgrades = new ArrayList<>();
         final List<Grant> hpGrants = new ArrayList<>();
+        // Fonte de cada hpGrants (mesma posição).
+        final List<String> hpLabels = new ArrayList<>();
         final List<ChoiceLine> choices = new ArrayList<>();
         final Set<String> languages = new LinkedHashSet<>();
         final Set<String> crafts = new LinkedHashSet<>();
@@ -2813,8 +2865,13 @@ public class CreationService {
             return Math.floorDiv(total(a) - 10, 2);
         }
 
-        int maxHp() {
-            if (klass == null) return 0;
+        void addBonus(Attribute a, int amount, String source) {
+            bonus.merge(a, amount, Integer::sum);
+            bonusSources.computeIfAbsent(a, k -> new ArrayList<>()).add(new Sourced<>(amount, source));
+        }
+
+        // Modificador que entra no PV de cada nível: o de Constituição ou, com Resiliência Adaptativa, o maior.
+        int hpModifier() {
             int con = modifier(Attribute.CONSTITUTION);
             // Resiliência Adaptativa: metade da DES no lugar da CON, se for maior.
             String alt = attributeSwaps.get("HP");
@@ -2823,10 +2880,20 @@ public class CreationService {
                 int other = modifier(Attribute.valueOf(half ? alt.substring(0, alt.length() - 2) : alt));
                 con = Math.max(con, half ? Math.floorDiv(other, 2) : other);
             }
-            // HP_BONUS com perLevel soma em cada nível (Pacto Carmesim); sem, uma vez só.
-            // HALF_HIT_DIE (Robusto): metade do dado de vida da primeira classe, uma vez.
-            int bonus = hpGrants.stream().mapToInt(g -> HALF_HIT_DIE.equals(g.value()) ? klass.hitDie() / 2 : hpBonusFor(g, proficiency(), roundUp, this::modifier)
-                    * (Boolean.TRUE.equals(g.perLevel()) ? level : 1)).sum();
+            return con;
+        }
+
+        // PV de um HP_BONUS: com perLevel soma em cada nível (Pacto Carmesim); sem, uma vez só.
+        // HALF_HIT_DIE (Robusto): metade do dado de vida da primeira classe, uma vez.
+        int hpGrantAmount(Grant g) {
+            return HALF_HIT_DIE.equals(g.value()) ? klass.hitDie() / 2 : hpBonusFor(g, proficiency(), roundUp, this::modifier)
+                    * (Boolean.TRUE.equals(g.perLevel()) ? level : 1);
+        }
+
+        int maxHp() {
+            if (klass == null) return 0;
+            int con = hpModifier();
+            int bonus = hpGrants.stream().mapToInt(this::hpGrantAmount).sum();
             int hp = Math.max(1, klass.hitDie() + con);
             for (int roll : hpRolls) hp += Math.max(1, roll + con);
             return hp + bonus;

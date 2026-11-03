@@ -10,6 +10,7 @@ import gusleite.runarcana_nexus.record.CastRequest;
 import gusleite.runarcana_nexus.record.CastResponse;
 import gusleite.runarcana_nexus.record.PreparationResponse;
 import gusleite.runarcana_nexus.record.RestRequest;
+import gusleite.runarcana_nexus.record.StatBreakdown;
 import gusleite.runarcana_nexus.services.AbilityService;
 import gusleite.runarcana_nexus.services.AuthService;
 import gusleite.runarcana_nexus.services.CreationService;
@@ -119,5 +120,12 @@ public class AbilityController {
     public ResponseEntity<PreparationResponse> preparation(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
         return ResponseEntity.ok(creation.preparation(auth.authenticate(authorization)));
+    }
+
+    // Jogador: de onde vem cada ponto de atributo e de PV (400 se a ficha não tem as escolhas da criação).
+    @GetMapping("/me/breakdown")
+    public ResponseEntity<StatBreakdown> breakdown(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        return ResponseEntity.ok(creation.breakdown(auth.authenticate(authorization)));
     }
 }

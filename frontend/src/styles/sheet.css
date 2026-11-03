@@ -852,3 +852,18 @@ background-color:transparent;background-image:linear-gradient(90deg,transparent 
 @media (max-width:480px){.lvc-label{flex-basis:84px}}
 @media (prefers-reduced-motion:reduce){.lvc-ray,.lvc-spark{display:none}.lvc-gains li,.lvc-ok{opacity:1}}
 .slot .item-art{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Modo "de onde vem": botão aceso e dica com as fontes de cada número */
+.icon-btn.on{border-color:var(--teal);box-shadow:0 0 12px rgba(47,211,192,.35)}
+.icon-btn.on svg{stroke:var(--teal)}
+.sheet.explaining .attr,.sheet.explaining .attack-hit,.hp.explainable{cursor:help}
+.hp.explainable:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
+.explain-tip{position:fixed;z-index:60;padding:10px 12px;border:1px solid var(--gold);background:rgba(4,9,16,.97);box-shadow:0 8px 28px rgba(0,0,0,.7),0 0 14px rgba(47,211,192,.2);pointer-events:none;font-size:14px;line-height:1.35}
+.explain-title{margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid rgba(200,162,74,.25);font-family:'Cinzel',Georgia,serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.explain-tip ul{margin:0;padding:0;list-style:none}
+.explain-tip li{display:flex;justify-content:space-between;gap:12px;padding:2px 0;color:var(--text)}
+.explain-tip li b{flex:none;color:var(--gold-hi)}
+.explain-tip li.neg b{color:var(--blood)}
+.explain-tip li.zero{opacity:.6}
+.explain-total{display:flex;justify-content:space-between;margin-top:6px;padding-top:5px;border-top:1px solid rgba(200,162,74,.25);font-family:'Cinzel',Georgia,serif;color:var(--gold-hi)}
+.explain-none{margin:0;color:var(--muted)}

@@ -17,6 +17,10 @@ export const rest = (token, type, prepared) => request('/character/me/rest', { m
 // Magias que a ficha prepara (Acólito, Xamã): { classes: [{ classId, name, limit, maxSpellLevel, options, prepared }] }.
 export const fetchPreparation = token => request('/character/me/preparation', { token })
 
+// De onde vem cada ponto de atributo e de PV: { attributes: [{ attribute, total, lines }], hp: { total, lines } },
+// com lines = [{ label, amount }]. 400 se a ficha não guarda as escolhas da criação.
+export const fetchBreakdown = token => request('/character/me/breakdown', { token })
+
 // Defesa em uso: "UNARMORED", "RULE:<n>" ou "ITEM:<id>". Devolve a CA recalculada.
 export const chooseDefense = (token, key) => request('/character/me/defense', { method: 'PATCH', token, body: { key } })
 // Forma temporária ativa (nome; null = forma normal): devolve a ficha inteira recalculada.

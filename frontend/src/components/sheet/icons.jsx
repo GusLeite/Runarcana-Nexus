@@ -70,6 +70,12 @@ export function PrintIcon() {
   )
 }
 
+export function InfoIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 11v6M12 7.5v.5" /></svg>
+  )
+}
+
 export function ExitIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10" /></svg>

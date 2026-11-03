@@ -55,7 +55,7 @@ export default function OverviewTab({ sheet, attacks = [], crafts = [], abilitie
         )}
         {attacks.length > 0 && (
           <section className="card" style={{ '--i': 3 }}>
-            <Attacks attacks={attacks} onRoll={onRoll} onRollDice={onRollDice} />
+            <Attacks attacks={attacks} sheet={sheet} onRoll={onRoll} onRollDice={onRollDice} />
           </section>
         )}
         <section className="card" style={{ '--i': 3 }}>

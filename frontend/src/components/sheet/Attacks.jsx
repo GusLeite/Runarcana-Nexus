@@ -1,9 +1,12 @@
 import { DAMAGE_TYPES, attributeById, critDice, formatModifier, parseDice } from '../../data/rules.js'
+import { attackExplanation, styleExplanation } from '../../data/breakdown.js'
+import { useExplain } from './Explain.jsx'
 
 // Ataques com arma (contas do back-end): o bônus rola o d20 (com o modo das rolagens e a margem de crítico),
 // o dano rola os dados; "Crítico" rola os dados multiplicados e "2 mãos" o dano versátil.
 // Embaixo, cada Estilo de Luta que vale para a arma (bônus e dano já somados; o Combatente usa um por vez).
-export default function Attacks({ attacks, onRoll, onRollDice }) {
+export default function Attacks({ attacks, sheet, onRoll, onRollDice }) {
+  const { bind } = useExplain()
   return (
     <>
       <h3 className="card-title">Ataques <small>clique para rolar</small></h3>
@@ -20,7 +23,8 @@ export default function Attacks({ attacks, onRoll, onRollDice }) {
           return (
             <li key={a.key} className={'attack' + (a.proficient ? '' : ' unprof')} style={{ '--n': n }} title={a.properties ?? undefined}>
               <button type="button" className="attack-hit" onClick={() => onRoll(a.name + ' · ataque', a.attackBonus, a.critRange)}
-                aria-label={`Atacar com ${a.name}, ${formatModifier(a.attackBonus)}`}>
+                aria-label={`Atacar com ${a.name}, ${formatModifier(a.attackBonus)}`}
+                {...bind(() => attackExplanation(a, sheet))}>
                 {formatModifier(a.attackBonus)}
               </button>
               <span className="attack-info">
@@ -52,7 +56,8 @@ export default function Attacks({ attacks, onRoll, onRollDice }) {
                   {a.styles.map(s => (
                     <span key={s.name} className="attack-style" title={s.note ?? undefined}>
                       <em>{s.name}</em>
-                      <button type="button" className="chip-btn" onClick={() => onRoll(a.name + ' · ' + s.name, s.attackBonus, a.critRange)}>
+                      <button type="button" className="chip-btn" onClick={() => onRoll(a.name + ' · ' + s.name, s.attackBonus, a.critRange)}
+                        {...bind(() => styleExplanation(a, s, sheet))}>
                         {formatModifier(s.attackBonus)}
                       </button>
                       {parseDice(s.damage) && (

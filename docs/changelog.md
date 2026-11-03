@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Modo "de onde vem" nos atributos, PV e ataques (`main`)
+- Botão "i" na barra da ficha liga/desliga (lembrado no navegador): com ele ligado, passar o mouse (ou o foco) por um atributo, pelos PV ou por um ataque (e seus Estilos de Luta) mostra cada fonte do número.
+- `GET /character/me/breakdown` refaz a conta pelo `build` guardado (`CreationService.breakdown`); o `Build` agora guarda a fonte de cada bônus de atributo (`bonusSources`) e de PV (`hpLabels`). O ataque se explica no front (`data/breakdown.js`).
+
 ## 2026-11-03 — Ficha física: Pulso Rúnico nas Runas (`main`)
 - O Pulso Rúnico sai das passivas do verso e vai na linha "Pulso Rúnico" das Runas, com a pedra e o dado.
 - No verso, a 1ª coluna fica com Habilidades, Passivas e Heranças; formas e magias com texto começam na 2ª.

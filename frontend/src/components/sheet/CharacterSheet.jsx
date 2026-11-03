@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { applyLevelUp, castSpell, fetchConditions, setDeathSaves as setDeathSavesApi, chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, chooseForm as chooseFormApi, toggleEffect as toggleEffectApi, consumeItem, fetchPreparation, fetchSheet, previewLevelUp, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
+import { applyLevelUp, castSpell, fetchBreakdown, fetchConditions, setDeathSaves as setDeathSavesApi, chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, chooseForm as chooseFormApi, toggleEffect as toggleEffectApi, consumeItem, fetchPreparation, fetchSheet, previewLevelUp, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
 import { fetchVisiblePois } from '../../api/map.js'
@@ -26,7 +26,8 @@ import { play } from '../../audio/engine.js'
 import useUrlParam from '../../hooks/useUrlParam.js'
 import { levelUpGains } from '../../data/levelGains.js'
 import LevelUpCeremony from './LevelUpCeremony.jsx'
-import { ExitIcon, KeyIcon, PrintIcon } from './icons.jsx'
+import { ExitIcon, InfoIcon, KeyIcon, PrintIcon } from './icons.jsx'
+import { ExplainProvider } from './Explain.jsx'
 import '../../styles/sheet.css'
 
 const MAX_LOG = 8
@@ -328,6 +329,32 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   }, [token, state.status])
   const prepares = preparation?.classes?.length > 0
 
+  // Modo "de onde vem": liga no botão do topo; a conta (atributos e PV) vem do back e refaz quando a ficha muda.
+  const [explain, setExplain] = useState(() => {
+    try { return localStorage.getItem('runarcana.explain') === '1' } catch { return false }
+  })
+  const toggleExplain = useCallback(() => setExplain(on => {
+    try { localStorage.setItem('runarcana.explain', on ? '0' : '1') } catch { /* sem armazenamento: vale só nesta visita */ }
+    return !on
+  }), [])
+  const [breakdown, setBreakdown] = useState({ data: null, unavailable: false })
+  const statsKey = state.status === 'ready'
+    ? [state.sheet.character.level, state.sheet.character.maxHp, state.sheet.character.str, state.sheet.character.dex, state.sheet.character.con,
+      state.sheet.character.intel, state.sheet.character.wis, state.sheet.character.cha].join('|')
+    : null
+  useEffect(() => {
+    if (!explain || !statsKey) return
+    let alive = true
+    fetchBreakdown(token)
+      .then(data => alive && setBreakdown({ data, unavailable: false }))
+      .catch(err => {
+        if (!alive) return
+        if (err.status === 401) expired.current()
+        else setBreakdown({ data: null, unavailable: true })
+      })
+    return () => { alive = false }
+  }, [token, explain, statsKey])
+
   const doRest = useCallback((type, prepared) => {
     setBusy(true)
     restApi(token, type, prepared)
@@ -506,7 +533,8 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   }
 
   return (
-    <div className="sheet" style={{ '--h': character.hue }}>
+    <ExplainProvider on={explain} breakdown={breakdown.data} unavailable={breakdown.unavailable}>
+    <div className={'sheet' + (explain ? ' explaining' : '')} style={{ '--h': character.hue }}>
       <div className="sheet-bg" style={{ backgroundImage: `url("${character.img}")` }} aria-hidden="true" />
       <div className="sheet-motes" aria-hidden="true">
         {motes.map((style, i) => <span key={i} style={style} />)}
@@ -534,6 +562,13 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             <span className="who-sub">{session.username}</span>
           </div>
           <WorldButtons session={session} />
+          {sheet && (
+            <button className={'icon-btn' + (explain ? ' on' : '')} type="button" onClick={toggleExplain} aria-pressed={explain}
+              title={explain ? 'Desligar: parar de mostrar de onde vem cada número' : 'Ligar: passe o mouse em um atributo, nos PV ou em um ataque para ver de onde vem cada ponto'}
+              aria-label="Mostrar de onde vem cada número">
+              <InfoIcon />
+            </button>
+          )}
           {sheet && (
             <button className="icon-btn" type="button" onClick={printSheet} disabled={printing}
               title={printing ? 'Gerando a ficha física…' : 'Baixar ficha física (PDF para imprimir)'} aria-label="Baixar ficha física">
@@ -644,5 +679,6 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       {ceremony && <LevelUpCeremony gains={ceremony} name={sheet?.characterName ?? character.name} onClose={closeCeremony} />}
       {toast && <div key={toast} className="toast" role="status">{toast}</div>}
     </div>
+    </ExplainProvider>
   )
 }

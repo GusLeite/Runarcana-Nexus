@@ -111,6 +111,42 @@ class LevelUpControllerTests {
     }
 
     @Test
+    void detalhaDeOndeVemCadaPontoDeAtributoEDePv() throws Exception {
+        long id = createNyx();
+        String player = login("gaudron");
+        assertBreakdownCloses(player);
+        // Nyx de teste: INT 15 base + 2 (origem/classe) e PV 9; as linhas têm a fonte de cada bônus.
+        String first = mvc.perform(get("/character/me/breakdown").header("Authorization", "Bearer " + player))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.hp.total").value(9))
+                .andExpect(jsonPath("$.hp.lines[0].label").value("Dado de vida de Arcanista (1º nível, valor máximo)"))
+                .andReturn().getResponse().getContentAsString();
+        assertThat(JSON.readTree(first).path("attributes").size()).isEqualTo(6);
+        // Depois de subir de nível, a conta continua fechando com o novo total (17).
+        levelUp(id, LEVEL_2).andExpect(status().isOk());
+        assertBreakdownCloses(player);
+        mvc.perform(get("/character/me/breakdown").header("Authorization", "Bearer " + player))
+                .andExpect(jsonPath("$.hp.total").value(17))
+                .andExpect(jsonPath("$.hp.lines[1].label").value("Dados de vida rolados (do 2º ao 2º nível)"))
+                .andExpect(jsonPath("$.hp.lines[1].amount").value(4));
+    }
+
+    // A soma das linhas de cada atributo e dos PV tem de dar o total.
+    private void assertBreakdownCloses(String player) throws Exception {
+        String body = mvc.perform(get("/character/me/breakdown").header("Authorization", "Bearer " + player))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        var root = JSON.readTree(body);
+        for (var attr : root.path("attributes")) {
+            int sum = 0;
+            for (var line : attr.path("lines")) sum += line.path("amount").asInt();
+            assertThat(sum).as(attr.path("attribute").asString()).isEqualTo(attr.path("total").asInt());
+        }
+        int hp = 0;
+        for (var line : root.path("hp").path("lines")) hp += line.path("amount").asInt();
+        assertThat(hp).isEqualTo(root.path("hp").path("total").asInt());
+    }
+
+    @Test
     void aplicarMantemUsosGastosEHabilidadesDoMestre() throws Exception {
         long id = createNyx();
         String player = login("gaudron");

@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { applyHp } from '../../data/rules.js'
+import { hpExplanation } from '../../data/breakdown.js'
 import Num from './Num.jsx'
+import { useExplain } from './Explain.jsx'
 
 const ACTIONS = [
   { id: 'damage', label: 'Dano' },
@@ -13,6 +15,7 @@ const ACTIONS = [
 export default function HitPoints({ currentHp, tempHp = 0, maxHp, onChange }) {
   const [open, setOpen] = useState(false)
   const [amount, setAmount] = useState('')
+  const { on, breakdown, bind } = useExplain()
   const hp = Math.min(currentHp, maxHp)
   const hpPct = maxHp ? (hp / maxHp) * 100 : 0
   // Os temporários aparecem depois dos atuais, até o fim da barra.
@@ -29,7 +32,8 @@ export default function HitPoints({ currentHp, tempHp = 0, maxHp, onChange }) {
   }
 
   return (
-    <div className="hp" aria-label={`Pontos de vida: ${hp} de ${maxHp}` + (tempHp ? `, mais ${tempHp} temporários` : '')}>
+    <div className={'hp' + (on ? ' explainable' : '')} aria-label={`Pontos de vida: ${hp} de ${maxHp}` + (tempHp ? `, mais ${tempHp} temporários` : '')}
+      tabIndex={on ? 0 : undefined} {...bind(() => hpExplanation(breakdown, maxHp))}>
       <div className="hp-head">
         <span>Pontos de vida</span>
         <b>
