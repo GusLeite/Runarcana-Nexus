@@ -812,3 +812,10 @@
 .map-point-body { background: linear-gradient(180deg, rgba(79, 209, 197, 0.08), transparent 150px); }
 .map-point-body > .lore-hero-kind,
 .map-point-body > h2 { background: none; }
+
+/* Região: conhecimentos, personagens e lugares. */
+.map-region-block { margin-top: 18px; padding-top: 6px; border-top: 1px solid var(--inc-line); }
+.map-region-block h3 { margin: 10px 0 8px; font: 600 10px Spectral, serif; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.map-region-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px; }
+.map-region-cards .lore-card { min-width: 0; }
+.map-panel .lore-knowledge { margin-bottom: 6px; }

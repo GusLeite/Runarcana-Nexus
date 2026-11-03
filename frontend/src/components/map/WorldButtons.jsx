@@ -21,7 +21,7 @@ export default function WorldButtons({ session }) {
     setScreenId(null)
     window.history.replaceState(window.history.state, '', withoutFocus(window.location.href))
   }, [setScreenId])
-  const openLore = useCallback(entryId => { setTarget({ entryId }); setScreenId('lore') }, [setScreenId])
+  const openLore = useCallback((entryId, draft) => { setTarget({ entryId, draft }); setScreenId('lore') }, [setScreenId])
   const showOnMap = useCallback(focus => { setTarget({ focus }); setScreenId('mapa') }, [setScreenId])
 
   // Colar ou clicar um link de local com o mapa já aberto (ou o "voltar" do navegador) leva ao ponto.
@@ -36,7 +36,7 @@ export default function WorldButtons({ session }) {
 
   let screen = null
   if (screenId === 'mapa') screen = <MapScreen key="map" session={session} focus={target.focus} onClose={close} onOpenLore={openLore} />
-  if (screenId === 'lore') screen = <LoreScreen key="lore" session={session} startId={target.entryId} onClose={close} onShowOnMap={showOnMap} />
+  if (screenId === 'lore') screen = <LoreScreen key="lore" session={session} startId={target.entryId} startDraft={target.draft} onClose={close} onShowOnMap={showOnMap} />
 
   return (
     <>

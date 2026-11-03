@@ -629,7 +629,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
       )}
       <DiceRoll roll={die} onClose={closeDie} />
       {tableImage && <ImageLightbox images={tableImage.images} index={tableImage.index} title={tableImage.title} onIndex={index => setTableImage(t => ({ ...t, index }))} onClose={() => setTableImage(null)} />}
-      {chosen && <RegionPanel key={chosen.slug} region={chosen} lore={loreOf(chosen)} onOpenLore={onOpenLore} onClose={() => setSelected(null)} />}
+      {chosen && <RegionPanel key={chosen.slug} region={chosen} lore={loreOf(chosen)} master={master} onOpenLore={onOpenLore} onClose={() => setSelected(null)} />}
       {openPoi && (
         <PoiPanel
           key={openPoi.id}

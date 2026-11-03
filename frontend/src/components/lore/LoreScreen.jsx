@@ -13,7 +13,8 @@ const FILTERS = [['ALL', 'Tudo'], ['CHARACTER', 'Personagens'], ['PLACE', 'Lugar
 const normalize = text => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
 
 // Lore da mesa em tela cheia: o jogador lê o que conhece e o mestre escreve e libera.
-export default function LoreScreen({ session, startId, onClose, onShowOnMap }) {
+// startDraft: abre direto o formulário de verbete novo, já preenchido (o painel da região usa para criar a região ou um personagem dela).
+export default function LoreScreen({ session, startId, startDraft, onClose, onShowOnMap }) {
   const master = Boolean(session.master)
   const [entries, setEntries] = useState(null)
   const [pois, setPois] = useState([])
@@ -22,9 +23,10 @@ export default function LoreScreen({ session, startId, onClose, onShowOnMap }) {
   const [filter, setFilter] = useState('ALL')
   const [search, setSearch] = useState('')
   const [openId, setOpenId] = useState(startId ?? null)
-  const [editing, setEditing] = useState(null) // null | 'new' | id
+  const [editing, setEditing] = useState(startDraft ? 'new' : null) // null | 'new' | id
   const closeBtn = useRef(null)
   const body = useRef(null)
+  const draft = useRef(startDraft) // o preenchimento vale só para o primeiro verbete novo
 
   useEffect(() => {
     fetchLore(session.token).then(setEntries).catch(err => setError(err.message))
@@ -95,6 +97,7 @@ export default function LoreScreen({ session, startId, onClose, onShowOnMap }) {
           <LoreForm
             key={editing}
             entry={editing === 'new' ? null : entries.find(e => e.id === editing)}
+            draft={editing === 'new' ? draft.current : undefined}
             entries={entries}
             players={players}
             onSave={save}
@@ -124,7 +127,7 @@ export default function LoreScreen({ session, startId, onClose, onShowOnMap }) {
                 ))}
               </div>
               <input className="lore-search" type="search" aria-label="Buscar na lore" placeholder="Buscar…" value={search} onChange={e => setSearch(e.target.value)} />
-              {master && <button type="button" className="lore-action" onClick={() => setEditing('new')}>NOVO VERBETE</button>}
+              {master && <button type="button" className="lore-action" onClick={() => { draft.current = undefined; setEditing('new') }}>NOVO VERBETE</button>}
             </div>
             {shown.length === 0 && (
               <p className="lore-empty">

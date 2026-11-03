@@ -27,7 +27,7 @@ export function LoreCard({ item, onOpen }) {
   )
 }
 
-function Knowledge({ section, master, startOpen }) {
+export function Knowledge({ section, master, startOpen }) {
   const [open, setOpen] = useState(startOpen)
   return (
     <article className={'lore-knowledge' + (open ? ' open' : '')}>

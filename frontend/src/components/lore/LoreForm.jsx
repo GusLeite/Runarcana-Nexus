@@ -27,8 +27,8 @@ const fromEntry = entry => ({
 })
 
 // Cadastro e edição de um verbete pelo mestre.
-export default function LoreForm({ entry, entries, players, onSave, onDelete, onCancel }) {
-  const [form, setForm] = useState(() => (entry ? fromEntry(entry) : EMPTY))
+export default function LoreForm({ entry, draft, entries, players, onSave, onDelete, onCancel }) {
+  const [form, setForm] = useState(() => (entry ? fromEntry(entry) : { ...EMPTY, ...draft }))
   const [msg, setMsg] = useState(null)
   const [busy, setBusy] = useState(false)
   const [confirming, setConfirming] = useState(false)

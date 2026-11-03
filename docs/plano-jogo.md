@@ -136,7 +136,7 @@ O plano vai até a Etapa 11 (decisão de 2026-11-03). Ficam de fora: modo transm
 
 Cabeçalho fixo (CAMPANHA / Runeterra, abas **Visão do mestre | Jogador**, **+ Novo ponto**, **Compartilhar**, fechar), painel lateral escuro com rótulos pequenos em caixa alta e botões dourados, marcadores de ponto e da bandeira como anel fino de ouro, e a névoa de guerra bem mais escura (opaca para o jogador). O "Ver como" virou a aba **Jogador** do cabeçalho.
 
-## Etapa 13 — Informações e personagens por região
+## Etapa 13 — Informações e personagens por região — **feita (2026-11-03)**
 
 - Cada região (Noxus, Shurima…) ganha, no painel, uma seção do mestre com texto próprio, anotações e a lista de **personagens relacionados** (verbetes da lore do tipo personagem ligados à região, mais os que o mestre escolher), cada um abrindo o verbete.
 - O mestre decide o que o jogador vê (como no ponto: a todos ou a alguns).

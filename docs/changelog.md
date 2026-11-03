@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Mapa: informações e personagens por região (`feature/character-sheet`)
+- Etapa 13 do plano: o painel da região mostra informações, conhecimentos liberados e os personagens e lugares ligados a ela (cada um abre o verbete). O mestre cria o verbete da região e personagens/lugares dela direto do mapa, com o formulário da lore já preenchido.
+- Só front: reaproveita `LoreEntry.region` e `linked`.
+
 ## 2026-11-03 — Mapa: visual do Incognium e névoa mais escura (`feature/character-sheet`)
 - Etapa 12 do plano: cabeçalho fixo com abas **Visão do mestre | Jogador** (o "Ver como" antigo), **+ Novo ponto** e **Compartilhar**; painel lateral escuro com rótulos em caixa alta e botões dourados; pontos e bandeira do grupo como anel de ouro.
 - Névoa de guerra bem mais escura, opaca para o jogador. Plano ganhou as Etapas 13 a 15 (regiões com personagens, pontos oficiais com liga/desliga, trajetória dos jogadores).
