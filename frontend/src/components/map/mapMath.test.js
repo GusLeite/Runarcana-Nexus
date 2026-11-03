@@ -59,6 +59,12 @@ describe('pinVisible', () => {
     expect(pinVisible('near', CAM_FAR_Z)).toBe(false)
     expect(pinVisible('near', 300)).toBe(true)
   })
+
+  it('mantém o ponto "any" de longe e de perto, menos na entrada', () => {
+    expect(pinVisible('any', 2300)).toBe(false)
+    expect(pinVisible('any', CAM_FAR_Z)).toBe(true)
+    expect(pinVisible('any', 300)).toBe(true)
+  })
 })
 
 describe('focusPan', () => {

@@ -12,6 +12,8 @@ const TEXTURES = ['terrain_z1', 'depth_z1', 'ocean_z1', 'clouds', 'fog', 'fog-ma
 const TERRAIN_SEGMENTS = 200
 const INTRO_SECONDS = 2.2
 const FOCUS_SECONDS = 1.5
+// A vista começa um pouco ao sul, para o brasão do Vazio não ficar cortado no pé da tela.
+const START_PAN = { x: 0, y: 70 }
 const HIGHLIGHT_OPACITY = 0.9
 
 const PLAIN_VERTEX = `
@@ -84,6 +86,21 @@ const HIGHLIGHT_FRAGMENT = `
   }
 `
 
+// Região sem imagem de destaque: acende a terra dentro de um círculo, com a borda suave.
+const AREA_FRAGMENT = `
+  uniform sampler2D oceanMask;
+  uniform vec2 center;
+  uniform float radius;
+  uniform vec3 color;
+  uniform float opacity;
+  varying vec2 vUv;
+  void main() {
+    float land = 1.0 - texture2D(oceanMask, vUv).r;
+    float inside = 1.0 - smoothstep(radius * 0.7, radius, distance(vUv, center));
+    gl_FragColor = vec4(color, land * inside * 0.4 * opacity);
+  }
+`
+
 // Brilho do mar: ruído que se move devagar, só onde a máscara do oceano é branca.
 const SPARKLE_FRAGMENT = `
   uniform sampler2D oceanMask;
@@ -152,9 +169,11 @@ const loadTextures = () => {
 
 // Monta a cena no container e devolve os controles. Rejeita se o navegador não tem WebGL ou faltam as texturas.
 // pins: elementos HTML presos a um ponto do mundo ({ el, x, y, z, level }); a cena os reposiciona a cada quadro.
-// decals: imagens deitadas sobre o terreno ({ url, x, y, z, size, level }).
+// lift: distância do ponto no plano em pé, de frente para a câmera.
+// decals: imagens em pé nesse mesmo plano ({ url, x, y, z, size, level }).
+// areas: regiões que acendem por um círculo em vez de uma imagem ({ [slug]: { x, y, radius, color } }).
 // onPinsChange: chamado quando os pontos visíveis mudam, porque o navegador não avisa que o mouse saiu de um ponto escondido.
-export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], onPinsChange } = {}) {
+export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], areas = {}, onPinsChange } = {}) {
   const textures = await loadTextures()
   const [terrain, depth, ocean, cloudMap, fogMap, fogMask] = textures
 
@@ -209,10 +228,22 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
   let destroyed = false
   const highlightFor = slug => {
     if (highlights.has(slug)) return highlights.get(slug)
+    const area = areas[slug]
     const material = new THREE.ShaderMaterial({
-      uniforms: { map: { value: null }, depthMap: { value: depth }, height: { value: TERRAIN_HEIGHT }, opacity: { value: 0 } },
+      uniforms: {
+        map: { value: null },
+        depthMap: { value: depth },
+        height: { value: TERRAIN_HEIGHT },
+        opacity: { value: 0 },
+        ...(area && {
+          oceanMask: { value: ocean },
+          center: { value: new THREE.Vector2(area.x / MAP_SIZE + 0.5, area.y / MAP_SIZE + 0.5) },
+          radius: { value: area.radius / MAP_SIZE },
+          color: { value: new THREE.Vector3(...area.color) },
+        }),
+      },
       vertexShader: TERRAIN_VERTEX,
-      fragmentShader: HIGHLIGHT_FRAGMENT,
+      fragmentShader: area ? AREA_FRAGMENT : HIGHLIGHT_FRAGMENT,
       transparent: true,
       depthTest: false,
       depthWrite: false,
@@ -221,11 +252,13 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     mesh.renderOrder = 0.5
     mesh.visible = false
     panGroup.add(mesh)
-    const highlight = { mesh, material, goal: 0, texture: null }
+    const highlight = { mesh, material, goal: 0, texture: null, ready: Boolean(area) }
     highlights.set(slug, highlight)
+    if (area) return highlight
     new THREE.TextureLoader().loadAsync(`/map/regions/${slug}.png`).then(texture => {
       if (destroyed) return texture.dispose()
       highlight.texture = texture
+      highlight.ready = true
       material.uniforms.map.value = texture
     }).catch(() => {})
     return highlight
@@ -349,10 +382,10 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
   let z = reducedMotion ? CAM_FAR_Z : CAM_INTRO_Z
   let goalZ = CAM_FAR_Z
   // Voo: câmera e mapa vão juntos até o destino, como na entrada e ao escolher uma região.
-  let flight = reducedMotion ? null : { fromZ: CAM_INTRO_Z, fromPan: { x: 0, y: 0 }, seconds: INTRO_SECONDS, elapsed: 0 }
+  let flight = reducedMotion ? null : { fromZ: CAM_INTRO_Z, fromPan: { ...START_PAN }, seconds: INTRO_SECONDS, elapsed: 0 }
   let aspect = 1
-  const pan = { x: 0, y: 0 }
-  let goalPan = { x: 0, y: 0 }
+  const pan = { ...START_PAN }
+  let goalPan = { ...START_PAN }
   const velocity = { x: 0, y: 0 }
 
   const resize = () => {
@@ -446,7 +479,11 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       const visible = pinVisible(pin.level, z)
       pin.el.classList.toggle('on', visible)
       if (!visible) continue
-      point.set(pin.x, pin.y, pin.z).applyMatrix4(panGroup.matrixWorld).project(camera)
+      // O plano em pé gira ao contrário da inclinação, para continuar de frente para a câmera.
+      const lift = pin.lift ?? 0
+      const upright = -tiltGroup.rotation.x
+      point.set(pin.x, pin.y + lift * Math.cos(upright), pin.z + lift * Math.sin(upright))
+      point.applyMatrix4(panGroup.matrixWorld).project(camera)
       const left = (point.x + 1) / 2 * container.clientWidth
       const top = (1 - point.y) / 2 * container.clientHeight
       pin.el.style.transform = `translate(${left}px, ${top}px) translate(-50%, -50%)`
@@ -481,7 +518,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     for (const highlight of highlights.values()) {
       const opacity = highlight.material.uniforms.opacity
       opacity.value += (highlight.goal - opacity.value) * easeFactor(0.12, dt)
-      highlight.mesh.visible = highlight.texture !== null && (highlight.goal > 0 || opacity.value > 0.01)
+      highlight.mesh.visible = highlight.ready && (highlight.goal > 0 || opacity.value > 0.01)
     }
 
     camera.position.z = z
@@ -497,6 +534,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       const goal = decal.texture && pinVisible(decal.level, z) ? 1 : 0
       decal.material.opacity += (goal - decal.material.opacity) * easeFactor(0.12, dt)
       decal.mesh.visible = decal.material.opacity > 0.01
+      decal.mesh.rotation.x = -tiltGroup.rotation.x
     }
     placePins()
   }

@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa: moldura em pé e Vazio como região (`feature/character-sheet`)
+- A moldura de Piltover e Zaun fica de frente para a câmera, com os ícones no mesmo plano, e a inclinação passa ao valor do original (0,75).
+- O Vazio ganha brasão, destaque roxo e painel, e aparece de longe e de perto.
+- O cartão da região sobe para o alto da tela, e a vista inicial desce um pouco para o brasão do Vazio caber.
+
 ## 2026-11-02 — Mapa: Piltover, Zaun, Vazio e brasões originais (`feature/character-sheet`)
 - De perto, Piltover e Zaun se separam dentro da moldura original, e aparecem O Vazio e o nome Icathia.
 - Brasões dourados do original, que ficam coloridos no destaque; `fetch-map-assets.sh` baixa `crests/` e `pins/`.

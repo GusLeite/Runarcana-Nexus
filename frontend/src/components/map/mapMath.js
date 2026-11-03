@@ -5,8 +5,8 @@ export const FOV = 50
 export const CAM_INTRO_Z = 2300
 export const CAM_FAR_Z = 1189
 export const CAM_NEAR_Z = 200
-// Inclinação no zoom máximo. O original calcula a sua numa função que não foi localizada; este valor é aproximado.
-export const MAX_TILT = 0.85
+// Inclinação no zoom máximo.
+export const MAX_TILT = 0.75
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value))
 
@@ -41,8 +41,10 @@ export const wheelZoom = (z, deltaY) => clampZoom(z * Math.exp(clamp(deltaY, -10
 export const easeFactor = (rate, dt) => 1 - (1 - rate) ** (dt * 60)
 
 // Os brasões das regiões ('far') aparecem com o mapa visto de longe, depois da entrada; ao aproximar, dão lugar aos pontos 'near'.
+// 'any' fica nos dois casos.
 export const pinVisible = (level, z) => {
   const progress = zoomProgress(z)
+  if (level === 'any') return progress > 0
   return level === 'near' ? progress > 0.32 : progress > 0 && progress <= 0.32
 }
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { prefersReducedMotion } from '../../hooks/useCountUp.js'
 import { createMapScene } from './mapScene.js'
-import { MAP_DECALS, MAP_LABELS, MAP_PINS } from './regions.js'
+import { MAP_AREAS, MAP_DECALS, MAP_LABELS, MAP_PINS } from './regions.js'
 import RegionPanel from './RegionPanel.jsx'
 import '../../styles/map.css'
 
@@ -13,6 +13,7 @@ const PANEL_DELAY = 1500
 const PIN_IMAGES = {
   crest: pin => [`/map/crests/${pin.slug}.png`, `/map/crests/${pin.slug}-hover.png`],
   capital: () => ['/map/pins/capital.png', '/map/pins/capital-hover.png'],
+  art: pin => [pin.art[0].icon, pin.art[0].icon],
 }
 
 // Mapa de Runeterra em tela cheia. A câmera e o relevo ficam em mapScene.js.
@@ -28,11 +29,12 @@ export default function MapScreen({ onClose }) {
 
   useEffect(() => {
     let cancelled = false
-    const pins = [...MAP_PINS, ...MAP_LABELS].map(pin => ({ el: anchors.current[pin.slug], x: pin.x, y: pin.y, z: pin.z, level: pin.level }))
+    const pins = [...MAP_PINS, ...MAP_LABELS].map(pin => ({ el: anchors.current[pin.slug], x: pin.x, y: pin.y, z: pin.z, level: pin.level, lift: pin.lift }))
     createMapScene(stage.current, {
       reducedMotion: prefersReducedMotion(),
       pins,
       decals: MAP_DECALS,
+      areas: MAP_AREAS,
       onPinsChange: () => setHovered(null),
     })
       .then(created => {
