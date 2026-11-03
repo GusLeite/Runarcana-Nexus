@@ -95,6 +95,64 @@ Testes: editar mantém ícone/usos, 403 para jogador, quem leu.
 - Aba **Mesa** no painel do mestre: um cartão por personagem com PV (barra), CA, condições, testes contra a morte, Mana e inspiração; atualiza a cada poucos segundos (polling simples de `GET /character`, só para o mestre — a rota passa a exigir o mestre, adiantando parte da segurança).
 - Ações rápidas no cartão: dano/cura (usa a rota da Etapa 5), condição, inspiração.
 
+# Plano do mapa de campanha (comparado ao Incognium)
+
+Comparação com a página do [Incognium](https://runarcana.org/incognium/) (protótipo de mapa e registro de campanha do Runarcana), feita em 2026-11-03. **Já temos:** pontos do mestre com tipo, descrição, verbete da lore e quem vê (oculto até revelar), comentários da mesa e anotação privada, edição no próprio mapa, relevo com zoom e blocos nítidos, waypoints dos jogadores, o grupo no mapa (marcador, trilha e névoa por região) e o diário do grupo. As etapas abaixo cobrem **o que falta**, na ordem de valor para a mesa. Mesmas regras do plano anterior: uma entrega por etapa (código + testes + docs + changelog) e marcar como **feita** ao concluir.
+
+Fica de fora (é do serviço deles, não serve a uma mesa própria): planos de hospedagem, armazenamento no Google Drive/Dropbox/GitHub, contas e convites (já temos contas).
+
+## Etapa 7 — Revelar o ponto na hora certa
+
+**Por quê**: hoje revelar é editar o formulário, e os jogadores só veem o ponto novo quando reabrem o mapa (`fetchPois` roda uma vez).
+- No painel do ponto (mestre): botão **REVELAR AO GRUPO** (todos) e **revelar a…** (escolhe jogadores), sem abrir o formulário; **ESCONDER** desfaz. Rota curta `PATCH /map/pois/{id}/audience`.
+- O mapa confere os pontos a cada poucos segundos, junto com o `GET /map/party` (ou uma revisão leve, como o ping do mercador). O ponto recém-revelado brota com animação, e a câmera do jogador oferece "Ver no mapa".
+- Aviso fora do mapa: a ficha mostra "Novo local revelado: X", e o diário ganha o evento `PLACE` (com o nome só se foi para todos).
+- Contadores no topo do mapa do mestre: "Mestre: N pontos · Grupo: M revelados".
+
+## Etapa 8 — Imagens e notas secretas no ponto
+
+**Por quê**: o Incognium usa o ponto como cartão da cena (imagens para mostrar à mesa e notas só do mestre).
+- `MapPoi.images` (lista, como a imagem do mercador: data URL reduzida com `fileToBanner` ou link http(s); limite por ponto) e `MapPoi.secretNotes` (só o mestre recebe na resposta).
+- Painel do ponto: galeria; clicar abre em tela cheia. O mestre tem **MOSTRAR À MESA**: a imagem abre na tela dos jogadores que veem o ponto (reaproveita o polling da Etapa 7).
+- Mais tipos de ponto: posto avançado, esconderijo, ruína, acampamento, masmorra, porto. `PoiKind` é salvo como texto, mas o Hibernate cria um `CHECK` com os valores antigos no PostgreSQL: o `ddl-auto` não atualiza esse `CHECK`, então é preciso um `ALTER TABLE` no banco local e no de produção.
+
+## Etapa 9 — O que aconteceu ali (histórico do local)
+
+- Entrada do diário pode apontar um ponto (`JournalEntry.poi`); o painel do ponto lista "Aconteceu aqui" (entradas e eventos ligados, mais as paradas da trilha a menos de N unidades).
+- No diário, a entrada ligada mostra "📍 Local" e leva ao mapa (usa o link da Etapa 10).
+
+## Etapa 10 — Links de locais
+
+- `?tela=mapa&ponto=12` (e `&regiao=demacia`) abre o mapa voando até o ponto: estende o `useUrlParam`/`WorldButtons` e o `focus` do `MapScreen`.
+- Botão **Copiar link** no painel do ponto; documentos, lore e diário podem colar o link (quem não vê o ponto cai no mapa sem foco).
+
+## Etapa 11 — Ver como jogador (prévia por camada)
+
+**Por quê**: o mestre quer conferir o que cada um vê antes de revelar.
+- Seletor "Ver como: Mestre / Nyx / Rudo…" no mapa do mestre. `GET /map/pois?as=<usuário>` (só mestre) devolve o que aquela conta vê; a névoa passa a ser opaca e os brasões ficam "???" como para o jogador; os waypoints mostrados são os dele.
+- Faixa "Prévia de Nyx" no topo enquanto ativo; nenhuma edição nesse modo.
+
+## Etapa 12 — Modo transmissão (OBS)
+
+**Por quê**: para mesa presencial ou live, uma tela limpa só com o que os jogadores podem ver.
+- Rota `?tela=mapa&modo=transmissao`: sem painéis de edição, ferramentas, notas nem nomes de waypoints privados; camada "Grupo" (o que foi revelado a todos), névoa opaca.
+- **Chave de transmissão**: o mestre gera um token só de leitura do mapa (`/map/broadcast-key`, revogável) para colar na fonte de navegador do OBS, sem login.
+- A câmera da transmissão segue o mestre: o mestre marca "Câmera ao vivo" e o foco/zoom dele vai para o back (`/map/broadcast/view`), que a transmissão lê a cada segundo e anima.
+
+## Etapa 13 — Ligação com a Wiki Runarcana
+
+- Campo `wikiUrl` no ponto e no verbete da lore (só links de `runarcana.org`), mostrado como "Abrir na Wiki". Busca automática na Wiki fica para depois (depende de API deles).
+
+## Etapa 14 — Exportar e importar a campanha (Markdown)
+
+- `GET /campaign/export` (mestre): um `.zip` com Markdown (um arquivo por ponto, com front matter de posição, tipo e quem vê; diário por sessão; trilha) e as imagens. `POST /campaign/import` recria tudo numa mesa vazia. Serve de backup e para levar a campanha a outro servidor.
+
+## Etapa 15 — Várias campanhas (opcional, maior)
+
+**Por quê**: o Incognium separa pontos, marcadores e acessos por campanha. Hoje o projeto é uma mesa só.
+- Entidade `Campaign` (nome, cor do marcador) e "campanha ativa" do mestre; pontos, trilha, névoa, waypoints, diário e mercadores passam a ter `campaign_id`; jogadores participam de uma ou mais campanhas.
+- Mexe em quase todas as tabelas e rotas: fazer só se a mesa for rodar mais de uma campanha ao mesmo tempo. Migração: tudo que existe vira a campanha "Principal".
+
 ## Depois do "para jogar"
 
 Não fazem parte deste plano; continuam nas pendências de [backend.md](backend.md) e [frontend.md](frontend.md):
