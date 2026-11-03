@@ -3,7 +3,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js'
 import {
-  CAM_FAR_Z, CAM_INTRO_Z, FOV, MAP_SIZE, TERRAIN_HEIGHT, clampPan, clampZoom, TILE_IDS, TILE_MIN_PROGRESS, TILE_SIZE, crestsVisible, easeFactor, focusPan, sineInOut,
+  CAM_FAR_Z, CAM_INTRO_Z, FOV, MAP_SIZE, TERRAIN_HEIGHT, clampPan, clampZoom, TILE_IDS, TILE_MIN_PROGRESS, TILE_SIZE, easeFactor, focusPan, pinVisible, sineInOut,
   tileCenter, tileNearView, tiltFor,
   wheelZoom, worldPerPixel, zoomProgress,
 } from './mapMath.js'
@@ -151,8 +151,10 @@ const loadTextures = () => {
 }
 
 // Monta a cena no container e devolve os controles. Rejeita se o navegador não tem WebGL ou faltam as texturas.
-// pins: elementos HTML presos a um ponto do mundo ({ el, x, y, z }); a cena os reposiciona a cada quadro.
-export async function createMapScene(container, { reducedMotion = false, pins = [] } = {}) {
+// pins: elementos HTML presos a um ponto do mundo ({ el, x, y, z, level }); a cena os reposiciona a cada quadro.
+// decals: imagens deitadas sobre o terreno ({ url, x, y, z, size, level }).
+// onPinsChange: chamado quando os pontos visíveis mudam, porque o navegador não avisa que o mouse saiu de um ponto escondido.
+export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], onPinsChange } = {}) {
   const textures = await loadTextures()
   const [terrain, depth, ocean, cloudMap, fogMap, fogMask] = textures
 
@@ -273,6 +275,23 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       tile.mesh.visible = tile.texture !== null && opacity.value > 0.01
     }
   }
+
+  const decalMeshes = decals.map(decal => {
+    const material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthTest: false, depthWrite: false })
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(decal.size, decal.size), material)
+    mesh.position.set(decal.x, decal.y, decal.z)
+    mesh.renderOrder = 0.6
+    mesh.visible = false
+    panGroup.add(mesh)
+    const part = { mesh, material, level: decal.level, texture: null }
+    new THREE.TextureLoader().loadAsync(decal.url).then(texture => {
+      if (destroyed) return texture.dispose()
+      part.texture = texture
+      material.map = texture
+      material.needsUpdate = true
+    }).catch(() => {})
+    return part
+  })
 
   const sparkleMaterial = new THREE.ShaderMaterial({
     uniforms: { oceanMask: { value: ocean }, time: { value: 0 }, opacity: { value: 0.18 } },
@@ -416,11 +435,15 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
   container.addEventListener('wheel', onWheel, { passive: false })
 
   const point = new THREE.Vector3()
+  let pinState = null
   const placePins = () => {
-    const visible = crestsVisible(z)
+    const state = `${pinVisible('far', z)}${pinVisible('near', z)}`
+    if (pinState !== null && state !== pinState) onPinsChange?.()
+    pinState = state
     tiltGroup.updateMatrixWorld(true)
     camera.updateMatrixWorld()
     for (const pin of pins) {
+      const visible = pinVisible(pin.level, z)
       pin.el.classList.toggle('on', visible)
       if (!visible) continue
       point.set(pin.x, pin.y, pin.z).applyMatrix4(panGroup.matrixWorld).project(camera)
@@ -470,6 +493,11 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     cloudsMaterial.uniforms.opacity.value = 0.32 * (1 - THREE.MathUtils.smoothstep(progress, 0, 0.6))
     sparkleMaterial.uniforms.opacity.value = 0.25 * progress
     updateTiles(progress, dt)
+    for (const decal of decalMeshes) {
+      const goal = decal.texture && pinVisible(decal.level, z) ? 1 : 0
+      decal.material.opacity += (goal - decal.material.opacity) * easeFactor(0.12, dt)
+      decal.mesh.visible = decal.material.opacity > 0.01
+    }
     placePins()
   }
 
@@ -507,6 +535,11 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
         part.texture?.dispose()
       }
       tileGeometry.dispose()
+      for (const decal of decalMeshes) {
+        decal.mesh.geometry.dispose()
+        decal.material.dispose()
+        decal.texture?.dispose()
+      }
       observer.disconnect()
       canvas.removeEventListener('pointerdown', onDown)
       canvas.removeEventListener('pointermove', onMove)

@@ -40,10 +40,10 @@ export const wheelZoom = (z, deltaY) => clampZoom(z * Math.exp(clamp(deltaY, -10
 // Suavização que dá o mesmo resultado em qualquer taxa de quadros; rate é a fração percorrida a cada 1/60 s.
 export const easeFactor = (rate, dt) => 1 - (1 - rate) ** (dt * 60)
 
-// Os brasões das regiões só aparecem com o mapa visto de longe, depois da entrada; de perto eles saem do caminho.
-export const crestsVisible = z => {
+// Os brasões das regiões ('far') aparecem com o mapa visto de longe, depois da entrada; ao aproximar, dão lugar aos pontos 'near'.
+export const pinVisible = (level, z) => {
   const progress = zoomProgress(z)
-  return progress > 0 && progress <= 0.32
+  return level === 'near' ? progress > 0.32 : progress > 0 && progress <= 0.32
 }
 
 // Leva o ponto do mundo ao centro da tela, ou mais para o lado quando um painel cobre parte dela.

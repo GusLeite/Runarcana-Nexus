@@ -1,22 +1,26 @@
 import { useEffect, useRef, useState } from 'react'
 import { prefersReducedMotion } from '../../hooks/useCountUp.js'
 import { createMapScene } from './mapScene.js'
-import { MAP_REGIONS } from './regions.js'
+import { MAP_DECALS, MAP_LABELS, MAP_PINS } from './regions.js'
 import RegionPanel from './RegionPanel.jsx'
 import '../../styles/map.css'
 
-const REGION_ZOOM = 300
 const PANEL_WIDTH = 380
 // Abaixo disso o painel ocupa a tela inteira e não adianta desviar o mapa.
 const PANEL_MIN_SCREEN = 720
 const PANEL_DELAY = 1500
+
+const PIN_IMAGES = {
+  crest: pin => [`/map/crests/${pin.slug}.png`, `/map/crests/${pin.slug}-hover.png`],
+  capital: () => ['/map/pins/capital.png', '/map/pins/capital-hover.png'],
+}
 
 // Mapa de Runeterra em tela cheia. A câmera e o relevo ficam em mapScene.js.
 export default function MapScreen({ onClose }) {
   const stage = useRef(null)
   const scene = useRef(null)
   const closeBtn = useRef(null)
-  const crests = useRef({})
+  const anchors = useRef({})
   const panelTimer = useRef()
   const [status, setStatus] = useState('loading') // 'loading' | 'ready' | 'error'
   const [hovered, setHovered] = useState(null)
@@ -24,8 +28,13 @@ export default function MapScreen({ onClose }) {
 
   useEffect(() => {
     let cancelled = false
-    const pins = MAP_REGIONS.map(region => ({ el: crests.current[region.slug], x: region.x, y: region.y, z: region.z }))
-    createMapScene(stage.current, { reducedMotion: prefersReducedMotion(), pins })
+    const pins = [...MAP_PINS, ...MAP_LABELS].map(pin => ({ el: anchors.current[pin.slug], x: pin.x, y: pin.y, z: pin.z, level: pin.level }))
+    createMapScene(stage.current, {
+      reducedMotion: prefersReducedMotion(),
+      pins,
+      decals: MAP_DECALS,
+      onPinsChange: () => setHovered(null),
+    })
       .then(created => {
         if (cancelled) return created.destroy()
         scene.current = created
@@ -45,17 +54,17 @@ export default function MapScreen({ onClose }) {
   // A região escolhida continua acesa enquanto o painel dela estiver aberto.
   const lit = hovered ?? selected
   useEffect(() => {
-    const region = MAP_REGIONS.find(r => r.slug === lit)
-    scene.current?.highlight(region?.highlight ? region.slug : null)
+    const pin = MAP_PINS.find(p => p.slug === lit)
+    scene.current?.highlight(pin?.highlight ? pin.slug : null)
   }, [lit])
 
-  const select = region => {
+  const select = pin => {
     setHovered(null)
     setSelected(null)
     const covered = window.innerWidth >= PANEL_MIN_SCREEN ? PANEL_WIDTH : 0
-    scene.current?.focus(region.x, region.y, REGION_ZOOM, covered)
+    scene.current?.focus(pin.x, pin.y, pin.zoom, covered)
     clearTimeout(panelTimer.current)
-    panelTimer.current = setTimeout(() => setSelected(region.slug), prefersReducedMotion() ? 0 : PANEL_DELAY)
+    panelTimer.current = setTimeout(() => setSelected(pin.slug), prefersReducedMotion() ? 0 : PANEL_DELAY)
   }
 
   useEffect(() => {
@@ -73,30 +82,37 @@ export default function MapScreen({ onClose }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose, selected])
 
-  const teased = MAP_REGIONS.find(r => r.slug === hovered)
-  const chosen = MAP_REGIONS.find(r => r.slug === selected)
+  const teased = MAP_PINS.find(p => p.slug === hovered)
+  const chosen = MAP_PINS.find(p => p.slug === selected)
 
   return (
     <div className={'map-screen ' + status} role="dialog" aria-modal="true" aria-label="Mapa de Runeterra">
       <div className="map-stage" ref={stage}>
         <div className="map-pins">
-          {MAP_REGIONS.map(region => (
-            <button
-              key={region.slug}
-              ref={el => { crests.current[region.slug] = el }}
-              className="map-crest"
-              type="button"
-              onClick={() => select(region)}
-              onPointerEnter={() => setHovered(region.slug)}
-              onPointerLeave={() => setHovered(null)}
-              onFocus={() => setHovered(region.slug)}
-              onBlur={() => setHovered(null)}
-            >
-              <span className="map-crest-icons">
-                {region.art.map(art => <img key={art.icon} src={art.icon} alt="" draggable="false" />)}
-              </span>
-              <span className="map-crest-name">{region.name}</span>
-            </button>
+          {MAP_PINS.map(pin => {
+            const [normal, active] = PIN_IMAGES[pin.icon](pin)
+            return (
+              <button
+                key={pin.slug}
+                ref={el => { anchors.current[pin.slug] = el }}
+                className={'map-pin map-pin-' + pin.icon}
+                type="button"
+                onClick={() => select(pin)}
+                onPointerEnter={() => setHovered(pin.slug)}
+                onPointerLeave={() => setHovered(null)}
+                onFocus={() => setHovered(pin.slug)}
+                onBlur={() => setHovered(null)}
+              >
+                <span className="map-pin-icon">
+                  <img src={normal} alt="" draggable="false" />
+                  <img className="map-pin-active" src={active} alt="" draggable="false" />
+                </span>
+                <span className="map-pin-name">{pin.name}</span>
+              </button>
+            )
+          })}
+          {MAP_LABELS.map(label => (
+            <span key={label.slug} ref={el => { anchors.current[label.slug] = el }} className="map-pin map-label">{label.name}</span>
           ))}
         </div>
       </div>

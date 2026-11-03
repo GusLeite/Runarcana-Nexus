@@ -105,7 +105,7 @@
   overflow: hidden;
   pointer-events: none;
 }
-.map-crest {
+.map-pin {
   position: absolute;
   top: 0;
   left: 0;
@@ -121,37 +121,64 @@
   visibility: hidden;
   transition: opacity 0.3s, visibility 0.3s;
 }
-.map-crest.on {
+.map-pin.on {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
-.map-crest-icons {
-  display: flex;
+/* Em repouso, o ícone dourado; no destaque, ele cresce e dá lugar à versão colorida. */
+.map-pin-icon {
+  position: relative;
+  display: block;
   transition: transform 0.2s ease-out;
 }
-.map-crest-icons img {
-  width: 46px;
-  height: 46px;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 5px #000);
+.map-pin-icon img {
+  display: block;
+  width: 64px;
+  height: auto;
+  transition: opacity 0.2s;
 }
-.map-crest-name {
+.map-pin-capital .map-pin-icon img {
+  width: 44px;
+}
+.map-pin-active {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+.map-pin-name {
   font: 600 13px Cinzel, serif;
   letter-spacing: 0.06em;
   white-space: nowrap;
   text-shadow: 0 1px 4px #000, 0 0 2px #000;
 }
-.map-crest:hover .map-crest-icons,
-.map-crest:focus-visible .map-crest-icons {
-  transform: scale(1.18);
+.map-pin:hover .map-pin-icon,
+.map-pin:focus-visible .map-pin-icon {
+  transform: scale(1.25);
 }
-.map-crest:hover .map-crest-name,
-.map-crest:focus-visible .map-crest-name {
+.map-pin:hover .map-pin-active,
+.map-pin:focus-visible .map-pin-active {
+  opacity: 1;
+}
+.map-pin:hover .map-pin-icon img:not(.map-pin-active),
+.map-pin:focus-visible .map-pin-icon img:not(.map-pin-active) {
+  opacity: 0;
+}
+.map-pin:hover .map-pin-name,
+.map-pin:focus-visible .map-pin-name {
   color: var(--gold-hi);
 }
-.map-crest:focus-visible {
+.map-pin:focus-visible {
   outline: 1px solid var(--gold-hi);
+}
+.map-label,
+.map-label.on {
+  cursor: default;
+  pointer-events: none;
+  font: 600 15px Cinzel, serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 4px #000, 0 0 2px #000;
 }
 .map-tease {
   position: absolute;

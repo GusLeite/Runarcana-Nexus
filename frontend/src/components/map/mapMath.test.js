@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { CAM_FAR_Z, CAM_NEAR_Z, MAX_TILT, clampPan, crestsVisible, easeFactor, focusPan, tileCenter, tileNearView, tiltFor, wheelZoom, worldPerPixel, zoomProgress } from './mapMath.js'
+import { CAM_FAR_Z, CAM_NEAR_Z, MAX_TILT, clampPan, easeFactor, focusPan, pinVisible, tileCenter, tileNearView, tiltFor, wheelZoom, worldPerPixel, zoomProgress } from './mapMath.js'
 
 describe('zoomProgress e tiltFor', () => {
   it('deixa o mapa reto de longe e inclina ao máximo de perto', () => {
@@ -48,11 +48,16 @@ describe('clampPan', () => {
   })
 })
 
-describe('crestsVisible', () => {
+describe('pinVisible', () => {
   it('esconde os brasões na entrada e de perto', () => {
-    expect(crestsVisible(2300)).toBe(false)
-    expect(crestsVisible(CAM_FAR_Z)).toBe(true)
-    expect(crestsVisible(300)).toBe(false)
+    expect(pinVisible('far', 2300)).toBe(false)
+    expect(pinVisible('far', CAM_FAR_Z)).toBe(true)
+    expect(pinVisible('far', 300)).toBe(false)
+  })
+
+  it('mostra os pontos próximos só ao aproximar', () => {
+    expect(pinVisible('near', CAM_FAR_Z)).toBe(false)
+    expect(pinVisible('near', 300)).toBe(true)
   })
 })
 

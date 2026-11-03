@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa: Piltover, Zaun, Vazio e brasões originais (`feature/character-sheet`)
+- De perto, Piltover e Zaun se separam dentro da moldura original, e aparecem O Vazio e o nome Icathia.
+- Brasões dourados do original, que ficam coloridos no destaque; `fetch-map-assets.sh` baixa `crests/` e `pins/`.
+
 ## 2026-11-02 — Mapa: nomes em português (`feature/character-sheet`)
 - Os blocos detalhados passam a ser a versão `pt_br` do original; `fetch-map-assets.sh` baixa essa versão.
 - O brilho do mar deixa de formar quadradinhos de perto.
