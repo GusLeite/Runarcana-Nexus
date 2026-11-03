@@ -2,6 +2,9 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa: domos roxos dentro do globo vermelho (`feature/character-sheet`)
+- Os seis domos de distorção ficam menores (raio de 14 a 26) e todos dentro do globo demoníaco; um teste garante isso.
+
 ## 2026-11-02 — Mapa: domo demoníaco menor e menos corvos (`feature/character-sheet`)
 - O domo fica com raio 140 e altura 83 (a metade do anterior, depois 50% maior), e os corvos caem para 12, em 3 bandos.
 

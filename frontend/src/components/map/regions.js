@@ -58,14 +58,14 @@ export const MAP_LABELS = [{ slug: 'icathia', name: 'Icathia', x: 275, y: -578, 
 // Imagens em pé, de frente para a câmera; size em unidades do mundo.
 export const MAP_DECALS = [{ draw: drawTwinFrame, x: TWIN_CITIES.x, y: TWIN_CITIES.y, z: TWIN_CITIES.z, size: 180, level: 'near' }]
 
-// Domos de distorção temporal no deserto de Shurima. speed é o ritmo do tempo lá dentro; o negativo corre ao contrário.
+// Domos de distorção temporal no deserto de Shurima, todos dentro do globo demoníaco. speed é o ritmo do tempo lá dentro; o negativo corre ao contrário.
 export const MAP_DOMES = [
-  { x: -55, y: -285, radius: 50, speed: 1 },
-  { x: 120, y: -265, radius: 34, speed: 1.9 },
-  { x: 158, y: -395, radius: 56, speed: 0.45 },
-  { x: -10, y: -440, radius: 42, speed: -1 },
-  { x: -150, y: -400, radius: 30, speed: 2.8 },
-  { x: 105, y: -505, radius: 38, speed: 0.2 },
+  { x: -55, y: -330, radius: 24, speed: 1 },
+  { x: 45, y: -310, radius: 18, speed: 1.9 },
+  { x: 70, y: -400, radius: 26, speed: 0.45 },
+  { x: -10, y: -450, radius: 20, speed: -1 },
+  { x: -80, y: -410, radius: 16, speed: 2.8 },
+  { x: 15, y: -375, radius: 14, speed: 0.2 },
 ]
 
 // Globo demoníaco: domo redondo no meio do deserto de Shurima.

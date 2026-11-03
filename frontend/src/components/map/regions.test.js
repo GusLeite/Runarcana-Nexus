@@ -38,6 +38,12 @@ describe('domos de distorção temporal', () => {
 describe('globo demoníaco', () => {
   const inside = point => Math.hypot(point.x - MAP_GLOBE.x, point.y - MAP_GLOBE.y) < MAP_GLOBE.radius
 
+  it('contém os domos de distorção inteiros', () => {
+    for (const dome of MAP_DOMES) {
+      expect(Math.hypot(dome.x - MAP_GLOBE.x, dome.y - MAP_GLOBE.y) + dome.radius).toBeLessThan(MAP_GLOBE.radius)
+    }
+  })
+
   it('fica sobre o brasão de Shurima', () => {
     expect(inside(MAP_PINS.find(pin => pin.slug === 'shurima'))).toBe(true)
   })

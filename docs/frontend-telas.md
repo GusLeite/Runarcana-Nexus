@@ -112,7 +112,7 @@ Os pontos do mapa ficam em `components/map/regions.js`, com as posições do ori
 
 Bandópolis não tem lugar fixo: o mestre aperta **ROLAR BANDÓPOLIS** e o d10 do servidor (`api/map.js`) escolhe uma das 10 regiões (`BANDLE_SPOTS`, sem o Vazio). A câmera voa até lá e o brasão (`assets/region-icons/bandle-gold.svg`, colorido no destaque) brota do chão. Antes da primeira rolagem ela não aparece; depois, todos a veem de longe e de perto, e ela abre painel como as outras, sem acender o terreno.
 
-**Domos de distorção temporal** (`temporalDomes.js`, posições em `MAP_DOMES`): cúpulas 3D roxas lisas no deserto de Shurima, apoiadas no relevo, com relógio no chão e poeira que sobe e volta. Cada uma tem o próprio ritmo de tempo, e uma corre ao contrário. Com movimento reduzido, ficam paradas.
+**Domos de distorção temporal** (`temporalDomes.js`, posições em `MAP_DOMES`): cúpulas 3D roxas lisas e pequenas, todas dentro do domo demoníaco de Shurima, apoiadas no relevo, com relógio no chão e poeira que sobe e volta. Cada uma tem o próprio ritmo de tempo, e uma corre ao contrário. Com movimento reduzido, ficam paradas.
 
 **Globo demoníaco** (`demonGlobe.js`, `MAP_GLOBE`): domo vermelho redondo e liso no meio do deserto de Shurima, com veias que pulsam e bandos de corvos (`ravens.js` e `ravenModel.js`: corpo gerado por código e penas de asa e cauda pintadas numa textura de canvas). Na subida a asa recolhe, na descida abre, e cada ave segue um trajeto irregular, com mergulhos.
 
