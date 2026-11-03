@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { documentKindOf, formatDate } from '../../data/rules.js'
 import { DocIcon } from './icons.jsx'
+import { mapLinkNodes } from '../map/MapLinkText.jsx'
 
 // Aba de documentos que o mestre entregou: lista à esquerda, leitura à direita.
 // O documento mostrado é marcado como lido (onOpen).
@@ -103,6 +104,6 @@ function inline(line) {
   return line.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**') && part.length > 4) return <strong key={i}>{part.slice(2, -2)}</strong>
     if (part.startsWith('*') && part.endsWith('*') && part.length > 2) return <em key={i}>{part.slice(1, -1)}</em>
-    return part
+    return mapLinkNodes(part)
   })
 }

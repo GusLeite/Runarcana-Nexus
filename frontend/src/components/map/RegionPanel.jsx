@@ -1,4 +1,5 @@
 import { prefersReducedMotion } from '../../hooks/useCountUp.js'
+import CopyLinkButton from './CopyLinkButton.jsx'
 
 // Painel lateral da região escolhida, com a arte e as descrições que a criação de personagem já usa.
 // Quando a lore tem um verbete desta região, mostra as informações dele e leva até lá.
@@ -26,7 +27,10 @@ export default function RegionPanel({ region, lore, onOpenLore, onClose }) {
         {lore?.summary
           ? <p>{lore.summary}</p>
           : region.art.map(art => <p key={art.icon}>{art.tagline}</p>)}
-        {lore && <button type="button" className="lore-action" onClick={() => onOpenLore(lore.id)}>ABRIR NA LORE</button>}
+        <div className="lore-actions">
+          {lore && <button type="button" className="lore-action" onClick={() => onOpenLore(lore.id)}>ABRIR NA LORE</button>}
+          <CopyLinkButton target={region.slug} />
+        </div>
       </div>
     </aside>
   )

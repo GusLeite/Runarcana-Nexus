@@ -602,3 +602,17 @@
 .map-history-list li.note strong { display: block; margin-top: 2px; }
 .map-history-list li.note p { margin: 2px 0 0; white-space: pre-wrap; }
 .map-history-list time { color: var(--muted); font-size: 12px; margin-left: 6px; }
+
+/* Links de locais. */
+.map-text-link {
+  padding: 0 8px;
+  border: 1px solid rgba(200, 162, 74, 0.5);
+  border-radius: 999px;
+  background: none;
+  color: var(--gold-hi, #f0c75e);
+  font: inherit;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+.map-text-link:hover, .map-text-link:focus-visible { background: rgba(200, 162, 74, 0.15); }
+.map-link-field { width: 100%; margin-top: 6px; }

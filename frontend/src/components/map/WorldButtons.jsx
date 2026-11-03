@@ -2,7 +2,7 @@ import { Suspense, lazy, useCallback, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { LoreIcon, MapIcon } from '../sheet/icons.jsx'
 import useUrlParam from '../../hooks/useUrlParam.js'
-import { pointFromSearch, withoutPoint } from '../../utils/mapLink.js'
+import { focusFromSearch, withoutFocus } from '../../utils/mapLink.js'
 
 // O Three.js é pesado: só é baixado quando alguém abre o mapa.
 const MapScreen = lazy(() => import('./MapScreen.jsx'))
@@ -13,13 +13,13 @@ const SCREENS = ['mapa', 'lore']
 // Botões do cabeçalho que abrem o mapa e a lore por cima da tela atual, sem perder o estado dela.
 // Um leva ao outro: a região abre o verbete, e o verbete mostra onde fica no mapa.
 // A tela aberta fica na URL (?tela=mapa|lore): recarregar reabre e o "voltar" do navegador fecha.
-// Link de local: ?tela=mapa&ponto=12 abre o mapa voando até o ponto (quem não vê o ponto cai no mapa sem foco).
+// Link de local: ?tela=mapa&ponto=12 (ou &regiao=demacia) abre o mapa voando até lá (quem não vê o ponto cai no mapa sem foco).
 export default function WorldButtons({ session }) {
   const [screenId, setScreenId] = useUrlParam('tela', SCREENS, null)
   const [target, setTarget] = useState(() => ({ focus: focusFromUrl() })) // { focus } no mapa, { entryId } na lore
   const close = useCallback(() => {
     setScreenId(null)
-    window.history.replaceState(window.history.state, '', withoutPoint(window.location.href))
+    window.history.replaceState(window.history.state, '', withoutFocus(window.location.href))
   }, [setScreenId])
   const openLore = useCallback(entryId => { setTarget({ entryId }); setScreenId('lore') }, [setScreenId])
   const showOnMap = useCallback(focus => { setTarget({ focus }); setScreenId('mapa') }, [setScreenId])
@@ -51,7 +51,4 @@ export default function WorldButtons({ session }) {
   )
 }
 
-function focusFromUrl() {
-  const poiId = pointFromSearch(window.location.search)
-  return poiId == null ? undefined : { poiId }
-}
+const focusFromUrl = () => focusFromSearch(window.location.search)

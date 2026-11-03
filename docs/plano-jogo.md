@@ -121,7 +121,7 @@ O plano vai até a Etapa 11 (decisão de 2026-11-03). Ficam de fora: modo transm
 - Entrada do diário pode apontar um ponto (`JournalEntry.poi`); o painel do ponto lista "Aconteceu aqui" (entradas e eventos ligados, mais as paradas da trilha a menos de N unidades).
 - No diário, a entrada ligada mostra "📍 Local" e leva ao mapa (usa o link da Etapa 10).
 
-## Etapa 10 — Links de locais
+## Etapa 10 — Links de locais — **feita (2026-11-03)**
 
 - `?tela=mapa&ponto=12` (e `&regiao=demacia`) abre o mapa voando até o ponto: estende o `useUrlParam`/`WorldButtons` e o `focus` do `MapScreen`.
 - Botão **Copiar link** no painel do ponto; documentos, lore e diário podem colar o link (quem não vê o ponto cai no mapa sem foco).

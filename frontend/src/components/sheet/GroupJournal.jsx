@@ -3,6 +3,7 @@ import { createJournalEntry, deleteJournalEntry, fetchJournal, updateJournalEntr
 import { sessionSummaries } from '../../data/journal.js'
 import { fetchVisiblePois } from '../../api/map.js'
 import { openMapAt } from '../../utils/mapLink.js'
+import { mapLinkNodes } from '../map/MapLinkText.jsx'
 import '../../styles/journal.css'
 
 const POLL = 15000
@@ -89,7 +90,7 @@ export default function GroupJournal({ token, onError, onToast }) {
                   <time dateTime={e.createdAt}>{fmtTime(e.createdAt)}{e.updatedAt && e.updatedAt !== e.createdAt && ' · editado'}</time>
                 </div>
                 {e.title && <h4>{e.title}</h4>}
-                {e.body && <p>{e.body}</p>}
+                {e.body && <p>{mapLinkNodes(e.body)}</p>}
                 {e.poiId && <PlaceLink entry={e} />}
                 {e.mine && (
                   <div className="gj-actions">

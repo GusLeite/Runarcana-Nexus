@@ -1,6 +1,11 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Mapa: links de locais (`feature/character-sheet`)
+- Etapa 10 do plano: `?tela=mapa&ponto=12` (e `&regiao=demacia`) abre o mapa voando até o lugar, inclusive com o mapa já aberto; o foco sai da URL ao fechar.
+- Botão **COPIAR LINK** nos painéis de ponto e de região; link colado em diário, comentários, documentos ou lore vira o botão "📍 Ver no mapa".
+- Novos: `utils/mapLink.js` (com testes), `CopyLinkButton.jsx`, `MapLinkText.jsx`.
+
 ## 2026-11-03 — Mapa: o que aconteceu ali (`feature/character-sheet`)
 - Etapa 9 do plano: entradas do diário podem apontar um local (`JournalEntry.poi`); o painel do ponto mostra "Aconteceu aqui" (entradas, eventos e paradas da trilha perto dele) e deixa escrever no diário dali mesmo.
 - No diário, a entrada ligada tem o botão **📍 nome**, que abre o mapa voando até o ponto (`openMapAt`; a base do link `?tela=mapa&ponto=` já funciona, a Etapa 10 completa).

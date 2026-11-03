@@ -4,6 +4,8 @@ import AudiencePicker, { audienceLabel, playerName } from '../lore/AudiencePicke
 import { PoiGlyph, POI_KINDS } from './poiKinds.jsx'
 import PoiGallery from './PoiGallery.jsx'
 import PoiHistory from './PoiHistory.jsx'
+import CopyLinkButton from './CopyLinkButton.jsx'
+import { mapLinkNodes } from './MapLinkText.jsx'
 import '../../styles/lore.css'
 
 // Moldura comum dos painéis laterais dos pontos do mapa.
@@ -45,7 +47,7 @@ export function PoiPanel({ poi, loreEntry, master, players = [], token, onPoi, o
       <h2>{poi.name}</h2>
       {master && <p className="lore-hero-who">Revelado a: {audienceLabel(poi)}</p>}
       {master && onAudience && <RevealBar poi={poi} players={players} onAudience={onAudience} />}
-      {poi.description && <p className="map-point-text">{poi.description}</p>}
+      {poi.description && <p className="map-point-text">{mapLinkNodes(poi.description)}</p>}
       {master && poi.secretNotes && (
         <div className="map-secret">
           <strong>Só o mestre lê</strong>
@@ -56,6 +58,7 @@ export function PoiPanel({ poi, loreEntry, master, players = [], token, onPoi, o
       <div className="lore-actions">
         {loreEntry && <button type="button" className="lore-action" onClick={() => onOpenLore(loreEntry.id)}>ABRIR NA LORE</button>}
         {master && <button type="button" className="lore-action ghost" onClick={onEdit}>EDITAR</button>}
+        <CopyLinkButton target={poi.id} />
       </div>
 
       <PoiHistory token={token} poi={poi} />
@@ -72,7 +75,7 @@ export function PoiPanel({ poi, loreEntry, master, players = [], token, onPoi, o
                 <button type="button" className="lore-link danger" onClick={() => onDeleteComment(poi, comment)}>Apagar</button>
               )}
             </div>
-            <p>{comment.text}</p>
+            <p>{mapLinkNodes(comment.text)}</p>
           </li>
         ))}
       </ul>
