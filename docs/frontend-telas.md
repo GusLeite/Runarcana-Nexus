@@ -105,7 +105,7 @@ Layout: 3 colunas acima de 1240px; 2 colunas (herói + conteúdo, rolagens embai
 - plano de 2048×2048 com 200 segmentos, levantado até 60 unidades pelo canal azul de `depth_z1.jpg`;
 - câmera de 50°, com entrada de Z 2300 a 1189 e zoom até Z 200; a inclinação cresce com o cubo do zoom;
 - arraste com inércia, roda do mouse, pinça e botões +/−; foco de miniatura e vinheta escura nas bordas;
-- água que ondula e brilha (máscara `ocean_z1.jpg`), nuvens que deslizam e névoa sobre o gelo. Nuvens e água são geradas por shader (`mapScene.js`), sem textura da Riot, e as nuvens somem ao aproximar. Com movimento reduzido, ficam paradas.
+- mar parado como a pintura, com brilho que cresce ao aproximar (máscara `ocean_z1.jpg`); nuvens `clouds.jpg` que deslizam e somem ao aproximar, com opacidade 0,32 (o original usa 0,15), e névoa `fog.jpg` nas montanhas e no gelo (máscara `fog-mask.jpg`). Com movimento reduzido, nuvens e brilho ficam parados.
 
 As texturas são arte da Riot e ficam fora do Git, em `public/map/`: `frontend/scripts/fetch-map-assets.sh` as baixa. O botão só aparece com login, mas os arquivos em `/map/` são públicos para quem tiver o endereço.
 

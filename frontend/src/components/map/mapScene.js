@@ -7,7 +7,7 @@ import {
   wheelZoom, worldPerPixel, zoomProgress,
 } from './mapMath.js'
 
-const TEXTURES = { terrain: '/map/terrain_z1.jpg', depth: '/map/depth_z1.jpg', ocean: '/map/ocean_z1.jpg' }
+const TEXTURES = ['terrain_z1', 'depth_z1', 'ocean_z1', 'clouds', 'fog', 'fog-mask'].map(name => `/map/${name}.jpg`)
 const TERRAIN_SEGMENTS = 200
 const INTRO_SECONDS = 2.2
 
@@ -44,21 +44,13 @@ const NOISE = `
   }
 `
 
-// A água ondula só onde a máscara do oceano é branca: a imagem é deslocada pelo ruído e ganha faixas de luz.
 // Perto da borda da textura, o terreno se funde com o fundo.
 const TERRAIN_FRAGMENT = `
   uniform sampler2D colorMap;
-  uniform sampler2D oceanMask;
   uniform vec3 edgeColor;
-  uniform float time;
   varying vec2 vUv;
-  ${NOISE}
   void main() {
-    float sea = texture2D(oceanMask, vUv).r;
-    vec2 flow = vec2(noise(vUv * 40.0 + time * 0.12), noise(vUv * 40.0 + 7.0 - time * 0.1)) - 0.5;
-    vec3 col = texture2D(colorMap, vUv + flow * 0.0025 * sea).rgb;
-    float swell = noise(vUv * 90.0 + flow * 2.0 + time * 0.25) - 0.5;
-    col += sea * swell * 0.07 * vec3(0.5, 0.8, 1.0);
+    vec3 col = texture2D(colorMap, vUv).rgb;
     vec2 border = smoothstep(vec2(0.0), vec2(0.07), vUv) * smoothstep(vec2(0.0), vec2(0.07), 1.0 - vUv);
     gl_FragColor = vec4(mix(edgeColor, col, border.x * border.y), 1.0);
   }
@@ -79,28 +71,27 @@ const SPARKLE_FRAGMENT = `
   }
 `
 
-// Nuvens que deslizam sobre o mapa, mais a névoa parada sobre o gelo do norte. O plano é 3x maior que o mapa.
+// Nuvens que deslizam sobre o mapa, repetindo a textura; somem nas beiradas do plano para não marcar a emenda.
 const CLOUDS_FRAGMENT = `
-  uniform float time;
+  uniform sampler2D cloudMap;
+  uniform float drift;
   uniform float opacity;
   varying vec2 vUv;
-  ${NOISE}
-  float fbm(vec2 p) {
-    float sum = 0.0;
-    float amp = 0.5;
-    for (int i = 0; i < 5; i++) {
-      sum += noise(p) * amp;
-      p = mat2(0.8, -0.6, 0.6, 0.8) * p * 2.03 + 11.0;
-      amp *= 0.5;
-    }
-    return sum;
-  }
   void main() {
-    vec2 map = (vUv - 0.5) * 3.0 + 0.5;
-    float clouds = smoothstep(0.48, 0.8, fbm(map * 6.0 + vec2(-time * 0.018, time * 0.004)));
-    vec2 inside = smoothstep(vec2(0.0), vec2(0.12), map) * smoothstep(vec2(0.0), vec2(0.12), 1.0 - map);
-    float ice = inside.x * inside.y * smoothstep(0.68, 0.84, map.y) * smoothstep(0.3, 0.7, fbm(map * 9.0 + vec2(time * 0.006, 0.0))) * 0.7;
-    gl_FragColor = vec4(vec3(0.78, 0.88, 0.94), max(clouds, ice) * opacity);
+    vec2 frame = smoothstep(vec2(0.0), vec2(0.1), vUv) * smoothstep(vec2(0.0), vec2(0.1), 1.0 - vUv);
+    vec3 col = texture2D(cloudMap, vUv * 4.0 + vec2(drift, 0.0)).rgb;
+    gl_FragColor = vec4(col, opacity * frame.x * frame.y);
+  }
+`
+
+// Névoa parada sobre as montanhas e o gelo: a máscara diz onde ela aparece.
+const FOG_FRAGMENT = `
+  uniform sampler2D fogMap;
+  uniform sampler2D fogMask;
+  varying vec2 vUv;
+  void main() {
+    vec3 col = texture2D(fogMap, fract(vUv * 6.0)).rgb;
+    gl_FragColor = vec4(col, max(texture2D(fogMask, vUv).g - 0.2, 0.0));
   }
 `
 
@@ -127,12 +118,18 @@ const TILT_SHIFT_FRAGMENT = `
 
 const loadTextures = () => {
   const loader = new THREE.TextureLoader()
-  return Promise.all(Object.values(TEXTURES).map(url => loader.loadAsync(url)))
+  return Promise.all(TEXTURES.map(url => loader.loadAsync(url)))
 }
 
 // Monta a cena no container e devolve os controles. Rejeita se o navegador não tem WebGL ou faltam as texturas.
 export async function createMapScene(container, { reducedMotion = false } = {}) {
-  const [terrain, depth, ocean] = await loadTextures()
+  const textures = await loadTextures()
+  const [terrain, depth, ocean, cloudMap, fogMap, fogMask] = textures
+
+  cloudMap.wrapS = cloudMap.wrapT = THREE.RepeatWrapping
+  // O fract do shader quebra a continuidade do mipmap e marcaria a emenda.
+  fogMap.generateMipmaps = false
+  fogMap.minFilter = THREE.LinearFilter
 
   // O relevo é lido no vertex shader, onde mipmap não ajuda.
   depth.generateMipmaps = false
@@ -165,9 +162,7 @@ export async function createMapScene(container, { reducedMotion = false } = {}) 
     uniforms: {
       colorMap: { value: terrain },
       depthMap: { value: depth },
-      oceanMask: { value: ocean },
       edgeColor: { value: edgeColor },
-      time: { value: 0 },
       height: { value: TERRAIN_HEIGHT },
     },
     vertexShader: TERRAIN_VERTEX,
@@ -190,7 +185,7 @@ export async function createMapScene(container, { reducedMotion = false } = {}) 
   panGroup.add(sparkle)
 
   const cloudsMaterial = new THREE.ShaderMaterial({
-    uniforms: { time: { value: 0 }, opacity: { value: 0 } },
+    uniforms: { cloudMap: { value: cloudMap }, drift: { value: 0 }, opacity: { value: 0 } },
     vertexShader: PLAIN_VERTEX,
     fragmentShader: CLOUDS_FRAGMENT,
     transparent: true,
@@ -198,9 +193,24 @@ export async function createMapScene(container, { reducedMotion = false } = {}) 
     depthTest: false,
     depthWrite: false,
   })
-  const clouds = new THREE.Mesh(new THREE.PlaneGeometry(3 * MAP_SIZE, 3 * MAP_SIZE), cloudsMaterial)
+  const clouds = new THREE.Mesh(new THREE.PlaneGeometry(1.5 * MAP_SIZE, MAP_SIZE), cloudsMaterial)
   clouds.position.z = 150
+  clouds.renderOrder = 2
   panGroup.add(clouds)
+
+  const fogMaterial = new THREE.ShaderMaterial({
+    uniforms: { fogMap: { value: fogMap }, fogMask: { value: fogMask } },
+    vertexShader: PLAIN_VERTEX,
+    fragmentShader: FOG_FRAGMENT,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthTest: false,
+    depthWrite: false,
+  })
+  const fog = new THREE.Mesh(new THREE.PlaneGeometry(1.5 * MAP_SIZE, MAP_SIZE), fogMaterial)
+  fog.position.z = 20
+  fog.renderOrder = 1
+  panGroup.add(fog)
 
   const target = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 })
   const composer = new EffectComposer(renderer, target)
@@ -321,16 +331,17 @@ export async function createMapScene(container, { reducedMotion = false } = {}) 
     tiltShift.uniforms.strength.value = progress
     // De longe se veem as nuvens; de perto elas abrem e aparece o brilho do mar.
     cloudsMaterial.uniforms.opacity.value = 0.32 * (1 - THREE.MathUtils.smoothstep(progress, 0, 0.6))
-    sparkleMaterial.uniforms.opacity.value = 0.03 + 0.3 * progress
+    sparkleMaterial.uniforms.opacity.value = 0.4 * progress
   }
 
   const clock = new THREE.Clock()
   renderer.setAnimationLoop(() => {
     const dt = Math.min(clock.getDelta(), 0.1)
     update(dt)
-    // Com movimento reduzido, a água e as nuvens ficam paradas.
+    // Com movimento reduzido, as nuvens e o brilho do mar ficam parados.
     if (!reducedMotion) {
-      for (const material of [terrainMaterial, sparkleMaterial, cloudsMaterial]) material.uniforms.time.value = clock.elapsedTime
+      sparkleMaterial.uniforms.time.value = clock.elapsedTime
+      cloudsMaterial.uniforms.drift.value = -0.018 * clock.elapsedTime
     }
     composer.render(dt)
   })
@@ -345,11 +356,11 @@ export async function createMapScene(container, { reducedMotion = false } = {}) 
       canvas.removeEventListener('pointerup', onUp)
       canvas.removeEventListener('pointercancel', onUp)
       canvas.removeEventListener('wheel', onWheel)
-      for (const mesh of [seaBed, terrainMesh, sparkle, clouds]) {
+      for (const mesh of [seaBed, terrainMesh, sparkle, clouds, fog]) {
         mesh.geometry.dispose()
         mesh.material.dispose()
       }
-      for (const texture of [terrain, depth, ocean]) texture.dispose()
+      for (const texture of textures) texture.dispose()
       tiltShift.dispose()
       composer.dispose()
       target.dispose()

@@ -4,7 +4,8 @@
 set -eu
 cd "$(dirname "$0")/.."
 mkdir -p public/map
-for name in terrain_z1 depth_z1 ocean_z1; do
-  curl -fsS -o "public/map/$name.jpg" "https://map.leagueoflegends.com/assets/images/tiles/$name.jpg"
+base=https://map.leagueoflegends.com/assets/images
+for file in tiles/terrain_z1 tiles/depth_z1 tiles/ocean_z1 fx/clouds fx/fog fx/fog-mask; do
+  curl -fsS -o "public/map/$(basename "$file").jpg" "$base/$file.jpg"
 done
 echo "Texturas em $(pwd)/public/map"

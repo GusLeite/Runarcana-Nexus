@@ -2,6 +2,10 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-02 — Mapa: nuvens e mar como no original (`feature/character-sheet`)
+- Nuvens e névoa passam a usar as texturas originais, mais fortes que lá; a ondulação do mar saiu e fica só o brilho ao aproximar.
+- `fetch-map-assets.sh` baixa também `clouds`, `fog` e `fog-mask`.
+
 ## 2026-11-02 — Mapa: bordas, mar e nuvens (`feature/character-sheet`)
 - Vinheta escura e terreno fundido ao fundo no lugar das barras azuis; o arraste horizontal não passa da borda do mapa.
 - Água que ondula, nuvens que deslizam e névoa sobre o gelo, geradas por shader.
