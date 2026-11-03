@@ -15,6 +15,9 @@ import { play } from './audio/engine.js'
 // O mestre entra pelo botão do topo, não pelos painéis; o LoginForm/PasswordForm usam este "personagem".
 const MASTER = { id: 'mestre', name: 'MESTRE', role: 'Narrador de Runeterra', fx: '' }
 
+// Aba e tela abertas ficam na query (?aba=, ?tela=); ao sair, a URL volta limpa.
+const clearUrl = () => window.history.replaceState(null, '', window.location.pathname)
+
 // Tela inicial: o jogador escolhe o personagem e, em seguida, faz login com ele.
 // Logado, abre a ficha do personagem (antes, pede a troca da senha inicial).
 // O mestre entra pelo botão "MESTRE" e cai no painel do mestre.
@@ -69,6 +72,7 @@ export default function App() {
     if (session) logout(session.token).catch(() => {})
     updateSession(null)
     setMasterOpen(false)
+    clearUrl()
     back()
   }
   const passwordChanged = account => {
@@ -125,6 +129,7 @@ export default function App() {
     setTestSession({ token: res.token, ...res.account })
   }
   const endTest = () => {
+    clearUrl()
     if (testSession) logout(testSession.token).catch(() => {})
     setTestSession(null)
   }

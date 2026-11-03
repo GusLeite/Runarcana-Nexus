@@ -37,13 +37,15 @@ frontend/
     │   ├── effects/Embers.jsx brasas e calor (Galdren)
     │   ├── effects/BloodMagic.jsx magia de sangue (Rudo)
     │   └── sheet/             ficha pós-login: CharacterSheet (abas e estado), SheetHero, OverviewTab, AttributeGrid,
-    │                          SkillList, AbilitiesTab, AbilityIcon, Inventory, MerchantTab, DocumentsTab, NotesTab, DiceRoll,
+    │                          SkillList, AbilitiesTab, AbilityIcon, Inventory, MerchantTab, DocumentsTab, NotesTab, DiceRoll, LevelUpCeremony,
     │                          TabBar (abas com sublinhado deslizante), Num (número que conta), icons
     │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities, MasterSheets, MasterMerchants, MasterRules
     │   └── map/               mapa 3D de Runeterra (Three.js): WorldButtons, MapScreen, RegionPanel, MapPointPanels, poiKinds, regions, twinFrame, temporalDomes, demonGlobe, ravens, ravenModel, mapScene, mapMath (+ .test.js)
     │   └── lore/              lore da mesa: LoreScreen, LoreEntryView, LoreForm, AudiencePicker
     ├── audio/                 engine.js (sons sintetizados), uiSounds.js (+ .test.js, sons de interface por delegação), SoundToggle.jsx — ver frontend-visual.md
     ├── hooks/useCountUp.js (+ .test.js)  número que conta até o valor; prefersReducedMotion
+    ├── hooks/useUrlParam.js (+ .test.js)  estado guardado na query da URL (aba, tela) com o "voltar" do navegador
+    ├── data/levelGains.js (+ .test.js)  o que mudou na subida de nível (resumo da cerimônia)
     ├── utils/motion.js        replay (reinicia animação de classe) e afterLeave (espera a saída)
     ├── utils/placeholderArt.js   gera um retrato SVG para quem ainda não tem arte
     ├── utils/iconImage.js (+ .test.js)  valida e reduz a imagem do ícone de habilidade para 128x128
@@ -88,5 +90,4 @@ A tela foi prototipada num `index.html` único (React via CDN, imagens e vídeo 
 - Vídeos das origens (`assets/origins/`, ~12 MB no total): para trocar um, corte o original num loop de até 10 s e recomprima, por exemplo `ffmpeg -ss INICIO -t DURACAO -i orig.mp4 -ss FIM_DO_TRECHO -t 1 -i orig.mp4 -filter_complex "[0:v]scale=-2:'min(1080,ih)'[a];[1:v]scale=-2:'min(1080,ih)',format=yuva420p,fade=t=out:st=0:d=1:alpha=1[b];[a][b]overlay=0:0:eof_action=pass,format=yuv420p[v]" -map "[v]" -an -c:v libx264 -preset slow -crf 24 -movflags +faststart saida.mp4` (o segundo `-ss` é INICIO+DURACAO: o último segundo é fundido com o começo para o loop emendar). O ffmpeg não está instalado na máquina; foi usado o pacote npm `ffmpeg-static` numa pasta temporária.
 - Vídeos das classes (`assets/classes/`, ~20 MB no total): mesmo processo dos das origens; os originais (1080p, 14–19 Mbps) foram recomprimidos com `libx264 -crf 25`, 30 fps, sem áudio; o do Xamã (22,8 s) foi cortado em 10 s com o último segundo fundido ao começo.
 - Artes das regiões (`assets/regions/`, ~23 MB no total): 12 loops de 7 a 10 s (mesma receita das origens, com `-crf 27`, 30 fps e sem áudio) com o primeiro quadro em `.webp`, mais as imagens de Nazumah e do Vazio. O vídeo de Zaun teve as faixas pretas cortadas. As `tagline` de `regionArt.js` são provisórias, até o catálogo ter a descrição das regiões.
-- Ainda não há roteamento (react-router): as abas da ficha são estado local e não mudam a URL (recarregar volta para "FICHA").
 - O token fica no `localStorage` (simples, mas acessível a scripts da página); se o projeto crescer, considerar cookie `HttpOnly`.

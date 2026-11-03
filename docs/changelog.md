@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-03 — Abas na URL e cerimônia de subida de nível (`feature/character-sheet`)
+- A aba da ficha e a do painel do mestre ficam na URL (`?aba=`), e o mapa/lore aberto em `?tela=`: recarregar volta ao mesmo lugar e o "voltar" do navegador funciona (hook `useUrlParam`, sem react-router).
+- Ao subir de nível, uma cerimônia: o anel enche até o nível novo, o número vira, raios e faíscas, e o resumo do que foi ganho (`levelUpGains`).
+- Quando o mestre libera um nível, a ficha avisa com som e mensagem.
+
 ## 2026-11-02 — Mapa: domos roxos dentro do globo vermelho (`feature/character-sheet`)
 - Os seis domos de distorção ficam menores (raio de 14 a 26) e todos dentro do globo demoníaco; um teste garante isso.
 

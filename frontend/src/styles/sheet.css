@@ -822,3 +822,32 @@ background-color:transparent;background-image:linear-gradient(90deg,transparent 
  .journal input.note-title{font-size:20px}
  .journal .save-status{flex-basis:100%;order:3}
 }
+
+/* ---------- cerimônia de subida de nível (LevelUpCeremony.jsx) ---------- */
+.lvc-overlay{position:fixed;inset:0;z-index:45;display:grid;place-items:center;padding:16px;background:radial-gradient(circle at 50% 40%,rgba(240,199,94,.16),rgba(1,10,19,.9) 60%);animation:prep-in .3s ease both}
+.lvc{position:relative;width:min(460px,100%);max-height:calc(100vh - 32px);overflow:auto;padding:28px 24px 22px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;outline:none;background:linear-gradient(180deg,rgba(10,22,38,.96),rgba(1,10,19,.98));border:1px solid var(--gold);box-shadow:0 0 60px rgba(240,199,94,.25),0 20px 60px rgba(0,0,0,.7);animation:lvc-rise .6s cubic-bezier(.22,1,.36,1) both}
+.lvc-burst{position:absolute;left:50%;top:108px;width:0;height:0;pointer-events:none}
+.lvc-ray{position:absolute;left:-2px;top:-150px;width:4px;height:150px;transform-origin:50% 150px;transform:rotate(var(--a)) scaleY(0);background:linear-gradient(0deg,transparent,rgba(240,199,94,.7) 60%,transparent);opacity:0;animation:lvc-ray 1.6s 1s ease-out both}
+.lvc-spark{position:absolute;left:var(--x);top:0;width:4px;height:4px;border-radius:50%;background:var(--gold-hi);box-shadow:0 0 8px var(--gold-hi);opacity:0;animation:lvc-spark var(--d) var(--dl) ease-out both}
+.lvc-ring{position:relative;width:160px;height:160px;display:grid;place-items:center}
+.lvc-ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.lvc-track{fill:none;stroke:rgba(200,162,74,.2);stroke-width:6}
+.lvc-fill{fill:none;stroke:var(--gold-hi);stroke-width:6;stroke-linecap:round;filter:drop-shadow(0 0 8px rgba(240,199,94,.9));stroke-dashoffset:var(--to);animation:lvc-fill 1s .15s cubic-bezier(.65,0,.35,1) both}
+.lvc-num{position:relative;display:flex;flex-direction:column;align-items:center;font-family:'Cinzel',Georgia,serif;font-weight:700;color:var(--gold-hi);line-height:1}
+.lvc-num small{font-size:11px;letter-spacing:.3em;color:var(--teal);margin-bottom:4px}
+.lvc-num span{font-size:58px;text-shadow:0 0 20px rgba(240,199,94,.6)}
+.lvc-num .lvc-new{animation:lvc-flip .7s cubic-bezier(.34,1.56,.64,1) both}
+.lvc-title{margin:0;font-family:'Cinzel',Georgia,serif;font-size:20px;letter-spacing:.08em;color:var(--text)}
+.lvc-gains{list-style:none;margin:0;padding:0;width:100%;display:flex;flex-direction:column;gap:6px;text-align:left}
+.lvc-gains li{display:flex;gap:12px;align-items:baseline;padding:7px 10px;border-left:2px solid var(--teal);background:rgba(47,211,192,.06);opacity:0;animation:lvc-line .45s calc(1.5s + var(--i) * .12s) ease-out both}
+.lvc-label{flex:0 0 108px;font-family:'Cinzel',Georgia,serif;font-size:11px;letter-spacing:.12em;color:var(--teal);text-transform:uppercase}
+.lvc-value{color:var(--text);font-size:15px}
+.lvc-ok{margin-top:4px;opacity:0;animation:lvc-line .4s 1.8s ease-out both}
+@keyframes lvc-rise{from{opacity:0;transform:translateY(24px) scale(.96)}}
+@keyframes lvc-fill{from{stroke-dashoffset:var(--from)}to{stroke-dashoffset:var(--to)}}
+@keyframes lvc-flip{0%{transform:scale(.3) rotateX(90deg);opacity:0}100%{transform:none;opacity:1}}
+@keyframes lvc-ray{0%{opacity:0;transform:rotate(var(--a)) scaleY(0)}30%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) scaleY(1.2)}}
+@keyframes lvc-spark{0%{opacity:0;transform:translateY(0)}15%{opacity:1}100%{opacity:0;transform:translateY(-170px)}}
+@keyframes lvc-line{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (max-width:480px){.lvc-label{flex-basis:84px}}
+@media (prefers-reduced-motion:reduce){.lvc-ray,.lvc-spark{display:none}.lvc-gains li,.lvc-ok{opacity:1}}

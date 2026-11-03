@@ -21,6 +21,9 @@ import CreationScreen from '../creation/CreationScreen.jsx'
 import LevelUp from '../creation/LevelUp.jsx'
 import { fetchCatalog } from '../../api/creation.js'
 import { play } from '../../audio/engine.js'
+import useUrlParam from '../../hooks/useUrlParam.js'
+import { levelUpGains } from '../../data/levelGains.js'
+import LevelUpCeremony from './LevelUpCeremony.jsx'
 import { ExitIcon, KeyIcon } from './icons.jsx'
 import '../../styles/sheet.css'
 
@@ -36,6 +39,7 @@ const TABS = [
   { id: 'notes', label: 'ANOTAÇÕES' },
   { id: 'book', label: 'LIVRO' },
 ]
+const TAB_IDS = [...TABS.map(t => t.id), MERCHANT_TAB.id]
 const MODE_SHORT = { adv: 'V', dis: 'D' }
 
 // Fixadas primeiro, depois as editadas mais recentemente (mesma ordem do back-end).
@@ -48,7 +52,8 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const [abilities, setAbilities] = useState([])
   const [documents, setDocuments] = useState([])
   const [notes, setNotes] = useState([])
-  const [tab, setTab] = useState('sheet')
+  // A aba fica na URL (?aba=…): recarregar volta para ela e o "voltar" do navegador troca de aba.
+  const [tab, setTab] = useUrlParam('aba', TAB_IDS, 'sheet')
   const [docId, setDocId] = useState(null)
   const [noteId, setNoteId] = useState(null)
   const [rolls, setRolls] = useState([])
@@ -160,7 +165,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
           if (ping.id == null) {
             known.current = null
             setMerchant(null)
-            setTab(t => (t === 'merchant' ? 'inventory' : t))
+            setTab(t => (t === 'merchant' ? 'inventory' : t), { replace: true })
             if (before) setToast('O mercador fechou a loja.')
           } else if (before?.id !== ping.id || before?.revision !== ping.revision) {
             fetchActiveMerchant(token)
@@ -370,6 +375,23 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const levelUpPreview = useCallback(levels => previewLevelUp(token, levels), [token])
   const levelUpApply = useCallback(levels => applyLevelUp(token, levels), [token])
 
+  // Depois de salvar o nível: busca a ficha nova e compara com a de antes para a cerimônia.
+  const [ceremony, setCeremony] = useState(null)
+  const levelApplied = useCallback(updated => {
+    const before = state.status === 'ready' ? state.sheet : null
+    setLeveling(false)
+    fetchSheet(token)
+      .then(after => {
+        play('levelup')
+        putSheet(after)
+        setAbilities(after.abilities ?? [])
+        if (before) setCeremony(levelUpGains({ ...before, abilities }, after))
+        else setToast(updated.characterName + ' subiu para o ' + updated.level + 'º nível!')
+      })
+      .catch(() => load())
+  }, [state, abilities, token, putSheet, load])
+  const closeCeremony = useCallback(() => setCeremony(null), [])
+
   // O mestre libera a subida no painel: a cada 10 s (com a aba visível) confere se mudou o que está liberado.
   const pendingNow = sheet?.pendingLevels
   useEffect(() => {
@@ -379,6 +401,11 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       fetchSheet(token)
         .then(s => {
           if (s.character.pendingLevels !== pendingNow) {
+            // Liberou um nível agora: aviso com som, além do botão que brilha no topo.
+            if (s.character.pendingLevels > pendingNow && s.character.canLevelUp) {
+              play('levelready')
+              setToast('O mestre liberou o ' + (s.character.level + 1) + 'º nível! Clique em SUBIR DE NÍVEL.')
+            }
             setState(st => (st.status === 'ready'
               ? { ...st, sheet: { ...st.sheet, character: { ...st.sheet.character, pendingLevels: s.character.pendingLevels } } } : st))
           }
@@ -490,12 +517,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
                 catalog={catalog}
                 onPreview={levelUpPreview}
                 onApply={levelUpApply}
-                onApplied={updated => {
-                  play('levelup')
-                  setLeveling(false)
-                  setToast(updated.characterName + ' subiu para o ' + updated.level + 'º nível!')
-                  load()
-                }}
+                onApplied={levelApplied}
                 onCancel={() => setLeveling(false)}
                 onError={fail}
               />
@@ -560,6 +582,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       {preparing && preparation && (
         <PrepareSpells preparation={preparation} busy={busy} onConfirm={picks => doRest('LONG', picks)} onCancel={() => setPreparing(false)} />
       )}
+      {ceremony && <LevelUpCeremony gains={ceremony} name={sheet?.characterName ?? character.name} onClose={closeCeremony} />}
       {toast && <div key={toast} className="toast" role="status">{toast}</div>}
     </div>
   )

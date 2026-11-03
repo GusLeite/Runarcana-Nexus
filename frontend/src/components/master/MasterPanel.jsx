@@ -9,6 +9,7 @@ import MasterMerchants from './MasterMerchants.jsx'
 import MasterAccounts from './MasterAccounts.jsx'
 import WorldButtons from '../map/WorldButtons.jsx'
 import TabBar from '../sheet/TabBar.jsx'
+import useUrlParam from '../../hooks/useUrlParam.js'
 import { CrownIcon, ExitIcon, FlaskIcon, KeyIcon } from '../sheet/icons.jsx'
 import '../../styles/sheet.css'
 import '../../styles/master.css'
@@ -23,10 +24,12 @@ const TABS = [
   { id: 'rules', label: 'REGRAS' },
   { id: 'accounts', label: 'CONTAS' },
 ]
+const TAB_IDS = TABS.map(t => t.id)
 
 // Painel do mestre: mesma moldura da ficha, com as abas da mesa (todos os personagens de uma vez), documentos, habilidades, fichas (subida de nível), inventário (itens, ouro e inspiração), mercadores, regras da mesa e contas (senhas provisórias).
 export default function MasterPanel({ session, notice, onChangePassword, onLogout, onExpired, onTestPlayer }) {
-  const [tab, setTab] = useState('table')
+  // A aba fica na URL (?aba=…), como na ficha.
+  const [tab, setTab] = useUrlParam('aba', TAB_IDS, 'table')
   const [toast, setToast] = useState(notice)
   const expired = useRef(onExpired)
   expired.current = onExpired
