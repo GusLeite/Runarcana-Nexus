@@ -73,3 +73,19 @@ export const MAP_GLOBE = { x: 0, y: -380, radius: 140, height: 83, flightHeight:
 
 // Regiões sem imagem de destaque no original: acendem a terra dentro de um círculo em volta do ponto.
 export const MAP_AREAS = { void: { x: 270, y: -560, radius: 175, color: [0.55, 0.2, 0.85] } }
+
+// Regiões que a névoa de guerra cobre (as dos brasões, menos Bandópolis, que não tem lugar fixo).
+// As sem imagem em public/map/regions/ usam um círculo de terra (FOG_AREAS).
+export const FOG_REGIONS = MAP_PINS.filter(p => p.icon !== 'capital' && p.slug !== 'bandle').map(p => p.slug)
+export const FOG_AREAS = { ...MAP_AREAS, 'piltover-zaun': { x: TWIN_CITIES.x, y: TWIN_CITIES.y, radius: 80 } }
+
+// Região cujo brasão fica mais perto de um ponto (nome da parada do grupo), até `max` unidades.
+export function nearestRegion(x, y, max = 200) {
+  let best = null
+  for (const pin of MAP_PINS) {
+    if (pin.icon === 'capital' || pin.slug === 'bandle') continue
+    const d = Math.hypot(pin.x - x, pin.y - y)
+    if (d <= max && (!best || d < best.d)) best = { d, pin }
+  }
+  return best?.pin ?? null
+}

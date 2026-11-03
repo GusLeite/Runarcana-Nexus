@@ -9,6 +9,7 @@ import {
 } from './mapMath.js'
 import { createDemonGlobe } from './demonGlobe.js'
 import { createTemporalDomes } from './temporalDomes.js'
+import { createPartyLayers } from './partyLayers.js'
 
 const TEXTURES = ['terrain_z1', 'depth_z1', 'ocean_z1', 'clouds', 'fog', 'fog-mask'].map(name => `/map/${name}.jpg`)
 const TERRAIN_SEGMENTS = 200
@@ -180,7 +181,7 @@ const loadTextures = () => {
 // areas: regiões que acendem por um círculo em vez de uma imagem ({ [slug]: { x, y, radius, color } }).
 // onMapClick(clientX, clientY): clique no mapa, sem arrastar.
 // onPinsChange: chamado quando os pontos visíveis mudam, porque o navegador não avisa que o mouse saiu de um ponto escondido.
-export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], areas = {}, domes = [], globe = null, onPinsChange, onMapClick } = {}) {
+export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], areas = {}, fogAreas = {}, domes = [], globe = null, onPinsChange, onMapClick } = {}) {
   const textures = await loadTextures()
   const [terrain, depth, ocean, cloudMap, fogMap, fogMask] = textures
 
@@ -285,6 +286,9 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     }).catch(() => {})
     return highlight
   }
+
+  // Névoa de guerra e trilha do grupo (partyLayers.js).
+  const party = createPartyLayers({ panGroup, terrainGeometry, depth, ocean, heightAt, fogAreas, renderer })
 
   // Blocos detalhados por cima da imagem geral, baixados só quando o zoom e a vista pedem.
   const tileGeometry = new THREE.PlaneGeometry(TILE_SIZE, TILE_SIZE, 64, 64)
@@ -420,6 +424,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     renderer.setSize(width, height)
     composer.setPixelRatio(ratio)
     composer.setSize(width, height)
+    party?.resize()
   }
   const observer = new ResizeObserver(resize)
   observer.observe(container)
@@ -562,6 +567,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       decal.mesh.visible = decal.material.opacity > 0.01
       decal.mesh.rotation.x = -tiltGroup.rotation.x
     }
+    party.update(reducedMotion ? 0 : clock.elapsedTime, dt)
     placePins()
   }
 
@@ -594,6 +600,9 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       return hit && { x: Math.round(hit.x), y: Math.round(hit.y) }
     },
     heightAt,
+    // Névoa: regiões encobertas e o quanto cobrem (1 = opaca). Trilha: as paradas do grupo, em ordem.
+    setFog: (hidden, strength) => party.setFog(hidden, strength),
+    setTrail: (points, options) => party.setTrail(points, options),
     // Acende uma região (ou nenhuma, com null) e apaga as outras.
     highlight(slug) {
       if (slug) highlightFor(slug)
@@ -615,6 +624,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       }
       tileGeometry.dispose()
       temporalDomes.dispose()
+      party.dispose()
       demonGlobe?.dispose()
       for (const decal of decalMeshes) {
         decal.mesh.geometry.dispose()

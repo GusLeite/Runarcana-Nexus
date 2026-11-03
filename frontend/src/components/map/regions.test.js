@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { BANDLE_SPOTS, MAP_DOMES, MAP_GLOBE, MAP_PINS, bandleSpot } from './regions.js'
+import { BANDLE_SPOTS, FOG_AREAS, FOG_REGIONS, MAP_DOMES, MAP_GLOBE, MAP_PINS, bandleSpot, nearestRegion } from './regions.js'
+import { trailPath } from './partyLayers.js'
 
 describe('Bandópolis', () => {
   it('tem um lugar para cada face do d10', () => {
@@ -54,5 +55,25 @@ describe('globo demoníaco', () => {
 
   it('deixa a câmera passar por cima no zoom máximo', () => {
     expect(MAP_GLOBE.height).toBeLessThan(200)
+  })
+})
+
+describe('névoa e trilha do grupo', () => {
+  it('cobre as 11 regiões, e as sem imagem têm círculo', () => {
+    expect(FOG_REGIONS).toHaveLength(11)
+    expect(FOG_REGIONS).not.toContain('bandle')
+    expect(FOG_AREAS['piltover-zaun']).toBeTruthy()
+    expect(FOG_AREAS.void).toBeTruthy()
+  })
+
+  it('a parada recebe o nome do brasão mais perto', () => {
+    expect(nearestRegion(-420, 60).slug).toBe('demacia')
+    expect(nearestRegion(-1000, -1000)).toBeNull()
+  })
+
+  it('a trilha segue o relevo em passos curtos', () => {
+    const path = trailPath([{ x: 0, y: 0 }, { x: 12, y: 0 }], () => 10, 6)
+    expect(path).toEqual([[0, 0, 13], [6, 0, 13], [12, 0, 13]])
+    expect(trailPath([{ x: 5, y: 5 }], () => 0)).toHaveLength(1)
   })
 })

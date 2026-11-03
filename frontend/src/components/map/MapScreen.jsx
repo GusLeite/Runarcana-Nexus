@@ -2,14 +2,15 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { prefersReducedMotion } from '../../hooks/useCountUp.js'
 import { createMapScene } from './mapScene.js'
 import {
-  addPoiComment, createPoi, createWaypoint, deletePoi, deletePoiComment, deleteWaypoint, fetchBandle, fetchPois,
-  fetchWaypoints, rollBandle, updatePoi, updateWaypoint,
+  addPoiComment, clearPartyTrail, createPoi, createWaypoint, deletePoi, deletePoiComment, deleteWaypoint, fetchBandle, fetchParty, fetchPois,
+  fetchWaypoints, hideParty, moveParty, rollBandle, setMapFog, setRegionRevealed, updatePoi, updateWaypoint,
 } from '../../api/map.js'
 import { fetchLore } from '../../api/lore.js'
 import { fetchRecipients } from '../../api/master.js'
 import DiceRoll from '../sheet/DiceRoll.jsx'
 import { playerName } from '../lore/AudiencePicker.jsx'
-import { MAP_AREAS, MAP_DECALS, MAP_DOMES, MAP_GLOBE, MAP_LABELS, MAP_PINS, bandleSpot } from './regions.js'
+import { FOG_AREAS, FOG_REGIONS, MAP_AREAS, MAP_DECALS, MAP_DOMES, MAP_GLOBE, MAP_LABELS, MAP_PINS, bandleSpot, nearestRegion } from './regions.js'
+import { sineInOut } from './mapMath.js'
 import RegionPanel from './RegionPanel.jsx'
 import { PoiForm, PoiPanel, WaypointPanel } from './MapPointPanels.jsx'
 import { PoiGlyph } from './poiKinds.jsx'
@@ -25,6 +26,12 @@ const POINT_ZOOM = 400
 const DIE_SPIN = 800
 const NOTICE_MS = 6000
 const MAX_WAYPOINTS = 3
+// O grupo no mapa: todos conferem a cada poucos segundos; o marcador anda até o lugar novo.
+const PARTY_POLL = 3000
+const PARTY_WALK_MS = 1600
+// Névoa: quase opaca para os jogadores; o mestre vê através.
+const FOG_PLAYER = 0.96
+const FOG_MASTER = 0.45
 
 const PIN_IMAGES = {
   crest: pin => [`/map/crests/${pin.slug}.png`, `/map/crests/${pin.slug}-hover.png`],
@@ -63,6 +70,13 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   const [placing, setPlacing] = useState(null) // null | 'poi' | 'waypoint'
   const [panel, setPanel] = useState(null) // null | { type: 'poi' | 'poiForm' | 'waypoint', id, draft }
   const closeDie = useCallback(() => setDie(null), [])
+  // O grupo: { x, y, trail, fog, revealed } do back. partyPin é o ponto que a cena desenha (anda aos poucos).
+  const [party, setParty] = useState(null)
+  const [fogOpen, setFogOpen] = useState(false)
+  const partyPin = useRef({ slug: 'party', el: null, x: 0, y: 0, z: 0, level: 'any', lift: 0 })
+  const partyWalk = useRef(0)
+  const partyDrag = useRef(null)
+  const trailKey = useRef(null)
 
   useEffect(() => {
     let cancelled = false
@@ -75,6 +89,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
       pins,
       decals: MAP_DECALS,
       areas: MAP_AREAS,
+      fogAreas: FOG_AREAS,
       domes: MAP_DOMES,
       globe: MAP_GLOBE,
       onPinsChange: () => setHovered(null),
@@ -105,6 +120,105 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
     if (master) fetchRecipients(session.token).then(setPlayers).catch(() => {})
   }, [session.token, master])
 
+  // O grupo: a mesa inteira confere a cada poucos segundos (com a aba visível); só troca o estado quando muda.
+  useEffect(() => {
+    let last = null
+    const check = () => {
+      if (document.hidden) return
+      fetchParty(session.token)
+        .then(view => {
+          const key = JSON.stringify(view)
+          if (key !== last) { last = key; setParty(view) }
+        })
+        .catch(() => {})
+    }
+    check()
+    const t = setInterval(check, PARTY_POLL)
+    return () => clearInterval(t)
+  }, [session.token])
+
+  // O marcador anda do lugar antigo até o novo (sem animação na primeira vez ou com movimento reduzido).
+  const partyX = party?.x
+  const partyY = party?.y
+  useEffect(() => {
+    if (partyX == null || status !== 'ready' || partyDrag.current) return undefined
+    const pin = partyPin.current
+    const from = { x: pin.x, y: pin.y }
+    const first = !pin.placed
+    pin.placed = true
+    const start = performance.now()
+    cancelAnimationFrame(partyWalk.current)
+    const step = now => {
+      const t = first || prefersReducedMotion() ? 1 : Math.min(1, (now - start) / PARTY_WALK_MS)
+      const k = sineInOut(t)
+      pin.x = from.x + (partyX - from.x) * k
+      pin.y = from.y + (partyY - from.y) * k
+      pin.z = scene.current?.heightAt(pin.x, pin.y) ?? 0
+      if (t < 1) partyWalk.current = requestAnimationFrame(step)
+    }
+    partyWalk.current = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(partyWalk.current)
+  }, [partyX, partyY, status])
+
+  // Névoa por região e trilha: a cena só redesenha a trilha quando ela muda.
+  const hiddenRegions = party?.fog ? FOG_REGIONS.filter(slug => !party.revealed.includes(slug)) : []
+  const hiddenKey = hiddenRegions.join(',')
+  useEffect(() => {
+    if (status !== 'ready') return
+    scene.current?.setFog(hiddenKey ? hiddenKey.split(',') : [], master ? FOG_MASTER : FOG_PLAYER)
+  }, [hiddenKey, status, master])
+  useEffect(() => {
+    if (status !== 'ready' || !party) return
+    const key = JSON.stringify(party.trail.map(p => [p.x, p.y]))
+    if (key === trailKey.current) return
+    scene.current?.setTrail(party.trail, { animate: trailKey.current !== null })
+    trailKey.current = key
+  }, [party, status])
+
+  const moveGroupTo = async (x, y) => {
+    const region = nearestRegion(x, y)
+    try {
+      setParty(await moveParty(session.token, x, y, region?.name ?? null))
+    } catch (err) {
+      setNotice(err.message)
+    }
+  }
+  const partyAction = async (call, done) => {
+    try {
+      setParty(await call())
+      if (done) setNotice(done)
+    } catch (err) {
+      setNotice(err.message)
+    }
+  }
+
+  // Mestre arrasta o marcador: segue o ponteiro e, ao soltar, salva (um clique sem arrastar só centraliza nele).
+  const dragStart = e => {
+    if (!master) return
+    e.preventDefault()
+    e.currentTarget.setPointerCapture(e.pointerId)
+    partyDrag.current = { x: e.clientX, y: e.clientY, moved: false }
+  }
+  const dragMove = e => {
+    const drag = partyDrag.current
+    if (!drag) return
+    if (Math.hypot(e.clientX - drag.x, e.clientY - drag.y) > 4) drag.moved = true
+    if (!drag.moved) return
+    const world = scene.current?.screenToWorld(e.clientX, e.clientY)
+    if (!world) return
+    const pin = partyPin.current
+    pin.x = Math.max(-1024, Math.min(1024, world.x))
+    pin.y = Math.max(-1024, Math.min(1024, world.y))
+    pin.z = scene.current.heightAt(pin.x, pin.y)
+  }
+  const dragEnd = () => {
+    const drag = partyDrag.current
+    partyDrag.current = null
+    const pin = partyPin.current
+    if (drag?.moved) moveGroupTo(Math.round(pin.x), Math.round(pin.y))
+    else if (party?.x != null) scene.current?.focus(party.x, party.y, POINT_ZOOM)
+  }
+
   // A cena lê estes objetos a cada quadro: basta mudá-los para Bandópolis aparecer no lugar novo.
   useEffect(() => {
     const spot = bandleSpot(bandleRoll)
@@ -123,9 +237,13 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
     ]
       .map(p => ({ ...p, el: anchors.current[p.slug], z: heightAt(p.x, p.y), lift: 0 }))
       .filter(p => p.el)
+    // O marcador do grupo é sempre o mesmo objeto: a caminhada e o arraste mudam x/y nele.
+    const group = partyPin.current
+    group.el = anchors.current.party
+    if (partyX != null && group.el) dynamic.push(group)
     scenePins.current.length = 0
     scenePins.current.push(...staticPins.current, ...dynamic)
-  }, [pois, waypoints, draftPoint?.x, draftPoint?.y, status]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [pois, waypoints, draftPoint?.x, draftPoint?.y, status, partyX != null]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const rollDie = async () => {
     setRolling(true)
@@ -152,13 +270,19 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   }
 
   // A região escolhida continua acesa enquanto o painel dela estiver aberto.
-  const lit = hovered ?? selected
+  // Para o jogador, região na névoa não acende, não abre painel e não mostra o nome.
+  const foggedSlug = slug => !master && (hiddenRegions.includes(slug) || ((slug === 'piltover' || slug === 'zaun') && hiddenRegions.includes('piltover-zaun')))
+  const lit = hovered && foggedSlug(hovered) ? selected : hovered ?? selected
   useEffect(() => {
     const pin = MAP_PINS.find(p => p.slug === lit)
     scene.current?.highlight(pin?.highlight ? pin.slug : null)
   }, [lit])
 
   const select = pin => {
+    if (foggedSlug(pin.slug)) {
+      setNotice('Região ainda não explorada. A névoa esconde o que há ali.')
+      return
+    }
     setHovered(null)
     setSelected(null)
     setPanel(null)
@@ -186,9 +310,13 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
       return
     }
     setNotice(null)
+    setPlacing(null)
+    if (placing === 'party') {
+      moveGroupTo(world.x, world.y)
+      return
+    }
     setSelected(null)
     setPanel({ type: placing === 'poi' ? 'poiForm' : 'waypoint', draft: world })
-    setPlacing(null)
   }
 
   // Abre já mostrando o que a lore pediu, uma vez, quando a cena e os pontos estiverem prontos.
@@ -255,7 +383,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose, selected, panel, placing])
 
-  const teased = MAP_PINS.find(p => p.slug === hovered)
+  const teased = MAP_PINS.find(p => p.slug === hovered && !foggedSlug(p.slug))
   const chosen = MAP_PINS.find(p => p.slug === selected)
   const loreOf = pin => lore.find(entry => entry.kind === 'REGION' && entry.mapSlug === pin.slug)
   const mine = master ? [] : waypoints
@@ -276,6 +404,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
                 className={'map-pin map-pin-' + pin.icon + (pin.slug === 'bandle' && born ? ' map-pin-born' : '')}
                 type="button"
                 onClick={() => select(pin)}
+                data-fogged={foggedSlug(pin.slug) || undefined}
                 onPointerEnter={() => setHovered(pin.slug)}
                 onPointerLeave={() => setHovered(null)}
                 onFocus={() => setHovered(pin.slug)}
@@ -285,7 +414,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
                   <img src={normal} alt="" draggable="false" />
                   <img className="map-pin-active" src={active} alt="" draggable="false" />
                 </span>
-                <span className="map-pin-name">{pin.name}</span>
+                <span className="map-pin-name">{foggedSlug(pin.slug) ? '???' : pin.name}</span>
               </button>
             )
           })}
@@ -305,6 +434,21 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
             </button>
           ))}
           {draftPoint && <span ref={el => { anchors.current.draft = el }} className="map-pin map-waypoint map-draft"><span className="map-waypoint-flag" aria-hidden="true" /></span>}
+          {party?.x != null && (
+            <button
+              ref={el => { anchors.current.party = el; partyPin.current.el = el }}
+              className={'map-pin map-party' + (master ? ' draggable' : '')}
+              type="button"
+              title={master ? 'Arraste para mover o grupo' : 'O grupo está aqui'}
+              onPointerDown={dragStart}
+              onPointerMove={dragMove}
+              onPointerUp={dragEnd}
+              onPointerCancel={dragEnd}
+            >
+              <span className="map-party-banner" aria-hidden="true"><span /></span>
+              <span className="map-pin-name">O GRUPO{party.trail.at(-1)?.label ? ' · ' + party.trail.at(-1).label : ''}</span>
+            </button>
+          )}
         </div>
       </div>
       <div className="map-head">
@@ -321,7 +465,40 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
           </div>
           <div className="map-tools">
             {master
-              ? <button type="button" className={'map-tool' + (placing === 'poi' ? ' on' : '')} aria-pressed={placing === 'poi'} onClick={() => setPlacing(p => (p === 'poi' ? null : 'poi'))}>+ PONTO DE INTERESSE</button>
+              ? (
+                <>
+                  <button type="button" className={'map-tool' + (placing === 'poi' ? ' on' : '')} aria-pressed={placing === 'poi'} onClick={() => setPlacing(p => (p === 'poi' ? null : 'poi'))}>+ PONTO DE INTERESSE</button>
+                  <button type="button" className={'map-tool' + (placing === 'party' ? ' on' : '')} aria-pressed={placing === 'party'} onClick={() => setPlacing(p => (p === 'party' ? null : 'party'))}>
+                    {party?.x != null ? 'MOVER O GRUPO' : 'POR O GRUPO NO MAPA'}
+                  </button>
+                  {party?.trail.length > 1 && (
+                    <button type="button" className="map-tool quiet" onClick={() => window.confirm('Apagar a trilha da viagem?') && partyAction(() => clearPartyTrail(session.token), 'Trilha apagada.')}>APAGAR TRILHA</button>
+                  )}
+                  {party?.x != null && <button type="button" className="map-tool quiet" onClick={() => partyAction(() => hideParty(session.token), 'O grupo saiu do mapa.')}>TIRAR O GRUPO</button>}
+                  <button type="button" className={'map-tool' + (party?.fog ? ' on' : '')} aria-pressed={!!party?.fog} onClick={() => partyAction(() => setMapFog(session.token, !party?.fog))}>
+                    NÉVOA {party?.fog ? 'LIGADA' : 'DESLIGADA'}
+                  </button>
+                  {party?.fog && (
+                    <button type="button" className="map-tool quiet" aria-expanded={fogOpen} onClick={() => setFogOpen(o => !o)}>
+                      REGIÕES {FOG_REGIONS.length - hiddenRegions.length}/{FOG_REGIONS.length}
+                    </button>
+                  )}
+                  {party?.fog && fogOpen && (
+                    <div className="map-fog-list" role="group" aria-label="Regiões reveladas">
+                      {FOG_REGIONS.map(slug => {
+                        const open = party.revealed.includes(slug)
+                        const name = MAP_PINS.find(p => p.slug === slug)?.name ?? slug
+                        return (
+                          <button key={slug} type="button" className={'map-fog-chip' + (open ? ' on' : '')} aria-pressed={open}
+                            onClick={() => partyAction(() => setRegionRevealed(session.token, slug, !open), open ? name + ' voltou para a névoa.' : name + ' foi revelada!')}>
+                            {open ? '◆' : '◇'} {name}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  )}
+                </>
+              )
               : (
                 <>
                   <button type="button" className={'map-tool' + (placing === 'waypoint' ? ' on' : '')} aria-pressed={placing === 'waypoint'} disabled={mine.length >= MAX_WAYPOINTS} title={mine.length >= MAX_WAYPOINTS ? 'Apague um waypoint para criar outro' : undefined} onClick={() => setPlacing(p => (p === 'waypoint' ? null : 'waypoint'))}>
@@ -339,7 +516,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
           )}
         </>
       )}
-      {placing && <div className="map-tease" role="status"><strong>Clique no mapa para marcar</strong><span>Esc cancela.</span></div>}
+      {placing && <div className="map-tease" role="status"><strong>{placing === 'party' ? 'Clique onde o grupo está' : 'Clique no mapa para marcar'}</strong><span>Esc cancela.</span></div>}
       {notice && !placing && !teased && !chosen && <div className="map-tease" role="status"><strong>{notice}</strong></div>}
       {teased && !placing && !chosen && !panel && (
         <div className="map-tease">

@@ -29,7 +29,7 @@
 .gj-sessions{display:flex;flex-direction:column;gap:14px}
 .gj-session{padding:14px 16px;border:1px solid rgba(200,162,74,.35);background:linear-gradient(135deg,rgba(200,162,74,.07),rgba(10,22,38,.75) 40%);animation:gj-in .45s calc(var(--n) * 60ms) ease both}
 .gj-session header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px}
-.gj-session h4{margin:0;font-family:'Cinzel',Georgia,serif;font-size:16px;letter-spacing:.06em;color:var(--gold-hi);text-transform:capitalize}
+.gj-session h4{margin:0;font-family:'Cinzel',Georgia,serif;font-size:16px;letter-spacing:.06em;color:var(--gold-hi)}
 .gj-session header small{color:var(--muted)}
 .gj-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
 .gj-stat{display:flex;flex-direction:column;align-items:center;padding:8px 4px;border:1px solid rgba(47,211,192,.2);background:rgba(1,10,19,.5)}

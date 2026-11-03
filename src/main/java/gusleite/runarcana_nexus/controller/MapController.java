@@ -7,6 +7,9 @@ import gusleite.runarcana_nexus.record.PoiResponse;
 import gusleite.runarcana_nexus.record.WaypointRequest;
 import gusleite.runarcana_nexus.record.WaypointResponse;
 import gusleite.runarcana_nexus.services.AuthService;
+import gusleite.runarcana_nexus.services.MapPartyService;
+import gusleite.runarcana_nexus.services.MapPartyService.MoveRequest;
+import gusleite.runarcana_nexus.services.MapPartyService.PartyView;
 import gusleite.runarcana_nexus.services.MapPointService;
 import gusleite.runarcana_nexus.services.MapService;
 import jakarta.validation.Valid;
@@ -17,16 +20,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// Mapa de Runeterra: Bandópolis, pontos de interesse do mestre e waypoints dos jogadores.
+// Mapa de Runeterra: Bandópolis, pontos de interesse do mestre, waypoints dos jogadores e o grupo (marcador, trilha e névoa).
 @RestController
 @RequestMapping("/map")
 public class MapController {
 
     private final MapService map;
     private final MapPointService points;
+    private final MapPartyService party;
     private final AuthService auth;
 
-    public MapController(MapService map, MapPointService points, AuthService auth) {
+    public MapController(MapService map, MapPointService points, MapPartyService party, AuthService auth) {
+        this.party = party;
         this.map = map;
         this.points = points;
         this.auth = auth;
@@ -104,5 +109,50 @@ public class MapController {
                                                @PathVariable Long id) {
         points.deleteWaypoint(auth.authenticate(authorization), id);
         return ResponseEntity.noContent().build();
+    }
+
+    // ---------- O grupo no mapa (todos leem; só o mestre muda) ----------
+
+    @GetMapping("/party")
+    public ResponseEntity<PartyView> party(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        auth.authenticate(authorization);
+        return ResponseEntity.ok(party.view());
+    }
+
+    @PutMapping("/party")
+    public ResponseEntity<PartyView> moveParty(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                               @RequestBody MoveRequest request) {
+        auth.requireMaster(authorization);
+        return ResponseEntity.ok(party.move(request));
+    }
+
+    @DeleteMapping("/party")
+    public ResponseEntity<PartyView> hideParty(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        auth.requireMaster(authorization);
+        return ResponseEntity.ok(party.hide());
+    }
+
+    @DeleteMapping("/party/trail")
+    public ResponseEntity<PartyView> clearTrail(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        auth.requireMaster(authorization);
+        return ResponseEntity.ok(party.clearTrail());
+    }
+
+    public record FogRequest(Boolean enabled) {}
+
+    public record RevealRequest(Boolean revealed) {}
+
+    @PutMapping("/fog")
+    public ResponseEntity<PartyView> setFog(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                            @RequestBody FogRequest request) {
+        auth.requireMaster(authorization);
+        return ResponseEntity.ok(party.setFog(request.enabled()));
+    }
+
+    @PutMapping("/fog/{slug}")
+    public ResponseEntity<PartyView> reveal(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                            @PathVariable String slug, @RequestBody RevealRequest request) {
+        auth.requireMaster(authorization);
+        return ResponseEntity.ok(party.reveal(slug, request.revealed()));
     }
 }

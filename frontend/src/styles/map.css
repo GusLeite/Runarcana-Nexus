@@ -430,3 +430,97 @@
 .map-panel .lore-action {
   margin-top: 4px;
 }
+/* O grupo: estandarte dourado com pulso no chão; o mestre arrasta. */
+.map-party {
+  z-index: 3;
+  width: 30px;
+  height: 40px;
+  padding: 0;
+  touch-action: none;
+}
+.map-party.draggable { cursor: grab; }
+.map-party.draggable:active { cursor: grabbing; }
+.map-party::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34px;
+  height: 14px;
+  margin: 6px 0 0 -17px;
+  border: 2px solid var(--gold-hi);
+  border-radius: 50%;
+  animation: party-pulse 2s ease-out infinite;
+  pointer-events: none;
+}
+.map-party-banner {
+  position: relative;
+  top: -18px;
+  left: 14px;
+  display: block;
+  width: 26px;
+  height: 40px;
+  border-left: 3px solid #f0e6d2;
+  filter: drop-shadow(0 3px 4px #000);
+  transition: transform 0.2s ease-out;
+  transform-origin: 0 100%;
+}
+.map-party-banner > span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 22px;
+  height: 26px;
+  background: linear-gradient(180deg, var(--gold-hi), #b07a1e);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%);
+  animation: party-wave 2.6s ease-in-out infinite;
+  transform-origin: 0 0;
+}
+.map-party:hover .map-party-banner,
+.map-party:focus-visible .map-party-banner { transform: scale(1.15); }
+.map-party .map-pin-name {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translate(-50%, -12px);
+  color: var(--gold-hi);
+  white-space: nowrap;
+}
+@keyframes party-pulse {
+  from { transform: scale(0.5); opacity: 0.9; }
+  to { transform: scale(1.6); opacity: 0; }
+}
+@keyframes party-wave {
+  50% { transform: skewY(6deg) scaleX(0.92); }
+}
+/* Região na névoa (jogador): brasão apagado e sem nome. */
+.map-pin[data-fogged] .map-pin-icon { filter: grayscale(1) brightness(0.45) blur(0.5px); }
+.map-pin[data-fogged] .map-pin-name { color: var(--muted); letter-spacing: 0.3em; }
+.map-pin[data-fogged]:hover .map-pin-icon { transform: none; }
+.map-pin[data-fogged] .map-pin-active { display: none; }
+/* Lista de regiões reveladas (mestre). */
+.map-fog-list {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid rgba(200, 162, 74, 0.35);
+  background: rgba(5, 11, 20, 0.9);
+}
+.map-fog-chip {
+  padding: 5px 10px;
+  border: 1px solid rgba(141, 151, 168, 0.4);
+  background: transparent;
+  color: var(--muted);
+  font: 400 13px Spectral, serif;
+  cursor: pointer;
+}
+.map-fog-chip.on {
+  border-color: var(--teal);
+  color: var(--teal);
+  background: rgba(47, 211, 192, 0.08);
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-party::before, .map-party-banner > span { animation: none; }
+}

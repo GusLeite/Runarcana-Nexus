@@ -29,3 +29,17 @@ export const createWaypoint = (token, waypoint) => request('/map/waypoints', { m
 export const updateWaypoint = (token, id, waypoint) => request('/map/waypoints/' + id, { method: 'PUT', token, body: waypoint })
 
 export const deleteWaypoint = (token, id) => request('/map/waypoints/' + id, { method: 'DELETE', token })
+
+// O grupo no mapa: { x, y, trail: [{ x, y, label, createdAt }], fog, revealed: [slug] } (x nulo = fora do mapa).
+export const fetchParty = token => request('/map/party', { token })
+
+// Só o mestre. Cada movimento vira uma parada na trilha.
+export const moveParty = (token, x, y, label) => request('/map/party', { method: 'PUT', token, body: { x, y, label } })
+
+export const hideParty = token => request('/map/party', { method: 'DELETE', token })
+
+export const clearPartyTrail = token => request('/map/party/trail', { method: 'DELETE', token })
+
+export const setMapFog = (token, enabled) => request('/map/fog', { method: 'PUT', token, body: { enabled } })
+
+export const setRegionRevealed = (token, slug, revealed) => request('/map/fog/' + slug, { method: 'PUT', token, body: { revealed } })

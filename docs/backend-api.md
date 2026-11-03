@@ -67,6 +67,10 @@
 | DELETE | `/map/waypoints/{id}` | – (Bearer) | Só o dono |
 | GET | `/map/bandle` | – (Bearer) | Última rolagem de Bandópolis: `{ roll }` (1 a 10; nulo antes da primeira). 401 sem sessão |
 | POST | `/map/bandle/roll` | – (Bearer **mestre**) | Rola o d10 no servidor, guarda em `TableSetting` (`map.bandleRoll`) e devolve `{ roll }`. 401 sem sessão; 403 para jogador |
+| GET | `/map/party` | – (Bearer) | O grupo no mapa (`MapPartyService`): `{ x, y, trail: [{ x, y, label, createdAt }], fog, revealed: [slug] }`. `x` nulo = fora do mapa; `fog` falso = tudo à vista |
+| PUT · DELETE | `/map/party` | `{ x, y, label? }` / – (Bearer **mestre**) | Move o marcador (−1024 a 1024; parada nova na trilha se mudou de lugar, até 200) / tira do mapa (a trilha fica). Posição em `TableSetting` `map.party` |
+| DELETE | `/map/party/trail` | – (Bearer **mestre**) | Apaga a trilha (`PartyTrailPoint`); com o grupo no mapa, ela recomeça dele |
+| PUT | `/map/fog` · `/map/fog/{slug}` | `{ enabled }` / `{ revealed }` (Bearer **mestre**) | Liga/desliga a névoa de guerra (`map.fog`) / revela ou encobre uma região (`map.revealed`, slug de minúsculas e hífen). 400 em slug inválido |
 | GET | `/conditions` | – (Bearer) | Catálogo das condições: `{ exhaustionMax, exhaustion, conditions: [{ id, name, text }] }` |
 | POST | `/character/me/rest` | `{ type: SHORT \| LONG, prepared? }` (Bearer) | Descanso: curto recupera o que é `SHORT_REST`; longo recupera tudo que recarrega. No longo, `prepared` (`{ "ACOLYTE": ["spell:<id>"], "SHAMAN": ["ability:<id>"] }`) troca as magias preparadas antes (400 acima do limite ou fora das opções, e aí não descansa). Devolve as habilidades |
 | GET | `/character/me/preparation` | – (Bearer) | `PreparationResponse`: por classe que prepara (Acólito, Xamã), `limit`, `maxSpellLevel` (nulo = entre os conhecidos), `options` (`key`, `name`, `level`) e `prepared`. `classes` vazio se a ficha não prepara |

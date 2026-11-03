@@ -119,6 +119,11 @@ Bandópolis não tem lugar fixo: o mestre aperta **ROLAR BANDÓPOLIS** e o d10 d
 
 **Pontos marcados** (`MapPointPanels.jsx`, `poiKinds.jsx`): o mestre clica em **+ PONTO DE INTERESSE** e depois no mapa, escolhe tipo, descrição, verbete da lore e quem vê (`toAll`/`recipients`; sem ninguém, fica oculto até revelar). Os pontos aparecem ao aproximar. Dentro deles, cada conta escreve anotação só sua ou comentário para a mesa; o mestre não vê as anotações privadas. Cada jogador tem até 3 waypoints com comentário, visíveis para ele e para o mestre, que só lê.
 
+**O grupo no mapa** (`MapScreen.jsx` + `partyLayers.js`; `GET /map/party` a cada 3 s com a aba visível, então todos veem as mudanças sem recarregar):
+- **Marcador**: estandarte dourado com pulso no chão e o nome "O GRUPO · <região>" (a parada recebe o nome do brasão mais perto, `nearestRegion`). O mestre arrasta o marcador ou usa **POR O GRUPO NO MAPA / MOVER O GRUPO** e clica no lugar; nos outros, ele **anda** até a posição nova em 1,6 s.
+- **Trilha**: linha dourada tracejada (`Line2`, largura em pixels) apoiada no relevo (`trailPath`, um ponto a cada 6 unidades), com um disco em cada parada; o tracejado desliza na direção da viagem e o trecho novo é desenhado aos poucos. O mestre tem **APAGAR TRILHA** e **TIRAR O GRUPO**.
+- **Névoa de guerra**: o mestre liga em **NÉVOA LIGADA/DESLIGADA** e revela cada região em **REGIÕES n/11** (chips). As regiões encobertas (`FOG_REGIONS`; máscara de `public/map/regions/<slug>.png` ou círculo de terra em `FOG_AREAS` para Vazio e Piltover e Zaun) ganham uma névoa cinza que se mexe; ao revelar, ela some devagar com um brilho dourado. O jogador vê a névoa quase opaca e o brasão apagado, com "???" e sem painel; o mestre vê através (opacidade 0,45).
+
 As texturas são arte da Riot e ficam fora do Git, em `public/map/`: `frontend/scripts/fetch-map-assets.sh` as baixa. O botão só aparece com login, mas os arquivos em `/map/` são públicos para quem tiver o endereço.
 
 ## Lore

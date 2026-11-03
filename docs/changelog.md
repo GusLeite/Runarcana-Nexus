@@ -2,6 +2,12 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-03 — O grupo no mapa: marcador, trilha e névoa (`feature/character-sheet`)
+- Marcador do grupo que o mestre arrasta; todos veem em até 3 s, e ele anda até o lugar novo.
+- Trilha da viagem: linha dourada tracejada sobre o relevo, com as paradas (`PartyTrailPoint`).
+- Névoa de guerra por região: o mestre liga e revela cada uma; ao revelar, a névoa some com um brilho dourado.
+- Novos: `MapPartyService`, `/map/party`, `/map/fog`, `partyLayers.js`.
+
 ## 2026-11-03 — Diário do grupo e resumo das sessões (`feature/character-sheet`)
 - Aba **DIÁRIO** na ficha e no painel do mestre: crônica que todos escrevem (cada um edita a sua; o mestre, tudo).
 - Eventos entram sozinhos: loot e ouro dados pelo mestre, queda a 0 PV, documento novo (sem o título se for secreto ou só para alguns) e subida de nível.

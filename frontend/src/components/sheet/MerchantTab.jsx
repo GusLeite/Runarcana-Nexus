@@ -214,7 +214,7 @@ function Haggle({ merchant, skills, busy, onHaggle }) {
     <div className="shop-haggle">
       <span className="shop-haggle-title">PECHINCHAR <small>uma tentativa por visita</small></span>
       {HAGGLE_SKILLS.map(s => (
-        <button key={s.id} type="button" className="shop-haggle-btn" disabled={busy} title={s.hint} onClick={() => onHaggle(s.id)}>
+        <button key={s.id} type="button" className="shop-haggle-btn" disabled={busy} aria-label={'Pechinchar com ' + SKILL_NAMES[s.id] + ' (' + formatModifier(mod(s.id)) + ')'} onClick={() => onHaggle(s.id)}>
           {SKILL_NAMES[s.id]} <b>{formatModifier(mod(s.id))}</b>
           <small>{s.hint}</small>
         </button>

@@ -7,7 +7,10 @@ const POLL = 15000
 const EMPTY = { title: '', body: '' }
 const EVENT_ICON = { LOOT: '◆', GOLD: '●', DOWNED: '✝', DOCUMENT: '✉', LEVEL_UP: '▲' }
 const fmtTime = iso => new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
-const fmtDay = key => new Date(key + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' })
+const fmtDay = key => {
+  const text = new Date(key + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' })
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}
 
 // Diário do grupo (ficha e painel do mestre): a crônica que todos escrevem, os eventos que entram sozinhos
 // (loot, ouro, quedas a 0 PV, documentos, subidas de nível) e o resumo de cada sessão (um por dia).
