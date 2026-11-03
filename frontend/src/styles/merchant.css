@@ -4,7 +4,7 @@
 .tab.glow:not(.on){color:var(--gold-hi);animation:tab-glow 2.2s ease-in-out infinite}
 @keyframes tab-glow{50%{text-shadow:0 0 12px rgba(240,199,94,.9)}}
 /* Com a aba a mais, todas ainda cabem na barra em telas médias. */
-@media (min-width:901px) and (max-width:1600px){.topbar .tabs{gap:14px}.topbar .tab{letter-spacing:.08em;font-size:12px}.master .topbar .who{display:none}}
+@media (min-width:901px) and (max-width:2100px){.topbar .tabs{gap:14px}.topbar .tab{letter-spacing:.08em;font-size:12px}.master .topbar .who{display:none}}
 
 /* ---------- loja (jogador) ---------- */
 .shop{margin:-18px -18px -20px}
