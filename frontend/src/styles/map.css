@@ -550,3 +550,46 @@
 @media (prefers-reduced-motion: reduce) {
   .map-poi-born .map-poi-icon { animation: none; }
 }
+
+/* Notas secretas, galeria do ponto e imagem em tela cheia. */
+.map-secret {
+  margin: 10px 0;
+  padding: 8px 12px;
+  border-left: 3px solid #c79bff;
+  background: rgba(199, 155, 255, 0.08);
+}
+.map-secret strong { color: #c79bff; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+.map-gallery h3 { margin: 12px 0 6px; }
+.map-gallery-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.map-gallery-thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  border: 1px solid rgba(200, 162, 74, 0.4);
+  background: #0b0f17;
+  cursor: zoom-in;
+  overflow: hidden;
+}
+.map-gallery-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.map-gallery-actions { display: flex; flex-direction: column; gap: 2px; align-items: flex-start; margin-top: 4px; }
+.map-gallery-show { font-size: 11px; padding: 4px 8px; }
+.map-gallery-add { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.map-gallery-file { text-align: center; cursor: pointer; }
+.map-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  background: rgba(4, 6, 10, 0.92);
+  animation: map-lightbox-in 0.25s ease-out;
+}
+.map-lightbox img { max-width: 100%; max-height: calc(100vh - 110px); object-fit: contain; border: 1px solid var(--gold-hi); box-shadow: 0 0 40px #000; }
+.map-lightbox-bar { display: flex; align-items: center; gap: 14px; color: var(--muted); }
+@keyframes map-lightbox-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .map-lightbox { animation: none; } }

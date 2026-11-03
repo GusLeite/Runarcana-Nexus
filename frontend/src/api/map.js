@@ -50,3 +50,14 @@ export const setPoiAudience = (token, id, toAll, recipients) =>
 
 // Leve: [{ id, name }] do que a conta vê (a ficha usa para avisar de local novo).
 export const fetchVisiblePois = token => request('/map/pois/visible', { token })
+
+// Galeria do ponto: lista de imagens (data URL ou link) de quem vê o ponto.
+export const fetchPoiImages = (token, id) => request('/map/pois/' + id + '/images', { token })
+
+// Só o mestre. Devolvem o ponto atualizado.
+export const addPoiImage = (token, id, image) => request('/map/pois/' + id + '/images', { method: 'POST', token, body: { image } })
+
+export const removePoiImage = (token, id, index) => request('/map/pois/' + id + '/images/' + index, { method: 'DELETE', token })
+
+// MOSTRAR À MESA: os jogadores que veem o ponto abrem esta imagem na tela.
+export const showPoiImage = (token, id, index) => request('/map/pois/' + id + '/spotlight', { method: 'POST', token, body: { index } })

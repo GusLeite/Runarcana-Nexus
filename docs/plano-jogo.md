@@ -109,7 +109,7 @@ O plano vai até a Etapa 11 (decisão de 2026-11-03). Ficam de fora: modo transm
 - Aviso fora do mapa: a ficha mostra "Novo local revelado: X", e o diário ganha o evento `PLACE` (com o nome só se foi para todos).
 - Contadores no topo do mapa do mestre: "Mestre: N pontos · Grupo: M revelados".
 
-## Etapa 8 — Imagens e notas secretas no ponto
+## Etapa 8 — Imagens e notas secretas no ponto — **feita (2026-11-03)**
 
 **Por quê**: o Incognium usa o ponto como cartão da cena (imagens para mostrar à mesa e notas só do mestre).
 - `MapPoi.images` (lista, como a imagem do mercador: data URL reduzida com `fileToBanner` ou link http(s); limite por ponto) e `MapPoi.secretNotes` (só o mestre recebe na resposta).

@@ -137,6 +137,46 @@ class MapControllerTests {
         mvc.perform(get("/map/pois/visible").header("Authorization", "Bearer " + player)).andExpect(jsonPath("$").isEmpty());
     }
 
+    @Test
+    void oPontoGuardaImagensENotasSecretas() throws Exception {
+        String master = login("mestre");
+        String player = login("gaudron");
+        String body = send(post("/map/pois"), master, "{\"name\":\"Porto Velho\",\"kind\":\"PORT\",\"x\":0,\"y\":0,\"secretNotes\":\"O capitão é um espião\",\"toAll\":false,\"recipients\":[]}")
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.secretNotes").value("O capitão é um espião"))
+                .andReturn().getResponse().getContentAsString();
+        Matcher m = Pattern.compile("^\\{\"id\":(\\d+)").matcher(body);
+        assertThat(m.find()).isTrue();
+        String id = m.group(1);
+        String img = "data:image/png;base64,iVBORw0KGgo=";
+
+        send(post("/map/pois/" + id + "/images"), player, "{\"image\":\"" + img + "\"}").andExpect(status().isForbidden());
+        send(post("/map/pois/" + id + "/images"), master, "{\"image\":\"javascript:alert(1)\"}").andExpect(status().isBadRequest());
+        send(post("/map/pois/" + id + "/images"), master, "{\"image\":\"" + img + "\"}").andExpect(jsonPath("$.imageCount").value(1));
+        send(post("/map/pois/" + id + "/images"), master, "{\"image\":\"https://exemplo.com/mapa.png\"}").andExpect(jsonPath("$.imageCount").value(2));
+
+        // Escondido: o jogador não vê o ponto nem as imagens.
+        mvc.perform(get("/map/pois/" + id + "/images").header("Authorization", "Bearer " + player)).andExpect(status().isNotFound());
+        send(patch("/map/pois/" + id + "/audience"), master, "{\"toAll\":true,\"recipients\":[]}").andExpect(status().isOk());
+        mvc.perform(get("/map/pois/" + id + "/images").header("Authorization", "Bearer " + player))
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0]").value(img));
+        // As notas secretas só chegam ao mestre.
+        mvc.perform(get("/map/pois").header("Authorization", "Bearer " + player))
+                .andExpect(jsonPath("$[0].secretNotes").doesNotExist())
+                .andExpect(jsonPath("$[0].imageCount").value(2))
+                .andExpect(jsonPath("$[0].spotlightRev").value(0));
+
+        // Mostrar à mesa sobe a revisão; apagar uma imagem limpa o destaque.
+        send(post("/map/pois/" + id + "/spotlight"), player, "{\"index\":1}").andExpect(status().isForbidden());
+        send(post("/map/pois/" + id + "/spotlight"), master, "{\"index\":5}").andExpect(status().isNotFound());
+        send(post("/map/pois/" + id + "/spotlight"), master, "{\"index\":1}").andExpect(jsonPath("$.spotlight").value(1)).andExpect(jsonPath("$.spotlightRev").value(1));
+        send(post("/map/pois/" + id + "/spotlight"), master, "{\"index\":1}").andExpect(jsonPath("$.spotlightRev").value(2));
+        mvc.perform(delete("/map/pois/" + id + "/images/0").header("Authorization", "Bearer " + master))
+                .andExpect(jsonPath("$.imageCount").value(1))
+                .andExpect(jsonPath("$.spotlight").doesNotExist());
+    }
+
     private org.springframework.test.web.servlet.ResultActions send(org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder request,
                                                                      String token, String body) throws Exception {
         return mvc.perform(request.header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON).content(body));

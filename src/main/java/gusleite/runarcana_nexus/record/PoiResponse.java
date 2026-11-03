@@ -5,7 +5,7 @@ import gusleite.runarcana_nexus.enums.PoiKind;
 import java.time.Instant;
 import java.util.List;
 
-// loreEntryId só vem se quem pede pode ver o verbete. recipients só para o mestre.
+// secretNotes só vai para o mestre; as imagens vêm por /map/pois/{id}/images (leves aqui: só a contagem e a imagem em destaque). loreEntryId só vem se quem pede pode ver o verbete. recipients só para o mestre.
 public record PoiResponse(
         Long id,
         String name,
@@ -14,6 +14,10 @@ public record PoiResponse(
         double x,
         double y,
         Long loreEntryId,
+        String secretNotes,
+        int imageCount,
+        Integer spotlight,
+        long spotlightRev,
         boolean toAll,
         List<String> recipients,
         List<Comment> comments

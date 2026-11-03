@@ -30,7 +30,6 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.List;
 import java.util.random.RandomGenerator;
-import java.util.regex.Pattern;
 
 // Mercadores: o mestre monta a loja (imagem, itens, preços, estoque) e abre uma por vez; os jogadores compram com o
 // próprio ouro e vendem o que têm. O que um jogador vende vai para a prateleira, ao preço normal do item.
@@ -42,8 +41,6 @@ public class MerchantService {
     static final int MAX_PRICE = 1_000_000;
     static final int DEFAULT_HAGGLE_DC = 15;
     static final int MAX_HAGGLE_DC = 40;
-    private static final Pattern IMAGE_HEADER = Pattern.compile("^data:image/(png|jpeg|webp|gif);base64,");
-    private static final Pattern IMAGE_LINK = Pattern.compile("^https?://\\S+$");
 
     private final MerchantRepository merchants;
     private final MerchantItemRepository shelf;
@@ -401,18 +398,7 @@ public class MerchantService {
     }
 
     private static String image(String image) {
-        if (image == null || image.isBlank()) return null;
-        if (image.length() > Merchant.MAX_IMAGE) throw ApiException.badRequest("A imagem é grande demais.");
-        boolean link = image.length() <= 1000 && IMAGE_LINK.matcher(image).matches();
-        if (!link && !embedded(image)) throw ApiException.badRequest("A imagem deve ser PNG, JPEG, WebP ou GIF, ou um link http(s).");
-        return image;
-    }
-
-    private static boolean embedded(String image) {
-        var header = IMAGE_HEADER.matcher(image);
-        if (!header.find()) return false;
-        return image.substring(header.end()).chars()
-                .allMatch(ch -> (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || ch == '+' || ch == '/' || ch == '=');
+        return ImageRules.clean(image);
     }
 
     // Em PO inteiros; o que custa menos de 1 PO no livro sai por 1 (o mestre ajusta na prateleira).

@@ -69,6 +69,35 @@ public class MapController {
         return ResponseEntity.ok(points.setAudience(auth.requireMaster(authorization), id, request.toAll(), request.recipients()));
     }
 
+    public record ImageRequest(String image) {}
+
+    public record ShowImageRequest(int index) {}
+
+    @GetMapping("/pois/{id}/images")
+    public ResponseEntity<List<String>> poiImages(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                                  @PathVariable Long id) {
+        return ResponseEntity.ok(points.images(auth.authenticate(authorization), id));
+    }
+
+    @PostMapping("/pois/{id}/images")
+    public ResponseEntity<PoiResponse> addPoiImage(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                                   @PathVariable Long id, @RequestBody ImageRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(points.addImage(auth.requireMaster(authorization), id, request.image()));
+    }
+
+    @DeleteMapping("/pois/{id}/images/{index}")
+    public ResponseEntity<PoiResponse> removePoiImage(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                                      @PathVariable Long id, @PathVariable int index) {
+        return ResponseEntity.ok(points.removeImage(auth.requireMaster(authorization), id, index));
+    }
+
+    // MOSTRAR À MESA.
+    @PostMapping("/pois/{id}/spotlight")
+    public ResponseEntity<PoiResponse> showPoiImage(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                                    @PathVariable Long id, @RequestBody ShowImageRequest request) {
+        return ResponseEntity.ok(points.showImage(auth.requireMaster(authorization), id, request.index()));
+    }
+
     @PostMapping("/pois")
     public ResponseEntity<PoiResponse> createPoi(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
                                                  @Valid @RequestBody PoiRequest request) {

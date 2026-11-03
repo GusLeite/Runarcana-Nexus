@@ -1,6 +1,11 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Mapa: imagens e notas secretas no ponto (`feature/character-sheet`)
+- Etapa 8 do plano: galeria de até 6 imagens por ponto (arquivo ou link), notas que só o mestre lê e **MOSTRAR À MESA**, que abre a imagem em tela cheia para os jogadores que veem o ponto.
+- Seis tipos novos: posto avançado, esconderijo, ruína, acampamento, masmorra, porto (o `CHECK` do `kind` no PostgreSQL precisa do `ALTER TABLE` em `backend-api.md`).
+- Novos: `ImageRules` (validação de imagem compartilhada com o mercador), `PoiGallery.jsx`, rotas `/map/pois/{id}/images` e `/spotlight`.
+
 
 ## 2026-11-03 — Mapa: revelar o ponto na hora certa (`feature/character-sheet`)
 - Etapa 7 do plano: botões **REVELAR AO GRUPO**, **ESCONDER** e "Só a:" no painel do ponto (`PATCH /map/pois/{id}/audience`).

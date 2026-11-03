@@ -25,6 +25,8 @@ public record PoiRequest(
         @DecimalMax(value = "1024", message = "O ponto está fora do mapa.")
         double y,
         Long loreEntryId,
+        @Size(max = 4000, message = "As notas secretas podem ter até 4000 caracteres.")
+        String secretNotes,
         boolean toAll,
         List<String> recipients
 ) {}

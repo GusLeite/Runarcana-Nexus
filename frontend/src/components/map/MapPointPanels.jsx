@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { formatDate } from '../../data/rules.js'
 import AudiencePicker, { audienceLabel, playerName } from '../lore/AudiencePicker.jsx'
 import { PoiGlyph, POI_KINDS } from './poiKinds.jsx'
+import PoiGallery from './PoiGallery.jsx'
 import '../../styles/lore.css'
 
 // Moldura comum dos painéis laterais dos pontos do mapa.
@@ -15,7 +16,7 @@ function PointPanel({ label, onClose, children }) {
 }
 
 // Ponto de interesse: descrição, verbete ligado, comentários da mesa e anotações de quem está vendo.
-export function PoiPanel({ poi, loreEntry, master, players = [], onOpenLore, onEdit, onAudience, onAddComment, onDeleteComment, onClose }) {
+export function PoiPanel({ poi, loreEntry, master, players = [], token, onPoi, onNotice, onOpenLore, onEdit, onAudience, onAddComment, onDeleteComment, onClose }) {
   const [text, setText] = useState('')
   const [shared, setShared] = useState(false)
   const [msg, setMsg] = useState(null)
@@ -44,6 +45,13 @@ export function PoiPanel({ poi, loreEntry, master, players = [], onOpenLore, onE
       {master && <p className="lore-hero-who">Revelado a: {audienceLabel(poi)}</p>}
       {master && onAudience && <RevealBar poi={poi} players={players} onAudience={onAudience} />}
       {poi.description && <p className="map-point-text">{poi.description}</p>}
+      {master && poi.secretNotes && (
+        <div className="map-secret">
+          <strong>Só o mestre lê</strong>
+          <p className="map-point-text">{poi.secretNotes}</p>
+        </div>
+      )}
+      <PoiGallery token={token} poi={poi} master={master} onPoi={onPoi} onNotice={onNotice} />
       <div className="lore-actions">
         {loreEntry && <button type="button" className="lore-action" onClick={() => onOpenLore(loreEntry.id)}>ABRIR NA LORE</button>}
         {master && <button type="button" className="lore-action ghost" onClick={onEdit}>EDITAR</button>}
@@ -88,6 +96,7 @@ export function PoiForm({ poi, lore, players, onSave, onDelete, onClose }) {
     name: poi.name ?? '',
     kind: poi.kind ?? 'LANDMARK',
     description: poi.description ?? '',
+    secretNotes: poi.secretNotes ?? '',
     loreEntryId: poi.loreEntryId ?? '',
     toAll: poi.toAll ?? true,
     recipients: poi.recipients ?? [],
@@ -127,6 +136,9 @@ export function PoiForm({ poi, lore, players, onSave, onDelete, onClose }) {
         </fieldset>
         <label>Descrição
           <textarea rows={5} value={form.description} maxLength={4000} onChange={e => set('description', e.target.value)} />
+        </label>
+        <label>Notas secretas (só o mestre lê)
+          <textarea rows={4} value={form.secretNotes} maxLength={4000} onChange={e => set('secretNotes', e.target.value)} />
         </label>
         <label>Verbete da lore
           <select value={form.loreEntryId} onChange={e => set('loreEntryId', e.target.value)}>

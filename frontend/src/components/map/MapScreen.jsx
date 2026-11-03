@@ -3,7 +3,7 @@ import { prefersReducedMotion } from '../../hooks/useCountUp.js'
 import { createMapScene } from './mapScene.js'
 import {
   addPoiComment, clearPartyTrail, createPoi, createWaypoint, deletePoi, deletePoiComment, deleteWaypoint, fetchBandle, fetchParty, fetchPois,
-  fetchWaypoints, hideParty, moveParty, rollBandle, setMapFog, setPoiAudience, setRegionRevealed, updatePoi, updateWaypoint,
+  fetchPoiImages, fetchWaypoints, hideParty, moveParty, rollBandle, setMapFog, setPoiAudience, setRegionRevealed, updatePoi, updateWaypoint,
 } from '../../api/map.js'
 import { fetchLore } from '../../api/lore.js'
 import { fetchRecipients } from '../../api/master.js'
@@ -14,6 +14,7 @@ import { sineInOut } from './mapMath.js'
 import RegionPanel from './RegionPanel.jsx'
 import { PoiForm, PoiPanel, WaypointPanel } from './MapPointPanels.jsx'
 import { PoiGlyph } from './poiKinds.jsx'
+import { ImageLightbox } from './PoiGallery.jsx'
 import '../../styles/map.css'
 
 const PANEL_WIDTH = 380
@@ -84,6 +85,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   // Ponto recém-revelado ao jogador: { id, name } para o aviso com "Ver no mapa"; born: ids que brotam agora.
   const [freshPoi, setFreshPoi] = useState(null)
   const [bornPois, setBornPois] = useState([])
+  const [tableImage, setTableImage] = useState(null) // { images, index, title }: o que o mestre mandou mostrar à mesa
 
   useEffect(() => {
     let cancelled = false
@@ -129,6 +131,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   // Pontos de interesse: conferidos a cada poucos segundos; o jogador é avisado do que acabou de ser revelado a ele.
   useEffect(() => {
     let known = null
+    const revs = new Map() // última revisão de MOSTRAR À MESA vista em cada ponto
     let lastKey = null
     const check = () => {
       if (document.hidden && known) return
@@ -142,6 +145,13 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
               setTimeout(() => setBornPois([]), BORN_MS)
             }
           }
+          if (!master) {
+            const shown = list.find(p => known && revs.has(p.id) && p.spotlightRev > revs.get(p.id) && p.spotlight != null)
+            if (shown) {
+              fetchPoiImages(session.token, shown.id).then(images => { if (images[shown.spotlight]) setTableImage({ images, index: shown.spotlight, title: shown.name }) }).catch(() => {})
+            }
+          }
+          list.forEach(p => revs.set(p.id, p.spotlightRev ?? 0))
           known = new Set(list.map(p => p.id))
           const key = JSON.stringify(list)
           if (key !== lastKey) { lastKey = key; setPois(list) }
@@ -574,6 +584,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
         </div>
       )}
       <DiceRoll roll={die} onClose={closeDie} />
+      {tableImage && <ImageLightbox images={tableImage.images} index={tableImage.index} title={tableImage.title} onIndex={index => setTableImage(t => ({ ...t, index }))} onClose={() => setTableImage(null)} />}
       {chosen && <RegionPanel key={chosen.slug} region={chosen} lore={loreOf(chosen)} onOpenLore={onOpenLore} onClose={() => setSelected(null)} />}
       {openPoi && (
         <PoiPanel
@@ -585,6 +596,9 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
           onOpenLore={onOpenLore}
           onEdit={() => setPanel({ type: 'poiForm', id: openPoi.id })}
           onAudience={revealPoi}
+          token={session.token}
+          onPoi={saved => setPois(list => list.map(p => (p.id === saved.id ? saved : p)))}
+          onNotice={setNotice}
           onAddComment={addComment}
           onDeleteComment={removeComment}
           onClose={() => setPanel(null)}

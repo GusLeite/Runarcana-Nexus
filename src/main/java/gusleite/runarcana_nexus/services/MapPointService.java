@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,9 +52,11 @@ public class MapPointService {
     @Transactional(readOnly = true)
     public List<PoiResponse> listPois(Account viewer) {
         List<PoiComment> allComments = comments.findAllByOrderByCreatedAtAscIdAsc();
+        Map<Long, Integer> counts = new HashMap<>();
+        for (Object[] row : pois.countImages()) counts.put((Long) row[0], ((Number) row[1]).intValue());
         return pois.findAll().stream()
                 .filter(p -> RecipientResolver.reaches(viewer, p.isToAll(), p.getRecipients()))
-                .map(p -> toResponse(viewer, p, allComments))
+                .map(p -> toResponse(viewer, p, allComments, counts.getOrDefault(p.getId(), 0)))
                 .toList();
     }
 
@@ -61,7 +65,7 @@ public class MapPointService {
         MapPoi poi = new MapPoi();
         fill(poi, request);
         announce(poi, Audience.NOBODY);
-        return toResponse(master, pois.save(poi), List.of());
+        return toResponse(master, pois.save(poi), List.of(), 0);
     }
 
     @Transactional
@@ -70,7 +74,7 @@ public class MapPointService {
         Audience before = Audience.of(poi);
         fill(poi, request);
         announce(poi, before);
-        return toResponse(master, poi, comments.findAllByOrderByCreatedAtAscIdAsc());
+        return toResponse(master, poi, comments.findAllByOrderByCreatedAtAscIdAsc(), poi.getImages().size());
     }
 
     // Revelar (ou esconder) sem mexer no resto do ponto: toAll e/ou jogadores. Os dois vazios = só o mestre.
@@ -82,7 +86,46 @@ public class MapPointService {
         poi.getRecipients().clear();
         poi.getRecipients().addAll(resolver.resolve(recipients));
         announce(poi, before);
-        return toResponse(master, poi, comments.findAllByOrderByCreatedAtAscIdAsc());
+        return toResponse(master, poi, comments.findAllByOrderByCreatedAtAscIdAsc(), poi.getImages().size());
+    }
+
+    public static final int MAX_IMAGES = 6;
+
+    // Galeria do ponto: quem vê o ponto vê as imagens (o mestre sempre).
+    @Transactional(readOnly = true)
+    public List<String> images(Account viewer, Long id) {
+        MapPoi poi = findPoi(id);
+        if (!RecipientResolver.reaches(viewer, poi.isToAll(), poi.getRecipients())) throw ApiException.notFound("Ponto não encontrado.");
+        return List.copyOf(poi.getImages());
+    }
+
+    @Transactional
+    public PoiResponse addImage(Account master, Long id, String image) {
+        MapPoi poi = findPoi(id);
+        String clean = ImageRules.clean(image);
+        if (clean == null) throw ApiException.badRequest("Escolha uma imagem ou cole um link.");
+        if (poi.getImages().size() >= MAX_IMAGES) throw ApiException.badRequest("Cada ponto guarda até " + MAX_IMAGES + " imagens. Apague uma para enviar outra.");
+        poi.getImages().add(clean);
+        return toResponse(master, poi, comments.findAllByOrderByCreatedAtAscIdAsc(), poi.getImages().size());
+    }
+
+    @Transactional
+    public PoiResponse removeImage(Account master, Long id, int index) {
+        MapPoi poi = findPoi(id);
+        if (index < 0 || index >= poi.getImages().size()) throw ApiException.notFound("Imagem não encontrada.");
+        poi.getImages().remove(index);
+        poi.setSpotlight(null);
+        return toResponse(master, poi, comments.findAllByOrderByCreatedAtAscIdAsc(), poi.getImages().size());
+    }
+
+    // MOSTRAR À MESA: sobe a revisão, e os jogadores que veem o ponto abrem a imagem na tela.
+    @Transactional
+    public PoiResponse showImage(Account master, Long id, int index) {
+        MapPoi poi = findPoi(id);
+        if (index < 0 || index >= poi.getImages().size()) throw ApiException.notFound("Imagem não encontrada.");
+        poi.setSpotlight(index);
+        poi.setSpotlightRev((poi.getSpotlightRev() == null ? 0 : poi.getSpotlightRev()) + 1);
+        return toResponse(master, poi, comments.findAllByOrderByCreatedAtAscIdAsc(), poi.getImages().size());
     }
 
     // Leve, para a ficha avisar de local novo: só id e nome do que a conta vê.
@@ -158,12 +201,13 @@ public class MapPointService {
         LoreEntry entry = r.loreEntryId() == null ? null : lore.findById(r.loreEntryId())
                 .orElseThrow(() -> ApiException.badRequest("Verbete da lore não encontrado."));
         poi.setLoreEntry(entry);
+        poi.setSecretNotes(r.secretNotes() == null || r.secretNotes().isBlank() ? null : r.secretNotes());
         poi.setToAll(r.toAll());
         poi.getRecipients().clear();
         poi.getRecipients().addAll(resolver.resolve(r.recipients()));
     }
 
-    private PoiResponse toResponse(Account viewer, MapPoi p, List<PoiComment> all) {
+    private PoiResponse toResponse(Account viewer, MapPoi p, List<PoiComment> all, int imageCount) {
         LoreEntry entry = p.getLoreEntry();
         Long entryId = entry != null && LoreService.canSee(viewer, entry) ? entry.getId() : null;
         List<PoiResponse.Comment> visible = all.stream()
@@ -172,6 +216,7 @@ public class MapPointService {
                 .map(c -> toComment(viewer, c))
                 .toList();
         return new PoiResponse(p.getId(), p.getName(), p.getKind(), p.getDescription(), p.getX(), p.getY(), entryId,
+                viewer.isMaster() ? p.getSecretNotes() : null, imageCount, p.getSpotlight(), p.getSpotlightRev() == null ? 0 : p.getSpotlightRev(),
                 p.isToAll(), RecipientResolver.names(viewer, p.getRecipients()), visible);
     }
 

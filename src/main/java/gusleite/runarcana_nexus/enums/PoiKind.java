@@ -6,5 +6,11 @@ public enum PoiKind {
     LANDMARK,
     QUEST,
     DANGER,
-    MYSTERY
+    MYSTERY,
+    OUTPOST,
+    HIDEOUT,
+    RUIN,
+    CAMP,
+    DUNGEON,
+    PORT
 }
