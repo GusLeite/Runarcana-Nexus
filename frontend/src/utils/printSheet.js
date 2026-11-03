@@ -55,17 +55,19 @@ export function importantInfo(sheet) {
   return out
 }
 
-// Verso (Informações Adicionais): habilidades, passivas e fórmulas, com o texto de cada uma.
+// Verso (Informações Adicionais): habilidades e heranças só com o título (e usos/dano); passivas, formas e magias
+// com o texto de cada uma.
 export function additionalInfo(sheet, abilities, extraSpells = []) {
-  const entry = a => {
-    const uses = a.maxUses ? a.maxUses + ' usos' + (a.recharge && RECHARGES[a.recharge] ? ' / ' + RECHARGES[a.recharge].toLowerCase() : '') : ''
-    return { title: a.name, sub: [uses, a.damage].filter(Boolean).join(' · '), text: a.description ?? '' }
+  const entry = (a, withText = true) => {
+    const uses = a.maxUses ? a.maxUses + (a.maxUses === 1 ? ' uso' : ' usos') + (a.recharge && RECHARGES[a.recharge] ? ' / ' + RECHARGES[a.recharge].toLowerCase() : '') : ''
+    return { title: a.name, sub: [uses, a.damage].filter(Boolean).join(' · '), text: withText ? a.description ?? '' : '' }
   }
+  const titleOnly = a => entry(a, false)
   const sections = []
   const push = (title, items) => items.length && sections.push({ title, items })
-  push('Habilidades', abilities.filter(a => a.type === 'ABILITY' && a.name !== MANA).map(entry))
-  push('Passivas', abilities.filter(a => a.type === 'PASSIVE').map(entry))
-  push('Heranças', abilities.filter(a => a.type === 'HERITAGE').map(entry))
+  push('Habilidades', abilities.filter(a => a.type === 'ABILITY' && a.name !== MANA).map(titleOnly))
+  push('Passivas', abilities.filter(a => a.type === 'PASSIVE').map(a => entry(a)))
+  push('Heranças', abilities.filter(a => a.type === 'HERITAGE').map(titleOnly))
   push('Formas', (sheet.forms ?? []).map(f => ({ title: f.name, sub: '', text: f.description ?? '' })))
   push('Magias (continuação)', extraSpells.map(entry))
   return sections
@@ -337,8 +339,10 @@ export async function buildPrintSheet({ pages, sheet: full, abilities = full.abi
       out.push({ kind: 'section', l: sec.title.toUpperCase(), h: sz * 1.6 })
       sec.items.forEach(it => {
         out.push({ kind: 'title', l: it.title + (it.sub ? ' (' + it.sub + ')' : ''), h: sz * 1.25 })
-        out.push({ kind: 'body', text: it.text, h: 0 })
-        out.push({ kind: 'gap', h: sz * 0.5 })
+        if (it.text) {
+          out.push({ kind: 'body', text: it.text, h: 0 })
+          out.push({ kind: 'gap', h: sz * 0.5 })
+        }
       })
     })
     return out
