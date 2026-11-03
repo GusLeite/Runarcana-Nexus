@@ -1,7 +1,9 @@
 package gusleite.runarcana_nexus.controller;
 
+import gusleite.runarcana_nexus.enums.SkillType;
 import gusleite.runarcana_nexus.services.AuthService;
 import gusleite.runarcana_nexus.services.MerchantService;
+import gusleite.runarcana_nexus.services.MerchantService.HaggleView;
 import gusleite.runarcana_nexus.services.MerchantService.MerchantRequest;
 import gusleite.runarcana_nexus.services.MerchantService.Ping;
 import gusleite.runarcana_nexus.services.MerchantService.ShelfRequest;
@@ -41,6 +43,8 @@ public class MerchantController {
     public record BuyRequest(Long lineId, Integer quantity, Integer price) {}
 
     public record SellRequest(Long entryId, Integer quantity, Integer unitValue) {}
+
+    public record HaggleRequest(SkillType skill) {}
 
     @GetMapping
     public ResponseEntity<List<View>> list(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
@@ -112,6 +116,13 @@ public class MerchantController {
         return ResponseEntity.ok(merchants.trades(id));
     }
 
+    @GetMapping("/{id}/haggles")
+    public ResponseEntity<List<HaggleView>> haggles(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                                    @PathVariable Long id) {
+        auth.requireMaster(authorization);
+        return ResponseEntity.ok(merchants.haggles(id));
+    }
+
     // Leve (sem a imagem), para a ficha conferir a cada poucos segundos se a loja abriu, fechou ou mudou.
     @GetMapping("/active/ping")
     public ResponseEntity<Ping> ping(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
@@ -134,5 +145,12 @@ public class MerchantController {
     public ResponseEntity<TradeResult> sell(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
                                             @RequestBody SellRequest request) {
         return ResponseEntity.ok(merchants.sell(auth.authenticate(authorization), request.entryId(), request.quantity(), request.unitValue()));
+    }
+
+    // Pechincha com o mercador aberto (Persuasão ou Enganação), uma vez por abertura. Devolve a loja com os preços dele.
+    @PostMapping("/active/haggle")
+    public ResponseEntity<View> haggle(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                       @RequestBody HaggleRequest request) {
+        return ResponseEntity.ok(merchants.haggle(auth.authenticate(authorization), request.skill()));
     }
 }

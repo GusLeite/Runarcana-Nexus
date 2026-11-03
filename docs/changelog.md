@@ -2,6 +2,11 @@
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
 
+## 2026-11-03 — Mercador com pechincha (`feature/character-sheet`)
+- O jogador pechincha uma vez por abertura da loja, com Persuasão (segura) ou Enganação (rende mais, mas qualquer falha irrita); o back rola contra a CD do mercador (padrão 15, 0 = não pechincha).
+- O resultado muda só os preços de compra dele (de −25% a +25%) até a loja fechar; o mestre vê as pechinchas no Movimento.
+- Novos: `MerchantHaggle`, `Merchant.haggleDc` (coluna nula, o `ddl-auto` cria sozinho), `POST /merchants/active/haggle`, `GET /merchants/{id}/haggles`.
+
 ## 2026-11-03 — Abas na URL e cerimônia de subida de nível (`feature/character-sheet`)
 - A aba da ficha e a do painel do mestre ficam na URL (`?aba=`), e o mapa/lore aberto em `?tela=`: recarregar volta ao mesmo lugar e o "voltar" do navegador funciona (hook `useUrlParam`, sem react-router).
 - Ao subir de nível, uma cerimônia: o anel enche até o nível novo, o número vira, raios e faíscas, e o resumo do que foi ganho (`levelUpGains`).

@@ -172,6 +172,54 @@ class MerchantControllerTests {
         mvc.perform(get("/character/me").header("Authorization", "Bearer " + player)).andExpect(status().isOk());
     }
 
+    @Test
+    void jogadorPechinchaUmaVezPorAbertura() throws Exception {
+        long id = create("gaudron");
+        String master = login("mestre");
+        String player = login("gaudron");
+        send(patch("/character/" + id + "/gold"), master, "{\"gold\":100}").andExpect(status().isOk());
+        long m = merchant(master, "Tobias");
+        send(put("/merchants/" + m), master, "{\"name\":\"Tobias\",\"haggleDc\":41}").andExpect(status().isBadRequest());
+        String shop = send(post("/merchants/" + m + "/items"), master, "{\"catalogId\":\"t-machado\"}")
+                .andExpect(jsonPath("$.haggleDc").value(15))
+                .andReturn().getResponse().getContentAsString();
+        long axe = lineId(shop, "Machado Teste");
+        send(post("/merchants/active/haggle"), player, "{\"skill\":\"PERSUASION\"}").andExpect(status().isNotFound());
+        send(post("/merchants/" + m + "/open"), master, "").andExpect(status().isOk());
+
+        send(post("/merchants/active/haggle"), player, "{\"skill\":\"ATHLETICS\"}").andExpect(status().isBadRequest());
+        String after = send(post("/merchants/active/haggle"), player, "{\"skill\":\"PERSUASION\"}")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.haggle.skill").value("PERSUASION"))
+                .andExpect(jsonPath("$.haggle.dc").value(15))
+                .andExpect(jsonPath("$.items[0].basePrice").value(10))
+                .andReturn().getResponse().getContentAsString();
+        int percent = Integer.parseInt(group(after, "\"percent\":(-?\\d+)"));
+        assertThat(percent).isIn(-20, -10, 0, 10, 20);
+        int price = Integer.parseInt(group(after, "\"price\":(\\d+)"));
+        assertThat(price).isEqualTo((int) Math.ceil(10 * (100 + percent) / 100.0));
+        send(post("/merchants/active/haggle"), player, "{\"skill\":\"DECEPTION\"}").andExpect(status().isBadRequest());
+
+        // A compra cobra o preço dele; o mestre vê a pechincha e o preço da prateleira.
+        send(post("/merchants/active/buy"), player, "{\"lineId\":" + axe + ",\"quantity\":1,\"price\":" + price + "}")
+                .andExpect(jsonPath("$.sheet.character.gold").value(100 - price));
+        mvc.perform(get("/merchants").header("Authorization", "Bearer " + master))
+                .andExpect(jsonPath("$[0].items[0].price").value(10))
+                .andExpect(jsonPath("$[0].haggles[0].characterName").value("Nyx"));
+
+        // Reabrir zera as pechinchas; CD 0 = não pechincha.
+        send(post("/merchants/" + m + "/close"), master, "").andExpect(status().isOk());
+        send(put("/merchants/" + m), master, "{\"name\":\"Tobias\",\"haggleDc\":0}").andExpect(status().isOk());
+        send(post("/merchants/" + m + "/open"), master, "").andExpect(jsonPath("$.haggles").isEmpty());
+        send(post("/merchants/active/haggle"), player, "{\"skill\":\"PERSUASION\"}").andExpect(status().isBadRequest());
+    }
+
+    private static String group(String json, String regex) {
+        Matcher m = Pattern.compile(regex).matcher(json);
+        assertThat(m.find()).as(regex).isTrue();
+        return m.group(1);
+    }
+
     private long merchant(String master, String name) throws Exception {
         String body = send(post("/merchants"), master, "{\"name\":\"" + name + "\"}")
                 .andExpect(status().isCreated())

@@ -31,6 +31,9 @@ public class Merchant {
     // Quanto do preço ele paga quando o jogador vende (0 a 100%); 0 = não compra nada.
     private int buyRate;
 
+    // CD da pechincha (Persuasão ou Enganação); nulo = 15 (padrão), 0 = não aceita pechincha.
+    private Integer haggleDc;
+
     private boolean active;
 
     // Sobe a cada mudança (estoque, preço, venda): a ficha só busca a loja de novo quando muda.

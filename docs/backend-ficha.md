@@ -68,6 +68,7 @@ O mestre monta lojas (`Merchant`: nome, fala, imagem, `buyRate`) com a prateleir
 - **Revenda**: o que o jogador vende vai para a prateleira, ao preço normal (linha sem limite continua sem limite).
 - **Concorrência**: comprar e vender travam a linha do mercador (`PESSIMISTIC_WRITE`) e sobem `revision`, que a ficha usa para saber quando buscar a loja de novo. O cliente manda o valor que viu: se mudou, nada é cobrado.
 - **Movimento**: cada negociação fica em `MerchantTrade` para o mestre.
+- **Pechincha** (`MerchantHaggle`, uma por personagem por abertura; abrir ou fechar a loja apaga todas): o back rola d20 + Persuasão ou Enganação contra `Merchant.haggleDc` (nulo = 15, 0 = não pechincha, até 40) e guarda o `percent` que muda só o preço de **compra** de quem pechinchou (`haggled`: arredonda para cima, nunca zera um preço > 0). Tabela (`haggleOutcome`): Persuasão: CD+10 ou 20 natural −20%, CD −10%, até CD−4 nada, até CD−9 +10%, pior ou 1 natural +20%; Enganação: −25% / −15% / qualquer falha +10% / +25%. `Line.price` vem com a pechincha de quem pediu e `basePrice` é o da prateleira; o mestre vê os preços normais e as pechinchas (`View.haggles`, `GET /merchants/{id}/haggles`).
 
 ## Modelo de dados
 

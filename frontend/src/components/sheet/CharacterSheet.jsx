@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { applyLevelUp, castSpell, fetchConditions, setDeathSaves as setDeathSavesApi, chooseDefense as chooseDefenseApi, chooseShield as chooseShieldApi, chooseForm as chooseFormApi, toggleEffect as toggleEffectApi, consumeItem, fetchPreparation, fetchSheet, previewLevelUp, rest as restApi, setAbilityUses, setHp as setHpApi, spendGold as spendGoldApi, spendInspiration } from '../../api/character.js'
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
-import { buyFromMerchant, fetchActiveMerchant, pingMerchant, sellToMerchant } from '../../api/merchants.js'
-import { deathSaveResult, rollCheck, rollD20, rollDice } from '../../data/rules.js'
+import { buyFromMerchant, fetchActiveMerchant, haggleWithMerchant, pingMerchant, sellToMerchant } from '../../api/merchants.js'
+import { SKILL_NAMES, deathSaveResult, rollCheck, rollD20, rollDice } from '../../data/rules.js'
 import WorldButtons from '../map/WorldButtons.jsx'
 import SheetHero from './SheetHero.jsx'
 import PrepareSpells from './PrepareSpells.jsx'
@@ -211,6 +211,22 @@ export default function CharacterSheet({ character, session, notice, onChangePas
     'Comprou ' + (quantity > 1 ? quantity + '× ' : '') + line.name + '.'), [token, trade])
   const sell = useCallback((item, quantity, unitValue) => trade(() => sellToMerchant(token, item.id, quantity, unitValue),
     'Vendeu ' + (quantity > 1 ? quantity + '× ' : '') + item.name + ' por ' + unitValue * quantity + ' PO.'), [token, trade])
+  // Pechincha: o back rola; o dado aparece como uma rolagem comum e a loja volta com os preços dele.
+  const haggle = useCallback(skill => {
+    setBusy(true)
+    haggleWithMerchant(token, skill)
+      .then(m => {
+        const h = m.haggle
+        putMerchant(m)
+        pushRoll({ id: Date.now() + Math.random(), kind: 'check', label: 'Pechincha (' + SKILL_NAMES[skill] + ')', mod: h.modifier, d20: h.d20, other: null, mode: 'normal', total: h.total })
+        play(h.percent < 0 ? 'coin' : h.percent > 0 ? 'error' : 'ward')
+      })
+      .catch(err => {
+        fail(err)
+        fetchActiveMerchant(token).then(putMerchant).catch(() => {})
+      })
+      .finally(() => setBusy(false))
+  }, [token, fail, putMerchant])
 
   // Forma temporária: o back devolve a ficha inteira (atributos, deslocamento e tamanho mudam).
   const chooseForm = useCallback(name => {
@@ -556,7 +572,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
               )}
               {tab === 'inventory' && <Inventory items={state.sheet.inventory} strength={sheet.str} onUse={consumeOne} />}
               {tab === 'merchant' && merchant && (
-                <MerchantTab merchant={merchant} inventory={state.sheet.inventory} gold={sheet.gold} busy={busy} onBuy={buy} onSell={sell} />
+                <MerchantTab merchant={merchant} inventory={state.sheet.inventory} gold={sheet.gold} skills={sheet.skills} busy={busy} onBuy={buy} onSell={sell} onHaggle={haggle} />
               )}
               {tab === 'documents' && (
                 <DocumentsTab documents={documents} selectedId={docId} onSelect={setDocId} onOpen={markRead} />

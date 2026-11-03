@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ITEM_KINDS, formatKg, itemStats, rarityOf } from '../../data/rules.js'
+import { ITEM_KINDS, SKILL_NAMES, formatKg, formatModifier, itemStats, rarityOf } from '../../data/rules.js'
 import { CoinIcon } from './icons.jsx'
 import ItemIcon from './ItemIcon.jsx'
 import Num from './Num.jsx'
@@ -11,7 +11,7 @@ const BURST = 12
 
 // Aba do mercador aberto pelo mestre: imagem e fala no topo; comprar da prateleira com o ouro ou vender o que está
 // na mochila, com a quantidade e o total ao lado antes de fechar negócio.
-export default function MerchantTab({ merchant, inventory, gold, busy, onBuy, onSell }) {
+export default function MerchantTab({ merchant, inventory, gold, skills, busy, onBuy, onSell, onHaggle }) {
   const [mode, setMode] = useState('buy')
   const [selectedId, setSelectedId] = useState(null)
   const [qty, setQty] = useState(1)
@@ -58,6 +58,8 @@ export default function MerchantTab({ merchant, inventory, gold, busy, onBuy, on
         </div>
       </header>
 
+      <Haggle merchant={merchant} skills={skills} busy={busy} onHaggle={onHaggle} />
+
       <div className="shop-body">
         <div className="shop-main">
           <div className="card-title inv-title">
@@ -85,7 +87,7 @@ export default function MerchantTab({ merchant, inventory, gold, busy, onBuy, on
                         ? item.stock != null ? ' · ' + (item.stock === 0 ? 'esgotado' : item.stock + ' em estoque') : ''
                         : item.quantity > 1 ? ' · ' + item.quantity + ' na mochila' : ''}</small>
                     </span>
-                    <span className="shop-price">{out && !buying ? 'sem oferta' : <><CoinIcon />{price}</>}</span>
+                    <span className="shop-price">{out && !buying ? 'sem oferta' : <>{buying && item.basePrice != null && item.basePrice !== price && <s className="shop-base">{item.basePrice}</s>}<CoinIcon />{price}</>}</span>
                   </button>
                 </li>
               )
@@ -177,4 +179,46 @@ function useTypewriter(text) {
     return () => clearInterval(t)
   }, [text])
   return text.slice(0, shown)
+}
+
+const HAGGLE_SKILLS = [
+  { id: 'PERSUASION', hint: 'segura: errar por pouco não irrita' },
+  { id: 'DECEPTION', hint: 'rende mais, mas qualquer falha irrita' },
+]
+
+// O que o mercador responde a cada resultado da pechincha.
+function haggleReaction(percent) {
+  if (percent <= -20) return 'Por você, faço preço de amigo.'
+  if (percent < 0) return 'Está bem, está bem… um descontinho.'
+  if (percent === 0) return 'Bela tentativa. O preço é o preço.'
+  if (percent < 20) return 'Acha que sou tolo? Os preços subiram.'
+  return 'Fora daqui com essa conversa! Agora custa bem mais.'
+}
+
+// Pechincha: uma tentativa por visita (o back rola), com Persuasão ou Enganação; depois, o resultado e a reação.
+function Haggle({ merchant, skills, busy, onHaggle }) {
+  if (!merchant.haggleDc) return null
+  const h = merchant.haggle
+  if (h) {
+    const tone = h.percent < 0 ? 'good' : h.percent > 0 ? 'bad' : ''
+    return (
+      <div className={'shop-haggle done ' + tone} aria-live="polite">
+        <span className="shop-haggle-roll">{SKILL_NAMES[h.skill]}: <b>{h.total}</b> <small>(d20 {h.d20} {h.modifier >= 0 ? '+' : '−'} {Math.abs(h.modifier)})</small></span>
+        <span className="shop-haggle-say">“{haggleReaction(h.percent)}”</span>
+        <span className="shop-haggle-pct">{h.percent === 0 ? 'preço normal' : (h.percent < 0 ? '−' : '+') + Math.abs(h.percent) + '% nas compras'}</span>
+      </div>
+    )
+  }
+  const mod = id => skills?.find(s => s.skill === id)?.modifier ?? 0
+  return (
+    <div className="shop-haggle">
+      <span className="shop-haggle-title">PECHINCHAR <small>uma tentativa por visita</small></span>
+      {HAGGLE_SKILLS.map(s => (
+        <button key={s.id} type="button" className="shop-haggle-btn" disabled={busy} title={s.hint} onClick={() => onHaggle(s.id)}>
+          {SKILL_NAMES[s.id]} <b>{formatModifier(mod(s.id))}</b>
+          <small>{s.hint}</small>
+        </button>
+      ))}
+    </div>
+  )
 }

@@ -1,20 +1,21 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
-  addMerchantItem, closeMerchant, createMerchant, deleteMerchant, fetchMerchants, fetchMerchantTrades, openMerchant,
+  addMerchantItem, closeMerchant, createMerchant, deleteMerchant, fetchMerchantHaggles, fetchMerchants, fetchMerchantTrades, openMerchant,
   removeMerchantItem, updateMerchant, updateMerchantItem,
 } from '../../api/merchants.js'
 import { fetchCatalog } from '../../api/master.js'
-import { ITEM_KINDS, RARITIES, rarityOf } from '../../data/rules.js'
+import { ITEM_KINDS, RARITIES, SKILL_NAMES, rarityOf } from '../../data/rules.js'
 import { fileToBanner, isIconLink } from '../../utils/iconImage.js'
 import { CoinIcon } from '../sheet/icons.jsx'
 import '../../styles/merchant.css'
 
 const MAX_RESULTS = 40
 const TRADES_POLL = 8000
-const EMPTY = { name: '', greeting: '', image: null, buyRate: '50' }
+const MAX_HAGGLE_DC = 40
+const EMPTY = { name: '', greeting: '', image: null, buyRate: '50', haggleDc: '15' }
 const EMPTY_CUSTOM = { name: '', description: '', effect: '', weight: '', price: '', stock: '', rarity: 'Common', consumable: false }
 const plain = s => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()
-const toDraft = m => ({ name: m.name, greeting: m.greeting ?? '', image: m.image, buyRate: String(m.buyRate) })
+const toDraft = m => ({ name: m.name, greeting: m.greeting ?? '', image: m.image, buyRate: String(m.buyRate), haggleDc: String(m.haggleDc ?? 15) })
 const stockOf = text => (text.trim() === '' ? null : Number(text))
 
 // Aba Mercadores do mestre: monta lojas (imagem, fala, itens, preços e estoque), abre uma por vez para os jogadores
@@ -52,7 +53,7 @@ export default function MasterMerchants({ token, onError, onToast }) {
 
   const create = () => {
     setBusy(true)
-    createMerchant(token, { name: 'Novo mercador', greeting: null, image: null, buyRate: 50 })
+    createMerchant(token, { name: 'Novo mercador', greeting: null, image: null, buyRate: 50, haggleDc: 15 })
       .then(m => { setMerchants(list => [...list, m]); setSelectedId(m.id) })
       .catch(onError)
       .finally(() => setBusy(false))
@@ -134,6 +135,8 @@ function MerchantEditor({ merchant, catalog, token, busy, run, onError, onToast,
 
   const rate = Number(draft.buyRate)
   const rateOk = /^\d+$/.test(draft.buyRate.trim()) && rate <= 100
+  const dc = Number(draft.haggleDc)
+  const dcOk = /^\d+$/.test(draft.haggleDc.trim()) && dc <= MAX_HAGGLE_DC
   const dirty = JSON.stringify(draft) !== JSON.stringify(toDraft(merchant))
   const linkValue = draft.image && !draft.image.startsWith('data:') ? draft.image : ''
 
@@ -141,7 +144,8 @@ function MerchantEditor({ merchant, catalog, token, busy, run, onError, onToast,
     e.preventDefault()
     if (!draft.name.trim()) return onToast('Dê um nome ao mercador.')
     if (!rateOk) return onToast('O quanto ele paga vai de 0 a 100%.')
-    run(() => updateMerchant(token, id, { name: draft.name.trim(), greeting: draft.greeting, image: draft.image, buyRate: rate }), 'Mercador salvo.').catch(() => {})
+    if (!dcOk) return onToast('A CD da pechincha vai de 0 (não pechincha) a ' + MAX_HAGGLE_DC + '.')
+    run(() => updateMerchant(token, id, { name: draft.name.trim(), greeting: draft.greeting, image: draft.image, buyRate: rate, haggleDc: dc }), 'Mercador salvo.').catch(() => {})
   }
 
   const chooseFile = file => {
@@ -232,6 +236,8 @@ function MerchantEditor({ merchant, catalog, token, busy, run, onError, onToast,
               placeholder="Chegue mais, viajante. Tudo tem um preço…" />
             <label htmlFor="mer-rate">Paga quanto na venda <small>% do preço; 0 = não compra nada</small></label>
             <input id="mer-rate" type="number" min={0} max={100} value={draft.buyRate} onChange={e => set('buyRate', e.target.value)} />
+            <label htmlFor="mer-dc">CD da pechincha <small>Persuasão ou Enganação; 0 = não pechincha</small></label>
+            <input id="mer-dc" type="number" min={0} max={MAX_HAGGLE_DC} value={draft.haggleDc} onChange={e => set('haggleDc', e.target.value)} />
             <button className="btn" type="submit" disabled={busy || !dirty}>SALVAR</button>
             <button className="link-btn danger mer-delete" type="button" disabled={busy} onClick={onDelete}>Apagar mercador</button>
           </form>
@@ -328,8 +334,12 @@ function ShelfRow({ line, n, busy, onSave, onRemove }) {
 // Movimento da loja; com ela aberta, atualiza sozinho.
 function Trades({ token, merchantId, revision, active, onError }) {
   const [trades, setTrades] = useState([])
+  const [haggles, setHaggles] = useState([])
   useEffect(() => {
-    const load = () => fetchMerchantTrades(token, merchantId).then(setTrades)
+    const load = () => Promise.all([
+      fetchMerchantTrades(token, merchantId).then(setTrades),
+      fetchMerchantHaggles(token, merchantId).then(setHaggles),
+    ])
     load().catch(onError)
     if (!active) return undefined
     const t = setInterval(() => { if (!document.hidden) load().catch(() => {}) }, TRADES_POLL)
@@ -348,6 +358,19 @@ function Trades({ token, merchantId, revision, active, onError }) {
           </li>
         ))}
       </ul>
+      {haggles.length > 0 && (
+        <>
+          <h4 className="mer-sub">Pechinchas <small>desta abertura</small></h4>
+          <ul className="mer-trades">
+            {haggles.map(h => (
+              <li key={h.characterName} className={h.percent < 0 ? 'sell' : 'buy'}>
+                <span><b>{h.characterName}</b> {SKILL_NAMES[h.skill]} {h.total} contra CD {h.dc}</span>
+                <span className="mer-trade-total">{h.percent === 0 ? 'preço normal' : (h.percent > 0 ? '+' : '−') + Math.abs(h.percent) + '%'}</span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </section>
   )
 }
