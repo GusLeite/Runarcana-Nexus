@@ -2,7 +2,7 @@ import { prefersReducedMotion } from '../../hooks/useCountUp.js'
 import { Knowledge, LoreCard } from '../lore/LoreEntryView.jsx'
 import CopyLinkButton from './CopyLinkButton.jsx'
 
-// Painel lateral da região escolhida, com a arte e as descrições que a criação de personagem já usa.
+// Painel lateral da região escolhida, com a arte. O resumo da região não aparece aqui: só no verbete, em "ABRIR NA LORE".
 // Quando a lore tem um verbete desta região, mostra as informações dele, os conhecimentos liberados, os personagens
 // e lugares ligados a ela e leva até lá. O mestre cria o verbete da região e os personagens dela sem sair do mapa.
 export default function RegionPanel({ region, lore, master, onOpenLore, onClose }) {
@@ -29,9 +29,6 @@ export default function RegionPanel({ region, lore, master, onOpenLore, onClose 
             {lore.facts.map((fact, i) => <div key={i}><dt>{fact.label}:</dt><dd>{fact.value}</dd></div>)}
           </dl>
         )}
-        {lore?.summary
-          ? <p>{lore.summary}</p>
-          : region.art.map(art => <p key={art.icon}>{art.tagline}</p>)}
         <div className="lore-actions">
           {lore && <button type="button" className="lore-action" onClick={() => onOpenLore(lore.id)}>ABRIR NA LORE</button>}
           {master && !lore && <button type="button" className="lore-action" onClick={() => onOpenLore(undefined, draftFor({ kind: 'REGION', name: region.name, mapSlug: region.slug }))}>CRIAR VERBETE DA REGIÃO</button>}

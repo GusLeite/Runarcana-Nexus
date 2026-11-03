@@ -1,6 +1,9 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Painel da região sem o resumo (`main`)
+- O texto de resumo some do `RegionPanel`; fica só no verbete, aberto por "ABRIR NA LORE".
+
 ## 2026-11-03 — Barra de atalhos no canto direito e abas do cabeçalho que encolhem (`main`)
 - A `.world-dock` agora vai por portal no `body` e fica no canto inferior direito (no painel do mestre o `backdrop-filter` do header a prendia no topo, sobre o logo). As abas do cabeçalho usam gap, fonte e espaçamento com `clamp()` e o modo compacto (`merchant.css`) vale até 2100px, para não serem cortadas ("MERCAD…").
 
