@@ -19,7 +19,7 @@ function PointPanel({ label, onClose, children }) {
 }
 
 // Ponto de interesse: descrição, verbete ligado, comentários da mesa e anotações de quem está vendo.
-export function PoiPanel({ poi, loreEntry, master, players = [], token, onPoi, onNotice, onOpenLore, onEdit, onAudience, onAddComment, onDeleteComment, onClose }) {
+export function PoiPanel({ poi, loreEntry, master, preview = false, players = [], token, onPoi, onNotice, onOpenLore, onEdit, onAudience, onAddComment, onDeleteComment, onClose }) {
   const [text, setText] = useState('')
   const [shared, setShared] = useState(false)
   const [msg, setMsg] = useState(null)
@@ -61,7 +61,7 @@ export function PoiPanel({ poi, loreEntry, master, players = [], token, onPoi, o
         <CopyLinkButton target={poi.id} />
       </div>
 
-      <PoiHistory token={token} poi={poi} />
+      <PoiHistory token={token} poi={poi} readOnly={preview} />
       <div className="lore-rule" aria-hidden="true" />
       <h3>{master ? 'Comentários da mesa' : 'Comentários e anotações'}</h3>
       {poi.comments.length === 0 && <p className="lore-form-hint">Nada escrito aqui ainda.</p>}
@@ -71,7 +71,7 @@ export function PoiPanel({ poi, loreEntry, master, players = [], token, onPoi, o
             <div className="map-comment-head">
               <strong>{comment.mine && !master ? 'Você' : playerName(comment.author)}</strong>
               <span>{comment.shared ? formatDate(comment.createdAt) : 'Anotação só sua'}</span>
-              {(comment.mine || (master && comment.shared)) && (
+              {!preview && (comment.mine || (master && comment.shared)) && (
                 <button type="button" className="lore-link danger" onClick={() => onDeleteComment(poi, comment)}>Apagar</button>
               )}
             </div>
@@ -80,7 +80,7 @@ export function PoiPanel({ poi, loreEntry, master, players = [], token, onPoi, o
         ))}
       </ul>
 
-      <form className="lore-form map-comment-form" onSubmit={submit}>
+      {!preview && <form className="lore-form map-comment-form" onSubmit={submit}>
         <textarea aria-label="Novo comentário" rows={3} maxLength={1000} value={text} onChange={e => setText(e.target.value)} placeholder={master ? 'Comentário para a mesa…' : 'O que você quer lembrar daqui?'} />
         {!master && (
           <div className="lore-chips" role="group" aria-label="Quem vê">
@@ -90,7 +90,7 @@ export function PoiPanel({ poi, loreEntry, master, players = [], token, onPoi, o
         )}
         {msg && <p className="lore-form-error" role="alert">{msg}</p>}
         <button type="submit" className="lore-action" disabled={busy || !text.trim()}>{master || shared ? 'COMENTAR' : 'ANOTAR'}</button>
-      </form>
+      </form>}
     </PointPanel>
   )
 }

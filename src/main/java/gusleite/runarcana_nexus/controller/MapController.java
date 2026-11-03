@@ -50,7 +50,12 @@ public class MapController {
     }
 
     @GetMapping("/pois")
-    public ResponseEntity<List<PoiResponse>> pois(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+    public ResponseEntity<List<PoiResponse>> pois(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                                  @RequestParam(required = false) String as) {
+        if (as != null && !as.isBlank()) {
+            auth.requireMaster(authorization);
+            return ResponseEntity.ok(points.previewPois(as));
+        }
         return ResponseEntity.ok(points.listPois(auth.authenticate(authorization)));
     }
 
@@ -138,7 +143,12 @@ public class MapController {
     }
 
     @GetMapping("/waypoints")
-    public ResponseEntity<List<WaypointResponse>> waypoints(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+    public ResponseEntity<List<WaypointResponse>> waypoints(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                                            @RequestParam(required = false) String as) {
+        if (as != null && !as.isBlank()) {
+            auth.requireMaster(authorization);
+            return ResponseEntity.ok(points.previewWaypoints(as));
+        }
         return ResponseEntity.ok(points.listWaypoints(auth.authenticate(authorization)));
     }
 

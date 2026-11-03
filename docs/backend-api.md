@@ -57,7 +57,7 @@
 | POST | `/lore` | `LoreEntryRequest` (Bearer **mestre**) | Cria o verbete inteiro (201). `facts` e `sections` substituem os atuais; em região, `linkedIds` são personagens e lugares dela; nos outros, `regionId`. `toAll` falso sem `recipients` = só o mestre |
 | PUT | `/lore/{id}` | `LoreEntryRequest` (Bearer **mestre**) | Edita. 404 se não existir |
 | DELETE | `/lore/{id}` | – (Bearer **mestre**) | Apaga; quem apontava para o verbete só perde o vínculo |
-| GET | `/map/pois` | – (Bearer) | Pontos que a conta vê, com os comentários da mesa e as anotações dela |
+| GET | `/map/pois` | – (Bearer; `?as=usuário` só o **mestre**) | Pontos que a conta vê, com os comentários da mesa e as anotações dela. Com `as`, a prévia "Ver como": o que aquele jogador vê, sem `secretNotes` e sem as anotações privadas dele (403 para jogador; 400 se o usuário não é jogador) |
 | POST / PUT | `/map/pois`, `/map/pois/{id}` | `PoiRequest { name, kind, description, x, y, loreEntryId, secretNotes, toAll, recipients }` (Bearer **mestre**) | Cria ou edita. `kind`: CITY, LANDMARK, QUEST, DANGER, MYSTERY, OUTPOST, HIDEOUT, RUIN, CAMP, DUNGEON, PORT. `secretNotes` só volta para o mestre. Se `map_poi` já existia no PostgreSQL, o `CHECK` do `kind` não tem os tipos novos: `ALTER TABLE map_poi DROP CONSTRAINT map_poi_kind_check;` (o `ddl-auto` não recria). `x` e `y` entre -1024 e 1024 |
 | DELETE | `/map/pois/{id}` | – (Bearer **mestre**) | Apaga o ponto e os comentários |
 | POST | `/map/pois/{id}/comments` | `{ text, shared }` (Bearer) | Comentário (`shared`) ou anotação só do autor (201). 404 se a conta não vê o ponto |
@@ -69,7 +69,7 @@
 | POST | `/map/pois/{id}/images` | `{ image }` (Bearer **mestre**) | Adiciona (até 6 por ponto; mesmas regras de imagem do mercador, em `ImageRules`) e devolve o ponto |
 | DELETE | `/map/pois/{id}/images/{index}` | – (Bearer **mestre**) | Apaga a imagem e limpa o destaque |
 | POST | `/map/pois/{id}/spotlight` | `{ index }` (Bearer **mestre**) | MOSTRAR À MESA: sobe `spotlightRev`; quem vê o ponto abre a imagem ao notar a revisão nova |
-| GET | `/map/waypoints` | – (Bearer) | Jogador: os seus. Mestre: os de todos, com `owner` |
+| GET | `/map/waypoints` | – (Bearer; `?as=usuário` só o **mestre**) | Jogador: os seus. Mestre: os de todos, com `owner`; com `as`, só os daquele jogador (prévia) |
 | POST / PUT | `/map/waypoints`, `/map/waypoints/{id}` | `{ name, comment, x, y }` (Bearer) | Só o dono. 400 no quarto waypoint e para o mestre; 404 no waypoint de outro |
 | DELETE | `/map/waypoints/{id}` | – (Bearer) | Só o dono |
 | GET | `/map/bandle` | – (Bearer) | Última rolagem de Bandópolis: `{ roll }` (1 a 10; nulo antes da primeira). 401 sem sessão |

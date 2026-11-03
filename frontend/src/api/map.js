@@ -7,7 +7,8 @@ export const fetchBandle = token => request('/map/bandle', { token })
 export const rollBandle = token => request('/map/bandle/roll', { method: 'POST', token })
 
 // Pontos de interesse que esta conta pode ver, com os comentários visíveis para ela.
-export const fetchPois = token => request('/map/pois', { token })
+// as (só o mestre): o que aquele jogador vê ("Ver como"), sem as anotações privadas dele.
+export const fetchPois = (token, as) => request('/map/pois' + (as ? '?as=' + encodeURIComponent(as) : ''), { token })
 
 // Só o mestre.
 export const createPoi = (token, poi) => request('/map/pois', { method: 'POST', token, body: poi })
@@ -22,7 +23,7 @@ export const addPoiComment = (token, id, comment) => request('/map/pois/' + id +
 export const deletePoiComment = (token, id) => request('/map/pois/comments/' + id, { method: 'DELETE', token })
 
 // Jogador: os próprios waypoints (até 3). Mestre: os de todos, só para ver.
-export const fetchWaypoints = token => request('/map/waypoints', { token })
+export const fetchWaypoints = (token, as) => request('/map/waypoints' + (as ? '?as=' + encodeURIComponent(as) : ''), { token })
 
 export const createWaypoint = (token, waypoint) => request('/map/waypoints', { method: 'POST', token, body: waypoint })
 

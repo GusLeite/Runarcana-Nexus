@@ -54,7 +54,25 @@ public class MapPointService {
 
     @Transactional(readOnly = true)
     public List<PoiResponse> listPois(Account viewer) {
-        List<PoiComment> allComments = comments.findAllByOrderByCreatedAtAscIdAsc();
+        return list(viewer, comments.findAllByOrderByCreatedAtAscIdAsc());
+    }
+
+    // Prévia do mestre ("Ver como"): o que o jogador vê no mapa, sem as anotações privadas dele.
+    @Transactional(readOnly = true)
+    public List<PoiResponse> previewPois(String username) {
+        return list(previewAs(username), comments.findAllByOrderByCreatedAtAscIdAsc().stream().filter(PoiComment::isShared).toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<WaypointResponse> previewWaypoints(String username) {
+        return waypoints.findByOwnerOrderById(previewAs(username)).stream().map(MapPointService::toResponse).toList();
+    }
+
+    private Account previewAs(String username) {
+        return resolver.resolve(List.of(username)).stream().findFirst().orElseThrow(() -> ApiException.badRequest("Escolha um jogador."));
+    }
+
+    private List<PoiResponse> list(Account viewer, List<PoiComment> allComments) {
         Map<Long, Integer> counts = new HashMap<>();
         for (Object[] row : pois.countImages()) counts.put((Long) row[0], ((Number) row[1]).intValue());
         return pois.findAll().stream()

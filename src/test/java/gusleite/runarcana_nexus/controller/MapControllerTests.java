@@ -215,6 +215,37 @@ class MapControllerTests {
                 .andExpect(jsonPath("$[0].poiId").doesNotExist());
     }
 
+    @Test
+    void oMestreVeOMapaComoUmJogador() throws Exception {
+        String master = login("mestre");
+        String player = login("gaudron");
+        send(post("/map/pois"), master, "{\"name\":\"Segredo\",\"kind\":\"HIDEOUT\",\"x\":1,\"y\":1,\"secretNotes\":\"só eu\",\"toAll\":false,\"recipients\":[]}").andExpect(status().isCreated());
+        String body = send(post("/map/pois"), master, "{\"name\":\"Aberto\",\"kind\":\"CAMP\",\"x\":2,\"y\":2,\"secretNotes\":\"nota\",\"toAll\":true,\"recipients\":[]}")
+                .andReturn().getResponse().getContentAsString();
+        Matcher m = Pattern.compile("^\\{\"id\":(\\d+)").matcher(body);
+        assertThat(m.find()).isTrue();
+        String id = m.group(1);
+        send(post("/map/pois/" + id + "/comments"), player, "{\"text\":\"anotação minha\",\"shared\":false}").andExpect(status().isCreated());
+        send(post("/map/pois/" + id + "/comments"), player, "{\"text\":\"para a mesa\",\"shared\":true}").andExpect(status().isCreated());
+        send(post("/map/waypoints"), player, "{\"name\":\"Meu marco\",\"x\":5,\"y\":5}").andExpect(status().isCreated());
+
+        // A prévia mostra só o que o jogador vê, sem as notas do mestre nem as anotações privadas dele.
+        mvc.perform(get("/map/pois").param("as", "gaudron").header("Authorization", "Bearer " + master))
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].name").value("Aberto"))
+                .andExpect(jsonPath("$[0].secretNotes").doesNotExist())
+                .andExpect(jsonPath("$[0].comments.length()").value(1))
+                .andExpect(jsonPath("$[0].comments[0].text").value("para a mesa"));
+        mvc.perform(get("/map/waypoints").param("as", "gaudron").header("Authorization", "Bearer " + master))
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].name").value("Meu marco"));
+        mvc.perform(get("/map/pois").param("as", "rudo").header("Authorization", "Bearer " + master)).andExpect(jsonPath("$[0].comments.length()").value(1));
+        mvc.perform(get("/map/pois").param("as", "mestre").header("Authorization", "Bearer " + master)).andExpect(status().isBadRequest());
+        mvc.perform(get("/map/pois").param("as", "rudo").header("Authorization", "Bearer " + player)).andExpect(status().isForbidden());
+        // Sem o parâmetro, o mestre continua vendo tudo.
+        mvc.perform(get("/map/pois").header("Authorization", "Bearer " + master)).andExpect(jsonPath("$.length()").value(2));
+    }
+
     private org.springframework.test.web.servlet.ResultActions send(org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder request,
                                                                      String token, String body) throws Exception {
         return mvc.perform(request.header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON).content(body));

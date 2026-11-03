@@ -126,7 +126,7 @@ O plano vai até a Etapa 11 (decisão de 2026-11-03). Ficam de fora: modo transm
 - `?tela=mapa&ponto=12` (e `&regiao=demacia`) abre o mapa voando até o ponto: estende o `useUrlParam`/`WorldButtons` e o `focus` do `MapScreen`.
 - Botão **Copiar link** no painel do ponto; documentos, lore e diário podem colar o link (quem não vê o ponto cai no mapa sem foco).
 
-## Etapa 11 — Ver como jogador (prévia por camada)
+## Etapa 11 — Ver como jogador (prévia por camada) — **feita (2026-11-03)**
 
 **Por quê**: o mestre quer conferir o que cada um vê antes de revelar.
 - Seletor "Ver como: Mestre / Nyx / Rudo…" no mapa do mestre. `GET /map/pois?as=<usuário>` (só mestre) devolve o que aquela conta vê; a névoa passa a ser opaca e os brasões ficam "???" como para o jogador; os waypoints mostrados são os dele.

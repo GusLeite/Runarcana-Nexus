@@ -49,7 +49,9 @@ const coveredWidth = () => (window.innerWidth >= PANEL_MIN_SCREEN ? PANEL_WIDTH 
 // Mapa de Runeterra em tela cheia. A câmera e o relevo ficam em mapScene.js.
 // focus: { slug } ou { poiId }, para abrir já mostrando algo (vem da lore).
 export default function MapScreen({ session, focus, onClose, onOpenLore }) {
-  const master = Boolean(session.master)
+  const isMaster = Boolean(session.master)
+  const [viewAs, setViewAs] = useState(null) // mestre: usuário cujo mapa ele está vendo (prévia); nada é editável
+  const master = isMaster && !viewAs // o que a tela mostra: no "Ver como", a visão do jogador
   const stage = useRef(null)
   const scene = useRef(null)
   const closeBtn = useRef(null)
@@ -124,9 +126,13 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   useEffect(() => {
     fetchBandle(session.token).then(res => setBandleRoll(res.roll)).catch(() => {})
     fetchLore(session.token).then(setLore).catch(() => {})
-    fetchWaypoints(session.token).then(setWaypoints).catch(() => {})
-    if (master) fetchRecipients(session.token).then(setPlayers).catch(() => {})
-  }, [session.token, master])
+    if (isMaster) fetchRecipients(session.token).then(setPlayers).catch(() => {})
+  }, [session.token, isMaster])
+
+  // Os waypoints seguem o "Ver como": os do jogador escolhido.
+  useEffect(() => {
+    fetchWaypoints(session.token, viewAs).then(setWaypoints).catch(() => {})
+  }, [session.token, viewAs])
 
   // Pontos de interesse: conferidos a cada poucos segundos; o jogador é avisado do que acabou de ser revelado a ele.
   useEffect(() => {
@@ -135,9 +141,9 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
     let lastKey = null
     const check = () => {
       if (document.hidden && known) return
-      fetchPois(session.token)
+      fetchPois(session.token, viewAs)
         .then(list => {
-          if (known && !master) {
+          if (known && !isMaster) {
             const fresh = list.filter(p => !known.has(p.id))
             if (fresh.length) {
               setFreshPoi(fresh[0])
@@ -145,7 +151,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
               setTimeout(() => setBornPois([]), BORN_MS)
             }
           }
-          if (!master) {
+          if (!isMaster) {
             const shown = list.find(p => known && revs.has(p.id) && p.spotlightRev > revs.get(p.id) && p.spotlight != null)
             if (shown) {
               fetchPoiImages(session.token, shown.id).then(images => { if (images[shown.spotlight]) setTableImage({ images, index: shown.spotlight, title: shown.name }) }).catch(() => {})
@@ -161,7 +167,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
     check()
     const t = setInterval(check, POI_POLL)
     return () => clearInterval(t)
-  }, [session.token, master])
+  }, [session.token, viewAs, isMaster])
 
   // O grupo: a mesa inteira confere a cada poucos segundos (com a aba visível); só troca o estado quando muda.
   useEffect(() => {
@@ -549,7 +555,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
                   )}
                 </>
               )
-              : (
+              : viewAs ? null : (
                 <>
                   <button type="button" className={'map-tool' + (placing === 'waypoint' ? ' on' : '')} aria-pressed={placing === 'waypoint'} disabled={mine.length >= MAX_WAYPOINTS} title={mine.length >= MAX_WAYPOINTS ? 'Apague um waypoint para criar outro' : undefined} onClick={() => setPlacing(p => (p === 'waypoint' ? null : 'waypoint'))}>
                     + WAYPOINT {mine.length}/{MAX_WAYPOINTS}
@@ -559,6 +565,17 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
               )}
           </div>
           <p className="map-hint">Arraste para mover · role para aproximar</p>
+          {isMaster && (
+            <div className={'map-viewas' + (viewAs ? ' on' : '')} role="group" aria-label="Ver como jogador">
+              <label>Ver como:
+                <select value={viewAs ?? ''} onChange={e => { setPanel(null); setPlacing(null); setFreshPoi(null); setViewAs(e.target.value || null) }}>
+                  <option value="">Mestre</option>
+                  {players.map(username => <option key={username} value={username}>{playerName(username)}</option>)}
+                </select>
+              </label>
+              {viewAs && <strong>Prévia de {playerName(viewAs)}: o mapa como esse jogador vê, sem edição.</strong>}
+            </div>
+          )}
           {master && (
             <button className="map-roll" type="button" onClick={rollDie} disabled={rolling || die !== null}>
               {bandleRoll ? 'ROLAR BANDÓPOLIS DE NOVO' : 'ROLAR BANDÓPOLIS'}
@@ -592,6 +609,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
           poi={openPoi}
           loreEntry={lore.find(entry => entry.id === openPoi.loreEntryId)}
           master={master}
+          preview={Boolean(viewAs)}
           players={players}
           onOpenLore={onOpenLore}
           onEdit={() => setPanel({ type: 'poiForm', id: openPoi.id })}
@@ -605,7 +623,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
         />
       )}
       {editedPoi && <PoiForm key={editedPoi.id ?? 'new'} poi={editedPoi} lore={lore} players={players} onSave={savePoi} onDelete={removePoi} onClose={() => setPanel(null)} />}
-      {openWaypoint && <WaypointPanel key={openWaypoint.id ?? 'new'} waypoint={openWaypoint} readOnly={master} onSave={saveWaypoint} onDelete={removeWaypoint} onClose={() => setPanel(null)} />}
+      {openWaypoint && <WaypointPanel key={openWaypoint.id ?? 'new'} waypoint={openWaypoint} readOnly={isMaster} onSave={saveWaypoint} onDelete={removeWaypoint} onClose={() => setPanel(null)} />}
       <p className="map-legal">Projeto de fãs sem fins lucrativos, não endossado pela Riot Games. Arte do mapa © Riot Games.</p>
     </div>
   )

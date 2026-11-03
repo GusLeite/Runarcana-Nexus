@@ -1,6 +1,11 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Mapa: ver como jogador (`feature/character-sheet`)
+- Etapa 11 do plano: seletor "Ver como" no mapa do mestre; mostra pontos, waypoints, névoa opaca e brasões "???" como aquele jogador vê, em modo só leitura com a faixa "Prévia de Nyx".
+- Back: `GET /map/pois?as=` e `/map/waypoints?as=` (só mestre); a prévia não vaza notas secretas nem as anotações privadas do jogador.
+- Com isso o plano do mapa (Etapas 7 a 11) está completo.
+
 ## 2026-11-03 — Mapa: links de locais (`feature/character-sheet`)
 - Etapa 10 do plano: `?tela=mapa&ponto=12` (e `&regiao=demacia`) abre o mapa voando até o lugar, inclusive com o mapa já aberto; o foco sai da URL ao fechar.
 - Botão **COPIAR LINK** nos painéis de ponto e de região; link colado em diário, comentários, documentos ou lore vira o botão "📍 Ver no mapa".

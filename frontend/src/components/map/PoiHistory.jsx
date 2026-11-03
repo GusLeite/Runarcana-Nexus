@@ -6,7 +6,7 @@ const EVENT_ICON = { LOOT: '◆', GOLD: '●', DOWNED: '✝', DOCUMENT: '✉', L
 const fmt = iso => new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
 
 // "Aconteceu aqui": o diário ligado ao ponto e as paradas da viagem perto dele; qualquer um que vê o ponto escreve sobre ele.
-export default function PoiHistory({ token, poi }) {
+export default function PoiHistory({ token, poi, readOnly = false }) {
   const [history, setHistory] = useState(null)
   const [text, setText] = useState('')
   const [msg, setMsg] = useState(null)
@@ -52,11 +52,11 @@ export default function PoiHistory({ token, poi }) {
           </li>
         ))}
       </ul>
-      <form className="lore-form map-comment-form" onSubmit={submit}>
+      {!readOnly && <form className="lore-form map-comment-form" onSubmit={submit}>
         <textarea aria-label="Escrever no diário sobre este local" rows={2} maxLength={8000} value={text} onChange={e => setText(e.target.value)} placeholder="O que aconteceu aqui? Vai para o diário do grupo." />
         {msg && <p className="lore-form-error" role="alert">{msg}</p>}
         <button type="submit" className="lore-action ghost" disabled={busy || !text.trim()}>ESCREVER NO DIÁRIO</button>
-      </form>
+      </form>}
     </section>
   )
 }
