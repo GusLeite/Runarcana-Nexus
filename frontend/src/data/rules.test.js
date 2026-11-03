@@ -3,7 +3,7 @@ import {
   addHeritage, heritageOptions, carryCapacity, choiceOptionName, critDice, deathSaveResult, situationalFor, heritageTimes, removeHeritage, setHeritageOption, formatFeet,
   addTrait, removeTrait, setTraitDetail, traitTimes, formatPoints, formatKg, formatModifier, grantLabel, levelGrantsText, visibleGrants, groupAbilities, groupGrants, groupSkills, itemStats, modifier, parseDice,
   pointBuySpent, roll4d6DropLowest, rollCheck, rollD20, rollDice, totalValue, totalWeight,
-  resourceCost, togglePick, levelChoices, keepChoices, dominantChoices, pendingChoices, senseLabel, formEffects, rollDie, applyHp,
+  resourceCost, togglePick, levelChoices, keepChoices, dropStalePicks, dominantChoices, pendingChoices, senseLabel, formEffects, rollDie, applyHp,
 } from './rules.js'
 
 describe('modificadores', () => {
@@ -270,6 +270,19 @@ describe('subida de nível', () => {
   it('tira as escolhas que sumiram da prévia', () => {
     expect(keepChoices({ 'level:4:class:ARCANIST:0': ['x'], 'level:4:class:BRUTE:0': ['y'] }, choices))
       .toEqual({ 'level:4:class:ARCANIST:0': ['x'] })
+  })
+
+  it('libera a escolha que perdeu a opção para outra', () => {
+    const choices = [
+      { key: 'class:ARCANIST:1', type: 'SKILL_CHOICE', count: 2, options: ['HISTORY', 'INSIGHT'] },
+      { key: 'heritage:x:0', type: 'SKILL_CHOICE', count: 1, options: ['ARCANA', 'INSIGHT'] },
+      { key: 'class:ARCANIST:2', type: 'RESOURCE_CHOICE', count: 1, options: [] },
+    ]
+    const picks = { 'class:ARCANIST:1': ['ARCANA', 'HISTORY'], 'heritage:x:0': ['ARCANA'], 'class:ARCANIST:2': ['runa'] }
+    expect(dropStalePicks(picks, choices)).toEqual({ ...picks, 'class:ARCANIST:1': ['HISTORY'] })
+    // Nada a tirar: devolve o mesmo objeto (não dispara nova prévia).
+    const clean = { 'heritage:x:0': ['ARCANA'] }
+    expect(dropStalePicks(clean, choices)).toBe(clean)
   })
 
   it('rola o dado de vida entre 1 e o lado', () => {

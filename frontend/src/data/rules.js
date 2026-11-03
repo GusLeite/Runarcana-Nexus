@@ -583,6 +583,24 @@ export function keepChoices(picks, choices) {
   return Object.fromEntries(Object.entries(picks).filter(([k]) => keys.has(k)))
 }
 
+// Tira de cada escolha o que saiu das opções dela na prévia. Ex.: Arcanismo escolhido na classe e depois numa
+// escolha que o back processa antes (Herança): a da classe perde a opção e volta a ficar livre ("1 de 2"),
+// em vez de guardar um valor invisível que trava o contador. Recursos (opções vazias) ficam como estão.
+export function dropStalePicks(picks, choices) {
+  let changed = false
+  const out = { ...picks }
+  for (const c of choices ?? []) {
+    const list = picks[c.key]
+    if (!list?.length || c.type === 'RESOURCE_CHOICE' || !c.options?.length) continue
+    const kept = list.filter(id => c.options.includes(id))
+    if (kept.length !== list.length) {
+      out[c.key] = kept
+      changed = true
+    }
+  }
+  return changed ? out : picks
+}
+
 // ---------- Pontos de vida ----------
 
 // Dano, cura e PV temporários: { currentHp, tempHp } depois da ação. O dano gasta os temporários primeiro;

@@ -59,7 +59,8 @@ export default function ChoiceStep({ choices, picks, onChange, crafts, resources
       </div>
       {wealthBox}
       {choices.map((c, n) => {
-        const current = picks[c.key] ?? []
+        // Só o que ainda está nas opções (a prévia pode ter tirado uma que outra escolha pegou).
+        const current = (picks[c.key] ?? []).filter(id => c.type === 'RESOURCE_CHOICE' || !c.options.length || c.options.includes(id))
         if (c.type === 'RESOURCE_CHOICE') {
           return <ResourceChoice key={c.key} choice={c} current={current} resources={resources} n={n + 1}
             gem={/^Runa inicial/.test(c.label) ? { name: pulse } : null}

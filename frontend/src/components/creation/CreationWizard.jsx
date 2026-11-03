@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { fetchFormulas, fetchSpells } from '../../api/book.js'
 import { createCharacter, fetchCatalog, previewCreation } from '../../api/creation.js'
-import { ATTRIBUTES, heritageChoices } from '../../data/rules.js'
+import { ATTRIBUTES, dropStalePicks, heritageChoices } from '../../data/rules.js'
 import { replay } from '../../utils/motion.js'
 import BackgroundPicker from './BackgroundPicker.jsx'
 import OriginStep from './OriginStep.jsx'
@@ -77,6 +77,15 @@ export default function CreationWizard({ token, defaultPlayer, onCreated, onErro
     }, PREVIEW_DELAY)
     return () => clearTimeout(t)
   }, [draft, token, onError])
+
+  // Escolha que perdeu a opção (outra escolha pegou a mesma perícia) volta a ficar livre.
+  useEffect(() => {
+    if (!preview) return
+    setDraft(d => {
+      const choices = dropStalePicks(d.choices, preview.choices)
+      return choices === d.choices ? d : { ...d, choices }
+    })
+  }, [preview])
 
   const set = (key, value) => setDraft(d => ({ ...d, [key]: value }))
   const origin = catalog?.origins.find(o => o.id === draft?.originId)

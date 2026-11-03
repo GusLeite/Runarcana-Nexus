@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Escolhas que se roubam e especialidade das Heranças (`feature/character-sheet`)
+- Escolher numa etapa uma perícia que outra escolha já tinha não trava mais a outra em "1 de 2": `dropStalePicks` tira o valor que saiu das opções e ela volta a ficar livre.
+- Minucioso, Pés Cascudos, Alma da Caça, Instinto Assassino, Incentivo Celeste, Pastor da Montanha, Visão Lunar e Habilidade Símia ganharam `expertise`: a perícia que já tem continua na lista e vira especialidade.
+
 ## 2026-11-03 — Mapa: trajetórias dos jogadores (`feature/character-sheet`)
 - Etapa 15 do plano: cada jogador desenha até 5 trajetórias no mapa (clica as paradas, nome opcional); linhas sólidas na cor do dono, privadas ao jogador e ao mestre, que vê as de todos e a prévia "Jogador".
 - Novos: `MapRoute`, `MapRouteService`, `/map/routes`, `setRoutes` na cena 3D e `routeColors.js` (com testes).
