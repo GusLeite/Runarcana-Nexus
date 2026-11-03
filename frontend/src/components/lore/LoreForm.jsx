@@ -5,7 +5,7 @@ import { fileToBanner } from '../../utils/iconImage.js'
 import { KIND_LABELS } from './LoreEntryView.jsx'
 
 const EMPTY = {
-  kind: 'CHARACTER', name: '', subtitle: '', quote: '', quoteAuthor: '', summary: '', imageUrl: '', mapSlug: '',
+  kind: 'CHARACTER', name: '', subtitle: '', quote: '', quoteAuthor: '', summary: '', mapSummary: '', imageUrl: '', mapSlug: '',
   regionId: '', linkedIds: [], facts: [], sections: [], toAll: false, recipients: [],
 }
 
@@ -17,6 +17,7 @@ const fromEntry = entry => ({
   quote: entry.quote ?? '',
   quoteAuthor: entry.quoteAuthor ?? '',
   summary: entry.summary ?? '',
+  mapSummary: entry.mapSummary ?? '',
   imageUrl: entry.imageUrl ?? '',
   mapSlug: entry.mapSlug ?? '',
   regionId: entry.region?.id ?? '',
@@ -111,6 +112,11 @@ export default function LoreForm({ entry, draft, entries, players, onSave, onDel
       <label>Resumo
         <textarea rows={5} value={form.summary} maxLength={4000} onChange={e => set('summary', e.target.value)} />
       </label>
+      {isRegion && (
+        <label>Resumo no mapa
+          <textarea rows={3} value={form.mapSummary} maxLength={1000} onChange={e => set('mapSummary', e.target.value)} placeholder="Texto curto que aparece no painel da região, ao clicar nela no mapa." />
+        </label>
+      )}
 
       {isRegion ? (
         <>

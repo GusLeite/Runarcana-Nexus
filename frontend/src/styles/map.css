@@ -899,3 +899,32 @@
 .map-route-bar strong { font: 600 12px Spectral, serif; letter-spacing: 0.08em; color: var(--inc-gold); }
 .map-route-bar input { width: 170px; padding: 6px 8px; border: 1px solid var(--inc-line); background: #070c13; color: var(--text); font: 400 13px Spectral, serif; }
 .map-route-bar span { flex-basis: 100%; text-align: center; color: var(--muted); font: 400 12px Spectral, serif; }
+
+/* Resumo curto da região e carrosséis de personagens e lugares. */
+.map-panel-summary { margin: 0 0 16px; font-size: 16px; line-height: 1.65; text-align: left; white-space: pre-line; }
+.map-carousel { position: relative; margin-bottom: 10px; }
+.map-carousel-track { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.map-carousel-track::-webkit-scrollbar { display: none; }
+.map-slide {
+  position: relative; flex: 0 0 82%; aspect-ratio: 16 / 10; padding: 0; overflow: hidden; scroll-snap-align: start;
+  display: grid; place-items: center; border: 1px solid rgba(200, 162, 74, 0.25); cursor: pointer; color: var(--text);
+  background: linear-gradient(160deg, #162437, #070f1a); transition: border-color 0.2s;
+}
+.map-slide:hover, .map-slide:focus-visible { border-color: var(--gold-hi); }
+.map-slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.4s; }
+.map-slide:hover img { transform: scale(1.05); }
+.map-slide .lore-sigil { width: 30%; }
+.map-slide-text {
+  position: absolute; left: 0; right: 0; bottom: 0; display: grid; gap: 2px; padding: 28px 12px 10px; text-align: left;
+  background: linear-gradient(0deg, rgba(1, 10, 19, 0.92), transparent);
+}
+.map-slide-text strong { font: 600 15px Cinzel, serif; letter-spacing: 0.04em; text-transform: uppercase; color: #f0e6d2; }
+.map-slide-text small { font: 600 10px Cinzel, serif; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.map-carousel-arrow {
+  position: absolute; top: 50%; width: 30px; height: 40px; margin-top: -20px; padding: 0; cursor: pointer;
+  border: 1px solid var(--gold-soft); background: rgba(1, 10, 19, 0.85); color: var(--gold-hi); font-size: 22px; line-height: 1;
+}
+.map-carousel-arrow.prev { left: 4px; }
+.map-carousel-arrow.next { right: 4px; }
+.map-carousel-arrow:hover { background: var(--gold); color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { .map-slide img { transition: none; } }

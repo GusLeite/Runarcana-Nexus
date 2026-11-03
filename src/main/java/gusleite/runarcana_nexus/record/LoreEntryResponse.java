@@ -13,6 +13,7 @@ public record LoreEntryResponse(
         String quote,
         String quoteAuthor,
         String summary,
+        String mapSummary,
         String imageUrl,
         String mapSlug,
         Link region,

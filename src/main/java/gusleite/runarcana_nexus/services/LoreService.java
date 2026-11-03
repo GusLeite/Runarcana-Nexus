@@ -86,6 +86,7 @@ public class LoreService {
         entry.setQuote(blankToNull(r.quote()));
         entry.setQuoteAuthor(blankToNull(r.quoteAuthor()));
         entry.setSummary(blankToNull(r.summary()));
+        entry.setMapSummary(r.kind() == LoreKind.REGION ? blankToNull(r.mapSummary()) : null);
         // Link http(s) ou imagem enviada (data URL): cada uma na sua coluna, a outra zera.
         String image = ImageRules.clean(blankToNull(r.imageUrl()));
         boolean uploaded = image != null && image.startsWith("data:");
@@ -151,7 +152,7 @@ public class LoreService {
                 .map(s -> new LoreEntryResponse.Section(s.getId(), s.getTitle(), s.getBody(), s.isToAll(), RecipientResolver.names(viewer, s.getRecipients())))
                 .toList();
         List<LoreEntryResponse.Fact> facts = e.getFacts().stream().map(f -> new LoreEntryResponse.Fact(f.getLabel(), f.getValue())).toList();
-        return new LoreEntryResponse(e.getId(), e.getKind(), e.getName(), e.getSubtitle(), e.getQuote(), e.getQuoteAuthor(), e.getSummary(),
+        return new LoreEntryResponse(e.getId(), e.getKind(), e.getName(), e.getSubtitle(), e.getQuote(), e.getQuoteAuthor(), e.getSummary(), e.getMapSummary(),
                 imageOf(e), e.getMapSlug(), regionLink, linked, facts, sections, e.isToAll(), RecipientResolver.names(viewer, e.getRecipients()));
     }
 

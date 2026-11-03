@@ -40,6 +40,10 @@ public class LoreEntry {
     @Column(length = 4000)
     private String summary;
 
+    // Resumo curto de região, mostrado no painel do mapa (o resumo longo fica só no verbete).
+    @Column(length = 1000)
+    private String mapSummary;
+
     @Column(length = 1000)
     private String imageUrl;
 

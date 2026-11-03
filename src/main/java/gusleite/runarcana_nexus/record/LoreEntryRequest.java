@@ -24,6 +24,8 @@ public record LoreEntryRequest(
         String quoteAuthor,
         @Size(max = 4000, message = "O resumo pode ter até 4000 caracteres.")
         String summary,
+        @Size(max = 1000, message = "O resumo do mapa pode ter até 1000 caracteres.")
+        String mapSummary,
         // Link http(s) ou imagem enviada (data URL); o LoreService valida.
         String imageUrl,
         @Pattern(regexp = "^[a-z-]{1,40}$", message = "Região do mapa desconhecida.")
