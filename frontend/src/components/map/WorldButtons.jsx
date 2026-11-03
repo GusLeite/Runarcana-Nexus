@@ -1,6 +1,6 @@
 import { Suspense, lazy, useCallback, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { LoreIcon, MapIcon } from '../sheet/icons.jsx'
+import { LoreIcon, MapIcon, MenuIcon } from '../sheet/icons.jsx'
 import useUrlParam from '../../hooks/useUrlParam.js'
 import { focusFromSearch, withoutFocus } from '../../utils/mapLink.js'
 
@@ -15,6 +15,7 @@ const SCREENS = ['mapa', 'lore']
 // A tela aberta fica na URL (?tela=mapa|lore): recarregar reabre e o "voltar" do navegador fecha.
 // Link de local: ?tela=mapa&ponto=12 (ou &regiao=demacia) abre o mapa voando até lá (quem não vê o ponto cai no mapa sem foco).
 export default function WorldButtons({ session, children }) {
+  const [dockOpen, setDockOpen] = useState(false)
   const [screenId, setScreenId] = useUrlParam('tela', SCREENS, null)
   const [target, setTarget] = useState(() => ({ focus: focusFromUrl() })) // { focus } no mapa, { entryId } na lore
   const close = useCallback(() => {
@@ -40,7 +41,11 @@ export default function WorldButtons({ session, children }) {
 
   return (
     <>
-      <nav className="world-dock" aria-label="Atalhos do mundo">
+      <nav className={"world-dock" + (dockOpen ? " open" : "")} aria-label="Atalhos do mundo" onClick={e => { if (e.target.closest(".dock-btn:not(.dock-toggle)")) setDockOpen(false) }}>
+        <button className="dock-btn dock-toggle" type="button" onClick={() => setDockOpen(o => !o)} aria-expanded={dockOpen} title={dockOpen ? "Recolher atalhos" : "Lore, mapa e ficha para imprimir"} aria-label="Atalhos">
+          <MenuIcon /><span>{dockOpen ? "Fechar" : "Atalhos"}</span>
+        </button>
+        <div className="dock-items">
         <button className="dock-btn" type="button" onClick={() => openLore(undefined)} title="Lore de Runeterra" aria-label="Lore de Runeterra">
           <LoreIcon /><span>Lore</span>
         </button>
@@ -48,6 +53,7 @@ export default function WorldButtons({ session, children }) {
           <MapIcon /><span>Mapa</span>
         </button>
         {children}
+        </div>
       </nav>
       {screen && createPortal(<Suspense fallback={null}>{screen}</Suspense>, document.body)}
     </>
