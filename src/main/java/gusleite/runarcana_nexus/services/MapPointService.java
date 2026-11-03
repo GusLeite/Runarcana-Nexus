@@ -268,7 +268,7 @@ public class MapPointService {
                 .map(c -> toComment(viewer, c))
                 .toList();
         return new PoiResponse(p.getId(), p.getName(), p.getKind(), p.getDescription(), p.getX(), p.getY(), entryId,
-                viewer.isMaster() ? p.getSecretNotes() : null, p.getOfficialKey() != null, p.getRegionSlug(), imageCount, p.getSpotlight(), p.getSpotlightRev() == null ? 0 : p.getSpotlightRev(),
+                viewer.isMaster() ? p.getSecretNotes() : null, p.getOfficialKey() != null, p.getOfficialKey(), p.getRegionSlug(), imageCount, p.getSpotlight(), p.getSpotlightRev() == null ? 0 : p.getSpotlightRev(),
                 p.isToAll(), RecipientResolver.names(viewer, p.getRecipients()), visible);
     }
 

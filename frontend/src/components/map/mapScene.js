@@ -9,6 +9,7 @@ import {
 } from './mapMath.js'
 import { createDemonGlobe } from './demonGlobe.js'
 import { createTemporalDomes } from './temporalDomes.js'
+import { createLandmarks } from './landmarks.js'
 import { createPartyLayers } from './partyLayers.js'
 
 const TEXTURES = ['terrain_z1', 'depth_z1', 'ocean_z1', 'clouds', 'fog', 'fog-mask'].map(name => `/map/${name}.jpg`)
@@ -178,10 +179,11 @@ const loadTextures = () => {
 // decals: imagens em pé nesse mesmo plano ({ draw, x, y, z, size, level }); draw(pixels) devolve um canvas.
 // domes: domos de distorção temporal ({ x, y, radius, speed }).
 // globe: globo demoníaco com corvos ({ x, y, radius, height, flightHeight, ravens, flocks }).
+// landmarks: marcos em 3D (MAP_LANDMARKS), que aparecem de perto.
 // areas: regiões que acendem por um círculo em vez de uma imagem ({ [slug]: { x, y, radius, color } }).
 // onMapClick(clientX, clientY): clique no mapa, sem arrastar.
 // onPinsChange: chamado quando os pontos visíveis mudam, porque o navegador não avisa que o mouse saiu de um ponto escondido.
-export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], areas = {}, fogAreas = {}, domes = [], globe = null, onPinsChange, onMapClick } = {}) {
+export async function createMapScene(container, { reducedMotion = false, pins = [], decals = [], areas = {}, fogAreas = {}, domes = [], globe = null, landmarks = [], onPinsChange, onMapClick } = {}) {
   const textures = await loadTextures()
   const [terrain, depth, ocean, cloudMap, fogMap, fogMask] = textures
 
@@ -364,6 +366,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
 
   const temporalDomes = createTemporalDomes(domes, panGroup, heightAt)
   const demonGlobe = globe && createDemonGlobe(globe, panGroup)
+  const landmarkModels = landmarks.length > 0 ? createLandmarks(landmarks, panGroup) : null
 
   const cloudsMaterial = new THREE.ShaderMaterial({
     uniforms: { cloudMap: { value: cloudMap }, drift: { value: 0 }, opacity: { value: 0 } },
@@ -413,10 +416,19 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
   let goalPan = { ...START_PAN }
   const velocity = { x: 0, y: 0 }
 
+  // Tamanho do palco guardado aqui: ler clientWidth/clientHeight a cada pin, a cada quadro, forçaria um recálculo de layout por leitura.
+  // Qualidade adaptativa: se o mapa ficar abaixo de ~30 quadros por segundo por um tempo, a resolução de desenho cai (2 → 1,5 → 1).
+  let maxRatio = 2
+  let avgFrame = 1 / 60
+  let slowFrames = 0
+  let viewW = 1
+  let viewH = 1
   const resize = () => {
     const width = container.clientWidth || 1
+    viewW = width
     const height = container.clientHeight || 1
-    const ratio = Math.min(window.devicePixelRatio || 1, 2)
+    viewH = height
+    const ratio = Math.min(window.devicePixelRatio || 1, maxRatio)
     aspect = width / height
     camera.aspect = aspect
     camera.updateProjectionMatrix()
@@ -431,7 +443,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
   resize()
 
   const movePan = (dx, dy) => {
-    const scale = worldPerPixel(z, container.clientHeight || 1)
+    const scale = worldPerPixel(z, viewH)
     goalPan = clampPan({ x: goalPan.x + dx * scale, y: goalPan.y - dy * scale }, goalZ, aspect)
   }
 
@@ -508,15 +520,15 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     camera.updateMatrixWorld()
     for (const pin of pins) {
       const visible = pinVisible(pin.level, z)
-      pin.el.classList.toggle('on', visible)
+      if (pin.on !== visible) { pin.on = visible; pin.el.classList.toggle('on', visible) }
       if (!visible) continue
       // O plano em pé gira ao contrário da inclinação, para continuar de frente para a câmera.
       const lift = pin.lift ?? 0
       const upright = -tiltGroup.rotation.x
       point.set(pin.x, pin.y + lift * Math.cos(upright), pin.z + lift * Math.sin(upright))
       point.applyMatrix4(panGroup.matrixWorld).project(camera)
-      const left = (point.x + 1) / 2 * container.clientWidth
-      const top = (1 - point.y) / 2 * container.clientHeight
+      const left = (point.x + 1) / 2 * viewW
+      const top = (1 - point.y) / 2 * viewH
       pin.el.style.transform = `translate(${left}px, ${top}px) translate(-50%, -50%)`
     }
   }
@@ -568,12 +580,29 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       decal.mesh.rotation.x = -tiltGroup.rotation.x
     }
     party.update(reducedMotion ? 0 : clock.elapsedTime, dt)
+    landmarkModels?.setVisible(pinVisible('near', z))
+    landmarkModels?.update(dt)
     placePins()
+  }
+
+  // Chamado a cada quadro com o tempo real desde o anterior (sem o teto de 0,1 s da animação).
+  const watchSpeed = raw => {
+    if (raw > 0.25) return // aba que estava escondida: não conta
+    avgFrame = avgFrame * 0.95 + raw * 0.05
+    slowFrames = avgFrame > 1 / 30 ? slowFrames + 1 : 0
+    if (slowFrames > 90 && maxRatio > 1 && (window.devicePixelRatio || 1) > 1) {
+      maxRatio = maxRatio > 1.5 ? 1.5 : 1
+      slowFrames = 0
+      avgFrame = 1 / 60
+      resize()
+    }
   }
 
   const clock = new THREE.Clock()
   renderer.setAnimationLoop(() => {
-    const dt = Math.min(clock.getDelta(), 0.1)
+    const raw = clock.getDelta()
+    watchSpeed(raw)
+    const dt = Math.min(raw, 0.1)
     update(dt)
     // Com movimento reduzido, as nuvens e o brilho do mar ficam parados.
     if (!reducedMotion) {
@@ -613,7 +642,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
     focus(x, y, zoom, coveredPx = 0) {
       velocity.x = velocity.y = 0
       goalZ = clampZoom(zoom)
-      goalPan = focusPan(x, y, goalZ, aspect, container.clientHeight || 1, coveredPx)
+      goalPan = focusPan(x, y, goalZ, aspect, viewH, coveredPx)
       flight = { fromZ: z, fromPan: { ...pan }, seconds: reducedMotion ? 0.01 : FOCUS_SECONDS, elapsed: 0 }
     },
     destroy() {
@@ -627,6 +656,7 @@ export async function createMapScene(container, { reducedMotion = false, pins = 
       temporalDomes.dispose()
       party.dispose()
       demonGlobe?.dispose()
+      landmarkModels?.dispose()
       for (const decal of decalMeshes) {
         decal.mesh.geometry.dispose()
         decal.material.dispose()

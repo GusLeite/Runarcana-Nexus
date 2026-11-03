@@ -16,6 +16,7 @@ public record PoiResponse(
         Long loreEntryId,
         String secretNotes,
         boolean official,
+        String officialKey,
         String regionSlug,
         int imageCount,
         Integer spotlight,

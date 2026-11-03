@@ -138,6 +138,10 @@ Bandópolis não tem lugar fixo: o mestre aperta **ROLAR BANDÓPOLIS** e o d10 d
 
 As texturas são arte da Riot e ficam fora do Git, em `public/map/`: `frontend/scripts/fetch-map-assets.sh` as baixa. O botão só aparece com login, mas os arquivos em `/map/` são públicos para quem tiver o endereço.
 
+**Marcos em 3D** (`landmarkData.js`, `landmarks.js`): os 8 modelos do mapa original (Disco Solar, Bastião Imortal, Ixaocan com chão, torre e esferas que giram, Monte Targon com o feixe de luz, Grande Cidade de Demacia, Cidadela Praeglacius, Placídio de Navori e o Vazio), com a posição, a escala, o giro e o deslocamento do original (`pins-pt_br.json` do site). Cada um é um grupo no ponto do mundo com o `.obj` (OBJLoader do three, `rotation.x = π/2` porque o modelo é Y para cima) e o shader do original (textura + brilho, sem luz, com teste de profundidade); surgem de perto (`pinVisible("near")`) com um fade. Os arquivos vêm do `fetch-map-assets.sh` para `public/map/landmarks/` (fora do Git). Os lugares do mapa oficial (`OfficialPlaces`, 99 como no original, incluindo Zirima) aparecem por tamanho (`poiLevels.js`): marcos de perto, cidades um pouco mais perto e vilarejos só bem de perto.
+
+**Desempenho do mapa:** o tamanho do palco fica guardado (sem ler `clientWidth` por pin a cada quadro) e a classe do pin só muda quando muda; a névoa descarta cedo os pixels fora da região (o ruído é a parte cara, e há uma névoa por região); e a resolução é adaptativa: abaixo de ~30 quadros por segundo por um tempo, o `devicePixelRatio` usado cai de 2 para 1,5 e depois 1.
+
 ## Lore
 
 `components/lore/LoreScreen.jsx` lista os verbetes com filtro por tipo e busca; `LoreEntryView.jsx` é a página, na ordem da do Azir no Universo: capa, citação, resumo, informações, conhecimentos e vínculos. O servidor já filtra: o jogador recebe só o que foi liberado para ele. O mestre escreve em `LoreForm.jsx`, marcando com `AudiencePicker.jsx` quem conhece o verbete e cada conhecimento, e vincula personagens e lugares à região (nos dois sentidos). Imagens são links, como nos documentos.

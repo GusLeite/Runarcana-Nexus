@@ -4,60 +4,117 @@ import gusleite.runarcana_nexus.enums.PoiKind;
 
 import java.util.List;
 
-// Catálogo de lugares do mapa oficial de Runeterra. O mestre liga e desliga cada um para os jogadores.
-// As posições são aproximadas (partem do brasão da região no mapa); o mestre pode mover qualquer ponto.
+// Lugares do mapa oficial de Runeterra (nome e posição como no mapa original, 99 no total). O mestre liga e desliga
+// cada um para os jogadores. A região é a do brasão mais próximo, só para agrupar na lista do mestre.
 public final class OfficialPlaces {
 
-    public record Place(String key, String region, String name, PoiKind kind, double x, double y, String description) {}
+    public record Place(String key, String region, String name, PoiKind kind, double x, double y) {}
 
     private OfficialPlaces() {}
 
-    private static Place p(String key, String region, String name, PoiKind kind, double x, double y, String description) {
-        return new Place(key, region, name, kind, x, y, description);
+    private static Place p(String key, String region, String name, PoiKind kind, double x, double y) {
+        return new Place(key, region, name, kind, x, y);
     }
 
     public static final List<Place> ALL = List.of(
-            // Noxus
-            p("cidade-noxiana", "noxus", "Cidade Noxiana", PoiKind.CITY, 18, 150, "Capital do Império Noxiano, onde a força vale mais que o berço."),
-            p("grande-muralha-noxus", "noxus", "Fortificações do Norte", PoiKind.OUTPOST, -70, 215, "Linha de fortes que guarda a fronteira de Noxus."),
-            // Demacia
-            p("cidade-demacia", "demacia", "Cidade de Demacia", PoiKind.CITY, -420, 55, "A capital do reino, cercada por muralhas brancas e douradas."),
-            p("grande-barreira", "demacia", "Grande Barreira", PoiKind.LANDMARK, -345, 85, "Muralha monumental que isola Demacia do resto do continente."),
-            p("petricita", "demacia", "Cavernas de Petricita", PoiKind.MYSTERY, -480, 105, "Pedra que anula a magia, extraída e vigiada pelo reino."),
-            // Freljord
-            p("avarosa", "freljord", "Avarosa", PoiKind.CITY, -330, 262, "Tribo e cidade do gelo, lar da Guarda do Inverno."),
-            p("fortaleza-guarda-gelida", "freljord", "Fortaleza Guarda-Gélida", PoiKind.OUTPOST, -395, 305, "Bastião dos Guarda-Gélidos, às margens do gelo eterno."),
-            p("serilia", "freljord", "Serilia", PoiKind.CITY, -285, 320, "Assentamento do clã Lokfar, entre fiordes e geleiras."),
-            p("rakelstake", "freljord", "Rakelstake", PoiKind.LANDMARK, -440, 240, "Vale sagrado de rituais antigos do Freljord."),
-            // Ionia
-            p("placidium", "ionia", "Placidium", PoiKind.CITY, 520, 205, "Cidade ionia de templos e jardins, centro de debates e artes."),
-            p("navori", "ionia", "Navori", PoiKind.RUIN, 585, 250, "Província marcada pelas cicatrizes da guerra e pelo luto."),
-            p("shon-xan", "ionia", "Shon-Xan", PoiKind.CITY, 495, 270, "Cidade no alto do Monte Sentinela, de tradição espiritual."),
-            p("templo-kinkou", "ionia", "Templo Kinkou", PoiKind.HIDEOUT, 560, 180, "Refúgio da ordem que busca o equilíbrio entre o espiritual e o material."),
-            // Shurima
-            p("disco-solar", "shurima", "Disco Solar", PoiKind.LANDMARK, 85, -335, "O grande disco de ouro de Shurima, símbolo do poder dos Ascendidos."),
-            p("nashramae", "shurima", "Nashramae", PoiKind.RUIN, 20, -380, "Cidade-tumba dos Ascendidos, sepultada pelas areias."),
-            p("oasis-shurima", "shurima", "Oásis de Shurima", PoiKind.CAMP, 120, -385, "Ponto de descanso das caravanas no coração do deserto."),
-            p("xer-sai", "shurima", "Tocas Xer'Sai", PoiKind.DANGER, 30, -320, "Ninhos do Vazio sob o deserto, onde as criaturas aguardam."),
-            // Targon
-            p("monte-targon", "targon", "Monte Targon", PoiKind.LANDMARK, -240, -355, "A montanha mais alta de Runeterra, tocada pelos céus."),
-            p("templo-solari", "targon", "Templo Solari", PoiKind.CITY, -265, -395, "Santuário do Sol, de devotos de armadura dourada."),
-            p("templo-lunari", "targon", "Templo Lunari", PoiKind.CITY, -215, -410, "Santuário da Lua, dos que seguem a luz da noite."),
-            // Ixtal
-            p("ixaocan", "ixtal", "Ixaocan", PoiKind.CITY, 290, -320, "Capital escondida de Ixtal, dominada pelas magias elementais."),
-            p("selva-ixtal", "ixtal", "Selva de Ixtal", PoiKind.MYSTERY, 330, -350, "Floresta fechada onde estrangeiros raramente voltam."),
-            // Piltover e Zaun
-            p("piltover", "piltover-zaun", "Piltover", PoiKind.CITY, 205, -95, "Cidade do progresso, de comércio e invenções hextec."),
-            p("zaun", "piltover-zaun", "Zaun", PoiKind.CITY, 185, -128, "A cidade sob Piltover, entre vapores e experimentos químicos."),
-            // Águas de Sentina
-            p("aguas-de-sentina", "bilgewater", "Águas de Sentina", PoiKind.PORT, 565, -165, "Porto de piratas, caçadores de monstros e contrabandistas."),
-            p("ilhas-serpente", "bilgewater", "Ilhas da Serpente", PoiKind.DANGER, 600, -215, "Arquipélago infestado de monstros marinhos."),
-            p("ilhas-buhru", "bilgewater", "Ilhas Buhru", PoiKind.LANDMARK, 540, -230, "Ilhas habitadas por povos que vivem do mar."),
-            // Ilhas das Sombras
-            p("camavor", "shadow-isles", "Camavor", PoiKind.RUIN, 690, -380, "Antiga capital, hoje arruinada e assombrada pela Névoa Negra."),
-            p("nevoa-negra", "shadow-isles", "Coração da Névoa Negra", PoiKind.DANGER, 715, -410, "Onde a Ruína nasceu e onde ela é mais forte."),
-            // O Vazio e Icathia
-            p("icathia", "void", "Ruínas de Icathia", PoiKind.RUIN, 275, -565, "O reino devorado pelo Vazio, agora apenas ruínas e fendas."),
-            p("fenda-vazio", "void", "Fenda do Vazio", PoiKind.DANGER, 250, -520, "Rasgo na realidade por onde o Vazio avança.")
+            p("antathir", "shurima", "Antathir", PoiKind.LANDMARK, 82, -526),
+            p("aurma", "targon", "Aurma", PoiKind.LANDMARK, -243, -221),
+            p("basilich", "piltover-zaun", "Basilich", PoiKind.CITY, 307, 3),
+            p("belzhun", "piltover-zaun", "Bel’zhun", PoiKind.CITY, 139, -186),
+            p("bilgewater-bay", "bilgewater", "Baía de Águas de Sentina", PoiKind.CITY, 506, -190),
+            p("bloodcliffs", "piltover-zaun", "Penhascos Sangrentos", PoiKind.LANDMARK, 157, 71),
+            p("boleham", "demacia", "Boleham", PoiKind.LANDMARK, -222, -50),
+            p("cloudfield", "demacia", "Campinuvem", PoiKind.LANDMARK, -370, 22),
+            p("delverhold", "freljord", "O Forte do Minério", PoiKind.CITY, -195, 252),
+            p("demacia-city-landmark", "demacia", "A Grande Cidade de Demacia", PoiKind.LANDMARK, -456, 37),
+            p("drekan", "noxus", "Drekan", PoiKind.LANDMARK, -11, 91),
+            p("drugne", "noxus", "Drugne", PoiKind.LANDMARK, -123, 226),
+            p("edessa", "demacia", "Edessa", PoiKind.LANDMARK, -473, 53),
+            p("evenmoor", "demacia", "Evenmoor", PoiKind.LANDMARK, -437, -25),
+            p("everpeak", "demacia", "Apogeterno", PoiKind.LANDMARK, -353, 56),
+            p("faelor", "ionia", "Fae’lor", PoiKind.LANDMARK, 361, 200),
+            p("fallgren", "bilgewater", "Fallgren", PoiKind.LANDMARK, 454, -37),
+            p("fossbarrow", "demacia", "Monte da Vala", PoiKind.CITY, -502, 85),
+            p("foundling-village", "freljord", "Vila dos Órfãos", PoiKind.CITY, -264, 415),
+            p("frostguard", "freljord", "A Cidadela Praeglacius", PoiKind.LANDMARK, -215, 399),
+            p("frostheld", "demacia", "Guardageada", PoiKind.CITY, -569, 110),
+            p("gates-of-mourning", "demacia", "Portões do Luto", PoiKind.LANDMARK, -339, -48),
+            p("ghulfrost", "freljord", "Ghulfrost", PoiKind.CITY, -418, 270),
+            p("glaserport", "demacia", "Glaciporto", PoiKind.CITY, -695, 188),
+            p("glorft", "demacia", "Glorft", PoiKind.LANDMARK, -212, -91),
+            p("harelport", "ixtal", "Harelport", PoiKind.LANDMARK, 382, -296),
+            p("high-silvermere", "demacia", "Alta Pratânia", PoiKind.CITY, -487, 87),
+            p("hirana-monastery", "ionia", "Monastério Hirana", PoiKind.CITY, 560, 350),
+            p("holdrum", "piltover-zaun", "Holdrum", PoiKind.LANDMARK, 260, -111),
+            p("immortal-bastion", "noxus", "O Bastião Imortal", PoiKind.LANDMARK, -5, 110),
+            p("ironwater", "bilgewater", "Águas Férreas", PoiKind.LANDMARK, 391, -125),
+            p("ixaocan", "ixtal", "Ixaocan", PoiKind.LANDMARK, 333, -382),
+            p("jandelle", "demacia", "Jandelle", PoiKind.LANDMARK, -426, 40),
+            p("kalamanda", "targon", "Kalamanda", PoiKind.LANDMARK, -201, -232),
+            p("kashuri", "ionia", "Kashuri", PoiKind.LANDMARK, 646, 129),
+            p("kenethet", "shurima", "Kenethet", PoiKind.LANDMARK, 138, -263),
+            p("khworez", "noxus", "Khworez", PoiKind.LANDMARK, 41, 191),
+            p("kilgrove", "noxus", "Kilgrove", PoiKind.LANDMARK, -144, -62),
+            p("killash-village", "ixtal", "Vilarejo Killash", PoiKind.LANDMARK, 250, -362),
+            p("kinkou-monastery", "ionia", "Monastério Kinkou", PoiKind.CITY, 421, 286),
+            p("krexor", "piltover-zaun", "Krexor", PoiKind.LANDMARK, 303, -55),
+            p("kumangra", "piltover-zaun", "Kumangra", PoiKind.LANDMARK, 220, -136),
+            p("lissus", "demacia", "Lissus", PoiKind.LANDMARK, -473, 68),
+            p("marrowmark-market", "shurima", "Medumarca", PoiKind.CITY, 53, -441),
+            p("master-yi-village", "ionia", "Wuju", PoiKind.LANDMARK, 467, 171),
+            p("meltridge", "demacia", "Cordilheira Derretida", PoiKind.LANDMARK, -388, 74),
+            p("mount-targon", "targon", "Monte Targon", PoiKind.LANDMARK, -201, -424),
+            p("mudtown", "bilgewater", "Cidade da Lama", PoiKind.LANDMARK, 392, -181),
+            p("naljaag", "freljord", "Naljaäg", PoiKind.CITY, -279, 298),
+            p("nashramae", "shurima", "Nashramae", PoiKind.CITY, -2, -223),
+            p("needlebrook", "demacia", "Needlebrook", PoiKind.LANDMARK, -401, -44),
+            p("nerimazeth", "targon", "Nerimazeth", PoiKind.LANDMARK, -139, -383),
+            p("old-bargate", "demacia", "Pórtico Antigo", PoiKind.LANDMARK, -338, 70),
+            p("ornnkaal-rocks", "freljord", "Rochas de Ornnkaal", PoiKind.CITY, -416, 319),
+            p("palclyff", "demacia", "Palclyff", PoiKind.LANDMARK, -348, -79),
+            p("paretha", "ixtal", "Paretha", PoiKind.LANDMARK, 313, -312),
+            p("pinara", "demacia", "Pinara", PoiKind.LANDMARK, -475, 59),
+            p("placidium", "ionia", "O Placídio de Navori", PoiKind.LANDMARK, 480, 240),
+            p("puboe", "ionia", "Puboe", PoiKind.LANDMARK, 448, 340),
+            p("qualthala", "piltover-zaun", "Qualthala", PoiKind.LANDMARK, 5, -35),
+            p("quchar", "freljord", "Quchar", PoiKind.CITY, -447, 319),
+            p("raikkon", "ionia", "Raikkon", PoiKind.LANDMARK, 582, 49),
+            p("rakelstake", "demacia", "Rakelstake", PoiKind.CITY, -454, 189),
+            p("rokrund", "piltover-zaun", "Rokrund", PoiKind.LANDMARK, 58, -69),
+            p("ruug", "noxus", "Ruug", PoiKind.LANDMARK, -14, 300),
+            p("ryganns-reach", "demacia", "Canal de Rygann", PoiKind.CITY, -660, 167),
+            p("stonewall", "piltover-zaun", "Stonewall", PoiKind.LANDMARK, 13, -133),
+            p("sun-disc", "shurima", "O Disco Solar", PoiKind.LANDMARK, 3, -416),
+            p("temple-jagged-knife", "ionia", "Templo da Faca Dentada", PoiKind.LANDMARK, 587, 70),
+            p("temple-pallas", "bilgewater", "Templo de Pallas", PoiKind.CITY, 650, 31),
+            p("terbisia", "demacia", "Terbisia", PoiKind.LANDMARK, -390, 14),
+            p("tereshni", "piltover-zaun", "Tereshni", PoiKind.LANDMARK, 61, -181),
+            p("tevasa", "ionia", "Tevasa", PoiKind.LANDMARK, 475, 188),
+            p("the-city-of-gardens", "targon", "A Cidade dos Jardins", PoiKind.CITY, -83, -437),
+            p("the-dawnhold", "demacia", "Guarida Nascente", PoiKind.LANDMARK, -524, 25),
+            p("the-drakkengate", "piltover-zaun", "O Drakkengate", PoiKind.LANDMARK, 241, 92),
+            p("the-graygate", "demacia", "O Portão Cinza", PoiKind.LANDMARK, -386, 73),
+            p("the-iron-pinnacle", "noxus", "O Ápice de Ferro", PoiKind.LANDMARK, 12, 264),
+            p("the-void", "void", "O Vazio", PoiKind.LANDMARK, 270, -537),
+            p("trannit", "piltover-zaun", "Trannit", PoiKind.LANDMARK, 361, -131),
+            p("trevale", "demacia", "Trevale", PoiKind.CITY, -317, -75),
+            p("tuula", "ionia", "Tuula", PoiKind.LANDMARK, 618, 98),
+            p("urzeris", "targon", "Urzeris", PoiKind.LANDMARK, -122, -229),
+            p("uwendale", "demacia", "Uwendale", PoiKind.CITY, -407, 112),
+            p("valars-hollow", "demacia", "Depressão de Valar", PoiKind.CITY, -619, 151),
+            p("vaskasia", "demacia", "Vaskasia", PoiKind.LANDMARK, -470, 12),
+            p("vathcaer", "freljord", "Vathcaer", PoiKind.CITY, -397, 317),
+            p("vekaura", "shurima", "Vekaura", PoiKind.LANDMARK, 118, -370),
+            p("velorus", "demacia", "Velorus", PoiKind.LANDMARK, -471, 75),
+            p("village-of-the-ice-children", "freljord", "Vila dos Filhos do Gelo", PoiKind.CITY, -402, 279),
+            p("vindor", "piltover-zaun", "Vindor", PoiKind.LANDMARK, 375, -31),
+            p("vlonquo", "ionia", "Vlonqo", PoiKind.LANDMARK, 561, 218),
+            p("wehle", "ionia", "Weh’le", PoiKind.LANDMARK, 430, 183),
+            p("wrenwall", "demacia", "Wrenwall", PoiKind.LANDMARK, -380, -18),
+            p("yadulsk", "freljord", "Yadulsk", PoiKind.CITY, -442, 326),
+            p("yetis-vigil", "freljord", "Vigília do Yeti", PoiKind.CITY, -288, 402),
+            p("zhyunia", "ionia", "Zhyunia", PoiKind.LANDMARK, 594, 133),
+            p("zirima", "shurima", "Zirima", PoiKind.CITY, -5, -483),
+            p("zuretta", "shurima", "Zuretta", PoiKind.LANDMARK, -7, -271)
     );
 }

@@ -46,6 +46,7 @@ export const pinVisible = (level, z) => {
   if (level === 'hidden') return false
   const progress = zoomProgress(z)
   if (level === 'any') return progress > 0
+  if (typeof level === 'number') return progress > level // só de bem perto: o mínimo de aproximação
   return level === 'near' ? progress > 0.32 : progress > 0 && progress <= 0.32
 }
 

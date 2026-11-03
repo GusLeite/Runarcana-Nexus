@@ -1,6 +1,11 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-03 — Mapa: marcos 3D do original, lugares oficiais reais e desempenho (`feature/character-sheet`)
+- Etapa 16: os 8 modelos 3D do mapa original (Disco Solar, Ixaocan, Monte Targon com o feixe de luz, Placídio, Vazio…) com texturas, posição e animação do original; `fetch-map-assets.sh` baixa para `public/map/landmarks/` (rode de novo no servidor).
+- Catálogo oficial refeito com os dados reais do site: 99 lugares (Zirima, Disco Solar…), por tamanho (marcos/cidades/vilarejos aparecem conforme o zoom); lugares da versão anterior (inventada) saem sozinhos no próximo start.
+- Desempenho: sem leitura de layout por pin a cada quadro, névoa que descarta cedo e resolução adaptativa quando cai abaixo de ~30 quadros por segundo.
+
 ## 2026-11-03 — Runa inicial junto do Pulso Rúnico (`feature/character-sheet`)
 - Na etapa Escolhas, a Runa inicial aparece sempre logo abaixo do Pulso Rúnico (`orderChoices`), em vez de ficar separada por outras escolhas.
 

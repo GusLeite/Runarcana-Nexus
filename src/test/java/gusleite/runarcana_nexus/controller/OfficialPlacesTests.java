@@ -40,7 +40,9 @@ class OfficialPlacesTests {
             assertThat(Math.abs(p.x())).isLessThanOrEqualTo(1024);
             assertThat(Math.abs(p.y())).isLessThanOrEqualTo(1024);
         });
-        assertThat(OfficialPlaces.ALL).anyMatch(p -> p.name().equals("Disco Solar"));
+        assertThat(OfficialPlaces.ALL).anyMatch(p -> p.name().equals("O Disco Solar"));
+        assertThat(OfficialPlaces.ALL).anyMatch(p -> p.name().equals("Zirima"));
+        assertThat(OfficialPlaces.ALL).hasSize(99);
     }
 
     @Test
@@ -57,7 +59,7 @@ class OfficialPlacesTests {
         send(patch("/map/pois/official/audience"), master, "{\"region\":\"shurima\",\"toAll\":true}").andExpect(jsonPath("$.changed").value(shurima));
         mvc.perform(get("/map/pois").header("Authorization", "Bearer " + player))
                 .andExpect(jsonPath("$.length()").value(shurima))
-                .andExpect(jsonPath("$[?(@.name=='Disco Solar')]").exists());
+                .andExpect(jsonPath("$[?(@.name=='O Disco Solar')]").exists());
         // Ligar de novo não muda nada; desligar tudo esconde de volta.
         send(patch("/map/pois/official/audience"), master, "{\"region\":\"shurima\",\"toAll\":true}").andExpect(jsonPath("$.changed").value(0));
         send(patch("/map/pois/official/audience"), master, "{\"toAll\":false}").andExpect(jsonPath("$.changed").value(shurima));

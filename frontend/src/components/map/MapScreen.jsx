@@ -9,6 +9,7 @@ import { fetchLore } from '../../api/lore.js'
 import { fetchRecipients } from '../../api/master.js'
 import DiceRoll from '../sheet/DiceRoll.jsx'
 import { playerName } from '../lore/AudiencePicker.jsx'
+import { MAP_LANDMARKS } from './landmarkData.js'
 import { FOG_AREAS, FOG_REGIONS, MAP_AREAS, MAP_DECALS, MAP_DOMES, MAP_GLOBE, MAP_LABELS, MAP_PINS, bandleSpot, nearestRegion } from './regions.js'
 import { sineInOut } from './mapMath.js'
 import RegionPanel from './RegionPanel.jsx'
@@ -17,6 +18,7 @@ import { PoiGlyph } from './poiKinds.jsx'
 import { ImageLightbox } from './PoiGallery.jsx'
 import OfficialPlacesPanel from './OfficialPlacesPanel.jsx'
 import { cssColor, routeColor } from './routeColors.js'
+import { poiLevel } from './poiLevels.js'
 import '../../styles/map.css'
 
 const PANEL_WIDTH = 380
@@ -112,6 +114,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
       fogAreas: FOG_AREAS,
       domes: MAP_DOMES,
       globe: MAP_GLOBE,
+      landmarks: MAP_LANDMARKS,
       onPinsChange: () => setHovered(null),
       onMapClick: (x, y) => mapClick.current(x, y),
     })
@@ -303,7 +306,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   useEffect(() => {
     const heightAt = (x, y) => scene.current?.heightAt(x, y) ?? 0
     const dynamic = [
-      ...(pois ?? []).map(p => ({ slug: 'poi-' + p.id, x: p.x, y: p.y, level: bornPois.includes(p.id) ? 'any' : 'near' })),
+      ...(pois ?? []).map(p => ({ slug: 'poi-' + p.id, x: p.x, y: p.y, level: bornPois.includes(p.id) ? 'any' : poiLevel(p) })),
       ...waypoints.map(w => ({ slug: 'wp-' + w.id, x: w.x, y: w.y, level: 'any' })),
       ...(draftPoint ? [{ slug: 'draft', x: draftPoint.x, y: draftPoint.y, level: 'any' }] : []),
     ]

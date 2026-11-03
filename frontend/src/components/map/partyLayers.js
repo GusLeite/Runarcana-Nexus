@@ -53,6 +53,8 @@ const FOG_FRAGMENT = `
     } else {
       mask = texture2D(map, vUv).a;
     }
+    // Fora da região (a maior parte da tela, em cada uma das regiões na névoa): sai antes do ruído, que é a parte cara.
+    if (mask * opacity < 0.004) discard;
     float n = noise(vUv * 36.0 + vec2(time * 0.04, time * 0.02)) * 0.6 + noise(vUv * 110.0 - time * 0.06) * 0.4;
     vec3 mist = mix(vec3(0.004, 0.008, 0.012), vec3(0.07, 0.085, 0.105), n);
     mist += vec3(1.0, 0.75, 0.3) * glow * (0.4 + n);

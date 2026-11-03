@@ -150,6 +150,10 @@ Cabeçalho fixo (CAMPANHA / Runeterra, abas **Visão do mestre | Jogador**, **+ 
 
 - Cada jogador desenha a própria rota no mapa (clicando as paradas, como a trilha do grupo, mas pessoal), com nome e cor; o mestre vê as de todos. Apagar e refazer; limite por jogador.
 
+## Etapa 16 — Desempenho e marcos 3D do mapa original — **feita (2026-11-03)**
+
+Marcos em 3D com os modelos do mapa original (8 `.obj` com texturas, posições e animações iguais), os 99 lugares do mapa oficial com nome e posição reais (inclui Zirima e o Disco Solar) aparecendo por tamanho como no original, e ajustes de desempenho (sem leitura de layout por pin, névoa que descarta cedo, resolução adaptativa). **Pendente**: medir em hardware mais fraco que o do desenvolvimento (o mapa rodava a 80–160 quadros por segundo na RTX 5070 do dev, então o travamento relatado não foi reproduzido); ver "Depois do para jogar".
+
 ## Depois do "para jogar"
 
 Não fazem parte deste plano; continuam nas pendências de [backend.md](backend.md) e [frontend.md](frontend.md):
