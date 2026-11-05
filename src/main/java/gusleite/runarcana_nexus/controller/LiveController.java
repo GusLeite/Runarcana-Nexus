@@ -32,7 +32,6 @@ public class LiveController {
     // Sem "produces": com ele, o 401 de ticket inválido viraria 406 (o JSON de erro não casa com text/event-stream).
     @GetMapping("/stream")
     public SseEmitter stream(@RequestParam(required = false) String ticket) {
-        tickets.redeem(ticket);
-        return hub.open();
+        return hub.open(tickets.redeem(ticket));
     }
 }

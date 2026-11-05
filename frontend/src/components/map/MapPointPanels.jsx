@@ -19,7 +19,7 @@ function PointPanel({ label, onClose, children }) {
 }
 
 // Ponto de interesse: descrição, verbete ligado, comentários da mesa e anotações de quem está vendo.
-export function PoiPanel({ poi, loreEntry, master, preview = false, players = [], token, onPoi, onNotice, onMove, onOpenLore, onEdit, onAudience, onAddComment, onDeleteComment, onClose }) {
+export function PoiPanel({ poi, loreEntry, master, preview = false, players = [], token, onPoi, onNotice, onMove, onLookHere, onOpenLore, onEdit, onAudience, onAddComment, onDeleteComment, onClose }) {
   const [text, setText] = useState('')
   const [shared, setShared] = useState(false)
   const [msg, setMsg] = useState(null)
@@ -59,6 +59,7 @@ export function PoiPanel({ poi, loreEntry, master, preview = false, players = []
         {loreEntry && <button type="button" className="lore-action" onClick={() => onOpenLore(loreEntry.id)}>ABRIR NA LORE</button>}
         {master && <button type="button" className="lore-action ghost" onClick={onEdit}>EDITAR</button>}
         {master && onMove && <button type="button" className="lore-action ghost" onClick={onMove}>MOVER</button>}
+        {onLookHere && <button type="button" className="lore-action" onClick={onLookHere} title={poi.toAll ? 'Leva a câmera de todos até aqui' : 'Só quem vê este ponto é levado até ele'}>OLHEM AQUI!</button>}
         <CopyLinkButton target={poi.id} />
       </div>
       {loreEntry?.related?.length > 0 && (

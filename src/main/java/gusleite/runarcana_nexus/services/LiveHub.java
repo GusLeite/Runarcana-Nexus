@@ -7,8 +7,9 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 // Canal ao vivo (SSE): guarda as conexões abertas e avisa todas quando algo muda.
 // O evento é só um aviso de tópico ({"topic":"map"}), sem dados: a tela busca de novo pelas rotas de sempre,
 // com as permissões da própria conta, então nada oculto vaza por aqui. Fica em memória (uma instância só).
+// Exceção: sinais efêmeros que não ficam salvos em lugar nenhum ("Olhem aqui!" e ping no mapa) vão com os dados,
+// e só para as contas escolhidas por quem manda (send).
 @Service
 public class LiveHub {
 
@@ -23,7 +26,8 @@ public class LiveHub {
     static final Duration TIMEOUT = Duration.ofMinutes(30);
     private static final long HEARTBEAT_SECONDS = 20;
 
-    private final Set<SseEmitter> emitters = ConcurrentHashMap.newKeySet();
+    // Conexão aberta → conta dona dela.
+    private final Map<SseEmitter, String> emitters = new ConcurrentHashMap<>();
     private final ScheduledExecutorService heartbeat = Executors.newSingleThreadScheduledExecutor(r -> {
         Thread t = new Thread(r, "live-heartbeat");
         t.setDaemon(true);
@@ -34,12 +38,12 @@ public class LiveHub {
         heartbeat.scheduleAtFixedRate(this::beat, HEARTBEAT_SECONDS, HEARTBEAT_SECONDS, TimeUnit.SECONDS);
     }
 
-    public SseEmitter open() {
+    public SseEmitter open(String username) {
         SseEmitter emitter = new SseEmitter(TIMEOUT.toMillis());
         emitter.onCompletion(() -> emitters.remove(emitter));
         emitter.onTimeout(() -> emitters.remove(emitter));
         emitter.onError(e -> emitters.remove(emitter));
-        emitters.add(emitter);
+        emitters.put(emitter, username);
         // Primeiro evento: o cliente sabe que está ligado e confere o que perdeu enquanto estava fora.
         send(emitter, SseEmitter.event().name("hello").data("{}", MediaType.APPLICATION_JSON));
         return emitter;
@@ -47,9 +51,20 @@ public class LiveHub {
 
     public void publish(String topic) {
         String data = "{\"topic\":\"" + topic + "\"}";
-        for (SseEmitter emitter : emitters) {
+        for (SseEmitter emitter : emitters.keySet()) {
             send(emitter, SseEmitter.event().name("change").data(data, MediaType.APPLICATION_JSON));
         }
+    }
+
+    // Evento com dados (name: "map-focus", "map-ping"...) só para as contas que passam no filtro. Devolve quantas conexões receberam.
+    public int send(String name, Object data, Predicate<String> toUsername) {
+        int sent = 0;
+        for (Map.Entry<SseEmitter, String> entry : emitters.entrySet()) {
+            if (!toUsername.test(entry.getValue())) continue;
+            send(entry.getKey(), SseEmitter.event().name(name).data(data, MediaType.APPLICATION_JSON));
+            sent++;
+        }
+        return sent;
     }
 
     int connections() {
@@ -58,7 +73,7 @@ public class LiveHub {
 
     // Comentário SSE: mantém a conexão viva atrás de proxies que derrubam conexão parada.
     private void beat() {
-        for (SseEmitter emitter : emitters) {
+        for (SseEmitter emitter : emitters.keySet()) {
             send(emitter, SseEmitter.event().comment("ping"));
         }
     }
@@ -77,7 +92,7 @@ public class LiveHub {
     @PreDestroy
     void shutdown() {
         heartbeat.shutdownNow();
-        emitters.forEach(SseEmitter::complete);
+        emitters.keySet().forEach(SseEmitter::complete);
         emitters.clear();
     }
 }

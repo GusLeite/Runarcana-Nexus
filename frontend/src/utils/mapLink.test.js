@@ -22,6 +22,11 @@ describe('links do mapa', () => {
     expect(focusFromSearch('?ponto=abc')).toBeUndefined()
     expect(focusFromSearch('?ponto=-3')).toBeUndefined()
     expect(focusFromSearch('?regiao=../x')).toBeUndefined()
+    expect(focusFromSearch('?tela=mapa&x=-120&y=45')).toEqual({ x: -120, y: 45 })
+    expect(focusFromSearch('?tela=mapa&x=5000&y=0')).toBeUndefined()
+    expect(focusFromSearch('?tela=mapa&x=10')).toBeUndefined()
+    expect(mapLinkPath({ x: 10.4, y: -3 }, 'https://mesa.example/?aba=x', true)).toBe('/?aba=x&tela=mapa&x=10&y=-3')
+    expect(withoutFocus('https://mesa.example/?tela=mapa&x=1&y=2')).toBe('/?tela=mapa')
   })
 
   it('tira o foco da URL', () => {

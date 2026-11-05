@@ -870,3 +870,6 @@
 .map-carousel-arrow.next { right: 4px; }
 .map-carousel-arrow:hover { background: var(--gold); color: var(--ink); }
 @media (prefers-reduced-motion: reduce) { .map-slide img { transition: none; } }
+
+/* "Olhem aqui!" do mestre */
+.map-tool.look{border-color:var(--gold-hi);color:var(--gold-hi);box-shadow:0 0 14px rgba(240,199,94,.25)}

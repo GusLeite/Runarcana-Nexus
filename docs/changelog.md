@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-04 — "Olhem aqui!" e ping no mapa, Etapa 20 (`main`)
+- O canal ao vivo ganha eventos com dados, por conta (`LiveHub.send`): `POST /map/focus` (mestre) leva a câmera de todos até um lugar ou ponto (oculto só para quem vê) e `POST /map/ping` (Alt+clique) deixa uma onda na cor de quem marcou; nada é salvo.
+- Mapa: anéis de luz (`mapPulses.js`), botão **OLHEM AQUI!** na barra e no painel do ponto; ficha com o mapa fechado mostra o aviso com **VER**.
+
 ## 2026-11-04 — Dados 3D com física, Etapa 19 (`main`)
 - `components/dice3d/`: d4 a d20 caem na tela com three + `cannon-es` (dependência nova, carregada sob demanda). A física roda antes e os números são trocados para a face de cima mostrar o valor do servidor.
 - Crítico em ouro com tremida, falha com rachadura, descartado escurecido, secreta na névoa, batidas com som; rolagem dos outros num palco pequeno no canto. Botão **3D** liga/desliga; sem WebGL ou com movimento reduzido, fica o dado 2D.

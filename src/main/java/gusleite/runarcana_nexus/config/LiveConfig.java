@@ -27,6 +27,8 @@ public class LiveConfig implements WebMvcConfigurer {
             "documents", "documents");
 
     private static final Set<String> READS = Set.of("GET", "HEAD", "OPTIONS");
+    // Sinais efêmeros do mapa: vão pelo próprio canal (MapSignalService), não fazem as telas buscarem nada.
+    private static final Set<String> QUIET = Set.of("/map/focus", "/map/ping");
 
     private final LiveHub hub;
 
@@ -49,7 +51,9 @@ public class LiveConfig implements WebMvcConfigurer {
                 if (ex != null || READS.contains(request.getMethod())) return;
                 int status = response.getStatus();
                 if (status < 200 || status >= 300) return;
-                String topic = topicOf(request.getRequestURI().substring(request.getContextPath().length()));
+                String path = request.getRequestURI().substring(request.getContextPath().length());
+                if (QUIET.contains(path)) return;
+                String topic = topicOf(path);
                 if (topic != null) hub.publish(topic);
             }
         });

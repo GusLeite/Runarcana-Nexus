@@ -3,7 +3,8 @@ import { applyLevelUp, castSpell, fetchBreakdown, fetchConditions, setDeathSaves
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
 import { fetchVisiblePois } from '../../api/map.js'
-import { useLive } from '../../api/live.js'
+import { useLive, useLiveEvent } from '../../api/live.js'
+import { openMapAt } from '../../utils/mapLink.js'
 import { buyFromMerchant, fetchActiveMerchant, haggleWithMerchant, pingMerchant, sellToMerchant } from '../../api/merchants.js'
 import { SKILL_NAMES, deathSaveResult, parseDice } from '../../data/rules.js'
 import { serverRoll } from '../../api/rolls.js'
@@ -101,6 +102,23 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   }, [token])
 
   useEffect(load, [load])
+
+  // "Olhem aqui!" do mestre com o mapa fechado: aviso com VER (com o mapa aberto, o MapScreen leva a câmera sozinho).
+  const [mapCall, setMapCall] = useState(null)
+  useLiveEvent(token, 'map-focus', signal => {
+    if (new URLSearchParams(window.location.search).get('tela') === 'mapa') return
+    play('notice')
+    setMapCall(signal)
+  })
+  useEffect(() => {
+    if (!mapCall) return undefined
+    const t = setTimeout(() => setMapCall(null), 15000)
+    return () => clearTimeout(t)
+  }, [mapCall])
+  const seeMapCall = () => {
+    openMapAt(mapCall.poiId ?? { x: mapCall.x, y: mapCall.y })
+    setMapCall(null)
+  }
 
   // Canal ao vivo: cada efeito abaixo confere na hora do aviso; sem canal, o polling segue no ritmo normal.
   const merchantLive = useLive(token, ['merchants'])
@@ -723,6 +741,13 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       )}
       {ceremony && <LevelUpCeremony gains={ceremony} name={sheet?.characterName ?? character.name} onClose={closeCeremony} />}
       {toast && <div key={toast} className="toast" role="status">{toast}</div>}
+      {mapCall && (
+        <div className="map-call" role="status">
+          <span>O mestre quer mostrar {mapCall.name ?? 'algo'} no mapa.</span>
+          <button type="button" className="btn" onClick={seeMapCall}>VER</button>
+          <button type="button" className="map-call-close" onClick={() => setMapCall(null)} aria-label="Fechar o aviso">×</button>
+        </div>
+      )}
     </div>
     </ExplainProvider>
   )

@@ -12,6 +12,10 @@ import gusleite.runarcana_nexus.services.MapPartyService.MoveRequest;
 import gusleite.runarcana_nexus.services.MapPartyService.PartyView;
 import gusleite.runarcana_nexus.services.MapPointService;
 import gusleite.runarcana_nexus.services.MapService;
+import gusleite.runarcana_nexus.services.MapSignalService;
+import gusleite.runarcana_nexus.services.MapSignalService.FocusRequest;
+import gusleite.runarcana_nexus.services.MapSignalService.PingRequest;
+import gusleite.runarcana_nexus.services.MapSignalService.SignalResult;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,13 +33,29 @@ public class MapController {
     private final MapService map;
     private final MapPointService points;
     private final MapPartyService party;
+    private final MapSignalService signals;
     private final AuthService auth;
 
-    public MapController(MapService map, MapPointService points, MapPartyService party, AuthService auth) {
+    public MapController(MapService map, MapPointService points, MapPartyService party, AuthService auth, MapSignalService signals) {
+        this.signals = signals;
         this.party = party;
         this.map = map;
         this.points = points;
         this.auth = auth;
+    }
+
+    // "Olhem aqui!": o mestre leva a câmera de todos (ver MapSignalService). Efêmero: nada fica salvo.
+    @PostMapping("/focus")
+    public ResponseEntity<SignalResult> focus(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                              @RequestBody FocusRequest request) {
+        return ResponseEntity.ok(signals.focus(auth.requireMaster(authorization), request));
+    }
+
+    // Ping: onda na cor de quem clicou, para todos (Alt+clique no mapa).
+    @PostMapping("/ping")
+    public ResponseEntity<SignalResult> ping(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+                                             @RequestBody PingRequest request) {
+        return ResponseEntity.ok(signals.ping(auth.authenticate(authorization), request));
     }
 
     @GetMapping("/bandle")

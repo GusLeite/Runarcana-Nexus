@@ -3,7 +3,7 @@
 // Ao (re)conectar, todos os assinantes são chamados para conferir o que perderam.
 // Sem canal (caiu, EventSource ausente, proxy ruim), o polling de cada tela segue no ritmo normal;
 // com o canal ligado, ele vira só reserva (a cada LIVE_FALLBACK_MS).
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { request } from './auth.js'
 
 const API = import.meta.env.VITE_API_URL ?? '/runarcana'
@@ -11,8 +11,10 @@ export const LIVE_FALLBACK_MS = 60000
 const DEBOUNCE_MS = 250
 const CLOSE_IDLE_MS = 3000 // espera antes de fechar sem assinantes (troca de tela não derruba o canal)
 const MAX_RETRY_MS = 30000
+// Eventos com dados (sinais efêmeros do mapa): vão direto, sem agrupar, e não são chamados ao reconectar.
+export const DATA_EVENTS = ['map-focus', 'map-ping']
 
-const subs = new Set() // { token, topics: Set, fn, timer }
+const subs = new Set() // { token, topics: Set, fn, timer, event? }
 let conn = null // { token, source, connected, attempt, retry, closing, dead }
 
 function call(sub) {
@@ -30,8 +32,13 @@ function connect(c) {
       source.addEventListener('hello', () => {
         c.connected = true
         c.attempt = 0
-        subs.forEach(s => { if (s.token === c.token) call(s) })
+        subs.forEach(s => { if (s.token === c.token && !s.event) call(s) })
       })
+      DATA_EVENTS.forEach(name => source.addEventListener(name, e => {
+        let data
+        try { data = JSON.parse(e.data) } catch { return }
+        subs.forEach(s => { if (s.token === c.token && s.event === name) s.fn(data) })
+      }))
       source.addEventListener('change', e => {
         let topic
         try { topic = JSON.parse(e.data).topic } catch { return }
@@ -89,6 +96,29 @@ export function subscribeLive(token, topics, fn) {
       c.closing = setTimeout(() => close(c), CLOSE_IDLE_MS)
     }
   }
+}
+
+// Assina um evento com dados (DATA_EVENTS); fn(data) a cada um. Mantém o canal aberto como os tópicos.
+export function subscribeLiveEvent(token, name, fn) {
+  if (!token) return () => {}
+  const sub = { token, topics: new Set(), fn, timer: null, event: name }
+  subs.add(sub)
+  ensure(token)
+  return () => {
+    subs.delete(sub)
+    const c = conn
+    if (c && ![...subs].some(s => s.token === c.token)) {
+      clearTimeout(c.closing)
+      c.closing = setTimeout(() => close(c), CLOSE_IDLE_MS)
+    }
+  }
+}
+
+// Hook: fn pode mudar a cada render (lê o estado atual) sem reabrir a assinatura.
+export function useLiveEvent(token, name, fn) {
+  const ref = useRef(fn)
+  ref.current = fn
+  useEffect(() => subscribeLiveEvent(token, name, data => ref.current(data)), [token, name])
 }
 
 export const isLiveConnected = token => !!(conn && conn.token === token && conn.connected)

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { LIVE_FALLBACK_MS, isLiveConnected, liveHandle, resetLive, subscribeLive } from './live'
+import { LIVE_FALLBACK_MS, isLiveConnected, liveHandle, resetLive, subscribeLive, subscribeLiveEvent } from './live'
 
 // EventSource falso: guarda as instâncias para o teste disparar eventos.
 class FakeSource {
@@ -61,6 +61,21 @@ describe('api/live', () => {
     await vi.advanceTimersByTimeAsync(300)
     expect(map).toHaveBeenCalledTimes(2)
     expect(journal).toHaveBeenCalledTimes(1)
+  })
+
+  it('eventos com dados vão direto para quem assina, sem chamar ao reconectar', async () => {
+    const ping = vi.fn()
+    const topic = vi.fn()
+    subscribeLiveEvent('t', 'map-ping', ping)
+    subscribeLive('t', ['map'], topic)
+    await flush()
+    const source = FakeSource.all[0]
+    source.emit('hello')
+    source.emit('map-ping', '{"x":3,"y":-4,"from":"rudo"}')
+    expect(ping).toHaveBeenCalledWith({ x: 3, y: -4, from: 'rudo' })
+    await vi.advanceTimersByTimeAsync(300)
+    expect(ping).toHaveBeenCalledTimes(1)
+    expect(topic).toHaveBeenCalledTimes(1)
   })
 
   it('ao cair, fecha e reconecta com um ticket novo', async () => {

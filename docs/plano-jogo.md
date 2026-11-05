@@ -10,7 +10,7 @@ Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criac
 
 - Ficha: atributos, perícias, resistências, CA (com armadura e escudo do inventário), PV editáveis pelo jogador, habilidades com usos, magias, descanso curto/longo, magias preparadas, rolagens de d20 e de dano, ataques com arma (Etapa 2), conjurar gastando Mana com CD e ataque de magia (Etapa 3), testes contra a morte e condições (Etapa 4; Exaustão até 10, como no livro), mestre edita habilidades/documentos e ajusta PV (Etapa 5), aba Mesa com todos os personagens (Etapa 6), inventário (o jogador gasta), documentos, anotações, aba Livro.
 - Mestre: cria/apaga habilidades e documentos, sobe de nível (com multiclasse), trava regras da mesa, dá e tira itens, ouro e inspiração (Etapa 1).
-- As Etapas 1–19 estão feitas; falta a Etapa 20 do plano da mesa ao vivo.
+- As Etapas 1–20 estão feitas, inclusive o plano da mesa ao vivo; o que falta está em "Depois do para jogar".
 
 ## Etapa 1 — Inventário, ouro e inspiração pelo mestre — **feita (2026-10-28)**
 
@@ -196,7 +196,10 @@ Como ficou: ver `frontend-visual.md`, Dados 3D. A física roda inteira antes de 
 - Sons: colisões do `engine.js` (`rattle`/`settle`) disparadas pelos impactos da física, com volume pela velocidade.
 - Respeita `prefers-reduced-motion` e falta de WebGL (volta ao `DiceRoll` atual) e tem um botão "dados 3D: ligado/desligado" lembrado no navegador, para aparelhos fracos.
 
-## Etapa 20 — "Olhem aqui!" e ping no mapa
+## Etapa 20 — "Olhem aqui!" e ping no mapa — **feita (2026-11-04)**
+
+Como ficou: "Olhem aqui!" no painel do ponto e na barra (centro da tela); ponto oculto só leva quem o vê (os outros não recebem nada). Ping com limite de 3 a cada 3 s. Sem gesto de ping no celular (não há Alt). O texto abaixo é o planejado.
+
 
 **Por quê**: o mestre conduz a cena pelo mapa, e o canal ao vivo torna isso trivial.
 - Mestre: botão **Olhem aqui!** num ponto ou num lugar qualquer leva a câmera de todos os jogadores com o mapa aberto até lá, num voo suave, com um pulso de luz (quem está com o mapa fechado recebe "O mestre quer mostrar algo no mapa" com o botão **Ver**).

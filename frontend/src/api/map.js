@@ -78,3 +78,9 @@ export const fetchRoutes = (token, as) => request('/map/routes' + (as ? '?as=' +
 export const createRoute = (token, route) => request('/map/routes', { method: 'POST', token, body: route })
 
 export const deleteRoute = (token, id) => request('/map/routes/' + id, { method: 'DELETE', token })
+
+// "Olhem aqui!" (só o mestre): leva a câmera de todos até { x, y } ou até o ponto { poiId }. Devolve { sentTo }.
+export const focusMap = (token, target) => request('/map/focus', { method: 'POST', token, body: target })
+
+// Ping: onda no lugar, para toda a mesa (no máximo 3 a cada 3 s).
+export const pingMap = (token, x, y) => request('/map/ping', { method: 'POST', token, body: { x, y } })

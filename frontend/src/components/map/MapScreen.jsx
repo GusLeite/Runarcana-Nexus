@@ -3,10 +3,10 @@ import { prefersReducedMotion } from '../../hooks/useCountUp.js'
 import { createMapScene } from './mapScene.js'
 import {
   addPoiComment, clearPartyTrail, createPoi, createWaypoint, deletePoi, deletePoiComment, deleteWaypoint, fetchBandle, fetchParty, fetchPois,
-  createRoute, deleteRoute, fetchPoiImages, fetchRoutes, fetchWaypoints, hideParty, setOfficialAudience, moveParty, rollBandle, setMapFog, setPoiAudience, setRegionRevealed, updatePoi, updateWaypoint,
+  createRoute, deleteRoute, fetchPoiImages, focusMap, pingMap, fetchRoutes, fetchWaypoints, hideParty, setOfficialAudience, moveParty, rollBandle, setMapFog, setPoiAudience, setRegionRevealed, updatePoi, updateWaypoint,
 } from '../../api/map.js'
 import { fetchLore } from '../../api/lore.js'
-import { useLive } from '../../api/live.js'
+import { useLive, useLiveEvent } from '../../api/live.js'
 import { fetchRecipients } from '../../api/master.js'
 import DiceRoll from '../sheet/DiceRoll.jsx'
 import { playerName } from '../lore/AudiencePicker.jsx'
@@ -38,6 +38,8 @@ const PARTY_WALK_MS = 1600
 // Pontos: conferidos com a mesma frequência; o recém-revelado brota e fica em destaque por um tempo.
 const POI_POLL = 5000
 const BORN_MS = 4000
+// "Olhem aqui!" do mestre: anéis dourados e um farol.
+const LOOK_COLOR = 0xf0c75e
 // Névoa: quase opaca para os jogadores; o mestre vê através.
 const FOG_PLAYER = 1
 const FOG_MASTER = 0.45
@@ -415,8 +417,45 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
     scene.current?.focus(point.x, point.y, POINT_ZOOM, coveredWidth())
   }
 
+  // Sinais do mapa pelo canal ao vivo (efêmeros, nada fica salvo). Os seus já foram desenhados na hora.
+  const me = session.username
+  useLiveEvent(session.token, 'map-focus', signal => {
+    if (signal.from === me || !scene.current) return
+    scene.current.focus(signal.x, signal.y, POINT_ZOOM, panel ? coveredWidth() : 0)
+    scene.current.pulse(signal.x, signal.y, LOOK_COLOR, { big: true })
+    setNotice('O mestre está mostrando ' + (signal.name ?? 'este lugar') + '.')
+  })
+  useLiveEvent(session.token, 'map-ping', signal => {
+    if (signal.from === me || !scene.current) return
+    scene.current.pulse(signal.x, signal.y, routeColor(signal.from))
+    setNotice((signal.who ?? 'Alguém') + ' marcou um lugar no mapa.')
+  })
+  // Ping: Alt+clique deixa uma onda na sua cor para toda a mesa.
+  const ping = (clientX, clientY) => {
+    const world = scene.current?.screenToWorld(clientX, clientY)
+    if (!world || Math.abs(world.x) > 1024 || Math.abs(world.y) > 1024) return
+    scene.current.pulse(world.x, world.y, routeColor(me))
+    pingMap(session.token, world.x, world.y).catch(err => setNotice(err.message))
+  }
+  // "Olhem aqui!" (mestre): o ponto aberto ou o centro do que ele está vendo.
+  const lookHere = target => {
+    const at = target ?? scene.current?.center()
+    if (!at) return
+    const x = target?.x ?? at.x
+    const y = target?.y ?? at.y
+    scene.current?.pulse(x, y, LOOK_COLOR, { big: true })
+    const body = target?.id != null ? { poiId: target.id } : { x: Math.round(x), y: Math.round(y) }
+    focusMap(session.token, body)
+      .then(({ sentTo }) => setNotice(sentTo > 1 ? 'A mesa está olhando para cá.' : 'Ninguém mais está com o canal ao vivo aberto agora.'))
+      .catch(err => setNotice(err.message))
+  }
+
   // Marcar no mapa: com o modo ligado, o próximo clique vira o rascunho do ponto.
-  mapClick.current = (clientX, clientY) => {
+  mapClick.current = (clientX, clientY, e) => {
+    if (e?.altKey && !placing) {
+      ping(clientX, clientY)
+      return
+    }
     if (!placing) return
     const world = scene.current?.screenToWorld(clientX, clientY)
     if (!world || Math.abs(world.x) > 1024 || Math.abs(world.y) > 1024) {
@@ -452,6 +491,10 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
     } else if (focus.slug) {
       const pin = MAP_PINS.find(p => p.slug === focus.slug)
       if (pin && (pin.slug !== 'bandle' || bandleRoll)) select(pin)
+    } else if (focus.x != null) {
+      // Veio do aviso "o mestre quer mostrar algo" com o mapa fechado.
+      scene.current?.focus(focus.x, focus.y, POINT_ZOOM)
+      scene.current?.pulse(focus.x, focus.y, LOOK_COLOR, { big: true })
     }
   }, [focus, status, pois, bandleRoll]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -669,6 +712,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
               ? (
                 <>
                   <span className="map-count" title="Pontos que você criou e quantos o grupo inteiro já vê">Mestre: {plural((pois ?? []).length, 'ponto', 'pontos')} · Grupo: {plural((pois ?? []).filter(p => p.toAll).length, 'revelado', 'revelados')}</span>
+                  <button type="button" className="map-tool look" onClick={() => lookHere()} title="Leva a câmera de todos até o centro do que você está vendo">OLHEM AQUI!</button>
                   <button type="button" className={'map-tool' + (placing === 'party' ? ' on' : '')} aria-pressed={placing === 'party'} onClick={() => setPlacing(p => (p === 'party' ? null : 'party'))}>
                     {party?.x != null ? 'MOVER O GRUPO' : 'POR O GRUPO NO MAPA'}
                   </button>
@@ -726,7 +770,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
                 </>
               )}
           </div>
-          <p className="map-hint">Arraste para mover · role para aproximar</p>
+          <p className="map-hint">Arraste para mover · role para aproximar · Alt+clique marca para a mesa</p>
           {master && officialOpen && (
             <OfficialPlacesPanel
               places={(pois ?? []).filter(p => p.official)}
@@ -787,6 +831,7 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
           onEdit={() => setPanel({ type: 'poiForm', id: openPoi.id })}
           onAudience={revealPoi}
           onMove={() => { setMovingId(openPoi.id); setPanel(null); setPlacing('move') }}
+          onLookHere={master ? () => lookHere(openPoi) : null}
           token={session.token}
           onPoi={saved => setPois(list => list.map(p => (p.id === saved.id ? saved : p)))}
           onNotice={setNotice}

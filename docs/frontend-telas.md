@@ -104,6 +104,8 @@ Layout: 3 colunas acima de 1240px; 2 colunas (herói + conteúdo, rolagens embai
 
 ## Mapa de Runeterra
 
+**Sinais ao vivo** (canal SSE, `useLiveEvent` de `api/live.js`; nada fica salvo): **Alt+clique** em qualquer lugar deixa uma onda na sua cor (`routeColor`) para toda a mesa, com o aviso "X marcou um lugar"; o mestre tem **OLHEM AQUI!** na barra (o centro do que ele vê) e no painel do ponto, que leva a câmera de quem está com o mapa aberto até lá, com anéis dourados e um farol (`mapPulses.js`, `scene.pulse`). Com o mapa fechado, a ficha mostra "O mestre quer mostrar … no mapa" com **VER** (abre o mapa no ponto ou em `?tela=mapa&x=..&y=..`).
+
 `components/map/WorldButtons.jsx` põe a barra flutuante `.world-dock` (canto inferior direito, renderizada por portal no `body` para o `backdrop-filter` do cabeçalho não prendê-la; recolhida, só o botão "Atalhos", que abre os botões grandes dourados "Lore" e "Mapa", mais o que a tela passar como filho, como o "Imprimir ficha" em azul-turquesa; no celular viram só ícones em coluna) na ficha, na criação e no painel do mestre e abre `MapScreen.jsx` ou `LoreScreen.jsx` em tela cheia, por cima da tela atual. O Three.js só é baixado ao abrir o mapa. O Esc fecha primeiro o que estiver por cima.
 
 `mapScene.js` monta a cena e `mapMath.js` guarda as regras da câmera, com testes. O comportamento imita o mapa original da Riot:
@@ -156,7 +158,7 @@ Lore e mapa se ligam: a região com `mapSlug` mostra as informações do verbete
 
 ## Pendências / problemas conhecidos
 
-- Mapa: os blocos detalhados (versão `pt_br` do original) trazem manchas escuras onde o original põe modelos 3D de cidades. O mar continua só com a textura geral. Ainda não há as demais cidades, marcadores nem modelos 3D; Icathia é só um nome, sem painel, e Nazumah não está no mapa. Quem está com o mapa aberto só vê rolagens, pontos e comentários novos ao reabri-lo. Na lore, imagens precisam de link externo (sem envio de arquivo), e a galeria da página do Universo não foi reproduzida. O painel mostra só a descrição curta da região. Pinça e desempenho dos shaders não foram testados em celular.
+- Mapa: os blocos detalhados (versão `pt_br` do original) trazem manchas escuras onde o original põe modelos 3D de cidades. O mar continua só com a textura geral. Ainda não há as demais cidades, marcadores nem modelos 3D; Icathia é só um nome, sem painel, e Nazumah não está no mapa. Na lore, imagens precisam de link externo (sem envio de arquivo), e a galeria da página do Universo não foi reproduzida. O painel mostra só a descrição curta da região. Pinça e desempenho dos shaders não foram testados em celular, e no celular não há como pingar (o ping é Alt+clique).
 
 - Passado: os 22 passados têm ilustração (o teste `backgroundArt.test.js` exige). Para trocar, basta substituir `assets/backgrounds/<id>.webp` (o id é o do catálogo); imagens sem uso ficam em `assets/backgrounds/_reserva/`. As artes atuais são provisórias.
 - Fora da loja de um mercador aberto, o jogador só gasta consumíveis, ouro e inspiração (decisão da mesa); quem dá é o mestre, na aba Inventário do painel.
