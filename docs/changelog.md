@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-04 — Dados 3D com física, Etapa 19 (`main`)
+- `components/dice3d/`: d4 a d20 caem na tela com three + `cannon-es` (dependência nova, carregada sob demanda). A física roda antes e os números são trocados para a face de cima mostrar o valor do servidor.
+- Crítico em ouro com tremida, falha com rachadura, descartado escurecido, secreta na névoa, batidas com som; rolagem dos outros num palco pequeno no canto. Botão **3D** liga/desliga; sem WebGL ou com movimento reduzido, fica o dado 2D.
+
 ## 2026-11-04 — Rolagens pelo servidor e histórico da mesa, Etapa 18 (`main`)
 - `POST /rolls` sorteia no servidor (d20 com vantagem/desvantagem ou expressão de dados), guarda em `TableRoll` e avisa o canal ao vivo (tópico `rolls`); `GET /rolls` traz o histórico. Secreta (`PRIVATE`) chega mascarada para os outros.
 - Ficha: atributos, perícias, ataques, dano, teste contra a morte e o atalho R rolam pelo servidor; seletor **À mesa / Só ao mestre**; o card vira "Rolagens da mesa", com retrato de quem rolou. A pechincha também entra no histórico.

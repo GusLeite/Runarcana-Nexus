@@ -307,6 +307,12 @@ const SFX = {
       tone({ f: rand(300, 500), f2: 150, t, dur: 0.04, vol: 0.04 * v, type: 'triangle' })
     }
   },
+  // Batida de um dado 3D na mesa (v de 0 a 1, pela velocidade do impacto): madeira curta, mais aguda quanto mais fraca.
+  clack: (v = 0.5) => {
+    const k = Math.max(0.15, Math.min(1, v))
+    tone({ f: rand(700, 1100) * (1.4 - k * 0.5), f2: 300, type: 'triangle', dur: 0.05, vol: 0.09 * k })
+    noise({ dur: 0.03, vol: 0.07 * k, f: rand(2200, 3800), q: 1.4 })
+  },
   settle: () => {
     tone({ f: 200, f2: 90, type: 'triangle', dur: 0.2, vol: 0.16 })
     noise({ dur: 0.08, vol: 0.1, type: 'lowpass', f: 700, q: 0.5 })
@@ -383,7 +389,7 @@ Object.assign(SFX, {
   'lol-danger': () => tone({ f: 140, f2: 70, dur: 0.18, vol: 0.1, lp: 400 }),
 })
 
-const MIN_GAP = { hover: 60, key: 30, quill: 30, tap: 40 }
+const MIN_GAP = { hover: 60, key: 30, quill: 30, tap: 40, clack: 28 }
 const last = {}
 
 export function play(name, arg) {

@@ -2,14 +2,14 @@ import { useCallback, useState } from 'react'
 import { parseDice } from '../../data/rules.js'
 import { serverRoll } from '../../api/rolls.js'
 import useTableRolls from '../../hooks/useTableRolls.js'
-import DiceRoll, { RollLog } from '../sheet/DiceRoll.jsx'
+import DiceRoll, { Dice3dToggle, RollLog } from '../sheet/DiceRoll.jsx'
 
 const QUICK = ['1d20', '1d12', '1d10', '1d8', '1d6', '1d4', '1d100']
 
 // Aba Mesa: histórico de rolagens de todos (as secretas dos jogadores aparecem inteiras para o mestre)
 // e a rolagem do mestre, atrás do escudo por padrão (os jogadores só veem "Mestre rolou em segredo").
 export default function MasterRolls({ token, onError }) {
-  const [rolls, addRoll] = useTableRolls(token, 20)
+  const [rolls, addRoll, incoming, clearIncoming] = useTableRolls(token, 20)
   const [current, setCurrent] = useState(null)
   const [expr, setExpr] = useState('1d20')
   const [label, setLabel] = useState('')
@@ -30,7 +30,7 @@ export default function MasterRolls({ token, onError }) {
 
   return (
     <section className="card master-rolls">
-      <div className="card-title"><h3>Rolagens da mesa</h3></div>
+      <div className="card-title"><h3>Rolagens da mesa</h3><Dice3dToggle /></div>
       <form className="master-roll-form" onSubmit={e => { e.preventDefault(); send(expr) }}>
         <input value={label} maxLength={120} onChange={e => setLabel(e.target.value)} placeholder="O que é (ex.: Emboscada)" aria-label="O que está sendo rolado" />
         <input className="master-roll-expr" value={expr} maxLength={20} onChange={e => setExpr(e.target.value)} aria-label="Dados" />
@@ -47,6 +47,7 @@ export default function MasterRolls({ token, onError }) {
       </div>
       <RollLog rolls={rolls} empty="Nenhuma rolagem ainda." />
       <DiceRoll roll={current} onClose={closeRoll} />
+      <DiceRoll key={incoming?.id} roll={incoming} onClose={clearIncoming} compact />
     </section>
   )
 }

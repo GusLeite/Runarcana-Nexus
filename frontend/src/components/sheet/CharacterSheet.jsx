@@ -77,7 +77,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const token = session.token
 
   // Erro de uma ação: 401 desloga; o resto vira aviso.
-  const [rolls, addRoll] = useTableRolls(token, MAX_LOG)
+  const [rolls, addRoll, incomingRoll, clearIncomingRoll] = useTableRolls(token, MAX_LOG)
   const fail = useCallback(err => {
     play('error')
     if (err.status === 401) expired.current()
@@ -716,6 +716,8 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       </main>
 
       <DiceRoll roll={current} onClose={closeRoll} />
+      {/* Rolagem de outra pessoa da mesa: pequena, no canto (some sozinha). */}
+      <DiceRoll key={incomingRoll?.id} roll={incomingRoll} onClose={clearIncomingRoll} compact />
       {preparing && preparation && (
         <PrepareSpells preparation={preparation} busy={busy} onConfirm={picks => doRest('LONG', picks)} onCancel={() => setPreparing(false)} />
       )}

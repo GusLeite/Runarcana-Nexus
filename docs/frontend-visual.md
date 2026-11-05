@@ -54,15 +54,27 @@ Estado atual: **Rudo** (vídeo + burst vermelho + magia de sangue) e **Galdren**
 ### Imagem viva nas origens
 `LivingArt.jsx` anima uma imagem em tempo real com WebGL, a cerca de 30 quadros/s; sai do ar fora da tela e fica parada com `prefers-reduced-motion` ou sem WebGL. A cena é um fragment shader em `data/scenes/`, com máscaras em fração da imagem para cada área que se mexe (na do Alistar: respiração, juba, correntes, poeira, olhos, areia, lascas, sangue). Hoje nenhuma origem usa: o Minotauro testou a imagem animada do Alistar e voltou ao vídeo (`minotauro.webp` e `scenes/minotauro.js` ficaram sem uso). Para usar numa origem, preencha `living` em `originArt.js`; `living` tem prioridade sobre `video`.
 
+## Dados 3D
+
+`components/dice3d/`: os dados caem na tela com física (three + `cannon-es`, num pedaço carregado só quando um dado aparece, ~90 KB).
+- `diceShapes.js`: d4, d6, d8, d10 (trapezoedro com pipas planas), d12 e d20, com faces, normais e números; `upIndex` acha o que ficou para cima (no d4, o vértice) e `relabel` troca números.
+- `diceScene.js`: `simulate` roda o lançamento inteiro antes de desenhar (passo de 1/60 s, até 5,5 s, gravando posição, giro e batidas); com o resultado, troca os números para a face de cima mostrar o valor **do servidor** e só então pinta o dado (`diceTexture.js`: atlas de obsidiana com filete e número em ouro, Cinzel; 6 e 9 sublinhados) e reproduz a gravação. Mesa com paredes invisíveis do tamanho da tela; a força do arremesso acompanha o tamanho da mesa.
+- Efeitos: crítico acende o dado em ouro e treme a tela (`body.dice-shake`); falha crítica racha a face de cima em vermelho; vantagem/desvantagem rola 2 d20 e escurece o descartado; rolagem secreta de outro vira um d20 com "?" envolto em névoa roxa. Cada batida toca `clack` (volume pela velocidade).
+- `diceSpec.js` decide se a rolagem tem versão 3D (até 10 dados, só esses tipos; d100 e outros ficam no dado 2D). `Dice3D.jsx` monta o palco; `DiceRoll.jsx` usa o 3D quando dá e cai no 2D se a cena falhar. O palco e o cartão vão por portal no `body` (dentro de card com `transform` o `fixed` ficava preso).
+- Rolagem de outra pessoa da mesa (`incoming` do `useTableRolls`) aparece num palco pequeno no canto inferior esquerdo, com câmera mais perto.
+- Botão **3D** nos cards "Rolagens da mesa" liga/desliga (`dice3dPref.js`, `localStorage` `runarcana.dice3d`); sem WebGL ou com "reduzir movimento", fica no 2D e o botão some.
+
 ## Som
 
 Tudo é **sintetizado na hora** com a Web Audio API (`src/audio/`), sem arquivos de áudio; só toca depois do primeiro clique/tecla (regra dos navegadores).
 - `engine.js`: osciladores, ruído e reverberação de catedral. `play('nome', arg)` dispara um efeito (tabela `SFX`; ajuste a receita ali). Preferências (efeitos e volume) ficam no `localStorage` (`runarcana.sound.v2`).
 - `uiSounds.js` (instalado em `main.jsx`): sons de interface **por delegação** (dentro de `.sheet`, ou seja, ficha e painel do mestre, usam sons suaves e arredondados: receitas `lol-*` em `engine.js`, com fallback para a comum), então tela nova já nasce com som: hover nos controles, clique escolhido por `clickSound` (aba = página virando, `.danger-btn`/`.danger` = golpe grave, `.btn`/submit = acorde de alaúde, `.master-btn` = portão, marcador = alavanca, resto = toque), digitação (pena nas `textarea`) e avisos que aparecem na tela (`role="alert"`/`.err` = erro, `.toast` = sino, `.lvl-ready` = chamado de subida de nível). `data-sfx="nome"` num controle troca o som; `data-sfx="none"` o silencia.
-- Explícitos no código: assinatura de cada personagem no hover/escolha da seleção (forja, coração, magia, assombração), login/logout, dado (chacoalhar + queda, 20 natural e 1 natural têm som próprio), PV (cura/dano/temporários), conjuração, descansos, compra/venda/ouro, poção, subida de nível e criação concluída.
+- Explícitos no código: assinatura de cada personagem no hover/escolha da seleção (forja, coração, magia, assombração), login/logout, dado (chacoalhar + queda no 2D, batidas `clack` da física no 3D; 20 natural e 1 natural têm som próprio), PV (cura/dano/temporários), conjuração, descansos, compra/venda/ouro, poção, subida de nível e criação concluída.
 - `SoundToggle.jsx`: controle fixo no canto inferior esquerdo (efeitos e volume).
 
 ## Pendências / problemas conhecidos
+
+- Dados 3D: com a aba em segundo plano o navegador pausa a animação, então a rolagem de outra pessoa só termina de cair quando a aba volta. Não foram testados em celular nem em GPU fraca.
 
 - O som não foi calibrado por ouvido em vários aparelhos: se algum efeito estiver alto/agudo demais, ajuste `vol` na receita em `engine.js`.
 - Vídeos pesados (entre 7,2 MB e 9,6 MB cada) estão versionados no Git; vale comprimir ou passar para Git LFS/CDN.

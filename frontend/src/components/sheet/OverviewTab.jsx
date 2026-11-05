@@ -5,7 +5,7 @@ import SavingThrows from './SavingThrows.jsx'
 import Attacks from './Attacks.jsx'
 import Crafts from './Crafts.jsx'
 import Forms from './Forms.jsx'
-import { RollLog } from './DiceRoll.jsx'
+import { Dice3dToggle, RollLog } from './DiceRoll.jsx'
 import { RichText } from './DocumentsTab.jsx'
 import AbilityIcon from './AbilityIcon.jsx'
 import Num from './Num.jsx'
@@ -75,6 +75,7 @@ export default function OverviewTab({ sheet, attacks = [], crafts = [], abilitie
         <section className="card" style={{ '--i': 2 }}>
           <div className="card-title inv-title">
             <h3>Rolagens da mesa <small>R para rolar</small></h3>
+            <Dice3dToggle />
           </div>
           <div className="seg mode-seg" role="group" aria-label="Modo das rolagens de d20">
             {MODES.map(m => (

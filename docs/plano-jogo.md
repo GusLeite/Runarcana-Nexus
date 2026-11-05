@@ -10,7 +10,7 @@ Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criac
 
 - Ficha: atributos, perícias, resistências, CA (com armadura e escudo do inventário), PV editáveis pelo jogador, habilidades com usos, magias, descanso curto/longo, magias preparadas, rolagens de d20 e de dano, ataques com arma (Etapa 2), conjurar gastando Mana com CD e ataque de magia (Etapa 3), testes contra a morte e condições (Etapa 4; Exaustão até 10, como no livro), mestre edita habilidades/documentos e ajusta PV (Etapa 5), aba Mesa com todos os personagens (Etapa 6), inventário (o jogador gasta), documentos, anotações, aba Livro.
 - Mestre: cria/apaga habilidades e documentos, sobe de nível (com multiclasse), trava regras da mesa, dá e tira itens, ouro e inspiração (Etapa 1).
-- As Etapas 1–18 estão feitas; em seguida vêm as Etapas 19–20 do plano da mesa ao vivo.
+- As Etapas 1–19 estão feitas; falta a Etapa 20 do plano da mesa ao vivo.
 
 ## Etapa 1 — Inventário, ouro e inspiração pelo mestre — **feita (2026-10-28)**
 
@@ -183,7 +183,10 @@ Como ficou: duas visibilidades, `TABLE` e `PRIVATE` (secreta: só quem rolou e o
 - Teste contra a morte, Pechincha e o d20 do atalho **R** usam a mesma rota. Sem rede, cai no sorteio local marcado como "não registrado".
 - Testes: limites de expressão (quantidade e faces de dado), vantagem/desvantagem, crítico pela margem, quem vê o quê e 401.
 
-## Etapa 19 — Dados 3D com física
+## Etapa 19 — Dados 3D com física — **feita (2026-11-04)**
+
+Como ficou: ver `frontend-visual.md`, Dados 3D. A física roda inteira antes de aparecer e é reproduzida (por isso a troca de números não aparece); o "excesso vira número" ficou como "mais de 10 dados usa o dado 2D". O texto abaixo é o planejado.
+
 
 **Por quê**: é o momento mais visto de toda sessão; hoje é um hexágono SVG girando números (`DiceRoll.jsx`).
 - Cena Three.js transparente sobre a tela, com física em `cannon-es` (carregados sob demanda, como o `pdf-lib`). Dados d4, d6, d8, d10, d12 e d20 com faces gravadas em runas douradas; até ~10 dados por rolagem, o excesso vira número.
