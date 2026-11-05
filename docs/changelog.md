@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-04 — Plano da mesa ao vivo (`main`)
+- `plano-jogo.md` ganha as Etapas 17–20: canal ao vivo por SSE (ticket de uso único; o polling vira reserva), rolagens sorteadas e salvas no servidor com histórico da mesa e rolagem secreta, dados 3D com física (Three.js + `cannon-es`, caindo no valor do servidor) e "Olhem aqui!"/ping no mapa.
+- Só documentação; nada implementado ainda.
+
 ## 2026-11-03 — Pontos de interesse no WebGL e só 8 lugares oficiais (`main`)
 - O mestre via o mapa travar de perto: ~50 botões HTML de pontos na tela custavam 20–40 ms por quadro. Os pontos agora são sprites (`poiSprites.js`), numa cena desenhada depois do foco de miniatura, com hover e clique por `hitTest`; o arraste fica igual a sem pontos (~6 ms).
 - `OfficialPlaces` passa a ter só os 8 lugares com modelo 3D; no próximo start o seeder **apaga** os outros 91 do banco (com comentários, imagens e ligações do diário).

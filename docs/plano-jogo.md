@@ -10,7 +10,7 @@ Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criac
 
 - Ficha: atributos, perícias, resistências, CA (com armadura e escudo do inventário), PV editáveis pelo jogador, habilidades com usos, magias, descanso curto/longo, magias preparadas, rolagens de d20 e de dano, ataques com arma (Etapa 2), conjurar gastando Mana com CD e ataque de magia (Etapa 3), testes contra a morte e condições (Etapa 4; Exaustão até 10, como no livro), mestre edita habilidades/documentos e ajusta PV (Etapa 5), aba Mesa com todos os personagens (Etapa 6), inventário (o jogador gasta), documentos, anotações, aba Livro.
 - Mestre: cria/apaga habilidades e documentos, sobe de nível (com multiclasse), trava regras da mesa, dá e tira itens, ouro e inspiração (Etapa 1).
-- Todas as etapas do plano estão feitas; o que falta está em "Depois do para jogar".
+- As Etapas 1–16 estão feitas; em seguida vem o plano da mesa ao vivo (Etapas 17–20).
 
 ## Etapa 1 — Inventário, ouro e inspiração pelo mestre — **feita (2026-10-28)**
 
@@ -154,10 +154,50 @@ Cabeçalho fixo (CAMPANHA / Runeterra, abas **Visão do mestre | Jogador**, **+ 
 
 Marcos em 3D com os modelos do mapa original (8 `.obj` com texturas, posições e animações iguais), os 99 lugares do mapa oficial com nome e posição reais (inclui Zirima e o Disco Solar) aparecendo por tamanho como no original, e ajustes de desempenho (sem leitura de layout por pin, névoa que descarta cedo, resolução adaptativa). **Pendente**: medir em hardware mais fraco que o do desenvolvimento (o mapa rodava a 80–160 quadros por segundo na RTX 5070 do dev, então o travamento relatado não foi reproduzido); ver "Depois do para jogar".
 
+# Plano da mesa ao vivo (tempo real e dados 3D)
+
+Decidido em 2026-11-04. Hoje cada tela busca as novidades por polling (mapa 3–5 s, mercador 5 s, pendências da ficha 10 s, Mesa e diário) e as rolagens são sorteadas no navegador (`rollCheck`/`rollDice` em `CharacterSheet.jsx`), visíveis só para quem rolou. Ordem: o canal ao vivo vem primeiro porque as outras etapas dependem dele. Mesmas regras dos planos anteriores: uma entrega por etapa (código + testes + docs + changelog) e marcar como **feita** ao concluir.
+
+## Etapa 17 — Canal ao vivo (SSE)
+
+**Por quê**: base de tudo o que é "na hora" (rolagens da mesa, revelar ponto, mercador, documento novo) e fim dos `setInterval` espalhados.
+- Back: **Server-Sent Events** com `SseEmitter` (cabe no `spring-boot-starter-webmvc`, sem dependência nova; o Caddy já repassa a conexão aberta). Um `LiveHub` guarda as conexões por conta e publica eventos curtos `{ type, payload }` para um jogador, para o grupo ou só para o mestre. Heartbeat a cada ~20 s.
+- Autenticação: o `EventSource` não manda cabeçalho, então `POST /live/ticket` (com o Bearer) devolve um ticket de uso único válido por ~30 s, e `GET /live/stream?ticket=…` abre o canal. O token de 30 dias **nunca** vai na URL.
+- Eventos iniciais (os que hoje são polling): `POI` (revelado/escondido/alterado), `PARTY` (grupo andou), `MERCHANT` (abriu/fechou/revisão), `DOCUMENT` e `PENDING` (algo novo na ficha), `JOURNAL`, `TABLE` (mudou algo na Mesa do mestre).
+- Front: um hook `useLive(token)` com reconexão e backoff; cada tela assina os tipos que usa. O polling atual **fica como reserva** com intervalo longo (30–60 s) e volta ao normal quando o canal cai, para não quebrar nada no app Android nem atrás de proxy ruim.
+- Testes: ticket (uso único, vencido, sem login), entrega por público (jogador, grupo, mestre) e que um jogador não recebe evento de ponto oculto.
+- Limite conhecido: o hub fica em memória, então vale para uma instância só (como o `LoginThrottle`).
+
+## Etapa 18 — Rolagens pelo servidor e histórico da mesa
+
+**Por quê**: com a mesa vendo os dados, o sorteio precisa ser do servidor (ninguém "rola de novo" no console) e ficar salvo.
+- `POST /rolls` com `{ label, kind: CHECK|DICE, expr | mod, mode (normal/vantagem/desvantagem), critRange, visibility: TABLE|MASTER|SELF }`; o servidor sorteia com `SecureRandom`, salva (`Roll`: conta, personagem, rótulo, dados, total, quando) e publica `ROLL` pelo canal. Os campos que hoje o front calcula (`d20`, `other`, `rolls`, `total`) passam a vir na resposta.
+- Visibilidade: **à mesa** (todos veem), **ao mestre** (rolagem secreta de jogador) e **oculta do mestre** (o mestre rola atrás do escudo; os jogadores veem só "o Mestre rolou algo" com o dado coberto de névoa).
+- `GET /rolls?limit=50` para o histórico ao entrar; o histórico da ficha (`MAX_LOG`) vira o da mesa, com o retrato de quem rolou. O mestre ganha o mesmo histórico na aba Mesa.
+- Teste contra a morte, Pechincha e o d20 do atalho **R** usam a mesma rota. Sem rede, cai no sorteio local marcado como "não registrado".
+- Testes: limites de expressão (quantidade e faces de dado), vantagem/desvantagem, crítico pela margem, quem vê o quê e 401.
+
+## Etapa 19 — Dados 3D com física
+
+**Por quê**: é o momento mais visto de toda sessão; hoje é um hexágono SVG girando números (`DiceRoll.jsx`).
+- Cena Three.js transparente sobre a tela, com física em `cannon-es` (carregados sob demanda, como o `pdf-lib`). Dados d4, d6, d8, d10, d12 e d20 com faces gravadas em runas douradas; até ~10 dados por rolagem, o excesso vira número.
+- O resultado é o do **servidor**: simula-se o lançamento, vê-se qual face ficou para cima e as faces do modelo são renumeradas antes de mostrar, para que o dado caia exatamente no valor sorteado (sem truque visível).
+- Vantagem/desvantagem: 2 d20, o descartado escurece. Crítico: o dado acende em dourado, tremida curta da tela e as faíscas atuais. Falha crítica: o dado racha. Rolagem oculta do mestre: dado envolto em névoa.
+- Rolagens dos outros (pelo canal) aparecem menores, num canto, com o nome de quem rolou; a sua é a grande.
+- Sons: colisões do `engine.js` (`rattle`/`settle`) disparadas pelos impactos da física, com volume pela velocidade.
+- Respeita `prefers-reduced-motion` e falta de WebGL (volta ao `DiceRoll` atual) e tem um botão "dados 3D: ligado/desligado" lembrado no navegador, para aparelhos fracos.
+
+## Etapa 20 — "Olhem aqui!" e ping no mapa
+
+**Por quê**: o mestre conduz a cena pelo mapa, e o canal ao vivo torna isso trivial.
+- Mestre: botão **Olhem aqui!** num ponto ou num lugar qualquer leva a câmera de todos os jogadores com o mapa aberto até lá, num voo suave, com um pulso de luz (quem está com o mapa fechado recebe "O mestre quer mostrar algo no mapa" com o botão **Ver**).
+- Qualquer um: **Alt+clique** deixa um ping (onda na cor do jogador) que todos veem por alguns segundos. Limite de pings por segundo por conta.
+- Só eventos efêmeros pelo canal (`MAP_FOCUS`, `MAP_PING`); nada é salvo. Ponto oculto não pode ser alvo do "Olhem aqui!" para quem não o vê.
+
 ## Depois do "para jogar"
 
 Não fazem parte deste plano; continuam nas pendências de [backend.md](backend.md) e [frontend.md](frontend.md):
 
 - **Segurança**: ligação conta ↔ personagem por chave estrangeira, enums salvos como ordinal, token no `localStorage`.
-- **Front/polimento**: artes (itens), vídeos pesados no Git, atualização em tempo real, histórico de rolagens compartilhado.
+- **Front/polimento**: artes (itens), vídeos pesados no Git (tempo real e histórico de rolagens compartilhado viraram as Etapas 17–18).
 - **Regras no texto**: o que sobrou está nas pendências de [backend-criacao.md](backend-criacao.md) (formas temporárias, Essência Volátil, escolhas de dentro das Runas...).
