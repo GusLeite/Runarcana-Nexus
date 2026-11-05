@@ -27,6 +27,7 @@ frontend/
     ├── api/journal.js         diário do grupo (listar, escrever, editar, apagar)
     ├── data/journal.js (+ .test.js)  resumo das sessões do diário (um por dia)
     ├── api/map.js             Bandópolis, pontos de interesse, comentários e waypoints
+    ├── api/live.js (+ .test.js) canal ao vivo (SSE): uma conexão por aba, `useLive(token, tópicos)`
     ├── api/lore.js            verbetes da lore
     ├── api/merchants.js       mercadores (mestre monta e abre; jogador compra e vende)
     ├── data/characters.js     lista de personagens + imports das artes
@@ -65,7 +66,7 @@ frontend/
 
 ## Conexão com a API
 
-`src/api/auth.js` chama `VITE_API_URL` (padrão `/runarcana`). Em `npm run dev`, o Vite repassa `/runarcana` para o Spring em `localhost:8080`, então **o back-end precisa estar rodando** para o login funcionar. Os erros mostrados vêm do campo `message` da API; sem servidor, aparece "Não foi possível falar com o servidor". As regras de senha são repetidas em `validation.js` (`validatePasswordChange`) só para avisar antes de enviar; quem decide é o back-end.
+`src/api/auth.js` chama `VITE_API_URL` (padrão `/runarcana`). Em `npm run dev`, o Vite repassa `/runarcana` para o Spring em `localhost:8080`, então **o back-end precisa estar rodando** para o login funcionar. Os erros mostrados vêm do campo `message` da API; sem servidor, aparece "Não foi possível falar com o servidor". **Canal ao vivo** (`api/live.js`, ver `backend.md`): cada tela que buscava novidades com `setInterval` usa `const live = useLive(token, ['map'])`, chama `live.listen(check)` (roda no aviso do tópico e ao reconectar, agrupado em 250 ms) e deixa o intervalo como reserva com `if (live.due()) check()`: sem canal, `due()` é sempre verdadeiro (polling normal); com canal, no máximo a cada 60 s. A conexão é única por aba e fecha 3 s depois do último assinante sair; caiu, pede outro ticket com espera crescente (até 30 s); 401 no ticket para de tentar. Assinam: mapa (pontos, grupo, trajetórias: `map`), ficha (mercador, locais revelados, nível liberado, documentos novos), Mesa do mestre (`table`), diário e trocas do mercador. As regras de senha são repetidas em `validation.js` (`validatePasswordChange`) só para avisar antes de enviar; quem decide é o back-end.
 
 ## App Android (APK)
 

@@ -33,7 +33,7 @@ model/        entidades JPA
   map/        MapPoi, PoiComment, MapWaypoint (pontos do mapa), PartyTrailPoint (trilha do grupo)
 record/       DTOs de entrada e saída (Java records)
 enums/        enums de domínio (regras do sistema Runarcana)
-config/       beans de configuração (AuthConfig: BCrypt + seed das contas)
+config/       beans de configuração (AuthConfig: BCrypt + seed das contas; LiveConfig: avisos do canal ao vivo)
 rules/        modelo do catálogo de regras de criação (RuleCatalog, RuleOption, RuleClass, Grant…)
 exception/    ApiException + ApiExceptionHandler (erros viram { "message": ... })
 ```
@@ -45,6 +45,15 @@ Configuração em `src/main/resources/application.properties`:
 - PostgreSQL por variáveis de ambiente: `DB_URL` (padrão `jdbc:postgresql://localhost:5432/runarcana`), `DB_USERNAME` (padrão `postgres`) e `DB_PASSWORD`. Em dev, a senha fica em `application-local.properties` na raiz, fora do Git (modelo: `application-local.properties.example`)
 - Perfil `prod` (`application-prod.properties`): sem Swagger e sem `show-sql`, lê `RUNARCANA_MASTER_PASSWORD` e usa o endereço real do cliente vindo do proxy
 - `spring.jpa.hibernate.ddl-auto=update` (o Hibernate cria e altera as tabelas) e `show-sql=true`
+
+## Canal ao vivo (SSE)
+
+As telas recebem aviso na hora do que mudou, em vez de só perguntar de tempos em tempos.
+- `services/LiveHub` guarda as conexões `SseEmitter` abertas (em memória: vale para uma instância só) e manda a todas o evento `change` com `{ "topic": "..." }`; comentário de heartbeat a cada 20 s; a conexão cai em 30 min e o cliente reconecta.
+- O evento **não leva dados**: a tela busca de novo pelas rotas de sempre, com as permissões da própria conta, então ponto oculto, documento de outro jogador etc. nunca vazam pelo canal (no máximo o "algo mudou").
+- Quem publica é o interceptor de `config/LiveConfig`: depois de todo POST/PUT/PATCH/DELETE com 2xx, pelo 1º trecho da rota: `character`, `conditions` e `creation` → `table`; `map` → `map`; `merchants`, `journal`, `documents` → o mesmo nome. Rota nova cai sozinha no tópico da área; `auth`, `notes`, `lore` e `live` não avisam.
+- Abrir: `POST /live/ticket` (Bearer) e `GET /live/stream?ticket=…`. O `EventSource` não manda header, e o token de 30 dias não vai na URL; o ticket (`services/LiveTickets`) é de uso único e vence em 30 s.
+- O Caddy da VPS repassa SSE sem configuração extra.
 
 Erros de regra e de `@Valid` voltam como `{ "message": "..." }` (`exception/ApiExceptionHandler.java`), já em português para o front mostrar direto.
 
@@ -64,7 +73,7 @@ Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spri
 
 ## Testes
 
-`./mvnw test` usa H2 em memória (`src/test/resources/application.properties`), então não precisa do PostgreSQL. `controller/AuthControllerTests` cobre seed, login, senha errada, token inválido, troca de senha, sessões derrubadas e logout. `controller/CharacterControllerTests` cria o Rudo com o payload real (números como string) e cobre classe/antecedente inexistente, campo obrigatório vazio e enum inválido, além de `/character/me` (ficha com inventário, 401 sem login e 404 sem ficha). `controller/PlayerFeaturesTests` cobre habilidades (cadastro, listagem e exclusão pelo mestre, 403 para jogador, usos e descanso, ícone: guardar, trocar por link, remover e recusar tipo inválido), a lista de destinatários, anotações (CRUD e isolamento entre contas) e documentos (destinatários, lido, exclusão, 403 e destinatário inexistente). `CharacterControllerTests` também cobre os PV do jogador (atual, temporários, limites, 401 e 404). `controller/LevelUpControllerTests` cobre a subida de nível (403 para jogador, 404, PV e dado de vida, usos gastos e habilidade do mestre mantidos, usos pelo nível da classe, Aprimoramento com aumento de atributo e pré-requisito de nível de classe, multiclasse com proficiências reduzidas, subclasse obrigatória e pré-requisito). `controller/CreationControllerTests` cobre o assistente (catálogo exige login, prévia aplicando cada tipo de concessão, o que falta, compra de pontos estourada, criação ligada à conta, 409 na segunda, 403 para o mestre e as Heranças: tipo de ponto, pré-requisitos, exclusão, opção, repetição e pontos sobrando) e `services/RuleCatalogValidationTests` cobre a conferência do catálogo (inclusive Heranças e ofícios) e garante que o `rules/criacao.json` e o `rules/herancas.json` reais continuam válidos. As tabelas antigas `character`/`character_skill` geram avisos de DDL no H2 (usam `tinyint`), sem afetar os testes.
+`./mvnw test` usa H2 em memória (`src/test/resources/application.properties`), então não precisa do PostgreSQL. `controller/AuthControllerTests` cobre seed, login, senha errada, token inválido, troca de senha, sessões derrubadas e logout. `controller/CharacterControllerTests` cria o Rudo com o payload real (números como string) e cobre classe/antecedente inexistente, campo obrigatório vazio e enum inválido, além de `/character/me` (ficha com inventário, 401 sem login e 404 sem ficha). `controller/PlayerFeaturesTests` cobre habilidades (cadastro, listagem e exclusão pelo mestre, 403 para jogador, usos e descanso, ícone: guardar, trocar por link, remover e recusar tipo inválido), a lista de destinatários, anotações (CRUD e isolamento entre contas) e documentos (destinatários, lido, exclusão, 403 e destinatário inexistente). `CharacterControllerTests` também cobre os PV do jogador (atual, temporários, limites, 401 e 404). `controller/LevelUpControllerTests` cobre a subida de nível (403 para jogador, 404, PV e dado de vida, usos gastos e habilidade do mestre mantidos, usos pelo nível da classe, Aprimoramento com aumento de atributo e pré-requisito de nível de classe, multiclasse com proficiências reduzidas, subclasse obrigatória e pré-requisito). `controller/CreationControllerTests` cobre o assistente (catálogo exige login, prévia aplicando cada tipo de concessão, o que falta, compra de pontos estourada, criação ligada à conta, 409 na segunda, 403 para o mestre e as Heranças: tipo de ponto, pré-requisitos, exclusão, opção, repetição e pontos sobrando) e `services/RuleCatalogValidationTests` cobre a conferência do catálogo (inclusive Heranças e ofícios) e garante que o `rules/criacao.json` e o `rules/herancas.json` reais continuam válidos. As tabelas antigas `character`/`character_skill` geram avisos de DDL no H2 (usam `tinyint`), sem afetar os testes. `controller/LiveControllerTests` cobre o canal ao vivo (ticket exige login e vale uma vez, aviso do tópico depois de uma alteração, nada em leitura, erro ou anotação).
 
 ## Convenções
 
@@ -74,6 +83,7 @@ Feita para a mesa atual (5 jogadores), sem Spring Security completo: só o `spri
 
 ## Pendências / problemas conhecidos
 
+- Canal ao vivo: a conexão aberta não cai quando a sessão é encerrada (logout, senha provisória); dura até os 30 min do `SseEmitter`. Como o evento não leva dados, só recebe "algo mudou" nesse intervalo.
 - **Senha antiga no histórico do Git**: a senha do PostgreSQL local foi versionada em commits antigos de um repositório público. Não vale para produção (lá a senha é outra), mas troque a local se ela for usada em outro lugar.
 - O schema depende de `ddl-auto=update` e de `ALTER TABLE` manual; em produção vale adotar migrações versionadas (Flyway) antes de mudanças que o Hibernate não aplica sozinho.
 - `Origin` não tem getters (nem `@Data`).

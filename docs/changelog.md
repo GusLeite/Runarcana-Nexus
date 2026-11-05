@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-04 — Canal ao vivo por SSE, Etapa 17 (`main`)
+- `GET /live/stream` (Server-Sent Events, aberto com ticket de uso único de `POST /live/ticket`) avisa o tópico que mudou (`map`, `table`, `merchants`, `journal`, `documents`) depois de toda alteração com 2xx (interceptor em `LiveConfig`). O evento não leva dados: a tela busca de novo com as próprias permissões.
+- Front: `api/live.js` (`useLive`) com uma conexão por aba e reconexão; mapa, ficha, Mesa, diário e trocas do mercador atualizam na hora, e o polling vira reserva a cada 60 s. Documento novo do mestre agora chega sem reabrir a ficha.
+
 ## 2026-11-04 — Plano da mesa ao vivo (`main`)
 - `plano-jogo.md` ganha as Etapas 17–20: canal ao vivo por SSE (ticket de uso único; o polling vira reserva), rolagens sorteadas e salvas no servidor com histórico da mesa e rolagem secreta, dados 3D com física (Three.js + `cannon-es`, caindo no valor do servidor) e "Olhem aqui!"/ping no mapa.
 - Só documentação; nada implementado ainda.

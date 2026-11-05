@@ -4,6 +4,7 @@ import {
   removeMerchantItem, updateMerchant, updateMerchantItem,
 } from '../../api/merchants.js'
 import { fetchCatalog } from '../../api/master.js'
+import { useLive } from '../../api/live.js'
 import { ITEM_KINDS, RARITIES, SKILL_NAMES, rarityOf } from '../../data/rules.js'
 import { fileToBanner, isIconLink } from '../../utils/iconImage.js'
 import { CoinIcon } from '../sheet/icons.jsx'
@@ -335,6 +336,7 @@ function ShelfRow({ line, n, busy, onSave, onRemove }) {
 function Trades({ token, merchantId, revision, active, onError }) {
   const [trades, setTrades] = useState([])
   const [haggles, setHaggles] = useState([])
+  const live = useLive(token, ['merchants'])
   useEffect(() => {
     const load = () => Promise.all([
       fetchMerchantTrades(token, merchantId).then(setTrades),
@@ -342,9 +344,10 @@ function Trades({ token, merchantId, revision, active, onError }) {
     ])
     load().catch(onError)
     if (!active) return undefined
-    const t = setInterval(() => { if (!document.hidden) load().catch(() => {}) }, TRADES_POLL)
-    return () => clearInterval(t)
-  }, [token, merchantId, revision, active, onError])
+    const off = live.listen(() => load().catch(() => {}))
+    const t = setInterval(() => { if (!document.hidden && live.due()) load().catch(() => {}) }, TRADES_POLL)
+    return () => { off(); clearInterval(t) }
+  }, [token, merchantId, revision, active, onError, live])
 
   return (
     <section className="card" style={{ '--i': 5 }}>

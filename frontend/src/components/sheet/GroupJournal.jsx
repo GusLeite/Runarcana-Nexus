@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { createJournalEntry, deleteJournalEntry, fetchJournal, updateJournalEntry } from '../../api/journal.js'
 import { sessionSummaries } from '../../data/journal.js'
 import { fetchVisiblePois } from '../../api/map.js'
+import { useLive } from '../../api/live.js'
 import { openMapAt } from '../../utils/mapLink.js'
 import { mapLinkNodes } from '../map/MapLinkText.jsx'
 import '../../styles/journal.css'
@@ -26,11 +27,13 @@ export default function GroupJournal({ token, onError, onToast }) {
   const [places, setPlaces] = useState([]) // locais que esta conta vê, para ligar a entrada a um deles
 
   const load = useCallback(() => fetchJournal(token).then(setEntries), [token])
+  const live = useLive(token, ['journal'])
   useEffect(() => {
     load().catch(onError)
-    const t = setInterval(() => { if (!document.hidden) load().catch(() => {}) }, POLL)
-    return () => clearInterval(t)
-  }, [load, onError])
+    const off = live.listen(() => load().catch(() => {}))
+    const t = setInterval(() => { if (!document.hidden && live.due()) load().catch(() => {}) }, POLL)
+    return () => { off(); clearInterval(t) }
+  }, [load, onError, live])
 
   useEffect(() => { fetchVisiblePois(token).then(setPlaces).catch(() => {}) }, [token])
 

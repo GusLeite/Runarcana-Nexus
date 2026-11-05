@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { fetchConditions, fetchTable, setInspiration } from '../../api/master.js'
+import { useLive } from '../../api/live.js'
 import { CLASS_NAMES } from '../../data/rules.js'
 import { CHARACTERS } from '../../data/characters.js'
 import ConditionChips from '../sheet/ConditionChips.jsx'
@@ -24,11 +25,14 @@ export default function MasterTable({ token, onError, onToast }) {
     fetchConditions(token).then(setCatalog).catch(onError)
   }, [token, load, onError])
 
+  // Canal ao vivo: qualquer alteração de ficha avisa (tópico table); com um cartão aberto, a mesa não se mexe.
+  const live = useLive(token, ['table'])
   useEffect(() => {
     if (openId != null) return
-    const t = setInterval(() => { if (!document.hidden) load() }, POLL_MS)
-    return () => clearInterval(t)
-  }, [load, openId])
+    const off = live.listen(() => { if (!document.hidden) load() })
+    const t = setInterval(() => { if (!document.hidden && live.due()) load() }, POLL_MS)
+    return () => { off(); clearInterval(t) }
+  }, [load, openId, live])
 
   // A ação devolve a ficha; o cartão troca só ela (CA e Mana não mudam por essas ações).
   const putCharacter = updated => setCards(list => list.map(c => (c.character.id === updated.id ? { ...c, character: updated } : c)))

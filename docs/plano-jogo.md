@@ -10,7 +10,7 @@ Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criac
 
 - Ficha: atributos, perícias, resistências, CA (com armadura e escudo do inventário), PV editáveis pelo jogador, habilidades com usos, magias, descanso curto/longo, magias preparadas, rolagens de d20 e de dano, ataques com arma (Etapa 2), conjurar gastando Mana com CD e ataque de magia (Etapa 3), testes contra a morte e condições (Etapa 4; Exaustão até 10, como no livro), mestre edita habilidades/documentos e ajusta PV (Etapa 5), aba Mesa com todos os personagens (Etapa 6), inventário (o jogador gasta), documentos, anotações, aba Livro.
 - Mestre: cria/apaga habilidades e documentos, sobe de nível (com multiclasse), trava regras da mesa, dá e tira itens, ouro e inspiração (Etapa 1).
-- As Etapas 1–16 estão feitas; em seguida vem o plano da mesa ao vivo (Etapas 17–20).
+- As Etapas 1–17 estão feitas; em seguida vêm as Etapas 18–20 do plano da mesa ao vivo.
 
 ## Etapa 1 — Inventário, ouro e inspiração pelo mestre — **feita (2026-10-28)**
 
@@ -158,7 +158,10 @@ Marcos em 3D com os modelos do mapa original (8 `.obj` com texturas, posições 
 
 Decidido em 2026-11-04. Hoje cada tela busca as novidades por polling (mapa 3–5 s, mercador 5 s, pendências da ficha 10 s, Mesa e diário) e as rolagens são sorteadas no navegador (`rollCheck`/`rollDice` em `CharacterSheet.jsx`), visíveis só para quem rolou. Ordem: o canal ao vivo vem primeiro porque as outras etapas dependem dele. Mesmas regras dos planos anteriores: uma entrega por etapa (código + testes + docs + changelog) e marcar como **feita** ao concluir.
 
-## Etapa 17 — Canal ao vivo (SSE)
+## Etapa 17 — Canal ao vivo (SSE) — **feita (2026-11-04)**
+
+Como ficou (ver `backend.md`, Canal ao vivo): o evento só diz o tópico, sem dados nem público, e cada tela busca de novo com as próprias permissões, o que dispensa decidir quem recebe o quê; quem publica é um interceptor pelo 1º trecho da rota. O texto abaixo é o planejado.
+
 
 **Por quê**: base de tudo o que é "na hora" (rolagens da mesa, revelar ponto, mercador, documento novo) e fim dos `setInterval` espalhados.
 - Back: **Server-Sent Events** com `SseEmitter` (cabe no `spring-boot-starter-webmvc`, sem dependência nova; o Caddy já repassa a conexão aberta). Um `LiveHub` guarda as conexões por conta e publica eventos curtos `{ type, payload }` para um jogador, para o grupo ou só para o mestre. Heartbeat a cada ~20 s.

@@ -160,5 +160,5 @@ Lore e mapa se ligam: a região com `mapSlug` mostra as informações do verbete
 
 - Passado: os 22 passados têm ilustração (o teste `backgroundArt.test.js` exige). Para trocar, basta substituir `assets/backgrounds/<id>.webp` (o id é o do catálogo); imagens sem uso ficam em `assets/backgrounds/_reserva/`. As artes atuais são provisórias.
 - Fora da loja de um mercador aberto, o jogador só gasta consumíveis, ouro e inspiração (decisão da mesa); quem dá é o mestre, na aba Inventário do painel.
-- Documentos e anotações só atualizam ao abrir a ficha (não há aviso em tempo real quando o mestre envia algo).
+- A ficha em si (PV, inventário, condições) não se recarrega quando o mestre muda algo; só o nível liberado, os documentos, os locais revelados e o mercador chegam pelo canal ao vivo.
 - O histórico de rolagens não é compartilhado com o mestre nem salvo.

@@ -6,6 +6,7 @@ import {
   createRoute, deleteRoute, fetchPoiImages, fetchRoutes, fetchWaypoints, hideParty, setOfficialAudience, moveParty, rollBandle, setMapFog, setPoiAudience, setRegionRevealed, updatePoi, updateWaypoint,
 } from '../../api/map.js'
 import { fetchLore } from '../../api/lore.js'
+import { useLive } from '../../api/live.js'
 import { fetchRecipients } from '../../api/master.js'
 import DiceRoll from '../sheet/DiceRoll.jsx'
 import { playerName } from '../lore/AudiencePicker.jsx'
@@ -54,6 +55,8 @@ const coveredWidth = () => (window.innerWidth >= PANEL_MIN_SCREEN ? PANEL_WIDTH 
 // focus: { slug } ou { poiId }, para abrir já mostrando algo (vem da lore).
 export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   const isMaster = Boolean(session.master)
+  // Canal ao vivo: qualquer alteração em /map avisa; sem ele, o polling abaixo segue no ritmo normal.
+  const mapLive = useLive(session.token, ['map'])
   const [viewAs, setViewAs] = useState(null) // mestre: usuário cujo mapa ele está vendo (prévia); nada é editável
   const master = isMaster && !viewAs // o que a tela mostra: no "Ver como", a visão do jogador
   const stage = useRef(null)
@@ -150,8 +153,10 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
 
   // Trajetórias: seguem o "Ver como" e vão para a cena junto com o rascunho em desenho.
   useEffect(() => {
-    fetchRoutes(session.token, viewAs).then(setRoutes).catch(() => {})
-  }, [session.token, viewAs])
+    const load = () => fetchRoutes(session.token, viewAs).then(setRoutes).catch(() => {})
+    load()
+    return mapLive.listen(load)
+  }, [session.token, viewAs, mapLive])
 
   useEffect(() => { if (placing !== 'route') { setDraftRoute([]); setRouteName('') } }, [placing])
 
@@ -193,9 +198,10 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
         .catch(() => setPois(p => p ?? []))
     }
     check()
-    const t = setInterval(check, POI_POLL)
-    return () => clearInterval(t)
-  }, [session.token, viewAs, isMaster])
+    const off = mapLive.listen(check)
+    const t = setInterval(() => { if (mapLive.due()) check() }, POI_POLL)
+    return () => { off(); clearInterval(t) }
+  }, [session.token, viewAs, isMaster, mapLive])
 
   // O grupo: a mesa inteira confere a cada poucos segundos (com a aba visível); só troca o estado quando muda.
   useEffect(() => {
@@ -210,9 +216,10 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
         .catch(() => {})
     }
     check()
-    const t = setInterval(check, PARTY_POLL)
-    return () => clearInterval(t)
-  }, [session.token])
+    const off = mapLive.listen(check)
+    const t = setInterval(() => { if (mapLive.due()) check() }, PARTY_POLL)
+    return () => { off(); clearInterval(t) }
+  }, [session.token, mapLive])
 
   // O marcador anda do lugar antigo até o novo (sem animação na primeira vez ou com movimento reduzido).
   const partyX = party?.x

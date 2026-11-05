@@ -3,6 +3,7 @@ import { applyLevelUp, castSpell, fetchBreakdown, fetchConditions, setDeathSaves
 import { fetchDocuments, markDocumentRead } from '../../api/documents.js'
 import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.js'
 import { fetchVisiblePois } from '../../api/map.js'
+import { useLive } from '../../api/live.js'
 import { buyFromMerchant, fetchActiveMerchant, haggleWithMerchant, pingMerchant, sellToMerchant } from '../../api/merchants.js'
 import { SKILL_NAMES, deathSaveResult, rollCheck, rollD20, rollDice } from '../../data/rules.js'
 import WorldButtons from '../map/WorldButtons.jsx'
@@ -92,12 +93,35 @@ export default function CharacterSheet({ character, session, notice, onChangePas
         else if (err.status === 404) setState({ status: 'empty', message: err.message })
         else setState({ status: 'error', message: err.message })
       })
-    // Documentos e anotações não travam a ficha: se falharem, as abas ficam vazias.
-    fetchDocuments(token).then(setDocuments).catch(() => {})
+    // Anotações não travam a ficha: se falharem, a aba fica vazia (documentos: efeito do canal ao vivo, abaixo).
     fetchNotes(token).then(list => setNotes(sortNotes(list))).catch(() => {})
   }, [token])
 
   useEffect(load, [load])
+
+  // Canal ao vivo: cada efeito abaixo confere na hora do aviso; sem canal, o polling segue no ritmo normal.
+  const merchantLive = useLive(token, ['merchants'])
+  const mapLive = useLive(token, ['map'])
+  const tableLive = useLive(token, ['table'])
+  const documentsLive = useLive(token, ['documents'])
+
+  // Documento novo do mestre chega sem reabrir a ficha.
+  const knownDocs = useRef(null)
+  useEffect(() => {
+    const check = () => fetchDocuments(token)
+      .then(list => {
+        const before = knownDocs.current
+        knownDocs.current = new Set(list.map(d => d.id))
+        if (before && list.some(d => !before.has(d.id))) {
+          play('success')
+          setToast('O mestre enviou um documento novo. Veja a aba DOCUMENTOS.')
+        }
+        setDocuments(list)
+      })
+      .catch(() => {})
+    check()
+    return documentsLive.listen(check)
+  }, [token, documentsLive])
 
   // Defesa em uso (sem armadura, CA alternativa ou armadura do inventário): o back devolve a CA recalculada.
   const chooseDefense = useCallback(key => {
@@ -194,9 +218,10 @@ export default function CharacterSheet({ character, session, notice, onChangePas
         .catch(() => {})
     }
     check()
-    const t = setInterval(check, MERCHANT_POLL)
-    return () => clearInterval(t)
-  }, [token, hasSheet, putMerchant])
+    const off = merchantLive.listen(check)
+    const t = setInterval(() => { if (merchantLive.due()) check() }, MERCHANT_POLL)
+    return () => { off(); clearInterval(t) }
+  }, [token, hasSheet, putMerchant, merchantLive])
 
   // Ao entrar na loja, ouro e mochila vêm atualizados (o mestre pode ter mexido) e, com eles, as ofertas.
   useEffect(() => {
@@ -467,15 +492,16 @@ export default function CharacterSheet({ character, session, notice, onChangePas
         .catch(() => {})
     }
     check()
-    const t = setInterval(check, PENDING_POLL)
-    return () => clearInterval(t)
-  }, [token, hasSheet])
+    const off = mapLive.listen(check)
+    const t = setInterval(() => { if (mapLive.due()) check() }, PENDING_POLL)
+    return () => { off(); clearInterval(t) }
+  }, [token, hasSheet, mapLive])
 
   // O mestre libera a subida no painel: a cada 10 s (com a aba visível) confere se mudou o que está liberado.
   const pendingNow = sheet?.pendingLevels
   useEffect(() => {
     if (pendingNow == null) return
-    const t = setInterval(() => {
+    const check = () => {
       if (document.hidden) return
       fetchSheet(token)
         .then(s => {
@@ -490,9 +516,11 @@ export default function CharacterSheet({ character, session, notice, onChangePas
           }
         })
         .catch(() => {})
-    }, PENDING_POLL)
-    return () => clearInterval(t)
-  }, [token, pendingNow])
+    }
+    const off = tableLive.listen(check)
+    const t = setInterval(() => { if (tableLive.due()) check() }, PENDING_POLL)
+    return () => { off(); clearInterval(t) }
+  }, [token, pendingNow, tableLive])
   // Se o mestre cancelar enquanto o jogador escolhe, o formulário fecha.
   useEffect(() => {
     if (leveling && sheet && !canLevel) setLeveling(false)

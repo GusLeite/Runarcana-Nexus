@@ -110,6 +110,8 @@
 | POST | `/auth/login` | `LoginRequest { username, password }` | Entra; devolve `{ token, expiresAt, account: { username, mustChangePassword, master } }`. 401 se errar; 429 depois de muitas senhas erradas do mesmo endereço |
 | GET | `/auth/me` | – (Bearer) | Conta do token. 401 se o token for inválido ou expirado |
 | POST | `/auth/logout` | – (Bearer) | Apaga o token. 204 |
+| POST | `/live/ticket` | – (Bearer) | `{ ticket }` de uso único, válido por 30 s, para abrir o canal ao vivo. 401 sem sessão |
+| GET | `/live/stream?ticket=…` | – | Canal ao vivo (Server-Sent Events): `hello` ao abrir e `change` com `{ topic }` a cada alteração (ver `backend.md`, Canal ao vivo). 401 com ticket inválido, vencido ou já usado |
 | POST | `/auth/test-player` | – (Bearer **mestre**) | Sessão do personagem de teste (`teste`), com token próprio; 403 para jogador |
 | GET | `/auth/players` | – (aberto) | Jogadores que o mestre adicionou: `[{ username }]` |
 | POST | `/auth/players` | `CreatePlayerRequest { username }` (Bearer **mestre**) | Cria conta de jogador (2–20 de `a-z0-9_-`) e devolve `{ username, temporaryPassword }`; 400 se repetir ou for `teste`. 201 |
