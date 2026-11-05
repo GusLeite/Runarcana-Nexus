@@ -18,6 +18,7 @@ public record LoreEntryResponse(
         String mapSlug,
         Link region,
         List<Link> linked,
+        List<Link> related,
         List<Fact> facts,
         List<Section> sections,
         boolean toAll,

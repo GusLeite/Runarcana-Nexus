@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-04 — Verbetes relacionados entre si (`main`)
+- O mestre relaciona um verbete a qualquer outro (lugar ↔ personagem, personagem ↔ personagem, região...) em **Verbetes relacionados** no formulário da lore; a relação vale nos dois sentidos (`relatedIds` no `LoreEntryRequest`, `related` na resposta, tabela `lore_entry_relations`).
+- Os relacionados aparecem na página do verbete (junto dos ligados, por tipo), no painel da região e no painel do ponto do mapa ligado ao verbete. O jogador só vê relações com o que conhece.
+
 ## 2026-11-04 — Canal ao vivo por SSE, Etapa 17 (`main`)
 - `GET /live/stream` (Server-Sent Events, aberto com ticket de uso único de `POST /live/ticket`) avisa o tópico que mudou (`map`, `table`, `merchants`, `journal`, `documents`) depois de toda alteração com 2xx (interceptor em `LiveConfig`). O evento não leva dados: a tela busca de novo com as próprias permissões.
 - Front: `api/live.js` (`useLive`) com uma conexão por aba e reconexão; mapa, ficha, Mesa, diário e trocas do mercador atualizam na hora, e o polling vira reserva a cada 60 s. Documento novo do mestre agora chega sem reabrir a ficha.

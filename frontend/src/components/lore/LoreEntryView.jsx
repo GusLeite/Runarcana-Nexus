@@ -4,6 +4,14 @@ import { audienceLabel } from './AudiencePicker.jsx'
 
 export const KIND_LABELS = { CHARACTER: 'Personagem', PLACE: 'Lugar', REGION: 'Região' }
 
+// Os ligados à região (linked) somados aos relacionados (related), sem repetir, do tipo pedido.
+export const connectedOf = (entry, kind) => {
+  const seen = new Set()
+  return [...(entry?.linked ?? []), ...(entry?.related ?? [])]
+    .filter(item => item.kind === kind && !seen.has(item.id) && seen.add(item.id))
+    .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
+}
+
 // Marca dourada para quem ainda não tem imagem.
 export function LoreSigil({ kind }) {
   const paths = {
@@ -45,8 +53,9 @@ export function Knowledge({ section, master, startOpen }) {
 // Página do verbete, na ordem da do Universo: capa, citação, resumo, informações, conhecimentos e vínculos.
 export default function LoreEntryView({ entry, master, mapTarget, onOpen, onShowOnMap, onEdit }) {
   const groups = [
-    ['Personagens', entry.linked.filter(l => l.kind === 'CHARACTER')],
-    ['Lugares', entry.linked.filter(l => l.kind === 'PLACE')],
+    ['Personagens', connectedOf(entry, 'CHARACTER')],
+    ['Lugares', connectedOf(entry, 'PLACE')],
+    ['Regiões', connectedOf(entry, 'REGION').filter(r => r.id !== entry.region?.id)],
   ].filter(([, items]) => items.length > 0)
 
   return (

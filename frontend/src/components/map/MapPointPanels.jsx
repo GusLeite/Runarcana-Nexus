@@ -61,6 +61,16 @@ export function PoiPanel({ poi, loreEntry, master, preview = false, players = []
         {master && onMove && <button type="button" className="lore-action ghost" onClick={onMove}>MOVER</button>}
         <CopyLinkButton target={poi.id} />
       </div>
+      {loreEntry?.related?.length > 0 && (
+        <div className="map-point-related">
+          <span>Relacionados</span>
+          <div className="lore-chips">
+            {loreEntry.related.map(item => (
+              <button key={item.id} type="button" className="lore-chip" onClick={() => onOpenLore(item.id)} title={'Abrir ' + item.name + ' na lore'}>{item.name}</button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <PoiHistory token={token} poi={poi} readOnly={preview} />
       <div className="lore-rule" aria-hidden="true" />

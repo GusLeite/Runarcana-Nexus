@@ -54,6 +54,7 @@ public class LoreService {
         fill(entry, request);
         entries.saveAndFlush(entry);
         applyLinks(entry, request);
+        applyRelations(entry, request.relatedIds());
         return toResponse(master, entry, entries.findAll());
     }
 
@@ -63,6 +64,7 @@ public class LoreService {
         fill(entry, request);
         entries.flush();
         applyLinks(entry, request);
+        applyRelations(entry, request.relatedIds());
         return toResponse(master, entry, entries.findAll());
     }
 
@@ -72,6 +74,8 @@ public class LoreService {
         LoreEntry entry = find(id);
         entries.findByRegion(entry).forEach(child -> child.setRegion(null));
         pois.findByLoreEntry(entry).forEach(poi -> poi.setLoreEntry(null));
+        entry.getRelated().forEach(other -> other.getRelated().remove(entry));
+        entry.getRelated().clear();
         entries.delete(entry);
     }
 
@@ -139,6 +143,25 @@ public class LoreService {
         entry.setRegion(region);
     }
 
+    // Relação simétrica: marcar B em A também põe A em B; tirar desfaz dos dois lados.
+    private void applyRelations(LoreEntry entry, List<Long> relatedIds) {
+        if (relatedIds == null) return;
+        Set<Long> wanted = new HashSet<>(relatedIds);
+        if (wanted.contains(entry.getId())) throw ApiException.badRequest("Um verbete não pode ser relacionado a ele mesmo.");
+        for (LoreEntry other : List.copyOf(entry.getRelated())) {
+            if (!wanted.contains(other.getId())) {
+                entry.getRelated().remove(other);
+                other.getRelated().remove(entry);
+            }
+        }
+        for (Long id : wanted) {
+            LoreEntry other = entries.findById(id)
+                    .orElseThrow(() -> ApiException.badRequest("Verbete relacionado não encontrado."));
+            entry.getRelated().add(other);
+            other.getRelated().add(entry);
+        }
+    }
+
     private LoreEntryResponse toResponse(Account viewer, LoreEntry e, List<LoreEntry> all) {
         LoreEntry region = e.getRegion();
         LoreEntryResponse.Link regionLink = region != null && canSee(viewer, region) ? link(region) : null;
@@ -147,13 +170,18 @@ public class LoreService {
                 .sorted(Comparator.comparing(c -> c.getName().toLowerCase()))
                 .map(LoreService::link)
                 .toList();
+        List<LoreEntryResponse.Link> related = e.getRelated().stream()
+                .filter(r -> canSee(viewer, r))
+                .sorted(Comparator.comparing(r -> r.getName().toLowerCase()))
+                .map(LoreService::link)
+                .toList();
         List<LoreEntryResponse.Section> sections = e.getSections().stream()
                 .filter(s -> RecipientResolver.reaches(viewer, s.isToAll(), s.getRecipients()))
                 .map(s -> new LoreEntryResponse.Section(s.getId(), s.getTitle(), s.getBody(), s.isToAll(), RecipientResolver.names(viewer, s.getRecipients())))
                 .toList();
         List<LoreEntryResponse.Fact> facts = e.getFacts().stream().map(f -> new LoreEntryResponse.Fact(f.getLabel(), f.getValue())).toList();
         return new LoreEntryResponse(e.getId(), e.getKind(), e.getName(), e.getSubtitle(), e.getQuote(), e.getQuoteAuthor(), e.getSummary(), e.getMapSummary(),
-                imageOf(e), e.getMapSlug(), regionLink, linked, facts, sections, e.isToAll(), RecipientResolver.names(viewer, e.getRecipients()));
+                imageOf(e), e.getMapSlug(), regionLink, linked, related, facts, sections, e.isToAll(), RecipientResolver.names(viewer, e.getRecipients()));
     }
 
     private static String imageOf(LoreEntry e) {

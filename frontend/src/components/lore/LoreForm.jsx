@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { MAP_PINS } from '../map/regions.js'
 import AudiencePicker from './AudiencePicker.jsx'
 import { fileToBanner } from '../../utils/iconImage.js'
@@ -6,7 +6,7 @@ import { KIND_LABELS } from './LoreEntryView.jsx'
 
 const EMPTY = {
   kind: 'CHARACTER', name: '', subtitle: '', quote: '', quoteAuthor: '', summary: '', mapSummary: '', imageUrl: '', mapSlug: '',
-  regionId: '', linkedIds: [], facts: [], sections: [], toAll: false, recipients: [],
+  regionId: '', linkedIds: [], relatedIds: [], facts: [], sections: [], toAll: false, recipients: [],
 }
 
 const fromEntry = entry => ({
@@ -22,6 +22,7 @@ const fromEntry = entry => ({
   mapSlug: entry.mapSlug ?? '',
   regionId: entry.region?.id ?? '',
   linkedIds: entry.linked.map(l => l.id),
+  relatedIds: (entry.related ?? []).map(l => l.id),
   facts: entry.facts.map(f => ({ ...f })),
   sections: entry.sections.map(s => ({ title: s.title, body: s.body ?? '', toAll: s.toAll, recipients: s.recipients ?? [] })),
   toAll: entry.toAll,
@@ -38,6 +39,7 @@ export default function LoreForm({ entry, draft, entries, players, onSave, onDel
   const set = (key, value) => setForm(f => ({ ...f, [key]: value }))
   const setItem = (key, index, patch) => setForm(f => ({ ...f, [key]: f[key].map((item, i) => (i === index ? { ...item, ...patch } : item)) }))
   const removeItem = (key, index) => setForm(f => ({ ...f, [key]: f[key].filter((_, i) => i !== index) }))
+  const toggleRelated = id => set('relatedIds', form.relatedIds.includes(id) ? form.relatedIds.filter(x => x !== id) : [...form.relatedIds, id])
   const toggleLinked = id => set('linkedIds', form.linkedIds.includes(id) ? form.linkedIds.filter(x => x !== id) : [...form.linkedIds, id])
 
   const isRegion = form.kind === 'REGION'
@@ -65,6 +67,7 @@ export default function LoreForm({ entry, draft, entries, players, onSave, onDel
         mapSlug: isRegion ? form.mapSlug || null : null,
         regionId: !isRegion && form.regionId !== '' ? Number(form.regionId) : null,
         linkedIds: isRegion ? form.linkedIds : [],
+        relatedIds: form.relatedIds,
       })
     } catch (err) {
       setMsg(err.message)
@@ -146,6 +149,8 @@ export default function LoreForm({ entry, draft, entries, players, onSave, onDel
         </label>
       )}
 
+      <RelatedPicker entries={entries} self={entry?.id} chosen={form.relatedIds} onToggle={toggleRelated} />
+
       <fieldset>
         <legend>Quem conhece este verbete</legend>
         <p className="lore-form-hint">Quem marcar aqui vê nome, imagem, resumo e informações. Quem recebe só um conhecimento abaixo também vê essa parte.</p>
@@ -189,5 +194,38 @@ export default function LoreForm({ entry, draft, entries, players, onSave, onDel
           : <button type="button" className="lore-link danger" onClick={() => setConfirming(true)}>Apagar verbete</button>)}
       </div>
     </form>
+  )
+}
+
+const MAX_SHOWN = 24
+
+// Verbetes relacionados, de qualquer tipo (o lugar e quem o guarda, dois personagens rivais...). A relação vale
+// nos dois sentidos: marcar aqui também mostra este verbete na página do outro. Os marcados vêm primeiro; a busca filtra o resto.
+function RelatedPicker({ entries, self, chosen, onToggle }) {
+  const [query, setQuery] = useState('')
+  const others = useMemo(() => entries.filter(e => e.id !== self), [entries, self])
+  const picked = others.filter(e => chosen.includes(e.id))
+  const q = query.trim().toLowerCase()
+  const rest = others.filter(e => !chosen.includes(e.id) && (!q || e.name.toLowerCase().includes(q)))
+  const chip = (item, on) => (
+    <button key={item.id} type="button" className={'lore-chip' + (on ? ' on' : '')} aria-pressed={on} onClick={() => onToggle(item.id)}>
+      {item.name}<span className="lore-chip-kind"> · {KIND_LABELS[item.kind]}</span>
+    </button>
+  )
+  return (
+    <fieldset>
+      <legend>Verbetes relacionados</legend>
+      {others.length === 0 ? <p className="lore-form-hint">Crie outros verbetes para relacioná-los a este.</p> : (
+        <>
+          {picked.length > 0 && <div className="lore-chips">{picked.map(item => chip(item, true))}</div>}
+          <input className="lore-search lore-related-search" type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Buscar verbete para relacionar…" aria-label="Buscar verbete para relacionar" />
+          <div className="lore-chips">
+            {rest.slice(0, MAX_SHOWN).map(item => chip(item, false))}
+            {rest.length > MAX_SHOWN && <span className="lore-chips-hint">e mais {rest.length - MAX_SHOWN}: use a busca.</span>}
+            {rest.length === 0 && q && <span className="lore-chips-hint">Nenhum verbete com esse nome.</span>}
+          </div>
+        </>
+      )}
+    </fieldset>
   )
 }

@@ -14,6 +14,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -103,6 +106,35 @@ class LoreAndMapPointsTests {
         send(put("/lore/" + region), master, "{\"kind\":\"REGION\",\"name\":\"Shurima\",\"toAll\":true,\"recipients\":[],\"linkedIds\":[]}")
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.linked", hasSize(0)));
+    }
+
+    @Test
+    void relacaoEntreVerbetesValeNosDoisSentidos() throws Exception {
+        String master = login("mestre");
+        long azir = id(send(post("/lore"), master, AZIR));
+        long hidden = id(send(post("/lore"), master, "{\"kind\":\"CHARACTER\",\"name\":\"Oculto\",\"toAll\":false,\"recipients\":[]}"));
+        String place = "{\"kind\":\"PLACE\",\"name\":\"Templo do Sol\",\"toAll\":true,\"recipients\":[]";
+        long temple = id(send(post("/lore"), master, place + ",\"relatedIds\":[" + azir + "," + hidden + "]}"));
+
+        // O outro lado vê a relação sem ter sido editado.
+        read("/lore", master)
+                .andExpect(jsonPath("$[?(@.name == 'Azir')].related[*].name").value(hasItem("Templo do Sol")))
+                .andExpect(jsonPath("$[?(@.name == 'Templo do Sol')].related[*].name").value(containsInAnyOrder("Azir", "Oculto")));
+        // O jogador não fica sabendo do verbete que não conhece.
+        read("/lore", login("gaudron"))
+                .andExpect(jsonPath("$[?(@.name == 'Templo do Sol')].related[*].name").value(contains("Azir")));
+
+        // Sem relatedIds, a edição mantém; desfazer de um lado desfaz do outro.
+        send(put("/lore/" + temple), master, place + "}").andExpect(jsonPath("$.related", hasSize(2)));
+        send(put("/lore/" + azir), master, AZIR.substring(0, AZIR.length() - 1) + ",\"relatedIds\":[]}").andExpect(jsonPath("$.related", hasSize(0)));
+        read("/lore", master).andExpect(jsonPath("$[?(@.name == 'Templo do Sol')].related[*].name").value(contains("Oculto")));
+
+        send(put("/lore/" + temple), master, place + ",\"relatedIds\":[" + temple + "]}").andExpect(status().isBadRequest());
+        send(put("/lore/" + temple), master, place + ",\"relatedIds\":[999]}").andExpect(status().isBadRequest());
+
+        // Apagar um verbete só tira a relação do outro.
+        mvc.perform(delete("/lore/" + hidden).header("Authorization", "Bearer " + master)).andExpect(status().isNoContent());
+        read("/lore", master).andExpect(jsonPath("$[?(@.name == 'Templo do Sol')].related[*]", hasSize(0)));
     }
 
     @Test

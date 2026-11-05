@@ -150,7 +150,7 @@ As texturas são arte da Riot e ficam fora do Git, em `public/map/`: `frontend/s
 
 ## Lore
 
-`components/lore/LoreScreen.jsx` lista os verbetes com filtro por tipo e busca; `LoreEntryView.jsx` é a página, na ordem da do Azir no Universo: capa, citação, resumo, informações, conhecimentos e vínculos. O servidor já filtra: o jogador recebe só o que foi liberado para ele. O mestre escreve em `LoreForm.jsx`, marcando com `AudiencePicker.jsx` quem conhece o verbete e cada conhecimento, e vincula personagens e lugares à região (nos dois sentidos). Imagens são links, como nos documentos.
+`components/lore/LoreScreen.jsx` lista os verbetes com filtro por tipo e busca; `LoreEntryView.jsx` é a página, na ordem da do Azir no Universo: capa, citação, resumo, informações, conhecimentos e vínculos. O servidor já filtra: o jogador recebe só o que foi liberado para ele. O mestre escreve em `LoreForm.jsx`, marcando com `AudiencePicker.jsx` quem conhece o verbete e cada conhecimento, e vincula personagens e lugares à região (nos dois sentidos). Em **Verbetes relacionados** (`RelatedPicker`, com busca) liga o verbete a qualquer outro, de qualquer tipo, e a relação aparece nas duas páginas: a página junta ligados e relacionados em Personagens, Lugares e Regiões (`connectedOf`), o painel da região do mapa também, e o painel do ponto de interesse ligado a um verbete mostra os relacionados dele como atalhos para a lore. Imagens são links, como nos documentos.
 
 Lore e mapa se ligam: a região com `mapSlug` mostra as informações do verbete no painel do mapa e **ABRIR NA LORE**, e o verbete com brasão ou ponto de interesse mostra **VER NO MAPA**.
 

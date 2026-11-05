@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 // Verbete inteiro de uma vez: facts e sections substituem os atuais. linkedIds: só em região, personagens e lugares dela.
+// relatedIds: verbetes relacionados, de qualquer tipo, nos dois sentidos (nulo = mantém os atuais).
 public record LoreEntryRequest(
         @NotNull(message = "Informe o tipo: CHARACTER, PLACE ou REGION.")
         LoreKind kind,
@@ -32,6 +33,8 @@ public record LoreEntryRequest(
         String mapSlug,
         Long regionId,
         List<Long> linkedIds,
+        @Size(max = 40, message = "São até 40 verbetes relacionados.")
+        List<Long> relatedIds,
         @Size(max = 12, message = "São até 12 informações.")
         List<@Valid Fact> facts,
         @Size(max = 40, message = "São até 40 conhecimentos.")

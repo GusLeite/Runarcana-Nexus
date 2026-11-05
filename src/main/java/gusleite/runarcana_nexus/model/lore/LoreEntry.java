@@ -69,6 +69,16 @@ public class LoreEntry {
     @OrderColumn(name = "position")
     private List<LoreSection> sections = new ArrayList<>();
 
+    // Verbetes relacionados (qualquer tipo, ex.: um lugar e o personagem que o guarda). Guardado nos dois sentidos:
+    // o LoreService mantém A→B e B→A juntos, então cada lado só lê a própria lista.
+    @ManyToMany
+    @JoinTable(
+            name = "lore_entry_relations",
+            joinColumns = @JoinColumn(name = "entry_id"),
+            inverseJoinColumns = @JoinColumn(name = "related_id")
+    )
+    private Set<LoreEntry> related = new HashSet<>();
+
     private boolean toAll;
 
     @ManyToMany

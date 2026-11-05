@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { prefersReducedMotion } from '../../hooks/useCountUp.js'
-import { Knowledge, LoreSigil } from '../lore/LoreEntryView.jsx'
+import { Knowledge, LoreSigil, connectedOf } from '../lore/LoreEntryView.jsx'
 import CopyLinkButton from './CopyLinkButton.jsx'
 
 // Painel lateral da região escolhida, com a arte. O resumo curto (mapSummary) aparece aqui; o resumo longo fica só no verbete, em "ABRIR NA LORE".
@@ -8,8 +8,8 @@ import CopyLinkButton from './CopyLinkButton.jsx'
 // e lugares ligados a ela e leva até lá. O mestre cria o verbete da região e os personagens dela sem sair do mapa.
 export default function RegionPanel({ region, lore, master, onOpenLore, onClose }) {
   const [main] = region.art
-  const people = lore?.linked.filter(item => item.kind === 'CHARACTER') ?? []
-  const places = lore?.linked.filter(item => item.kind === 'PLACE') ?? []
+  const people = connectedOf(lore, 'CHARACTER')
+  const places = connectedOf(lore, 'PLACE')
   const draftFor = extra => ({ ...extra, toAll: false, recipients: [] })
   return (
     <aside className="map-panel" style={{ '--h': main.hue }} aria-label={region.name}>
