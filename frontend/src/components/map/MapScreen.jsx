@@ -630,7 +630,10 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
               <button
                 key={pin.slug}
                 ref={el => { anchors.current[pin.slug] = el }}
-                className={'map-pin map-pin-' + pin.icon + (pin.slug === 'bandle' && born ? ' map-pin-born' : '')}
+                // className fixo: a cena liga a classe "on" direto no elemento, e um className que mudasse no React
+                // (como o "brotar" da Bandópolis ao rolar de novo) a apagaria, deixando o brasão invisível.
+                className={'map-pin map-pin-' + pin.icon}
+                data-born={(pin.slug === 'bandle' && born) || undefined}
                 type="button"
                 onClick={() => select(pin)}
                 data-fogged={foggedSlug(pin.slug) || undefined}
@@ -660,7 +663,8 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
           {party?.x != null && (
             <button
               ref={el => { anchors.current.party = el; partyPin.current.el = el }}
-              className={'map-pin map-party' + (master ? ' draggable' : '')}
+              className="map-pin map-party"
+              data-draggable={master || undefined}
               type="button"
               title={master ? 'Arraste para mover o grupo' : 'O grupo está aqui'}
               onPointerDown={dragStart}

@@ -104,6 +104,8 @@ Layout: 3 colunas acima de 1240px; 2 colunas (herói + conteúdo, rolagens embai
 
 ## Mapa de Runeterra
 
+**Cuidado com os brasões em HTML** (`.map-pin`): a cena (`placePins` em `mapScene.js`) liga a classe `on` direto no elemento e só mexe de novo quando muda; por isso o `className` deles no React é fixo, e estado que muda vai em atributo (`data-born`, `data-draggable`, `data-fogged`). Um `className` que mudasse apagaria o `on` e o brasão sumiria.
+
 **Sinais ao vivo** (canal SSE, `useLiveEvent` de `api/live.js`; nada fica salvo): **Alt+clique** em qualquer lugar deixa uma onda na sua cor (`routeColor`) para toda a mesa, com o aviso "X marcou um lugar"; o mestre tem **OLHEM AQUI!** na barra (o centro do que ele vê) e no painel do ponto, que leva a câmera de quem está com o mapa aberto até lá, com anéis dourados e um farol (`mapPulses.js`, `scene.pulse`). Com o mapa fechado, a ficha mostra "O mestre quer mostrar … no mapa" com **VER** (abre o mapa no ponto ou em `?tela=mapa&x=..&y=..`).
 
 `components/map/WorldButtons.jsx` põe a barra flutuante `.world-dock` (canto inferior direito, renderizada por portal no `body` para o `backdrop-filter` do cabeçalho não prendê-la; recolhida, só o botão "Atalhos", que abre os botões grandes dourados "Lore" e "Mapa", mais o que a tela passar como filho, como o "Imprimir ficha" em azul-turquesa; no celular viram só ícones em coluna) na ficha, na criação e no painel do mestre e abre `MapScreen.jsx` ou `LoreScreen.jsx` em tela cheia, por cima da tela atual. O Three.js só é baixado ao abrir o mapa. O Esc fecha primeiro o que estiver por cima.

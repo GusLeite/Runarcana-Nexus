@@ -1,6 +1,9 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-05 — Bandópolis sumia ao rolar de novo (`main`)
+- A cena liga a classe `on` direto no brasão e guarda que ligou; o React reescrevia o `className` ao trocar o "brotar" (`map-pin-born`) e apagava o `on`, então da 2ª rolagem em diante a Bandópolis ficava invisível. O brotar agora é `data-born` e o `className` dos brasões é fixo; o marcador do grupo (`draggable`, que mudava no "Ver como") virou `data-draggable` pelo mesmo motivo.
+
 ## 2026-11-05 — Ponto do mapa relacionado a verbetes (`main`)
 - O ponto (ex.: um marco) se relaciona direto com verbetes, sem precisar de verbete próprio: `relatedLoreIds` no ponto e `relatedPoiIds` no verbete editam o mesmo vínculo (tabela `map_poi_lore`).
 - O painel do ponto mostra os relacionados; a página do verbete ganha **No mapa** com os pontos ligados. Só aparece o que a conta conhece/vê.

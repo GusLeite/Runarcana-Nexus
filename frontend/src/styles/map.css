@@ -292,7 +292,7 @@
   cursor: default;
 }
 /* Bandópolis brota do chão ao ser rolada. */
-.map-pin-born .map-pin-icon {
+.map-pin[data-born] .map-pin-icon {
   animation: map-pin-born 0.9s cubic-bezier(0.2, 1.4, 0.4, 1) both;
 }
 @keyframes map-pin-born {
@@ -302,7 +302,7 @@
   .map-roll { bottom: 52px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .map-pin-born .map-pin-icon { animation: none; }
+  .map-pin[data-born] .map-pin-icon { animation: none; }
 }
 .map-screen.placing .map-stage canvas {
   cursor: crosshair;
@@ -419,8 +419,8 @@
   padding: 0;
   touch-action: none;
 }
-.map-party.draggable { cursor: grab; }
-.map-party.draggable:active { cursor: grabbing; }
+.map-party[data-draggable] { cursor: grab; }
+.map-party[data-draggable]:active { cursor: grabbing; }
 .map-party::before {
   content: '';
   position: absolute;
