@@ -10,7 +10,7 @@ Regras da mesa que valem para todo o plano (ver [regras-criacao.md](regras-criac
 
 - Ficha: atributos, perícias, resistências, CA (com armadura e escudo do inventário), PV editáveis pelo jogador, habilidades com usos, magias, descanso curto/longo, magias preparadas, rolagens de d20 e de dano, ataques com arma (Etapa 2), conjurar gastando Mana com CD e ataque de magia (Etapa 3), testes contra a morte e condições (Etapa 4; Exaustão até 10, como no livro), mestre edita habilidades/documentos e ajusta PV (Etapa 5), aba Mesa com todos os personagens (Etapa 6), inventário (o jogador gasta), documentos, anotações, aba Livro.
 - Mestre: cria/apaga habilidades e documentos, sobe de nível (com multiclasse), trava regras da mesa, dá e tira itens, ouro e inspiração (Etapa 1).
-- As Etapas 1–17 estão feitas; em seguida vêm as Etapas 18–20 do plano da mesa ao vivo.
+- As Etapas 1–18 estão feitas; em seguida vêm as Etapas 19–20 do plano da mesa ao vivo.
 
 ## Etapa 1 — Inventário, ouro e inspiração pelo mestre — **feita (2026-10-28)**
 
@@ -171,7 +171,10 @@ Como ficou (ver `backend.md`, Canal ao vivo): o evento só diz o tópico, sem da
 - Testes: ticket (uso único, vencido, sem login), entrega por público (jogador, grupo, mestre) e que um jogador não recebe evento de ponto oculto.
 - Limite conhecido: o hub fica em memória, então vale para uma instância só (como o `LoginThrottle`).
 
-## Etapa 18 — Rolagens pelo servidor e histórico da mesa
+## Etapa 18 — Rolagens pelo servidor e histórico da mesa — **feita (2026-11-04)**
+
+Como ficou: duas visibilidades, `TABLE` e `PRIVATE` (secreta: só quem rolou e o mestre veem os números, os outros veem que houve uma rolagem); serve tanto para a secreta do jogador quanto para o mestre atrás do escudo. A "oculta só para quem rolou" (`SELF`) não foi feita. O texto abaixo é o planejado.
+
 
 **Por quê**: com a mesa vendo os dados, o sorteio precisa ser do servidor (ninguém "rola de novo" no console) e ficar salvo.
 - `POST /rolls` com `{ label, kind: CHECK|DICE, expr | mod, mode (normal/vantagem/desvantagem), critRange, visibility: TABLE|MASTER|SELF }`; o servidor sorteia com `SecureRandom`, salva (`Roll`: conta, personagem, rótulo, dados, total, quando) e publica `ROLL` pelo canal. Os campos que hoje o front calcula (`d20`, `other`, `rolls`, `total`) passam a vir na resposta.

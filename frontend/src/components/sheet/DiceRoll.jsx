@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { formatModifier } from '../../data/rules.js'
 import { play } from '../../audio/engine.js'
+import { CHARACTERS } from '../../data/characters.js'
 
 const SPIN_MS = 750
 const STAY_MS = 3600
@@ -93,17 +94,40 @@ function Sparks() {
   )
 }
 
-// Histórico das últimas rolagens da sessão (só na tela; não vai para o servidor).
-export function RollLog({ rolls }) {
+// Retrato de quem rolou: a arte do personagem da mesa, ou a inicial (o mestre ganha um "M" dourado).
+function Who({ roll }) {
+  const art = CHARACTERS.find(c => c.id === roll.username)?.img
+  const master = roll.who === 'Mestre'
+  return (
+    <span className={'log-who' + (master ? ' master' : '')} title={roll.who}>
+      {art && !master ? <img src={art} alt="" /> : (roll.who ?? '?').slice(0, 1).toUpperCase()}
+    </span>
+  )
+}
+
+// Histórico de rolagens da mesa (vem do servidor; ver hooks/useTableRolls.js). A secreta de outro mostra só quem rolou;
+// a sua secreta leva um cadeado; a sorteada sem servidor, "não registrada".
+export function RollLog({ rolls, empty = 'Clique num atributo, perícia ou magia para rolar com o bônus.' }) {
   if (!rolls.length) {
-    return <p className="muted-note">Clique num atributo, perícia ou magia para rolar com o bônus.</p>
+    return <p className="muted-note">{empty}</p>
   }
   return (
     <ol className="log">
-      {rolls.map((r, n) => (
+      {rolls.map((r, n) => (r.hidden ? (
+        <li key={r.id} className="hidden-roll" style={{ '--n': n }}>
+          <Who roll={r} />
+          <span className="log-label">{r.who} rolou em segredo</span>
+          <span className="log-math" />
+          <b className="log-total">?</b>
+        </li>
+      ) : (
         <li key={r.id} className={outcome(r)} style={{ '--n': n }}>
+          <Who roll={r} />
           <span className="log-label">
+            {!r.mine && <span className="log-name">{r.who}: </span>}
             {r.label}
+            {r.secret && <abbr className="log-mode secret" title="Secreta: só quem rolou e o mestre veem">S</abbr>}
+            {r.unregistered && <abbr className="log-mode local" title="Sem servidor: rolada só nesta tela, fora do histórico da mesa">!</abbr>}
             {r.mode === 'adv' && <abbr className="log-mode adv" title="Vantagem">V</abbr>}
             {r.mode === 'dis' && <abbr className="log-mode dis" title="Desvantagem">D</abbr>}
           </span>
@@ -112,7 +136,7 @@ export function RollLog({ rolls }) {
           </span>
           <b className="log-total">{r.total}</b>
         </li>
-      ))}
+      )))}
     </ol>
   )
 }

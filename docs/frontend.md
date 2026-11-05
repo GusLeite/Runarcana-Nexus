@@ -28,6 +28,7 @@ frontend/
     ├── data/journal.js (+ .test.js)  resumo das sessões do diário (um por dia)
     ├── api/map.js             Bandópolis, pontos de interesse, comentários e waypoints
     ├── api/live.js (+ .test.js) canal ao vivo (SSE): uma conexão por aba, `useLive(token, tópicos)`
+    ├── api/rolls.js (+ .test.js) rolagens pelo servidor (`serverRoll`; sem servidor, sorteia aqui como "não registrada"); histórico em `hooks/useTableRolls.js`
     ├── api/lore.js            verbetes da lore
     ├── api/merchants.js       mercadores (mestre monta e abre; jogador compra e vende)
     ├── data/characters.js     lista de personagens + imports das artes

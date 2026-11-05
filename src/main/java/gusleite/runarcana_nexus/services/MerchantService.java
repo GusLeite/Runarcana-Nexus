@@ -53,10 +53,11 @@ public class MerchantService {
     private final CharacterService characterService;
     private final RuleCatalogService rules;
     private final RandomGenerator random = new SecureRandom();
+    private final RollService rolls;
 
     public MerchantService(MerchantRepository merchants, MerchantItemRepository shelf, MerchantTradeRepository trades, MerchantHaggleRepository haggles,
                            CharacterRepository characters, PlayerItemsRepository inventory, InventoryService inventoryService,
-                           StartingEquipmentService equipment, CharacterService characterService, RuleCatalogService rules) {
+                           StartingEquipmentService equipment, CharacterService characterService, RuleCatalogService rules, RollService rolls) {
         this.merchants = merchants;
         this.shelf = shelf;
         this.trades = trades;
@@ -67,6 +68,7 @@ public class MerchantService {
         this.equipment = equipment;
         this.characterService = characterService;
         this.rules = rules;
+        this.rolls = rolls;
     }
 
     public record MerchantRequest(String name, String greeting, String image, Integer buyRate, Integer haggleDc) {}
@@ -290,6 +292,7 @@ public class MerchantService {
         h.setPercent(haggleOutcome(skill, d20, d20 + modifier, dc));
         h.setCreatedAt(Instant.now());
         haggles.save(h);
+        rolls.recordCheck(account, "Pechincha (" + (skill == SkillType.PERSUASION ? "Persuasão" : "Enganação") + ")", modifier, d20);
         m.setRevision(m.getRevision() + 1);
         return playerView(m, c);
     }

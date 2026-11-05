@@ -1,6 +1,11 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-04 — Rolagens pelo servidor e histórico da mesa, Etapa 18 (`main`)
+- `POST /rolls` sorteia no servidor (d20 com vantagem/desvantagem ou expressão de dados), guarda em `TableRoll` e avisa o canal ao vivo (tópico `rolls`); `GET /rolls` traz o histórico. Secreta (`PRIVATE`) chega mascarada para os outros.
+- Ficha: atributos, perícias, ataques, dano, teste contra a morte e o atalho R rolam pelo servidor; seletor **À mesa / Só ao mestre**; o card vira "Rolagens da mesa", com retrato de quem rolou. A pechincha também entra no histórico.
+- Mestre: card **Rolagens da mesa** na aba Mesa, com rolagem atrás do escudo.
+
 ## 2026-11-04 — Verbetes relacionados entre si (`main`)
 - O mestre relaciona um verbete a qualquer outro (lugar ↔ personagem, personagem ↔ personagem, região...) em **Verbetes relacionados** no formulário da lore; a relação vale nos dois sentidos (`relatedIds` no `LoreEntryRequest`, `related` na resposta, tabela `lore_entry_relations`).
 - Os relacionados aparecem na página do verbete (junto dos ligados, por tipo), no painel da região e no painel do ponto do mapa ligado ao verbete. O jogador só vê relações com o que conhece.

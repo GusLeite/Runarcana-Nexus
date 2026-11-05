@@ -111,6 +111,8 @@
 | GET | `/auth/me` | – (Bearer) | Conta do token. 401 se o token for inválido ou expirado |
 | POST | `/auth/logout` | – (Bearer) | Apaga o token. 204 |
 | POST | `/live/ticket` | – (Bearer) | `{ ticket }` de uso único, válido por 30 s, para abrir o canal ao vivo. 401 sem sessão |
+| GET | `/rolls?limit=` | – (Bearer) | Histórico de rolagens da mesa, mais nova primeiro (padrão 30, máx. 100). Secreta (`PRIVATE`) de outra conta vem com `hidden: true` e só `id, who, username, mine, visibility, createdAt` (o mestre vê tudo) |
+| POST | `/rolls` | `{ label, kind: CHECK|DICE, mod?, mode?: normal|adv|dis, critRange?, expr?, visibility?: TABLE|PRIVATE }` (Bearer) | O servidor sorteia (`SecureRandom`), guarda (`TableRoll`) e avisa o canal (tópico `rolls`, depois do commit). Devolve `{ id, who, username, mine, hidden, visibility, kind, label, mode, mod, d20, other, critRange, expr, count, sides, bonus, rolls[], total, createdAt }` (201). 400: rótulo vazio ou > 120, tipo/modo/visibilidade inválidos, `mod` além de ±100, `critRange` fora de 2–20, expressão fora de `NdM±B` com 1–100 dados, 2–1000 faces e bônus até ±1000 |
 | GET | `/live/stream?ticket=…` | – | Canal ao vivo (Server-Sent Events): `hello` ao abrir e `change` com `{ topic }` a cada alteração (ver `backend.md`, Canal ao vivo). 401 com ticket inválido, vencido ou já usado |
 | POST | `/auth/test-player` | – (Bearer **mestre**) | Sessão do personagem de teste (`teste`), com token próprio; 403 para jogador |
 | GET | `/auth/players` | – (aberto) | Jogadores que o mestre adicionou: `[{ username }]` |

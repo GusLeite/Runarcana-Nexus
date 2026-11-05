@@ -198,6 +198,10 @@ class MerchantControllerTests {
         assertThat(percent).isIn(-20, -10, 0, 10, 20);
         int price = Integer.parseInt(group(after, "\"price\":(\\d+)"));
         assertThat(price).isEqualTo((int) Math.ceil(10 * (100 + percent) / 100.0));
+        // O d20 da pechincha entra no histórico de rolagens da mesa.
+        mvc.perform(get("/rolls").header("Authorization", "Bearer " + master))
+                .andExpect(jsonPath("$[0].label").value("Pechincha (Persuasão)"))
+                .andExpect(jsonPath("$[0].who").value("Nyx"));
         send(post("/merchants/active/haggle"), player, "{\"skill\":\"DECEPTION\"}").andExpect(status().isBadRequest());
 
         // A compra cobra o preço dele; o mestre vê a pechincha e o preço da prateleira.

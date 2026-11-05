@@ -19,7 +19,7 @@ const MODES = [
 
 // Aba principal: atributos, estatísticas e perícias no centro; à direita, rolagens e atalhos
 // para as outras abas (habilidades, documentos novos e a anotação fixada).
-export default function OverviewTab({ sheet, attacks = [], crafts = [], abilities, documents, notes, rolls, mode, onMode, onRoll, onRollDice, onGo, onInspiration, onForm, onEffect }) {
+export default function OverviewTab({ sheet, attacks = [], crafts = [], abilities, documents, notes, rolls, mode, onMode, secret, onSecret, onRoll, onRollDice, onGo, onInspiration, onForm, onEffect }) {
   const initiative = sheet.initiative ?? modifier(sheet.dex)
   const conMod = modifier(sheet.con)
   const quick = abilities.filter(a => a.type !== 'PASSIVE').slice(0, 5)
@@ -74,7 +74,7 @@ export default function OverviewTab({ sheet, attacks = [], crafts = [], abilitie
       <div className="sheet-col">
         <section className="card" style={{ '--i': 2 }}>
           <div className="card-title inv-title">
-            <h3>Rolagens <small>R para rolar</small></h3>
+            <h3>Rolagens da mesa <small>R para rolar</small></h3>
           </div>
           <div className="seg mode-seg" role="group" aria-label="Modo das rolagens de d20">
             {MODES.map(m => (
@@ -82,6 +82,11 @@ export default function OverviewTab({ sheet, attacks = [], crafts = [], abilitie
                 {m.label}
               </button>
             ))}
+          </div>
+          <div className="seg mode-seg" role="group" aria-label="Quem vê as rolagens">
+            <button type="button" className={!secret ? 'on' : ''} aria-pressed={!secret} onClick={() => onSecret(false)}>À mesa</button>
+            <button type="button" className={secret ? 'on secret' : 'secret'} aria-pressed={secret} onClick={() => onSecret(true)}
+              title="Só você e o mestre veem o resultado; os outros veem que você rolou">Só ao mestre</button>
           </div>
           <RollLog rolls={rolls} />
         </section>

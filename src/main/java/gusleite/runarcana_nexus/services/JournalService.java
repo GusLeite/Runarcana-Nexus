@@ -129,7 +129,7 @@ public class JournalService {
     }
 
     // Mesma ligação conta → ficha do CharacterService.findCharacterOf (pela conta ou, nas antigas, pelo nome).
-    private String nameOf(Account account) {
+    public String nameOf(Account account) {
         if (account.isMaster()) return MASTER_NAME;
         return characters.findFirstByAccountOrderByIdAsc(account)
                 .or(() -> characters.findFirstByCharacterNameIgnoreCaseAndAccountIsNullOrderByIdAsc(account.getUsername()))

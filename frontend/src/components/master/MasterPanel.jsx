@@ -5,6 +5,7 @@ import MasterRules from './MasterRules.jsx'
 import MasterSheets from './MasterSheets.jsx'
 import MasterInventory from './MasterInventory.jsx'
 import MasterTable from './MasterTable.jsx'
+import MasterRolls from './MasterRolls.jsx'
 import MasterMerchants from './MasterMerchants.jsx'
 import MasterAccounts from './MasterAccounts.jsx'
 import WorldButtons from '../map/WorldButtons.jsx'
@@ -73,7 +74,12 @@ export default function MasterPanel({ session, notice, onChangePassword, onLogou
       <WorldButtons session={session} />
 
       <main className="master-body">
-        {tab === 'table' && <MasterTable token={session.token} onError={onError} onToast={setToast} />}
+        {tab === 'table' && (
+          <>
+            <MasterTable token={session.token} onError={onError} onToast={setToast} />
+            <MasterRolls token={session.token} onError={onError} />
+          </>
+        )}
         {tab === 'documents' && <MasterDocuments token={session.token} onError={onError} onToast={setToast} />}
         {tab === 'abilities' && <MasterAbilities token={session.token} onError={onError} onToast={setToast} />}
         {tab === 'sheets' && <MasterSheets token={session.token} onError={onError} onToast={setToast} />}

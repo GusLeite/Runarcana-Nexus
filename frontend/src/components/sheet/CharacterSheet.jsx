@@ -5,7 +5,9 @@ import { createNote, deleteNote, fetchNotes, updateNote } from '../../api/notes.
 import { fetchVisiblePois } from '../../api/map.js'
 import { useLive } from '../../api/live.js'
 import { buyFromMerchant, fetchActiveMerchant, haggleWithMerchant, pingMerchant, sellToMerchant } from '../../api/merchants.js'
-import { SKILL_NAMES, deathSaveResult, rollCheck, rollD20, rollDice } from '../../data/rules.js'
+import { SKILL_NAMES, deathSaveResult, parseDice } from '../../data/rules.js'
+import { serverRoll } from '../../api/rolls.js'
+import useTableRolls from '../../hooks/useTableRolls.js'
 import WorldButtons from '../map/WorldButtons.jsx'
 import SheetHero from './SheetHero.jsx'
 import PrepareSpells from './PrepareSpells.jsx'
@@ -61,9 +63,9 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const [tab, setTab] = useUrlParam('aba', TAB_IDS, 'sheet')
   const [docId, setDocId] = useState(null)
   const [noteId, setNoteId] = useState(null)
-  const [rolls, setRolls] = useState([])
   const [current, setCurrent] = useState(null)
   const [mode, setMode] = useState('normal')
+  const [secret, setSecret] = useState(false) // rolagens só para o mestre (os outros veem que houve uma)
   const [busy, setBusy] = useState(false)
   // Subida de nível liberada pelo mestre: o formulário ocupa o lugar das abas; o catálogo vem quando abre.
   const [leveling, setLeveling] = useState(false)
@@ -75,6 +77,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const token = session.token
 
   // Erro de uma ação: 401 desloga; o resto vira aviso.
+  const [rolls, addRoll] = useTableRolls(token, MAX_LOG)
   const fail = useCallback(err => {
     play('error')
     if (err.status === 401) expired.current()
@@ -149,14 +152,18 @@ export default function CharacterSheet({ character, session, notice, onChangePas
   const rollDeathSave = useCallback(() => {
     const c = state.status === 'ready' ? state.sheet.character : null
     if (!c) return
-    const d20 = rollD20()
-    pushRoll({ id: Date.now() + Math.random(), kind: 'check', label: 'Teste contra a morte', mod: 0, d20, other: null, mode: 'normal', total: d20 })
-    const r = deathSaveResult(d20, c.deathSuccesses ?? 0, c.deathFailures ?? 0)
-    if (r.revived) {
-      setHp({ currentHp: 1, tempHp: c.tempHp ?? 0 })
-      setToast('20 natural: ' + c.characterName + ' volta com 1 PV!')
-    } else setDeathSaves(r.successes, r.failures)
-  }, [state, setHp, setDeathSaves])
+    // O d20 vem do servidor e entra no histórico da mesa (sempre à vista de todos).
+    serverRoll(token, { label: 'Teste contra a morte', kind: 'CHECK' })
+      .then(entry => {
+        pushRoll(entry)
+        const r = deathSaveResult(entry.d20, c.deathSuccesses ?? 0, c.deathFailures ?? 0)
+        if (r.revived) {
+          setHp({ currentHp: 1, tempHp: c.tempHp ?? 0 })
+          setToast('20 natural: ' + c.characterName + ' volta com 1 PV!')
+        } else setDeathSaves(r.successes, r.failures)
+      })
+      .catch(fail)
+  }, [state, token, setHp, setDeathSaves, fail])
 
   // Condições do livro (nome e regra), para os chips do herói.
   const [conditionCatalog, setConditionCatalog] = useState(null)
@@ -258,7 +265,8 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       .then(m => {
         const h = m.haggle
         putMerchant(m)
-        pushRoll({ id: Date.now() + Math.random(), kind: 'check', label: 'Pechincha (' + SKILL_NAMES[skill] + ')', mod: h.modifier, d20: h.d20, other: null, mode: 'normal', total: h.total })
+        // O servidor já guardou o d20 no histórico da mesa (chega pelo canal ao vivo); aqui só o dado em destaque.
+        setCurrent({ id: 'haggle-' + Date.now(), kind: 'check', label: 'Pechincha (' + SKILL_NAMES[skill] + ')', mod: h.modifier, d20: h.d20, other: null, mode: 'normal', total: h.total })
         play(h.percent < 0 ? 'coin' : h.percent > 0 ? 'error' : 'ward')
       })
       .catch(err => {
@@ -296,20 +304,23 @@ export default function CharacterSheet({ character, session, notice, onChangePas
 
   // ---------- rolagens ----------
 
+  // O servidor sorteia (api/rolls.js); sem servidor, sorteia aqui e marca como não registrada.
   const pushRoll = entry => {
+    if (!entry) return
     setCurrent(entry)
-    setRolls(list => [entry, ...list].slice(0, MAX_LOG))
+    addRoll(entry)
   }
 
   const roll = useCallback((label, mod = 0, critRange = 20) => {
-    const { d20, other } = rollCheck(mode)
-    pushRoll({ id: Date.now() + Math.random(), kind: 'check', label, mod, d20, other, mode, critRange, total: d20 + mod })
-  }, [mode])
+    serverRoll(token, { label, kind: 'CHECK', mod, mode, critRange, secret }).then(pushRoll).catch(fail)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, mode, secret, fail])
 
   const rollExpr = useCallback((label, expr) => {
-    const r = rollDice(expr)
-    if (r) pushRoll({ id: Date.now() + Math.random(), kind: 'dice', label, expr, ...r })
-  }, [])
+    if (!parseDice(expr)) return
+    serverRoll(token, { label, kind: 'DICE', expr, secret }).then(pushRoll).catch(fail)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, secret, fail])
 
   // Atalho: R rola um d20 puro, Esc fecha a rolagem (fora de campos de texto).
   useEffect(() => {
@@ -661,6 +672,8 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             rolls={rolls}
             mode={mode}
             onMode={setMode}
+            secret={secret}
+            onSecret={setSecret}
             onRoll={roll}
             onRollDice={rollExpr}
             onGo={go}

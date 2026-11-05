@@ -254,3 +254,11 @@ font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:13px;letter-spacing
 .inv-edit .mform{margin:0}
 .inv-actions{display:flex;gap:12px;align-items:center}
 .inv-name{display:flex;align-items:center;gap:10px;min-width:0}
+
+/* Rolagens da mesa (aba Mesa): histórico de todos e a rolagem do mestre */
+.master-rolls{max-width:960px;margin:20px auto 0;width:100%}
+.master-roll-form{display:grid;grid-template-columns:1fr 110px auto;gap:8px;margin-bottom:10px}
+.master-roll-form .btn{margin:0;width:auto;padding:8px 18px}
+.master-roll-expr{text-align:center;font-family:'Cinzel',Georgia,serif}
+.master-roll-tools{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;margin-bottom:12px}
+@media (max-width:600px){.master-roll-form{grid-template-columns:1fr 90px}.master-roll-form .btn{grid-column:1/-1}}
