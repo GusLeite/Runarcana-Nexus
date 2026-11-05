@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-05 — Ponto do mapa relacionado a verbetes (`main`)
+- O ponto (ex.: um marco) se relaciona direto com verbetes, sem precisar de verbete próprio: `relatedLoreIds` no ponto e `relatedPoiIds` no verbete editam o mesmo vínculo (tabela `map_poi_lore`).
+- O painel do ponto mostra os relacionados; a página do verbete ganha **No mapa** com os pontos ligados. Só aparece o que a conta conhece/vê.
+
 ## 2026-11-04 — "Olhem aqui!" e ping no mapa, Etapa 20 (`main`)
 - O canal ao vivo ganha eventos com dados, por conta (`LiveHub.send`): `POST /map/focus` (mestre) leva a câmera de todos até um lugar ou ponto (oculto só para quem vê) e `POST /map/ping` (Alt+clique) deixa uma onda na cor de quem marcou; nada é salvo.
 - Mapa: anéis de luz (`mapPulses.js`), botão **OLHEM AQUI!** na barra e no painel do ponto; ficha com o mapa fechado mostra o aviso com **VER**.

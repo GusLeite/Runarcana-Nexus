@@ -7,6 +7,7 @@ import gusleite.runarcana_nexus.model.lore.LoreEntry;
 import gusleite.runarcana_nexus.model.map.MapPoi;
 import gusleite.runarcana_nexus.model.map.MapWaypoint;
 import gusleite.runarcana_nexus.model.map.PoiComment;
+import gusleite.runarcana_nexus.record.LoreEntryResponse;
 import gusleite.runarcana_nexus.record.PoiCommentRequest;
 import gusleite.runarcana_nexus.record.PoiRequest;
 import gusleite.runarcana_nexus.record.PoiResponse;
@@ -253,6 +254,12 @@ public class MapPointService {
         LoreEntry entry = r.loreEntryId() == null ? null : lore.findById(r.loreEntryId())
                 .orElseThrow(() -> ApiException.badRequest("Verbete da lore não encontrado."));
         poi.setLoreEntry(entry);
+        if (r.relatedLoreIds() != null) {
+            poi.getRelatedLore().clear();
+            for (Long id : new java.util.LinkedHashSet<>(r.relatedLoreIds())) {
+                poi.getRelatedLore().add(lore.findById(id).orElseThrow(() -> ApiException.badRequest("Verbete relacionado não encontrado.")));
+            }
+        }
         poi.setSecretNotes(r.secretNotes() == null || r.secretNotes().isBlank() ? null : r.secretNotes());
         poi.setToAll(r.toAll());
         poi.getRecipients().clear();
@@ -262,12 +269,17 @@ public class MapPointService {
     private PoiResponse toResponse(Account viewer, MapPoi p, List<PoiComment> all, int imageCount) {
         LoreEntry entry = p.getLoreEntry();
         Long entryId = entry != null && LoreService.canSee(viewer, entry) ? entry.getId() : null;
+        List<LoreEntryResponse.Link> related = p.getRelatedLore().stream()
+                .filter(e -> LoreService.canSee(viewer, e))
+                .sorted(java.util.Comparator.comparing(e -> e.getName().toLowerCase()))
+                .map(LoreService::link)
+                .toList();
         List<PoiResponse.Comment> visible = all.stream()
                 .filter(c -> c.getPoi().getId().equals(p.getId()))
                 .filter(c -> c.isShared() || c.getAuthor().getId().equals(viewer.getId()))
                 .map(c -> toComment(viewer, c))
                 .toList();
-        return new PoiResponse(p.getId(), p.getName(), p.getKind(), p.getDescription(), p.getX(), p.getY(), entryId,
+        return new PoiResponse(p.getId(), p.getName(), p.getKind(), p.getDescription(), p.getX(), p.getY(), entryId, related,
                 viewer.isMaster() ? p.getSecretNotes() : null, p.getOfficialKey() != null, p.getOfficialKey(), p.getRegionSlug(), imageCount, p.getSpotlight(), p.getSpotlightRev() == null ? 0 : p.getSpotlightRev(),
                 p.isToAll(), RecipientResolver.names(viewer, p.getRecipients()), visible);
     }

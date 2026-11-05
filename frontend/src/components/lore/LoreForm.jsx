@@ -3,10 +3,11 @@ import { MAP_PINS } from '../map/regions.js'
 import AudiencePicker from './AudiencePicker.jsx'
 import { fileToBanner } from '../../utils/iconImage.js'
 import { KIND_LABELS } from './LoreEntryView.jsx'
+import { POI_KINDS } from '../map/poiKinds.jsx'
 
 const EMPTY = {
   kind: 'CHARACTER', name: '', subtitle: '', quote: '', quoteAuthor: '', summary: '', mapSummary: '', imageUrl: '', mapSlug: '',
-  regionId: '', linkedIds: [], relatedIds: [], facts: [], sections: [], toAll: false, recipients: [],
+  regionId: '', linkedIds: [], relatedIds: [], relatedPoiIds: [], facts: [], sections: [], toAll: false, recipients: [],
 }
 
 const fromEntry = entry => ({
@@ -29,9 +30,12 @@ const fromEntry = entry => ({
   recipients: entry.recipients ?? [],
 })
 
-// Cadastro e edição de um verbete pelo mestre.
-export default function LoreForm({ entry, draft, entries, players, onSave, onDelete, onCancel }) {
-  const [form, setForm] = useState(() => (entry ? fromEntry(entry) : { ...EMPTY, ...draft }))
+// Cadastro e edição de um verbete pelo mestre. pois: os pontos do mapa (o mestre vê todos), para relacionar.
+export default function LoreForm({ entry, draft, entries, pois = [], players, onSave, onDelete, onCancel }) {
+  // Pontos relacionados: os que têm este verbete em related (o ponto do próprio lugar, loreEntryId, é outro vínculo).
+  const [form, setForm] = useState(() => (entry
+    ? { ...fromEntry(entry), relatedPoiIds: pois.filter(p => p.related?.some(r => r.id === entry.id)).map(p => p.id) }
+    : { ...EMPTY, ...draft }))
   const [msg, setMsg] = useState(null)
   const [busy, setBusy] = useState(false)
   const [confirming, setConfirming] = useState(false)
@@ -39,6 +43,7 @@ export default function LoreForm({ entry, draft, entries, players, onSave, onDel
   const set = (key, value) => setForm(f => ({ ...f, [key]: value }))
   const setItem = (key, index, patch) => setForm(f => ({ ...f, [key]: f[key].map((item, i) => (i === index ? { ...item, ...patch } : item)) }))
   const removeItem = (key, index) => setForm(f => ({ ...f, [key]: f[key].filter((_, i) => i !== index) }))
+  const togglePoi = id => set('relatedPoiIds', form.relatedPoiIds.includes(id) ? form.relatedPoiIds.filter(x => x !== id) : [...form.relatedPoiIds, id])
   const toggleRelated = id => set('relatedIds', form.relatedIds.includes(id) ? form.relatedIds.filter(x => x !== id) : [...form.relatedIds, id])
   const toggleLinked = id => set('linkedIds', form.linkedIds.includes(id) ? form.linkedIds.filter(x => x !== id) : [...form.linkedIds, id])
 
@@ -68,6 +73,7 @@ export default function LoreForm({ entry, draft, entries, players, onSave, onDel
         regionId: !isRegion && form.regionId !== '' ? Number(form.regionId) : null,
         linkedIds: isRegion ? form.linkedIds : [],
         relatedIds: form.relatedIds,
+        relatedPoiIds: form.relatedPoiIds,
       })
     } catch (err) {
       setMsg(err.message)
@@ -149,7 +155,9 @@ export default function LoreForm({ entry, draft, entries, players, onSave, onDel
         </label>
       )}
 
-      <RelatedPicker entries={entries} self={entry?.id} chosen={form.relatedIds} onToggle={toggleRelated} />
+      <RelatedPicker items={entries.filter(e => e.id !== entry?.id)} chosen={form.relatedIds} onToggle={toggleRelated} />
+      <RelatedPicker items={pois} chosen={form.relatedPoiIds} onToggle={togglePoi} legend="Pontos do mapa relacionados"
+        tagOf={p => POI_KINDS[p.kind]} empty="Ainda não há pontos no mapa." placeholder="Buscar ponto do mapa…" />
 
       <fieldset>
         <legend>Quem conhece este verbete</legend>
@@ -199,30 +207,32 @@ export default function LoreForm({ entry, draft, entries, players, onSave, onDel
 
 const MAX_SHOWN = 24
 
-// Verbetes relacionados, de qualquer tipo (o lugar e quem o guarda, dois personagens rivais...). A relação vale
-// nos dois sentidos: marcar aqui também mostra este verbete na página do outro. Os marcados vêm primeiro; a busca filtra o resto.
-function RelatedPicker({ entries, self, chosen, onToggle }) {
+// Escolha de relacionados com busca: verbetes (de qualquer tipo: o lugar e quem o guarda, dois rivais...) ou pontos
+// do mapa. A relação vale nos dois sentidos: marcar aqui também mostra este lado na página/painel do outro.
+// Os marcados vêm primeiro; a busca filtra o resto.
+export function RelatedPicker({ items, chosen, onToggle, legend = 'Verbetes relacionados', tagOf = item => KIND_LABELS[item.kind],
+  empty = 'Crie outros verbetes para relacioná-los a este.', placeholder = 'Buscar verbete para relacionar…' }) {
   const [query, setQuery] = useState('')
-  const others = useMemo(() => entries.filter(e => e.id !== self), [entries, self])
+  const others = useMemo(() => [...items].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR')), [items])
   const picked = others.filter(e => chosen.includes(e.id))
   const q = query.trim().toLowerCase()
   const rest = others.filter(e => !chosen.includes(e.id) && (!q || e.name.toLowerCase().includes(q)))
   const chip = (item, on) => (
     <button key={item.id} type="button" className={'lore-chip' + (on ? ' on' : '')} aria-pressed={on} onClick={() => onToggle(item.id)}>
-      {item.name}<span className="lore-chip-kind"> · {KIND_LABELS[item.kind]}</span>
+      {item.name}{tagOf(item) && <span className="lore-chip-kind"> · {tagOf(item)}</span>}
     </button>
   )
   return (
     <fieldset>
-      <legend>Verbetes relacionados</legend>
-      {others.length === 0 ? <p className="lore-form-hint">Crie outros verbetes para relacioná-los a este.</p> : (
+      <legend>{legend}</legend>
+      {others.length === 0 ? <p className="lore-form-hint">{empty}</p> : (
         <>
           {picked.length > 0 && <div className="lore-chips">{picked.map(item => chip(item, true))}</div>}
-          <input className="lore-search lore-related-search" type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Buscar verbete para relacionar…" aria-label="Buscar verbete para relacionar" />
+          <input className="lore-search lore-related-search" type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder={placeholder} aria-label={placeholder} />
           <div className="lore-chips">
             {rest.slice(0, MAX_SHOWN).map(item => chip(item, false))}
             {rest.length > MAX_SHOWN && <span className="lore-chips-hint">e mais {rest.length - MAX_SHOWN}: use a busca.</span>}
-            {rest.length === 0 && q && <span className="lore-chips-hint">Nenhum verbete com esse nome.</span>}
+            {rest.length === 0 && q && <span className="lore-chips-hint">Nada com esse nome.</span>}
           </div>
         </>
       )}

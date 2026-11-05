@@ -6,6 +6,7 @@ import gusleite.runarcana_nexus.model.auth.Account;
 import gusleite.runarcana_nexus.model.lore.LoreEntry;
 import gusleite.runarcana_nexus.model.lore.LoreFact;
 import gusleite.runarcana_nexus.model.lore.LoreSection;
+import gusleite.runarcana_nexus.model.map.MapPoi;
 import gusleite.runarcana_nexus.record.LoreEntryRequest;
 import gusleite.runarcana_nexus.record.LoreEntryResponse;
 import gusleite.runarcana_nexus.repository.LoreEntryRepository;
@@ -55,6 +56,7 @@ public class LoreService {
         entries.saveAndFlush(entry);
         applyLinks(entry, request);
         applyRelations(entry, request.relatedIds());
+        applyPois(entry, request.relatedPoiIds());
         return toResponse(master, entry, entries.findAll());
     }
 
@@ -65,6 +67,7 @@ public class LoreService {
         entries.flush();
         applyLinks(entry, request);
         applyRelations(entry, request.relatedIds());
+        applyPois(entry, request.relatedPoiIds());
         return toResponse(master, entry, entries.findAll());
     }
 
@@ -74,6 +77,7 @@ public class LoreService {
         LoreEntry entry = find(id);
         entries.findByRegion(entry).forEach(child -> child.setRegion(null));
         pois.findByLoreEntry(entry).forEach(poi -> poi.setLoreEntry(null));
+        pois.findByRelatedLoreContaining(entry).forEach(poi -> poi.getRelatedLore().remove(entry));
         entry.getRelated().forEach(other -> other.getRelated().remove(entry));
         entry.getRelated().clear();
         entries.delete(entry);
@@ -162,6 +166,17 @@ public class LoreService {
         }
     }
 
+    // Pontos do mapa relacionados, editados do lado do verbete: quem sai perde a ligação, quem entra ganha.
+    private void applyPois(LoreEntry entry, List<Long> poiIds) {
+        if (poiIds == null) return;
+        Set<Long> wanted = new HashSet<>(poiIds);
+        pois.findByRelatedLoreContaining(entry).stream().filter(p -> !wanted.contains(p.getId())).forEach(p -> p.getRelatedLore().remove(entry));
+        for (Long id : wanted) {
+            MapPoi poi = pois.findById(id).orElseThrow(() -> ApiException.badRequest("Ponto do mapa não encontrado."));
+            poi.getRelatedLore().add(entry);
+        }
+    }
+
     private LoreEntryResponse toResponse(Account viewer, LoreEntry e, List<LoreEntry> all) {
         LoreEntry region = e.getRegion();
         LoreEntryResponse.Link regionLink = region != null && canSee(viewer, region) ? link(region) : null;
@@ -175,20 +190,28 @@ public class LoreService {
                 .sorted(Comparator.comparing(r -> r.getName().toLowerCase()))
                 .map(LoreService::link)
                 .toList();
+        // O ponto do próprio lugar (loreEntry) e os relacionados, sem repetir, só os que quem pede vê.
+        List<LoreEntryResponse.PoiLink> poiLinks = java.util.stream.Stream.concat(pois.findByLoreEntry(e).stream(), pois.findByRelatedLoreContaining(e).stream())
+                .filter(p -> RecipientResolver.reaches(viewer, p.isToAll(), p.getRecipients()))
+                .collect(java.util.stream.Collectors.toMap(MapPoi::getId, p -> p, (a, b) -> a, java.util.LinkedHashMap::new))
+                .values().stream()
+                .sorted(Comparator.comparing(p -> p.getName().toLowerCase()))
+                .map(p -> new LoreEntryResponse.PoiLink(p.getId(), p.getName(), p.getKind()))
+                .toList();
         List<LoreEntryResponse.Section> sections = e.getSections().stream()
                 .filter(s -> RecipientResolver.reaches(viewer, s.isToAll(), s.getRecipients()))
                 .map(s -> new LoreEntryResponse.Section(s.getId(), s.getTitle(), s.getBody(), s.isToAll(), RecipientResolver.names(viewer, s.getRecipients())))
                 .toList();
         List<LoreEntryResponse.Fact> facts = e.getFacts().stream().map(f -> new LoreEntryResponse.Fact(f.getLabel(), f.getValue())).toList();
         return new LoreEntryResponse(e.getId(), e.getKind(), e.getName(), e.getSubtitle(), e.getQuote(), e.getQuoteAuthor(), e.getSummary(), e.getMapSummary(),
-                imageOf(e), e.getMapSlug(), regionLink, linked, related, facts, sections, e.isToAll(), RecipientResolver.names(viewer, e.getRecipients()));
+                imageOf(e), e.getMapSlug(), regionLink, linked, related, poiLinks, facts, sections, e.isToAll(), RecipientResolver.names(viewer, e.getRecipients()));
     }
 
     private static String imageOf(LoreEntry e) {
         return e.getImageData() != null ? e.getImageData() : e.getImageUrl();
     }
 
-    private static LoreEntryResponse.Link link(LoreEntry e) {
+    public static LoreEntryResponse.Link link(LoreEntry e) {
         return new LoreEntryResponse.Link(e.getId(), e.getKind(), e.getName(), e.getSubtitle(), imageOf(e));
     }
 

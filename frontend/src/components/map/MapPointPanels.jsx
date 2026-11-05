@@ -6,6 +6,7 @@ import PoiGallery from './PoiGallery.jsx'
 import PoiHistory from './PoiHistory.jsx'
 import CopyLinkButton from './CopyLinkButton.jsx'
 import { mapLinkNodes } from './MapLinkText.jsx'
+import { RelatedPicker } from '../lore/LoreForm.jsx'
 import '../../styles/lore.css'
 
 // Moldura comum dos painéis laterais dos pontos do mapa.
@@ -24,6 +25,9 @@ export function PoiPanel({ poi, loreEntry, master, preview = false, players = []
   const [shared, setShared] = useState(false)
   const [msg, setMsg] = useState(null)
   const [busy, setBusy] = useState(false)
+
+  // Relacionados do próprio ponto e os do verbete do lugar, sem repetir.
+  const related = [...(poi.related ?? []), ...(loreEntry?.related ?? [])].filter((item, i, all) => all.findIndex(o => o.id === item.id) === i)
 
   const submit = async e => {
     e.preventDefault()
@@ -62,11 +66,11 @@ export function PoiPanel({ poi, loreEntry, master, preview = false, players = []
         {onLookHere && <button type="button" className="lore-action" onClick={onLookHere} title={poi.toAll ? 'Leva a câmera de todos até aqui' : 'Só quem vê este ponto é levado até ele'}>OLHEM AQUI!</button>}
         <CopyLinkButton target={poi.id} />
       </div>
-      {loreEntry?.related?.length > 0 && (
+      {related.length > 0 && (
         <div className="map-point-related">
           <span>Relacionados</span>
           <div className="lore-chips">
-            {loreEntry.related.map(item => (
+            {related.map(item => (
               <button key={item.id} type="button" className="lore-chip" onClick={() => onOpenLore(item.id)} title={'Abrir ' + item.name + ' na lore'}>{item.name}</button>
             ))}
           </div>
@@ -115,6 +119,7 @@ export function PoiForm({ poi, lore, players, onSave, onDelete, onClose }) {
     description: poi.description ?? '',
     secretNotes: poi.secretNotes ?? '',
     loreEntryId: poi.loreEntryId ?? '',
+    relatedLoreIds: (poi.related ?? []).map(r => r.id),
     toAll: poi.toAll ?? true,
     recipients: poi.recipients ?? [],
   })
@@ -163,6 +168,9 @@ export function PoiForm({ poi, lore, players, onSave, onDelete, onClose }) {
             {lore.map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}
           </select>
         </label>
+        <RelatedPicker items={lore} chosen={form.relatedLoreIds}
+          onToggle={id => set('relatedLoreIds', form.relatedLoreIds.includes(id) ? form.relatedLoreIds.filter(x => x !== id) : [...form.relatedLoreIds, id])}
+          empty="Ainda não há verbetes na lore." />
         <fieldset>
           <legend>Quem vê no mapa</legend>
           <AudiencePicker players={players} toAll={form.toAll} recipients={form.recipients} onChange={patch => setForm(f => ({ ...f, ...patch }))} />

@@ -1,6 +1,7 @@
 package gusleite.runarcana_nexus.record;
 
 import gusleite.runarcana_nexus.enums.LoreKind;
+import gusleite.runarcana_nexus.enums.PoiKind;
 
 import java.util.List;
 
@@ -19,12 +20,16 @@ public record LoreEntryResponse(
         Link region,
         List<Link> linked,
         List<Link> related,
+        // Pontos do mapa ligados ao verbete (relacionados ou o ponto do próprio lugar) que quem pede vê.
+        List<PoiLink> pois,
         List<Fact> facts,
         List<Section> sections,
         boolean toAll,
         List<String> recipients
 ) {
     public record Link(Long id, LoreKind kind, String name, String subtitle, String imageUrl) {}
+
+    public record PoiLink(Long id, String name, PoiKind kind) {}
 
     public record Fact(String label, String value) {}
 

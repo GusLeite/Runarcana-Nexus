@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 // Ponto de interesse. toAll falso e recipients vazio = só o mestre vê, até revelar.
+// relatedLoreIds: verbetes relacionados (qualquer tipo); nulo = mantém os atuais.
 public record PoiRequest(
         @NotBlank(message = "Informe o nome do ponto.")
         @Size(max = 120, message = "O nome pode ter até 120 caracteres.")
@@ -25,6 +26,8 @@ public record PoiRequest(
         @DecimalMax(value = "1024", message = "O ponto está fora do mapa.")
         double y,
         Long loreEntryId,
+        @Size(max = 40, message = "São até 40 verbetes relacionados.")
+        List<Long> relatedLoreIds,
         @Size(max = 4000, message = "As notas secretas podem ter até 4000 caracteres.")
         String secretNotes,
         boolean toAll,

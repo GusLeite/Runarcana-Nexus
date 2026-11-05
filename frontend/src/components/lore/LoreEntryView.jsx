@@ -108,6 +108,17 @@ export default function LoreEntryView({ entry, master, mapTarget, onOpen, onShow
         {entry.sections.map((section, i) => <Knowledge key={section.id} section={section} master={master} startOpen={i === 0} />)}
       </section>
 
+      {entry.pois?.length > 0 && (
+        <section className="lore-section" aria-label="No mapa">
+          <h3>No mapa</h3>
+          <div className="lore-chips">
+            {entry.pois.map(p => (
+              <button key={p.id} type="button" className="lore-chip" onClick={() => onShowOnMap({ poiId: p.id })} title={'Ver ' + p.name + ' no mapa'}>{p.name}</button>
+            ))}
+          </div>
+        </section>
+      )}
+
       {groups.map(([title, items]) => (
         <section className="lore-section" key={title}>
           <h3>{title}</h3>

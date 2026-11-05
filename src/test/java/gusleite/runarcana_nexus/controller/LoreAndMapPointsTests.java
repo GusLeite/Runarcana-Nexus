@@ -138,6 +138,37 @@ class LoreAndMapPointsTests {
     }
 
     @Test
+    void pontoDoMapaRelacionaVerbetesNosDoisSentidos() throws Exception {
+        String master = login("mestre");
+        long azir = id(send(post("/lore"), master, AZIR));
+        long hidden = id(send(post("/lore"), master, "{\"kind\":\"CHARACTER\",\"name\":\"Oculto\",\"toAll\":false,\"recipients\":[]}"));
+        String poi = "{\"name\":\"Domínio de Justus\",\"kind\":\"LANDMARK\",\"x\":10,\"y\":20,\"toAll\":true,\"recipients\":[]";
+        long marco = id(send(post("/map/pois"), master, poi + ",\"relatedLoreIds\":[" + azir + "," + hidden + "]}"));
+        long secreto = id(send(post("/map/pois"), master, "{\"name\":\"Cripta\",\"kind\":\"DUNGEON\",\"x\":0,\"y\":0,\"toAll\":false,\"recipients\":[],\"relatedLoreIds\":[" + azir + "]}"));
+
+        // O jogador vê no ponto só os verbetes que conhece, e no verbete só os pontos que vê.
+        String gaudron = login("gaudron");
+        read("/map/pois", gaudron)
+                .andExpect(jsonPath("$[?(@.name == 'Domínio de Justus')].related[*].name").value(contains("Azir")));
+        read("/lore", gaudron)
+                .andExpect(jsonPath("$[?(@.name == 'Azir')].pois[*].name").value(contains("Domínio de Justus")));
+        read("/lore", master)
+                .andExpect(jsonPath("$[?(@.name == 'Azir')].pois[*].name").value(containsInAnyOrder("Domínio de Justus", "Cripta")));
+
+        // Sem relatedLoreIds, editar o ponto mantém; o verbete também edita o vínculo do lado dele.
+        send(put("/map/pois/" + marco), master, poi + "}").andExpect(jsonPath("$.related", hasSize(2)));
+        send(put("/lore/" + azir), master, AZIR.substring(0, AZIR.length() - 1) + ",\"relatedPoiIds\":[" + secreto + "]}")
+                .andExpect(jsonPath("$.pois[*].name").value(contains("Cripta")));
+        read("/map/pois", master).andExpect(jsonPath("$[?(@.name == 'Domínio de Justus')].related[*].name").value(contains("Oculto")));
+        send(put("/lore/" + azir), master, AZIR.substring(0, AZIR.length() - 1) + ",\"relatedPoiIds\":[999]}").andExpect(status().isBadRequest());
+        send(put("/map/pois/" + marco), master, poi + ",\"relatedLoreIds\":[999]}").andExpect(status().isBadRequest());
+
+        // Apagar o verbete só tira a ligação do ponto.
+        mvc.perform(delete("/lore/" + hidden).header("Authorization", "Bearer " + master)).andExpect(status().isNoContent());
+        read("/map/pois", master).andExpect(jsonPath("$[?(@.name == 'Domínio de Justus')].related[*]", hasSize(0)));
+    }
+
+    @Test
     void apagarRegiaoSoDesfazOVinculo() throws Exception {
         String master = login("mestre");
         long region = id(send(post("/lore"), master, "{\"kind\":\"REGION\",\"name\":\"Shurima\",\"toAll\":true,\"recipients\":[]}"));

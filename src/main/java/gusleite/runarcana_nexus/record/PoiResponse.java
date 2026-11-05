@@ -14,6 +14,8 @@ public record PoiResponse(
         double x,
         double y,
         Long loreEntryId,
+        // Verbetes relacionados que quem pede conhece.
+        List<LoreEntryResponse.Link> related,
         String secretNotes,
         boolean official,
         String officialKey,

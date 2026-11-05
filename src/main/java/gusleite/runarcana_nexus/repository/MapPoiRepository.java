@@ -10,6 +10,8 @@ import java.util.List;
 public interface MapPoiRepository extends JpaRepository<MapPoi, Long> {
     List<MapPoi> findByLoreEntry(LoreEntry entry);
 
+    List<MapPoi> findByRelatedLoreContaining(LoreEntry entry);
+
     List<MapPoi> findByOfficialKeyIsNotNull();
 
     // [id, quantidade de imagens]: a lista de pontos não carrega as imagens, só conta.

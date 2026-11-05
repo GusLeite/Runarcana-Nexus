@@ -58,7 +58,8 @@ export default function LoreScreen({ session, startId, startDraft, onClose, onSh
       && (!term || normalize(e.name + ' ' + (e.subtitle ?? '')).includes(term)))
   }, [entries, filter, search])
 
-  const reload = () => fetchLore(session.token).then(setEntries)
+  // Os pontos também: o vínculo ponto ↔ verbete mora neles.
+  const reload = () => Promise.all([fetchLore(session.token).then(setEntries), fetchPois(session.token).then(setPois).catch(() => {})])
 
   const save = async form => {
     const saved = editing === 'new' ? await createLore(session.token, form) : await updateLore(session.token, editing, form)
@@ -99,6 +100,7 @@ export default function LoreScreen({ session, startId, startDraft, onClose, onSh
             entry={editing === 'new' ? null : entries.find(e => e.id === editing)}
             draft={editing === 'new' ? draft.current : undefined}
             entries={entries}
+            pois={master ? pois : []}
             players={players}
             onSave={save}
             onDelete={remove}

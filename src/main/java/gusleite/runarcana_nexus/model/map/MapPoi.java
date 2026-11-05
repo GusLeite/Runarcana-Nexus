@@ -40,6 +40,16 @@ public class MapPoi {
     @JoinColumn(name = "lore_entry_id")
     private LoreEntry loreEntry;
 
+    // Verbetes relacionados ao ponto (ex.: o marco e quem o guarda), além do verbete do próprio lugar (loreEntry).
+    // Uma tabela só para os dois lados: o verbete mostra os pontos ligados a ele (LoreService) e pode editá-los.
+    @ManyToMany
+    @JoinTable(
+            name = "map_poi_lore",
+            joinColumns = @JoinColumn(name = "poi_id"),
+            inverseJoinColumns = @JoinColumn(name = "lore_entry_id")
+    )
+    private Set<LoreEntry> relatedLore = new HashSet<>();
+
     // Notas que só o mestre lê.
     @Column(length = 4000)
     private String secretNotes;

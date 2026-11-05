@@ -11,6 +11,7 @@ import java.util.List;
 
 // Verbete inteiro de uma vez: facts e sections substituem os atuais. linkedIds: só em região, personagens e lugares dela.
 // relatedIds: verbetes relacionados, de qualquer tipo, nos dois sentidos (nulo = mantém os atuais).
+// relatedPoiIds: pontos do mapa relacionados (o mesmo vínculo que o ponto edita do lado dele; nulo = mantém).
 public record LoreEntryRequest(
         @NotNull(message = "Informe o tipo: CHARACTER, PLACE ou REGION.")
         LoreKind kind,
@@ -35,6 +36,8 @@ public record LoreEntryRequest(
         List<Long> linkedIds,
         @Size(max = 40, message = "São até 40 verbetes relacionados.")
         List<Long> relatedIds,
+        @Size(max = 40, message = "São até 40 pontos do mapa relacionados.")
+        List<Long> relatedPoiIds,
         @Size(max = 12, message = "São até 12 informações.")
         List<@Valid Fact> facts,
         @Size(max = 40, message = "São até 40 conhecimentos.")
