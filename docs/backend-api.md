@@ -78,7 +78,7 @@
 | GET | `/map/waypoints` | – (Bearer; `?as=usuário` só o **mestre**) | Jogador: os seus. Mestre: os de todos, com `owner`; com `as`, só os daquele jogador (prévia) |
 | POST / PUT | `/map/waypoints`, `/map/waypoints/{id}` | `{ name, comment, x, y }` (Bearer) | Só o dono. 400 no quarto waypoint e para o mestre; 404 no waypoint de outro |
 | DELETE | `/map/waypoints/{id}` | – (Bearer) | Só o dono |
-| GET | `/map/bandle` | – (Bearer) | Última rolagem de Bandópolis: `{ roll }` (1 a 10; nulo antes da primeira). Para jogador, nulo também com a névoa ligada e `bandle` não revelada (`MapPartyService.hiddenFromPlayers`). 401 sem sessão |
+| GET | `/map/bandle` | – (Bearer) | Última rolagem de Bandópolis: `{ roll }` (1 a 10; nulo antes da primeira). 401 sem sessão |
 | POST | `/map/bandle/roll` | – (Bearer **mestre**) | Rola o d10 no servidor, guarda em `TableSetting` (`map.bandleRoll`) e devolve `{ roll }`. 401 sem sessão; 403 para jogador |
 | GET | `/map/party` | – (Bearer) | O grupo no mapa (`MapPartyService`): `{ x, y, trail: [{ x, y, label, createdAt }], fog, revealed: [slug] }`. `x` nulo = fora do mapa; `fog` falso = tudo à vista |
 | PUT · DELETE | `/map/party` | `{ x, y, label? }` / – (Bearer **mestre**) | Move o marcador (−1024 a 1024; parada nova na trilha se mudou de lugar, até 200) / tira do mapa (a trilha fica). Posição em `TableSetting` `map.party` |

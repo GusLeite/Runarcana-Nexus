@@ -1,6 +1,9 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-06 — Bandópolis na névoa aparece como "???" (`main`)
+- Escondida na névoa, Bandópolis não some mais do mapa do jogador: fica no lugar, apagada e com "???", como as outras regiões. O servidor volta a mandar a rolagem a todos (`hiddenFromPlayers` saiu).
+
 ## 2026-11-05 — Relacionados do ponto com retrato (`main`)
 - No painel do ponto do mapa, cada verbete relacionado vira um cartão com a imagem dele (ou o símbolo do tipo), o nome e o título, em vez de só o nome.
 

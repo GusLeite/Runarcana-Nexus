@@ -78,7 +78,7 @@ export const MAP_AREAS = { void: { x: 270, y: -560, radius: 175, color: [0.55, 0
 // As sem imagem em public/map/regions/ usam um círculo de terra (FOG_AREAS).
 export const FOG_REGIONS = MAP_PINS.filter(p => p.icon !== 'capital' && p.slug !== 'bandle').map(p => p.slug)
 // O que o mestre pode esconder na névoa: as regiões do terreno e Bandópolis, que não tem terreno a cobrir
-// (escondida, os jogadores nem veem o brasão, e o servidor não lhes manda a rolagem).
+// (escondida, o jogador vê o brasão apagado e "???", como nas outras regiões).
 export const FOG_TOGGLES = [...FOG_REGIONS, 'bandle']
 export const FOG_AREAS = { ...MAP_AREAS, 'piltover-zaun': { x: TWIN_CITIES.x, y: TWIN_CITIES.y, radius: 80 } }
 

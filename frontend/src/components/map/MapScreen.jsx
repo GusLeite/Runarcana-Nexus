@@ -312,15 +312,14 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   }
 
   // A cena lê estes objetos a cada quadro: basta mudá-los para Bandópolis aparecer no lugar novo.
-  // Escondida na névoa (para o jogador ou no "Ver como"), o brasão some: a posição é o segredo.
-  const bandleHidden = !master && hiddenRegions.includes('bandle')
+  // Na névoa, o jogador vê o brasão no lugar, apagado e com "???" (data-fogged, como nas outras regiões).
   useEffect(() => {
     const spot = bandleSpot(bandleRoll)
     const pin = staticPins.current.find(p => p.slug === 'bandle')
     if (!pin) return
     if (spot) Object.assign(pin, { x: spot.x, y: spot.y, z: spot.z })
-    pin.level = spot && !bandleHidden ? 'any' : 'hidden'
-  }, [bandleRoll, bandleHidden])
+    pin.level = spot ? 'any' : 'hidden'
+  }, [bandleRoll])
 
   // Pontos que mudam com o uso: a lista que a cena percorre é a mesma, só troca o conteúdo.
   const draftPoint = panel?.draft ? { x: panel.draft.x, y: panel.draft.y } : null
