@@ -32,6 +32,10 @@ frontend/
     ├── api/rolls.js (+ .test.js) rolagens pelo servidor (`serverRoll`; sem servidor, sorteia aqui como "não registrada"); histórico em `hooks/useTableRolls.js`
     ├── api/lore.js            verbetes da lore
     ├── api/merchants.js       mercadores (mestre monta e abre; jogador compra e vende)
+    ├── api/combat.js          combate (bestiário, confrontos, iniciativa, turnos; o confronto ativo e a iniciativa do jogador)
+    ├── hooks/useActiveCombat.js  confronto ativo pelo canal ao vivo (tópicos combat e table; busca ao voltar à aba)
+    ├── data/combat.js (+ .test.js)  retrato (com placeholder por baixo se o link quebrar), dano/cura, próximo da ordem, ataques do texto
+    ├── components/combat/     CombatArena (trilha de iniciativa, mestre e jogador), CombatIntro (abertura), TurnBanner (faixa de turno)
     ├── data/characters.js     lista de personagens + imports das artes
     ├── data/rules.js (+ .test.js)  rótulos em PT, formatação e regras derivadas dos atributos
     ├── components/
@@ -44,7 +48,7 @@ frontend/
     │   └── sheet/             ficha pós-login: CharacterSheet (abas e estado), SheetHero, OverviewTab, AttributeGrid,
     │                          SkillList, AbilitiesTab, AbilityIcon, Inventory, MerchantTab, DocumentsTab, NotesTab, DiceRoll, LevelUpCeremony, GroupJournal,
     │                          TabBar (abas com sublinhado deslizante), Num (número que conta), icons
-    │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities, MasterSheets, MasterMerchants, MasterRules
+    │   └── master/            MasterGate (portal de login), MasterPanel, MasterDocuments, MasterAbilities, MasterSheets, MasterMerchants, MasterRules, MasterCombat
     │   └── map/               mapa 3D de Runeterra (Three.js): WorldButtons, MapScreen, RegionPanel, MapPointPanels, poiKinds, regions, twinFrame, temporalDomes, demonGlobe, ravens, ravenModel, mapScene, mapMath (+ .test.js)
     │   └── lore/              lore da mesa: LoreScreen, LoreEntryView, LoreForm, AudiencePicker
     ├── audio/                 engine.js (sons sintetizados), uiSounds.js (+ .test.js, sons de interface por delegação), SoundToggle.jsx — ver frontend-visual.md
@@ -59,6 +63,7 @@ frontend/
     ├── styles/master.css      botão, portal e painel do mestre
     ├── styles/map.css, lore.css  mapa e lore
     ├── styles/merchant.css    loja do mercador (ficha) e aba do mestre
+    ├── styles/combat.css      combate (trilha, abertura, faixa de turno, aba do mestre)
     ├── styles/motion.css      animações de polimento (importado por último no main.jsx)
     ├── styles/sound.css       controle de som do canto da tela
     ├── api/master.js          rotas do mestre (personagens, habilidades, documentos, destinatários, liberar a subida de nível)
@@ -68,7 +73,7 @@ frontend/
 
 ## Conexão com a API
 
-`src/api/auth.js` chama `VITE_API_URL` (padrão `/runarcana`). Em `npm run dev`, o Vite repassa `/runarcana` para o Spring em `localhost:8080`, então **o back-end precisa estar rodando** para o login funcionar. Os erros mostrados vêm do campo `message` da API; sem servidor, aparece "Não foi possível falar com o servidor". **Canal ao vivo** (`api/live.js`, ver `backend.md`): cada tela que buscava novidades com `setInterval` usa `const live = useLive(token, ['map'])`, chama `live.listen(check)` (roda no aviso do tópico e ao reconectar, agrupado em 250 ms) e deixa o intervalo como reserva com `if (live.due()) check()`: sem canal, `due()` é sempre verdadeiro (polling normal); com canal, no máximo a cada 60 s. A conexão é única por aba e fecha 3 s depois do último assinante sair; caiu, pede outro ticket com espera crescente (até 30 s); 401 no ticket para de tentar. Assinam: mapa (pontos, grupo, trajetórias: `map`), ficha (mercador, locais revelados, nível liberado, documentos novos), Mesa do mestre (`table`), diário e trocas do mercador. As regras de senha são repetidas em `validation.js` (`validatePasswordChange`) só para avisar antes de enviar; quem decide é o back-end.
+`src/api/auth.js` chama `VITE_API_URL` (padrão `/runarcana`). Em `npm run dev`, o Vite repassa `/runarcana` para o Spring em `localhost:8080`, então **o back-end precisa estar rodando** para o login funcionar. Os erros mostrados vêm do campo `message` da API; sem servidor, aparece "Não foi possível falar com o servidor". **Canal ao vivo** (`api/live.js`, ver `backend.md`): cada tela que buscava novidades com `setInterval` usa `const live = useLive(token, ['map'])`, chama `live.listen(check)` (roda no aviso do tópico e ao reconectar, agrupado em 250 ms) e deixa o intervalo como reserva com `if (live.due()) check()`: sem canal, `due()` é sempre verdadeiro (polling normal); com canal, no máximo a cada 60 s. A conexão é única por aba e fecha 3 s depois do último assinante sair; caiu, pede outro ticket com espera crescente (até 30 s); 401 no ticket para de tentar. Assinam: mapa (pontos, grupo, trajetórias: `map`), ficha (mercador, locais revelados, nível liberado, documentos novos), Mesa do mestre (`table`), diário, trocas do mercador e o combate (`combat` + `table`, em `useActiveCombat`). As regras de senha são repetidas em `validation.js` (`validatePasswordChange`) só para avisar antes de enviar; quem decide é o back-end.
 
 ## App Android (APK)
 

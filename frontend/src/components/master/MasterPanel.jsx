@@ -8,6 +8,7 @@ import MasterTable from './MasterTable.jsx'
 import MasterRolls from './MasterRolls.jsx'
 import MasterMerchants from './MasterMerchants.jsx'
 import MasterAccounts from './MasterAccounts.jsx'
+import MasterCombat from './MasterCombat.jsx'
 import WorldButtons from '../map/WorldButtons.jsx'
 import GroupJournal from '../sheet/GroupJournal.jsx'
 import TabBar from '../sheet/TabBar.jsx'
@@ -18,6 +19,7 @@ import '../../styles/master.css'
 
 const TABS = [
   { id: 'table', label: 'MESA' },
+  { id: 'combat', label: 'COMBATE' },
   { id: 'documents', label: 'DOCUMENTOS' },
   { id: 'abilities', label: 'HABILIDADES' },
   { id: 'sheets', label: 'FICHAS' },
@@ -80,6 +82,7 @@ export default function MasterPanel({ session, notice, onChangePassword, onLogou
             <MasterRolls token={session.token} onError={onError} />
           </>
         )}
+        {tab === 'combat' && <MasterCombat token={session.token} onError={onError} onToast={setToast} />}
         {tab === 'documents' && <MasterDocuments token={session.token} onError={onError} onToast={setToast} />}
         {tab === 'abilities' && <MasterAbilities token={session.token} onError={onError} onToast={setToast} />}
         {tab === 'sheets' && <MasterSheets token={session.token} onError={onError} onToast={setToast} />}

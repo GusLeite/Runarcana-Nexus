@@ -354,6 +354,26 @@ const SFX = {
     // aviso discreto: duas notas macias
     ;[392, 587].forEach((f, i) => tone({ f, t: i * 0.1, dur: 0.45, vol: 0.05, attack: 0.015, lp: 1600, send: 0.3 }))
   },
+  // Começo do combate: três batidas de tambor de guerra e uma trompa grave que abre.
+  warhorn: () => {
+    ;[0, 0.32, 0.56].forEach((t, i) => {
+      tone({ f: 70 - i * 6, f2: 38, t, dur: 0.38, vol: 0.2, lp: 260 })
+      noise({ t, dur: 0.14, vol: 0.09, type: 'lowpass', f: 380, q: 0.5 })
+    })
+    tone({ f: 110, f2: 147, type: 'sawtooth', t: 0.8, dur: 1.6, vol: 0.07, lp: 700, attack: 0.25, send: 0.7 })
+    tone({ f: 165, f2: 220, type: 'sawtooth', t: 0.86, dur: 1.5, vol: 0.045, lp: 900, attack: 0.3, send: 0.7 })
+    bell(220, 0.9, 0.05, 2.2, 0.9)
+  },
+  // A vez é sua: aço tirado da bainha e duas notas que sobem.
+  yourturn: () => {
+    noise({ dur: 0.35, vol: 0.06, f: 2500, f2: 7000, q: 2.5, attack: 0.02, send: 0.3 })
+    ;[440, 659].forEach((f, i) => tone({ f, t: 0.12 + i * 0.1, dur: 0.45, vol: 0.06, attack: 0.012, lp: 2200, send: 0.4 }))
+  },
+  // Fim do combate: acorde que desce e repousa.
+  victory: () => {
+    ;[523, 392, 330].forEach((f, i) => tone({ f, t: i * 0.12, dur: 1.2, vol: 0.05, attack: 0.02, lp: 1800, send: 0.6 }))
+    bell(262, 0.36, 0.06, 2.4, 0.8)
+  },
   levelup: () => {
     ;[392, 494, 587, 784, 988].forEach((f, i) => {
       pluck(f, i * 0.1, 0.12, 0.5)

@@ -7,7 +7,13 @@ import { useLive, useLiveEvent } from '../../api/live.js'
 import { openMapAt } from '../../utils/mapLink.js'
 import { buyFromMerchant, fetchActiveMerchant, haggleWithMerchant, pingMerchant, sellToMerchant } from '../../api/merchants.js'
 import { SKILL_NAMES, deathSaveResult, parseDice } from '../../data/rules.js'
-import { serverRoll } from '../../api/rolls.js'
+import { serverRoll, toEntry } from '../../api/rolls.js'
+import { rollMyInitiative } from '../../api/combat.js'
+import useActiveCombat from '../../hooks/useActiveCombat.js'
+import CombatTab from './CombatTab.jsx'
+import CombatIntro from '../combat/CombatIntro.jsx'
+import TurnBanner from '../combat/TurnBanner.jsx'
+import '../../styles/combat.css'
 import useTableRolls from '../../hooks/useTableRolls.js'
 import WorldButtons from '../map/WorldButtons.jsx'
 import SheetHero from './SheetHero.jsx'
@@ -41,6 +47,10 @@ const MERCHANT_POLL = 5000
 const MERCHANT_TAB = { id: 'merchant', label: 'MERCADOR', glow: true }
 // A BANCADA (fabricação) só aparece para quem tem algum Ofício.
 const WORKBENCH_TAB = { id: 'workbench', label: 'BANCADA' }
+// Confronto ativo: a ficha fica presa no COMBATE, com só Magias e Inventário abertos além dele.
+const COMBAT_TAB = { id: 'combat', label: 'COMBATE', glow: true }
+const COMBAT_ALLOWED = ['combat', 'abilities', 'inventory']
+const SEEN_INTROS = 'runarcana.combatIntros'
 const TABS = [
   { id: 'sheet', label: 'FICHA' },
   { id: 'abilities', label: 'MAGIAS' },
@@ -50,7 +60,7 @@ const TABS = [
   { id: 'journal', label: 'DIÁRIO' },
   { id: 'book', label: 'LIVRO' },
 ]
-const TAB_IDS = [...TABS.map(t => t.id), MERCHANT_TAB.id, WORKBENCH_TAB.id]
+const TAB_IDS = [...TABS.map(t => t.id), MERCHANT_TAB.id, WORKBENCH_TAB.id, COMBAT_TAB.id]
 const MODE_SHORT = { adv: 'V', dis: 'D' }
 
 // Fixadas primeiro, depois as editadas mais recentemente (mesma ordem do back-end).
@@ -356,6 +366,65 @@ export default function CharacterSheet({ character, session, notice, onChangePas
 
   const closeRoll = useCallback(() => setCurrent(null), [])
 
+  // ---------- combate ----------
+
+  // Confronto ativo do mestre: a ficha vai para a aba COMBATE e só deixa sair para Magias e Inventário.
+  // Mapa e lore fecham; a subida de nível espera o fim da luta. A abertura toca uma vez por confronto (lembrada na aba).
+  const [combat, putCombat] = useActiveCombat(token, hasSheet)
+  const inCombat = !!combat
+  const [combatIntro, setCombatIntro] = useState(null)
+  const [rollingInit, setRollingInit] = useState(false)
+  const combatId = combat?.id ?? null
+  const wasInCombat = useRef(false)
+  useEffect(() => {
+    if (combat === undefined) return
+    if (combatId != null) {
+      setLeveling(false)
+      setTab(t => (COMBAT_ALLOWED.includes(t) ? t : 'combat'), { replace: true })
+      const params = new URLSearchParams(window.location.search)
+      if (params.has('tela')) {
+        params.delete('tela')
+        params.delete('ponto')
+        params.delete('regiao')
+        const q = params.toString()
+        window.history.replaceState(window.history.state, '', window.location.pathname + (q ? '?' + q : ''))
+        window.dispatchEvent(new PopStateEvent('popstate'))
+      }
+      let seen = []
+      try { seen = JSON.parse(sessionStorage.getItem(SEEN_INTROS) ?? '[]') } catch { seen = [] }
+      if (!seen.includes(combatId)) {
+        sessionStorage.setItem(SEEN_INTROS, JSON.stringify([...seen.slice(-20), combatId]))
+        setCombatIntro(combat)
+      }
+      wasInCombat.current = true
+    } else {
+      setTab(t => (t === 'combat' ? 'sheet' : t), { replace: true })
+      if (wasInCombat.current) {
+        play('victory')
+        setToast('O combate terminou. A ficha está liberada.')
+      }
+      wasInCombat.current = false
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [combatId, combat === undefined])
+  const closeCombatIntro = useCallback(() => setCombatIntro(null), [])
+  const rollInitiative = useCallback(() => {
+    setRollingInit(true)
+    rollMyInitiative(token)
+      .then(({ encounter, roll: r }) => {
+        putCombat(encounter)
+        pushRoll(toEntry(r))
+      })
+      .catch(fail)
+      .finally(() => setRollingInit(false))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, putCombat, fail])
+  const changeTab = t => {
+    if (inCombat && !COMBAT_ALLOWED.includes(t)) return
+    setLeveling(false)
+    setTab(t)
+  }
+
   // ---------- habilidades ----------
 
   const setUses = useCallback((ability, usesLeft) => {
@@ -607,9 +676,9 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             <span>ROLAR D20{MODE_SHORT[mode] && <i className={'play-mode ' + mode}>{MODE_SHORT[mode]}</i>}</span>
           </button>
         </div>
-        <TabBar tabs={[...TABS.slice(0, 3), ...(sheet?.crafts?.length ? [WORKBENCH_TAB] : []), ...(merchant ? [MERCHANT_TAB] : []), ...TABS.slice(3)]} active={tab} onChange={t => { setLeveling(false); setTab(t) }} badges={badges} alertId="documents" label="Seções" />
+        <TabBar tabs={inCombat ? [COMBAT_TAB, TABS[1], TABS[2]] : [...TABS.slice(0, 3), ...(sheet?.crafts?.length ? [WORKBENCH_TAB] : []), ...(merchant ? [MERCHANT_TAB] : []), ...TABS.slice(3)]} active={tab} onChange={changeTab} badges={badges} alertId="documents" label="Seções" />
         <div className="topbar-right">
-          {canLevel && !leveling && (
+          {canLevel && !leveling && !inCombat && (
             <button className="lvl-ready" type="button" onClick={openLevelUp} title={'O mestre liberou o ' + (sheet.level + 1) + 'º nível'}>
               SUBIR DE NÍVEL{sheet.pendingLevels > 1 && <span className="lvl-ready-n">{sheet.pendingLevels}</span>}
             </button>
@@ -639,16 +708,16 @@ export default function CharacterSheet({ character, session, notice, onChangePas
         </div>
       </header>
 
-      <WorldButtons session={session}>
+      {!inCombat && <WorldButtons session={session}>
         {sheet && (
           <button className="dock-btn print" type="button" onClick={printSheet} disabled={printing}
             title={printing ? 'Gerando a ficha física…' : 'Baixar ficha física (PDF para imprimir)'} aria-label="Baixar ficha física">
             <PrintIcon /><span>{printing ? 'Gerando…' : 'Imprimir ficha'}</span>
           </button>
         )}
-      </WorldButtons>
+      </WorldButtons>}
 
-      <main className={'sheet-body tab-' + (leveling ? 'levelup' : tab)}>
+      <main className={'sheet-body tab-' + (leveling ? 'levelup' : tab) + (inCombat ? ' in-combat' : '')}>
         <SheetHero character={character} sheet={sheet} armorClass={state.status === 'ready' ? state.sheet.armorClass : null}
           onDefense={chooseDefense} onShield={chooseShield} onHp={setHp}
           onDeathSaves={setDeathSaves} onDeathRoll={rollDeathSave} conditionCatalog={conditionCatalog} />
@@ -682,7 +751,14 @@ export default function CharacterSheet({ character, session, notice, onChangePas
           </div>
         )}
 
-        {sheet && !leveling && tab === 'sheet' && (
+        {sheet && !leveling && tab === 'combat' && combat && (
+          <div className="sheet-col wide" key="combat">
+            <CombatTab encounter={combat} catalog={conditionCatalog} sheet={sheet} attacks={state.sheet.attacks ?? []}
+              onRollMine={rollInitiative} rolling={rollingInit} onRoll={roll} onRollDice={rollExpr} onGo={changeTab} />
+          </div>
+        )}
+
+        {sheet && !leveling && tab === 'sheet' && !inCombat && (
           <OverviewTab
             sheet={sheet}
             attacks={state.sheet.attacks ?? []}
@@ -704,7 +780,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
           />
         )}
 
-        {sheet && !leveling && tab !== 'sheet' && (
+        {sheet && !leveling && tab !== 'sheet' && tab !== 'combat' && (
           <div className="sheet-col wide" key={tab}>
             <section className="card" style={{ '--i': 1 }}>
               {tab === 'abilities' && (
@@ -743,6 +819,8 @@ export default function CharacterSheet({ character, session, notice, onChangePas
       {preparing && preparation && (
         <PrepareSpells preparation={preparation} busy={busy} onConfirm={picks => doRest('LONG', picks)} onCancel={() => setPreparing(false)} />
       )}
+      {combatIntro && <CombatIntro encounter={combatIntro} onDone={closeCombatIntro} />}
+      {combat && !combatIntro && <TurnBanner encounter={combat} />}
       {ceremony && <LevelUpCeremony gains={ceremony} name={sheet?.characterName ?? character.name} onClose={closeCeremony} />}
       {toast && <div key={toast} className="toast" role="status">{toast}</div>}
       {mapCall && (

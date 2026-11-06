@@ -1,6 +1,11 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-06 — Combate: bestiário, confronto, iniciativa e turnos (`main`)
+- Back: `model/combat` (`Enemy`, `Encounter`, `Combatant`), `CombatService`/`CombatController` em `/combat` (tópico `combat` no canal ao vivo). Iniciativa d20 + bônus no servidor (mestre por grupo, jogador a sua uma vez), ajuste à mão, turnos que pulam derrotados e viram a rodada; jogador vê inimigo só pelo estado e não vê os escondidos.
+- Mestre: aba **COMBATE** (bestiário com retrato enviado ou por link, montar e ativar, trilha com PV/esconder/derrotar, ficha do inimigo com rolagens atrás do escudo, reforços, atalhos N/B). Jogador: a ficha fica presa em COMBATE/MAGIAS/INVENTÁRIO; abertura "COMBATE", faixa "SUA VEZ!" e sons novos (`warhorn`, `yourturn`, `victory`).
+- Testes: `CombatControllerTests` (3), `combat.test.js` (6). Conferido no sandbox com mestre e jogador lado a lado, também no celular.
+
 ## 2026-11-06 — Script de atualização do servidor (`main`)
 - `deploy/update.sh`: sem commits novos não faz nada; com eles, backup `predeploy`, `git pull --ff-only`, texturas do mapa se o script delas mudou e `docker compose up -d --build`. Passo a passo em `deploy-vps.md#atualizar`.
 

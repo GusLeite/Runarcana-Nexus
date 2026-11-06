@@ -24,7 +24,8 @@ public class LiveConfig implements WebMvcConfigurer {
             "map", "map",
             "merchants", "merchants",
             "journal", "journal",
-            "documents", "documents");
+            "documents", "documents",
+            "combat", "combat");
 
     private static final Set<String> READS = Set.of("GET", "HEAD", "OPTIONS");
     // Sinais efêmeros do mapa: vão pelo próprio canal (MapSignalService), não fazem as telas buscarem nada.
