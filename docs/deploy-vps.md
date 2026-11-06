@@ -46,6 +46,10 @@ Quando os logs estiverem calmos, abra o endereço, entre como `mestre`, troque a
 
 Quando o trabalho estiver na `main`, troque o branch do servidor com `git switch main`.
 
+## Atualizar
+
+No servidor, na pasta do projeto: `sh deploy/update.sh`. Ele busca a `main` do GitHub; sem commits novos, não faz nada (`--force` reconstrói assim mesmo). Com commits novos, grava um `pg_dump` em `backups/runarcana-predeploy-*.dump`, dá `git pull --ff-only`, baixa de novo as texturas se `fetch-map-assets.sh` mudou e roda `docker compose up -d --build`. Os `ALTER TABLE` que o `ddl-auto` não aplica ficam de fora: rode antes, à mão.
+
 ## 5. Ligar o backup externo
 
 No **seu PC**, com o [rclone](https://rclone.org/downloads/) instalado, rode `rclone authorize "drive"`, autorize no navegador e copie o token que aparecer. No servidor, rode `rclone config`, crie um remote `drive` chamado `gdrive`, responda **não** à autorização automática e cole o token.

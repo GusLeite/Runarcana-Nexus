@@ -1,6 +1,9 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-06 — Script de atualização do servidor (`main`)
+- `deploy/update.sh`: sem commits novos não faz nada; com eles, backup `predeploy`, `git pull --ff-only`, texturas do mapa se o script delas mudou e `docker compose up -d --build`. Passo a passo em `deploy-vps.md#atualizar`.
+
 ## 2026-11-06 — Bancada de fabricação (`main`)
 - `WorkbenchService`: receitas da ficha (`GET /character/me/workbench`) e fabricação (`POST .../craft`): materiais = metade do valor, d20 + bônus do ofício no servidor, Obra-prima na margem, falha por pouco devolve metade, item direto na mochila.
 - Aba **BANCADA** (`WorkbenchTab.jsx`): grimório de fórmulas, tampo de madeira com a estação do ofício, receita em pergaminho com a trilha do d20 e a animação de trabalho/resultado.
