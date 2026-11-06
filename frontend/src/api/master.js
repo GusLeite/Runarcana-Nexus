@@ -71,6 +71,11 @@ export const setItemQuantity = (token, characterId, entryId, quantity) =>
 export const removeItem = (token, characterId, entryId) =>
   request('/character/' + characterId + '/items/' + entryId, { method: 'DELETE', token })
 
+// Perícias: { ATHLETICS: 'NONE' | 'PROFICIENT' | 'EXPERTISE' | 'BASE' } (BASE volta ao das regras); só as citadas mudam.
+// Devolve a ficha (CharacterResponse).
+export const setSkills = (token, characterId, skills) =>
+  request('/character/' + characterId + '/skills', { method: 'PATCH', token, body: { skills } })
+
 // Condições (ids; a lista substitui a atual) e Exaustão; nulos = mantém. Devolve a ficha (CharacterResponse).
 export const setConditions = (token, characterId, conditions, exhaustion) =>
   request('/character/' + characterId + '/conditions', { method: 'PATCH', token, body: { conditions, exhaustion } })

@@ -99,7 +99,8 @@ Catálogo fixo em código (`services/OfficialPlaces`, só os 8 lugares do mapa o
 ### Personagem (`model/player`)
 - **Character**: jogador, nome, `level` (1–20), ouro, idade, altura, `characterClass` (ManyToOne), PV máx./atual, `tempHp` (PV temporários; nulo nas fichas antigas = 0), atributos `str, dex, con, intel, wis, cha`, `skills` (OneToMany → CharacterSkill), `region`, `background`, `alignment`, `inspiration`.
   - Regras: modificador = `floor((atributo - 10) / 2)`; bônus de proficiência por nível (1–4: +2, 5–8: +3, 9–12: +4, 13–16: +5, 17–20: +6); bônus de perícia (`getSkillModifier`) = modificador do atributo base + proficiência, se proficiente; percepção e intuição passivas = 10 + bônus da perícia.
-- **CharacterSkill**: `character, skillType, proficient`
+- **CharacterSkill**: `character, skillType, proficient, expertise` — o que as regras deram (criação e subida de nível, que refaz essas linhas).
+  - **Ajuste do mestre** (`Character.skillOverrides`, tabela `character_skill_overrides`, o `ddl-auto` cria): perícia → `NONE`/`PROFICIENT`/`EXPERTISE`, por cima das linhas. `isProficient`/`isExpert` leem `getSkillState` (ajuste ou regras); `getBaseSkillState` é só o das regras. Por ficar à parte, a subida de nível não apaga o ajuste. Ajuste igual ao das regras é removido (`CharacterService.setSkills`).
 - **Background** (antecedente): `name` (único), `skills` (tabela `background_skills`), `occupation`, `items` (ManyToMany, tabela `background_items`)
 - **Occupation**: `name` (único)
 - **Origin**: `name, description, baseMovementSpeed`

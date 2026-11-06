@@ -1,6 +1,10 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-06 — Mestre edita as perícias da ficha (`main`)
+- Novo cartão **Perícias** na aba Fichas (`SkillEditor.jsx`): cada perícia com Sem / Proficiente / Especialidade, o bônus novo já calculado, rascunho com a lista de mudanças e SALVAR; ↺ volta ao das regras; filtro Ajustadas.
+- `PATCH /character/{id}/skills`: o ajuste fica em `Character.skillOverrides` (tabela `character_skill_overrides`), à parte das linhas de `CharacterSkill`, e sobrevive à subida de nível. `SkillResponse` ganhou `base` e `adjusted`; a ficha do jogador diz "Ajustada pelo mestre" na dica.
+
 ## 2026-11-06 — Bandópolis na névoa aparece como "???" (`main`)
 - Escondida na névoa, Bandópolis não some mais do mapa do jogador: fica no lugar, apagada e com "???", como as outras regiões. O servidor volta a mandar a rolagem a todos (`hiddenFromPlayers` saiu).
 

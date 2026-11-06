@@ -3,6 +3,7 @@ import { deleteCharacter, fetchCharacters, fetchConditions, fetchFormulas, setPe
 import ConditionEditor from './ConditionEditor.jsx'
 import HpEditor from './HpEditor.jsx'
 import FormulaEditor from './FormulaEditor.jsx'
+import SkillEditor from './SkillEditor.jsx'
 import { CLASS_NAMES } from '../../data/rules.js'
 import { CHARACTERS } from '../../data/characters.js'
 
@@ -146,7 +147,13 @@ export default function MasterSheets({ token, onError, onToast }) {
             )}
           </section>
 
-          <section className="card" style={{ '--i': 3 }}>
+          <section className="card se-card" style={{ '--i': 3 }}>
+            <h3 className="card-title">Perícias <small>{character.characterName}</small></h3>
+            <SkillEditor token={token} character={character} onError={onError}
+              onSaved={updated => { put(updated); onToast('Perícias de ' + updated.characterName + ' salvas.') }} />
+          </section>
+
+          <section className="card" style={{ '--i': 4 }}>
             <h3 className="card-title">Excluir ficha <small>{character.characterName}</small></h3>
             <p className="muted-note">
               Apaga a ficha, o inventário e as habilidades. A conta do jogador continua e ele cria o personagem de novo. Não dá para desfazer.

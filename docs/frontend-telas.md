@@ -43,6 +43,7 @@ Responsivo: abaixo de 760px os painéis empilham na vertical e a lore some. Com 
 - **Fórmulas de Ofício** (aba Fichas, `FormulaEditor.jsx`, no card Na mesa): por ofício da ficha, "Alquimista · 1/2 fórmulas" abre as fórmulas até o nível do ofício; cada clique marca/desmarca e salva.
 - **Na mesa** (aba Fichas): **PV** do personagem (`HpEditor.jsx`: barra, Dano — gasta os temporários antes —, Cura, PV temp. e, fora da Mesa, **PV máx. +/−** no bônus do mestre; `PATCH /character/{id}/hp`) e, abaixo, as condições.
 - **Condições** (aba Fichas, `ConditionEditor.jsx`): para o personagem escolhido, chips de cada condição (liga/desliga, regra na dica) e a Exaustão com −/+; cada clique salva (`PATCH /character/{id}/conditions`).
+- **Perícias** (aba Fichas, `SkillEditor.jsx`, cartão na largura toda): as 19 agrupadas pelo atributo, cada uma com o losango, o bônus e o seletor **— / ◆ / ◆◆** (sem proficiência, proficiente, especialidade). As escolhas viram rascunho: o bônus muda na hora (calculado com o `proficiencyBonus`) e embaixo aparece a lista "Arcanismo: Proficiente → Especialidade +5 → +7" com **SALVAR PERÍCIAS** / Descartar (`PATCH /character/{id}/skills`). Perícia ajustada tem a marca "mestre" (dica: o que as regras dão) e o **↺** volta ao das regras; filtro Todas / Proficientes / Ajustadas. Na ficha do jogador, a dica da perícia diz "Ajustada pelo mestre".
 
 ## Criação de personagem (assistente)
 

@@ -31,7 +31,7 @@ export default function SkillList({ skills, onRoll, sheet }) {
                   style={{ '--n': n }}
                   onClick={() => onRoll(name, s.modifier)}
                   aria-label={`${name}${s.expertise ? ', especialista' : s.proficient ? ', proficiente' : ''}, ${formatModifier(s.modifier)}. Rolar.`}
-                  title={[s.expertise && 'Especialidade: bônus de proficiência em dobro', ...notes].filter(Boolean).join('\n') || undefined}
+                  title={[s.expertise && 'Especialidade: bônus de proficiência em dobro', s.adjusted && 'Ajustada pelo mestre', ...notes].filter(Boolean).join('\n') || undefined}
                 >
                   <span className="pip" aria-hidden="true" />
                   <span className="skill-name">{name}{notes.length > 0 && <i className="sit-mark" aria-label={notes.join('. ')}>✦</i>}</span>

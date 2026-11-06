@@ -147,6 +147,19 @@ public class CharacterController {
 
     public record ConditionsRequest(List<String> conditions, Integer exhaustion) {}
 
+    // Mestre: ajusta perícias (tirar a proficiência, dar proficiência ou especialidade, ou voltar ao das regras).
+    @PatchMapping("/{id}/skills")
+    public ResponseEntity<CharacterResponse> setSkills(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @PathVariable long id,
+            @RequestBody SkillsRequest request) {
+        authService.requireMaster(authorization);
+        return ResponseEntity.ok(charService.setSkills(id, request.skills()));
+    }
+
+    // skills: perícia → NONE | PROFICIENT | EXPERTISE | BASE (ou nulo: volta ao das regras). Só as citadas mudam.
+    public record SkillsRequest(java.util.Map<gusleite.runarcana_nexus.enums.SkillType, String> skills) {}
+
     // Mestre: apaga a ficha (o jogador pode criar outra pelo assistente).
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCharacter(

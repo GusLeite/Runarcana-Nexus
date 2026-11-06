@@ -213,6 +213,46 @@ font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:13px;letter-spacing
 .formula-craft .to-pick{margin-top:6px}
 .formula-craft .to-chip{font-size:12px;padding:4px 9px}
 
+/* ---------- perícias (aba Fichas, SkillEditor) ---------- */
+.se-card{grid-column:1/-1}
+.se-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.se-head .muted-note{margin:0}
+.se-groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px 22px;align-items:start}
+.se-group .skill-group-name{margin-bottom:4px}
+.se-row{display:grid;grid-template-columns:minmax(0,1fr) 34px auto 26px;align-items:center;gap:8px;padding:4px 6px;border-left:2px solid transparent;transition:background .2s,border-color .2s}
+.se-row:hover{background:rgba(255,255,255,.03)}
+.se-row.adjusted{border-left-color:rgba(200,162,74,.45)}
+.se-row.changed{border-left-color:var(--teal);background:rgba(47,211,192,.06)}
+.se-name{display:flex;align-items:center;gap:8px;min-width:0;color:var(--muted);font-size:14px}
+.se-name>span:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.se-name .pip{flex:none;margin-left:2px}
+.se-name.prof{color:var(--text)}
+.se-name .pip{transition:background .2s,box-shadow .2s,transform .3s}
+.se-name.prof .pip{background:var(--teal);border-color:var(--teal);box-shadow:0 0 6px rgba(47,211,192,.9)}
+.se-name.expert .pip{background:var(--gold-hi);border-color:var(--gold-hi);box-shadow:0 0 6px rgba(240,199,94,.9),5px -5px 0 -2px var(--gold-hi)}
+.se-row:hover .se-name .pip{transform:rotate(225deg)}
+.se-badge{flex:none;font-style:normal;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-hi);border:1px solid rgba(240,199,94,.4);padding:0 5px}
+.se-mod{text-align:right;font-family:'Cinzel',Georgia,serif;color:var(--muted);transition:color .2s}
+.se-name.prof+.se-mod{color:var(--gold-hi)}
+.se-mod.moved{color:var(--teal);animation:chip-pop .3s ease}
+.se-states{display:flex;border:1px solid rgba(200,162,74,.25)}
+.se-state{min-width:32px;padding:3px 6px;border:0;border-left:1px solid rgba(200,162,74,.18);background:rgba(0,0,0,.3);color:var(--muted);font-size:11px;cursor:pointer;transition:background .2s,color .2s}
+.se-state:first-child{border-left:0}
+.se-state:hover:not(:disabled){color:var(--text)}
+.se-state.on.s-none{background:rgba(224,100,90,.14);color:#e0857a}
+.se-state.on.s-proficient{background:rgba(47,211,192,.14);color:var(--teal)}
+.se-state.on.s-expertise{background:rgba(240,199,94,.16);color:var(--gold-hi)}
+.se-state:focus-visible,.se-restore:focus-visible{outline:2px solid var(--teal);outline-offset:1px}
+.se-restore{border:0;background:none;color:var(--gold-hi);font-size:15px;cursor:pointer;padding:0}
+.se-restore:disabled{opacity:.18;cursor:default}
+.se-pending{margin-top:14px;padding:10px 14px;border:1px solid rgba(47,211,192,.35);background:rgba(47,211,192,.05)}
+.se-pending ul{margin:6px 0 10px;padding-left:18px;font-size:14px}
+.se-pending li{margin:2px 0}
+.se-pending small{color:var(--muted)}
+.se-pending em{margin-left:8px;font-style:normal;color:var(--teal)}
+.se-pending .lvl-release-actions{margin-top:0;align-items:center}
+.se-pending .btn{flex:0 1 auto;width:auto;margin-top:0;padding:10px 26px}
+
 /* ---------- jogador de teste (topo do painel) ---------- */
 .test-btn{display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid var(--teal);background:rgba(47,211,192,.08);color:var(--teal);
 font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:12px;letter-spacing:.14em;cursor:pointer;white-space:nowrap;transition:box-shadow .2s,background .2s}

@@ -345,6 +345,53 @@ class LevelUpControllerTests {
                 .andExpect(jsonPath("$.preview.features[?(@.name == 'Progresso 5')].source").value("Aprimoramento: Progressivo (5º nível)"));
     }
 
+    @Test
+    void mestreAjustaPericiasESobreviveASubidaDeNivel() throws Exception {
+        long id = createNyx();
+        String master = login("mestre");
+        String player = login("gaudron");
+        int arcanaBefore = skill(player, "ARCANA").path("modifier").asInt();
+        // Só o mestre ajusta; estado inválido e corpo vazio dão 400.
+        skills(player, id, "{\"skills\":{\"ARCANA\":\"EXPERTISE\"}}").andExpect(status().isForbidden());
+        skills(master, 999, "{\"skills\":{\"ARCANA\":\"EXPERTISE\"}}").andExpect(status().isNotFound());
+        skills(master, id, "{\"skills\":{\"ARCANA\":\"MESTRE\"}}").andExpect(status().isBadRequest());
+        skills(master, id, "{\"skills\":{}}").andExpect(status().isBadRequest());
+        // Especialidade em Arcana, tira Intuição e dá Furtividade.
+        skills(master, id, "{\"skills\":{\"ARCANA\":\"EXPERTISE\",\"INSIGHT\":\"NONE\",\"STEALTH\":\"PROFICIENT\"}}")
+                .andExpect(status().isOk());
+        assertThat(skill(player, "ARCANA").path("expertise").asBoolean()).isTrue();
+        assertThat(skill(player, "ARCANA").path("adjusted").asBoolean()).isTrue();
+        assertThat(skill(player, "ARCANA").path("base").asString()).isEqualTo("PROFICIENT");
+        assertThat(skill(player, "ARCANA").path("modifier").asInt()).isEqualTo(arcanaBefore + 2);
+        assertThat(skill(player, "INSIGHT").path("proficient").asBoolean()).isFalse();
+        assertThat(skill(player, "STEALTH").path("proficient").asBoolean()).isTrue();
+        // A subida de nível refaz as perícias pelas regras, mas o ajuste do mestre continua.
+        levelUp(id, LEVEL_2).andExpect(status().isOk());
+        assertThat(skill(player, "ARCANA").path("expertise").asBoolean()).isTrue();
+        assertThat(skill(player, "INSIGHT").path("proficient").asBoolean()).isFalse();
+        assertThat(skill(player, "STEALTH").path("proficient").asBoolean()).isTrue();
+        // BASE (ou o mesmo que as regras deram) desfaz o ajuste.
+        skills(master, id, "{\"skills\":{\"ARCANA\":\"BASE\",\"INSIGHT\":\"PROFICIENT\"}}").andExpect(status().isOk());
+        assertThat(skill(player, "ARCANA").path("expertise").asBoolean()).isFalse();
+        assertThat(skill(player, "ARCANA").path("adjusted").asBoolean()).isFalse();
+        assertThat(skill(player, "INSIGHT").path("proficient").asBoolean()).isTrue();
+        assertThat(skill(player, "INSIGHT").path("adjusted").asBoolean()).isFalse();
+    }
+
+    private ResultActions skills(String token, long id, String body) throws Exception {
+        return mvc.perform(patch("/character/" + id + "/skills").header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON).content(body));
+    }
+
+    private tools.jackson.databind.JsonNode skill(String player, String name) throws Exception {
+        String body = mvc.perform(get("/character/me").header("Authorization", "Bearer " + player))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        for (var s : JSON.readTree(body).path("character").path("skills")) {
+            if (s.path("skill").asString().equals(name)) return s;
+        }
+        throw new AssertionError("Perícia ausente: " + name);
+    }
+
     private ResultActions rest(String token, String body) throws Exception {
         return mvc.perform(post("/character/me/rest").header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON).content(body));

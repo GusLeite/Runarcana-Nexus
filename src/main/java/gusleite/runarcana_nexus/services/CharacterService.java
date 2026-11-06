@@ -190,6 +190,27 @@ public class CharacterService {
         return CharacterResponse.of(c);
     }
 
+    // Mestre: ajusta perícias (NONE tira a proficiência, PROFICIENT, EXPERTISE dá especialidade; nulo ou "BASE" volta ao
+    // que as regras deram). Só as perícias citadas mudam. O ajuste fica à parte e sobrevive à subida de nível.
+    @Transactional
+    public CharacterResponse setSkills(long characterId, Map<SkillType, String> states) {
+        if (states == null || states.isEmpty()) throw ApiException.badRequest("Informe as perícias a ajustar.");
+        Character c = charRepository.findById(characterId).orElseThrow(() -> ApiException.notFound("Personagem não encontrado."));
+        List<String> valid = List.of("BASE", Character.SKILL_NONE, Character.SKILL_PROFICIENT, Character.SKILL_EXPERTISE);
+        for (Map.Entry<SkillType, String> e : states.entrySet()) {
+            if (e.getKey() == null) throw ApiException.badRequest("Perícia desconhecida.");
+            String state = e.getValue() == null ? "BASE" : e.getValue().trim().toUpperCase(java.util.Locale.ROOT);
+            if (!valid.contains(state)) {
+                throw ApiException.badRequest("Estado de perícia inválido: " + e.getValue() + " (use NONE, PROFICIENT, EXPERTISE ou BASE).");
+            }
+            // Igual ao das regras não é ajuste: sai, e a perícia volta a acompanhar as regras.
+            if (state.equals("BASE") || state.equals(c.getBaseSkillState(e.getKey()))) c.getSkillOverrides().remove(e.getKey().name());
+            else c.getSkillOverrides().put(e.getKey().name(), state);
+        }
+        charRepository.save(c);
+        return CharacterResponse.of(c);
+    }
+
     // Mestre: PV de qualquer ficha (dano e cura na mesa), com os mesmos limites.
     @Transactional
     public CharacterResponse setHpFor(long characterId, Integer currentHp, Integer tempHp) {

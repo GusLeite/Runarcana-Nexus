@@ -234,6 +234,13 @@ public class Character {
     @MapKeyColumn(name = "craft")
     @Column(name = "margin")
     private Map<String, Integer> craftMasterwork = new HashMap<>();
+    // Ajuste do mestre por perícia (nome do SkillType → NONE, PROFICIENT ou EXPERTISE). Vale por cima do que as regras
+    // deram (as linhas de CharacterSkill) e, por ficar à parte, sobrevive à subida de nível, que refaz essas linhas.
+    @ElementCollection
+    @CollectionTable(name = "character_skill_overrides", joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyColumn(name = "skill")
+    @Column(name = "state")
+    private Map<String, String> skillOverrides = new HashMap<>();
     // Atributo alternativo por alvo ("SKILL:INTIMIDATION" → "STRENGTH"; "AC" → "CONSTITUTION/2" = metade): vale o maior.
     @ElementCollection
     @CollectionTable(name = "character_attribute_swaps", joinColumns = @JoinColumn(name = "character_id"))
@@ -431,14 +438,31 @@ public class Character {
         return getPassiveSkill(SkillType.INSIGHT) + (passiveInsightBonus == null ? 0 : passiveInsightBonus);
     }
 
+    public static final String SKILL_NONE = "NONE", SKILL_PROFICIENT = "PROFICIENT", SKILL_EXPERTISE = "EXPERTISE";
+
+    // O que as regras deram (criação e subidas de nível), sem o ajuste do mestre.
+    public String getBaseSkillState(SkillType skill) {
+        CharacterSkill s = getSkill(skill);
+        if (s == null || !s.isProficient()) return SKILL_NONE;
+        return s.isExpertise() ? SKILL_EXPERTISE : SKILL_PROFICIENT;
+    }
+
+    // O que vale na ficha: o ajuste do mestre, se houver, ou o das regras.
+    public String getSkillState(SkillType skill) {
+        String override = skillOverrides == null ? null : skillOverrides.get(skill.name());
+        return override != null ? override : getBaseSkillState(skill);
+    }
+
+    public boolean isSkillAdjusted(SkillType skill) {
+        return skillOverrides != null && skillOverrides.containsKey(skill.name());
+    }
+
     public boolean isProficient(SkillType skill) {
-        CharacterSkill characterSkill = getSkill(skill);
-        return characterSkill != null && characterSkill.isProficient();
+        return !SKILL_NONE.equals(getSkillState(skill));
     }
 
     public boolean isExpert(SkillType skill) {
-        CharacterSkill characterSkill = getSkill(skill);
-        return characterSkill != null && characterSkill.isProficient() && characterSkill.isExpertise();
+        return SKILL_EXPERTISE.equals(getSkillState(skill));
     }
 
     // Bônus de um teste de perícia: modificador do atributo base + proficiência, se tiver (duas vezes com especialidade).
