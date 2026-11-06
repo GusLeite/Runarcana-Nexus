@@ -112,6 +112,11 @@ public class MapPartyService {
         return view();
     }
 
+    // Região escondida dos jogadores: névoa ligada e a região não revelada.
+    public boolean hiddenFromPlayers(String slug) {
+        return fogOn() && !revealed().contains(slug);
+    }
+
     private boolean fogOn() {
         return settings.findById(FOG).map(s -> "on".equals(s.getValue())).orElse(false);
     }

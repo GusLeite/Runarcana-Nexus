@@ -1,6 +1,9 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-05 — Bandópolis na névoa (`main`)
+- Bandópolis entra na lista de regiões da névoa (`FOG_TOGGLES`, REGIÕES n/12). Escondida, o jogador não vê o brasão e `GET /map/bandle` lhe devolve `roll` nulo; o mestre continua vendo. O mapa busca a Bandópolis de novo a cada aviso do canal ao vivo.
+
 ## 2026-11-05 — Bandópolis sumia ao rolar de novo (`main`)
 - A cena liga a classe `on` direto no brasão e guarda que ligou; o React reescrevia o `className` ao trocar o "brotar" (`map-pin-born`) e apagava o `on`, então da 2ª rolagem em diante a Bandópolis ficava invisível. O brotar agora é `data-born` e o `className` dos brasões é fixo; o marcador do grupo (`draggable`, que mudava no "Ver como") virou `data-draggable` pelo mesmo motivo.
 

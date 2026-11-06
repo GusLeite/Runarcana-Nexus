@@ -11,7 +11,7 @@ import { fetchRecipients } from '../../api/master.js'
 import DiceRoll from '../sheet/DiceRoll.jsx'
 import { playerName } from '../lore/AudiencePicker.jsx'
 import { MAP_LANDMARKS } from './landmarkData.js'
-import { FOG_AREAS, FOG_REGIONS, MAP_AREAS, MAP_DECALS, MAP_DOMES, MAP_GLOBE, MAP_LABELS, MAP_PINS, bandleSpot, nearestRegion } from './regions.js'
+import { FOG_AREAS, FOG_REGIONS, FOG_TOGGLES, MAP_AREAS, MAP_DECALS, MAP_DOMES, MAP_GLOBE, MAP_LABELS, MAP_PINS, bandleSpot, nearestRegion } from './regions.js'
 import { sineInOut } from './mapMath.js'
 import RegionPanel from './RegionPanel.jsx'
 import { PoiForm, PoiPanel, WaypointPanel } from './MapPointPanels.jsx'
@@ -143,10 +143,15 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   }, [])
 
   useEffect(() => {
-    fetchBandle(session.token).then(res => setBandleRoll(res.roll)).catch(() => {})
     fetchLore(session.token).then(setLore).catch(() => {})
     if (isMaster) fetchRecipients(session.token).then(setPlayers).catch(() => {})
   }, [session.token, isMaster])
+  // Bandópolis: de novo a cada aviso do mapa (o mestre pode tê-la rolado, escondido ou revelado).
+  useEffect(() => {
+    const load = () => fetchBandle(session.token).then(res => setBandleRoll(res.roll)).catch(() => {})
+    load()
+    return mapLive.listen(load)
+  }, [session.token, mapLive])
 
   // Os waypoints seguem o "Ver como": os do jogador escolhido.
   useEffect(() => {
@@ -247,11 +252,12 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   }, [partyX, partyY, status])
 
   // Névoa por região e trilha: a cena só redesenha a trilha quando ela muda.
-  const hiddenRegions = party?.fog ? FOG_REGIONS.filter(slug => !party.revealed.includes(slug)) : []
+  const hiddenRegions = party?.fog ? FOG_TOGGLES.filter(slug => !party.revealed.includes(slug)) : []
   const hiddenKey = hiddenRegions.join(',')
   useEffect(() => {
     if (status !== 'ready') return
-    scene.current?.setFog(hiddenKey ? hiddenKey.split(',') : [], master ? FOG_MASTER : FOG_PLAYER)
+    // Só as regiões com terreno: Bandópolis some pelo brasão (ver o efeito dela).
+    scene.current?.setFog(hiddenKey ? hiddenKey.split(',').filter(slug => FOG_REGIONS.includes(slug)) : [], master ? FOG_MASTER : FOG_PLAYER)
   }, [hiddenKey, status, master])
   useEffect(() => {
     if (status !== 'ready' || !party) return
@@ -306,11 +312,15 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
   }
 
   // A cena lê estes objetos a cada quadro: basta mudá-los para Bandópolis aparecer no lugar novo.
+  // Escondida na névoa (para o jogador ou no "Ver como"), o brasão some: a posição é o segredo.
+  const bandleHidden = !master && hiddenRegions.includes('bandle')
   useEffect(() => {
     const spot = bandleSpot(bandleRoll)
     const pin = staticPins.current.find(p => p.slug === 'bandle')
-    if (spot && pin) Object.assign(pin, { x: spot.x, y: spot.y, z: spot.z, level: 'any' })
-  }, [bandleRoll])
+    if (!pin) return
+    if (spot) Object.assign(pin, { x: spot.x, y: spot.y, z: spot.z })
+    pin.level = spot && !bandleHidden ? 'any' : 'hidden'
+  }, [bandleRoll, bandleHidden])
 
   // Pontos que mudam com o uso: a lista que a cena percorre é a mesma, só troca o conteúdo.
   const draftPoint = panel?.draft ? { x: panel.draft.x, y: panel.draft.y } : null
@@ -737,12 +747,12 @@ export default function MapScreen({ session, focus, onClose, onOpenLore }) {
                   </button>
                   {party?.fog && (
                     <button type="button" className="map-tool quiet" aria-expanded={fogOpen} onClick={() => setFogOpen(o => !o)}>
-                      REGIÕES {FOG_REGIONS.length - hiddenRegions.length}/{FOG_REGIONS.length}
+                      REGIÕES {FOG_TOGGLES.length - hiddenRegions.length}/{FOG_TOGGLES.length}
                     </button>
                   )}
                   {party?.fog && fogOpen && (
                     <div className="map-fog-list" role="group" aria-label="Regiões reveladas">
-                      {FOG_REGIONS.map(slug => {
+                      {FOG_TOGGLES.map(slug => {
                         const open = party.revealed.includes(slug)
                         const name = MAP_PINS.find(p => p.slug === slug)?.name ?? slug
                         return (

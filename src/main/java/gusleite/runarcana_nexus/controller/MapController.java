@@ -30,6 +30,8 @@ import java.util.Map;
 @RequestMapping("/map")
 public class MapController {
 
+    static final String BANDLE = "bandle";
+
     private final MapService map;
     private final MapPointService points;
     private final MapPartyService party;
@@ -60,7 +62,8 @@ public class MapController {
 
     @GetMapping("/bandle")
     public ResponseEntity<BandleRollResponse> bandle(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
-        auth.authenticate(authorization);
+        // Bandópolis na névoa: o jogador não recebe a rolagem, para a posição não vazar.
+        if (!auth.authenticate(authorization).isMaster() && party.hiddenFromPlayers(BANDLE)) return ResponseEntity.ok(new BandleRollResponse(null));
         return ResponseEntity.ok(map.bandle());
     }
 

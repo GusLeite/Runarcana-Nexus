@@ -92,6 +92,22 @@ class MapControllerTests {
     }
 
     @Test
+    void bandopolisNaNevoaNaoChegaAoJogador() throws Exception {
+        String master = login("mestre");
+        String player = login("gaudron");
+        send(post("/map/bandle/roll"), master, "").andExpect(status().isOk());
+        send(put("/map/fog"), master, "{\"enabled\":true}").andExpect(status().isOk());
+        mvc.perform(get("/map/bandle").header("Authorization", "Bearer " + player)).andExpect(jsonPath("$.roll").doesNotExist());
+        mvc.perform(get("/map/bandle").header("Authorization", "Bearer " + master)).andExpect(jsonPath("$.roll").isNumber());
+        send(put("/map/fog/bandle"), master, "{\"revealed\":true}").andExpect(jsonPath("$.revealed[0]").value("bandle"));
+        mvc.perform(get("/map/bandle").header("Authorization", "Bearer " + player)).andExpect(jsonPath("$.roll").isNumber());
+        // Sem névoa, todos veem.
+        send(put("/map/fog/bandle"), master, "{\"revealed\":false}").andExpect(status().isOk());
+        send(put("/map/fog"), master, "{\"enabled\":false}").andExpect(status().isOk());
+        mvc.perform(get("/map/bandle").header("Authorization", "Bearer " + player)).andExpect(jsonPath("$.roll").isNumber());
+    }
+
+    @Test
     void nevoaPorRegiao() throws Exception {
         String master = login("mestre");
         String player = login("gaudron");
