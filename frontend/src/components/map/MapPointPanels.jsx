@@ -7,6 +7,7 @@ import PoiHistory from './PoiHistory.jsx'
 import CopyLinkButton from './CopyLinkButton.jsx'
 import { mapLinkNodes } from './MapLinkText.jsx'
 import { RelatedPicker } from '../lore/LoreForm.jsx'
+import { KIND_LABELS, LoreSigil } from '../lore/LoreEntryView.jsx'
 import '../../styles/lore.css'
 
 // Moldura comum dos painéis laterais dos pontos do mapa.
@@ -69,9 +70,18 @@ export function PoiPanel({ poi, loreEntry, master, preview = false, players = []
       {related.length > 0 && (
         <div className="map-point-related">
           <span>Relacionados</span>
-          <div className="lore-chips">
+          {/* Retrato (a imagem do verbete, ou o símbolo do tipo) com o nome e o título. */}
+          <div className="map-related-list">
             {related.map(item => (
-              <button key={item.id} type="button" className="lore-chip" onClick={() => onOpenLore(item.id)} title={'Abrir ' + item.name + ' na lore'}>{item.name}</button>
+              <button key={item.id} type="button" className="map-related-item" onClick={() => onOpenLore(item.id)} title={'Abrir ' + item.name + ' na lore'}>
+                <span className="map-related-art">
+                  {item.imageUrl ? <img src={item.imageUrl} alt="" loading="lazy" /> : <LoreSigil kind={item.kind} />}
+                </span>
+                <span className="map-related-text">
+                  <b>{item.name}</b>
+                  <small>{item.subtitle || KIND_LABELS[item.kind]}</small>
+                </span>
+              </button>
             ))}
           </div>
         </div>

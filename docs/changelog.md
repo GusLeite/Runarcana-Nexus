@@ -1,6 +1,9 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-05 — Relacionados do ponto com retrato (`main`)
+- No painel do ponto do mapa, cada verbete relacionado vira um cartão com a imagem dele (ou o símbolo do tipo), o nome e o título, em vez de só o nome.
+
 ## 2026-11-05 — Bandópolis na névoa (`main`)
 - Bandópolis entra na lista de regiões da névoa (`FOG_TOGGLES`, REGIÕES n/12). Escondida, o jogador não vê o brasão e `GET /map/bandle` lhe devolve `roll` nulo; o mestre continua vendo. O mapa busca a Bandópolis de novo a cada aviso do canal ao vivo.
 
