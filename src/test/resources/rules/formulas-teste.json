@@ -1,11 +1,16 @@
 {
   "source": "teste",
   "rule": "Uma fórmula por nível.",
-  "general": [ { "id": "abaco", "name": "Ábaco", "level": 0, "crafts": "Ferraria", "dc": "10", "description": "Conta." } ],
+  "general": [
+    { "id": "abaco", "name": "Ábaco", "level": 0, "crafts": "Ferraria", "dc": "10", "value": "2 PO", "description": "Conta." },
+    { "id": "ninguem", "name": "Sem Dono", "level": 0, "crafts": "Alquimia", "dc": "10", "value": "2 PO", "description": "De outro ofício." }
+  ],
   "crafts": {
     "ferraria": [
-      { "id": "criar-arma-1", "name": "Criar Arma", "level": 1, "dc": "13", "description": "Forja armas simples." },
-      { "id": "adaptar-arma-3", "name": "Adaptar Arma", "level": 3, "dc": "17", "description": "Muda o tamanho." }
+      { "id": "criar-arma-1", "name": "Criar Arma", "level": 1, "dc": "13", "value": "15, 25, 50 PO", "description": "Forja armas simples." },
+      { "id": "adaptar-arma-3", "name": "Adaptar Arma", "level": 3, "dc": "17", "description": "Muda o tamanho." },
+      { "id": "pregos-0", "name": "Pregos", "level": 0, "dc": "1", "value": "3 PO", "description": "Um punhado." },
+      { "id": "variavel-0", "name": "Peça Variável", "level": 0, "dc": "*", "value": "*", "description": "Depende." }
     ],
     "alquimia": [ { "id": "pocao-1", "name": "Poção", "level": 1, "dc": "13", "description": "Cura." } ]
   }

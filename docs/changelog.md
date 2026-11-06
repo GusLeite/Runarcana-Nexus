@@ -1,6 +1,11 @@
 # Changelog
 
 Entradas mais recentes no topo. Formato: `## AAAA-MM-DD — título (branch)`.
+## 2026-11-06 — Bancada de fabricação (`main`)
+- `WorkbenchService`: receitas da ficha (`GET /character/me/workbench`) e fabricação (`POST .../craft`): materiais = metade do valor, d20 + bônus do ofício no servidor, Obra-prima na margem, falha por pouco devolve metade, item direto na mochila.
+- Aba **BANCADA** (`WorkbenchTab.jsx`): grimório de fórmulas, tampo de madeira com a estação do ofício, receita em pergaminho com a trilha do d20 e a animação de trabalho/resultado.
+- Testes: `WorkbenchRulesTests`, `WorkbenchControllerTests`, `workbench.test.js`. Conferido no sandbox (Alquimista: quase, arruinado e sucesso).
+
 ## 2026-11-06 — Mestre edita as perícias da ficha (`main`)
 - Novo cartão **Perícias** na aba Fichas (`SkillEditor.jsx`): cada perícia com Sem / Proficiente / Especialidade, o bônus novo já calculado, rascunho com a lista de mudanças e SALVAR; ↺ volta ao das regras; filtro Ajustadas.
 - `PATCH /character/{id}/skills`: o ajuste fica em `Character.skillOverrides` (tabela `character_skill_overrides`), à parte das linhas de `CharacterSkill`, e sobrevive à subida de nível. `SkillResponse` ganhou `base` e `adjusted`; a ficha do jogador diz "Ajustada pelo mestre" na dica.

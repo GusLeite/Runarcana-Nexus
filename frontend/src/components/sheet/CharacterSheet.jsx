@@ -20,6 +20,7 @@ import DocumentsTab from './DocumentsTab.jsx'
 import NotesTab from './NotesTab.jsx'
 import MerchantTab from './MerchantTab.jsx'
 import BookTab from './BookTab.jsx'
+import WorkbenchTab from './WorkbenchTab.jsx'
 import GroupJournal from './GroupJournal.jsx'
 import DiceRoll from './DiceRoll.jsx'
 import TabBar from './TabBar.jsx'
@@ -38,6 +39,8 @@ const MAX_LOG = 8
 const PENDING_POLL = 10000
 const MERCHANT_POLL = 5000
 const MERCHANT_TAB = { id: 'merchant', label: 'MERCADOR', glow: true }
+// A BANCADA (fabricação) só aparece para quem tem algum Ofício.
+const WORKBENCH_TAB = { id: 'workbench', label: 'BANCADA' }
 const TABS = [
   { id: 'sheet', label: 'FICHA' },
   { id: 'abilities', label: 'MAGIAS' },
@@ -47,7 +50,7 @@ const TABS = [
   { id: 'journal', label: 'DIÁRIO' },
   { id: 'book', label: 'LIVRO' },
 ]
-const TAB_IDS = [...TABS.map(t => t.id), MERCHANT_TAB.id]
+const TAB_IDS = [...TABS.map(t => t.id), MERCHANT_TAB.id, WORKBENCH_TAB.id]
 const MODE_SHORT = { adv: 'V', dis: 'D' }
 
 // Fixadas primeiro, depois as editadas mais recentemente (mesma ordem do back-end).
@@ -604,7 +607,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
             <span>ROLAR D20{MODE_SHORT[mode] && <i className={'play-mode ' + mode}>{MODE_SHORT[mode]}</i>}</span>
           </button>
         </div>
-        <TabBar tabs={merchant ? [...TABS.slice(0, 3), MERCHANT_TAB, ...TABS.slice(3)] : TABS} active={tab} onChange={t => { setLeveling(false); setTab(t) }} badges={badges} alertId="documents" label="Seções" />
+        <TabBar tabs={[...TABS.slice(0, 3), ...(sheet?.crafts?.length ? [WORKBENCH_TAB] : []), ...(merchant ? [MERCHANT_TAB] : []), ...TABS.slice(3)]} active={tab} onChange={t => { setLeveling(false); setTab(t) }} badges={badges} alertId="documents" label="Seções" />
         <div className="topbar-right">
           {canLevel && !leveling && (
             <button className="lvl-ready" type="button" onClick={openLevelUp} title={'O mestre liberou o ' + (sheet.level + 1) + 'º nível'}>
@@ -709,6 +712,7 @@ export default function CharacterSheet({ character, session, notice, onChangePas
                   onRollDice={rollExpr} onCast={cast} busy={busy} prepares={prepares} />
               )}
               {tab === 'inventory' && <Inventory items={state.sheet.inventory} strength={sheet.str} onUse={consumeOne} />}
+              {tab === 'workbench' && <WorkbenchTab token={token} gold={sheet.gold} onCrafted={putSheet} onError={fail} onGo={go} />}
               {tab === 'merchant' && merchant && (
                 <MerchantTab merchant={merchant} inventory={state.sheet.inventory} gold={sheet.gold} skills={sheet.skills} busy={busy} onBuy={buy} onSell={sell} onHaggle={haggle} />
               )}
