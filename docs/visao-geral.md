@@ -70,7 +70,7 @@ cp .env.example .env     # preencha domínio e senhas
 docker compose up -d --build
 ```
 
-- Só o Caddy fica exposto: ele emite o certificado HTTPS, serve o front e repassa `/runarcana` para a API. A API e o banco ficam na rede interna.
+- Só o Caddy fica exposto: ele emite o certificado HTTPS, serve o front e repassa `/runarcana` para a API. `/assets/*` (nomes com hash) fica em cache por 1 ano; o resto (`index.html`) vai com `Cache-Control: no-cache`, para o app Android pegar a versão nova a cada abertura. A API e o banco ficam na rede interna.
 - **Primeiro acesso**: entre como `mestre` com `RUNARCANA_MASTER_PASSWORD`, troque a senha e, na aba **Contas**, gere a senha provisória de cada jogador.
 - **Backup**: o serviço `backup` grava um `pg_dump` por dia em `backups/` e guarda 14 dias. Essa pasta fica no mesmo servidor; `deploy/backup-offsite.sh` copia para fora com o rclone. Para restaurar: `docker compose exec -T db pg_restore -U runarcana -d runarcana --clean --if-exists < backups/ARQUIVO.dump`.
 - **Atualizar**: `sh deploy/update.sh` faz backup, `git pull`, baixa de novo as texturas do mapa se o script delas mudou e roda `docker compose up -d --build` (detalhes em [`deploy-vps.md`](deploy-vps.md#atualizar)). As texturas ficam fora do Git: `sh frontend/scripts/fetch-map-assets.sh` as baixa (e baixa também os modelos 3D dos marcos em `public/map/landmarks/`). Os `ALTER TABLE` que o `ddl-auto` não aplica ficam fora do script: rode antes, à mão.

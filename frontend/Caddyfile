@@ -9,6 +9,9 @@
 		root * /srv
 		@assets path /assets/*
 		header @assets Cache-Control "public, max-age=31536000, immutable"
+		# index.html (e o resto): sempre confere com o servidor, senão o app Android fica na versão velha
+		@pages not path /assets/*
+		header @pages Cache-Control "no-cache"
 		try_files {path} /index.html
 		file_server
 	}
